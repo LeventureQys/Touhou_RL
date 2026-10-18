@@ -60,6 +60,21 @@ def build_pilot(cfg: EvalConfig) -> AvoidPilot | None:
     return AvoidPilot(base)
 
 
+def _regions_from_screen(
+    screen, region_sizes: dict[str, tuple[int, int]], box=None
+) -> dict:
+    """Native crops of every region, resized to the sizes the model expects."""
+    native = vision.extract_regions(screen)
+    out = {}
+    for name, (height, width) in region_sizes.items():
+        crop = native.get(name)
+        if crop is None:  # region missing on this screen: feed zeros rather than fail
+            out[name] = np.zeros((height, width, vision.VISION_CHANNELS), dtype=np.uint8)
+        else:
+            out[name] = vision.resize_area(crop, height, width)
+    return out
+
+
 def run_evaluation(cfg: EvalConfig) -> dict:
     device = torch.device(cfg.device if torch.cuda.is_available() else "cpu")
     pilot = build_pilot(cfg)
@@ -127,23 +142,31 @@ def run_evaluation(cfg: EvalConfig) -> dict:
             clearances: list[float] = []
             frame_stack = None
             if vision_model is not None:
-                # Deployment path: the policy sees only the picture.  The stack is
-                # primed with the first frame repeated so the very first decision
-                # does not start from black frames.
-                frame_stack = vision.FrameStack(depth=cfg.vision_depth)
-                first = vision.encode_frame(env.render(), cfg.vision_box)
-                for _ in range(cfg.vision_depth):
-                    frame_stack.push(first)
+                # Deployment path: the policy sees only pixels, as per-region
+                # streams (playfield + HUD blocks).  Each stream is stacked so the
+                # model gets motion without a recurrent state.
+                region_sizes = vision_model.config.region_sizes
+                frame_stack = {
+                    name: vision.FrameStack(
+                        depth=cfg.vision_depth, shape=(*size, vision.VISION_CHANNELS)
+                    )
+                    for name, size in region_sizes.items()
+                }
+                first = _regions_from_screen(env.render(), region_sizes, cfg.vision_box)
+                for name, stack in frame_stack.items():
+                    stack.reset()
+                    for _ in range(cfg.vision_depth):
+                        stack.push(first[name])
             # ``reset`` returns {"state": {...}} whereas ``step`` returns a flat
             # dict, so the bomb counter has to be read from both shapes.
             reset_state = info.get("state", {}) if isinstance(info, dict) else {}
             bombs_start = int(round(float(reset_state.get("bombs", info.get("bombs", 0)) or 0)))
             while True:
                 if vision_model is not None:
-                    encoded = vision.encode_frame(env.render(), cfg.vision_box)
-                    stack = frame_stack.push(encoded)
+                    regions = _regions_from_screen(env.render(), vision_model.config.region_sizes, cfg.vision_box)
+                    stacks = {name: frame_stack[name].push(regions[name]) for name in frame_stack}
                     with torch.no_grad():
-                        action, _logp, value, _extra = vision_model.act(vision.frames_to_batch(stack, device))
+                        action, _logp, value, _extra = vision_model.act(vision.regions_to_batch(stacks, device))
                     obs, reward, terminated, truncated, info = env.step(action[0].cpu().numpy())
                 elif model is None:
                     if pilot is None:

@@ -44,15 +44,35 @@ class VisionNetConfig:
     trunk_hidden: int = 256
     candidate_hidden: int = 64
     state_hidden: int = 256
-    # Auxiliary head: predict the privileged observation from pixels.  This is
-    # the "representation student" objective and the cheapest way to measure
-    # whether the vision path sees anything at all.
     state_head: bool = True
     danger_cells: int = obs.DANGER_ROWS * obs.DANGER_COLS
+    # Model input size per screen region.  The archive keeps native resolution
+    # (playfield 448x384, hud_score 34x216, hud_status 126x216); the model trades
+    # that down for compute, but the *HUD stays legible* because those regions are
+    # already small.  Tuple order is (H, W).
+    model_regions: tuple[tuple[str, int, int], ...] = (
+        ("playfield", 224, 192),
+        ("hud_score", 34, 216),
+        ("hud_status", 126, 216),
+    )
+
+    @property
+    def region_names(self) -> tuple[str, ...]:
+        return tuple(name for name, _h, _w in self.model_regions)
+
+    @property
+    def region_sizes(self) -> dict[str, tuple[int, int]]:
+        return {name: (height, width) for name, height, width in self.model_regions}
 
 
 class VisionEncoder(nn.Module):
-    """Small CNN: 128x112x(3*depth) -> ``trunk_hidden`` features."""
+    """Per-region CNN with shared weights, then a trunk.
+
+    Weights are shared across regions on purpose: a region is just "an image", and
+    sharing keeps the parameter count small enough that a handful of small HUD
+    streams cost almost nothing.  Each region is pooled to a fixed 2x2 before
+    concatenation so the trunk is independent of the input sizes.
+    """
 
     def __init__(self, config: VisionNetConfig | None = None):
         super().__init__()
@@ -67,20 +87,30 @@ class VisionEncoder(nn.Module):
             nn.ReLU(inplace=True),
             nn.Conv2d(width * 3, width * 4, 3, stride=2, padding=1),
             nn.ReLU(inplace=True),
-            nn.AdaptiveAvgPool2d((4, 4)),
         )
-        flat = width * 4 * 4 * 4
         self.trunk = nn.Sequential(
             nn.Flatten(),
-            nn.Linear(flat, self.config.trunk_hidden),
+            nn.Linear(width * 4 * 4 * len(self.config.region_names), self.config.trunk_hidden),
             nn.ReLU(inplace=True),
         )
 
-    def forward(self, frames: torch.Tensor) -> torch.Tensor:
-        """``frames`` [B, depth, H, W, C] in [0, 1] -> [B, trunk_hidden]."""
-        batch, depth, height, width, channels = frames.shape
-        x = frames.permute(0, 1, 4, 2, 3).reshape(batch, depth * channels, height, width)
-        return self.trunk(self.body(x))
+    @staticmethod
+    def _as_batched(region: torch.Tensor) -> tuple[torch.Tensor, int]:
+        if region.ndim == 4:  # (depth, H, W, C) -> (1, depth, H, W, C)
+            region = region.unsqueeze(0)
+        batch, depth, height, width, channels = region.shape
+        return region.permute(0, 1, 4, 2, 3).reshape(batch, depth * channels, height, width), batch
+
+    def forward(self, regions: dict[str, torch.Tensor]) -> torch.Tensor:
+        missing = set(self.config.region_names) - set(regions)
+        if missing:
+            raise KeyError(f"missing regions {sorted(missing)}; got {sorted(regions)}")
+        pooled = []
+        for name in self.config.region_names:
+            x, _batch = self._as_batched(regions[name])
+            features = self.body(x)
+            pooled.append(torch.nn.functional.adaptive_avg_pool2d(features, (2, 2)).flatten(1))
+        return self.trunk(torch.cat(pooled, dim=-1))
 
 
 class VisionStateDecoder(nn.Module):
@@ -128,11 +158,11 @@ class VisionScorer(nn.Module):
         )
         self.state_decoder = VisionStateDecoder(self.config) if self.config.state_head else None
 
-    def features(self, frames: torch.Tensor) -> torch.Tensor:
-        return self.encoder(frames)
+    def features(self, regions: dict[str, torch.Tensor]) -> torch.Tensor:
+        return self.encoder(regions)
 
-    def score(self, frames: torch.Tensor, features: torch.Tensor | None = None) -> torch.Tensor:
-        features = self.features(frames) if features is None else features
+    def score(self, regions: dict[str, torch.Tensor], features: torch.Tensor | None = None) -> torch.Tensor:
+        features = self.features(regions) if features is None else features
         index = torch.arange(N_CANDIDATES, device=features.device)
         embedded = self.candidate_embed(index)
         fused = torch.cat(
@@ -144,19 +174,19 @@ class VisionScorer(nn.Module):
         )
         return self.score_head(fused).squeeze(-1)
 
-    def decode_state(self, frames: torch.Tensor, features: torch.Tensor | None = None) -> dict[str, torch.Tensor]:
+    def decode_state(self, regions: dict[str, torch.Tensor], features: torch.Tensor | None = None) -> dict[str, torch.Tensor]:
         if self.state_decoder is None:
             raise RuntimeError("this model was built with state_head=False")
-        features = self.features(frames) if features is None else features
+        features = self.features(regions) if features is None else features
         return self.state_decoder(features)
 
-    def act(self, frames: torch.Tensor, deterministic: bool = True):
+    def act(self, regions: dict[str, torch.Tensor], deterministic: bool = True):
         """Greedy action tuple ``[move, shoot, focus, bomb]`` from pixels.
 
         Shooting is always on and bombing is left to a rule (the teacher's value
         only ranks movement/focus), which mirrors how the privileged scorer acts.
         """
-        values = self.score(frames)
+        values = self.score(regions)
         best = values.argmax(dim=-1)
         move = best % spec.ACTION_DIMS[0]
         focus = best // spec.ACTION_DIMS[0]

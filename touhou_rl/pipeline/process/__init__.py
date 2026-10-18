@@ -33,7 +33,10 @@ from ... import obs
 from ..manifest import DatasetManifest, ManifestError, ShardRecord, file_digest
 
 REQUIRED_PRIVILEGED = {"self_feat", "bullets", "danger", "action", "meta"}
-REQUIRED_VISION = {"frame", "self_feat", "bullets", "danger", "action", "meta"}
+# Vision shards store native PNG blobs (frame_blob/frame_offset/frame_hw); the
+# older 128x112 capture path stored a dense `frame` array.  Both are accepted.
+REQUIRED_VISION = {"self_feat", "bullets", "danger", "action", "meta"}
+FRAME_KEYS_BLOB = {"frame_blob", "frame_offset", "frame_hw"}
 ACTION_DIMS = (9, 2, 2, 2)
 
 
@@ -74,6 +77,28 @@ def _validate_shard(path: Path, modality: str) -> dict:
         missing = required - set(data.files)
         if missing:
             raise ManifestError(f"{path.name}: missing keys {sorted(missing)}")
+        frame_reference = None
+        if modality == "vision":
+            files = set(data.files)
+            if "region_name" in files:
+                names = [str(value) for value in data["region_name"]]
+                shapes = data["region_hw"]
+                for name, (height, width) in zip(names, shapes):
+                    blob_key, offset_key = f"{name}_blob", f"{name}_offset"
+                    if blob_key not in files or offset_key not in files:
+                        raise ManifestError(f"{path.name}: missing payload for region {name!r}")
+                    offsets = data[offset_key]
+                    if offsets.shape[0] != data["action"].shape[0] + 1:
+                        raise ManifestError(f"{path.name}: {offset_key} length mismatch")
+                    if offsets[-1] != data[blob_key].shape[0]:
+                        raise ManifestError(f"{path.name}: {offset_key} does not cover {blob_key}")
+                frame_reference = tuple(int(v) for v in shapes[0])
+            elif "frame" in files:
+                frame_reference = tuple(int(v) for v in data["frame"].shape[1:3])
+            else:
+                raise ManifestError(
+                    f"{path.name}: no frame payload (expected <region>_blob/<region>_offset or frame)"
+                )
         action = data["action"]
         if action.ndim != 2 or action.shape[1] != 4:
             raise ManifestError(f"{path.name}: action shape {action.shape}, expected (n, 4)")
@@ -97,7 +122,7 @@ def _validate_shard(path: Path, modality: str) -> dict:
         row = {
             "frames": frames,
             "has_value": "value" in data.files,
-            "frame_shape": list(data["frame"].shape[1:]) if modality == "vision" else None,
+            "frame_shape": [*frame_reference, 3] if modality == "vision" and frame_reference else None,
             "stage_hist": {},
             "move_hist": [0] * ACTION_DIMS[0],
             "focus_rate": 0.0,

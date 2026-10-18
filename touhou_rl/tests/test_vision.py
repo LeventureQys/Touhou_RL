@@ -96,30 +96,49 @@ def _observation(seed: int = 0) -> obs.Observation:
     )
 
 
+def _regions(value: int) -> dict[str, bytes]:
+    """One PNG per region, distinct sizes so mix-ups are visible."""
+    sizes = {"playfield": (48, 64), "hud_score": (8, 32), "hud_status": (16, 32)}
+    return {
+        name: vision.encode_png(np.full((h, w, 3), value, dtype=np.uint8))
+        for name, (h, w) in sizes.items()
+    }
+
+
 def test_shard_roundtrip(tmp_path):
     writer = VisionShardWriter(tmp_path, shard_size=3, tag="t")
-    frames = []
     for index in range(7):
-        frame = np.full((vision.VISION_H, vision.VISION_W, 3), index, dtype=np.uint8)
-        frames.append(frame)
-        writer.add(frame, _observation(index), (index % 9, 1, 0, 0), {name: index for name in
-                   ("frame", "stage", "score", "graze", "lives", "bombs", "power", "deaths")})
+        writer.add(
+            _regions(index * 20),
+            _observation(index),
+            (index % 9, 1, 0, 0),
+            {name: index for name in
+             ("frame", "stage", "score", "graze", "lives", "bombs", "power", "deaths")},
+        )
     summary = writer.close()
     assert summary["frames"] == 7
     dataset = VisionDataset(tmp_path)
     assert len(dataset) == 7
-    batch = dataset.batch([0, 3, 6])
-    assert batch["frame"].shape == (3, vision.VISION_H, vision.VISION_W, 3)
-    assert int(batch["frame"][0, 0, 0, 0]) == 0
-    assert int(batch["frame"][2, 0, 0, 0]) == 6
-    assert int(batch["action"][1, 0]) == 3
+    assert set(dataset.region_names) == {"playfield", "hud_score", "hud_status"}
+    frames = dataset.frames([0, 3, 6], "playfield")
+    assert frames.shape == (3, 48, 64, 3)
+    assert int(frames[0, 0, 0, 0]) == 0
+    assert int(frames[2, 0, 0, 0]) == 120
+    hud = dataset.frames([1], "hud_status")
+    assert hud.shape == (1, 16, 32, 3)
+    # decoding at a different tensor size must work without touching the archive
+    small = dataset.frames([0], "playfield", 24, 32)
+    assert small.shape == (1, 24, 32, 3)
+    labels = dataset.labels([1, 4])
+    assert labels["action"].shape == (2, 4)
+    assert int(labels["action"][1, 0]) == 4
 
 
 def test_stack_indices_never_cross_shard_boundary(tmp_path):
     writer = VisionShardWriter(tmp_path, shard_size=3, tag="t")
     for index in range(7):
         writer.add(
-            np.zeros((vision.VISION_H, vision.VISION_W, 3), dtype=np.uint8),
+            _regions(index),
             _observation(index),
             (0, 1, 0, 0),
             {name: 0 for name in ("frame", "stage", "score", "graze", "lives", "bombs", "power", "deaths")},
@@ -135,11 +154,18 @@ def test_stack_indices_never_cross_shard_boundary(tmp_path):
     assert list(stack[2]) == [3, 3, 3]
 
 
+def _model_regions(config, batch: int = 4, depth: int = 2) -> dict:
+    """One zero tensor per model region, at that region's configured size."""
+    return {
+        name: np.zeros((batch, depth, height, width, 3), dtype=np.uint8)
+        for name, height, width in config.model_regions
+    }
+
+
 def test_vision_model_shapes():
     config = VisionNetConfig(depth=2, width=8, trunk_hidden=32)
     model = VisionScorer(config)
-    frames = np.zeros((4, 2, vision.VISION_H, vision.VISION_W, 3), dtype=np.uint8)
-    batch = vision.frames_to_batch(frames)
+    batch = vision.regions_to_batch(_model_regions(config))
     values = model.score(batch)
     assert tuple(values.shape) == (4, N_CANDIDATES)
     state = model.decode_state(batch)
@@ -158,6 +184,7 @@ def test_vision_checkpoint_roundtrip(tmp_path):
     save_vision_checkpoint(path, model, {"stage": "state"})
     restored, extra = load_vision_checkpoint(path)
     assert extra["stage"] == "state"
-    frames = np.zeros((1, 2, vision.VISION_H, vision.VISION_W, 3), dtype=np.uint8)
-    batch = vision.frames_to_batch(frames)
-    assert np.allclose(model.score(batch).detach().numpy(), restored.score(batch).detach().numpy(), atol=1e-6)
+    batch = vision.regions_to_batch(_model_regions(config, batch=1))
+    assert np.allclose(
+        model.score(batch).detach().numpy(), restored.score(batch).detach().numpy(), atol=1e-6
+    )

@@ -32,14 +32,26 @@ of this contract; it is training-time label material and is defined in
 
 from __future__ import annotations
 
+import io
 from dataclasses import dataclass, replace
 
 import numpy as np
 
 from . import spec
 
-# Output tensor shape (H, W, 3).  384x448 playfield -> 112x128 keeps the aspect
-# ratio (0.857 vs 0.875) at 1/3.43 scale, which renders a 10 px bullet as ~3 px.
+# --- recording contract ----------------------------------------------------
+# Captures store the frame at the **native client-area resolution** (640x480 for
+# TH08's windowed mode) as a lossless PNG blob.  Measured cost on real frames:
+# 300-340 KB/frame, 20-26 ms to encode, 4.25 ms to decode.
+NATIVE_H = spec.GAME_HEIGHT
+NATIVE_W = spec.GAME_WIDTH
+NATIVE_CHANNELS = 3
+
+# --- training tensor --------------------------------------------------------
+# The resolution the *model* consumes is a separate, cheap decision: frames are
+# decoded from the native blob and resized at load time, so nothing is lost from
+# the archive if this changes later.  Keep the historical default for
+# compatibility with the checkpoint and dataset formats already on disk.
 VISION_H = 128
 VISION_W = 112
 VISION_CHANNELS = 3
@@ -95,6 +107,44 @@ def crop(frame: np.ndarray, box: PlayfieldBox) -> np.ndarray:
     return frame[fitted.y : fitted.y + fitted.h, fitted.x : fitted.x + fitted.w]
 
 
+def native_frame(frame: np.ndarray, box: PlayfieldBox | None = None) -> np.ndarray:
+    """Crop the user's box at **native resolution** - no resizing, no loss.
+
+    The default box is the whole client area, i.e. recording keeps everything the
+    game draws, including the HUD (lives / bombs / power).  A vision-only agent
+    needs to read those from pixels at deployment, so cropping them away at
+    capture time would make that impossible to learn later.
+    """
+    if frame.dtype != np.uint8:
+        raise ValueError(f"expected uint8 RGB frame, got dtype {frame.dtype}")
+    if frame.shape[2] == 4:  # 32-bit DIB from GDI carries a padding channel
+        frame = frame[:, :, :3]
+    box = box or PlayfieldBox(0, 0, frame.shape[1], frame.shape[0])
+    return np.ascontiguousarray(crop(frame, box))
+
+
+def encode_png(image: np.ndarray, compress_level: int = 6) -> bytes:
+    """Lossless PNG bytes for one frame (the archive format)."""
+    from PIL import Image
+
+    buffer = io.BytesIO()
+    Image.fromarray(np.ascontiguousarray(image)).save(
+        buffer, format="PNG", compress_level=int(compress_level), optimize=False
+    )
+    return buffer.getvalue()
+
+
+def decode_png(blob: bytes, out_h: int | None = None, out_w: int | None = None) -> np.ndarray:
+    """Decode one archived frame; optionally resize to the training tensor."""
+    from PIL import Image
+
+    with Image.open(io.BytesIO(blob)) as image:
+        image = image.convert("RGB")
+        if out_h is not None and out_w is not None and (image.height != out_h or image.width != out_w):
+            image = image.resize((out_w, out_h), Image.BOX)
+        return np.asarray(image, dtype=np.uint8)
+
+
 def resize_area(image: np.ndarray, out_h: int = VISION_H, out_w: int = VISION_W) -> np.ndarray:
     """Area-average downscale to ``(out_h, out_w)``.
 
@@ -118,22 +168,52 @@ def encode_frame(
     out_h: int = VISION_H,
     out_w: int = VISION_W,
 ) -> np.ndarray:
-    """Client-area RGB frame -> ``uint8[out_h, out_w, 3]`` observation."""
-    if frame.dtype != np.uint8:
-        raise ValueError(f"expected uint8 RGB frame, got dtype {frame.dtype}")
-    if frame.shape[2] == 4:  # 32-bit DIB from GDI can carry a padding channel
-        frame = frame[:, :, :3]
+    """Client-area RGB frame -> ``uint8[out_h, out_w, 3]`` **training** tensor.
+
+    Note this is the *training* path, not the recording path: recording keeps the
+    native frame (see :func:`native_frame` / :func:`encode_png`).
+    """
     box = box or PlayfieldBox.for_th08()
     return resize_area(crop(frame, box), out_h, out_w)
 
 
-class FrameStack:
-    """Fixed-depth frame history (oldest first), zero-initialised.
+@dataclass(frozen=True)
+class RegionSpec:
+    """One named rectangle of the screen, recorded on its own.
 
-    History depth matters for a *vision* policy in a way it did not for the
-    privileged one: the memory-reading observation carried bullet velocities
-    explicitly, pixels do not, so motion has to come from consecutive frames.
+    Regions exist because a single downscaled screen cannot serve both needs: the
+    playfield needs spatial detail for bullets, the HUD digits need to stay legible
+    (lives / bombs / score drive real decisions - bomb now or die).  Recording them
+    separately keeps each at native resolution and lets the model weight them as
+    distinct streams.
     """
+
+    name: str
+    box: "PlayfieldBox"
+
+
+# TH08 layout, verified against a real 640x480 client-area screenshot
+# (tools/probes/verify_regions.py renders these next to the source).
+TH08_REGIONS: tuple[RegionSpec, ...] = (
+    RegionSpec("playfield", PlayfieldBox(32, 16, 384, 448)),
+    RegionSpec("hud_score", PlayfieldBox(424, 36, 216, 34)),
+    RegionSpec("hud_status", PlayfieldBox(424, 88, 216, 126)),
+)
+REGION_NAMES: tuple[str, ...] = tuple(region.name for region in TH08_REGIONS)
+
+
+def extract_regions(
+    frame: np.ndarray, regions: tuple[RegionSpec, ...] = TH08_REGIONS
+) -> dict[str, np.ndarray]:
+    """Crop every region at native resolution (no scaling, no loss)."""
+    if frame.dtype != np.uint8:
+        raise ValueError(f"expected uint8 RGB frame, got dtype {frame.dtype}")
+    if frame.shape[2] == 4:
+        frame = frame[:, :, :3]
+    return {region.name: np.ascontiguousarray(crop(frame, region.box)) for region in regions}
+
+
+class FrameStack:
 
     def __init__(self, depth: int = 1, shape: tuple[int, int, int] = (VISION_H, VISION_W, VISION_CHANNELS)):
         if depth < 1:
@@ -159,6 +239,25 @@ class FrameStack:
     @property
     def current(self) -> np.ndarray:
         return self._frames
+
+
+def regions_to_batch(regions: dict[str, np.ndarray], device=None) -> dict:
+    """``{name: uint8[B or (depth,H,W,3)]}`` -> ``{name: float32[B,depth,H,W,3]/255}``.
+
+    Kept as a function (not a transform object) so training and inference must call
+    the same code - the v1.0.2 post-mortem has a bug caused by two copies of the
+    preprocessing drifting apart.
+    """
+    import torch
+
+    batch = {}
+    for name, array in regions.items():
+        tensor = np.asarray(array)
+        if tensor.ndim == 4:  # (depth, H, W, C) -> (1, depth, H, W, C)
+            tensor = tensor[None, ...]
+        value = torch.as_tensor(tensor, dtype=torch.float32) / 255.0
+        batch[name] = value.to(device) if device is not None else value
+    return batch
 
 
 def frames_to_batch(stack: np.ndarray, device=None):

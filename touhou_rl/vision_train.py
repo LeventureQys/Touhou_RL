@@ -42,7 +42,7 @@ import torch
 
 from . import obs, spec, vision
 from .pilot import AvoidPilot, PilotConfig
-from .vision import frames_to_batch
+from .vision import regions_to_batch
 from .vision_data import VisionDataset
 from .vmodels import VisionNetConfig, VisionScorer, load_vision_checkpoint, save_vision_checkpoint
 
@@ -68,6 +68,9 @@ class VisionTrainConfig:
     depth: int = 3
     width: int = 32
     trunk_hidden: int = 256
+    # Model input size per region; the archive stays native, so these can change
+    # without re-collecting.
+    model_regions: tuple[tuple[str, int, int], ...] = VisionNetConfig().model_regions
     init_from: Path | None = None
     teacher_values: Path | None = None
     max_batches_per_epoch: int = 0
@@ -92,7 +95,9 @@ def teacher_values_for(dataset: VisionDataset, cache: Path, verbose: bool = True
     chunk = 2048
     for start in range(0, len(dataset), chunk):
         stop = min(len(dataset), start + chunk)
-        batch = dataset.batch(list(range(start, stop)))
+        # Labels only: decoding 2.3 M PNG frames just to compute teacher values
+        # would cost more than the labelling itself.
+        batch = dataset.labels(list(range(start, stop)))
         self_feat = batch["self_feat"].astype(np.float32)
         bullets = batch["bullets"].astype(np.float32)
         danger = batch["danger"]
@@ -112,18 +117,29 @@ def teacher_values_for(dataset: VisionDataset, cache: Path, verbose: bool = True
     return out
 
 
-def _gather(dataset: VisionDataset, indices: list[int], depth: int) -> tuple[torch.Tensor, dict]:
-    stack_ids = dataset.stack_indices(indices, depth).reshape(-1)
-    batch = dataset.batch(stack_ids.tolist())
-    frames = batch["frame"].reshape(len(indices), depth, vision.VISION_H, vision.VISION_W, vision.VISION_CHANNELS)
-    center = dataset.batch(indices)
+def _gather(
+    dataset: VisionDataset,
+    indices: list[int],
+    depth: int,
+    region_sizes: dict[str, tuple[int, int]],
+) -> tuple[dict[str, torch.Tensor], dict]:
+    """Per-region frame tensors (decoded from the native archive) plus labels."""
+    stack_ids = dataset.stack_indices(indices, depth).reshape(-1).tolist()
+    regions = dataset.region_frames(stack_ids, region_sizes)
+    stacked = {
+        name: frames.reshape(
+            len(indices), depth, region_sizes[name][0], region_sizes[name][1], vision.VISION_CHANNELS
+        )
+        for name, frames in regions.items()
+    }
+    center = dataset.labels(indices)
     labels = {
         "self_feat": center["self_feat"].astype(np.float32),
         "danger": center["danger"].astype(np.float32),
         "action": center["action"].astype(np.int64),
         "bullets": center["bullets"].astype(np.float32),
     }
-    return torch.as_tensor(frames, dtype=torch.uint8), labels
+    return {name: torch.as_tensor(value, dtype=torch.uint8) for name, value in stacked.items()}, labels
 
 
 def _danger_target(danger: np.ndarray) -> np.ndarray:
@@ -213,7 +229,13 @@ def train(cfg: VisionTrainConfig) -> dict:
     val_idx = perm[:n_val].tolist()
     train_idx = perm[n_val:].tolist()
 
-    net_config = VisionNetConfig(depth=cfg.depth, width=cfg.width, trunk_hidden=cfg.trunk_hidden)
+    net_config = VisionNetConfig(
+        depth=cfg.depth,
+        width=cfg.width,
+        trunk_hidden=cfg.trunk_hidden,
+        model_regions=cfg.model_regions,
+    )
+    region_sizes = net_config.region_sizes
     if cfg.init_from is not None:
         model, _extra = load_vision_checkpoint(cfg.init_from, map_location=device)
         print(f"[vision] warm start from {cfg.init_from}", flush=True)
@@ -232,7 +254,7 @@ def train(cfg: VisionTrainConfig) -> dict:
         "device": str(device),
         "depth": cfg.depth,
         "parameters": model.num_parameters(),
-        "frame_shape": [vision.VISION_H, vision.VISION_W, vision.VISION_CHANNELS],
+        "frame_shape": {name: [h, w, vision.VISION_CHANNELS] for name, h, w in cfg.model_regions},
         "started": time.strftime("%Y-%m-%dT%H:%M:%S"),
         "stages": {},
     }
@@ -257,10 +279,10 @@ def train(cfg: VisionTrainConfig) -> dict:
         pred_danger: list[np.ndarray] = []
         true_danger: list[np.ndarray] = []
         for index in batches(indices, training, cfg.max_batches_per_epoch):
-            frames, labels = _gather(dataset, index, cfg.depth)
-            frames = frames_to_batch(frames.numpy(), device)
+            regions, labels = _gather(dataset, index, cfg.depth, region_sizes)
+            batch = regions_to_batch({name: value.numpy() for name, value in regions.items()}, device)
             with torch.set_grad_enabled(training):
-                out = model.decode_state(frames)
+                out = model.decode_state(batch)
                 target_self = torch.as_tensor(labels["self_feat"], device=device)
                 target_danger = torch.as_tensor(_danger_target(labels["danger"]), device=device)
                 loss = torch.nn.functional.smooth_l1_loss(out["self_feat"], target_self) + torch.nn.functional.smooth_l1_loss(
@@ -293,11 +315,11 @@ def train(cfg: VisionTrainConfig) -> dict:
         truths: list[np.ndarray] = []
         bullets: list[np.ndarray] = []
         for index in batches(indices, training, cfg.max_batches_per_epoch):
-            frames, labels = _gather(dataset, index, cfg.depth)
-            frames = frames_to_batch(frames.numpy(), device)
+            regions, labels = _gather(dataset, index, cfg.depth, region_sizes)
+            batch = regions_to_batch({name: value.numpy() for name, value in regions.items()}, device)
             target = np.clip(values[index].astype(np.float32), *VALUE_CLIP) / VALUE_SCALE
             with torch.set_grad_enabled(training):
-                predicted = model.score(frames)
+                predicted = model.score(batch)
                 loss = torch.nn.functional.smooth_l1_loss(
                     predicted, torch.as_tensor(target, device=device)
                 )

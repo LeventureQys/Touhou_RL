@@ -47,16 +47,18 @@ def capture_vision(
     max_seconds: float = 600.0,
     stage: int | None = None,
     box: vision.PlayfieldBox | None = None,
+    regions: tuple[vision.RegionSpec, ...] = vision.TH08_REGIONS,
     template_dir: Path | None = None,
     run_dir: Path | None = None,
-    shard_size: int = 512,
+    shard_size: int = 128,
+    compress_level: int = 6,
     allow_append: bool = False,
     verbose: bool = True,
 ) -> dict:
     template = template_dir or (ROOT / "third_party/th08/build/play")
     work = run_dir or (ROOT / "third_party/th08/build/rl/vision-session")
     out_dir = Path(out_dir)
-    box = box or vision.PlayfieldBox.for_th08()
+    box = box or vision.PlayfieldBox(0, 0, vision.NATIVE_W, vision.NATIVE_H)
     if every < 1:
         raise ValueError("every must be >= 1")
 
@@ -83,6 +85,11 @@ def capture_vision(
     )
     session = GameSession(SessionOptions(run_dir=work))
     started = time.time()
+    playback_started: float | None = None
+    first_game_frame: int | None = None
+    last_game_frame: int | None = None
+    last_stage_for_span: int | None = None
+    game_frames_total = 0
     report = {
         "replay": str(replay),
         "frames": 0,
@@ -90,7 +97,7 @@ def capture_vision(
         "ended_reason": "",
         "elapsed_seconds": 0.0,
         "box": [box.x, box.y, box.w, box.h],
-        "frame_shape": [vision.VISION_H, vision.VISION_W, vision.VISION_CHANNELS],
+        "frame_shape": [vision.NATIVE_H, vision.NATIVE_W, vision.NATIVE_CHANNELS],
         "every": int(every),
     }
     transient = {
@@ -105,6 +112,7 @@ def capture_vision(
         assert reader is not None
         session.keyboard.release_all()
         last_key: tuple[int, int] | None = None
+        next_target: int | None = None
         last_guard = 0.0
         last_progress = time.time()
         while time.time() - started < max_seconds:
@@ -132,24 +140,36 @@ def capture_vision(
             if last_key is not None and key[0] != last_key[0]:
                 if state.stage not in report["stages_seen"]:
                     report["stages_seen"].append(state.stage)
-            # Only every ``every``-th logic frame is recorded (decision rate).
-            if last_key is not None and key[0] == last_key[0]:
-                if (key[1] - last_key[1]) % every != 0:
-                    continue
+                next_target = None  # stage boundary resets the stride clock
+            # Stride by absolute target rather than by ``delta % every``: with the
+            # modulo test, a sample that is taken a few milliseconds late makes the
+            # next delta a non-multiple of ``every``, so that frame is dropped and
+            # the following one is taken - silently halving the rate.  Targeting the
+            # next frame number keeps the cadence even under jitter.
+            if next_target is not None and key[1] < next_target:
+                continue
+            next_target = key[1] + every
             last_key = key
             last_progress = time.time()
 
             field = reader.read_bullets()
             observation = obs.encode(state, field)
             try:
-                frame = vision.encode_frame(session.grab(), box)
-            except Exception as exc:  # a transient BitBlt failure must not kill a long capture
+                # Discrete, per-region recording: playfield and each HUD block are
+                # cropped at native resolution and encoded separately, so the HUD
+                # digits stay legible instead of being lost in a global downscale.
+                crops = vision.extract_regions(session.grab(), regions)
+                blobs = {
+                    name: vision.encode_png(image, compress_level=compress_level)
+                    for name, image in crops.items()
+                }
+            except Exception as exc:  # a transient BitBlt/PNG failure must not kill a long capture
                 if verbose:
-                    print(f"[vision-capture] grab failed: {exc!r}", flush=True)
+                    print(f"[vision-capture] frame skipped: {exc!r}", flush=True)
                 continue
             action = spec.buttons_to_action(state.gui_input_current)
             writer.add(
-                frame,
+                blobs,
                 observation,
                 action,
                 {
@@ -162,8 +182,17 @@ def capture_vision(
                     "power": state.power,
                     "deaths": state.deaths,
                 },
+                native_hw={name: (image.shape[0], image.shape[1]) for name, image in crops.items()},
             )
             report["frames"] += 1
+            if playback_started is None:
+                playback_started = time.time()
+            if last_game_frame is not None and key[0] == last_stage_for_span:
+                advanced = (key[1] - last_game_frame) & 0xFFFFFFFF
+                if 0 < advanced < 600:
+                    game_frames_total += advanced
+            last_stage_for_span = key[0]
+            last_game_frame = key[1]
             if verbose and report["frames"] % 1000 == 0:
                 elapsed = max(1e-6, time.time() - started)
                 print(
@@ -181,6 +210,22 @@ def capture_vision(
         except Exception:
             pass
         report["elapsed_seconds"] = round(time.time() - started, 1)
+        # Rate metrics split two things the earlier report conflated: the wall
+        # clock includes boot + menu walk (several seconds with zero samples), and
+        # the *effective* rate is samples per second of game time actually played.
+        if playback_started is not None:
+            playback_seconds = max(1e-6, time.time() - playback_started)
+            report["playback_seconds"] = round(playback_seconds, 1)
+            report["samples_per_playback_second"] = round(report["frames"] / playback_seconds, 2)
+        if first_game_frame is not None and last_game_frame is not None:
+            # ``gameplay_frame`` resets at every stage boundary, so the meaningful
+            # span is the sum of within-stage deltas (``game_frames_total``), not
+            # last-minus-first.
+            report["game_frames_span"] = int(game_frames_total)
+            if game_frames_total > 0:
+                report["samples_per_game_second"] = round(
+                    report["frames"] / (game_frames_total / 60.0), 2
+                )
         report["shards"] = len(summary["shards"])
         report["bytes"] = sum((out_dir / name).stat().st_size for name in summary["shards"]) if summary["shards"] else 0
         (out_dir / "capture-report.json").write_text(
@@ -197,7 +242,8 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--every", type=int, default=2, help="record every N-th logic frame")
     parser.add_argument("--max-seconds", type=float, default=600.0)
     parser.add_argument("--stage", type=int, default=-1)
-    parser.add_argument("--shard-size", type=int, default=512)
+    parser.add_argument("--shard-size", type=int, default=128)
+    parser.add_argument("--compress-level", type=int, default=6, help="PNG compress level (1=fast, 9=small)")
     parser.add_argument("--overwrite", action="store_true")
     args = parser.parse_args(argv)
     report = capture_vision(
@@ -208,6 +254,7 @@ def main(argv: list[str] | None = None) -> int:
         max_seconds=args.max_seconds,
         stage=None if args.stage < 0 else args.stage,
         shard_size=args.shard_size,
+        compress_level=args.compress_level,
         allow_append=args.overwrite,
     )
     print(json.dumps(report, ensure_ascii=False, indent=2))
