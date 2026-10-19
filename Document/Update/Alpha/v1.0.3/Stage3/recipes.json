@@ -1,0 +1,21 @@
+{
+  "dataset": "third_party/th08/build/rl/datasets/pilot-ud0059",
+  "runs_root": "third_party/th08/build/rl/runs",
+  "table": "Document/Update/Alpha/v1.0.3/Stage3/实验表.md",
+  "recipes": [
+    {"id": "R1-a", "arch": "v2", "note": "v2 baseline: 3-stream, stride8 heatmap, sigma1.5, loss 1:1:1",
+     "args": {"stage": "both", "epochs_state": 8, "epochs_policy": 8, "batch_size": 96, "depth": 1,
+              "train_fraction": 1.0, "max_train_batches": 160, "max_val_batches": 0}},
+    {"id": "R1-b", "arch": "v2", "note": "A: depth3 frame stack",
+     "args": {"stage": "state", "epochs_state": 8, "batch_size": 96, "depth": 3,
+              "train_fraction": 1.0, "max_train_batches": 160, "max_val_batches": 0}},
+    {"id": "R1-c", "arch": "v2", "note": "B: heatmap sigma 1.0 (sharper)",
+     "args": {"stage": "state", "epochs_state": 8, "batch_size": 96, "depth": 1,
+              "heatmap_sigma": 1.0,
+              "train_fraction": 1.0, "max_train_batches": 160, "max_val_batches": 0}},
+    {"id": "R1-d", "arch": "v2", "note": "C: w_heatmap 2.0 (position prioritized)",
+     "args": {"stage": "state", "epochs_state": 8, "batch_size": 96, "depth": 1,
+              "w_heatmap": 2.0,
+              "train_fraction": 1.0, "max_train_batches": 160, "max_val_batches": 0}}
+  ]
+}

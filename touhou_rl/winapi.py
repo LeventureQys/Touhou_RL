@@ -344,6 +344,67 @@ def force_foreground(hwnd: int) -> bool:
 
 
 # ---------------------------------------------------------------------------
+# Session / window state (guards against a frozen window DC)
+# ---------------------------------------------------------------------------
+# Why these exist: `GetDC` + `BitBlt` keeps returning the *last painted* client
+# area when the window stops being composited (locked desktop, display off,
+# minimised).  BitBlt still reports success, so a capture that only checks return
+# values cannot tell a live frame from a stale one.  v1.0.3 shipped 52,888
+# identical samples (73% of a dataset) because of exactly that.
+ES_CONTINUOUS = 0x80000000
+ES_SYSTEM_REQUIRED = 0x00000001
+ES_DISPLAY_REQUIRED = 0x00000002
+DWMWA_CLOAKED = 14
+
+kernel32.SetThreadExecutionState.argtypes = [wt.DWORD]
+kernel32.SetThreadExecutionState.restype = wt.DWORD
+user32.IsIconic.argtypes = [wt.HWND]
+user32.IsIconic.restype = wt.BOOL
+
+try:  # pragma: no cover - depends on the host's DWM
+    dwmapi = ctypes.WinDLL("dwmapi")
+    dwmapi.DwmGetWindowAttribute.argtypes = [wt.HWND, wt.DWORD, ctypes.c_void_p, wt.DWORD]
+    dwmapi.DwmGetWindowAttribute.restype = ctypes.c_long
+except OSError:  # pragma: no cover
+    dwmapi = None
+
+
+def keep_awake(enable: bool = True) -> bool:
+    """Ask Windows not to sleep and not to turn the display off.
+
+    The power plan is a per-user setting the capture cannot rely on: on this host
+    the display went off after 5 minutes and the session locked around minute 10,
+    which froze the window DC mid-capture.  Calling this for the duration of a
+    capture makes the guarantee local to the process instead of to the machine.
+    """
+    flags = ES_CONTINUOUS
+    if enable:
+        flags |= ES_SYSTEM_REQUIRED | ES_DISPLAY_REQUIRED
+    return bool(kernel32.SetThreadExecutionState(flags))
+
+
+def is_iconic(hwnd: int) -> bool:
+    """True when the window is minimised."""
+    return bool(user32.IsIconic(hwnd)) if hwnd else False
+
+
+def is_cloaked(hwnd: int) -> bool:
+    """True when DWM is not compositing the window (locked desktop, hidden shell)."""
+    if not hwnd or dwmapi is None:
+        return False
+    value = wt.DWORD(0)
+    status = dwmapi.DwmGetWindowAttribute(
+        wt.HWND(hwnd), DWMWA_CLOAKED, ctypes.byref(value), ctypes.sizeof(value)
+    )
+    return status == 0 and bool(value.value)
+
+
+def window_visible(hwnd: int) -> bool:
+    """True when the window is neither minimised nor cloaked."""
+    return not is_iconic(hwnd) and not is_cloaked(hwnd)
+
+
+# ---------------------------------------------------------------------------
 # Frame capture
 # ---------------------------------------------------------------------------
 class GdiCapture:

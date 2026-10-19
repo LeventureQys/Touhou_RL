@@ -1,0 +1,171 @@
+{
+  "checkpoint": ".",
+  "checkpoint_extra": {
+    "vision_checkpoint": true,
+    "stage": "policy",
+    "epoch": 2,
+    "arch": "v2",
+    "train_fraction": 1.0,
+    "val_index_sha256": "e7c7b6c06d8ad8ef4528560ad3bab42391b50b77ffe1554b30eb8af9d59678fa",
+    "train_loss": 0.7322,
+    "val_loss": 0.72432,
+    "seconds": 152.7,
+    "val_frames": 7200,
+    "val_top1": 0.1182,
+    "val_regret_px": 3.673,
+    "val_regret_px_bucket_0_15": 4.081,
+    "by_danger": [
+      {
+        "bucket": "0-15",
+        "frames": 1069,
+        "top1": 0.1207,
+        "regret_px": 4.081
+      },
+      {
+        "bucket": "15-30",
+        "frames": 1995,
+        "top1": 0.0847,
+        "regret_px": 4.397
+      },
+      {
+        "bucket": "30-60",
+        "frames": 1382,
+        "top1": 0.1606,
+        "regret_px": 5.049
+      },
+      {
+        "bucket": "60-120",
+        "frames": 749,
+        "top1": 0.2577,
+        "regret_px": 4.355
+      },
+      {
+        "bucket": "120+",
+        "frames": 2005,
+        "top1": 0.0688,
+        "regret_px": 1.531
+      }
+    ]
+  },
+  "policy": "vision",
+  "difficulty": 3,
+  "team": 0,
+  "practice_stage": null,
+  "frameskip": 2,
+  "deterministic": false,
+  "device": "cuda",
+  "started": "2026-10-18T20:05:22",
+  "episodes": [
+    {
+      "episode": 1,
+      "steps": 609,
+      "frames_reported": 1236,
+      "stages_reached": 0,
+      "deaths": 3,
+      "lives_left": 0.0,
+      "score": 10674,
+      "graze": 70,
+      "episode_reward": -23.63,
+      "terminated": true,
+      "truncated": false,
+      "termination_reason": "frame stalled",
+      "wall_seconds": 21.5,
+      "decisions_per_s": 28.26,
+      "last_state": {
+        "stage": 0,
+        "frame": 1236,
+        "bullets": 209
+      },
+      "screenshot": "third_party\\th08\\build\\rl\\eval\\vision-v103\\episode-01.png"
+    },
+    {
+      "episode": 2,
+      "steps": 710,
+      "frames_reported": 1420,
+      "stages_reached": 0,
+      "deaths": 3,
+      "lives_left": 0.0,
+      "score": 13639,
+      "graze": 91,
+      "episode_reward": -21.351,
+      "terminated": true,
+      "truncated": false,
+      "termination_reason": "frame stalled",
+      "wall_seconds": 24.6,
+      "decisions_per_s": 28.83,
+      "last_state": {
+        "stage": 0,
+        "frame": 1420,
+        "bullets": 105
+      },
+      "screenshot": "third_party\\th08\\build\\rl\\eval\\vision-v103\\episode-02.png"
+    },
+    {
+      "episode": 3,
+      "steps": 701,
+      "frames_reported": 1401,
+      "stages_reached": 0,
+      "deaths": 3,
+      "lives_left": 0.0,
+      "score": 13013,
+      "graze": 82,
+      "episode_reward": -21.565,
+      "terminated": true,
+      "truncated": false,
+      "termination_reason": "frame stalled",
+      "wall_seconds": 24.3,
+      "decisions_per_s": 28.82,
+      "last_state": {
+        "stage": 0,
+        "frame": 1401,
+        "bullets": 97
+      },
+      "screenshot": "third_party\\th08\\build\\rl\\eval\\vision-v103\\episode-03.png"
+    }
+  ],
+  "vision": {
+    "checkpoint": "third_party\\th08\\build\\rl\\runs\\v103-exp-05\\policy.pt",
+    "arch": "v2",
+    "depth": 1,
+    "region_sizes": {
+      "playfield": [
+        224,
+        192
+      ],
+      "hud_score": [
+        34,
+        216
+      ],
+      "hud_status": [
+        126,
+        216
+      ]
+    },
+    "frame_shape": {
+      "playfield": [
+        224,
+        192,
+        3
+      ],
+      "hud_score": [
+        34,
+        216,
+        3
+      ],
+      "hud_status": [
+        126,
+        216,
+        3
+      ]
+    },
+    "isolation": "I-1: policy input is regions_to_batch(env.render crops) only; env bookkeeping still reads memory"
+  },
+  "finished": "2026-10-18T20:06:47",
+  "summary": {
+    "episodes": 3,
+    "frames_mean": 1352.3,
+    "frames_max": 1420,
+    "stages_max": 0,
+    "deaths_mean": 3.0
+  }
+}

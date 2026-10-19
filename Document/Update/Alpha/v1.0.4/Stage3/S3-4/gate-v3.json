@@ -1,0 +1,618 @@
+{
+  "schema": "v104-gate/1",
+  "phase": "gate",
+  "status": "done",
+  "created_at": "2026-10-19T11:12:06+08:00",
+  "command": "C:\\Users\\a5935\\AppData\\Local\\Programs\\Python\\Python312\\python.exe tools\\rl\\run_v104_experiments.py --phase gate --out Document\\Update\\Alpha\\v1.0.4\\Stage3\\S3-4\\evidence\\gate --pytest-log Document\\Update\\Alpha\\v1.0.4\\Stage3\\S3-4\\evidence\\pytest-final-s3-4.txt --pytest-exit-code 0 --execute",
+  "cwd": "D:\\WorkShop\\Touhou_RL",
+  "route": "candidate-v3-blocked",
+  "route_reason": "E* does not clear the v2-skip routing condition, and the written v3 entry checklist is not complete (failed=['throughput_le_60s'], blocked=[]).  In particular the <=60 s/epoch condition is not met on the letter of 設計 §5.2; the Q5 ruling covered continuing the depth-3 run, not this criterion, so v3 needs a new user ruling.  No v3 run is started by this tool.",
+  "items": {
+    "matrix": {
+      "status": "pass",
+      "reason": "six formal seed-7 configurations present",
+      "experiments": [
+        "E0",
+        "E1",
+        "E2",
+        "E3a",
+        "E3b",
+        "E3c"
+      ],
+      "missing": [],
+      "table": "Document/Update/Alpha/v1.0.4/Stage3/S3-4/experiment-table.json",
+      "table_sha256": "3983e5e8e274f073eb12ab5073666060bafa37212c86f50e39c30d4d824858b6",
+      "matrix": "Document/Update/Alpha/v1.0.4/Stage3/S3-4/evidence/matrix/matrix.json",
+      "matrix_sha256": "223d110f405e8189ed6a50841b4a10bec46e2ebe44ef077b998ec746f91faf8d",
+      "state_runs": [
+        "state-d1",
+        "state-d3"
+      ]
+    },
+    "coverage": {
+      "status": "pass",
+      "reason": "every formal run visited the fixed 7241-frame validation split exactly once",
+      "rows": [
+        {
+          "experiment": "E0",
+          "actual_frames": 7241,
+          "complete": true,
+          "visited_index_sha256": "e5d4ebbe6d8de05793520a393fc1fdbea2b1e2c4db9ff7c1632908340c76655f"
+        },
+        {
+          "experiment": "E1",
+          "actual_frames": 7241,
+          "complete": true,
+          "visited_index_sha256": "e5d4ebbe6d8de05793520a393fc1fdbea2b1e2c4db9ff7c1632908340c76655f"
+        },
+        {
+          "experiment": "E2",
+          "actual_frames": 7241,
+          "complete": true,
+          "visited_index_sha256": "e5d4ebbe6d8de05793520a393fc1fdbea2b1e2c4db9ff7c1632908340c76655f"
+        },
+        {
+          "experiment": "E3a",
+          "actual_frames": 7241,
+          "complete": true,
+          "visited_index_sha256": "e5d4ebbe6d8de05793520a393fc1fdbea2b1e2c4db9ff7c1632908340c76655f"
+        },
+        {
+          "experiment": "E3b",
+          "actual_frames": 7241,
+          "complete": true,
+          "visited_index_sha256": "e5d4ebbe6d8de05793520a393fc1fdbea2b1e2c4db9ff7c1632908340c76655f"
+        },
+        {
+          "experiment": "E3c",
+          "actual_frames": 7241,
+          "complete": true,
+          "visited_index_sha256": "e5d4ebbe6d8de05793520a393fc1fdbea2b1e2c4db9ff7c1632908340c76655f"
+        }
+      ]
+    },
+    "teacher": {
+      "status": "pass",
+      "reason": "all formal runs share the bound teacher fingerprint",
+      "bound": "a52416f9342fa00a0185c061771d09c22ba735bbe01c83dd7910a6c3bc8ec0f6",
+      "observed": [
+        "a52416f9342fa00a0185c061771d09c22ba735bbe01c83dd7910a6c3bc8ec0f6"
+      ]
+    },
+    "history": {
+      "status": "pass",
+      "reason": "all formal runs declare causal-segment-v1 and share one source checkpoint per depth",
+      "history_contracts": [
+        "causal-segment-v1"
+      ],
+      "source_state_by_depth": {
+        "1": "37e910b5a9bad2bbd809046ada109ab963ed1917fbe9633cc5da0d53d86bd32c",
+        "3": "dc5d41fce9a36583ecf8ca2dba5f7734d63597a6cc46cefd4f4b3e07e03a247a"
+      }
+    },
+    "init": {
+      "status": "pass",
+      "reason": "depth-1 and depth-3 policy runs start from a same-depth state checkpoint byte for byte",
+      "source_state_by_depth": {
+        "1": "37e910b5a9bad2bbd809046ada109ab963ed1917fbe9633cc5da0d53d86bd32c",
+        "3": "dc5d41fce9a36583ecf8ca2dba5f7734d63597a6cc46cefd4f4b3e07e03a247a"
+      }
+    },
+    "baseline": {
+      "status": "pass",
+      "reason": "the frozen baselines were re-evaluated on the full 7241-frame split",
+      "path": "Document/Update/Alpha/v1.0.4/Stage3/S3-4/evidence/baseline/baseline.json",
+      "sha256": "27a0093fd54ce5605d2e112a3c2f45dddd5d0c9bbeae3bbf08d24e7ef5a2b843",
+      "state": {
+        "old_summary_7200": {
+          "val_frames": 7200,
+          "val_player_pos_px": 12.808,
+          "val_player_pos_p95_px": 40.9585,
+          "val_danger_corr_perframe_median": 0.6382,
+          "val_danger_corr_perframe_valid": 7200,
+          "epoch": 55
+        },
+        "recheck_7241": {
+          "frames": 7241,
+          "val_player_pos_px": 13.234,
+          "val_player_pos_p95_px": 43.1621,
+          "val_danger_corr_perframe_median": 0.635,
+          "val_danger_corr_perframe_valid": 7241
+        }
+      },
+      "policy": {
+        "old_summary_7200": {
+          "val_frames": 7200,
+          "val_regret_px": 3.744,
+          "val_regret_px_bucket_0_15": 3.967,
+          "val_top1": 0.0699,
+          "by_danger": [
+            {
+              "bucket": "0-15",
+              "frames": 1076,
+              "top1": 0.0595,
+              "regret_px": 3.967
+            },
+            {
+              "bucket": "15-30",
+              "frames": 2009,
+              "top1": 0.0562,
+              "regret_px": 4.222
+            },
+            {
+              "bucket": "30-60",
+              "frames": 1367,
+              "top1": 0.0549,
+              "regret_px": 5.152
+            },
+            {
+              "bucket": "60-120",
+              "frames": 789,
+              "top1": 0.0634,
+              "regret_px": 5.099
+            },
+            {
+              "bucket": "120+",
+              "frames": 1959,
+              "top1": 0.1026,
+              "regret_px": 1.604
+            }
+          ],
+          "epoch": 9
+        },
+        "recheck_7241": {
+          "frames": 7241,
+          "val_regret_px": 3.729,
+          "val_regret_px_bucket_0_15": 3.967,
+          "val_top1": 0.0699,
+          "by_danger": [
+            {
+              "bucket": "0-15",
+              "frames": 1076,
+              "top1": 0.0595,
+              "top3": 0.1803,
+              "top3_tie": 0.2463,
+              "near_optimal_05": 0.1682,
+              "regret_px": 3.967,
+              "regret_p90_px": 7.93
+            },
+            {
+              "bucket": "15-30",
+              "frames": 2009,
+              "top1": 0.0562,
+              "top3": 0.2026,
+              "top3_tie": 0.2588,
+              "near_optimal_05": 0.2021,
+              "regret_px": 4.222,
+              "regret_p90_px": 8.322
+            },
+            {
+              "bucket": "30-60",
+              "frames": 1367,
+              "top1": 0.0549,
+              "top3": 0.1807,
+              "top3_tie": 0.218,
+              "near_optimal_05": 0.1375,
+              "regret_px": 5.152,
+              "regret_p90_px": 10.656
+            },
+            {
+              "bucket": "60-120",
+              "frames": 802,
+              "top1": 0.0661,
+              "top3": 0.1983,
+              "top3_tie": 0.2382,
+              "near_optimal_05": 0.1222,
+              "regret_px": 5.061,
+              "regret_p90_px": 11.031
+            },
+            {
+              "bucket": "120+",
+              "frames": 1987,
+              "top1": 0.1012,
+              "top3": 0.1928,
+              "top3_tie": 0.6925,
+              "near_optimal_05": 0.6885,
+              "regret_px": 1.585,
+              "regret_p90_px": 5.25
+            }
+          ]
+        }
+      }
+    },
+    "overfit": {
+      "status": "pass",
+      "reason": "reduction_at_least_30pct",
+      "path": "Document/Update/Alpha/v1.0.4/Stage3/S3-4/evidence/overfit-E3a/overfit.json",
+      "sha256": "9f092eaa79a2374cc7b029dcf355a9551889eb0020f9c37d4011aa2edccc72a2",
+      "experiment": "E3a",
+      "initial_regret_px": 4.585,
+      "final_regret_px": 2.395,
+      "reduction": 0.4776444929116685,
+      "threshold": 0.3,
+      "gradients": {
+        "finite": true,
+        "nonzero": true,
+        "first": 0.16136073096277012,
+        "last": 0.7600331759160449,
+        "max": 2.287544841438599
+      },
+      "indices_sha256": "9ca61b7f01463cd5d920da52b5382386bb032b5e92c9d8f09ef6b3b22b700052"
+    },
+    "throughput": {
+      "status": "pass",
+      "reason": "three paths measured; measured epoch seconds recorded against the 60 s ceiling",
+      "path": "Document/Update/Alpha/v1.0.4/Stage3/S3-4/evidence/throughput-E3a/throughput.json",
+      "sha256": "54913e90bea0e5b2bada0b5e3c70b1a0f6f4f330002f6cdf729669f72a1c428e",
+      "state_epoch_seconds": 90.96654166744597,
+      "policy_joint_epoch_seconds": 68.95045298962731,
+      "within_budget": false,
+      "user_ruling": "question list §8 Q5: depth 3 may continue at the measured ~72 s/epoch; the 60 s ceiling is recorded, not enforced, this round"
+    },
+    "budget": {
+      "status": "pass",
+      "reason": "measured per-epoch seconds recorded for every formal run, with the one-time cold-start epochs separated from the steady state (設計 §5.1); this item only asserts that the record exists and is honest - whether <=60 s was met is the separate v3_entry_throughput item",
+      "limit_seconds": 60.0,
+      "exceeds_design_ceiling": true,
+      "rows": {
+        "state-d1": {
+          "steady_mean_seconds": 40.31,
+          "steady_max_seconds": 42.1,
+          "cold_start_seconds": [
+            105.0,
+            65.1
+          ],
+          "exceeded": false,
+          "overrun_fraction": 0.0
+        },
+        "state-d3": {
+          "steady_mean_seconds": 69.98,
+          "steady_max_seconds": 72.0,
+          "cold_start_seconds": [
+            114.7,
+            86.5
+          ],
+          "exceeded": true,
+          "overrun_fraction": 0.2
+        },
+        "E0": {
+          "steady_mean_seconds": 42.13,
+          "steady_max_seconds": 44.5,
+          "cold_start_seconds": [
+            89.3,
+            63.7
+          ],
+          "exceeded": false,
+          "overrun_fraction": 0.0
+        },
+        "E1": {
+          "steady_mean_seconds": 71.32,
+          "steady_max_seconds": 73.9,
+          "cold_start_seconds": [
+            119.9,
+            87.1
+          ],
+          "exceeded": true,
+          "overrun_fraction": 0.2317
+        },
+        "E2": {
+          "steady_mean_seconds": 71.34,
+          "steady_max_seconds": 73.5,
+          "cold_start_seconds": [
+            118.8,
+            85.4
+          ],
+          "exceeded": true,
+          "overrun_fraction": 0.225
+        },
+        "E3a": {
+          "steady_mean_seconds": 72.01,
+          "steady_max_seconds": 72.3,
+          "cold_start_seconds": [
+            120.1,
+            87.2
+          ],
+          "exceeded": true,
+          "overrun_fraction": 0.205
+        },
+        "E3b": {
+          "steady_mean_seconds": 71.97,
+          "steady_max_seconds": 73.4,
+          "cold_start_seconds": [
+            119.8,
+            87.9
+          ],
+          "exceeded": true,
+          "overrun_fraction": 0.2233
+        },
+        "E3c": {
+          "steady_mean_seconds": 72.22,
+          "steady_max_seconds": 73.7,
+          "cold_start_seconds": [
+            119.2,
+            86.7
+          ],
+          "exceeded": true,
+          "overrun_fraction": 0.2283
+        }
+      },
+      "user_ruling": "question list §8 Q5: depth 3 may continue at the measured ~72 s/epoch; the 60 s ceiling is recorded, not enforced, this round"
+    },
+    "v3_entry_throughput": {
+      "status": "fail",
+      "criterion": "設計 §5.2 / 任务书 §5：v2 离线不足时，允许候选 v3 的条件之一为吞吐 <= 60 s/epoch（epoch 秒数 = 训练 + 全验证，排除一次性 cache/labels 构建）",
+      "measured": {
+        "depth3_steady_max_seconds": 73.9,
+        "depth3_runs": {
+          "state-d3": {
+            "depth": 3,
+            "kind": "state",
+            "steady_mean_seconds": 69.98,
+            "steady_max_seconds": 72.0,
+            "overrun_fraction": 0.2
+          },
+          "E1": {
+            "depth": 3,
+            "kind": "policy",
+            "steady_mean_seconds": 71.32,
+            "steady_max_seconds": 73.9,
+            "overrun_fraction": 0.2317
+          },
+          "E2": {
+            "depth": 3,
+            "kind": "policy",
+            "steady_mean_seconds": 71.34,
+            "steady_max_seconds": 73.5,
+            "overrun_fraction": 0.225
+          },
+          "E3a": {
+            "depth": 3,
+            "kind": "policy",
+            "steady_mean_seconds": 72.01,
+            "steady_max_seconds": 72.3,
+            "overrun_fraction": 0.205
+          },
+          "E3b": {
+            "depth": 3,
+            "kind": "policy",
+            "steady_mean_seconds": 71.97,
+            "steady_max_seconds": 73.4,
+            "overrun_fraction": 0.2233
+          },
+          "E3c": {
+            "depth": 3,
+            "kind": "policy",
+            "steady_mean_seconds": 72.22,
+            "steady_max_seconds": 73.7,
+            "overrun_fraction": 0.2283
+          }
+        },
+        "depth1_steady_max_seconds": 44.5,
+        "throughput_probe_forecast_seconds": 90.96654166744597,
+        "s3_3_measured_seconds": 71.15
+      },
+      "limit_seconds": 60.0,
+      "reason": "depth-3 steady epochs peak at 73.9 s (>60 s by +23.2%); the `<=60 s` v3 entry condition is therefore not met on the letter of the contract",
+      "needs_user_ruling": true,
+      "q5_note": "Q5 裁决只允许 depth 3 以实测 ~72 s/epoch 继续本矩阵，不构成本条判据通过；本项按字面记 fail，不得扩大解释为吞吐门通过。"
+    },
+    "pytest": {
+      "status": "pass",
+      "reason": "0 failed and at least 178 cases",
+      "command_exit": 0,
+      "command_exit_source": "--pytest-exit-code",
+      "path": "Document/Update/Alpha/v1.0.4/Stage3/S3-4/evidence/pytest-final-s3-4.txt",
+      "sha256": "878bb67fdc125901853dd683999cb8c8a6d15d53a8bbf67b64b0e6dccae61b84",
+      "passed": 564,
+      "failed": 0,
+      "errors": 0,
+      "skipped": null,
+      "parsed": true
+    },
+    "a01_state": {
+      "status": "fail",
+      "criterion": "val_player_pos_px < 10.0 且 val_danger_corr_perframe_median > 0.8（stages.state.best，7241 帧全验证）",
+      "measured": {
+        "val_player_pos_px": 13.0557,
+        "val_danger_corr_perframe_median": 0.6198,
+        "val_danger_corr_perframe_valid": 7241,
+        "epoch": 55,
+        "selection_rule": "position"
+      },
+      "checkpoint": "third_party/th08/build/rl/runs/v104-state-d3-s7",
+      "checkpoint_sha256": "dc5d41fce9a36583ecf8ca2dba5f7734d63597a6cc46cefd4f4b3e07e03a247a",
+      "reason": "state best misses at least one A-01 bar"
+    },
+    "a02_policy": {
+      "status": "fail",
+      "criterion": "0-15 px 桶后悔 < 1.5 px（stages.policy.best.by_danger，空桶不算）",
+      "experiment": "E3c",
+      "measured": {
+        "bucket_0_15_regret_px": 3.049,
+        "bucket_0_15_frames": 1076,
+        "bucket_0_15_top3": 0.3578,
+        "bucket_0_15_near_optimal_05": 0.29,
+        "global_regret_px": 2.635,
+        "regret_p90_px": 7.727,
+        "epoch": 9
+      },
+      "checkpoint": "third_party/th08/build/rl/runs/v104-E3c-s7",
+      "checkpoint_sha256": "d29c7fa6cfcc2370d7bf7dee38e4927f94c219ffe264005e53c6c9a8118c37be",
+      "reason": "0-15 bucket regret is above the A-02 line"
+    },
+    "startup": {
+      "status": "pass",
+      "reason": "real CLI run -> summary -> strict checkpoint load -> finite scores / legal actions",
+      "checkpoint": "third_party/th08/build/rl/runs/v104-E3c-s7/policy.pt",
+      "checkpoint_sha256": "d29c7fa6cfcc2370d7bf7dee38e4927f94c219ffe264005e53c6c9a8118c37be",
+      "arch": "v2",
+      "depth": 3,
+      "history_contract": "causal-segment-v1",
+      "scores_shape": [
+        4,
+        18
+      ],
+      "scores_finite": true,
+      "act_contract": "tuple4",
+      "actions_shape": [
+        4,
+        4
+      ],
+      "actions_dtype": "int64",
+      "actions_legal": true,
+      "actions_sample": [
+        [
+          5,
+          1,
+          0,
+          0
+        ],
+        [
+          5,
+          1,
+          0,
+          0
+        ],
+        [
+          5,
+          1,
+          0,
+          0
+        ],
+        [
+          4,
+          1,
+          0,
+          0
+        ]
+      ],
+      "experiment": "E3c"
+    },
+    "route": {
+      "status": "blocked",
+      "reason": "E* does not clear the v2-skip routing condition, and the written v3 entry checklist is not complete (failed=['throughput_le_60s'], blocked=[]).  In particular the <=60 s/epoch condition is not met on the letter of 設計 §5.2; the Q5 ruling covered continuing the depth-3 run, not this criterion, so v3 needs a new user ruling.  No v3 run is started by this tool.",
+      "route": "candidate-v3-blocked",
+      "selected_experiment": "E3c",
+      "selection_rule": "0-15 桶后悔 -> 全局后悔 -> 较早 epoch（设计 §5.2）",
+      "ranking": [
+        {
+          "experiment": "E3c",
+          "bucket_0_15_regret_px": 3.049,
+          "global_regret_px": 2.635,
+          "epoch": 9
+        },
+        {
+          "experiment": "E2",
+          "bucket_0_15_regret_px": 3.05,
+          "global_regret_px": 2.499,
+          "epoch": 12
+        },
+        {
+          "experiment": "E3b",
+          "bucket_0_15_regret_px": 3.1,
+          "global_regret_px": 2.675,
+          "epoch": 9
+        },
+        {
+          "experiment": "E3a",
+          "bucket_0_15_regret_px": 3.11,
+          "global_regret_px": 2.689,
+          "epoch": 9
+        },
+        {
+          "experiment": "E1",
+          "bucket_0_15_regret_px": 3.728,
+          "global_regret_px": 3.922,
+          "epoch": 12
+        },
+        {
+          "experiment": "E0",
+          "bucket_0_15_regret_px": 3.767,
+          "global_regret_px": 3.594,
+          "epoch": 12
+        }
+      ],
+      "selection_key": {
+        "bucket_0_15_regret_px": 3.049,
+        "global_regret_px": 2.635,
+        "epoch": 9
+      },
+      "selection_margin_to_second_px": 0.001,
+      "policy_checkpoint_sha256": "d29c7fa6cfcc2370d7bf7dee38e4927f94c219ffe264005e53c6c9a8118c37be",
+      "source_state_sha256": "dc5d41fce9a36583ecf8ca2dba5f7734d63597a6cc46cefd4f4b3e07e03a247a",
+      "source_state_checkpoint": "state.pt",
+      "policy_0_15_frame_count": 1076,
+      "policy_perception": {
+        "checkpoint": "third_party/th08/build/rl/runs/v104-E3c-s7/policy.pt",
+        "checkpoint_sha256": "d29c7fa6cfcc2370d7bf7dee38e4927f94c219ffe264005e53c6c9a8118c37be",
+        "frames": 7241,
+        "player_pos_px": 8.6161,
+        "danger_corr_perframe_median": 0.6373,
+        "danger_corr_perframe_valid": 7241,
+        "a01_pos_pass": true,
+        "a01_danger_pass": false
+      },
+      "a01_state": {
+        "status": "fail",
+        "val_player_pos_px": 13.0557,
+        "val_danger_corr_perframe_median": 0.6198,
+        "checkpoint_sha256": "dc5d41fce9a36583ecf8ca2dba5f7734d63597a6cc46cefd4f4b3e07e03a247a",
+        "run": "third_party/th08/build/rl/runs/v104-state-d3-s7"
+      },
+      "v2_skip_v3": false,
+      "v3_entry": {
+        "conditions": {
+          "sequence_labels_coverage": {
+            "status": "pass",
+            "criterion": "序列对齐 / 标签 / 覆盖正确（7241 帧全验证、teacher 指纹一致、causal-segment-v1）",
+            "measured": "coverage/teacher/history 三项见同名 item"
+          },
+          "small_set_regret_reduction_30pct": {
+            "status": "pass",
+            "criterion": "小集 rank 后悔相对初始化下降 >= 30%（含有效对与梯度）",
+            "measured": {
+              "reduction": 0.4776444929116685,
+              "initial_regret_px": 4.585,
+              "final_regret_px": 2.395
+            }
+          },
+          "valid_pairs_gradient": {
+            "status": "pass",
+            "criterion": "有效对有限非零、梯度有限非零",
+            "measured": {
+              "finite": true,
+              "nonzero": true,
+              "first": 0.16136073096277012,
+              "last": 0.7600331759160449,
+              "max": 2.287544841438599
+            }
+          },
+          "throughput_le_60s": {
+            "status": "fail",
+            "criterion": "吞吐 <= 60 s/epoch（训练 + 全验证，排除一次性 cache/labels）",
+            "measured": {
+              "depth3_steady_max_seconds": 73.9,
+              "limit_seconds": 60.0
+            },
+            "needs_user_ruling": true,
+            "q5_note": "Q5 裁决允许 depth 3 以实测 ~72 s/epoch 继续跑，不等于本条通过；按字面记 fail，需用户裁决。"
+          }
+        },
+        "failed": [
+          "throughput_le_60s"
+        ],
+        "blocked": [],
+        "status": "blocked",
+        "needs_user_ruling": true
+      }
+    }
+  },
+  "counts": {
+    "pass": 11,
+    "fail": 3,
+    "blocked": 1
+  },
+  "exit_code": 2,
+  "v3_started": false,
+  "v3_note": "This tool never starts a v3 run; G-v3 is a written verdict for the MainAgent."
+}

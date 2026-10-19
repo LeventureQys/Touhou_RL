@@ -1,0 +1,26 @@
+A-03 外部守卫使用记录（唯一一次）
+=====================================
+
+次数：1（external_guard_uses 从冻结时的 0 变为 1；此后不再使用 B 选模/调参）
+
+冻结时间：2026-10-20T02:36:52+08:00（Stage3/final-artifacts.json，sha256 d4566e54dda1b09a3befeff40198d1e1bdd7129aa6be617d5261f95cb9f71bad）
+A 侧运行：2026-10-20T02:44:22 - 02:45:01（exit 0）
+B 侧运行（守卫）：2026-10-20T02:45:05 - 02:45:43（exit 0）
+
+同一 checkpoint：third_party/th08/build/rl/runs/v104-v3-E5-s7/policy.pt
+  sha256 74abde8a996c13fae832913e4e5533bc9490688bc4c0aa73560e695f065d14be
+同一采样规则：--mode stage-sample --per-stage 128（每个 stage 按索引升序取前 128）
+A 清单：third_party/th08/build/rl/datasets/pilot-ud0059-v2/manifest.json（sha256 aa89c48893eb7e69628a5fd1c414c7c9b8b04cd5b88a225a6f4feb70373c949f）
+B 清单：Document/Update/Alpha/v1.0.4/Stage3/S3-1/evidence/ud0063-evaluation-manifest.json（sha256 748f2382df301d34f9bfeb85c200aedbdde09bbc9a40e43c720d423e616725a7）
+A 索引 sha256：bbca864360c227fc（768 帧 / 6 stage）
+B 索引 sha256：186ab1b1c0401c86（768 帧 / 6 stage）
+
+结果（原始未舍入）：
+  a_mae_raw = 0.805011 px
+  b_mae_raw = 1.020366 px
+  ratio     = 1.267518
+  规则      = B_mae_raw <= 1.25 * A_mae_raw
+  判定      = fail（1.267518 > 1.25，超出 1.40%）
+
+说明：该结果按契约记为 fail，未调阈值、未换抽样规则、未重跑以图改判、未据 B 改模型或 seed。
+B 数据未参与训练、未参与选模、未用于调参；本记录之后 B 不再被使用。

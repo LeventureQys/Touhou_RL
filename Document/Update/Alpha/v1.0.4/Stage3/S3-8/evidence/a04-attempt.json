@@ -1,0 +1,85 @@
+{
+  "schema": "v104-s3-8-a04-attempt/1",
+  "kind": "eval_report",
+  "created_at": "2026-10-20T02:55:38+08:00",
+  "producer": "Document/Update/Alpha/v1.0.4/Stage3/S3-8/evidence/make_a04_evidence.py",
+  "command": [
+    "python",
+    "-m",
+    "touhou_rl.evaluate",
+    "--vision-checkpoint",
+    "third_party/th08/build/rl/runs/v104-v3-E5-s7/policy.pt",
+    "--out",
+    "third_party/th08/build/rl/eval/v104-acceptance",
+    "--episodes",
+    "3",
+    "--difficulty",
+    "lunatic",
+    "--team",
+    "0",
+    "--frameskip",
+    "2",
+    "--max-steps",
+    "12000",
+    "--device",
+    "cuda"
+  ],
+  "cwd": "D:\\WorkShop\\Touhou_RL",
+  "exit_code": 1,
+  "status": "blocked",
+  "checkpoint": "third_party/th08/build/rl/runs/v104-v3-E5-s7/policy.pt",
+  "checkpoint_sha256": "74abde8a996c13fae832913e4e5533bc9490688bc4c0aa73560e695f065d14be",
+  "deployed_checkpoint": "third_party\\th08\\build\\rl\\runs\\v104-v3-E5-s7\\policy.pt",
+  "arch": "v3-st",
+  "depth": 3,
+  "difficulty": 3,
+  "team": 0,
+  "frameskip": 2,
+  "practice_stage": null,
+  "max_steps_configured": 12000,
+  "episodes": 0,
+  "frames_mean": 0.0,
+  "hit_step_cap": 0,
+  "episode_fields_complete": false,
+  "observations": {
+    "checkpoint_sha256": "74abde8a996c13fae832913e4e5533bc9490688bc4c0aa73560e695f065d14be",
+    "episodes": 0,
+    "frames_mean": 0.0,
+    "hit_step_cap": 0,
+    "episode_fields_complete": false,
+    "started": "2026-10-20T02:51:21",
+    "finished": "2026-10-20T02:51:33",
+    "max_steps": 12000
+  },
+  "reason": "the exact A-04 command ran and the deployment identity was correct (vision.checkpoint = the frozen policy.pt, arch v3-st depth 3, lunatic/team0/frameskip2/practice -1), but env.reset raised TimeoutError('screen 4 did not become ready') because the game window cannot be foregrounded (elevated Task Manager holds the foreground; medium-integrity agent). Zero episodes were produced; the partial eval-report is attached with its sha. Reported as blocked; a retry needs the user to release the foreground (close/minimise Task Manager) or an approved input-path change.",
+  "stderr_excerpt": [
+    "    select_difficulty(session, difficulty)",
+    "  File \"D:\\WorkShop\\Touhou_RL\\touhou_rl\\menu.py\", line 146, in select_difficulty",
+    "    _wait_screen(session, spec.SCREEN_DIFFICULTY_SELECT, timeout)",
+    "  File \"D:\\WorkShop\\Touhou_RL\\touhou_rl\\menu.py\", line 137, in _wait_screen",
+    "    raise TimeoutError(f\"screen {screen} did not become ready (last={last})\")",
+    "TimeoutError: screen 4 did not become ready (last=(0, 1, 518))"
+  ],
+  "artifacts_cited": [
+    {
+      "path": "third_party/th08/build/rl/eval/v104-acceptance/eval-report.json",
+      "sha256": "4a1cec902dd6c7beff760be563429786aeb2dc11ddb043dfd532feec9fc61ddd",
+      "exists": true
+    },
+    {
+      "path": "third_party/th08/build/rl/eval/v104-acceptance/vision-diagnostics-raw.json",
+      "sha256": "9d3783254b1bf929a90d3e0861ca6d6e18cdb67d6886a55cb8c2d29edc57bb15",
+      "exists": true
+    },
+    {
+      "path": "Document/Update/Alpha/v1.0.4/Stage3/S3-8/evidence/logs/a04-evaluate.err",
+      "sha256": "15be3abba9935a7bc0d87a801a0ec9e3f388aabfefc484943b76fae298cf25ad",
+      "exists": true
+    },
+    {
+      "path": "Document/Update/Alpha/v1.0.4/Stage3/S3-8/evidence/logs/a04-evaluate.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "exists": true
+    }
+  ]
+}

@@ -1,0 +1,71 @@
+{
+  "schema": "v104-evidence/1",
+  "kind": "d10",
+  "status": "pass",
+  "created_at": "2026-10-20T02:58:16+08:00",
+  "producer": "Document/Update/Alpha/v1.0.4/Stage3/S3-8/evidence/d9d10d11_recheck.py",
+  "command": "python Document/Update/Alpha/v1.0.4/Stage3/S3-8/evidence/d9d10d11_recheck.py --only d10 --out Document/Update/Alpha/v1.0.4/Stage3/S3-8/evidence",
+  "cwd": "D:\\WorkShop\\Touhou_RL",
+  "exit_code": 0,
+  "artifacts": [
+    {
+      "path": "Document/Update/Alpha/v1.0.4/Stage3/S3-8/evidence/d10-recheck.json",
+      "sha256": "83a861544b771f90cc65c18f5009ae8fed1d1a212ce053d8ae5472002d8dbcd0"
+    },
+    {
+      "path": "Document/Update/Alpha/v1.0.4/Stage3/S3-8/evidence/upstream-evidence-sha-crosscheck.json",
+      "sha256": "8d4aae63d560093d64632298bd7050d2d91ba5de717962338867d049e919ce56"
+    }
+  ],
+  "observations": {
+    "budget_bytes": 536870912,
+    "max_resident_bytes": 536721032,
+    "lru_verified": true,
+    "value_equal": true,
+    "cached_peak_resident_bytes": 73123584,
+    "npz_peak_resident_bytes": 536721032,
+    "over_budget_samples": 0,
+    "cached_loads": 91,
+    "npz_loads": 542,
+    "cached_evictions": 0,
+    "npz_evictions": 529,
+    "lru_small_budget_bytes": 100663296,
+    "lru_evictions": 1,
+    "lru_shards_touched": 3,
+    "lru_hit_recognised": true,
+    "lru_hits_after_reload": 1,
+    "lru_reload_was_miss": true,
+    "lru_values_equal_on_hit": true,
+    "hits_before_eviction": 1,
+    "misses_before_reload": 4,
+    "default_cache_budget_constant": 536870912,
+    "dataset": "third_party/th08/build/rl/datasets/pilot-ud0063",
+    "reference_files": {
+      "budget-B-cached.json": {
+        "path": "Document/Update/Alpha/v1.0.4/Stage3/S3-1/evidence/budget-B-cached.json",
+        "sha256": "33132e958beb57d991b435040491143c71ea2b1e1c197802c6f3b1118013a58c",
+        "bytes": 855,
+        "exists": true
+      },
+      "budget-B-npz.json": {
+        "path": "Document/Update/Alpha/v1.0.4/Stage3/S3-1/evidence/budget-B-npz.json",
+        "sha256": "83b7bf693edb5419f41e6004e3155ca47e4dd7b3c11c44c539bc1dec117547ad",
+        "bytes": 829,
+        "exists": true
+      },
+      "cache-B.json": {
+        "path": "Document/Update/Alpha/v1.0.4/Stage3/S3-1/evidence/cache-B.json",
+        "sha256": "864a684f12898a8fd423c7ff56a9fea3dcddf29b3fd241fa8b3c6fbe27b3a500",
+        "bytes": 2446,
+        "exists": true
+      },
+      "pixel-consistency-B.json": {
+        "path": "Document/Update/Alpha/v1.0.4/Stage3/S3-1/evidence/pixel-consistency-B.json",
+        "sha256": "32315c2cc237039d50d689056e0c7f36a95f6427fb6eae0ec3601857019a613e",
+        "bytes": 17584,
+        "exists": true
+      }
+    }
+  },
+  "reason": "both residency paths re-run on B: the 512 MiB budget is the module default, neither the label-only path nor the worst-case full-record path ever exceeded it, an LRU hit is recognised, an evicted record is re-read as a miss and its values are byte-identical"
+}

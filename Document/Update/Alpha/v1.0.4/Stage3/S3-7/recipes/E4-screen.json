@@ -1,0 +1,55 @@
+{
+  "schema": "v104-refine-recipe/1",
+  "phase": "v3-matrix",
+  "experiment": "E4",
+  "route": "v3-st",
+  "dataset": "third_party/th08/build/rl/datasets/pilot-ud0059-v2",
+  "run_dir": "third_party/th08/build/rl/runs/v104-E4-screen-s7",
+  "train_config": {
+    "arch": "v3-st",
+    "stage": "both",
+    "depth": 3,
+    "seed": 7,
+    "batch_size": 96,
+    "lr": 0.0003,
+    "weight_decay": 0.0001,
+    "epochs_state": 24,
+    "epochs_policy": 12,
+    "max_train_batches": 0,
+    "max_val_batches": 0,
+    "selection_contract": "v104",
+    "history_contract": "causal-segment-v1",
+    "policy_objective": "rank",
+    "rank_delta_px": 0.5,
+    "rank_weight": 1.0,
+    "regression_weight": 1.0,
+    "policy_freeze_epochs": 2,
+    "encoder_lr": 0.0001,
+    "policy_head_lr": 0.0003,
+    "heatmap_sigma": 2.0,
+    "local_enabled": false,
+    "danger_head_variant": "legacy",
+    "w_heatmap": 1.0,
+    "w_coord": 1.0,
+    "w_danger": 1.0,
+    "w_self": 1.0,
+    "policy_aux_heatmap": 0.1,
+    "policy_aux_coord": 1.0,
+    "policy_aux_danger": 0.2,
+    "policy_aux_self": 0.1,
+    "screening": true,
+    "note": "screening 24+12, not a formal comparison"
+  },
+  "notes": "screening 24+12, not a formal comparison",
+  "gate": {
+    "path": "Document/Update/Alpha/v1.0.4/Stage3/S3-4/gate-v3.json",
+    "waiver": {
+      "by": "Q6",
+      "items": [
+        "throughput_le_60s"
+      ],
+      "source": "Document/Update/Alpha/v1.0.4/问题清单.md §8 Q6（用户裁决进入 v3）"
+    }
+  },
+  "screening": true
+}

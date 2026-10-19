@@ -1,0 +1,7 @@
+throughput E3a (depth 3, batch 96, two passes: warm-up + measured)
+  perception               train  120.40 ms (data  87.65 / fwd  12.90 / bwd  19.85)  val  122.86 ms  forecast   90.97 s/epoch  peak    967.1 MiB alloc /   1404.0 MiB reserved
+  policy_frozen            train   86.36 ms (data  60.80 / fwd  23.65 / bwd   1.92)  val  124.90 ms  forecast   68.05 s/epoch  peak    810.9 MiB alloc /   1404.0 MiB reserved
+  policy_joint             train   88.71 ms (data  56.51 / fwd  12.67 / bwd  19.53)  val  115.84 ms  forecast   68.95 s/epoch  peak    967.4 MiB alloc /   1406.0 MiB reserved
+  perception_depth1_extra  train   51.05 ms (data  28.12 / fwd   7.92 / bwd  15.02)  val   57.57 ms  forecast   38.99 s/epoch  peak    616.3 MiB alloc /   1406.0 MiB reserved
+  policy mixed epoch (2 frozen + 10 joint): 68.80 s
+  seconds: 161.96

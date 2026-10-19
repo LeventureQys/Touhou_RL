@@ -1,0 +1,30 @@
+==============================================================================
+v3-matrix plan (E4 / E5 / E6)
+==============================================================================
+gate      : Document/Update/Alpha/v1.0.4/Stage3/S3-4/gate-v3.json (route=candidate-v3-blocked, exit=2)
+  sequence_labels_coverage         pass
+  small_set_regret_reduction_30pct pass
+  throughput_le_60s                fail
+  valid_pairs_gradient             pass
+  waived  : ['throughput_le_60s'] by Q6 (Document/Update/Alpha/v1.0.4/问题清单.md §8 Q6（用户裁决进入 v3）)
+single var: local_enabled (E4 off / E5 on) + policy aux zero (E6) verified across 26 compared fields
+estimate  : throughput probe Document/Update/Alpha/v1.0.4/Stage3/S3-7/evidence/throughput-v3/throughput.json
+total     : 7032 s = 117.2 min = 1.95 h
+------------------------------------------------------------------------------
+E4: arch=v3-st depth=3 local_enabled=False policy_aux=(0.1,1.0,0.2,0.1)
+  run_dir : third_party/th08/build/rl/runs/v104-E4-screen-s7
+  epochs  : 24 perception + 12 policy
+  estimate: 3516 s = 58.6 min
+  recipe  : Document/Update/Alpha/v1.0.4/Stage3/S3-7/recipes/E4-screen.json sha256=2bc7fa7a01cbbc43
+  command : C:\Users\a5935\AppData\Local\Programs\Python\Python312\python.exe -m touhou_rl.vision_train --dataset third_party/th08/build/rl/datasets/pilot-ud0059-v2 --out third_party/th08/build/rl/runs/v104-E4-screen-s7 --arch v3-st --stage both --depth 3 --seed 7 --batch-size 96 --lr 0.0003 --weight-decay 0.0001 --epochs-state 24 --epochs-policy 12 --max-train-batches 0 --max-val-batches 0 --selection-contract v104 --history-contract causal-segment-v1 --policy-objective rank --rank-delta-px 0.5 --rank-weight 1 --regression-weight 1 --w-heatmap 1 --w-coord 1 --w-danger 1 --w-self 1 --policy-aux-heatmap 0.1 --policy-aux-coord 1 --policy-aux-danger 0.2 --policy-aux-self 0.1 --policy-freeze-epochs 2 --encoder-lr 0.0001 --policy-head-lr 0.0003 --heatmap-sigma 2 --no-local-enabled --danger-head-variant legacy --note screening 24+12, not a formal comparison --screening
+------------------------------------------------------------------------------
+E5: arch=v3-st depth=3 local_enabled=True policy_aux=(0.1,1.0,0.2,0.1)
+  run_dir : third_party/th08/build/rl/runs/v104-E5-screen-s7
+  epochs  : 24 perception + 12 policy
+  estimate: 3516 s = 58.6 min
+  recipe  : Document/Update/Alpha/v1.0.4/Stage3/S3-7/recipes/E5-screen.json sha256=60f85c3a6f6af5dd
+  command : C:\Users\a5935\AppData\Local\Programs\Python\Python312\python.exe -m touhou_rl.vision_train --dataset third_party/th08/build/rl/datasets/pilot-ud0059-v2 --out third_party/th08/build/rl/runs/v104-E5-screen-s7 --arch v3-st --stage both --depth 3 --seed 7 --batch-size 96 --lr 0.0003 --weight-decay 0.0001 --epochs-state 24 --epochs-policy 12 --max-train-batches 0 --max-val-batches 0 --selection-contract v104 --history-contract causal-segment-v1 --policy-objective rank --rank-delta-px 0.5 --rank-weight 1 --regression-weight 1 --w-heatmap 1 --w-coord 1 --w-danger 1 --w-self 1 --policy-aux-heatmap 0.1 --policy-aux-coord 1 --policy-aux-danger 0.2 --policy-aux-self 0.1 --policy-freeze-epochs 2 --encoder-lr 0.0001 --policy-head-lr 0.0003 --heatmap-sigma 2 --local-enabled --danger-head-variant legacy --note screening 24+12, not a formal comparison --screening
+[refine] running third_party/th08/build/rl/runs/v104-E4-screen-s7 (3516 s = 58.6 min)
+[refine] E4 exit 0 in 3816.41 s -> f8cd1b5447693afb
+[refine] running third_party/th08/build/rl/runs/v104-E5-screen-s7 (3516 s = 58.6 min)
+[refine] E5 exit 0 in 3848.44 s -> 39ae990d1f315f35

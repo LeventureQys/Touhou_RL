@@ -1,0 +1,65 @@
+{
+  "schema": "v104-s3-8-boundary-checks/1",
+  "created_at": "2026-10-20T02:57:37+08:00",
+  "producer": "Document/Update/Alpha/v1.0.4/Stage3/S3-8/evidence/boundary_checks.py",
+  "command": [
+    "C:\\Users\\a5935\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+    "Document\\Update\\Alpha\\v1.0.4\\Stage3\\S3-8\\evidence\\boundary_checks.py"
+  ],
+  "cwd": "D:\\WorkShop\\Touhou_RL",
+  "scratch_root": ".pytest-tmp/S3-8/boundary",
+  "note": "all mutations live in .pytest-tmp/S3-8/boundary; delivered artifacts are read-only here",
+  "checks": [
+    {
+      "case": "missing_manifest_b",
+      "expect": "exit 2 and A-01..A-04 blocked",
+      "exit_code": 2,
+      "items": {
+        "A-01": "blocked",
+        "A-02": "blocked",
+        "A-03": "blocked",
+        "A-04": "blocked",
+        "A-05": "pass",
+        "A-06": "pass"
+      },
+      "pass": true
+    },
+    {
+      "case": "empty_0_15_bucket",
+      "expect": "A-02 never pass (fail or blocked)",
+      "exit_code": 2,
+      "items": {
+        "A-01": "pass",
+        "A-02": "blocked",
+        "A-03": "fail",
+        "A-04": "blocked",
+        "A-05": "pass",
+        "A-06": "pass"
+      },
+      "pass": true
+    },
+    {
+      "case": "wrong_checkpoint_sha",
+      "expect": "exit 2 and no game launch (real_game_started false, no pid recorded)",
+      "exit_code": 2,
+      "reason": "frozen checkpoint sha256 mismatch; refusing to start the game",
+      "checkpoint_matches_frozen": false,
+      "pass": true
+    },
+    {
+      "case": "missing_termination_reason",
+      "expect": "A-04 fail (fields incomplete), never pass",
+      "exit_code": 1,
+      "items": {
+        "A-01": "pass",
+        "A-02": "pass",
+        "A-03": "fail",
+        "A-04": "fail",
+        "A-05": "pass",
+        "A-06": "pass"
+      },
+      "pass": true
+    }
+  ],
+  "all_pass": true
+}

@@ -1,0 +1,63 @@
+{
+  "kind": "slope-probe/diagnostic",
+  "warning": "DIAGNOSTIC ONLY. These three points are NOT an A-03 verdict, were not produced by recipes-r3.json, and must not be quoted as the R3 data curve. The A-03 verdict is 'blocked' because A-01 failed (see Stage3/acceptance-v103.json).",
+  "purpose": "Answer whether the size of the frame pool affects val_player_pos_px at a fixed per-epoch batch budget, after the two-stage R3 sweep was cancelled by instruction.",
+  "common_config": {
+    "arch": "v2",
+    "stage": "state",
+    "epochs_state": 8,
+    "batch_size": 96,
+    "depth": 1,
+    "heatmap_sigma": 1.0,
+    "w_heatmap": 1.0,
+    "max_train_batches": 160,
+    "max_val_batches": 0,
+    "dataset": "third_party/th08/build/rl/datasets/pilot-ud0059",
+    "val_index_sha256": "e7c7b6c06d8ad8ef4528560ad3bab42391b50b77ffe1554b30eb8af9d59678fa",
+    "val_frames_top_level": 7247,
+    "val_frames_per_epoch": 7200
+  },
+  "only_varying_variable": "train_fraction",
+  "points": [
+    {
+      "train_fraction": 0.25,
+      "train_frames": 16307,
+      "out_dir": "third_party/th08/build/rl/runs/v103-exp-07",
+      "recipe_id": "SLOPE-025",
+      "val_player_pos_px": 71.71,
+      "val_danger_corr_perframe_median": 0.313,
+      "val_heatmap_hit_rate_epoch8": 0.2914,
+      "best_epoch": 8,
+      "seconds": 397.4
+    },
+    {
+      "train_fraction": 0.5,
+      "train_frames": 32613,
+      "out_dir": "third_party/th08/build/rl/runs/v103-exp-06",
+      "recipe_id": "SLOPE-050",
+      "val_player_pos_px": 73.0,
+      "val_danger_corr_perframe_median": 0.2956,
+      "val_heatmap_hit_rate_epoch8": 0.2839,
+      "best_epoch": 8,
+      "seconds": 399.1
+    },
+    {
+      "train_fraction": 1.0,
+      "train_frames": 65225,
+      "out_dir": "third_party/th08/build/rl/runs/v103-exp-03",
+      "recipe_id": "R1-c",
+      "val_player_pos_px": 74.32,
+      "val_danger_corr_perframe_median": 0.2998,
+      "val_heatmap_hit_rate_epoch8": 0.2739,
+      "best_epoch": 8,
+      "seconds": 397.9,
+      "note": "reused from the screening sweep (identical config), not re-run"
+    }
+  ],
+  "reading": {
+    "pos_px_trend": "71.71 (0.25) < 73.00 (0.50) < 74.32 (1.00): position error gets WORSE as the pool grows",
+    "perframe_trend": "0.313 / 0.296 / 0.300: flat, spread 0.017, no monotone trend",
+    "confound": "max_train_batches=160 fixes 15,360 samples per epoch for all three points, so per-epoch pool coverage is 94% (0.25) / 47% (0.50) / 24% (1.00). Epoch 8 has therefore seen the 0.25 pool ~7.5 times but the 1.00 pool ~1.9 times. The ordering above is consistent with a coverage effect, not with data being harmful.",
+    "what_it_does_not_show": "It cannot price additional data. A genuine A-03 curve needs max_train_batches=0 at each point so every point gets full passes, which is what recipes-r3.json would have produced."
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "schema": "v104-vision-diagnostics-raw/1",
+  "note": "raw per-decision samples behind vision_diagnostics; latency is measured from the start of this decision's env.render() to the action handed to env.step(), and the frame delta only counts consecutive same-stage decisions with a positive delta (nonpositive ones are counted separately, never used as a statistic). Neither value is fed to the policy or used to reset history.",
+  "episodes": [
+    {
+      "episode": 1,
+      "decisions": 4,
+      "timing_ms": [
+        19.4365,
+        12.0747,
+        12.2836,
+        11.8673
+      ],
+      "frame_delta": [
+        2,
+        2,
+        2
+      ],
+      "nonpositive": 0
+    },
+    {
+      "episode": 2,
+      "decisions": 4,
+      "timing_ms": [
+        11.5241,
+        9.6458,
+        10.1917,
+        12.0064
+      ],
+      "frame_delta": [
+        2,
+        2,
+        2
+      ],
+      "nonpositive": 0
+    },
+    {
+      "episode": 3,
+      "decisions": 4,
+      "timing_ms": [
+        10.3916,
+        9.624,
+        9.5409,
+        9.6827
+      ],
+      "frame_delta": [
+        2,
+        2,
+        2
+      ],
+      "nonpositive": 0
+    }
+  ]
+}

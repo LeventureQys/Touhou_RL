@@ -37,17 +37,38 @@ array; :class:`VisionDataset` still reads those as a single ``playfield`` region
 
 from __future__ import annotations
 
+import hashlib
 import json
+import os
 import struct
 import time
+from collections import OrderedDict
 from dataclasses import dataclass, field
 from pathlib import Path
 
 import numpy as np
 
-from . import obs, vision
+from . import obs, vision, vision_history
 
 META_FIELDS = ("frame", "stage", "score", "graze", "lives", "bombs", "power", "deaths")
+
+#: v1.0.4 residency budget for the full-shard and label caches (512 MiB).  The
+#: v1.0.3 default of 2 GB was paired with a ``per_frame=1200`` guess while the
+#: real shard cost is ~253 KB/frame, so a "budgeted" loader could pin ~20 GB.
+DEFAULT_CACHE_BUDGET_BYTES = 536_870_912
+
+#: The three regions the v1.0.4 experiments consume, at the fixed input sizes of
+#: contract C1 (playfield 224x192, hud_score 34x216, hud_status 126x216).
+ROI_SIZES: dict[str, tuple[int, int]] = {
+    "playfield": (224, 192),
+    "hud_score": (34, 216),
+    "hud_status": (126, 216),
+}
+
+#: Identity contract of a decoded-frame cache file and its ``<cache>.json``
+#: sidecar.  A cache file without a matching sidecar is *not* trusted: it falls
+#: back to PNG decoding and is only repaired by an explicit build.
+DECODE_CACHE_SCHEMA = "v104-decode-cache/1"
 
 
 def _png_size(blob: bytes) -> tuple[int, int]:
@@ -221,6 +242,476 @@ def discover_vision_shards(dataset_dir: Path) -> list[Path]:
     return shards
 
 
+def decoded_cache_path(shard: Path, region: str, height: int, width: int) -> Path:
+    """Sibling file holding one region's frames already decoded at ``height x width``.
+
+    Decoding a PNG costs ~4.4 ms of CPU per sample; a raw ``uint8`` frame at the
+    model resolution is 233 KB versus 253 KB for the PNG, so storing the decoded
+    frames costs ~8% more disk and turns the per-batch load into a memcpy.  On a
+    96-sample batch that takes the load from 148 ms to ~15 ms (measured), which is
+    what lets the GPU run at a useful duty cycle instead of waiting on inflate.
+    """
+    return shard.with_suffix(f".decoded-{region}-{height}x{width}.npy")
+
+
+def decoded_sidecar_path(cache: Path) -> Path:
+    """``<cache>.json`` - the identity file that must sit next to a cache file."""
+    cache = Path(cache)
+    return cache.with_name(cache.name + ".json")
+
+
+def _sidecar_candidates(cache: Path) -> list[Path]:
+    """Accepted sidecar names: ``<cache>.json`` first, ``<stem>.json`` as a legacy read."""
+    cache = Path(cache)
+    return [decoded_sidecar_path(cache), cache.with_suffix(".json")]
+
+
+def _file_digest(path: Path, chunk: int = 1 << 20) -> str:
+    digest = hashlib.sha256()
+    with open(path, "rb") as handle:
+        for block in iter(lambda: handle.read(chunk), b""):
+            digest.update(block)
+    return digest.hexdigest()
+
+
+def read_decode_sidecar(cache: Path) -> dict | None:
+    """Parse a decoded-cache sidecar; ``None`` when absent or unreadable."""
+    for path in _sidecar_candidates(cache):
+        if not path.exists():
+            continue
+        try:
+            payload = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            return None
+        return payload if isinstance(payload, dict) else None
+    return None
+
+
+def _atomic_write_json(path: Path, payload: dict) -> None:
+    temporary = path.with_name(f"{path.name}.tmp-{os.getpid()}")
+    try:
+        temporary.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
+        os.replace(temporary, path)
+    except BaseException:
+        temporary.unlink(missing_ok=True)
+        raise
+
+
+@dataclass
+class DecodeCacheCheck:
+    """Outcome of the full identity check of one decoded-cache file."""
+
+    ok: bool
+    reason: str
+    frames: int = 0
+    bytes: int = 0
+    array: np.ndarray | None = None
+
+
+def check_decode_cache(
+    shard: Path,
+    region: str,
+    height: int,
+    width: int,
+    *,
+    frames: int | None = None,
+    verify_source: bool = True,
+    source_digest: str | None = None,
+    verify_payload: bool = False,
+) -> DecodeCacheCheck:
+    """Validate one decoded cache: n/H/W/C/dtype, sidecar identity and source digest.
+
+    ``frames`` is the shard's frame count (``None`` skips the n checks).  The
+    source digest is the expensive part (one SHA-256 over the ``.npz``), so the
+    caller may pass a digest it already computed for this shard.
+    """
+    shard = Path(shard)
+    cache = decoded_cache_path(shard, region, height, width)
+    if not cache.exists():
+        return DecodeCacheCheck(False, "missing")
+    size = int(cache.stat().st_size)
+    try:
+        array = np.load(cache, mmap_mode="r")
+    except Exception:
+        return DecodeCacheCheck(False, "unreadable", bytes=size)
+    if array.ndim != 4:
+        return DecodeCacheCheck(False, f"ndim={array.ndim}", bytes=size)
+    if array.dtype != np.dtype(np.uint8):
+        return DecodeCacheCheck(False, f"dtype={array.dtype}", bytes=size)
+    if int(array.shape[3]) != int(vision.VISION_CHANNELS):
+        return DecodeCacheCheck(False, f"channels={int(array.shape[3])}", bytes=size)
+    if tuple(int(v) for v in array.shape[1:3]) != (int(height), int(width)):
+        return DecodeCacheCheck(False, f"hw={tuple(array.shape[1:3])}", bytes=size)
+    if frames is not None and int(array.shape[0]) != int(frames):
+        return DecodeCacheCheck(False, f"frames={int(array.shape[0])}!={int(frames)}", bytes=size)
+    sidecar = read_decode_sidecar(cache)
+    if sidecar is None:
+        # An old file without identity: readable, but nothing proves which shard
+        # or resolution produced it, so it must not be trusted.
+        return DecodeCacheCheck(False, "no-identity", bytes=size)
+    if str(sidecar.get("schema", "")) != DECODE_CACHE_SCHEMA:
+        return DecodeCacheCheck(False, f"schema={sidecar.get('schema')!r}", bytes=size)
+    if str(sidecar.get("region", "")) != str(region):
+        return DecodeCacheCheck(False, f"sidecar-region={sidecar.get('region')!r}", bytes=size)
+    try:
+        recorded_shape = [int(value) for value in sidecar.get("shape", [])]
+    except (TypeError, ValueError):
+        return DecodeCacheCheck(False, "sidecar-shape", bytes=size)
+    if recorded_shape != [int(value) for value in array.shape]:
+        return DecodeCacheCheck(False, "sidecar-shape", bytes=size)
+    if str(sidecar.get("dtype", "")) != "uint8":
+        return DecodeCacheCheck(False, f"sidecar-dtype={sidecar.get('dtype')!r}", bytes=size)
+    source = sidecar.get("source") or {}
+    if not isinstance(source, dict):
+        return DecodeCacheCheck(False, "sidecar-source", bytes=size)
+    if str(source.get("name", "")) != shard.name:
+        return DecodeCacheCheck(False, f"source-name={source.get('name')!r}", bytes=size)
+    if frames is not None and int(source.get("frames", -1)) != int(frames):
+        return DecodeCacheCheck(False, "source-frames", bytes=size)
+    try:
+        source_bytes = int(source.get("bytes", -1))
+    except (TypeError, ValueError):
+        return DecodeCacheCheck(False, "source-bytes", bytes=size)
+    if source_bytes != int(shard.stat().st_size):
+        return DecodeCacheCheck(False, "source-bytes", bytes=size)
+    if verify_source:
+        digest = source_digest if source_digest is not None else _file_digest(shard)
+        if str(source.get("sha256", "")).lower() != str(digest).lower():
+            return DecodeCacheCheck(False, "source-digest", bytes=size)
+    if verify_payload:
+        if str(sidecar.get("cache_sha256", "")).lower() != _file_digest(cache):
+            return DecodeCacheCheck(False, "cache-digest", bytes=size)
+    return DecodeCacheCheck(True, "ok", frames=int(array.shape[0]), bytes=size, array=array)
+
+
+def _write_decode_cache(
+    frames: np.ndarray,
+    target: Path,
+    shard: Path,
+    region: str,
+    *,
+    source_digest: str,
+    frames_total: int,
+    verify_payload: bool = True,
+) -> int:
+    """Write one ``.npy`` cache plus its sidecar, atomically; return its size.
+
+    The temporary file is validated (shape/dtype/size and, with
+    ``verify_payload``, read back through mmap and compared value by value) before
+    it replaces the target, so an interrupted build can never leave a truncated
+    cache in place of a good one.
+    """
+    target = Path(target)
+    array = np.ascontiguousarray(frames, dtype=np.uint8)
+    if array.ndim != 4 or array.dtype != np.uint8:
+        raise vision_history.v104_error("CACHE", f"refusing to cache {array.shape} {array.dtype}")
+    temporary = target.with_name(f"{target.name}.tmp-{os.getpid()}")
+    sidecar = decoded_sidecar_path(target)
+    temporary_sidecar = sidecar.with_name(f"{sidecar.name}.tmp-{os.getpid()}")
+    try:
+        with open(temporary, "wb") as handle:
+            np.save(handle, array, allow_pickle=False)
+        written = np.load(temporary, mmap_mode="r")
+        if [int(v) for v in written.shape] != [int(v) for v in array.shape]:
+            raise vision_history.v104_error("CACHE", f"{target.name}: wrote {written.shape}")
+        if written.dtype != np.dtype(np.uint8):
+            raise vision_history.v104_error("CACHE", f"{target.name}: wrote {written.dtype}")
+        if verify_payload and not np.array_equal(np.asarray(written), array):
+            raise vision_history.v104_error("CACHE", f"{target.name}: payload differs after write")
+        del written
+        cache_digest = _file_digest(temporary)
+        payload = {
+            "schema": DECODE_CACHE_SCHEMA,
+            "source": {
+                "name": shard.name,
+                "frames": int(frames_total),
+                "bytes": int(shard.stat().st_size),
+                "sha256": str(source_digest),
+            },
+            "region": str(region),
+            "shape": [int(v) for v in array.shape],
+            "dtype": "uint8",
+            "cache_sha256": cache_digest,
+            "payload_verified": bool(verify_payload),
+            "created": time.strftime("%Y-%m-%dT%H:%M:%S"),
+        }
+        temporary_sidecar.write_text(
+            json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8"
+        )
+        size = int(temporary.stat().st_size)
+        os.replace(temporary, target)
+        os.replace(temporary_sidecar, sidecar)
+        return size
+    except BaseException:
+        temporary.unlink(missing_ok=True)
+        temporary_sidecar.unlink(missing_ok=True)
+        raise
+
+
+def build_decode_cache(
+    dataset_dir: Path,
+    sizes: dict[str, tuple[int, int]],
+    *,
+    verbose: bool = True,
+    verify_payload: bool = True,
+    decode_threads: int = 8,
+    limit_shards: int | None = None,
+) -> dict:
+    """Materialise the decoded-frame cache for ``sizes``. Idempotent and resumable.
+
+    A cache file is only reused when its full identity checks out (n/H/W/C/dtype
+    and the sidecar's shard name, frame count, byte size and SHA-256).  Anything
+    else - including the v1.0.3 files that carry no sidecar at all - is counted in
+    ``files_invalid`` and rewritten from the PNG source, which is the only way to
+    earn the identity without asserting something unverified.
+
+    Old report keys are kept: ``dataset``, ``sizes``, ``files_written``,
+    ``files_skipped``, ``bytes_written``, ``elapsed_seconds``.  ``bytes_written``
+    is what this run wrote; ``bytes_total`` is the ``stat`` size of every target
+    file on disk afterwards.
+    """
+    dataset_dir = Path(dataset_dir)
+    # A small residency budget keeps one shard's blobs in memory across its three
+    # regions without letting the build pin the dataset.
+    dataset = VisionDataset(
+        dataset_dir,
+        max_cached_shards=2,
+        cache_budget_bytes=256 * 1024 * 1024,
+        decode_threads=decode_threads,
+        use_decode_cache=False,
+    )
+    started = time.time()
+    written = skipped = invalid = repaired = missing = 0
+    bytes_written = 0
+    files_expected = 0
+    processed = 0
+    seen_shards = 0
+    digests: dict[Path, str] = {}
+
+    def source_digest(path: Path) -> str:
+        """One SHA-256 per shard, reused by all of its regions (never per batch)."""
+        digest = digests.get(path)
+        if digest is None:
+            digest = _file_digest(path)
+            digests[path] = digest
+        return digest
+
+    try:
+        for path, start, size in dataset.offsets:
+            if limit_shards is not None and seen_shards >= int(limit_shards):
+                break
+            seen_shards += 1
+            for region, (height, width) in sizes.items():
+                if region not in dataset.region_hw:
+                    continue
+                files_expected += 1
+                target = decoded_cache_path(path, region, height, width)
+                existed = target.exists()
+                check = check_decode_cache(
+                    path,
+                    region,
+                    height,
+                    width,
+                    frames=size,
+                    source_digest=source_digest(path),
+                )
+                if check.ok:
+                    skipped += 1
+                    processed += 1
+                    continue
+                if existed:
+                    invalid += 1
+                else:
+                    missing += 1
+                frames = dataset.frames(list(range(start, start + size)), region, height, width)
+                bytes_written += _write_decode_cache(
+                    frames,
+                    target,
+                    path,
+                    region,
+                    source_digest=source_digest(path),
+                    frames_total=size,
+                    verify_payload=verify_payload,
+                )
+                written += 1
+                if existed:
+                    repaired += 1
+                processed += 1
+                if verbose and processed % 500 == 0:
+                    print(f"[decode-cache] {processed} region files done", flush=True)
+        # The authoritative number is the on-disk size, not the sum of what we
+        # think we wrote: a skipped file is only proven present by ``stat``.
+        bytes_total = 0
+        files_present = 0
+        for path, _start, size in dataset.offsets[:seen_shards]:
+            for region, (height, width) in sizes.items():
+                if region not in dataset.region_hw:
+                    continue
+                target = decoded_cache_path(path, region, height, width)
+                if target.exists():
+                    bytes_total += int(target.stat().st_size)
+                    files_present += 1
+    finally:
+        dataset.close()
+    report = {
+        "dataset": str(dataset_dir),
+        "sizes": {key: list(value) for key, value in sizes.items()},
+        "files_written": written,
+        "files_skipped": skipped,
+        "files_invalid": invalid,
+        "files_repaired": repaired,
+        "files_missing": missing,
+        "files_expected": files_expected,
+        "files_present": files_present,
+        "bytes_written": int(bytes_written),
+        "bytes_total": int(bytes_total),
+        "cache_contract": DECODE_CACHE_SCHEMA,
+        "shards_visited": seen_shards,
+        "payload_verified": bool(verify_payload),
+        "elapsed_seconds": round(time.time() - started, 1),
+    }
+    if verbose:
+        print(f"[decode-cache] {report}", flush=True)
+    return report
+
+
+def verify_decode_cache(
+    dataset_dir: Path,
+    sizes: dict[str, tuple[int, int]],
+    *,
+    verify_payload: bool = True,
+    verbose: bool = False,
+    limit_shards: int | None = None,
+) -> dict:
+    """Re-check every cache file (and its sidecar) without writing anything."""
+    dataset_dir = Path(dataset_dir)
+    dataset = VisionDataset(dataset_dir, use_decode_cache=False)
+    checked = ok = 0
+    bytes_total = 0
+    invalid: list[dict] = []
+    reasons: dict[str, int] = {}
+    seen_shards = 0
+    for path, _start, size in dataset.offsets:
+        if limit_shards is not None and seen_shards >= int(limit_shards):
+            break
+        seen_shards += 1
+        for region, (height, width) in sizes.items():
+            if region not in dataset.region_hw:
+                continue
+            checked += 1
+            check = check_decode_cache(
+                path, region, height, width, frames=size, verify_payload=verify_payload
+            )
+            if check.ok:
+                ok += 1
+                bytes_total += check.bytes
+                continue
+            reasons[check.reason] = reasons.get(check.reason, 0) + 1
+            if len(invalid) < 200:
+                invalid.append(
+                    {
+                        "file": decoded_cache_path(path, region, height, width).name,
+                        "reason": check.reason,
+                    }
+                )
+        if verbose and checked % 500 == 0:
+            print(f"[decode-cache] verified {checked} files", flush=True)
+    dataset.close()
+    return {
+        "dataset": str(dataset_dir),
+        "sizes": {key: list(value) for key, value in sizes.items()},
+        "cache_contract": DECODE_CACHE_SCHEMA,
+        "files": checked,
+        "files_ok": ok,
+        "files_invalid": checked - ok,
+        "bytes_total": int(bytes_total),
+        "payload_verified": bool(verify_payload),
+        "invalid_reasons": reasons,
+        "invalid": invalid,
+        "shards_visited": seen_shards,
+    }
+
+
+class _Residency:
+    """Shared-object residency accounting: every distinct ndarray is counted once.
+
+    A full shard record and its label-only record can hold the *same* array
+    objects when the loader reuses the full record (``_load_labels`` does), so a
+    naive sum over both caches would double-count.  ``nbytes`` here is the sum over
+    live objects; per-kind logical sums are reported separately by
+    :meth:`VisionDataset.cache_stats`.
+    """
+
+    __slots__ = ("_refs", "nbytes")
+
+    def __init__(self) -> None:
+        self._refs: dict[int, list] = {}
+        self.nbytes = 0
+
+    def add(self, entries: dict) -> None:
+        for value in entries.values():
+            if not isinstance(value, np.ndarray):
+                continue
+            slot = self._refs.get(id(value))
+            if slot is None:
+                self._refs[id(value)] = [value, 1]
+                self.nbytes += int(value.nbytes)
+            else:
+                slot[1] += 1
+
+    def discard(self, entries: dict) -> None:
+        for value in entries.values():
+            if not isinstance(value, np.ndarray):
+                continue
+            slot = self._refs.get(id(value))
+            if slot is None:
+                continue
+            slot[1] -= 1
+            if slot[1] <= 0:
+                self.nbytes -= int(value.nbytes)
+                del self._refs[id(value)]
+
+    def clear(self) -> None:
+        self._refs.clear()
+        self.nbytes = 0
+
+
+def _dict_bytes(entries: dict) -> int:
+    """Sum ``ndarray.nbytes`` of one record (a full or a label shard record)."""
+    total = 0
+    for value in entries.values():
+        if isinstance(value, np.ndarray):
+            total += int(value.nbytes)
+    return total
+
+
+def _entries_bytes(table: dict[Path, dict[str, np.ndarray]]) -> int:
+    """Logical bytes of one cache kind (may overlap with the other kind)."""
+    return sum(_dict_bytes(entries) for entries in table.values())
+
+
+def _validated_indices(indices: list[int], total: int) -> list[int]:
+    """``indices`` as a list of legal dataset indexes, else ``v104:DATA``."""
+    try:
+        array = np.asarray(indices)
+    except Exception as exc:  # ragged input and similar
+        raise vision_history.v104_error("DATA", f"indices are not array-like: {exc}") from exc
+    if array.size == 0:
+        return []
+    if array.dtype.kind == "f":
+        if not np.all(np.isfinite(array)) or not np.all(array == np.rint(array)):
+            raise vision_history.v104_error("DATA", "indices must be integers")
+    elif array.dtype.kind not in "iu":
+        raise vision_history.v104_error("DATA", f"indices must be integers, got {array.dtype}")
+    values = [int(value) for value in array.reshape(-1)]
+    for value in values:
+        if value < 0 or value >= int(total):
+            raise vision_history.v104_error(
+                "DATA", f"index {value} outside dataset range [0, {int(total)})"
+            )
+    return values
+
+
 class VisionDataset:
     """Per-shard cache over a directory of vision shards.
 
@@ -229,13 +720,28 @@ class VisionDataset:
     model wants.
     """
 
+    #: How many shards' derived segment tables stay in memory (a few hundred
+    #: bytes each); this is an index, not cached pixels.
+    _HISTORY_INDEX_SHARDS = 32
+
     def __init__(
         self,
         dataset_dir: Path,
         max_cached_shards: int | None = None,
-        cache_budget_bytes: int = 2_000_000_000,
+        cache_budget_bytes: int = DEFAULT_CACHE_BUDGET_BYTES,
         decode_threads: int = 8,
+        use_decode_cache: bool = True,
+        *,
+        history_contract: str = vision_history.HISTORY_LEGACY,
+        verify_source_digest: bool = True,
     ):
+        budget = int(cache_budget_bytes)
+        if budget < 0:
+            raise vision_history.v104_error("BUDGET", "cache_budget_bytes must be >= 0")
+        self.cache_budget_bytes = budget
+        self.history_contract = vision_history.normalize_history_contract(history_contract)
+        self.verify_source_digest = bool(verify_source_digest)
+        self.root = Path(dataset_dir)
         self.paths = discover_vision_shards(dataset_dir)
         if not self.paths:
             raise FileNotFoundError(f"no vision shards under {dataset_dir}")
@@ -259,21 +765,144 @@ class VisionDataset:
             self.offsets.append((path, total, n))
             total += n
         self.total = total
+        self._sizes = {path: n for path, _start, n in self.offsets}
         self._cache: dict[Path, dict[str, np.ndarray]] = {}
-        self._order: list[Path] = []
+        self._label_cache: dict[Path, dict[str, np.ndarray]] = {}
+        self._lru: OrderedDict[tuple[str, Path], None] = OrderedDict()
+        self._resident = _Residency()
+        self._stats = {"hits": 0, "misses": 0, "evictions": 0}
         self.decode_threads = max(1, int(decode_threads))
+        self.use_decode_cache = bool(use_decode_cache)
         self._pool = None
-        if max_cached_shards is None:
-            per_frame = 1200
-            max_cached_shards = len(self.paths) if total * per_frame <= cache_budget_bytes else 4
-        self._max_cached = max(1, int(max_cached_shards))
+        self._closed = False
+        # ``max_cached_shards`` caps the number of *full* shard records; the byte
+        # budget caps everything (full records + label-only records).
+        self.max_cached_shards = None if max_cached_shards is None else max(1, int(max_cached_shards))
+        self._max_cached = self.max_cached_shards if self.max_cached_shards is not None else len(self.paths)
+        # Decoded-cache identity: one source SHA-256 per shard, computed at most
+        # once, plus counters so a silent fallback to PNG decoding is visible.
+        self._source_digests: dict[Path, str] = {}
+        self._decode_counters = {"hits": 0, "missing": 0, "invalid": 0, "disabled": 0}
+        self._decode_reasons: dict[str, int] = {}
+        # Segment tables for ``causal-segment-v1``: 4 bytes + 1 bool per frame,
+        # a derived index rather than cached pixels.  Bounded to a few shards.
+        self._history_index: OrderedDict[Path, tuple[np.ndarray, np.ndarray]] = OrderedDict()
 
+    # -- lifecycle -------------------------------------------------------
     def __len__(self) -> int:
         return self.total
 
     @property
     def region_names(self) -> list[str]:
         return list(self.region_hw)
+
+    def __enter__(self) -> "VisionDataset":
+        return self
+
+    def __exit__(self, *_exc: object) -> bool:
+        self.close()
+        return False
+
+    def close(self) -> None:
+        """Release cached arrays and the decode thread pool. Idempotent."""
+        if self._closed:
+            return
+        self._closed = True
+        self._cache.clear()
+        self._label_cache.clear()
+        self._lru.clear()
+        self._resident.clear()
+        self._history_index.clear()
+        self._source_digests.clear()
+        pool, self._pool = self._pool, None
+        if pool is not None:
+            pool.shutdown(wait=True, cancel_futures=True)
+
+    def _ensure_open(self) -> None:
+        if self._closed:
+            raise RuntimeError("v104:CACHE: VisionDataset is closed; create a new instance")
+
+    # -- residency -------------------------------------------------------
+    def _touch(self, kind: str, path: Path) -> None:
+        """Every hit refreshes the entry: one unified LRU for full and label records."""
+        key = (kind, path)
+        self._lru[key] = None
+        self._lru.move_to_end(key)
+
+    def _evict(self, incoming_bytes: int = 0) -> None:
+        """Evict in LRU order until the byte budget *and* the shard-count cap hold.
+
+        ``incoming_bytes`` is the record about to be inserted: making room *before*
+        the insert keeps ``resident_bytes`` inside the budget at every instant, not
+        only after the fact.  A record that alone exceeds the budget is still
+        evicted (it is returned to the caller without becoming resident).
+        """
+        while True:
+            over_bytes = self._resident.nbytes + int(incoming_bytes) > self.cache_budget_bytes
+            over_count = (
+                self.max_cached_shards is not None
+                and len(self._cache) > self.max_cached_shards
+            )
+            if not over_bytes and not over_count:
+                return
+            if not self._lru:
+                return
+            kind, path = next(iter(self._lru))
+            del self._lru[(kind, path)]
+            table = self._cache if kind == "full" else self._label_cache
+            entries = table.pop(path, None)
+            if entries is not None:
+                self._resident.discard(entries)
+            self._stats["evictions"] += 1
+
+    def cache_stats(self) -> dict:
+        """Residency accounting for the byte budget (D10).
+
+        ``resident_bytes`` counts every distinct ``ndarray`` object once even when a
+        full record and a label record share it; ``full.bytes``/``label.bytes`` are
+        per-kind logical sums and may overlap.  mmap pages, temporary batches, the
+        OS page cache and the thread pool are outside this budget - RSS is not
+        promised.
+        """
+        return {
+            "budget_bytes": int(self.cache_budget_bytes),
+            "resident_bytes": int(self._resident.nbytes),
+            "hits": int(self._stats["hits"]),
+            "misses": int(self._stats["misses"]),
+            "evictions": int(self._stats["evictions"]),
+            "full": {"entries": len(self._cache), "bytes": _entries_bytes(self._cache)},
+            "label": {"entries": len(self._label_cache), "bytes": _entries_bytes(self._label_cache)},
+        }
+
+    def decode_cache_stats(self) -> dict:
+        """How often the identity-checked decoded cache was used versus PNG fallback."""
+        return {
+            "enabled": bool(self.use_decode_cache),
+            "hits": int(self._decode_counters["hits"]),
+            "missing": int(self._decode_counters["missing"]),
+            "invalid": int(self._decode_counters["invalid"]),
+            "disabled": int(self._decode_counters["disabled"]),
+            "reasons": dict(self._decode_reasons),
+            "verified_source_digests": len(self._source_digests),
+            "contract": DECODE_CACHE_SCHEMA,
+        }
+
+    def _note_decode_cache(self, reason: str) -> None:
+        if reason == "hit":
+            self._decode_counters["hits"] += 1
+        elif reason == "missing":
+            self._decode_counters["missing"] += 1
+        else:
+            self._decode_counters["invalid"] += 1
+        self._decode_reasons[reason] = self._decode_reasons.get(reason, 0) + 1
+
+    def _shard_digest(self, path: Path) -> str:
+        """One SHA-256 per shard, reused across regions and calls (not per batch)."""
+        digest = self._source_digests.get(path)
+        if digest is None:
+            digest = _file_digest(path)
+            self._source_digests[path] = digest
+        return digest
 
     def _locate(self, index: int) -> tuple[Path, int, int]:
         for path, start, size in self.offsets:
@@ -282,14 +911,93 @@ class VisionDataset:
         raise IndexError(index)
 
     def _load(self, path: Path) -> dict[str, np.ndarray]:
-        if path not in self._cache:
-            with np.load(path) as data:
-                self._cache[path] = {key: data[key] for key in data.files}
-            self._order.append(path)
-            while len(self._order) > self._max_cached:
-                stale = self._order.pop(0)
-                self._cache.pop(stale, None)
-        return self._cache[path]
+        """Full shard record (pixel blobs included), resident only while budgeted.
+
+        A record that alone exceeds the budget is returned to the caller without
+        being kept, which is what makes ``cache_budget_bytes=0`` a working mode.
+        """
+        self._ensure_open()
+        record = self._cache.get(path)
+        if record is not None:
+            self._stats["hits"] += 1
+            self._touch("full", path)
+            return record
+        self._stats["misses"] += 1
+        with np.load(path) as data:
+            record = {key: data[key] for key in data.files}
+        if self.cache_budget_bytes > 0:
+            self._evict(_dict_bytes(record))  # make room first: never over budget
+            self._cache[path] = record
+            self._resident.add(record)
+            self._touch("full", path)
+            self._evict()
+        return record
+
+    def _decoded_cache(self, shard: Path, region: str, out_h: int, out_w: int):
+        """mmap the identity-checked decoded-frame cache, or None to decode PNGs.
+
+        A cache file is only used when n/H/W/C/dtype, the sidecar schema, the
+        region/shape, the source shard's name/frames/bytes and (once per shard) its
+        SHA-256 all match.  Files without a sidecar - every v1.0.3 cache on disk -
+        fall back to PNG decoding and are counted, never silently trusted.
+        """
+        if not self.use_decode_cache:
+            self._decode_counters["disabled"] += 1
+            return None
+        path = decoded_cache_path(shard, region, out_h, out_w)
+        if not path.exists():
+            self._note_decode_cache("missing")
+            return None
+        try:
+            array = np.load(path, mmap_mode="r")
+        except Exception:
+            self._note_decode_cache("unreadable")
+            return None
+        if (
+            array.ndim != 4
+            or array.shape[0] != self._sizes.get(shard)
+            or tuple(int(v) for v in array.shape[1:3]) != (int(out_h), int(out_w))
+            or int(array.shape[3]) != vision.VISION_CHANNELS
+            or array.dtype != np.dtype(np.uint8)
+        ):
+            self._note_decode_cache("shape")
+            return None
+        check = check_decode_cache(
+            shard,
+            region,
+            out_h,
+            out_w,
+            frames=self._sizes.get(shard),
+            verify_source=self.verify_source_digest,
+            source_digest=self._shard_digest(shard) if self.verify_source_digest else None,
+        )
+        if not check.ok:
+            self._note_decode_cache(check.reason)
+            return None
+        self._note_decode_cache("hit")
+        return check.array
+
+    def shard_chunked_order(self, indices: list[int], rng: np.random.Generator) -> list[int]:
+        """Reshuffle ``indices`` so each contiguous run comes from one shard.
+
+        Reading 96 samples spread over 96 shards costs 90 ms on this machine; reading
+        96 samples from 2 shards costs 21 ms (measured, decoded-cache files).  The
+        sampler only needs "a random subset per epoch", not "every frame from a
+        different file", so shuffling at *shard* granularity keeps the epoch's sample
+        set identical while cutting the per-batch I/O by ~4x.
+        """
+        by_shard: dict[Path, list[int]] = {}
+        for index in indices:
+            path, _start, _size = self._locate(index)
+            by_shard.setdefault(path, []).append(index)
+        paths = list(by_shard)
+        rng.shuffle(paths)
+        order: list[int] = []
+        for path in paths:
+            rows = by_shard[path]
+            rng.shuffle(rows)
+            order.extend(rows)
+        return order
 
     def _group(self, indices: list[int]) -> dict[Path, list[tuple[int, int]]]:
         by_shard: dict[Path, list[tuple[int, int]]] = {}
@@ -299,12 +1007,48 @@ class VisionDataset:
         return by_shard
 
     # -- labels ----------------------------------------------------------
+    def _load_labels(self, path: Path) -> dict[str, np.ndarray]:
+        """Label members of one shard, cached separately from the pixel blobs.
+
+        A shard's labels are ~140 KB while its three PNG blobs are ~30 MB.  Reading
+        only the label members keeps ``labels()`` fast without pinning the pixel
+        blobs in RAM - which matters now that frames come from the decode cache and
+        the npz is otherwise never opened.
+
+        When the full record of the same shard is already resident its label
+        members are reused as-is, so the two caches share one array object instead
+        of paying for a second copy (the residency tracker counts shared objects
+        once).
+        """
+        self._ensure_open()
+        cached = self._label_cache.get(path)
+        if cached is not None:
+            self._stats["hits"] += 1
+            self._touch("label", path)
+            return cached
+        shared = self._cache.get(path)
+        if shared is not None:
+            self._stats["hits"] += 1
+            self._touch("full", path)
+            return shared
+        self._stats["misses"] += 1
+        with np.load(path) as data:
+            cached = {key: data[key] for key in data.files if not key.endswith("_blob")}
+        if self.cache_budget_bytes > 0:
+            self._evict(_dict_bytes(cached))  # make room first: never over budget
+            self._label_cache[path] = cached
+            self._resident.add(cached)
+            self._touch("label", path)
+            self._evict()
+        return cached
+
     def labels(self, indices: list[int]) -> dict[str, np.ndarray]:
         """Privileged arrays for ``indices`` (never touches pixels)."""
+        self._ensure_open()
         by_shard = self._group(indices)
         keys = ["self_feat", "bullets", "danger", "action", "meta"]
         first = next(iter(by_shard))
-        sample = self._load(first)
+        sample = self._load_labels(first)
         out = {
             key: np.zeros((len(indices),) + sample[key].shape[1:], dtype=sample[key].dtype)
             for key in keys
@@ -312,7 +1056,7 @@ class VisionDataset:
         if "value" in sample:
             out["value"] = np.zeros((len(indices),) + sample["value"].shape[1:], dtype=sample["value"].dtype)
         for path, entries in by_shard.items():
-            shard = self._load(path)
+            shard = self._load_labels(path)
             positions = [position for position, _ in entries]
             locals_ = [local for _, local in entries]
             for key in list(out):
@@ -335,6 +1079,7 @@ class VisionDataset:
         minutes.  With ``decode_threads`` workers the data loader stops being the
         bottleneck of training.
         """
+        self._ensure_open()
         native = self.region_hw.get(region)
         if native is None:
             raise KeyError(f"region {region!r} not present; dataset has {sorted(self.region_hw)}")
@@ -345,6 +1090,11 @@ class VisionDataset:
 
         jobs: list[tuple[int, bytes]] = []
         for path, entries in self._group(indices).items():
+            cached = self._decoded_cache(path, region, out_h, out_w)
+            if cached is not None:
+                rows = [local for _, local in entries]
+                out[[position for position, _ in entries]] = cached[rows]
+                continue
             shard = self._load(path)
             if blob_key in shard:
                 blob = shard[blob_key]
@@ -389,18 +1139,72 @@ class VisionDataset:
     def stack_indices(self, indices: list[int], depth: int) -> np.ndarray:
         """Global indices of the ``depth``-frame history behind each index.
 
-        Clamped **inside the sample's own shard**: shards come from different
-        capture runs, so the frame before a shard's first sample belongs to a
-        different episode (or a different stage) and would teach fake motion.
+        The composition rule is the dataset's ``history_contract``:
+
+        * ``legacy`` (the v1.0.3 default) clamps inside the sample's own shard.
+          Shards come from different capture runs, so the frame before a shard's
+          first sample would teach fake motion - but this is what every existing
+          checkpoint was trained with, so it stays available unchanged.
+        * ``causal-segment-v1`` clamps to the causal segment (same shard, same
+          stage, frame delta 2, unchanged death counter) and repeats the sample
+          itself when its meta is untrusted.  See :mod:`touhou_rl.vision_history`.
+
+        The signature is unchanged; ``indices`` must be legal dataset indexes and
+        ``depth`` a positive integer.
         """
-        depth = max(1, int(depth))
-        out = np.empty((len(indices), depth), dtype=np.int64)
-        for row, index in enumerate(indices):
-            _path, start, size = self._locate(index)
-            for slot in range(depth):
-                candidate = index - (depth - 1 - slot)
-                out[row, slot] = min(max(candidate, start), start + size - 1)
+        self._ensure_open()
+        depth_value = vision_history.positive_int(depth)
+        wanted = _validated_indices(indices, self.total)
+        out = np.empty((len(wanted), depth_value), dtype=np.int64)
+        if not wanted:
+            return out
+        grouped: dict[Path, list[tuple[int, int]]] = {}
+        shard_of: dict[Path, tuple[int, int]] = {}
+        for row, index in enumerate(wanted):
+            path, start, size = self._locate(index)
+            grouped.setdefault(path, []).append((row, index - start))
+            shard_of[path] = (start, size)
+        for path, entries in grouped.items():
+            start, size = shard_of[path]
+            rows = np.asarray([row for row, _local in entries], dtype=np.int64)
+            local = np.asarray([local for _row, local in entries], dtype=np.int64)
+            if self.history_contract == vision_history.HISTORY_LEGACY:
+                history = vision_history.history_rows(local, depth_value, self.history_contract)
+            else:
+                starts, reliable = self._history_state(path, size)
+                history = vision_history.history_rows(
+                    local, depth_value, self.history_contract, starts, reliable
+                )
+            out[rows] = history + int(start)
         return out
+
+    # -- history ---------------------------------------------------------
+    def meta_of_shard(self, path: Path) -> np.ndarray:
+        """The shard's ``meta`` block as float64 ``[n, 8]`` (labels only, no pixels)."""
+        with np.load(Path(path)) as data:
+            return np.asarray(data["meta"], dtype=np.float64)
+
+    def _history_state(self, path: Path, size: int) -> tuple[np.ndarray, np.ndarray]:
+        """Causal segment table of one shard, computed once and kept for a while."""
+        cached = self._history_index.get(path)
+        if cached is not None:
+            self._history_index.move_to_end(path)
+            return cached
+        meta = self.meta_of_shard(path)
+        if meta.shape[0] != int(size):
+            raise vision_history.v104_error(
+                "DATA", f"{path.name}: meta rows {meta.shape[0]} != frames {int(size)}"
+            )
+        starts, reliable = vision_history.segment_starts(meta)
+        self._history_index[path] = (starts, reliable)
+        while len(self._history_index) > self._HISTORY_INDEX_SHARDS:
+            self._history_index.popitem(last=False)
+        return starts, reliable
+
+    def history_audit(self, depth: int = 3) -> dict:
+        """Recomputable history audit (meta only; see :func:`vision_history.history_audit`)."""
+        self._ensure_open()
+        return vision_history.history_audit(self, depth)
 
     def label_stats(self) -> dict:
         """Cheap dataset description for reports (no pixels touched)."""
@@ -418,3 +1222,24 @@ class VisionDataset:
             "has_teacher_values": self.has_value,
             "regions": {name: list(hw) for name, hw in self.region_hw.items()},
         }
+
+    # -- metadata --------------------------------------------------------
+    def stage_of(self, indices: list[int] | np.ndarray) -> np.ndarray:
+        """每个索引所属 stage（来自分片 meta 的第 2 列）。返回 int64 数组，形状同 indices。
+        indices 是**数据集全局索引**（0..total-1）；stage_of[i] 即全局索引 i 的 stage，
+        因此调用方若需要按索引查表，应传 range(total)。"""
+        requested = np.asarray(indices, dtype=np.int64)
+        flat = requested.reshape(-1)
+        stages = np.empty(flat.size, dtype=np.int64)
+        cache: dict[Path, np.ndarray] = {}
+        for position, index in enumerate(flat):
+            path, start, _size = self._locate(int(index))
+            column = cache.get(path)
+            if column is None:
+                # Only ``meta`` is opened: no PNG is decoded, so this costs a few
+                # milliseconds per shard even on a 72k-frame dataset.
+                with np.load(path) as data:
+                    column = np.rint(data["meta"][:, 1]).astype(np.int64)
+                cache[path] = column
+            stages[position] = column[int(index) - start]
+        return stages.reshape(requested.shape)

@@ -1,0 +1,182 @@
+{
+  "checkpoint": ".",
+  "checkpoint_extra": {
+    "vision_checkpoint": true,
+    "stage": "policy",
+    "epoch": 1,
+    "history_contract": "causal-segment-v1"
+  },
+  "policy": "vision",
+  "difficulty": 3,
+  "team": 0,
+  "practice_stage": null,
+  "frameskip": 2,
+  "deterministic": false,
+  "device": "cpu",
+  "started": "2026-10-19T21:15:28",
+  "episodes": [
+    {
+      "episode": 1,
+      "steps": 4,
+      "frames_reported": 8,
+      "stages_reached": 0,
+      "deaths": 0,
+      "lives_left": 2.0,
+      "score": 0,
+      "graze": 0,
+      "episode_reward": 0.0,
+      "terminated": true,
+      "truncated": false,
+      "termination_reason": "game over",
+      "wall_seconds": 0.0,
+      "decisions_per_s": 125.62,
+      "last_state": {
+        "stage": 0,
+        "frame": 8,
+        "bullets": 0
+      },
+      "vision_diagnostics": {
+        "bomb_actions_requested": 0,
+        "screenshot_to_action_ms": {
+          "count": 4,
+          "mean": 5.871,
+          "p50": 4.43,
+          "p95": 9.657,
+          "max": 10.579
+        },
+        "observed_frame_delta": {
+          "count": 3,
+          "min": 2,
+          "p50": 2.0,
+          "p95": 2.0,
+          "max": 2,
+          "nonpositive": 0
+        }
+      }
+    },
+    {
+      "episode": 2,
+      "steps": 4,
+      "frames_reported": 8,
+      "stages_reached": 0,
+      "deaths": 0,
+      "lives_left": 2.0,
+      "score": 0,
+      "graze": 0,
+      "episode_reward": 0.0,
+      "terminated": true,
+      "truncated": false,
+      "termination_reason": "game over",
+      "wall_seconds": 0.0,
+      "decisions_per_s": 228.72,
+      "last_state": {
+        "stage": 0,
+        "frame": 8,
+        "bullets": 0
+      },
+      "vision_diagnostics": {
+        "bomb_actions_requested": 0,
+        "screenshot_to_action_ms": {
+          "count": 4,
+          "mean": 3.992,
+          "p50": 3.993,
+          "p95": 4.071,
+          "max": 4.076
+        },
+        "observed_frame_delta": {
+          "count": 3,
+          "min": 2,
+          "p50": 2.0,
+          "p95": 2.0,
+          "max": 2,
+          "nonpositive": 0
+        }
+      }
+    },
+    {
+      "episode": 3,
+      "steps": 4,
+      "frames_reported": 8,
+      "stages_reached": 0,
+      "deaths": 0,
+      "lives_left": 2.0,
+      "score": 0,
+      "graze": 0,
+      "episode_reward": 0.0,
+      "terminated": true,
+      "truncated": false,
+      "termination_reason": "game over",
+      "wall_seconds": 0.0,
+      "decisions_per_s": 221.78,
+      "last_state": {
+        "stage": 0,
+        "frame": 8,
+        "bullets": 0
+      },
+      "vision_diagnostics": {
+        "bomb_actions_requested": 0,
+        "screenshot_to_action_ms": {
+          "count": 4,
+          "mean": 4.132,
+          "p50": 4.164,
+          "p95": 4.269,
+          "max": 4.287
+        },
+        "observed_frame_delta": {
+          "count": 3,
+          "min": 2,
+          "p50": 2.0,
+          "p95": 2.0,
+          "max": 2,
+          "nonpositive": 0
+        }
+      }
+    }
+  ],
+  "vision": {
+    "checkpoint": "Document\\Update\\Alpha\\v1.0.4\\Stage3\\S3-6\\evidence\\fake-env\\fake-v2-depth3.pt",
+    "arch": "v2",
+    "depth": 3,
+    "region_sizes": {
+      "playfield": [
+        224,
+        192
+      ],
+      "hud_score": [
+        34,
+        216
+      ],
+      "hud_status": [
+        126,
+        216
+      ]
+    },
+    "frame_shape": {
+      "playfield": [
+        224,
+        192,
+        3
+      ],
+      "hud_score": [
+        34,
+        216,
+        3
+      ],
+      "hud_status": [
+        126,
+        216,
+        3
+      ]
+    },
+    "isolation": "I-1: policy input is regions_to_batch(env.render crops) only; env bookkeeping still reads memory",
+    "max_steps": 12000
+  },
+  "finished": "2026-10-19T21:15:28",
+  "summary": {
+    "episodes": 3,
+    "frames_mean": 8.0,
+    "frames_max": 8,
+    "stages_max": 0,
+    "deaths_mean": 0.0
+  }
+}

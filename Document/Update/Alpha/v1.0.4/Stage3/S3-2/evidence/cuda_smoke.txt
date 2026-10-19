@@ -1,0 +1,8 @@
+cuda smoke: policy_loss device parity
+cuda available: True
+legacy-reg {'rank_weight': 0.0, 'regression_weight': 1.0}: cpu=2.3293538 cuda=2.3293538 abs_diff=0.000e+00 grad_norm=0.112125 valid_pairs=0 stats_equal=True
+centered-reg {'rank_weight': 0.0, 'regression_weight': 1.0}: cpu=1.1988724 cuda=1.1988724 abs_diff=0.000e+00 grad_norm=0.103792 valid_pairs=0 stats_equal=True
+rank {'rank_weight': 1.0, 'regression_weight': 0.0}: cpu=1.0023677 cuda=1.0023677 abs_diff=0.000e+00 grad_norm=0.090484 valid_pairs=600 stats_equal=True
+rank {'rank_weight': 1.0, 'regression_weight': 1.0}: cpu=2.2012401 cuda=2.2012401 abs_diff=0.000e+00 grad_norm=0.189892 valid_pairs=600 stats_equal=True
+cuda tensor into policy_metrics raises: TypeError: can't convert cuda:0 device type tensor to numpy. Use Tensor.cpu() to copy the tensor to host memory first.
+cuda smoke: ok

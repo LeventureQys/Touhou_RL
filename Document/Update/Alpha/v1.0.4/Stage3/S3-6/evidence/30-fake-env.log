@@ -1,0 +1,31 @@
+COMMAND: C:\Users\a5935\AppData\Local\Programs\Python\Python312\python.exe Document\Update\Alpha\v1.0.4\Stage3\S3-6\evidence\fake_env_eval.py --out Document\Update\Alpha\v1.0.4\Stage3\S3-6\evidence\fake-env
+EXIT: 0
+--- STDOUT (checks) ---
+[PASS] policy_is_vision: vision
+[PASS] vision_arch_is_v2: v2
+[PASS] depth_follows_the_checkpoint: 3
+[PASS] region_sizes_are_the_three_roi: {'playfield': [224, 192], 'hud_score': [34, 216], 'hud_status': [126, 216]}
+[PASS] frame_shape_includes_rgb3: {'playfield': [224, 192, 3], 'hud_score': [34, 216, 3], 'hud_status': [126, 216, 3]}
+[PASS] isolation_statement_is_recorded: I-1: policy input is regions_to_batch(env.render crops) only; env bookkeeping still reads memory
+[PASS] step_cap_is_recorded: 12000
+[PASS] no_v3_contract_node_without_g_v3: ['arch', 'checkpoint', 'depth', 'frame_shape', 'isolation', 'max_steps', 'region_sizes']
+[PASS] eval_report_written: Document\Update\Alpha\v1.0.4\Stage3\S3-6\evidence\fake-env\plain\eval-report.json
+[PASS] episode_count: 3
+[PASS] episode_fields_complete: terminated/truncated/termination_reason
+[PASS] vision_diagnostics_contract: 3 keys, counts, p50<=p95<=max
+[PASS] raw_diagnostics_saved: Document\Update\Alpha\v1.0.4\Stage3\S3-6\evidence\fake-env\plain\vision-diagnostics-raw.json
+[PASS] poisoned_privileged_info_does_not_change_actions: (12, 4) identical=True
+[PASS] env_state_never_read: plain=0 poison=0
+[PASS] env_closed: close() called
+[PASS] action_shape_is_the_four_tuple: shape=(12, 4) actions=[[2, 1, 0, 0], [2, 1, 0, 0]]
+[PASS] v3_policy_is_vision: vision
+[PASS] v3_arch_is_v3st: v3-st
+[PASS] v3_depth_follows_the_checkpoint: 3
+[PASS] v3_contract_node: ['align_corners', 'arch', 'candidate_order_version', 'channels', 'depth', 'history_contract', 'identity', 'legacy_frame', 'local_grid_hw', 'normalization', 'region_sizes', 'roi_native_hw', 'schema', 'score_semantics']
+[PASS] v3_contract_identity: {'source_state_sha': 'dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd', 'teacher_fingerprint': 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', 'manifest_sha': 'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb', 'val_index_sha256': 'cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc', 'loss_config': {'objective': 'rank', 'rank_delta_px': 0.5}}
+[PASS] v3_diagnostics_contract: 3 keys on every v3 episode
+[PASS] v3_poisoned_privileged_info_does_not_change_actions: (12, 4) identical=True
+[PASS] v3_env_state_never_read: 0 reads
+[PASS] v3_action_shape_is_the_four_tuple: shape=(12, 4) actions=[[7, 1, 1, 0], [7, 1, 1, 0]]
+passed=True
+--- STDERR ---

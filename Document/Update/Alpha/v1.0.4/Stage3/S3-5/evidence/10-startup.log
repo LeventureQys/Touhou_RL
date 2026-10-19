@@ -1,0 +1,209 @@
+{
+  "batch": 2,
+  "seed": 20261019,
+  "config": {
+    "arch": "v3-st",
+    "depth": 3,
+    "region_sizes": {
+      "playfield": "224x192",
+      "hud_score": "34x216",
+      "hud_status": "126x216"
+    },
+    "heatmap_hw": "56x48",
+    "roi_native_hw": "128x128",
+    "local_grid_hw": "16x16",
+    "align_corners": false,
+    "center_detach": true,
+    "local_enabled": true,
+    "heatmap_gauss_sigma": 2.0,
+    "candidate_order_version": "focus9-move-v1",
+    "history_contract": "causal-segment-v1",
+    "score_semantics": "preference_logits"
+  },
+  "raw_uint8": {
+    "playfield": "2x3x224x192x3",
+    "hud_score": "2x3x34x216x3",
+    "hud_status": "2x3x126x216x3"
+  },
+  "preprocessed": {
+    "playfield": {
+      "shape": "2x3x224x192x3",
+      "dtype": "torch.float32",
+      "finite": true,
+      "min": 0.0,
+      "max": 1.0
+    },
+    "hud_score": {
+      "shape": "2x3x34x216x3",
+      "dtype": "torch.float32",
+      "finite": true,
+      "min": 0.0,
+      "max": 1.0
+    },
+    "hud_status": {
+      "shape": "2x3x126x216x3",
+      "dtype": "torch.float32",
+      "finite": true,
+      "min": 0.0,
+      "max": 1.0
+    }
+  },
+  "parameters": 1507162,
+  "forward_seconds_batch": 0.0333,
+  "forward_seconds_per_frame": 0.01665,
+  "forward": {
+    "policy_logits": {
+      "shape": "2x18",
+      "dtype": "torch.float32",
+      "finite": true,
+      "min": -0.056233,
+      "max": 0.05914
+    },
+    "heatmap_logits": {
+      "shape": "2x56x48",
+      "dtype": "torch.float32",
+      "finite": true,
+      "min": -0.052927,
+      "max": -0.000978
+    },
+    "position": {
+      "shape": "2x2",
+      "dtype": "torch.float32",
+      "finite": true,
+      "min": 0.499862,
+      "max": 0.500009
+    },
+    "danger_log": {
+      "shape": "2x128",
+      "dtype": "torch.float32",
+      "finite": true,
+      "min": -0.144606,
+      "max": -0.123016
+    },
+    "self_pred": {
+      "shape": "2x24",
+      "dtype": "torch.float32",
+      "finite": true,
+      "min": -0.057873,
+      "max": 0.500009
+    },
+    "features": {
+      "shape": "2x256",
+      "dtype": "torch.float32",
+      "finite": true,
+      "min": 0.0,
+      "max": 0.103811
+    },
+    "location_stats": {
+      "shape": "2x2",
+      "dtype": "torch.float32",
+      "finite": true,
+      "min": 0.000383,
+      "max": 0.999997
+    }
+  },
+  "score": {
+    "shape": "2x18",
+    "dtype": "torch.float32",
+    "finite": true,
+    "min": -0.056233,
+    "max": 0.05914
+  },
+  "features": {
+    "shape": "2x256",
+    "dtype": "torch.float32",
+    "finite": true,
+    "min": 0.0,
+    "max": 0.103811
+  },
+  "decode_state": {
+    "self_feat": {
+      "shape": "2x24",
+      "dtype": "torch.float32",
+      "finite": true,
+      "min": -0.057873,
+      "max": 0.500009
+    },
+    "danger_log": {
+      "shape": "2x128",
+      "dtype": "torch.float32",
+      "finite": true,
+      "min": -0.144606,
+      "max": -0.123016
+    },
+    "heatmap_logits": {
+      "shape": "2x56x48",
+      "dtype": "torch.float32",
+      "finite": true,
+      "min": -0.052927,
+      "max": -0.000978
+    }
+  },
+  "act": {
+    "actions": {
+      "shape": "2x4",
+      "dtype": "torch.int64",
+      "values": [
+        [
+          7,
+          1,
+          0,
+          0
+        ],
+        [
+          7,
+          1,
+          0,
+          0
+        ]
+      ]
+    },
+    "logp": {
+      "shape": "2",
+      "dtype": "torch.float32",
+      "finite": true,
+      "min": 0.0,
+      "max": 0.0
+    },
+    "max_preference": {
+      "shape": "2",
+      "dtype": "torch.float32",
+      "finite": true,
+      "min": 0.05913,
+      "max": 0.05914
+    },
+    "extra": {
+      "shape": "2",
+      "dtype": "torch.float32",
+      "finite": true,
+      "min": 0.0,
+      "max": 0.0
+    }
+  },
+  "loss": {
+    "total": 8.65859603881836,
+    "policy_rank": 0.6944522261619568,
+    "heatmap": 7.897095203399658,
+    "danger": 0.24925729632377625,
+    "self": 0.17197498679161072,
+    "valid_pairs": 299,
+    "frames_with_pairs": 2
+  },
+  "grad_norms": {
+    "playfield_trunk": 0.115591,
+    "heat_conv": 0.114457,
+    "heatmap_head": 0.018435,
+    "location_mlp": 0.001403,
+    "local": 0.007062,
+    "global": 0.01536,
+    "hud_score": 0.003526,
+    "hud_status": 0.003187,
+    "trunk": 0.037992,
+    "policy_head": 0.090293,
+    "self_head": 0.01039,
+    "danger": 0.158306
+  },
+  "all_grad_groups_nonzero": true,
+  "fusion_width": 400,
+  "ok": true
+}

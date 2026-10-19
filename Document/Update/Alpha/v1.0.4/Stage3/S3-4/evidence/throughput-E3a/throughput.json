@@ -1,0 +1,198 @@
+{
+  "schema": "v104-s34-phase/1",
+  "phase": "throughput",
+  "status": "done",
+  "created_at": "2026-10-19T07:09:17+08:00",
+  "command": "C:\\Users\\a5935\\AppData\\Local\\Programs\\Python\\Python312\\python.exe tools\\rl\\run_v104_experiments.py --phase throughput --experiment E3a --out D:\\WorkShop\\Touhou_RL\\Document\\Update\\Alpha\\v1.0.4\\Stage3\\S3-4\\evidence\\throughput-E3a --execute",
+  "cwd": "D:\\WorkShop\\Touhou_RL",
+  "execute": true,
+  "experiment": "E3a",
+  "depth": 3,
+  "objective": "rank",
+  "batch_size": 96,
+  "dataset": "third_party/th08/build/rl/datasets/pilot-ud0059-v2",
+  "manifest": "third_party/th08/build/rl/datasets/pilot-ud0059-v2/manifest.json",
+  "manifest_sha256": "aa89c48893eb7e69628a5fd1c414c7c9b8b04cd5b88a225a6f4feb70373c949f",
+  "val_index_sha256": "e5d4ebbe6d8de05793520a393fc1fdbea2b1e2c4db9ff7c1632908340c76655f",
+  "teacher": {
+    "fingerprint": "a52416f9342fa00a0185c061771d09c22ba735bbe01c83dd7910a6c3bc8ec0f6",
+    "cache_sha256": "7de5fe166ab147eb7e16e6bd406496bd764b9d98c5ea1e97551bc50d4f402d0c"
+  },
+  "history_contract": "causal-segment-v1",
+  "paths": {
+    "perception": {
+      "path": "perception",
+      "depth": 3,
+      "objective": "rank",
+      "batch_size": 96,
+      "warmup_batches": 10,
+      "warmup_passes": 1,
+      "measured_passes": 1,
+      "train_batches_measured": 100,
+      "train_batches_available": 110,
+      "val_batches_measured": 66,
+      "val_batches_epoch": 76,
+      "val_batches_available": 76,
+      "measurement_note": "pass 1 over the fixed batch cycle warms the decode/page cache and is discarded; pass 2 is measured after the leading warm-up prefix.  The cycle is fixed (seed 7, shard-chunked) so every measured batch is a real training/validation batch.",
+      "train": {
+        "data_seconds": 0.08764667099999315,
+        "forward_seconds": 0.012898990999983652,
+        "backward_seconds": 0.019851837000005618,
+        "total_seconds": 0.12039749899998242,
+        "batches_per_second": 8.305820372565597
+      },
+      "val": {
+        "data_seconds": 0.09580955606060977,
+        "forward_seconds": 0.02704619848488867,
+        "total_seconds": 0.12285575454549844,
+        "batches_per_second": 8.139626863222428
+      },
+      "forecast_epoch_seconds": 90.96654166744597,
+      "forecast_formula": "678*train_total + 76*val_total",
+      "parameters": 564473,
+      "trainable_parameters": 564473,
+      "memory": {
+        "peak_allocated_bytes": 1014106624,
+        "peak_reserved_bytes": 1472200704
+      },
+      "device": "cuda"
+    },
+    "policy_frozen": {
+      "path": "policy_frozen",
+      "depth": 3,
+      "objective": "rank",
+      "batch_size": 96,
+      "warmup_batches": 10,
+      "warmup_passes": 1,
+      "measured_passes": 1,
+      "train_batches_measured": 100,
+      "train_batches_available": 110,
+      "val_batches_measured": 66,
+      "val_batches_epoch": 76,
+      "val_batches_available": 76,
+      "measurement_note": "pass 1 over the fixed batch cycle warms the decode/page cache and is discarded; pass 2 is measured after the leading warm-up prefix.  The cycle is fixed (seed 7, shard-chunked) so every measured batch is a real training/validation batch.",
+      "train": {
+        "data_seconds": 0.060796276000019134,
+        "forward_seconds": 0.02364931200000683,
+        "backward_seconds": 0.0019160980000015116,
+        "total_seconds": 0.08636168600002747,
+        "batches_per_second": 11.57920886351943
+      },
+      "val": {
+        "data_seconds": 0.09962645606065328,
+        "forward_seconds": 0.025272706060591052,
+        "total_seconds": 0.12489916212124433,
+        "batches_per_second": 8.006458834601807
+      },
+      "forecast_epoch_seconds": 68.0455594292332,
+      "forecast_formula": "678*train_total + 76*val_total",
+      "parameters": 564473,
+      "trainable_parameters": 21761,
+      "memory": {
+        "peak_allocated_bytes": 850318336,
+        "peak_reserved_bytes": 1472200704
+      },
+      "device": "cuda"
+    },
+    "policy_joint": {
+      "path": "policy_joint",
+      "depth": 3,
+      "objective": "rank",
+      "batch_size": 96,
+      "warmup_batches": 10,
+      "warmup_passes": 1,
+      "measured_passes": 1,
+      "train_batches_measured": 100,
+      "train_batches_available": 110,
+      "val_batches_measured": 66,
+      "val_batches_epoch": 76,
+      "val_batches_available": 76,
+      "measurement_note": "pass 1 over the fixed batch cycle warms the decode/page cache and is discarded; pass 2 is measured after the leading warm-up prefix.  The cycle is fixed (seed 7, shard-chunked) so every measured batch is a real training/validation batch.",
+      "train": {
+        "data_seconds": 0.0565080609999859,
+        "forward_seconds": 0.012672314999990704,
+        "backward_seconds": 0.01953109100000802,
+        "total_seconds": 0.08871146699998463,
+        "batches_per_second": 11.272499867465536
+      },
+      "val": {
+        "data_seconds": 0.09307120757574178,
+        "forward_seconds": 0.022771928787912628,
+        "total_seconds": 0.1158431363636544,
+        "batches_per_second": 8.632362964179451
+      },
+      "forecast_epoch_seconds": 68.95045298962731,
+      "forecast_formula": "678*train_total + 76*val_total",
+      "parameters": 564473,
+      "trainable_parameters": 564473,
+      "memory": {
+        "peak_allocated_bytes": 1014373376,
+        "peak_reserved_bytes": 1474297856
+      },
+      "device": "cuda"
+    },
+    "perception_depth1_extra": {
+      "path": "perception",
+      "depth": 1,
+      "objective": "rank",
+      "batch_size": 96,
+      "warmup_batches": 10,
+      "warmup_passes": 1,
+      "measured_passes": 1,
+      "train_batches_measured": 100,
+      "train_batches_available": 110,
+      "val_batches_measured": 66,
+      "val_batches_epoch": 76,
+      "val_batches_available": 76,
+      "measurement_note": "pass 1 over the fixed batch cycle warms the decode/page cache and is discarded; pass 2 is measured after the leading warm-up prefix.  The cycle is fixed (seed 7, shard-chunked) so every measured batch is a real training/validation batch.",
+      "train": {
+        "data_seconds": 0.02812151599999197,
+        "forward_seconds": 0.007917780000043421,
+        "backward_seconds": 0.015015449000020453,
+        "total_seconds": 0.05105474500005584,
+        "batches_per_second": 19.586818032269207
+      },
+      "val": {
+        "data_seconds": 0.04551912878781822,
+        "forward_seconds": 0.012049800000072124,
+        "total_seconds": 0.05756892878789034,
+        "batches_per_second": 17.37048128313186
+      },
+      "forecast_epoch_seconds": 38.99035569791753,
+      "forecast_formula": "678*train_total + 76*val_total",
+      "parameters": 554873,
+      "trainable_parameters": 554873,
+      "memory": {
+        "peak_allocated_bytes": 646227968,
+        "peak_reserved_bytes": 1474297856
+      },
+      "device": "cuda",
+      "supplementary": true,
+      "note": "Extra depth-1 perception measurement so the E0 plan has a same-session number; not one of the three contract paths."
+    }
+  },
+  "derived": {
+    "state_epoch_seconds": 90.96654166744597,
+    "policy_frozen_epoch_seconds": 68.0455594292332,
+    "policy_joint_epoch_seconds": 68.95045298962731,
+    "policy_mixed_epoch_seconds": 68.79963739622829,
+    "policy_mixed_formula": "(2*frozen + 10*joint)/12",
+    "budget_seconds": 60.0,
+    "state_within_budget": false,
+    "policy_joint_within_budget": false,
+    "depth1_state_epoch_seconds": 38.99035569791753
+  },
+  "device": "cuda",
+  "env": {
+    "python": "3.12.10",
+    "executable": "C:\\Users\\a5935\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+    "torch": "2.14.1+cu132",
+    "cuda_available": true,
+    "device_name": "NVIDIA GeForce RTX 4070 SUPER",
+    "numpy": "2.5.4",
+    "platform": "win32",
+    "cwd": "D:\\WorkShop\\Touhou_RL"
+  },
+  "seconds": 161.96,
+  "cleanup_note": "Every path builds its own fresh model and optimizer; no checkpoint or run directory is written, so the shared matrix initialisation cannot be polluted."
+}

@@ -1,0 +1,144 @@
+.................................................................F...... [ 11%]
+........................................................................ [ 23%]
+..........F............................................................. [ 34%]
+........................................................................ [ 46%]
+........................................................................ [ 57%]
+........................................................................ [ 69%]
+........................................................................ [ 80%]
+......................................................F................. [ 92%]
+..................................................                       [100%]
+================================== FAILURES ===================================
+____________________ test_unknown_arch_and_v3_are_refused _____________________
+
+tmp_path = WindowsPath('D:/WorkShop/Touhou_RL/.pytest-tmp/S3-5/pytest-of-a5935/pytest-6/test_unknown_arch_and_v3_are_r0')
+
+    def test_unknown_arch_and_v3_are_refused(tmp_path: Path):
+        dataset = tmp_path / "dataset-a"
+        write_manifest(dataset, write_dataset(dataset))
+        legacy_config = VisionNetConfig(depth=1, width=4, trunk_hidden=16, candidate_hidden=8,
+                                        state_hidden=16,
+                                        model_regions=tuple((name, *size) for name, size in REGION_SIZES.items()))
+        unknown = tmp_path / "unknown.pt"
+        torch.save(
+            {
+                "kind": "vision_scorer",
+                "arch": "v9",
+                "state_dict": VisionScorer(legacy_config).state_dict(),
+                "config": legacy_config.__dict__,
+                "frame": {"H": vision.VISION_H, "W": vision.VISION_W, "C": 3, "depth": 1},
+                "extra": {},
+            },
+            unknown,
+        )
+        with pytest.raises(ValueError, match="v104:CHECKPOINT"):
+            COMPARE.evaluate_checkpoint(unknown, dataset)
+    
+        v3 = tmp_path / "v3.pt"
+        torch.save(
+            {
+                "schema": "vision-checkpoint/3",
+                "kind": "vision_scorer",
+                "arch": "v3-st",
+                "config": {
+                    "depth": 3,
+                    # The v3 contract fixes the real three-ROI sizes, not the tiny ones
+                    # this synthetic dataset uses; that is checked before the model.
+                    "region_sizes": {
+                        "playfield": [224, 192],
+                        "hud_score": [34, 216],
+                        "hud_status": [126, 216],
+                    },
+                    "roi_native_hw": [128, 128],
+                    "local_grid_hw": [16, 16],
+                    "align_corners": False,
+                    "candidate_order_version": "focus9-move-v1",
+                    "score_semantics": "preference_logits",
+                    "history_contract": "causal-segment-v1",
+                    "state_head": True,
+                },
+                "state_dict": {"weight": torch.zeros(1)},
+                "frame": {"H": vision.VISION_H, "W": vision.VISION_W, "C": 3, "depth": 3},
+                "extra": {
+                    "source_state_sha": "",
+                    "teacher_fingerprint": "a" * 64,
+                    "manifest_sha": "b" * 64,
+                    "val_index_sha256": "c" * 64,
+                    "loss_config": {"objective": "rank"},
+                    "stage": "state",
+                },
+            },
+            v3,
+        )
+>       with pytest.raises(ValueError, match="v104:CHECKPOINT.*v3 branch blocked"):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: Regex pattern did not match.
+E         Expected regex: 'v104:CHECKPOINT.*v3 branch blocked'
+E         Actual message: "v104:CHECKPOINT: v3 config does not match VisionSpatialTemporalConfig: VisionSpatialTemporalConfig.__init__() got an unexpected keyword argument 'region_sizes'"
+
+touhou_rl\tests\test_compare_state_models_v104.py:483: AssertionError
+__________________ test_v3_checkpoint_is_refused_as_blocked ___________________
+
+tmp_path = WindowsPath('D:/WorkShop/Touhou_RL/.pytest-tmp/S3-5/pytest-of-a5935/pytest-6/test_v3_checkpoint_is_refused_0')
+
+    def test_v3_checkpoint_is_refused_as_blocked(tmp_path):
+        """G-v3 not approved: a v3-st payload must fail loudly, never deploy as v1."""
+        payload = {
+            "schema": "vision-checkpoint/3",
+            "kind": "vision_scorer",
+            "arch": "v3-st",
+            "config": {
+                "depth": 3,
+                "region_sizes": {
+                    "playfield": [224, 192],
+                    "hud_score": [34, 216],
+                    "hud_status": [126, 216],
+                },
+                "roi_native_hw": [128, 128],
+                "local_grid_hw": [16, 16],
+                "align_corners": False,
+                "candidate_order_version": "focus9-move-v1",
+                "score_semantics": "preference_logits",
+                "history_contract": "causal-segment-v1",
+                "state_head": True,
+            },
+            "state_dict": {"weight": torch.zeros(1)},
+            "frame": {"H": vision.VISION_H, "W": vision.VISION_W, "C": 3, "depth": 3},
+            "extra": {
+                "source_state_sha": "",
+                "teacher_fingerprint": "a" * 64,
+                "manifest_sha": "b" * 64,
+                "val_index_sha256": "c" * 64,
+                "loss_config": {"objective": "rank"},
+                "stage": "state",
+            },
+        }
+        path = tmp_path / "v3.pt"
+        torch.save(payload, path)
+        factory = StubFactory()
+>       with pytest.raises(ValueError, match="v104:CHECKPOINT.*v3 branch blocked"):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: Regex pattern did not match.
+E         Expected regex: 'v104:CHECKPOINT.*v3 branch blocked'
+E         Actual message: "v104:CHECKPOINT: v3 config does not match VisionSpatialTemporalConfig: VisionSpatialTemporalConfig.__init__() got an unexpected keyword argument 'region_sizes'"
+
+touhou_rl\tests\test_evaluate_vision.py:560: AssertionError
+____________ test_v3_load_is_blocked_while_vmodels3_does_not_exist ____________
+
+tmp_path = WindowsPath('D:/WorkShop/Touhou_RL/.pytest-tmp/S3-5/pytest-of-a5935/pytest-6/test_v3_load_is_blocked_while_0')
+
+    def test_v3_load_is_blocked_while_vmodels3_does_not_exist(tmp_path):
+        """G-v3 not approved: the branch reports blocked, it does not fake a pass."""
+        path = tmp_path / "v3.pt"
+        torch.save(_valid_v3_payload(), path)
+>       with pytest.raises(ValueError, match="v104:CHECKPOINT.*v3 branch blocked.*G-v3 is not approved"):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: Regex pattern did not match.
+E         Expected regex: 'v104:CHECKPOINT.*v3 branch blocked.*G-v3 is not approved'
+E         Actual message: "v104:CHECKPOINT: v3 config does not match VisionSpatialTemporalConfig: VisionSpatialTemporalConfig.__init__() got an unexpected keyword argument 'region_sizes'"
+
+touhou_rl\tests\test_vmodels2.py:482: AssertionError
+=========================== short test summary info ===========================
+FAILED touhou_rl/tests/test_compare_state_models_v104.py::test_unknown_arch_and_v3_are_refused
+FAILED touhou_rl/tests/test_evaluate_vision.py::test_v3_checkpoint_is_refused_as_blocked
+FAILED touhou_rl/tests/test_vmodels2.py::test_v3_load_is_blocked_while_vmodels3_does_not_exist
+3 failed, 623 passed in 19.53s

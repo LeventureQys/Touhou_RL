@@ -1,0 +1,17 @@
+{
+  "dataset": "third_party/th08/build/rl/datasets/pilot-ud0059",
+  "runs_root": "third_party/th08/build/rl/runs",
+  "table": "Document/Update/Alpha/v1.0.3/Stage3/实验表.md",
+  "recipes": [
+    {"id": "SLOPE-050", "arch": "v2",
+     "note": "DIAGNOSTIC ONLY (not an A-03 point): R1-c config at 50% train frames, state-only, 160 train batches",
+     "args": {"stage": "state", "epochs_state": 8, "batch_size": 96, "depth": 1,
+              "heatmap_sigma": 1.0, "train_fraction": 0.5,
+              "max_train_batches": 160, "max_val_batches": 0}},
+    {"id": "SLOPE-025", "arch": "v2",
+     "note": "DIAGNOSTIC ONLY (not an A-03 point): R1-c config at 25% train frames, state-only, 160 train batches",
+     "args": {"stage": "state", "epochs_state": 8, "batch_size": 96, "depth": 1,
+              "heatmap_sigma": 1.0, "train_fraction": 0.25,
+              "max_train_batches": 160, "max_val_batches": 0}}
+  ]
+}

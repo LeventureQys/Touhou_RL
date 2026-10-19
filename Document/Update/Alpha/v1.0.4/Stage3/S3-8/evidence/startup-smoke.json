@@ -1,0 +1,88 @@
+{
+  "schema": "v104-s3-8-startup-smoke/1",
+  "created_at": "2026-10-20T02:46:34+08:00",
+  "producer": "Document/Update/Alpha/v1.0.4/Stage3/S3-8/evidence/startup_smoke.py",
+  "command": [
+    "C:\\Users\\a5935\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+    "Document\\Update\\Alpha\\v1.0.4\\Stage3\\S3-8\\evidence\\startup_smoke.py",
+    "--out",
+    "Document\\Update\\Alpha\\v1.0.4\\Stage3\\S3-8\\evidence",
+    "--device",
+    "cuda"
+  ],
+  "cwd": "D:\\WorkShop\\Touhou_RL",
+  "frozen_artifacts": "Document/Update/Alpha/v1.0.4/Stage3/final-artifacts.json",
+  "checkpoint": "third_party/th08/build/rl/runs/v104-v3-E5-s7/policy.pt",
+  "checkpoint_sha256": "74abde8a996c13fae832913e4e5533bc9490688bc4c0aa73560e695f065d14be",
+  "checkpoint_sha256_expected": "74abde8a996c13fae832913e4e5533bc9490688bc4c0aa73560e695f065d14be",
+  "checkpoint_matches_frozen": true,
+  "run_dir": "third_party/th08/build/rl/eval/v104-s38-smoke-session",
+  "exe": {},
+  "window": {},
+  "screenshots": [],
+  "observations": {
+    "real_game_started": false,
+    "pixels_only": false,
+    "no_crash": false,
+    "no_exception_log": false,
+    "ui_checked": false,
+    "screenshots": [],
+    "exe_path": null,
+    "exe_sha256": null,
+    "exe_bytes": null,
+    "window_title": null,
+    "window_foreground": null,
+    "action": null,
+    "decision_latency_ms": null,
+    "frames_advanced": null,
+    "note": "one reset -> screenshot -> pixels-only act -> env.step -> screenshot cycle; this is a startup smoke, not A-04"
+  },
+  "steps": [],
+  "errors": [
+    "Traceback (most recent call last):\n  File \"D:\\WorkShop\\Touhou_RL\\Document\\Update\\Alpha\\v1.0.4\\Stage3\\S3-8\\evidence\\startup_smoke.py\", line 181, in main\n    obs, info = env.reset()\n                ^^^^^^^^^^^\n  File \"D:\\WorkShop\\Touhou_RL\\touhou_rl\\env.py\", line 156, in reset\n    menu.enter_game(\n  File \"D:\\WorkShop\\Touhou_RL\\touhou_rl\\menu.py\", line 194, in enter_game\n    select_difficulty(session, difficulty)\n  File \"D:\\WorkShop\\Touhou_RL\\touhou_rl\\menu.py\", line 146, in select_difficulty\n    _wait_screen(session, spec.SCREEN_DIFFICULTY_SELECT, timeout)\n  File \"D:\\WorkShop\\Touhou_RL\\touhou_rl\\menu.py\", line 137, in _wait_screen\n    raise TimeoutError(f\"screen {screen} did not become ready (last={last})\")\nTimeoutError: screen 4 did not become ready (last=(0, 1, 517))\n"
+  ],
+  "arch": "v3-st",
+  "depth": 3,
+  "device": "cuda",
+  "region_sizes": {
+    "playfield": [
+      224,
+      192
+    ],
+    "hud_score": [
+      34,
+      216
+    ],
+    "hud_status": [
+      126,
+      216
+    ]
+  },
+  "reason": "startup smoke failed: TimeoutError('screen 4 did not become ready (last=(0, 1, 517))')",
+  "finished": "2026-10-20T02:47:29+08:00",
+  "session_log": "third_party/th08/build/rl/eval/v104-s38-smoke-session/rl-session.log",
+  "session_log_lines": 9,
+  "session_log_tail": [
+    "02:47:18 input backend: SendInput (requires foreground)",
+    "02:47:18 window hwnd=0x607A0 client=640x480 boot=43.84s",
+    "02:47:18 ensure_title: begin",
+    "02:47:19 ensure_title: at start menu",
+    "02:47:19 ensure_title: begin",
+    "02:47:19 ensure_title: at start menu",
+    "02:47:19 warning: could not take foreground for SendInput",
+    "02:47:29 closed exit=0"
+  ],
+  "exception_markers": [
+    "traceback",
+    "error:"
+  ],
+  "log.txt_lines": 49,
+  "log.txt_tail": [
+    "--------------------------------------------",
+    "DirectSound �͐���ɏ���������܂���",
+    "�g����p�b�h�����݂��Ȃ��悤�ł��A�c�O",
+    "KeyBoard OK",
+    "---------------------------------------------------------- "
+  ],
+  "status": "fail"
+}

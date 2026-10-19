@@ -1,0 +1,85 @@
+interpreter: C:\Users\a5935\AppData\Local\Programs\Python\Python312\python.exe
+torch: 2.14.1+cu132 cuda_available: True
+device used: cpu
+argv: ['Document\\Update\\Alpha\\v1.0.4\\Stage3\\S3-2\\evidence\\startup_check.py']
+
+scores: shape=(8, 18) dtype=torch.float32
+teacher: shape=(8, 18) dtype=torch.float16 min=2.504 max=198.750
+
+[legacy-reg] loss=2.923201 grad_norm=0.081149 grad_nonzero=True
+  stats: {"frames_with_pairs": 0, "frames_without_pairs": 8, "objective": "legacy-reg", "rank_loss": 0.0, "regression_loss": 2.9232006072998047, "valid_pairs": 0}
+[centered-reg] loss=3.544625 grad_norm=0.077687 grad_nonzero=True
+  stats: {"frames_with_pairs": 0, "frames_without_pairs": 8, "objective": "centered-reg", "rank_loss": 0.0, "regression_loss": 3.5446245670318604, "valid_pairs": 0}
+[rank R-a (1, 0)] loss=0.835626 grad_norm=0.058505 grad_nonzero=True
+  stats: {"frames_with_pairs": 7, "frames_without_pairs": 1, "objective": "rank", "rank_loss": 0.8356258869171143, "regression_loss": 3.5446245670318604, "valid_pairs": 1063}
+[rank R-b (1, 0.1)] loss=1.190088 grad_norm=0.064937 grad_nonzero=True
+  stats: {"frames_with_pairs": 7, "frames_without_pairs": 1, "objective": "rank", "rank_loss": 0.8356258869171143, "regression_loss": 3.5446245670318604, "valid_pairs": 1063}
+[rank R-c (1, 1)] loss=4.380250 grad_norm=0.129590 grad_nonzero=True
+  stats: {"frames_with_pairs": 7, "frames_without_pairs": 1, "objective": "rank", "rank_loss": 0.8356258869171143, "regression_loss": 3.5446245670318604, "valid_pairs": 1063}
+
+policy_metrics on 50 frames (teacher px is raw, unclipped):
+{
+  "top1": 0.04,
+  "top3": 0.14,
+  "top3_tie": 0.14,
+  "near_optimal_05": 0.04,
+  "regret_px": 111.374,
+  "regret_p90_px": 216.281,
+  "by_danger": [
+    {
+      "bucket": "0-15",
+      "frames": 0,
+      "top1": 0.0,
+      "top3": 0.0,
+      "top3_tie": 0.0,
+      "near_optimal_05": 0.0,
+      "regret_px": 0.0,
+      "regret_p90_px": 0.0
+    },
+    {
+      "bucket": "15-30",
+      "frames": 5,
+      "top1": 0.0,
+      "top3": 0.2,
+      "top3_tie": 0.2,
+      "near_optimal_05": 0.0,
+      "regret_px": 99.048,
+      "regret_p90_px": 144.816
+    },
+    {
+      "bucket": "30-60",
+      "frames": 18,
+      "top1": 0.0556,
+      "top3": 0.1667,
+      "top3_tie": 0.1667,
+      "near_optimal_05": 0.0556,
+      "regret_px": 138.14,
+      "regret_p90_px": 234.289
+    },
+    {
+      "bucket": "60-120",
+      "frames": 19,
+      "top1": 0.0526,
+      "top3": 0.1053,
+      "top3_tie": 0.1053,
+      "near_optimal_05": 0.0526,
+      "regret_px": 93.016,
+      "regret_p90_px": 196.677
+    },
+    {
+      "bucket": "120+",
+      "frames": 8,
+      "top1": 0.0,
+      "top3": 0.125,
+      "top3_tie": 0.125,
+      "near_optimal_05": 0.0,
+      "regret_px": 102.455,
+      "regret_p90_px": 175.058
+    }
+  ]
+}
+
+heatmap_hit_rate 28x24 on 50 frames: 0.5000
+heatmap_hit_rate 56x48 on 50 frames: 0.5000
+
+startup check: ok

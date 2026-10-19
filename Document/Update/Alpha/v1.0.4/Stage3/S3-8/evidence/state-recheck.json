@@ -1,0 +1,116 @@
+{
+  "schema": "v104-s3-8-full-val/1",
+  "kind": "state_recheck",
+  "created_at": "2026-10-20T02:40:05+08:00",
+  "producer": "Document/Update/Alpha/v1.0.4/Stage3/S3-8/evidence/full_val_recheck.py",
+  "command": [
+    "C:\\Users\\a5935\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+    "Document\\Update\\Alpha\\v1.0.4\\Stage3\\S3-8\\evidence\\full_val_recheck.py",
+    "--kind",
+    "state_recheck",
+    "--checkpoint",
+    "third_party\\th08\\build\\rl\\runs\\v104-v3-E5-s7\\state-pass.pt",
+    "--out",
+    "Document\\Update\\Alpha\\v1.0.4\\Stage3\\S3-8\\evidence\\state-recheck.json",
+    "--device",
+    "cuda"
+  ],
+  "cwd": "D:\\WorkShop\\Touhou_RL",
+  "device": "cuda",
+  "elapsed_seconds": 55.54,
+  "checkpoint": "third_party/th08/build/rl/runs/v104-v3-E5-s7/state-pass.pt",
+  "checkpoint_sha256": "00a2d28472e4169879f481ca28e664d0fb4c8291f2741ea58ab14967da8c8f46",
+  "arch": "v3-st",
+  "depth": 3,
+  "history_contract": "causal-segment-v1",
+  "legacy_history": false,
+  "parameters": 1507162,
+  "dataset": "third_party/th08/build/rl/datasets/pilot-ud0059-v2",
+  "manifest": "third_party/th08/build/rl/datasets/pilot-ud0059-v2/manifest.json",
+  "manifest_sha256": "aa89c48893eb7e69628a5fd1c414c7c9b8b04cd5b88a225a6f4feb70373c949f",
+  "val_index_sha256": "e5d4ebbe6d8de05793520a393fc1fdbea2b1e2c4db9ff7c1632908340c76655f",
+  "frames": 7241,
+  "coverage": {
+    "expected_frames": 7241,
+    "actual_frames": 7241,
+    "expected_index_sha256": "e5d4ebbe6d8de05793520a393fc1fdbea2b1e2c4db9ff7c1632908340c76655f",
+    "visited_index_sha256": "e5d4ebbe6d8de05793520a393fc1fdbea2b1e2c4db9ff7c1632908340c76655f",
+    "duplicated_indices": 0,
+    "missing_indices": 0,
+    "unexpected_indices": 0,
+    "complete": true
+  },
+  "metrics": {
+    "self_mae": 0.1226,
+    "player_pos_px": 2.4066,
+    "player_pos_p95_px": 7.8724,
+    "ray_mae": 0.119,
+    "bullet_count_mae": 51.2,
+    "danger_mae_log": 0.071,
+    "danger_corr": 0.8722,
+    "danger_corr_perframe_mean": 0.7133,
+    "danger_corr_perframe_median": 0.8166,
+    "danger_corr_perframe_valid": 7241,
+    "danger_iou": 0.5991,
+    "danger_cell_acc": 0.9109,
+    "heatmap_hit_rate": 0.9841
+  },
+  "position_distribution_px": {
+    "mean": 2.4065905386889286,
+    "median": 0.5087556838989258,
+    "p90": 2.8267476558685303,
+    "p95": 7.8724479377269745,
+    "p99": 27.483780884742746,
+    "max": 294.24441850185394,
+    "under_10px_share": 0.955669106477006,
+    "tail_gt30_share": 0.008976660682226212
+  },
+  "by_stage": {
+    "0": {
+      "frames": 821,
+      "position_mean_px": 1.663136251216321,
+      "position_median_px": 0.5074005126953125,
+      "position_p90_px": 1.6518383026123047
+    },
+    "1": {
+      "frames": 951,
+      "position_mean_px": 2.3445279800678778,
+      "position_median_px": 0.5662426948547363,
+      "position_p90_px": 2.9533440470695496
+    },
+    "2": {
+      "frames": 1014,
+      "position_mean_px": 1.8595530016460737,
+      "position_median_px": 0.4976229667663574,
+      "position_p90_px": 3.443820631504061
+    },
+    "4": {
+      "frames": 1317,
+      "position_mean_px": 3.246029478859159,
+      "position_median_px": 0.48578453063964844,
+      "position_p90_px": 2.9109746932983405
+    },
+    "5": {
+      "frames": 1398,
+      "position_mean_px": 1.9820020829350056,
+      "position_median_px": 0.4715099334716797,
+      "position_p90_px": 2.620551586151123
+    },
+    "7": {
+      "frames": 1740,
+      "position_mean_px": 2.8158589885537992,
+      "position_median_px": 0.5395879745483398,
+      "position_p90_px": 2.9697534322738663
+    }
+  },
+  "teacher": {},
+  "note": "A-01 full re-evaluation of the frozen state-pass.pt",
+  "observations": {
+    "checkpoint_sha256": "00a2d28472e4169879f481ca28e664d0fb4c8291f2741ea58ab14967da8c8f46",
+    "frames": 7241,
+    "coverage_sha256": "e5d4ebbe6d8de05793520a393fc1fdbea2b1e2c4db9ff7c1632908340c76655f",
+    "player_pos_px": 2.4066,
+    "danger_corr_perframe_median": 0.8166,
+    "danger_corr_perframe_valid": 7241
+  }
+}

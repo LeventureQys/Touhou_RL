@@ -1,0 +1,144 @@
+{
+  "schema": "v104-evidence/1",
+  "kind": "cross_replay",
+  "status": "fail",
+  "created_at": "2026-10-20T02:58:16+08:00",
+  "producer": "tools/rl/compare_state_models.py (--mode stage-sample --per-stage 128)",
+  "command": "python tools/rl/compare_state_models.py --dataset third_party/th08/build/rl/datasets/pilot-ud0059-v2 --checkpoint frozen=third_party/th08/build/rl/runs/v104-v3-E5-s7/policy.pt --mode stage-sample --per-stage 128 --out .../cross-replay-a.json ; then the same with --dataset third_party/th08/build/rl/datasets/pilot-ud0063 --manifest Document/Update/Alpha/v1.0.4/Stage3/S3-1/evidence/ud0063-evaluation-manifest.json --baseline .../cross-replay-a.json --out .../cross-replay-b.json",
+  "cwd": "D:\\WorkShop\\Touhou_RL",
+  "exit_code": 0,
+  "artifacts": [
+    {
+      "path": "Document/Update/Alpha/v1.0.4/Stage3/S3-8/evidence/cross-replay-a.json",
+      "sha256": "88f8c793b3d139f5407ae94cf7994b8025bbc3dd77d34da1dcf16df46c112a83"
+    },
+    {
+      "path": "Document/Update/Alpha/v1.0.4/Stage3/S3-8/evidence/cross-replay-b.json",
+      "sha256": "685e629ed85eb86cf82e6e82d8e23e3ab65628f90ffdd91720192365083556c3"
+    },
+    {
+      "path": "Document/Update/Alpha/v1.0.4/Stage3/S3-8/evidence/cross-replay-guard-usage.txt",
+      "sha256": "837d015116d99c62f6df92e5b94cbd9c3382a6faf950fc06bc19624afc136d20"
+    },
+    {
+      "path": "Document/Update/Alpha/v1.0.4/Stage3/S3-8/evidence/upstream-evidence-sha-crosscheck.json",
+      "sha256": "8d4aae63d560093d64632298bd7050d2d91ba5de717962338867d049e919ce56"
+    }
+  ],
+  "observations": {
+    "checkpoint_sha256": "74abde8a996c13fae832913e4e5533bc9490688bc4c0aa73560e695f065d14be",
+    "a_mae_raw": 0.8050109655014239,
+    "b_mae_raw": 1.0203658348182216,
+    "a_indices_sha256": "bbca864360c227fc5de3a964bba1a5c867c9dac490636dcda131d284e16223b7",
+    "b_indices_sha256": "186ab1b1c0401c86118366f0a1930fc23cfc884ebfd755a61da3832ff295a52c",
+    "a_frames": 768,
+    "b_frames": 768,
+    "sampling_mode": "stage-sample",
+    "per_stage": 128,
+    "a_per_stage": {
+      "0": {
+        "frames": 128,
+        "available": 821,
+        "selected": 128,
+        "mae": 0.4,
+        "mae_raw": 0.4010425768792629,
+        "p90": 0.6
+      },
+      "1": {
+        "frames": 128,
+        "available": 951,
+        "selected": 128,
+        "mae": 1.17,
+        "mae_raw": 1.1706565888598561,
+        "p90": 1.2
+      },
+      "2": {
+        "frames": 128,
+        "available": 1014,
+        "selected": 128,
+        "mae": 0.44,
+        "mae_raw": 0.4419349516974762,
+        "p90": 0.9
+      },
+      "4": {
+        "frames": 128,
+        "available": 1317,
+        "selected": 128,
+        "mae": 1.03,
+        "mae_raw": 1.0344200525432825,
+        "p90": 1.2
+      },
+      "5": {
+        "frames": 128,
+        "available": 1398,
+        "selected": 128,
+        "mae": 1.0,
+        "mae_raw": 1.003590056207031,
+        "p90": 1.4
+      },
+      "7": {
+        "frames": 128,
+        "available": 1740,
+        "selected": 128,
+        "mae": 0.78,
+        "mae_raw": 0.7784215668216348,
+        "p90": 0.6
+      }
+    },
+    "b_per_stage": {
+      "0": {
+        "frames": 128,
+        "available": 802,
+        "selected": 128,
+        "mae": 0.46,
+        "mae_raw": 0.461427194532007,
+        "p90": 0.7
+      },
+      "1": {
+        "frames": 128,
+        "available": 938,
+        "selected": 128,
+        "mae": 1.79,
+        "mae_raw": 1.79105993360281,
+        "p90": 2.1
+      },
+      "2": {
+        "frames": 128,
+        "available": 979,
+        "selected": 128,
+        "mae": 0.59,
+        "mae_raw": 0.5870855273678899,
+        "p90": 1.2
+      },
+      "4": {
+        "frames": 128,
+        "available": 1175,
+        "selected": 128,
+        "mae": 0.94,
+        "mae_raw": 0.9372890668455511,
+        "p90": 1.4
+      },
+      "5": {
+        "frames": 128,
+        "available": 1383,
+        "selected": 128,
+        "mae": 0.8,
+        "mae_raw": 0.8013338092714548,
+        "p90": 0.9
+      },
+      "7": {
+        "frames": 128,
+        "available": 1656,
+        "selected": 128,
+        "mae": 1.54,
+        "mae_raw": 1.543999477289617,
+        "p90": 0.9
+      }
+    },
+    "ratio": 1.267518,
+    "threshold": 1.25,
+    "external_guard_uses": 1,
+    "b_used_for_selection": false
+  },
+  "reason": "one-shot external guard on B with the same frozen policy.pt and the same stage-sample rule; B_mae_raw / A_mae_raw = 1.267518 > 1.25, so the item is a real fail. The ratio was not re-run, the threshold was not changed, and B was not used to adjust or re-select the model."
+}

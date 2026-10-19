@@ -1,0 +1,254 @@
+{
+  "schema": "v104-s3-8-startup/1",
+  "kind": "startup",
+  "created_at": "2026-10-20T02:55:38+08:00",
+  "producer": "Document/Update/Alpha/v1.0.4/Stage3/S3-8/evidence/make_a04_evidence.py",
+  "command": [
+    "C:\\Users\\a5935\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+    "Document\\Update\\Alpha\\v1.0.4\\Stage3\\S3-8\\evidence\\make_a04_evidence.py"
+  ],
+  "cwd": "D:\\WorkShop\\Touhou_RL",
+  "status": "blocked",
+  "checkpoint": "third_party/th08/build/rl/runs/v104-v3-E5-s7/policy.pt",
+  "checkpoint_sha256": "74abde8a996c13fae832913e4e5533bc9490688bc4c0aa73560e695f065d14be",
+  "observations": {
+    "real_game_started": true,
+    "pixels_only": false,
+    "no_crash": true,
+    "no_exception_log": false,
+    "ui_checked": true,
+    "screenshots": [
+      "Document/Update/Alpha/v1.0.4/Stage3/S3-8/evidence/startup-title-a.png",
+      "Document/Update/Alpha/v1.0.4/Stage3/S3-8/evidence/startup-title-b.png"
+    ],
+    "exe_path": "D:\\WorkShop\\Touhou_RL\\third_party\\th08\\build\\rl\\eval\\v104-s38-startup-evidence\\th08.exe",
+    "exe_sha256": "cdd23bca0c724941866efda5da280be67eb6cdd935f83548045c2a8e037f1ddf",
+    "exe_bytes": 898048,
+    "original_exe_sha256": "330fbdbf58a710829d65277b4f312cfbb38d5448b3df523e79350b879213d924",
+    "original_exe_bytes": 840704,
+    "window_title": "搶曽塱栭彺丂乣 Imperishable Night. ver 1.00d",
+    "window_class": "BASE",
+    "window_client_rect": [
+      259,
+      288,
+      640,
+      480
+    ],
+    "window_foreground": false,
+    "boot_seconds": 3.02,
+    "capture_std": 38.154,
+    "capture_second_std": 83.134,
+    "frames_differ": true,
+    "checkpoint_loaded": true,
+    "no_action_produced": true,
+    "client_timeout_error": true,
+    "failure_stage": "env.reset -> menu.select_difficulty (screen 4 did not become ready)"
+  },
+  "reason": "the game process starts, the frozen v3 policy.pt loads, and the 640x480 client area really renders (two raw screenshots 1.6 s apart, different pixels, 58-60 fps on screen), so the exe/window/capture path is proven; but no key can reach the game: the foreground is held by the user's elevated Task Manager while this agent runs at medium integrity, so SetForegroundWindow / SwitchToThisWindow / synthetic input are all denied (UIPI + ForegroundLockTimeout=0x7FFFFFFF). reset therefore never reaches gameplay, no action is produced, and the startup smoke cannot complete its act/step half. no_exception_log is false because the client side ended in a TimeoutError (the game's own session log is clean). This is an environment/security boundary, not a model or code failure; reported as blocked, never as pass.",
+  "artifacts_cited": [
+    {
+      "path": "Document/Update/Alpha/v1.0.4/Stage3/S3-8/evidence/startup-probe.json",
+      "sha256": "48e839b74696a2afd9bbde8f96d568e8da3c6d15fcc591c5e91eeedd9c384f24",
+      "exists": true
+    },
+    {
+      "path": "Document/Update/Alpha/v1.0.4/Stage3/S3-8/evidence/startup-smoke.json",
+      "sha256": "7de42de4dcd5f4acf42d39c79bcab679137bb4737ea786ecc93f2ca2491800d3",
+      "exists": true
+    },
+    {
+      "path": "Document/Update/Alpha/v1.0.4/Stage3/S3-8/evidence/foreground-diagnostic.json",
+      "sha256": "ee5c8a5c5ea1703b40869e40aa90ba0a853d8c5e26a43af9bf339482b17dae19",
+      "exists": true
+    },
+    {
+      "path": "Document/Update/Alpha/v1.0.4/Stage3/S3-8/evidence/focus-probe.json",
+      "sha256": "2deddb7c942f9180a1216bc739565c64b062e91d72b01da155ee301fb52ada6c",
+      "exists": true
+    },
+    {
+      "path": "Document/Update/Alpha/v1.0.4/Stage3/S3-8/evidence/startup-title-a.png",
+      "sha256": "42291ed70c3a42bc11ca65c3cf854dd64cbface6fbd2a560eb00fb0cf2ae00ac",
+      "exists": true
+    },
+    {
+      "path": "Document/Update/Alpha/v1.0.4/Stage3/S3-8/evidence/startup-title-b.png",
+      "sha256": "44443af9668d5349734a52c672eaa62cf88049d813e02391125efce8a50a86d4",
+      "exists": true
+    }
+  ],
+  "foreground_diagnostic": {
+    "foreground_before": null,
+    "foreground_lock_timeout_ms": 2147483647,
+    "attempts": [
+      {
+        "attempt": 1,
+        "force_foreground": false,
+        "foreground_before": {
+          "hwnd": "0x405A0",
+          "title": "任务管理器",
+          "class": "TaskManagerWindow"
+        },
+        "foreground_after": {
+          "hwnd": "0x405A0",
+          "title": "任务管理器",
+          "class": "TaskManagerWindow"
+        },
+        "is_window": true,
+        "visible": true,
+        "iconic": false,
+        "cloaked": false,
+        "last_error": 5
+      },
+      {
+        "attempt": 2,
+        "force_foreground": false,
+        "foreground_before": {
+          "hwnd": "0x405A0",
+          "title": "任务管理器",
+          "class": "TaskManagerWindow"
+        },
+        "foreground_after": {
+          "hwnd": "0x405A0",
+          "title": "任务管理器",
+          "class": "TaskManagerWindow"
+        },
+        "is_window": true,
+        "visible": true,
+        "iconic": false,
+        "cloaked": false,
+        "last_error": 5
+      },
+      {
+        "attempt": 3,
+        "force_foreground": false,
+        "foreground_before": {
+          "hwnd": "0x405A0",
+          "title": "任务管理器",
+          "class": "TaskManagerWindow"
+        },
+        "foreground_after": {
+          "hwnd": "0x405A0",
+          "title": "任务管理器",
+          "class": "TaskManagerWindow"
+        },
+        "is_window": true,
+        "visible": true,
+        "iconic": false,
+        "cloaked": false,
+        "last_error": 5
+      },
+      {
+        "attempt": 4,
+        "force_foreground": false,
+        "foreground_before": {
+          "hwnd": "0x405A0",
+          "title": "任务管理器",
+          "class": "TaskManagerWindow"
+        },
+        "foreground_after": {
+          "hwnd": "0x405A0",
+          "title": "任务管理器",
+          "class": "TaskManagerWindow"
+        },
+        "is_window": true,
+        "visible": true,
+        "iconic": false,
+        "cloaked": false,
+        "last_error": 5
+      },
+      {
+        "attempt": 5,
+        "force_foreground": false,
+        "foreground_before": {
+          "hwnd": "0x405A0",
+          "title": "任务管理器",
+          "class": "TaskManagerWindow"
+        },
+        "foreground_after": {
+          "hwnd": "0x405A0",
+          "title": "任务管理器",
+          "class": "TaskManagerWindow"
+        },
+        "is_window": true,
+        "visible": true,
+        "iconic": false,
+        "cloaked": false,
+        "last_error": 5
+      }
+    ],
+    "alternative": {
+      "attached": true,
+      "foreground": {
+        "hwnd": "0x405A0",
+        "title": "任务管理器",
+        "class": "TaskManagerWindow"
+      },
+      "success": false
+    }
+  },
+  "probe_methods": [
+    {
+      "method": "SwitchToThisWindow",
+      "foreground": {
+        "hwnd": "0x405A0",
+        "title": "任务管理器",
+        "class": "TaskManagerWindow"
+      },
+      "success": false
+    },
+    {
+      "method": "SendInput no-op + force_foreground",
+      "force_foreground_return": false,
+      "foreground": {
+        "hwnd": "0x405A0",
+        "title": "任务管理器",
+        "class": "TaskManagerWindow"
+      },
+      "success": false
+    },
+    {
+      "method": "mouse click inside the moved game window",
+      "cursor_before": [
+        1434,
+        903
+      ],
+      "cursor_target": [
+        380,
+        314
+      ],
+      "client_rect_after_move": [
+        63,
+        92,
+        634,
+        445
+      ],
+      "foreground": {
+        "hwnd": "0x405A0",
+        "title": "任务管理器",
+        "class": "TaskManagerWindow"
+      },
+      "success": false
+    }
+  ],
+  "binaries": {
+    "original_resources": {
+      "path": "third_party/th08/resources/th08.exe",
+      "bytes": 840704,
+      "sha256": "330fbdbf58a710829d65277b4f312cfbb38d5448b3df523e79350b879213d924",
+      "note": "pristine 840704-byte original, never used as the run directory exe"
+    },
+    "template": {
+      "path": "third_party/th08/build/play/th08.exe",
+      "bytes": 898048,
+      "sha256": "cdd23bca0c724941866efda5da280be67eb6cdd935f83548045c2a8e037f1ddf",
+      "note": "rebuilt 898048-byte build that prepare_run_dir links into the run directory"
+    }
+  },
+  "session_log_tail": [
+    "02:55:09 launched pid=11824 dir=D:\\WorkShop\\Touhou_RL\\third_party\\th08\\build\\rl\\eval\\v104-s38-startup-evidence",
+    "02:55:12 input backend: SendInput (requires foreground)",
+    "02:55:12 window hwnd=0xC10584 client=640x480 boot=2.91s",
+    "02:55:15 closed exit=0"
+  ]
+}

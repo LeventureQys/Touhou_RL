@@ -1,0 +1,143 @@
+{
+  "generated": "2026-10-18T20:05:08",
+  "dry_run": false,
+  "recipes": "Document/Update/Alpha/v1.0.3/Stage3/recipes-slope.json",
+  "dataset": "third_party/th08/build/rl/datasets/pilot-ud0059",
+  "runs_root": "third_party/th08/build/rl/runs",
+  "table": "Document/Update/Alpha/v1.0.3/Stage3/实验表.md",
+  "entries": [
+    {
+      "id": "R1-a",
+      "arch": "v2",
+      "note": "v2 baseline: 3-stream, stride8 heatmap, sigma1.5, loss 1:1:1",
+      "command": "C:\\Users\\a5935\\AppData\\Local\\Programs\\Python\\Python312\\python.exe -m touhou_rl.vision_train --dataset third_party/th08/build/rl/datasets/pilot-ud0059 --out third_party/th08/build/rl/runs/v103-exp-01 --arch v2 --stage both --epochs-state 8 --epochs-policy 8 --batch-size 96 --depth 1 --train-fraction 1.0 --max-train-batches 160 --max-val-batches 0",
+      "out_dir": "third_party/th08/build/rl/runs/v103-exp-01",
+      "summary": "third_party/th08/build/rl/runs/v103-exp-01/vision-summary.json",
+      "index": "01",
+      "status": "ok",
+      "returncode": 0,
+      "seconds": 746.4,
+      "metrics": {
+        "train_frames": 65225,
+        "max_train_batches": 160,
+        "pos_px": 76.3788,
+        "perframe_median": 0.2914,
+        "regret_0_15": 4.348
+      }
+    },
+    {
+      "id": "R1-b",
+      "arch": "v2",
+      "note": "A: depth3 frame stack",
+      "command": "C:\\Users\\a5935\\AppData\\Local\\Programs\\Python\\Python312\\python.exe -m touhou_rl.vision_train --dataset third_party/th08/build/rl/datasets/pilot-ud0059 --out third_party/th08/build/rl/runs/v103-exp-02 --arch v2 --stage state --epochs-state 8 --batch-size 96 --depth 3 --train-fraction 1.0 --max-train-batches 160 --max-val-batches 0",
+      "out_dir": "third_party/th08/build/rl/runs/v103-exp-02",
+      "summary": "third_party/th08/build/rl/runs/v103-exp-02/vision-summary.json",
+      "index": "02",
+      "status": "ok",
+      "returncode": 0,
+      "seconds": 810.3,
+      "metrics": {
+        "train_frames": 65225,
+        "max_train_batches": 160,
+        "pos_px": 74.8926,
+        "perframe_median": 0.2887,
+        "regret_0_15": null
+      }
+    },
+    {
+      "id": "R1-c",
+      "arch": "v2",
+      "note": "B: heatmap sigma 1.0 (sharper)",
+      "command": "C:\\Users\\a5935\\AppData\\Local\\Programs\\Python\\Python312\\python.exe -m touhou_rl.vision_train --dataset third_party/th08/build/rl/datasets/pilot-ud0059 --out third_party/th08/build/rl/runs/v103-exp-03 --arch v2 --stage state --epochs-state 8 --batch-size 96 --depth 1 --train-fraction 1.0 --max-train-batches 160 --max-val-batches 0 --heatmap-sigma 1.0",
+      "out_dir": "third_party/th08/build/rl/runs/v103-exp-03",
+      "summary": "third_party/th08/build/rl/runs/v103-exp-03/vision-summary.json",
+      "index": "03",
+      "status": "ok",
+      "returncode": 0,
+      "seconds": 397.9,
+      "metrics": {
+        "train_frames": 65225,
+        "max_train_batches": 160,
+        "pos_px": 74.3193,
+        "perframe_median": 0.2998,
+        "regret_0_15": null
+      }
+    },
+    {
+      "id": "R1-d",
+      "arch": "v2",
+      "note": "C: w_heatmap 2.0 (position prioritized)",
+      "command": "C:\\Users\\a5935\\AppData\\Local\\Programs\\Python\\Python312\\python.exe -m touhou_rl.vision_train --dataset third_party/th08/build/rl/datasets/pilot-ud0059 --out third_party/th08/build/rl/runs/v103-exp-04 --arch v2 --stage state --epochs-state 8 --batch-size 96 --depth 1 --train-fraction 1.0 --max-train-batches 160 --max-val-batches 0 --w-heatmap 2.0",
+      "out_dir": "third_party/th08/build/rl/runs/v103-exp-04",
+      "summary": "third_party/th08/build/rl/runs/v103-exp-04/vision-summary.json",
+      "index": "04",
+      "status": "ok",
+      "returncode": 0,
+      "seconds": 399.7,
+      "metrics": {
+        "train_frames": 65225,
+        "max_train_batches": 160,
+        "pos_px": 75.8103,
+        "perframe_median": 0.2946,
+        "regret_0_15": null
+      }
+    },
+    {
+      "id": "R1-confirm",
+      "arch": "v2",
+      "note": "winning recipe R1-c (heatmap_sigma 1.0) at full data: full train + full val, both stages",
+      "command": "C:\\Users\\a5935\\AppData\\Local\\Programs\\Python\\Python312\\python.exe -m touhou_rl.vision_train --dataset third_party/th08/build/rl/datasets/pilot-ud0059 --out third_party/th08/build/rl/runs/v103-exp-05 --arch v2 --stage both --epochs-state 8 --epochs-policy 8 --batch-size 96 --depth 1 --train-fraction 1.0 --max-train-batches 0 --max-val-batches 0 --heatmap-sigma 1.0",
+      "out_dir": "third_party/th08/build/rl/runs/v103-exp-05",
+      "summary": "third_party/th08/build/rl/runs/v103-exp-05/vision-summary.json",
+      "index": "05",
+      "status": "ok",
+      "returncode": 0,
+      "seconds": 2541.1,
+      "metrics": {
+        "train_frames": 65225,
+        "max_train_batches": 0,
+        "pos_px": 68.0718,
+        "perframe_median": 0.3418,
+        "regret_0_15": 4.081
+      }
+    },
+    {
+      "id": "SLOPE-050",
+      "arch": "v2",
+      "note": "DIAGNOSTIC ONLY (not an A-03 point): R1-c config at 50% train frames, state-only, 160 train batches",
+      "command": "C:\\Users\\a5935\\AppData\\Local\\Programs\\Python\\Python312\\python.exe -m touhou_rl.vision_train --dataset third_party/th08/build/rl/datasets/pilot-ud0059 --out third_party/th08/build/rl/runs/v103-exp-06 --arch v2 --stage state --epochs-state 8 --batch-size 96 --depth 1 --train-fraction 0.5 --max-train-batches 160 --max-val-batches 0 --heatmap-sigma 1.0",
+      "out_dir": "third_party/th08/build/rl/runs/v103-exp-06",
+      "summary": "third_party/th08/build/rl/runs/v103-exp-06/vision-summary.json",
+      "index": "06",
+      "status": "ok",
+      "returncode": 0,
+      "seconds": 399.1,
+      "metrics": {
+        "train_frames": 32613,
+        "max_train_batches": 160,
+        "pos_px": 72.9991,
+        "perframe_median": 0.2956,
+        "regret_0_15": null
+      }
+    },
+    {
+      "id": "SLOPE-025",
+      "arch": "v2",
+      "note": "DIAGNOSTIC ONLY (not an A-03 point): R1-c config at 25% train frames, state-only, 160 train batches",
+      "command": "C:\\Users\\a5935\\AppData\\Local\\Programs\\Python\\Python312\\python.exe -m touhou_rl.vision_train --dataset third_party/th08/build/rl/datasets/pilot-ud0059 --out third_party/th08/build/rl/runs/v103-exp-07 --arch v2 --stage state --epochs-state 8 --batch-size 96 --depth 1 --train-fraction 0.25 --max-train-batches 160 --max-val-batches 0 --heatmap-sigma 1.0",
+      "out_dir": "third_party/th08/build/rl/runs/v103-exp-07",
+      "summary": "third_party/th08/build/rl/runs/v103-exp-07/vision-summary.json",
+      "index": "07",
+      "status": "ok",
+      "returncode": 0,
+      "seconds": 397.4,
+      "metrics": {
+        "train_frames": 16307,
+        "max_train_batches": 160,
+        "pos_px": 71.7097,
+        "perframe_median": 0.313,
+        "regret_0_15": null
+      }
+    }
+  ]
+}

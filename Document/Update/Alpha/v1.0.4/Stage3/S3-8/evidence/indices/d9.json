@@ -1,0 +1,46 @@
+{
+  "schema": "v104-evidence/1",
+  "kind": "d9",
+  "status": "pass",
+  "created_at": "2026-10-20T02:58:16+08:00",
+  "producer": "Document/Update/Alpha/v1.0.4/Stage3/S3-8/evidence/d9d10d11_recheck.py",
+  "command": "python Document/Update/Alpha/v1.0.4/Stage3/S3-8/evidence/d9d10d11_recheck.py --only d9 --out Document/Update/Alpha/v1.0.4/Stage3/S3-8/evidence",
+  "cwd": "D:\\WorkShop\\Touhou_RL",
+  "exit_code": 0,
+  "artifacts": [
+    {
+      "path": "Document/Update/Alpha/v1.0.4/Stage3/S3-8/evidence/d9-recheck.json",
+      "sha256": "29364197b657afe0072d7301e5df3a47d74445870bfb3eead949de1e859ccceb"
+    },
+    {
+      "path": "Document/Update/Alpha/v1.0.4/Stage3/S3-8/evidence/upstream-evidence-sha-crosscheck.json",
+      "sha256": "8d4aae63d560093d64632298bd7050d2d91ba5de717962338867d049e919ce56"
+    }
+  ],
+  "observations": {
+    "expected_frames": 7241,
+    "actual_frames": 7241,
+    "visited_index_sha256": "e5d4ebbe6d8de05793520a393fc1fdbea2b1e2c4db9ff7c1632908340c76655f",
+    "last_batch_size": 41,
+    "batches": 76,
+    "expected_batches": 76,
+    "duplicated_indices": 0,
+    "missing_indices": 0,
+    "unexpected_indices": 0,
+    "complete": true,
+    "manifest_val_index_sha256": "e5d4ebbe6d8de05793520a393fc1fdbea2b1e2c4db9ff7c1632908340c76655f",
+    "cited_s3_3_runs": 5,
+    "cited_s3_3_coverage_ok": true,
+    "run_summary": "third_party/th08/build/rl/runs/v104-v3-E5-s7/vision-summary.json",
+    "run_summary_sha256": "5700bea766ca551a376ed171472be7cf4713489bf5aa926c1ceded228eb77f2a",
+    "reference_files": {
+      "throughput.json": {
+        "path": "Document/Update/Alpha/v1.0.4/Stage3/S3-3/evidence/throughput.json",
+        "sha256": "b190c83fddf3a631938a4cf4d37e7bf858d75b649cc6e67d19d4f7cccb4a65bd",
+        "bytes": 8161,
+        "exists": true
+      }
+    }
+  },
+  "reason": "the formal E5 run's coverage.val is 7241/7241 with the fixed visited digest; the trainer's make_batches reproduces 76 validation batches with a 41-frame tail; the S3-3 throughput evidence (5 runs) still reports the same coverage and its sha matches that stage's record"
+}

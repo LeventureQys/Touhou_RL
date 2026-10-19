@@ -137,7 +137,7 @@ def run_train(spec: TrainSpec) -> dict:
                 width=spec.width,
                 trunk_hidden=spec.trunk_hidden,
                 init_from=spec.init_from,
-                max_batches_per_epoch=spec.max_batches_per_epoch,
+                max_train_batches=spec.max_batches_per_epoch,
             )
         )
 
@@ -190,10 +190,15 @@ def _flat_metrics(model: str, summary: dict) -> dict:
             )
         policy = stages.get("policy", {})
         if policy:
+            # v1.0.3 moved the policy aggregates into `best` / `final` nodes with
+            # `val_`-prefixed keys; keep reading the old flat shape so previously
+            # written summaries still produce a report.
+            best = policy.get("best") or {}
+            final = policy.get("final") or {}
             flat.update(
                 {
-                    "policy_best_regret_px": policy.get("best_val_regret_px"),
-                    "policy_top1": (policy.get("final") or {}).get("top1"),
+                    "policy_best_regret_px": best.get("val_regret_px", policy.get("best_val_regret_px")),
+                    "policy_top1": final.get("val_top1", final.get("top1")),
                 }
             )
         return flat

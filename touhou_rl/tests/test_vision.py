@@ -188,3 +188,80 @@ def test_vision_checkpoint_roundtrip(tmp_path):
     assert np.allclose(
         model.score(batch).detach().numpy(), restored.score(batch).detach().numpy(), atol=1e-6
     )
+
+
+# --- v1.0.4 data-layer contract --------------------------------------------
+def _write_meta_dataset(tmp_path, frames_per_shard: list[list[float]]) -> VisionDataset:
+    """One shard file per entry; ``frames_per_shard[i][j]`` becomes meta frame."""
+    for index, frames in enumerate(frames_per_shard):
+        writer = VisionShardWriter(tmp_path, shard_size=len(frames), tag=f"m{index:02d}")
+        for frame in frames:
+            writer.add(
+                _regions(index),
+                _observation(index),
+                (0, 1, 0, 0),
+                {
+                    "frame": frame,
+                    "stage": 0,
+                    "score": 0,
+                    "graze": 0,
+                    "lives": 2,
+                    "bombs": 2,
+                    "power": 0.0,
+                    "deaths": 0,
+                },
+            )
+        writer.close()
+    return VisionDataset(tmp_path)
+
+
+def test_stack_indices_shape_and_dtype(tmp_path):
+    dataset = _write_meta_dataset(tmp_path, [[0, 2, 4, 6], [8, 10, 12]])
+    try:
+        stack = dataset.stack_indices([0, 3, 4, 6], depth=3)
+        assert stack.dtype == np.int64
+        assert stack.shape == (4, 3)
+        assert stack[0].tolist() == [0, 0, 0]
+        assert stack[1].tolist() == [1, 2, 3]
+        assert stack[2].tolist() == [4, 4, 4]  # new shard: no look-back
+        assert stack[3].tolist() == [4, 5, 6]
+    finally:
+        dataset.close()
+
+
+def test_dataset_close_is_idempotent_and_context_managed(tmp_path):
+    dataset = _write_meta_dataset(tmp_path, [[0, 2, 4]])
+    dataset.frames([0], "playfield")
+    dataset.close()
+    dataset.close()
+    assert dataset.cache_stats()["resident_bytes"] == 0
+    with pytest.raises(RuntimeError, match=r"^v104:CACHE: "):
+        dataset.labels([0])
+    with VisionDataset(tmp_path) as contextual:
+        assert len(contextual) == 3
+    assert contextual.cache_stats()["full"]["entries"] == 0
+
+
+def test_history_audit_contract_keys(tmp_path):
+    dataset = _write_meta_dataset(tmp_path, [[0, 2, 4, 6], [8, 10, 12]])
+    try:
+        audit = dataset.history_audit(3)
+        for key in (
+            "history_contract",
+            "frames",
+            "depth",
+            "delta_histogram",
+            "resets",
+            "repeated_history_samples",
+            "repeated_history_ratio",
+        ):
+            assert key in audit, key
+        assert set(audit["resets"]) >= {"shard", "stage", "death", "gap", "untrusted"}
+        assert audit["frames"] == 7
+        assert audit["depth"] == 3
+        assert audit["delta_histogram"] == {"2": 5}  # within-shard pairs only
+        assert audit["history_contract"] == "legacy"  # default keeps v1.0.3 behaviour
+        assert 0.0 <= audit["repeated_history_ratio"] <= 1.0
+        assert dataset.history_audit(1)["repeated_history_samples"] == 0
+    finally:
+        dataset.close()

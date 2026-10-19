@@ -27,6 +27,7 @@ privileged observation, so they are computed offline in
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import time
 from pathlib import Path
@@ -36,6 +37,64 @@ from .session import GameSession, SessionOptions, prepare_run_dir
 from .vision_data import VisionShardWriter
 
 ROOT = Path(__file__).resolve().parents[1]
+
+
+class FrozenCapture(RuntimeError):
+    """The captured pixels stopped changing while the game kept running."""
+
+
+class FrameStability:
+    """Detect a stale window DC.
+
+    A live shmup never renders ``limit`` identical frames in a row when sampled
+    every ``every``-th logic frame; a window that stopped being composited hands
+    back the same buffer forever.  Since the recorder only accepts a sample when
+    the game frame number advanced, consecutive identical samples mean the pixels
+    are stale - not that the scene happens to be still.
+
+    ``limit=0`` disables the check (kept for debugging only).
+    """
+
+    def __init__(self, limit: int = 5):
+        self.limit = max(0, int(limit))
+        self.last: bytes | None = None
+        self.identical_run = 0  # repeated frames *beyond* the first of the run
+        self.longest = 0  # longest run of identical frames, counted inclusive
+        self.frozen_frames = 0
+        self.frozen = False
+
+    @property
+    def run_length(self) -> int:
+        """Frames in the current run of identical pictures, counted inclusive."""
+        return self.identical_run + 1 if self.last is not None else 0
+
+    def update(self, digest: bytes) -> bool:
+        """Feed one frame digest; returns True when it repeats the previous one."""
+        same = self.last is not None and digest == self.last
+        self.last = digest
+        self.identical_run = self.identical_run + 1 if same else 0
+        self.longest = max(self.longest, self.run_length)
+        if self.limit and self.run_length >= self.limit:
+            self.frozen = True
+            self.frozen_frames += 1
+        return same
+
+    def check(self) -> None:
+        """Raise once the run of identical frames reaches the limit."""
+        if not self.limit or not self.frozen:
+            return
+        raise FrozenCapture(
+            f"{self.run_length} identical frames in a row (limit {self.limit}) while the game "
+            "frame counter kept advancing: the window DC stopped updating "
+            "(locked session, display off, minimised, or occluded)"
+        )
+
+    def summary(self) -> dict:
+        return {
+            "freeze_limit": self.limit,
+            "frozen_frames": self.frozen_frames,
+            "longest_identical_run": self.longest,
+        }
 
 
 def capture_vision(
@@ -53,6 +112,7 @@ def capture_vision(
     shard_size: int = 128,
     compress_level: int = 6,
     allow_append: bool = False,
+    freeze_limit: int = 5,
     verbose: bool = True,
 ) -> dict:
     template = template_dir or (ROOT / "third_party/th08/build/play")
@@ -86,10 +146,11 @@ def capture_vision(
     session = GameSession(SessionOptions(run_dir=work))
     started = time.time()
     playback_started: float | None = None
-    first_game_frame: int | None = None
     last_game_frame: int | None = None
     last_stage_for_span: int | None = None
     game_frames_total = 0
+    stability = FrameStability(freeze_limit)
+    window_hidden_events = 0
     report = {
         "replay": str(replay),
         "frames": 0,
@@ -99,6 +160,7 @@ def capture_vision(
         "box": [box.x, box.y, box.w, box.h],
         "frame_shape": [vision.NATIVE_H, vision.NATIVE_W, vision.NATIVE_CHANNELS],
         "every": int(every),
+        "window_hidden_events": 0,
     }
     transient = {
         spec.STATE_GAME_MANAGER_REINIT,
@@ -106,6 +168,7 @@ def capture_vision(
         12,
     }
     try:
+        winapi.keep_awake(True)
         session.start()
         menu.enter_replay(session, stage=int(stage), timeout=60.0)
         reader = session.reader
@@ -116,6 +179,18 @@ def capture_vision(
         last_guard = 0.0
         last_progress = time.time()
         while time.time() - started < max_seconds:
+            # A minimised / cloaked window cannot be captured correctly, and the
+            # failure mode is silent: record it and stop instead of writing
+            # thousands of identical samples.
+            if session.hwnd and not winapi.window_visible(session.hwnd):
+                window_hidden_events += 1
+                report["window_hidden_events"] = window_hidden_events
+                if window_hidden_events >= 3:
+                    report["ended_reason"] = "window hidden (minimised or cloaked)"
+                    break
+                time.sleep(0.2)
+                continue
+            window_hidden_events = 0
             now = time.time()
             if now - last_guard > 2.0:
                 last_guard = now
@@ -168,6 +243,18 @@ def capture_vision(
                     print(f"[vision-capture] frame skipped: {exc!r}", flush=True)
                 continue
             action = spec.buttons_to_action(state.gui_input_current)
+            # Freeze guard: the recorder only reaches this line when the game frame
+            # number advanced, so a repeated picture means stale pixels, not a still
+            # scene.  Hash the playfield only - it is the region that carries the
+            # information and hashing all three costs more for no extra signal.
+            stability.update(hashlib.blake2b(blobs["playfield"], digest_size=16).digest())
+            try:
+                stability.check()
+            except FrozenCapture as exc:
+                report["ended_reason"] = f"capture frozen: {exc}"
+                if verbose:
+                    print(f"[vision-capture] ABORT {exc}", flush=True)
+                break
             writer.add(
                 blobs,
                 observation,
@@ -185,6 +272,10 @@ def capture_vision(
                 native_hw={name: (image.shape[0], image.shape[1]) for name, image in crops.items()},
             )
             report["frames"] += 1
+            if state.stage not in report["stages_seen"]:
+                # Record the first stage too: v1.0.3 only appended on a stage *change*,
+                # so the opening stage never appeared in the report.
+                report["stages_seen"].append(state.stage)
             if playback_started is None:
                 playback_started = time.time()
             if last_game_frame is not None and key[0] == last_stage_for_span:
@@ -209,6 +300,8 @@ def capture_vision(
             session.close()
         except Exception:
             pass
+        winapi.keep_awake(False)
+        report.update(stability.summary())
         report["elapsed_seconds"] = round(time.time() - started, 1)
         # Rate metrics split two things the earlier report conflated: the wall
         # clock includes boot + menu walk (several seconds with zero samples), and
@@ -217,15 +310,15 @@ def capture_vision(
             playback_seconds = max(1e-6, time.time() - playback_started)
             report["playback_seconds"] = round(playback_seconds, 1)
             report["samples_per_playback_second"] = round(report["frames"] / playback_seconds, 2)
-        if first_game_frame is not None and last_game_frame is not None:
-            # ``gameplay_frame`` resets at every stage boundary, so the meaningful
-            # span is the sum of within-stage deltas (``game_frames_total``), not
-            # last-minus-first.
+        # ``gameplay_frame`` resets at every stage boundary, so the meaningful span
+        # is the sum of within-stage deltas (``game_frames_total``), not
+        # last-minus-first.  (v1.0.3 had a dead ``first_game_frame`` guard here that
+        # meant the field was never written at all - see D7.)
+        if game_frames_total > 0:
             report["game_frames_span"] = int(game_frames_total)
-            if game_frames_total > 0:
-                report["samples_per_game_second"] = round(
-                    report["frames"] / (game_frames_total / 60.0), 2
-                )
+            report["samples_per_game_second"] = round(
+                report["frames"] / (game_frames_total / 60.0), 2
+            )
         report["shards"] = len(summary["shards"])
         report["bytes"] = sum((out_dir / name).stat().st_size for name in summary["shards"]) if summary["shards"] else 0
         (out_dir / "capture-report.json").write_text(
@@ -245,6 +338,12 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--shard-size", type=int, default=128)
     parser.add_argument("--compress-level", type=int, default=6, help="PNG compress level (1=fast, 9=small)")
     parser.add_argument("--overwrite", action="store_true")
+    parser.add_argument(
+        "--freeze-limit",
+        type=int,
+        default=5,
+        help="abort after N identical frames in a row (0 disables; default 5)",
+    )
     args = parser.parse_args(argv)
     report = capture_vision(
         Path(args.replay),
@@ -256,6 +355,7 @@ def main(argv: list[str] | None = None) -> int:
         shard_size=args.shard_size,
         compress_level=args.compress_level,
         allow_append=args.overwrite,
+        freeze_limit=args.freeze_limit,
     )
     print(json.dumps(report, ensure_ascii=False, indent=2))
     return 0

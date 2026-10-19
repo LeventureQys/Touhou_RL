@@ -1,0 +1,33 @@
+{
+  "schema": "v104-evidence/1",
+  "kind": "state_recheck",
+  "status": "pass",
+  "created_at": "2026-10-20T02:58:16+08:00",
+  "producer": "Document/Update/Alpha/v1.0.4/Stage3/S3-8/evidence/full_val_recheck.py",
+  "command": "python Document/Update/Alpha/v1.0.4/Stage3/S3-8/evidence/full_val_recheck.py --kind state_recheck --checkpoint third_party/th08/build/rl/runs/v104-v3-E5-s7/state-pass.pt --out Document/Update/Alpha/v1.0.4/Stage3/S3-8/evidence/state-recheck.json --device cuda",
+  "cwd": "D:\\WorkShop\\Touhou_RL",
+  "exit_code": 0,
+  "artifacts": [
+    {
+      "path": "Document/Update/Alpha/v1.0.4/Stage3/S3-8/evidence/state-recheck.json",
+      "sha256": "2e255cd3e83240eb6973b8a15cc9bb2da84feb7d2958b3ab84cdce6a98cfb190"
+    },
+    {
+      "path": "Document/Update/Alpha/v1.0.4/Stage3/S3-8/evidence/state-full-val-compare.json",
+      "sha256": "eda9f7826cfe45dc15c66ed81df07c10f173e218d43dc758582c47ceee5c9b1f"
+    },
+    {
+      "path": "Document/Update/Alpha/v1.0.4/Stage3/S3-8/evidence/upstream-evidence-sha-crosscheck.json",
+      "sha256": "8d4aae63d560093d64632298bd7050d2d91ba5de717962338867d049e919ce56"
+    }
+  ],
+  "observations": {
+    "checkpoint_sha256": "00a2d28472e4169879f481ca28e664d0fb4c8291f2741ea58ab14967da8c8f46",
+    "frames": 7241,
+    "coverage_sha256": "e5d4ebbe6d8de05793520a393fc1fdbea2b1e2c4db9ff7c1632908340c76655f",
+    "player_pos_px": 2.4066,
+    "danger_corr_perframe_median": 0.8166,
+    "danger_corr_perframe_valid": 7241
+  },
+  "reason": "full re-evaluation of the frozen state-pass.pt on all 7241 validation indices; position and per-frame danger median reproduce the summary's state.best row, independent tool compare_state_models --mode full-val agrees on the position mean"
+}

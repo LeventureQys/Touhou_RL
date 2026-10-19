@@ -1,0 +1,88 @@
+{
+  "schema": "v104-evidence/1",
+  "kind": "policy_full_val",
+  "status": "pass",
+  "created_at": "2026-10-20T02:58:16+08:00",
+  "producer": "Document/Update/Alpha/v1.0.4/Stage3/S3-8/evidence/full_val_recheck.py",
+  "command": "python Document/Update/Alpha/v1.0.4/Stage3/S3-8/evidence/full_val_recheck.py --kind policy_full_val --checkpoint third_party/th08/build/rl/runs/v104-v3-E5-s7/policy.pt --teacher-cache third_party/th08/build/rl/datasets/pilot-ud0059-v2-teacher-values-v104-a52416f9342fa00a0185c061771d09c22ba735bbe01c83dd7910a6c3bc8ec0f6.npz --teacher-fingerprint a52416f9342fa00a0185c061771d09c22ba735bbe01c83dd7910a6c3bc8ec0f6 --out Document/Update/Alpha/v1.0.4/Stage3/S3-8/evidence/policy-full-val.json --device cuda",
+  "cwd": "D:\\WorkShop\\Touhou_RL",
+  "exit_code": 0,
+  "artifacts": [
+    {
+      "path": "Document/Update/Alpha/v1.0.4/Stage3/S3-8/evidence/policy-full-val.json",
+      "sha256": "dc5c682eaf66d673f46d2d7253c22e2ebfa4a4f4fa5f9b99dcba993f9e65ef50"
+    },
+    {
+      "path": "Document/Update/Alpha/v1.0.4/Stage3/S3-8/evidence/upstream-evidence-sha-crosscheck.json",
+      "sha256": "8d4aae63d560093d64632298bd7050d2d91ba5de717962338867d049e919ce56"
+    }
+  ],
+  "observations": {
+    "checkpoint_sha256": "74abde8a996c13fae832913e4e5533bc9490688bc4c0aa73560e695f065d14be",
+    "frames": 7241,
+    "coverage_sha256": "e5d4ebbe6d8de05793520a393fc1fdbea2b1e2c4db9ff7c1632908340c76655f",
+    "player_pos_px": 1.7699,
+    "danger_corr_perframe_median": 0.8317,
+    "danger_corr_perframe_valid": 7241,
+    "by_danger": [
+      {
+        "bucket": "0-15",
+        "frames": 1076,
+        "top1": 0.3476,
+        "top3": 0.6403,
+        "top3_tie": 0.6877,
+        "near_optimal_05": 0.5204,
+        "regret_px": 1.271,
+        "regret_p90_px": 3.675
+      },
+      {
+        "bucket": "15-30",
+        "frames": 2009,
+        "top1": 0.4146,
+        "top3": 0.7173,
+        "top3_tie": 0.768,
+        "near_optimal_05": 0.6307,
+        "regret_px": 0.967,
+        "regret_p90_px": 3.081
+      },
+      {
+        "bucket": "30-60",
+        "frames": 1367,
+        "top1": 0.4338,
+        "top3": 0.752,
+        "top3_tie": 0.7915,
+        "near_optimal_05": 0.5801,
+        "regret_px": 1.205,
+        "regret_p90_px": 3.763
+      },
+      {
+        "bucket": "60-120",
+        "frames": 802,
+        "top1": 0.5387,
+        "top3": 0.8342,
+        "top3_tie": 0.8541,
+        "near_optimal_05": 0.6521,
+        "regret_px": 1.147,
+        "regret_p90_px": 3.812
+      },
+      {
+        "bucket": "120+",
+        "frames": 1987,
+        "top1": 0.3367,
+        "top3": 0.4796,
+        "top3_tie": 0.9527,
+        "near_optimal_05": 0.9341,
+        "regret_px": 0.214,
+        "regret_p90_px": 0.031
+      }
+    ],
+    "top3": 0.6601,
+    "regret_px": 0.87,
+    "position_diagnostic": {
+      "player_pos_px": 1.7699,
+      "danger_corr_perframe_median": 0.8317,
+      "note": "final policy checkpoint perception - diagnostic only, A-01 stays with state-pass.pt"
+    }
+  },
+  "reason": "full 7241-frame re-evaluation of the frozen policy.pt with the fingerprinted teacher cache; the 0-15 px bucket / top3 / by_danger rows reproduce the summary's policy.best row. The position/danger numbers of the same checkpoint are diagnostics only and do not replace A-01."
+}

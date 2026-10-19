@@ -1,0 +1,3838 @@
+C:\Users\a5935\AppData\Local\Programs\Python\Python312\python.exe -m touhou_rl.vision_train --dataset third_party/th08/build/rl/datasets/pilot-ud0059-v2 --out third_party/th08/build/rl/runs/v104-E0-s7 --arch v2 --stage policy --depth 1 --selection-contract v104 --history-contract causal-segment-v1 --policy-objective legacy-reg --rank-weight 0 --regression-weight 1 --policy-freeze-epochs 2 --heatmap-sigma 1 --batch-size 96 --seed 7 --epochs-state 0 --epochs-policy 12 --max-val-batches 0 --device cuda --init-from third_party/th08/build/rl/runs/v104-state-d1-s7/state.pt --note "S3-4 matrix E0: depth 1, legacy-reg, seed 7"
+[vision] third_party\th08\build\rl\datasets\pilot-ud0059-v2: 72413 frames, train 65172 (fraction 1.0), val 7241, arch v2, manifest_verified True
+[vision] teacher cache hit: third_party\th08\build\rl\datasets\pilot-ud0059-v2-teacher-values-v104-a52416f9342fa00a0185c061771d09c22ba735bbe01c83dd7910a6c3bc8ec0f6.npz
+[vision] policy source state: third_party/th08/build/rl/runs/v104-state-d1-s7/state.pt
+[vision:policy] {"epoch": 1, "train_loss": 1.11821, "val_loss": 0.86807, "seconds": 89.3, "val_frames": 7241, "val_top1": 0.0296, "val_regret_px": 5.258, "val_regret_px_bucket_0_15": 4.852, "by_danger": [{"bucket": "0-15", "frames": 1076, "top1": 0.0362, "top3": 0.1543, "top3_tie": 0.1794, "near_optimal_05": 0.1199, "regret_px": 4.852, "regret_p90_px": 10.313}, {"bucket": "15-30", "frames": 2009, "top1": 0.0592, "top3": 0.1697, "top3_tie": 0.216, "near_optimal_05": 0.1697, "regret_px": 5.02, "regret_p90_px": 10.53}, {"bucket": "30-60", "frames": 1367, "top1": 0.0329, "top3": 0.1119, "top3_tie": 0.1631, "near_optimal_05": 0.1236, "regret_px": 6.253, "regret_p90_px": 11.209}, {"bucket": "60-120", "frames": 802, "top1": 0.0137, "top3": 0.0574, "top3_tie": 0.0923, "near_optimal_05": 0.0686, "regret_px": 7.445, "regret_p90_px": 11.875}, {"bucket": "120+", "frames": 1987, "top1": 0.0, "top3": 0.0035, "top3_tie": 0.4771, "near_optimal_05": 0.5803, "regret_px": 4.152, "regret_p90_px": 12.0}], "val_top3": 0.0985, "val_top3_tie": 0.2585, "val_near_optimal_05": 0.2551, "val_regret_p90_px": 11.734, "val_score_std": 0.0661235824227333, "policy_loss_stats": {"objective": "legacy-reg", "rank_loss": 0.0, "regression_loss": 0.00384, "valid_pairs": 0, "frames_with_pairs": 0, "frames_without_pairs": 7241}, "aux_losses": {"heatmap": 3.633181, "coord": 0.131284, "danger": 0.016925, "self": 0.017194}, "train_policy_loss_stats": {"objective": "legacy-reg", "rank_loss": 0.0, "regression_loss": 0.00656, "valid_pairs": 0, "frames_with_pairs": 0, "frames_without_pairs": 65088}}
+[vision:policy] {"epoch": 2, "train_loss": 0.83471, "val_loss": 0.83993, "seconds": 63.7, "val_frames": 7241, "val_top1": 0.0413, "val_regret_px": 4.586, "val_regret_px_bucket_0_15": 5.01, "by_danger": [{"bucket": "0-15", "frames": 1076, "top1": 0.0251, "top3": 0.1199, "top3_tie": 0.1394, "near_optimal_05": 0.0883, "regret_px": 5.01, "regret_p90_px": 10.328}, {"bucket": "15-30", "frames": 2009, "top1": 0.0448, "top3": 0.1926, "top3_tie": 0.2354, "near_optimal_05": 0.1483, "regret_px": 4.852, "regret_p90_px": 10.634}, {"bucket": "30-60", "frames": 1367, "top1": 0.0673, "top3": 0.2363, "top3_tie": 0.2772, "near_optimal_05": 0.1573, "regret_px": 5.557, "regret_p90_px": 11.531}, {"bucket": "60-120", "frames": 802, "top1": 0.0885, "top3": 0.3803, "top3_tie": 0.4077, "near_optimal_05": 0.1708, "regret_px": 5.144, "regret_p90_px": 11.934}, {"bucket": "120+", "frames": 1987, "top1": 0.0096, "top3": 0.1439, "top3_tie": 0.6422, "near_optimal_05": 0.6135, "regret_px": 3.196, "regret_p90_px": 9.75}], "val_top3": 0.1975, "val_top3_tie": 0.3598, "val_near_optimal_05": 0.2712, "val_regret_p90_px": 10.812, "val_score_std": 0.05800943076610565, "policy_loss_stats": {"objective": "legacy-reg", "rank_loss": 0.0, "regression_loss": 0.003546, "valid_pairs": 0, "frames_with_pairs": 0, "frames_without_pairs": 7241}, "aux_losses": {"heatmap": 3.633181, "coord": 0.131284, "danger": 0.016925, "self": 0.017194}, "train_policy_loss_stats": {"objective": "legacy-reg", "rank_loss": 0.0, "regression_loss": 0.003603, "valid_pairs": 0, "frames_with_pairs": 0, "frames_without_pairs": 65088}}
+[vision:policy] optimizer rebuilt for joint training at epoch 3
+[vision:policy] {"epoch": 3, "train_loss": 0.79857, "val_loss": 0.78336, "seconds": 44.5, "val_frames": 7241, "val_top1": 0.1195, "val_regret_px": 4.002, "val_regret_px_bucket_0_15": 4.265, "by_danger": [{"bucket": "0-15", "frames": 1076, "top1": 0.0483, "top3": 0.1459, "top3_tie": 0.1887, "near_optimal_05": 0.1255, "regret_px": 4.265, "regret_p90_px": 7.927}, {"bucket": "15-30", "frames": 2009, "top1": 0.0438, "top3": 0.1399, "top3_tie": 0.1887, "near_optimal_05": 0.1478, "regret_px": 4.837, "regret_p90_px": 9.719}, {"bucket": "30-60", "frames": 1367, "top1": 0.041, "top3": 0.1858, "top3_tie": 0.2217, "near_optimal_05": 0.1287, "regret_px": 5.786, "regret_p90_px": 11.469}, {"bucket": "60-120", "frames": 802, "top1": 0.1147, "top3": 0.3242, "top3_tie": 0.3491, "near_optimal_05": 0.182, "regret_px": 5.82, "regret_p90_px": 12.438}, {"bucket": "120+", "frames": 1987, "top1": 0.2904, "top3": 0.4036, "top3_tie": 0.8626, "near_optimal_05": 0.8223, "regret_px": 1.053, "regret_p90_px": 4.0}], "val_top3": 0.2422, "val_top3_tie": 0.3976, "val_near_optimal_05": 0.3298, "val_regret_p90_px": 10.125, "val_score_std": 0.06690673530101776, "policy_loss_stats": {"objective": "legacy-reg", "rank_loss": 0.0, "regression_loss": 0.003218, "valid_pairs": 0, "frames_with_pairs": 0, "frames_without_pairs": 7241}, "aux_losses": {"heatmap": 3.769476, "coord": 0.092568, "danger": 0.016868, "self": 0.016732}, "train_policy_loss_stats": {"objective": "legacy-reg", "rank_loss": 0.0, "regression_loss": 0.003437, "valid_pairs": 0, "frames_with_pairs": 0, "frames_without_pairs": 65088}}
+[vision:policy] {"epoch": 4, "train_loss": 0.77665, "val_loss": 0.77338, "seconds": 42.0, "val_frames": 7241, "val_top1": 0.0362, "val_regret_px": 4.751, "val_regret_px_bucket_0_15": 4.26, "by_danger": [{"bucket": "0-15", "frames": 1076, "top1": 0.0883, "top3": 0.1766, "top3_tie": 0.2147, "near_optimal_05": 0.1719, "regret_px": 4.26, "regret_p90_px": 8.182}, {"bucket": "15-30", "frames": 2009, "top1": 0.0353, "top3": 0.1075, "top3_tie": 0.1697, "near_optimal_05": 0.1399, "regret_px": 4.986, "regret_p90_px": 10.08}, {"bucket": "30-60", "frames": 1367, "top1": 0.0256, "top3": 0.1134, "top3_tie": 0.1675, "near_optimal_05": 0.1119, "regret_px": 6.139, "regret_p90_px": 11.513}, {"bucket": "60-120", "frames": 802, "top1": 0.0324, "top3": 0.1658, "top3_tie": 0.1983, "near_optimal_05": 0.096, "regret_px": 6.959, "regret_p90_px": 13.875}, {"bucket": "120+", "frames": 1987, "top1": 0.0176, "top3": 0.4243, "top3_tie": 0.5174, "near_optimal_05": 0.6085, "regret_px": 2.934, "regret_p90_px": 8.625}], "val_top3": 0.2123, "val_top3_tie": 0.2745, "val_near_optimal_05": 0.2631, "val_regret_p90_px": 10.906, "val_score_std": 0.0444655604660511, "policy_loss_stats": {"objective": "legacy-reg", "rank_loss": 0.0, "regression_loss": 0.00314, "valid_pairs": 0, "frames_with_pairs": 0, "frames_without_pairs": 7241}, "aux_losses": {"heatmap": 3.767309, "coord": 0.090787, "danger": 0.017005, "self": 0.016644}, "train_policy_loss_stats": {"objective": "legacy-reg", "rank_loss": 0.0, "regression_loss": 0.003239, "valid_pairs": 0, "frames_with_pairs": 0, "frames_without_pairs": 65088}}
+[vision:policy] {"epoch": 5, "train_loss": 0.75818, "val_loss": 0.76444, "seconds": 41.6, "val_frames": 7241, "val_top1": 0.0525, "val_regret_px": 4.405, "val_regret_px_bucket_0_15": 4.319, "by_danger": [{"bucket": "0-15", "frames": 1076, "top1": 0.0948, "top3": 0.223, "top3_tie": 0.2509, "near_optimal_05": 0.1942, "regret_px": 4.319, "regret_p90_px": 8.793}, {"bucket": "15-30", "frames": 2009, "top1": 0.0652, "top3": 0.1961, "top3_tie": 0.2449, "near_optimal_05": 0.1951, "regret_px": 4.699, "regret_p90_px": 10.009}, {"bucket": "30-60", "frames": 1367, "top1": 0.0556, "top3": 0.1858, "top3_tie": 0.2436, "near_optimal_05": 0.1485, "regret_px": 5.34, "regret_p90_px": 11.109}, {"bucket": "60-120", "frames": 802, "top1": 0.0636, "top3": 0.2431, "top3_tie": 0.2768, "near_optimal_05": 0.1259, "regret_px": 5.283, "regret_p90_px": 11.062}, {"bucket": "120+", "frames": 1987, "top1": 0.0101, "top3": 0.0996, "top3_tie": 0.6009, "near_optimal_05": 0.6095, "regret_px": 3.158, "regret_p90_px": 10.5}], "val_top3": 0.1769, "val_top3_tie": 0.3468, "val_near_optimal_05": 0.2922, "val_regret_p90_px": 10.516, "val_score_std": 0.04801541939377785, "policy_loss_stats": {"objective": "legacy-reg", "rank_loss": 0.0, "regression_loss": 0.00304, "valid_pairs": 0, "frames_with_pairs": 0, "frames_without_pairs": 7241}, "aux_losses": {"heatmap": 3.741018, "coord": 0.093701, "danger": 0.016798, "self": 0.016669}, "train_policy_loss_stats": {"objective": "legacy-reg", "rank_loss": 0.0, "regression_loss": 0.003069, "valid_pairs": 0, "frames_with_pairs": 0, "frames_without_pairs": 65088}}
+[vision:policy] {"epoch": 6, "train_loss": 0.74875, "val_loss": 0.74394, "seconds": 41.5, "val_frames": 7241, "val_top1": 0.062, "val_regret_px": 3.896, "val_regret_px_bucket_0_15": 4.329, "by_danger": [{"bucket": "0-15", "frames": 1076, "top1": 0.0446, "top3": 0.1403, "top3_tie": 0.197, "near_optimal_05": 0.1487, "regret_px": 4.329, "regret_p90_px": 8.139}, {"bucket": "15-30", "frames": 2009, "top1": 0.0478, "top3": 0.1996, "top3_tie": 0.2638, "near_optimal_05": 0.2106, "regret_px": 4.408, "regret_p90_px": 9.372}, {"bucket": "30-60", "frames": 1367, "top1": 0.0549, "top3": 0.1829, "top3_tie": 0.2363, "near_optimal_05": 0.15, "regret_px": 5.543, "regret_p90_px": 11.188}, {"bucket": "60-120", "frames": 802, "top1": 0.1172, "top3": 0.3317, "top3_tie": 0.3678, "near_optimal_05": 0.1908, "regret_px": 5.339, "regret_p90_px": 13.056}, {"bucket": "120+", "frames": 1987, "top1": 0.0684, "top3": 0.3478, "top3_tie": 0.7927, "near_optimal_05": 0.6517, "regret_px": 1.428, "regret_p90_px": 4.0}], "val_top3": 0.2429, "val_top3_tie": 0.4053, "val_near_optimal_05": 0.3088, "val_regret_p90_px": 9.773, "val_score_std": 0.04748312756419182, "policy_loss_stats": {"objective": "legacy-reg", "rank_loss": 0.0, "regression_loss": 0.002866, "valid_pairs": 0, "frames_with_pairs": 0, "frames_without_pairs": 7241}, "aux_losses": {"heatmap": 3.767116, "coord": 0.087456, "danger": 0.016555, "self": 0.016555}, "train_policy_loss_stats": {"objective": "legacy-reg", "rank_loss": 0.0, "regression_loss": 0.002967, "valid_pairs": 0, "frames_with_pairs": 0, "frames_without_pairs": 65088}}
+[vision:policy] {"epoch": 7, "train_loss": 0.73577, "val_loss": 0.7518, "seconds": 41.4, "val_frames": 7241, "val_top1": 0.0996, "val_regret_px": 3.802, "val_regret_px_bucket_0_15": 4.384, "by_danger": [{"bucket": "0-15", "frames": 1076, "top1": 0.1087, "top3": 0.2602, "top3_tie": 0.2844, "near_optimal_05": 0.2156, "regret_px": 4.384, "regret_p90_px": 10.168}, {"bucket": "15-30", "frames": 2009, "top1": 0.0881, "top3": 0.2713, "top3_tie": 0.3141, "near_optimal_05": 0.2529, "regret_px": 4.504, "regret_p90_px": 10.425}, {"bucket": "30-60", "frames": 1367, "top1": 0.0995, "top3": 0.2385, "top3_tie": 0.286, "near_optimal_05": 0.1931, "regret_px": 5.083, "regret_p90_px": 11.156}, {"bucket": "60-120", "frames": 802, "top1": 0.1197, "top3": 0.3142, "top3_tie": 0.3454, "near_optimal_05": 0.1845, "regret_px": 4.863, "regret_p90_px": 11.188}, {"bucket": "120+", "frames": 1987, "top1": 0.0981, "top3": 0.31, "top3_tie": 0.8012, "near_optimal_05": 0.6699, "regret_px": 1.468, "regret_p90_px": 4.625}], "val_top3": 0.2788, "val_top3_tie": 0.4415, "val_near_optimal_05": 0.3429, "val_regret_p90_px": 10.219, "val_score_std": 0.057064399123191833, "policy_loss_stats": {"objective": "legacy-reg", "rank_loss": 0.0, "regression_loss": 0.00292, "valid_pairs": 0, "frames_with_pairs": 0, "frames_without_pairs": 7241}, "aux_losses": {"heatmap": 3.734344, "coord": 0.093313, "danger": 0.016807, "self": 0.016721}, "train_policy_loss_stats": {"objective": "legacy-reg", "rank_loss": 0.0, "regression_loss": 0.002849, "valid_pairs": 0, "frames_with_pairs": 0, "frames_without_pairs": 65088}}
+[vision:policy] {"epoch": 8, "train_loss": 0.72857, "val_loss": 0.76239, "seconds": 42.6, "val_frames": 7241, "val_top1": 0.0685, "val_regret_px": 3.897, "val_regret_px_bucket_0_15": 4.187, "by_danger": [{"bucket": "0-15", "frames": 1076, "top1": 0.0651, "top3": 0.1803, "top3_tie": 0.2277, "near_optimal_05": 0.1617, "regret_px": 4.187, "regret_p90_px": 8.003}, {"bucket": "15-30", "frames": 2009, "top1": 0.0548, "top3": 0.2155, "top3_tie": 0.2603, "near_optimal_05": 0.2145, "regret_px": 4.396, "regret_p90_px": 8.831}, {"bucket": "30-60", "frames": 1367, "top1": 0.0695, "top3": 0.1843, "top3_tie": 0.2304, "near_optimal_05": 0.1653, "regret_px": 5.458, "regret_p90_px": 11.213}, {"bucket": "60-120", "frames": 802, "top1": 0.1172, "top3": 0.303, "top3_tie": 0.3304, "near_optimal_05": 0.1783, "regret_px": 5.779, "regret_p90_px": 13.55}, {"bucket": "120+", "frames": 1987, "top1": 0.0639, "top3": 0.3654, "top3_tie": 0.8193, "near_optimal_05": 0.6532, "regret_px": 1.401, "regret_p90_px": 3.775}], "val_top3": 0.2552, "val_top3_tie": 0.411, "val_near_optimal_05": 0.3138, "val_regret_p90_px": 9.594, "val_score_std": 0.03797309845685959, "policy_loss_stats": {"objective": "legacy-reg", "rank_loss": 0.0, "regression_loss": 0.003035, "valid_pairs": 0, "frames_with_pairs": 0, "frames_without_pairs": 7241}, "aux_losses": {"heatmap": 3.753228, "coord": 0.090629, "danger": 0.017079, "self": 0.017534}, "train_policy_loss_stats": {"objective": "legacy-reg", "rank_loss": 0.0, "regression_loss": 0.002797, "valid_pairs": 0, "frames_with_pairs": 0, "frames_without_pairs": 65088}}
+[vision:policy] {"epoch": 9, "train_loss": 0.72111, "val_loss": 0.72086, "seconds": 42.3, "val_frames": 7241, "val_top1": 0.0392, "val_regret_px": 4.754, "val_regret_px_bucket_0_15": 4.149, "by_danger": [{"bucket": "0-15", "frames": 1076, "top1": 0.0474, "top3": 0.1571, "top3_tie": 0.1998, "near_optimal_05": 0.1366, "regret_px": 4.149, "regret_p90_px": 7.865}, {"bucket": "15-30", "frames": 2009, "top1": 0.0473, "top3": 0.1588, "top3_tie": 0.2016, "near_optimal_05": 0.1727, "regret_px": 4.532, "regret_p90_px": 7.992}, {"bucket": "30-60", "frames": 1367, "top1": 0.0395, "top3": 0.1207, "top3_tie": 0.1558, "near_optimal_05": 0.1134, "regret_px": 5.985, "regret_p90_px": 11.188}, {"bucket": "60-120", "frames": 802, "top1": 0.0399, "top3": 0.1147, "top3_tie": 0.1421, "near_optimal_05": 0.086, "regret_px": 6.99, "regret_p90_px": 11.872}, {"bucket": "120+", "frames": 1987, "top1": 0.0262, "top3": 0.0795, "top3_tie": 0.5053, "near_optimal_05": 0.5964, "regret_px": 3.559, "regret_p90_px": 11.125}], "val_top3": 0.1247, "val_top3_tie": 0.2694, "val_near_optimal_05": 0.2628, "val_regret_p90_px": 10.75, "val_score_std": 0.04200063273310661, "policy_loss_stats": {"objective": "legacy-reg", "rank_loss": 0.0, "regression_loss": 0.002629, "valid_pairs": 0, "frames_with_pairs": 0, "frames_without_pairs": 7241}, "aux_losses": {"heatmap": 3.771441, "coord": 0.086433, "danger": 0.016767, "self": 0.016255}, "train_policy_loss_stats": {"objective": "legacy-reg", "rank_loss": 0.0, "regression_loss": 0.002724, "valid_pairs": 0, "frames_with_pairs": 0, "frames_without_pairs": 65088}}
+[vision:policy] {"epoch": 10, "train_loss": 0.71308, "val_loss": 0.74089, "seconds": 41.9, "val_frames": 7241, "val_top1": 0.0146, "val_regret_px": 4.68, "val_regret_px_bucket_0_15": 4.079, "by_danger": [{"bucket": "0-15", "frames": 1076, "top1": 0.0279, "top3": 0.1431, "top3_tie": 0.1998, "near_optimal_05": 0.1329, "regret_px": 4.079, "regret_p90_px": 7.867}, {"bucket": "15-30", "frames": 2009, "top1": 0.0174, "top3": 0.116, "top3_tie": 0.1906, "near_optimal_05": 0.1573, "regret_px": 4.604, "regret_p90_px": 8.892}, {"bucket": "30-60", "frames": 1367, "top1": 0.0102, "top3": 0.0658, "top3_tie": 0.1141, "near_optimal_05": 0.0944, "regret_px": 6.09, "regret_p90_px": 11.141}, {"bucket": "60-120", "frames": 802, "top1": 0.015, "top3": 0.0898, "top3_tie": 0.1222, "near_optimal_05": 0.0586, "regret_px": 6.943, "regret_p90_px": 11.188}, {"bucket": "120+", "frames": 1987, "top1": 0.0075, "top3": 0.1007, "top3_tie": 0.4977, "near_optimal_05": 0.5944, "regret_px": 3.197, "regret_p90_px": 9.25}], "val_top3": 0.1034, "val_top3_tie": 0.2542, "val_near_optimal_05": 0.2508, "val_regret_p90_px": 10.438, "val_score_std": 0.06408664584159851, "policy_loss_stats": {"objective": "legacy-reg", "rank_loss": 0.0, "regression_loss": 0.00282, "valid_pairs": 0, "frames_with_pairs": 0, "frames_without_pairs": 7241}, "aux_losses": {"heatmap": 3.786322, "coord": 0.086468, "danger": 0.017479, "self": 0.016578}, "train_policy_loss_stats": {"objective": "legacy-reg", "rank_loss": 0.0, "regression_loss": 0.00264, "valid_pairs": 0, "frames_with_pairs": 0, "frames_without_pairs": 65088}}
+[vision:policy] {"epoch": 11, "train_loss": 0.7073, "val_loss": 0.70545, "seconds": 41.7, "val_frames": 7241, "val_top1": 0.0507, "val_regret_px": 4.474, "val_regret_px_bucket_0_15": 4.05, "by_danger": [{"bucket": "0-15", "frames": 1076, "top1": 0.0353, "top3": 0.1533, "top3_tie": 0.2314, "near_optimal_05": 0.1524, "regret_px": 4.05, "regret_p90_px": 7.992}, {"bucket": "15-30", "frames": 2009, "top1": 0.0582, "top3": 0.1543, "top3_tie": 0.2334, "near_optimal_05": 0.1891, "regret_px": 4.435, "regret_p90_px": 9.114}, {"bucket": "30-60", "frames": 1367, "top1": 0.0505, "top3": 0.1617, "top3_tie": 0.2173, "near_optimal_05": 0.1485, "regret_px": 5.825, "regret_p90_px": 12.031}, {"bucket": "60-120", "frames": 802, "top1": 0.0636, "top3": 0.2369, "top3_tie": 0.2668, "near_optimal_05": 0.1309, "regret_px": 7.04, "regret_p90_px": 14.434}, {"bucket": "120+", "frames": 1987, "top1": 0.0463, "top3": 0.4962, "top3_tie": 0.5516, "near_optimal_05": 0.6271, "regret_px": 2.778, "regret_p90_px": 8.5}], "val_top3": 0.2585, "val_top3_tie": 0.3211, "val_near_optimal_05": 0.2897, "val_regret_p90_px": 10.875, "val_score_std": 0.043894968926906586, "policy_loss_stats": {"objective": "legacy-reg", "rank_loss": 0.0, "regression_loss": 0.002465, "valid_pairs": 0, "frames_with_pairs": 0, "frames_without_pairs": 7241}, "aux_losses": {"heatmap": 3.787631, "coord": 0.085128, "danger": 0.01664, "self": 0.016159}, "train_policy_loss_stats": {"objective": "legacy-reg", "rank_loss": 0.0, "regression_loss": 0.002591, "valid_pairs": 0, "frames_with_pairs": 0, "frames_without_pairs": 65088}}
+[vision:policy] {"epoch": 12, "train_loss": 0.69955, "val_loss": 0.7062, "seconds": 41.8, "val_frames": 7241, "val_top1": 0.1261, "val_regret_px": 3.594, "val_regret_px_bucket_0_15": 3.767, "by_danger": [{"bucket": "0-15", "frames": 1076, "top1": 0.0651, "top3": 0.1571, "top3_tie": 0.2454, "near_optimal_05": 0.1952, "regret_px": 3.767, "regret_p90_px": 7.852}, {"bucket": "15-30", "frames": 2009, "top1": 0.0443, "top3": 0.1284, "top3_tie": 0.2255, "near_optimal_05": 0.1896, "regret_px": 4.339, "regret_p90_px": 7.969}, {"bucket": "30-60", "frames": 1367, "top1": 0.0395, "top3": 0.1587, "top3_tie": 0.2246, "near_optimal_05": 0.1368, "regret_px": 5.376, "regret_p90_px": 10.741}, {"bucket": "60-120", "frames": 802, "top1": 0.1185, "top3": 0.3653, "top3_tie": 0.399, "near_optimal_05": 0.182, "regret_px": 5.049, "regret_p90_px": 11.938}, {"bucket": "120+", "frames": 1987, "top1": 0.3045, "top3": 0.4303, "top3_tie": 0.8822, "near_optimal_05": 0.8364, "regret_px": 0.936, "regret_p90_px": 2.75}], "val_top3": 0.2475, "val_top3_tie": 0.4277, "val_near_optimal_05": 0.3571, "val_regret_p90_px": 8.0, "val_score_std": 0.0684628114104271, "policy_loss_stats": {"objective": "legacy-reg", "rank_loss": 0.0, "regression_loss": 0.00245, "valid_pairs": 0, "frames_with_pairs": 0, "frames_without_pairs": 7241}, "aux_losses": {"heatmap": 3.745907, "coord": 0.091384, "danger": 0.017376, "self": 0.016474}, "train_policy_loss_stats": {"objective": "legacy-reg", "rank_loss": 0.0, "regression_loss": 0.002508, "valid_pairs": 0, "frames_with_pairs": 0, "frames_without_pairs": 65088}}
+{
+  "schema": "vision-summary/2",
+  "arch": "v2",
+  "note": "S3-4 matrix E0: depth 1, legacy-reg, seed 7",
+  "config": {
+    "stage": "policy",
+    "epochs_state": 0,
+    "epochs_policy": 12,
+    "batch_size": 96,
+    "lr": 0.0003,
+    "depth": 1,
+    "max_train_batches": 0,
+    "max_val_batches": 0,
+    "heatmap_sigma": 1.0,
+    "w_heatmap": 1.0,
+    "w_coord": 1.0,
+    "torch_threads": 1,
+    "playfield_hw": null,
+    "w_self": 1.0,
+    "w_danger": 1.0,
+    "pf_width": 32,
+    "hud_width": 16,
+    "seed": 7,
+    "weight_decay": 0.0001,
+    "val_fraction": 0.1,
+    "train_fraction": 1.0,
+    "allow_missing_manifest": false,
+    "init_from": "third_party\\th08\\build\\rl\\runs\\v104-state-d1-s7\\state.pt",
+    "selection_contract": "v104",
+    "history_contract": "causal-segment-v1",
+    "policy_objective": "legacy-reg",
+    "rank_delta_px": 0.5,
+    "rank_weight": 0.0,
+    "regression_weight": 1.0,
+    "policy_aux_heatmap": 0.1,
+    "policy_aux_coord": 1.0,
+    "policy_aux_danger": 0.2,
+    "policy_aux_self": 0.1,
+    "policy_freeze_epochs": 2,
+    "encoder_lr": 0.0001,
+    "policy_head_lr": 0.0003,
+    "teacher_values": "",
+    "effective_loss": {
+      "objective": "legacy-reg",
+      "rank_delta_px": 0.5,
+      "rank_weight": 0.0,
+      "regression_weight": 1.0,
+      "weights_forced_by_contract": false
+    }
+  },
+  "dataset": "third_party\\th08\\build\\rl\\datasets\\pilot-ud0059-v2",
+  "dataset_stats": {
+    "frames": 72413,
+    "shards": 566,
+    "stages": [
+      0,
+      1,
+      2,
+      4,
+      5,
+      7
+    ],
+    "has_teacher_values": false,
+    "regions": {
+      "playfield": [
+        448,
+        384
+      ],
+      "hud_score": [
+        34,
+        216
+      ],
+      "hud_status": [
+        126,
+        216
+      ]
+    }
+  },
+  "frames": 72413,
+  "train_frames": 65172,
+  "val_frames": 7241,
+  "train_fraction": 1.0,
+  "manifest_verified": true,
+  "val_index_sha256": "e5d4ebbe6d8de05793520a393fc1fdbea2b1e2c4db9ff7c1632908340c76655f",
+  "device": "cuda",
+  "depth": 1,
+  "parameters": 554873,
+  "frame_shape": {
+    "playfield": [
+      224,
+      192,
+      3
+    ],
+    "hud_score": [
+      34,
+      216,
+      3
+    ],
+    "hud_status": [
+      126,
+      216,
+      3
+    ]
+  },
+  "started": "2026-10-19T09:33:29",
+  "teacher": {
+    "cache": "third_party/th08/build/rl/datasets/pilot-ud0059-v2-teacher-values-v104-a52416f9342fa00a0185c061771d09c22ba735bbe01c83dd7910a6c3bc8ec0f6.npz",
+    "fingerprint": "a52416f9342fa00a0185c061771d09c22ba735bbe01c83dd7910a6c3bc8ec0f6",
+    "cache_sha256": "7de5fe166ab147eb7e16e6bd406496bd764b9d98c5ea1e97551bc50d4f402d0c",
+    "explicit_path": false,
+    "rebuilt": false,
+    "dtype": "float16",
+    "identity": {
+      "schema": "v104-teacher/1",
+      "dataset": {
+        "root": "third_party/th08/build/rl/datasets/pilot-ud0059-v2",
+        "total_frames": 72413,
+        "shard_count": 566,
+        "shards": [
+          {
+            "name": "collect-00000.npz",
+            "frames": 128,
+            "bytes": 19915772,
+            "sha256": "925ae048bd5e2338b536cb1614596fc90f585a29558b3cb0bf7e024d0040ee88"
+          },
+          {
+            "name": "collect-00001.npz",
+            "frames": 128,
+            "bytes": 25064014,
+            "sha256": "28a5171d09f4e74f3652b706c7c011e714fc4582ea08383832e23315a427ffca"
+          },
+          {
+            "name": "collect-00002.npz",
+            "frames": 128,
+            "bytes": 27954124,
+            "sha256": "7c1096b85a0592f4980269314bd4d0dbf431ee876542dfcf497d100aea3bdd47"
+          },
+          {
+            "name": "collect-00003.npz",
+            "frames": 128,
+            "bytes": 29266910,
+            "sha256": "2da649e6d1d5b76a5755a75cd25586e376b0bf2ad60ca1fccec61a3f81db5449"
+          },
+          {
+            "name": "collect-00004.npz",
+            "frames": 128,
+            "bytes": 30862226,
+            "sha256": "bfb7f5bc88a73bf5f27c3e7a889435087248267b3de0587a945a0f8c03c1efd6"
+          },
+          {
+            "name": "collect-00005.npz",
+            "frames": 128,
+            "bytes": 30450926,
+            "sha256": "24852de9694d9a820d128096bd01b4cf774424be889d3d7cc398bc0604411ea6"
+          },
+          {
+            "name": "collect-00006.npz",
+            "frames": 128,
+            "bytes": 33053336,
+            "sha256": "50c2a1a6c98b29ed3702a15cd22b37e6e1252a6971dbb3ae0af9c62db91c30fb"
+          },
+          {
+            "name": "collect-00007.npz",
+            "frames": 128,
+            "bytes": 32519723,
+            "sha256": "e612e356e486f7810a03cf968a8207153a3155a7d739ec7530fef78df3101ea9"
+          },
+          {
+            "name": "collect-00008.npz",
+            "frames": 128,
+            "bytes": 31419591,
+            "sha256": "9b73e04a4f04a372e831de2975b913197e754f65930f8843299475b7d593cac5"
+          },
+          {
+            "name": "collect-00009.npz",
+            "frames": 128,
+            "bytes": 30728590,
+            "sha256": "04faa7985866023d1382ed76ec8356f0de1c78afadc00f5795de94b623968d6f"
+          },
+          {
+            "name": "collect-00010.npz",
+            "frames": 128,
+            "bytes": 34851734,
+            "sha256": "ab5d4a5840f259590a11d28d36068ea6fddfd7562cf466953fd6444aa991137a"
+          },
+          {
+            "name": "collect-00011.npz",
+            "frames": 128,
+            "bytes": 33984177,
+            "sha256": "147d100e7a4d7e18af339f5ba471f843530eca6cc454413f50d714ac0ec884d4"
+          },
+          {
+            "name": "collect-00012.npz",
+            "frames": 128,
+            "bytes": 33495662,
+            "sha256": "e4500e2292a0e3893419e3d59fed357b8991ac9d4e71f252bd2b2b4e40c46be9"
+          },
+          {
+            "name": "collect-00013.npz",
+            "frames": 128,
+            "bytes": 34024109,
+            "sha256": "a64eb7be27a16cbfee0a5e4f6be1d27cac7c36b8c813e495249d15287118e179"
+          },
+          {
+            "name": "collect-00014.npz",
+            "frames": 128,
+            "bytes": 36580432,
+            "sha256": "40981c7223ab3813b50fef716ac48d78eb3d2db28a8a203843c2b327e003a2c6"
+          },
+          {
+            "name": "collect-00015.npz",
+            "frames": 128,
+            "bytes": 42328503,
+            "sha256": "0215c8981c64467eed10ed01a3082af11464fb3a65e9ee10c506904fe4e869e3"
+          },
+          {
+            "name": "collect-00016.npz",
+            "frames": 128,
+            "bytes": 37472917,
+            "sha256": "50317ed3f482778f34afb51e3b6c6b09ba80cb801c344bc8fd7673b475e2704a"
+          },
+          {
+            "name": "collect-00017.npz",
+            "frames": 128,
+            "bytes": 30307321,
+            "sha256": "1cfaf212e8f49a5310b65e47f113f2669860ed17360e544baebdd72e7ed60e5b"
+          },
+          {
+            "name": "collect-00018.npz",
+            "frames": 128,
+            "bytes": 30068325,
+            "sha256": "804e3c859a463fbfb6c5f60de166285cc0dcabfa9c84ec8b8a2222e8ceee286f"
+          },
+          {
+            "name": "collect-00019.npz",
+            "frames": 128,
+            "bytes": 34072413,
+            "sha256": "186f22db1af074bd248fb1a2308e3e2d59ad0aaed5fac3fdc2c933966e54cc9a"
+          },
+          {
+            "name": "collect-00020.npz",
+            "frames": 128,
+            "bytes": 35803592,
+            "sha256": "ce08189898a17fa6b67e1e1bf8c98d37961029be52b2c819b2f947547db5b0f1"
+          },
+          {
+            "name": "collect-00021.npz",
+            "frames": 128,
+            "bytes": 29682258,
+            "sha256": "52bfdb21ffc33ad315da8e17a220a13b80a14f7a07302d86501bd8700ddba9dc"
+          },
+          {
+            "name": "collect-00022.npz",
+            "frames": 128,
+            "bytes": 30219334,
+            "sha256": "1a6e400230de2bd942472915cd623c6df8ee31667828610771060bd0ea85e34e"
+          },
+          {
+            "name": "collect-00023.npz",
+            "frames": 128,
+            "bytes": 31261374,
+            "sha256": "e1e2ddd79d1530ce7ea9ad79d6dd52188b9e8e1a3656311d3c551a8319728671"
+          },
+          {
+            "name": "collect-00024.npz",
+            "frames": 128,
+            "bytes": 28166001,
+            "sha256": "fe1036e77e5effad43017c0bac82b24ee6febd07a16f2cc7768b178f2db56b30"
+          },
+          {
+            "name": "collect-00025.npz",
+            "frames": 128,
+            "bytes": 29044225,
+            "sha256": "e246b5847dc665788dcd84be1a9ae1509864f1d3dfa5081379ef5e7dc1cb1efb"
+          },
+          {
+            "name": "collect-00026.npz",
+            "frames": 128,
+            "bytes": 29660348,
+            "sha256": "dfae5d613f6e1ef4f78190eb75fc729faf2418ffab0a3f8b554284665d01c72c"
+          },
+          {
+            "name": "collect-00027.npz",
+            "frames": 128,
+            "bytes": 30517696,
+            "sha256": "f4cca50a5ce665db73ed677fbe2aaf579efab9e53ee5411f84af594d1d2a2934"
+          },
+          {
+            "name": "collect-00028.npz",
+            "frames": 128,
+            "bytes": 31217407,
+            "sha256": "3b67db77bbaa2ee0ce593c4fd2ecbabf851716f595402f75634f2721e79e735c"
+          },
+          {
+            "name": "collect-00029.npz",
+            "frames": 128,
+            "bytes": 30146845,
+            "sha256": "0024852851452bba1bfe1ecb06e7de81acafbf3f3a5c2a618124e745a6734415"
+          },
+          {
+            "name": "collect-00030.npz",
+            "frames": 128,
+            "bytes": 32038324,
+            "sha256": "471ca0ba1abbcb24f194dfad21d6c879dd3bec4e2dbf1cc14fbe9c5e4f343fd7"
+          },
+          {
+            "name": "collect-00031.npz",
+            "frames": 128,
+            "bytes": 31138941,
+            "sha256": "890a6e88809119eb4268d1fd7f8f1e596a0e7c6c928ed7318ffcad8418e8d388"
+          },
+          {
+            "name": "collect-00032.npz",
+            "frames": 128,
+            "bytes": 32359260,
+            "sha256": "3d38038947a784d04f6ced6da61ca503f561bc18bc91652e5abd10a59cd226fc"
+          },
+          {
+            "name": "collect-00033.npz",
+            "frames": 128,
+            "bytes": 37595793,
+            "sha256": "ed932fc50a4d543f31e4399670604ded231423e80fd25e2573d55ef5e09ecfa0"
+          },
+          {
+            "name": "collect-00034.npz",
+            "frames": 128,
+            "bytes": 37832583,
+            "sha256": "00edc44c3e9b9f616e6b598e0d4fbfab636917c662dd3d2319ae65d105869d70"
+          },
+          {
+            "name": "collect-00035.npz",
+            "frames": 128,
+            "bytes": 35808216,
+            "sha256": "0cc6a6a5f263e78bc9beadb06661a6b124d4027945d8e92e52245b0fc2f2c8f6"
+          },
+          {
+            "name": "collect-00036.npz",
+            "frames": 128,
+            "bytes": 36638161,
+            "sha256": "65ec5e0b2646d31ab49fa3d337b22aaff51489a61c6ba69c04abf4bd12140dfc"
+          },
+          {
+            "name": "collect-00037.npz",
+            "frames": 128,
+            "bytes": 36112763,
+            "sha256": "bd6b2fd484532b76d11a2359dd1060e183f352bd1b550efe56627bbe896ec713"
+          },
+          {
+            "name": "collect-00038.npz",
+            "frames": 128,
+            "bytes": 36730020,
+            "sha256": "6381aaa4b2efde2e660ba424bceef5bec598f7e3f0c4c9034d31074f29089942"
+          },
+          {
+            "name": "collect-00039.npz",
+            "frames": 128,
+            "bytes": 31513446,
+            "sha256": "6c972e6d4638b168d1cd15c3d029823f0622d840088ec9494e95cf205b4c8bcc"
+          },
+          {
+            "name": "collect-00040.npz",
+            "frames": 128,
+            "bytes": 29994156,
+            "sha256": "08fe1954671e447092ed173d906d9e1587dd2d7309d7d6c7ff215916d4728a3f"
+          },
+          {
+            "name": "collect-00041.npz",
+            "frames": 128,
+            "bytes": 32595803,
+            "sha256": "bf3bc1d5be977fac310db4c2a5b31a74afde815bd3f3f7dc6be3e4101b35707c"
+          },
+          {
+            "name": "collect-00042.npz",
+            "frames": 128,
+            "bytes": 34337552,
+            "sha256": "3b9acb47e336381af5276dedec2e8e8fe87522056ad059cd5acd76bc2056e08c"
+          },
+          {
+            "name": "collect-00043.npz",
+            "frames": 128,
+            "bytes": 33916175,
+            "sha256": "c8981cee50e179032a191d1ec9dfee680987023958ba8cc9e354b1299cd9f127"
+          },
+          {
+            "name": "collect-00044.npz",
+            "frames": 128,
+            "bytes": 33297989,
+            "sha256": "6f0dc1310bd1d573974d9755683ee4ecc684e8146fb7ed9ccbe092c34b123ae8"
+          },
+          {
+            "name": "collect-00045.npz",
+            "frames": 128,
+            "bytes": 33278448,
+            "sha256": "de41f53d4297ea5d56e997e1a5dd42e5c888412c5390d3631e97e72866b1d3f0"
+          },
+          {
+            "name": "collect-00046.npz",
+            "frames": 128,
+            "bytes": 28214734,
+            "sha256": "bdad19def7e8b00f2d2b158735d85dc5653bb3e906ce86857cbe434fee02725a"
+          },
+          {
+            "name": "collect-00047.npz",
+            "frames": 128,
+            "bytes": 34012791,
+            "sha256": "52955c6f35607bef25062ff70c4eb5b12534982a1a7fcb312117039d506c7137"
+          },
+          {
+            "name": "collect-00048.npz",
+            "frames": 128,
+            "bytes": 27610062,
+            "sha256": "0da183f842317c0e686ecc50cc07e860a6ab06bfc60f217697b0d500f283bad3"
+          },
+          {
+            "name": "collect-00049.npz",
+            "frames": 128,
+            "bytes": 31322823,
+            "sha256": "d8804d7e4d151a1f093daf9a280c7b35aa56974c8614363ef1be277246f983c6"
+          },
+          {
+            "name": "collect-00050.npz",
+            "frames": 128,
+            "bytes": 29129083,
+            "sha256": "1deb2a8fd9b6c18e57e83e97c91b4787ee275d82c238a4599869fd9226845899"
+          },
+          {
+            "name": "collect-00051.npz",
+            "frames": 128,
+            "bytes": 27373472,
+            "sha256": "8d5d866f39dfa00c669e94a514b621c6a28fb4a94292aa5e9f99a04a3555a347"
+          },
+          {
+            "name": "collect-00052.npz",
+            "frames": 128,
+            "bytes": 32005284,
+            "sha256": "3828c4f07cd48bb872caddf231c671ff594dc63893805a49f13b77fea7558296"
+          },
+          {
+            "name": "collect-00053.npz",
+            "frames": 128,
+            "bytes": 26688050,
+            "sha256": "b19d163e99ba9b3cc5a0a31fc7e794454a35d6410186ddabd9913dbc67f0c2de"
+          },
+          {
+            "name": "collect-00054.npz",
+            "frames": 128,
+            "bytes": 37416711,
+            "sha256": "646dd9800d8fd8467fb5464823c88bcbafa852396ff442e95fe3eaea9df655ea"
+          },
+          {
+            "name": "collect-00055.npz",
+            "frames": 128,
+            "bytes": 29909590,
+            "sha256": "cbd05ce566049a2ac1d074c8423921bb6071feb4d769a5f551c3ca39a6176df8"
+          },
+          {
+            "name": "collect-00056.npz",
+            "frames": 128,
+            "bytes": 31774263,
+            "sha256": "32e6b2c382dd3bdcb76499af49bd0c3eb896051cb0087068f051b49be9534744"
+          },
+          {
+            "name": "collect-00057.npz",
+            "frames": 128,
+            "bytes": 31891850,
+            "sha256": "97f6732940b1667c168e6a5d150245bf0d36759448acca10a11d46869677751c"
+          },
+          {
+            "name": "collect-00058.npz",
+            "frames": 128,
+            "bytes": 32426865,
+            "sha256": "efe67f31bf1a48a6f70fe728ab4b692d64226517d7152a9c41bd5d6dd24b22fa"
+          },
+          {
+            "name": "collect-00059.npz",
+            "frames": 128,
+            "bytes": 29858230,
+            "sha256": "6378fe63685e5e40c837c6becedc58964ea72197cd3d5ffc9f11c5da539e6170"
+          },
+          {
+            "name": "collect-00060.npz",
+            "frames": 128,
+            "bytes": 30808722,
+            "sha256": "2e80d53c262632a5aeca4da052b63891d3468aed5e863b4163e270625badf169"
+          },
+          {
+            "name": "collect-00061.npz",
+            "frames": 128,
+            "bytes": 28589365,
+            "sha256": "12ff0b17ba551a33a92f196d926dfc127915a17acad66c05e293fb657e943b6c"
+          },
+          {
+            "name": "collect-00062.npz",
+            "frames": 128,
+            "bytes": 28022530,
+            "sha256": "247c86d1c4fc11a0fa4dc307ed9da6292e582efb380d11e12843f4cdfc33e015"
+          },
+          {
+            "name": "collect-00063.npz",
+            "frames": 128,
+            "bytes": 31423974,
+            "sha256": "4a9cc00c7b3ad62720b155996e6fa56c0e59cd5f47ba90fe1e7bf02bba804681"
+          },
+          {
+            "name": "collect-00064.npz",
+            "frames": 128,
+            "bytes": 30558891,
+            "sha256": "61ded20d1bf2ff428c6088ee830c12ae197130395323b5eb8c172f25b07d153f"
+          },
+          {
+            "name": "collect-00065.npz",
+            "frames": 128,
+            "bytes": 28672631,
+            "sha256": "ce38813defcb6383356ff99192017af88e37cb7083aab9ae0ae8583a01d8f95e"
+          },
+          {
+            "name": "collect-00066.npz",
+            "frames": 128,
+            "bytes": 31765295,
+            "sha256": "fbba045bec9a711fe34b55c441c1e141e23818673e62968929399b34f1955334"
+          },
+          {
+            "name": "collect-00067.npz",
+            "frames": 128,
+            "bytes": 33155055,
+            "sha256": "e08a617745cc5e54c0848730d324466756dac5aba439a49cf299e8ddd4aec034"
+          },
+          {
+            "name": "collect-00068.npz",
+            "frames": 128,
+            "bytes": 32304052,
+            "sha256": "4083ed785d043225d53f3fb132e1be1aa95b8f830e04e0192cb6661348518163"
+          },
+          {
+            "name": "collect-00069.npz",
+            "frames": 128,
+            "bytes": 32576841,
+            "sha256": "18c4bc8e7157127b9291f3eaaa8ef4392e4cbda5937f13a93ee01f0b486ba061"
+          },
+          {
+            "name": "collect-00070.npz",
+            "frames": 128,
+            "bytes": 32182918,
+            "sha256": "04876319475f44613e085750a10a3f876872d0841dadb93efb2fe158bcb22875"
+          },
+          {
+            "name": "collect-00071.npz",
+            "frames": 128,
+            "bytes": 33464728,
+            "sha256": "138e3928d4fc81063ccf5dccecade6ca0ba6bdca0c0b9dccf89cc0853a7a3318"
+          },
+          {
+            "name": "collect-00072.npz",
+            "frames": 128,
+            "bytes": 33660795,
+            "sha256": "3ce760d44cd9fa7f9d78dd7fddea7fec6d3c82453975812f9cb9d5a05b31a37b"
+          },
+          {
+            "name": "collect-00073.npz",
+            "frames": 128,
+            "bytes": 32924250,
+            "sha256": "e256153bf0952511f4e124ea3c020f362bd3d59bf557372c6af95617f54c411f"
+          },
+          {
+            "name": "collect-00074.npz",
+            "frames": 128,
+            "bytes": 32465047,
+            "sha256": "6f80dd05e36ab7c2e4e8b950f7b1a38d9d8c052704de8d2cde2e2d7010ac4374"
+          },
+          {
+            "name": "collect-00075.npz",
+            "frames": 128,
+            "bytes": 34756149,
+            "sha256": "d86d979835c49fa06821436493d16b265723dcc5cb30f7fca2780f855d2b3e83"
+          },
+          {
+            "name": "collect-00076.npz",
+            "frames": 128,
+            "bytes": 33863547,
+            "sha256": "70cddded4ef45adfb6ddd5c2f67fdb3cbf657d66f4979ed48d8c22015ae7b3bb"
+          },
+          {
+            "name": "collect-00077.npz",
+            "frames": 128,
+            "bytes": 34053967,
+            "sha256": "aa22fd735c4aec64b6da686bd5f3494e6f3e4551968090b5f6b3a2a9410031aa"
+          },
+          {
+            "name": "collect-00078.npz",
+            "frames": 128,
+            "bytes": 34688503,
+            "sha256": "a1c1de009cb7c98a3cf7a33c1b84c71c2719cb9160753402118a676cb4be1629"
+          },
+          {
+            "name": "collect-00079.npz",
+            "frames": 128,
+            "bytes": 30262660,
+            "sha256": "2ac34c5dc8193660574c8ed7c4c38d2a7f4cd0586b22df0242ccaa9ce0e15ba3"
+          },
+          {
+            "name": "collect-00080.npz",
+            "frames": 128,
+            "bytes": 33017201,
+            "sha256": "eee957a0cf70dc9252c21debcd125600ce34aeda311a9760e4c63dedb7fc634c"
+          },
+          {
+            "name": "collect-00081.npz",
+            "frames": 128,
+            "bytes": 34567729,
+            "sha256": "a7e3ed2c7859c8872d85f8ccb9f5c16788c252a1d2ec6bb769d208887a4fe92a"
+          },
+          {
+            "name": "collect-00082.npz",
+            "frames": 128,
+            "bytes": 33061065,
+            "sha256": "1e2e5a7ddf3b58c5091c92c977cae0d1fc6c1a47889ea71773e6213323c7368a"
+          },
+          {
+            "name": "collect-00083.npz",
+            "frames": 128,
+            "bytes": 33860055,
+            "sha256": "46c19ad74ca4590902ab4bc6d176caf7e3c60b896b911961dfdc01d82317158d"
+          },
+          {
+            "name": "collect-00084.npz",
+            "frames": 128,
+            "bytes": 33955168,
+            "sha256": "a8c34f9320544d4c4ded5d27de23ec11bcb4ac1bf0e87e7a7331ff341f44de64"
+          },
+          {
+            "name": "collect-00085.npz",
+            "frames": 128,
+            "bytes": 33127633,
+            "sha256": "782301b9bbf849c334985e6857b1018f1a9f69a9f55ed6149c854010aed9781f"
+          },
+          {
+            "name": "collect-00086.npz",
+            "frames": 128,
+            "bytes": 33785224,
+            "sha256": "77da5c6f051879c461757b6d73af00f349bf57484de3d01fd1e279fc55a5a13c"
+          },
+          {
+            "name": "collect-00087.npz",
+            "frames": 128,
+            "bytes": 33671269,
+            "sha256": "bc0f9a9762639a582e365adbfe4d7381aaa340b8e9f1b83064a86d0d3f8fd7aa"
+          },
+          {
+            "name": "collect-00088.npz",
+            "frames": 128,
+            "bytes": 32279773,
+            "sha256": "e0ad7a3ccbb80789cde64b5c24589cd5adf68dd2e9cd4f6af1f355d040daf91a"
+          },
+          {
+            "name": "collect-00089.npz",
+            "frames": 128,
+            "bytes": 32368858,
+            "sha256": "0c9cc16a00509a0944569b203691a5801b2681d34464e33312fe8cc4805fec93"
+          },
+          {
+            "name": "collect-00090.npz",
+            "frames": 128,
+            "bytes": 31048306,
+            "sha256": "ce0c8ac0e512e3354bd068d72ac80031264b37ec11a4e28d03f8b09514a91dda"
+          },
+          {
+            "name": "collect-00091.npz",
+            "frames": 128,
+            "bytes": 33131619,
+            "sha256": "7abebe2923d64e5737a7a8d3086e377046709c7c3132a9da540315ec871a5c79"
+          },
+          {
+            "name": "collect-00092.npz",
+            "frames": 128,
+            "bytes": 44929924,
+            "sha256": "a14d84ea1357fd6691dad8a1acf9e51bd6df5f5de58ac710cacb817774e07363"
+          },
+          {
+            "name": "collect-00093.npz",
+            "frames": 128,
+            "bytes": 49471875,
+            "sha256": "76be39d29f12b3b8440a40a61ea4843146cc1c367ae47d3f8ef3f9eaf2bdca49"
+          },
+          {
+            "name": "collect-00094.npz",
+            "frames": 128,
+            "bytes": 46666635,
+            "sha256": "7cb05daa262b797e5a1ad777c607501b30bd57527652bac25764f83ea8a11997"
+          },
+          {
+            "name": "collect-00095.npz",
+            "frames": 128,
+            "bytes": 48846497,
+            "sha256": "bb92a70b93625f961c3a9e7b726683974f5c99288ff8aa53e4435eec55b3ac83"
+          },
+          {
+            "name": "collect-00096.npz",
+            "frames": 128,
+            "bytes": 38783859,
+            "sha256": "7944f836759a17d05945ca471d9630e19631bed231d2056414f5499cb5d2cc7f"
+          },
+          {
+            "name": "collect-00097.npz",
+            "frames": 128,
+            "bytes": 31473818,
+            "sha256": "c1cc9ce0484871b025a02d9d2514fdf6b9cf6ca295dbce7c8fe3815137689473"
+          },
+          {
+            "name": "collect-00098.npz",
+            "frames": 128,
+            "bytes": 32116932,
+            "sha256": "c4986269cb46e616201a72e0f76494a1b488d6176423414b6a7ecd70511b1e9c"
+          },
+          {
+            "name": "collect-00099.npz",
+            "frames": 128,
+            "bytes": 32072970,
+            "sha256": "f97b2e687ea5fc859087743068066ada4a4aba3cc93d44cb9ab1376e4c52645c"
+          },
+          {
+            "name": "collect-00100.npz",
+            "frames": 128,
+            "bytes": 32441639,
+            "sha256": "409d2d4973791d6cd122a9d9731f55d82e19b17f6f33e3cc8d07243fec08de47"
+          },
+          {
+            "name": "collect-00101.npz",
+            "frames": 128,
+            "bytes": 31063466,
+            "sha256": "c549c231a7f8d1b3dfe1fdbf739f071e626ff9ccd19a97ed907f8618553378c6"
+          },
+          {
+            "name": "collect-00102.npz",
+            "frames": 128,
+            "bytes": 31030712,
+            "sha256": "90690eb232901d6272eb7c8dfa4d91f0b9b04a161744bce105382920ba5957fd"
+          },
+          {
+            "name": "collect-00103.npz",
+            "frames": 128,
+            "bytes": 31669524,
+            "sha256": "cea835a2680946506b79cd888bc39990ac2c8c0cb0827fc8a805f26a20921442"
+          },
+          {
+            "name": "collect-00104.npz",
+            "frames": 128,
+            "bytes": 44493890,
+            "sha256": "b67d8084ae73f52e7f33edf9b9cb243c1340499078a2961b77100ddd71cd072d"
+          },
+          {
+            "name": "collect-00105.npz",
+            "frames": 128,
+            "bytes": 45846620,
+            "sha256": "2f8361c283b9e4884232a98ab65d27b5c3fb57e26065b8926c0aebf2e7f1bef2"
+          },
+          {
+            "name": "collect-00106.npz",
+            "frames": 128,
+            "bytes": 47106759,
+            "sha256": "7b598ed3db9d14f3dbf0647c31bda89b9daccc6cec26a8ff0cf96db133d05c0f"
+          },
+          {
+            "name": "collect-00107.npz",
+            "frames": 128,
+            "bytes": 41209878,
+            "sha256": "724478a5df900e45940f44cf175e07d24ec285a926a43417d995b4f3fd3ff8fd"
+          },
+          {
+            "name": "collect-00108.npz",
+            "frames": 128,
+            "bytes": 32291876,
+            "sha256": "60077d38c1e44e8436bf4c69efe3ff5630c62daec273f1372a5957c5516d256c"
+          },
+          {
+            "name": "collect-00109.npz",
+            "frames": 128,
+            "bytes": 30696611,
+            "sha256": "48512f4b5850bc00fde3b135d263120ddcd736a1e9ee989077f387a99a7103da"
+          },
+          {
+            "name": "collect-00110.npz",
+            "frames": 128,
+            "bytes": 31446697,
+            "sha256": "98de3d212aa15512d6f8aae66b2d11371f453f2f63b2b019ffa57effd4273c5a"
+          },
+          {
+            "name": "collect-00111.npz",
+            "frames": 128,
+            "bytes": 31251773,
+            "sha256": "3cf2c6318fb50b296f1a8880527c1eb8e4c27ed2bfba07d769a0f19bebbba9ec"
+          },
+          {
+            "name": "collect-00112.npz",
+            "frames": 128,
+            "bytes": 42798960,
+            "sha256": "46afaa3960192e210c1f807a013fd034a86275b73111b4ac3385844a40e6b463"
+          },
+          {
+            "name": "collect-00113.npz",
+            "frames": 128,
+            "bytes": 41097407,
+            "sha256": "29dc9f7f9b4291ecdf928e039f8f704f3c0fd347eb0eab65316e2b577b131cdf"
+          },
+          {
+            "name": "collect-00114.npz",
+            "frames": 128,
+            "bytes": 38881015,
+            "sha256": "17f655d58e19255ba605b7447f6ade7b12fb92d7e07c36f3d3123866b59a9c9e"
+          },
+          {
+            "name": "collect-00115.npz",
+            "frames": 128,
+            "bytes": 36368735,
+            "sha256": "66bbbe26ed15284fa5922e6b62b12e535c80a7d6e6c60fae14d7b54b7d258834"
+          },
+          {
+            "name": "collect-00116.npz",
+            "frames": 128,
+            "bytes": 38409389,
+            "sha256": "b4080a4d6d9b893bbac6a621dade848fc3783d15447e3080982741e0298b1c35"
+          },
+          {
+            "name": "collect-00117.npz",
+            "frames": 128,
+            "bytes": 37735779,
+            "sha256": "c8faa82a4e695a211ca0d303b751ed9e3a27c95799eee7b881394a6d0fea98e1"
+          },
+          {
+            "name": "collect-00118.npz",
+            "frames": 128,
+            "bytes": 37393804,
+            "sha256": "901ee3569430c6bb2041af72805f38d1ff9e85a9a6064c7f055aacea30097c43"
+          },
+          {
+            "name": "collect-00119.npz",
+            "frames": 128,
+            "bytes": 36511137,
+            "sha256": "dc9ce302fb5e20131c9044107241f02b284c0762b3127c893105fe36548e6fa0"
+          },
+          {
+            "name": "collect-00120.npz",
+            "frames": 128,
+            "bytes": 35108438,
+            "sha256": "457baf86fbc69d6c461b2f92f4c96aa9929a7bd699b079950e9da829a3c20d52"
+          },
+          {
+            "name": "collect-00121.npz",
+            "frames": 128,
+            "bytes": 38590731,
+            "sha256": "5d1591d731facbc417696fca678efe425557ffea759e37c5b2059c31f6471961"
+          },
+          {
+            "name": "collect-00122.npz",
+            "frames": 128,
+            "bytes": 11869779,
+            "sha256": "ba05df7fb4fc06af16af5e69d43882092a33eb04169f082d09102472da50ed4f"
+          },
+          {
+            "name": "collect-00123.npz",
+            "frames": 128,
+            "bytes": 9866788,
+            "sha256": "6e45b59d466cb4bada0f613f01fde419171633577ce82b50c4482e515cbf2215"
+          },
+          {
+            "name": "collect-00124.npz",
+            "frames": 128,
+            "bytes": 9490208,
+            "sha256": "7dfc6c80b3405ffa9d4d8ec80b58b71982164f3c169d47a20dbd5bec107d602c"
+          },
+          {
+            "name": "collect-00125.npz",
+            "frames": 128,
+            "bytes": 9372005,
+            "sha256": "09c5c3504ffc132b2fd9de404d787d23c9e0dcaf7455d51358b13e69d95e2d18"
+          },
+          {
+            "name": "collect-00126.npz",
+            "frames": 128,
+            "bytes": 9180756,
+            "sha256": "5ed3e9dcf593d82842838fa49f16a488047a4da91cd2d7adc0c682d098a4bbee"
+          },
+          {
+            "name": "collect-00127.npz",
+            "frames": 128,
+            "bytes": 8957597,
+            "sha256": "21c826617e4583b21eb73d3263e74de1fe3b8f4fe60bdfa4ca151a4154d54c2e"
+          },
+          {
+            "name": "collect-00128.npz",
+            "frames": 128,
+            "bytes": 8766715,
+            "sha256": "669965c4b9553b383b4df876eb1dfaa15cdca334c95f08b2f2e459e0f0ee876a"
+          },
+          {
+            "name": "collect-00129.npz",
+            "frames": 128,
+            "bytes": 36468811,
+            "sha256": "2a225032850105bd1b71678169d3d76626974dcb33adb293d96d6032e4395c80"
+          },
+          {
+            "name": "collect-00130.npz",
+            "frames": 128,
+            "bytes": 26313590,
+            "sha256": "4071a0069373972a30537f98f849045d878da45a9aab674dc606527803b6186e"
+          },
+          {
+            "name": "collect-00131.npz",
+            "frames": 128,
+            "bytes": 10075442,
+            "sha256": "6c5af8e061e2cd65a3b22af63defc7a6c9843b5d322e8e29c1e7d4b377215d57"
+          },
+          {
+            "name": "collect-00132.npz",
+            "frames": 128,
+            "bytes": 9817271,
+            "sha256": "44db66706532c8cb5abb7d9cdee6bc1351a84b1ec70d94838f19ab99370e75f1"
+          },
+          {
+            "name": "collect-00133.npz",
+            "frames": 128,
+            "bytes": 9606984,
+            "sha256": "f22735b9e6bdf45adf9448dc42495b779a220cef7450dca72c7436e47bd6625f"
+          },
+          {
+            "name": "collect-00134.npz",
+            "frames": 128,
+            "bytes": 19152707,
+            "sha256": "49155b4bcdb359779a63bcbb56ad7d961d6d4847a59292600e3501ae305044eb"
+          },
+          {
+            "name": "collect-00135.npz",
+            "frames": 128,
+            "bytes": 32037407,
+            "sha256": "4a1c33d0bb2bb94d3ff81f577e318cd2d4deed21b1d15e7eca119fe96dbc9bc5"
+          },
+          {
+            "name": "collect-00136.npz",
+            "frames": 128,
+            "bytes": 37057927,
+            "sha256": "97a8f12f04d2b066960c9488ffe9daa12b8674b66acc0129a10ceade7ba52569"
+          },
+          {
+            "name": "collect-00137.npz",
+            "frames": 128,
+            "bytes": 20808949,
+            "sha256": "64743ea17f939b017853fa5321e8e0a9527889b41523d1343f2e7056ecde130e"
+          },
+          {
+            "name": "collect-00138.npz",
+            "frames": 128,
+            "bytes": 29918624,
+            "sha256": "9deb10722a6cdc42fc6d25571adae6626b6e601bd00b5830a1f12b196022d497"
+          },
+          {
+            "name": "collect-00139.npz",
+            "frames": 128,
+            "bytes": 36273724,
+            "sha256": "fc74e5e5eb0f74caba920a13778a59bf2eff668216ae9222ef2a820019126eed"
+          },
+          {
+            "name": "collect-00140.npz",
+            "frames": 128,
+            "bytes": 39062817,
+            "sha256": "c4ca7f3aec8c84a07b8797ffbead98dfe991a8026543b309ff0b158cab4d866f"
+          },
+          {
+            "name": "collect-00141.npz",
+            "frames": 128,
+            "bytes": 35406854,
+            "sha256": "f44b93551a88668fecc499dbb11bf808115ca37651f677d6b47358152e3f32ed"
+          },
+          {
+            "name": "collect-00142.npz",
+            "frames": 128,
+            "bytes": 33649637,
+            "sha256": "e9bb7cf20ac72e6aa367449536225b0e26ebcb4ced6fe2377293250c5312c516"
+          },
+          {
+            "name": "collect-00143.npz",
+            "frames": 128,
+            "bytes": 34099183,
+            "sha256": "e122f8aae5203c17a0a96c71394a6ffb3e5611e217683491b3e8a8d26ee2b91d"
+          },
+          {
+            "name": "collect-00144.npz",
+            "frames": 128,
+            "bytes": 33184542,
+            "sha256": "5e54fa289e242e4e5009625bb8105c21f883c9d489e56d3971e9b5898f26088a"
+          },
+          {
+            "name": "collect-00145.npz",
+            "frames": 128,
+            "bytes": 36263635,
+            "sha256": "52a5ea6491ea3e03f5e408e1dc08a5629b7ed3b23f0e39bea29f356ac89e032b"
+          },
+          {
+            "name": "collect-00146.npz",
+            "frames": 128,
+            "bytes": 27500424,
+            "sha256": "74550f8ac249bc76a179bdfa421027efd570d22b69a138ce83f6a00e525b4d08"
+          },
+          {
+            "name": "collect-00147.npz",
+            "frames": 128,
+            "bytes": 28601283,
+            "sha256": "4de905cbbcf22f79c235bb36c0ed076f9e2d1d2028009d07ac5b48ec336d7341"
+          },
+          {
+            "name": "collect-00148.npz",
+            "frames": 128,
+            "bytes": 34243997,
+            "sha256": "d1fbdfc944d87a594d29a89f425384651f68a3e748ebf3d5e5cee9b8fb371be2"
+          },
+          {
+            "name": "collect-00149.npz",
+            "frames": 128,
+            "bytes": 41153159,
+            "sha256": "ac6ff9dea2b43bd45d8b454a4847f135ade8f5591c40518259ce1e7dbbc6fc04"
+          },
+          {
+            "name": "collect-00150.npz",
+            "frames": 128,
+            "bytes": 43896916,
+            "sha256": "d041983142c0ab93b743b6878fa85e4de226f0e54f7f128a38d9a3ef44036b09"
+          },
+          {
+            "name": "collect-00151.npz",
+            "frames": 128,
+            "bytes": 44191511,
+            "sha256": "10981cb8f14f62759c6ce2060523790f6b25ec76e1d398cc55229ebdcb016e62"
+          },
+          {
+            "name": "collect-00152.npz",
+            "frames": 128,
+            "bytes": 44309488,
+            "sha256": "17bed5388d17ab223fbb6f5ba450f0774d805446a85cda9c0ece77802eb1c5a7"
+          },
+          {
+            "name": "collect-00153.npz",
+            "frames": 128,
+            "bytes": 44053527,
+            "sha256": "53667cbbff7da20020f5bdab9d8760bec270ceeaee04f079e5741b2929cbebae"
+          },
+          {
+            "name": "collect-00154.npz",
+            "frames": 128,
+            "bytes": 43733445,
+            "sha256": "f2e4a693c6c1a18d3e0f590a15d4c5975817d1d0dd16f74123d95fa7622f5707"
+          },
+          {
+            "name": "collect-00155.npz",
+            "frames": 128,
+            "bytes": 42714840,
+            "sha256": "013d0163c6f337c088997f5a658f34ba54436948543041b47b968fd222f677ca"
+          },
+          {
+            "name": "collect-00156.npz",
+            "frames": 128,
+            "bytes": 40976685,
+            "sha256": "3a578f1279629f0acb3691e7f10c9f840c49c13c2ec423708d6631b168d64418"
+          },
+          {
+            "name": "collect-00157.npz",
+            "frames": 128,
+            "bytes": 41157977,
+            "sha256": "848575002c804aba5248f0b70a52f473cf8adb7eeacafef354bb9a09af91f734"
+          },
+          {
+            "name": "collect-00158.npz",
+            "frames": 128,
+            "bytes": 42034657,
+            "sha256": "20ea6bb8514c361e16304c9c82ccf573429f1c353ec68b3ccf67476ef05d1066"
+          },
+          {
+            "name": "collect-00159.npz",
+            "frames": 128,
+            "bytes": 43890032,
+            "sha256": "7891326eaa0d7ee17998de5b2d16bd3f38ff37b87066baa6be79c3902f0034ec"
+          },
+          {
+            "name": "collect-00160.npz",
+            "frames": 128,
+            "bytes": 42358808,
+            "sha256": "4a96fe6b829297ce5beff10b77711d9ac0594160d416e234ef442beb1e6cd5cd"
+          },
+          {
+            "name": "collect-00161.npz",
+            "frames": 128,
+            "bytes": 42793944,
+            "sha256": "870858ef8be61ff4003eb76aac6ddd7c90435c0460001a5f1336421b18cf6204"
+          },
+          {
+            "name": "collect-00162.npz",
+            "frames": 128,
+            "bytes": 42183853,
+            "sha256": "12f3498f386a737adb48712b7dc151bdb78444a565ac3d77c30db23e14a5a00f"
+          },
+          {
+            "name": "collect-00163.npz",
+            "frames": 128,
+            "bytes": 41856789,
+            "sha256": "cd970bf5759682ccadefc1fe8b8ab03286922e12e62871e02faedc93ab7d8867"
+          },
+          {
+            "name": "collect-00164.npz",
+            "frames": 128,
+            "bytes": 43799126,
+            "sha256": "f7e77143c3439adf5a8af194347f2f9402202976a4d3e6856e664a0e76e7af14"
+          },
+          {
+            "name": "collect-00165.npz",
+            "frames": 128,
+            "bytes": 39603436,
+            "sha256": "03d368a8143fdbda3cadd0bcbfa129af1332471e98709244ec06f7f0a9befb88"
+          },
+          {
+            "name": "collect-00166.npz",
+            "frames": 128,
+            "bytes": 43692070,
+            "sha256": "d929afe5a264b52c41959e2b25fe034cf917509251eb1696b05ca9f84a32abb8"
+          },
+          {
+            "name": "collect-00167.npz",
+            "frames": 128,
+            "bytes": 44340093,
+            "sha256": "d281c5f0bfee7d1e028e8245931bf1e5fa4d22254843efdcdc5b4a6316ac4947"
+          },
+          {
+            "name": "collect-00168.npz",
+            "frames": 128,
+            "bytes": 40919501,
+            "sha256": "351485fad160c6d404aeaec0159f9afd8994ca7cd2d7c7f39936b35aaa1d7dc1"
+          },
+          {
+            "name": "collect-00169.npz",
+            "frames": 128,
+            "bytes": 40839801,
+            "sha256": "89f02869aab3473c8d3d4215f71f0f005695fb5b88e440f3f2e4bf65f52eb0aa"
+          },
+          {
+            "name": "collect-00170.npz",
+            "frames": 128,
+            "bytes": 42235269,
+            "sha256": "9e0149304188df33ed9f07b9ff8113172a42e8c4e553a7e16b83aad71af732ed"
+          },
+          {
+            "name": "collect-00171.npz",
+            "frames": 128,
+            "bytes": 41354218,
+            "sha256": "4ea4464684420483181b9cbdb4a22ad21136515e900b5a8e561dabfe1a1868b6"
+          },
+          {
+            "name": "collect-00172.npz",
+            "frames": 128,
+            "bytes": 40925992,
+            "sha256": "e2dcb75e49265783b1280de07828278c6bf9991acd64e1195c696cc5d9521275"
+          },
+          {
+            "name": "collect-00173.npz",
+            "frames": 128,
+            "bytes": 41972002,
+            "sha256": "04d9d6e95f03e3844ad7d45a04f61b3c4bf577ba464d13f78b720fdcfb8b0ccf"
+          },
+          {
+            "name": "collect-00174.npz",
+            "frames": 128,
+            "bytes": 42287719,
+            "sha256": "83403f30ff2c30bb65eeb528635c18093b905afef2d280925aa206efe0348b34"
+          },
+          {
+            "name": "collect-00175.npz",
+            "frames": 128,
+            "bytes": 40427203,
+            "sha256": "d1aa76eeea737b40dd3ed8517f62ab95568ec5619fd33fdc2df32edb700e9899"
+          },
+          {
+            "name": "collect-00176.npz",
+            "frames": 128,
+            "bytes": 39862567,
+            "sha256": "a258328f6a262cae228d1dad530220c65737137e5e974aed2489cc6adb3582e7"
+          },
+          {
+            "name": "collect-00177.npz",
+            "frames": 128,
+            "bytes": 39922225,
+            "sha256": "a47b5b7c394e819e36f8267f445133a4225233620cfc2947b74de1909ee93442"
+          },
+          {
+            "name": "collect-00178.npz",
+            "frames": 128,
+            "bytes": 40744863,
+            "sha256": "af5b6c67afa7058ad1158637de2de56f5e13d0439f69a8ea30f8b9404c3844c8"
+          },
+          {
+            "name": "collect-00179.npz",
+            "frames": 128,
+            "bytes": 39742268,
+            "sha256": "3fd515a1a3b3ca917f0cac9e61fb29aefced68f8021795d2253c9a4841a12c48"
+          },
+          {
+            "name": "collect-00180.npz",
+            "frames": 128,
+            "bytes": 40849032,
+            "sha256": "88b825bef000d80888d9377c8b01bfcabd9c049fed5cf4c44046b19a579016a1"
+          },
+          {
+            "name": "collect-00181.npz",
+            "frames": 128,
+            "bytes": 44425896,
+            "sha256": "e2125c27c5506b67090a68932ed113e85d33e5ab54775aaeb72dca71377936dc"
+          },
+          {
+            "name": "collect-00182.npz",
+            "frames": 128,
+            "bytes": 43374634,
+            "sha256": "21fb4af589c6e8e41b3fdf9073c187648d453b84b470a9b4f709c2f01f0515ee"
+          },
+          {
+            "name": "collect-00183.npz",
+            "frames": 128,
+            "bytes": 43299054,
+            "sha256": "d73695a1be26b37f20c85bf47d22ac4b7606c07d42130201e38de04fb1a7c633"
+          },
+          {
+            "name": "collect-00184.npz",
+            "frames": 128,
+            "bytes": 48083464,
+            "sha256": "fbd2f7d4e28964e5985a5447d45b13abda2f5beeda714aee06ebb817c894f798"
+          },
+          {
+            "name": "collect-00185.npz",
+            "frames": 128,
+            "bytes": 51050389,
+            "sha256": "b39b886f869630e21aafa531a7f2f74fa440842e17b9066fdb1aaec4c315f4f3"
+          },
+          {
+            "name": "collect-00186.npz",
+            "frames": 128,
+            "bytes": 52999430,
+            "sha256": "595429b7eae12f7217ec75fc3e45b32c47f5193ad5c81179b7bc7aa23b52c39f"
+          },
+          {
+            "name": "collect-00187.npz",
+            "frames": 128,
+            "bytes": 52968165,
+            "sha256": "7ed923f5ebbe061bf826ef66fcfc6530fd7fe2f52708b2018975bfd4c7ce9305"
+          },
+          {
+            "name": "collect-00188.npz",
+            "frames": 128,
+            "bytes": 52726629,
+            "sha256": "a4a1d515b8252c2ab90cb88970477fe8a0bf530bde9d723002afdee646e5483f"
+          },
+          {
+            "name": "collect-00189.npz",
+            "frames": 128,
+            "bytes": 49151048,
+            "sha256": "13b2d86a6d5bff423cea077d094c119f59963ef4b80e5216a827a05357445f23"
+          },
+          {
+            "name": "collect-00190.npz",
+            "frames": 128,
+            "bytes": 42236236,
+            "sha256": "0c9bc143a4fb8dde3821daaf8b6da1594d189fc27b8dfa7f449701ad2ee2bc9e"
+          },
+          {
+            "name": "collect-00191.npz",
+            "frames": 128,
+            "bytes": 39208080,
+            "sha256": "26b62a842ff52f5707a6f5ff8afe2733e145e59acd343610307471b03364f897"
+          },
+          {
+            "name": "collect-00192.npz",
+            "frames": 128,
+            "bytes": 39604500,
+            "sha256": "ac590f633edec696e8b942b250574de81d92de872fdf55404083c3847b48d26f"
+          },
+          {
+            "name": "collect-00193.npz",
+            "frames": 128,
+            "bytes": 41678179,
+            "sha256": "f33c97a08514e379026e708cd892ab666efeed1383abfbdf5bb3c6ec1e88b29a"
+          },
+          {
+            "name": "collect-00194.npz",
+            "frames": 128,
+            "bytes": 39375137,
+            "sha256": "08860e8224eb43ad175a0f5ea8974ed9546972b0271462348009afefb551dfc2"
+          },
+          {
+            "name": "collect-00195.npz",
+            "frames": 128,
+            "bytes": 43551414,
+            "sha256": "f65d2425e81d08e2bbfc39f74bac2dc7fe07a2c89763432bbf92894f8dd126e5"
+          },
+          {
+            "name": "collect-00196.npz",
+            "frames": 128,
+            "bytes": 44187494,
+            "sha256": "bad9a12ee23f805f7c3286b5908446425bf6cb955503e0464bbec8007cfc8a27"
+          },
+          {
+            "name": "collect-00197.npz",
+            "frames": 128,
+            "bytes": 47277817,
+            "sha256": "d54d74a8d4f23721dedfdcaca45f0836d9d5dea2733669d6fe897723b589d884"
+          },
+          {
+            "name": "collect-00198.npz",
+            "frames": 128,
+            "bytes": 46651761,
+            "sha256": "b54a47f5dc894e116711b5ca993ca93a7198a7637960ee152961cea485e27d8d"
+          },
+          {
+            "name": "collect-00199.npz",
+            "frames": 128,
+            "bytes": 47010115,
+            "sha256": "9cb9f3a50ee895caa52f47d189d17b9ce16d75b582f256753f08963fe8af3919"
+          },
+          {
+            "name": "collect-00200.npz",
+            "frames": 128,
+            "bytes": 46948013,
+            "sha256": "818dc88e8a61ce48c98e7dee98192a7762fd76f2888e9b6a018cff4f54a7a510"
+          },
+          {
+            "name": "collect-00201.npz",
+            "frames": 128,
+            "bytes": 46390860,
+            "sha256": "af056713d8e1ddde263c4b05ed0a0d96efcee59055a11254fc34e11b645e22cf"
+          },
+          {
+            "name": "collect-00202.npz",
+            "frames": 128,
+            "bytes": 46439600,
+            "sha256": "dca6d7053049fbcb82531146c760da4c0bd2319291719bf8adbcec1b60c1ee2d"
+          },
+          {
+            "name": "collect-00203.npz",
+            "frames": 128,
+            "bytes": 46086253,
+            "sha256": "a5eb7c7aa96eb18d7e533f4ac4acb1cf7f0d550ebdff6e4c331e359175248b49"
+          },
+          {
+            "name": "collect-00204.npz",
+            "frames": 128,
+            "bytes": 46390327,
+            "sha256": "46c0f2d690422cafb35a1996834aec868a5def3e7207fe4b66daeda0ca26e4cd"
+          },
+          {
+            "name": "collect-00205.npz",
+            "frames": 128,
+            "bytes": 45164572,
+            "sha256": "1cb601cbe6197a5a94b4bf7ecb3866e5f62403b3de9e94dcc393d1c904be7ee8"
+          },
+          {
+            "name": "collect-00206.npz",
+            "frames": 128,
+            "bytes": 51046880,
+            "sha256": "8c032252876bd7174c76beb974fbdf3bde654c92168b53f6c94246c07cf9fd83"
+          },
+          {
+            "name": "collect-00207.npz",
+            "frames": 128,
+            "bytes": 53333435,
+            "sha256": "9f3251472aa963c71d0e181b8394ebad4f9d01bc72d42332aa62dd9622d05689"
+          },
+          {
+            "name": "collect-00208.npz",
+            "frames": 128,
+            "bytes": 52348759,
+            "sha256": "ca12df0f5b82ce2989824fac7677b4bd5f43c4d6926ea537c58a8488a68ce61a"
+          },
+          {
+            "name": "collect-00209.npz",
+            "frames": 128,
+            "bytes": 44373662,
+            "sha256": "328a6be77e3f7d522e8887574c0a8d4e6a4a36a4a265de274be40828a888996a"
+          },
+          {
+            "name": "collect-00210.npz",
+            "frames": 128,
+            "bytes": 46170176,
+            "sha256": "652f921a920c2f912c6d88b8dfd23d36e94be199f65912411b629185ed481b88"
+          },
+          {
+            "name": "collect-00211.npz",
+            "frames": 128,
+            "bytes": 49974072,
+            "sha256": "a0de491943baacf591fc467e79bf459468e5e34c2ec4e5ac69603cbb3297dc59"
+          },
+          {
+            "name": "collect-00212.npz",
+            "frames": 128,
+            "bytes": 50397219,
+            "sha256": "662d1410e163144cc3ebe75f6bcc6604c932ee9fe08a8c5e80b77020b0eca4b2"
+          },
+          {
+            "name": "collect-00213.npz",
+            "frames": 128,
+            "bytes": 49773401,
+            "sha256": "46961f284028eaf479b4dea0d3973adc5f0f023fb7a43204d8e1c8914441116f"
+          },
+          {
+            "name": "collect-00214.npz",
+            "frames": 128,
+            "bytes": 43205087,
+            "sha256": "dd2eb78a238bf08ce89e8044bee7c6324d4e817912d1fc1be16df9206ca3c58d"
+          },
+          {
+            "name": "collect-00215.npz",
+            "frames": 128,
+            "bytes": 41086968,
+            "sha256": "55622b87811e78f350f728e60511f49e32af26ca6a44230a2da17f3b9af0806c"
+          },
+          {
+            "name": "collect-00216.npz",
+            "frames": 128,
+            "bytes": 41983800,
+            "sha256": "db2513548150f17ef9010187e998ebfd358d561e6d8235ed6892b070a431ccc9"
+          },
+          {
+            "name": "collect-00217.npz",
+            "frames": 128,
+            "bytes": 40760346,
+            "sha256": "25e936ea0c79415ae90c263ea3cdc06d376fdc0e54ed7fb9604579a6a34533dc"
+          },
+          {
+            "name": "collect-00218.npz",
+            "frames": 128,
+            "bytes": 20008109,
+            "sha256": "66eaeb6350e275f56c9517ed4f285393ac670241168dee6778368d584ace821e"
+          },
+          {
+            "name": "collect-00219.npz",
+            "frames": 128,
+            "bytes": 24988322,
+            "sha256": "aed64ec01dd89323e0ab5e430a7c833948911eb3812b7a3b57240d2fb239a5d9"
+          },
+          {
+            "name": "collect-00220.npz",
+            "frames": 128,
+            "bytes": 31320119,
+            "sha256": "869bea1347046af785443ae742969dd337e9af8a881762b02773921ace0ee250"
+          },
+          {
+            "name": "collect-00221.npz",
+            "frames": 128,
+            "bytes": 34999263,
+            "sha256": "15774e063ccb654ac4b04f54711a3e7ce11be535ff31a97ab83548e9616c8269"
+          },
+          {
+            "name": "collect-00222.npz",
+            "frames": 128,
+            "bytes": 35953027,
+            "sha256": "ea7e4309d26b1f9c2eaf7e2284f44da07144c5d49b1b1a1a0a2b6ec9a051a4b1"
+          },
+          {
+            "name": "collect-00223.npz",
+            "frames": 128,
+            "bytes": 32144704,
+            "sha256": "2f877684d59e569f419e0791d0956ae1cd15822ee0ceaab6e6646245f773b577"
+          },
+          {
+            "name": "collect-00224.npz",
+            "frames": 128,
+            "bytes": 32990215,
+            "sha256": "eea47efe1460affd485cb0a8d89ed9152a4c7d58cb598d150b8b8fb73c4faeac"
+          },
+          {
+            "name": "collect-00225.npz",
+            "frames": 128,
+            "bytes": 32387740,
+            "sha256": "48114ebb4d42e5e4ad8ecf63f5ddd322d621068c5f45e3420d6b0077bbee8abe"
+          },
+          {
+            "name": "collect-00226.npz",
+            "frames": 128,
+            "bytes": 31328108,
+            "sha256": "0076a0281847e464b807833d3ab26f41b2e7adf1798c14d79d9b7a8afc4e9997"
+          },
+          {
+            "name": "collect-00227.npz",
+            "frames": 128,
+            "bytes": 35783126,
+            "sha256": "690f179a2156a8a851c7bea44ff052c70119f183e54ef31a16a0ff8e3b8f5278"
+          },
+          {
+            "name": "collect-00228.npz",
+            "frames": 128,
+            "bytes": 31081639,
+            "sha256": "29e4317d3d497625e5f12f79d686060ab3265fb0857ceb34bf0ae04a1f1b8db3"
+          },
+          {
+            "name": "collect-00229.npz",
+            "frames": 128,
+            "bytes": 37285099,
+            "sha256": "fe21668aab8b25b9c6b78dfbd94adf17f7a95f86f5893560bf9bcee2e5ef97bb"
+          },
+          {
+            "name": "collect-00230.npz",
+            "frames": 128,
+            "bytes": 34577862,
+            "sha256": "af8cf6be770b61f2197e994c75623f16aac7dbcb01d000e039d30bfbd2bde59e"
+          },
+          {
+            "name": "collect-00231.npz",
+            "frames": 128,
+            "bytes": 35023150,
+            "sha256": "4f5ddb31847faaae18ad7291037a906ad14ed5bead6107eba286967e77e87df2"
+          },
+          {
+            "name": "collect-00232.npz",
+            "frames": 128,
+            "bytes": 33718707,
+            "sha256": "105b185419160b09a6776b0a7d6462529781a2b4a49c8c1fed6d425fe5f7b5c1"
+          },
+          {
+            "name": "collect-00233.npz",
+            "frames": 128,
+            "bytes": 34230616,
+            "sha256": "211acd87d3090a3daeb8c3c7a581ea00e289f16ba96a16efd42be368a0ab7f65"
+          },
+          {
+            "name": "collect-00234.npz",
+            "frames": 128,
+            "bytes": 37057082,
+            "sha256": "588fddc666f0efec14a24e6d25e7d4ed044f0400232617678345e892c860ca77"
+          },
+          {
+            "name": "collect-00235.npz",
+            "frames": 128,
+            "bytes": 34318238,
+            "sha256": "1634d5c66aa877e3dbadb3b3bd6b9e76397f70e5707711473d1810065e8cc3db"
+          },
+          {
+            "name": "collect-00236.npz",
+            "frames": 128,
+            "bytes": 41996895,
+            "sha256": "a2716e99f6909511d64773497319a5af79a224d15ee6231209c78eb13e38934f"
+          },
+          {
+            "name": "collect-00237.npz",
+            "frames": 128,
+            "bytes": 45063191,
+            "sha256": "6c533761e25f93009547e0dec78976819c0bdbf709b014eceab055668a35f278"
+          },
+          {
+            "name": "collect-00238.npz",
+            "frames": 128,
+            "bytes": 45255623,
+            "sha256": "65f0abedce14438b40baca256ff4513b2ae7303ada1ed693baacba3613237b84"
+          },
+          {
+            "name": "collect-00239.npz",
+            "frames": 128,
+            "bytes": 46680927,
+            "sha256": "1062c9c9e4206e478ca34a7fc6d0a78a0383dd0e70a37d16ccdde27d951ae5c0"
+          },
+          {
+            "name": "collect-00240.npz",
+            "frames": 128,
+            "bytes": 50990226,
+            "sha256": "2af80c0c01a634c45df6181615429175e412745b3f88f72bee77785f1d13cd93"
+          },
+          {
+            "name": "collect-00241.npz",
+            "frames": 128,
+            "bytes": 48496846,
+            "sha256": "9c97d7118bd7b904a88aa2f7e0a9426528663fc5fbe037dd089ef508a4a65775"
+          },
+          {
+            "name": "collect-00242.npz",
+            "frames": 128,
+            "bytes": 49307776,
+            "sha256": "7bbab9a14b0dbbfa2b14874573db85e1310d78688ca6799e5292e220faebf9e0"
+          },
+          {
+            "name": "collect-00243.npz",
+            "frames": 128,
+            "bytes": 49011702,
+            "sha256": "90411f58e46f263e478ebb48185c416c76631dd5df2c3a53a823c7b3862f645b"
+          },
+          {
+            "name": "collect-00244.npz",
+            "frames": 128,
+            "bytes": 49356036,
+            "sha256": "42e685c95c3986890304f78d196aa0adb3282b5f1d8e684655f2de86888e1b7e"
+          },
+          {
+            "name": "collect-00245.npz",
+            "frames": 128,
+            "bytes": 50247057,
+            "sha256": "649e095b041667705df898ada734ac966d58cfc4973bd5663fa9a9703b502d6e"
+          },
+          {
+            "name": "collect-00246.npz",
+            "frames": 128,
+            "bytes": 50342064,
+            "sha256": "70eba57516846029836d1eeb695caea93d07eda173174c9ed67d02ec27f11358"
+          },
+          {
+            "name": "collect-00247.npz",
+            "frames": 128,
+            "bytes": 49940644,
+            "sha256": "3b39350011d035f393a7d9c23bbc8c6c58d8ed5bec3720fcc75303be79dec659"
+          },
+          {
+            "name": "collect-00248.npz",
+            "frames": 128,
+            "bytes": 48907695,
+            "sha256": "f7c8a6acc50920045fb7619912a7adb69eb7051dd3ec43bac6e9f630e084e993"
+          },
+          {
+            "name": "collect-00249.npz",
+            "frames": 128,
+            "bytes": 51791206,
+            "sha256": "08964c025d9e4d3e25580f81d1ba221aedb62c27ad731fa54d1f91446106383e"
+          },
+          {
+            "name": "collect-00250.npz",
+            "frames": 128,
+            "bytes": 52617852,
+            "sha256": "83c50a1b15fbc345b0fe9944c7fb99842cebb3b4ffc2ebebfa1789225829fed3"
+          },
+          {
+            "name": "collect-00251.npz",
+            "frames": 128,
+            "bytes": 51103982,
+            "sha256": "e22a53d8103e15284327e8eef2642756ac7a7a1334e01f7fca6e1161ee931d0a"
+          },
+          {
+            "name": "collect-00252.npz",
+            "frames": 128,
+            "bytes": 49707413,
+            "sha256": "e26432268884bae13295976f975c9a81df1adb242029fd5a4645831270672fd7"
+          },
+          {
+            "name": "collect-00253.npz",
+            "frames": 128,
+            "bytes": 54096007,
+            "sha256": "27f127dab37d136006b6589de38dbca9efcb22d9e035650be7526eeff987f63d"
+          },
+          {
+            "name": "collect-00254.npz",
+            "frames": 128,
+            "bytes": 53933122,
+            "sha256": "fc8bc0152b6143f3f2cc7230e24c06afde3a76d457f5f91692a289d46616f17f"
+          },
+          {
+            "name": "collect-00255.npz",
+            "frames": 128,
+            "bytes": 48032572,
+            "sha256": "0eed82f8e9fe362094ff43077d7db3dcd0b807cf5882ee2b1080d47f74fa0949"
+          },
+          {
+            "name": "collect-00256.npz",
+            "frames": 128,
+            "bytes": 53199568,
+            "sha256": "c1e88799a627dd10c02d17278e572eeda6c516f055a8291359ebc6f3e98fd49d"
+          },
+          {
+            "name": "collect-00257.npz",
+            "frames": 128,
+            "bytes": 46395046,
+            "sha256": "0dd95eaaf6a619e7478fc2074854b8fdc150415f27b29b6c1187bb24a5d1b06e"
+          },
+          {
+            "name": "collect-00258.npz",
+            "frames": 128,
+            "bytes": 49300973,
+            "sha256": "8dbf62fb610f8f46ca0a068805d79d2fbf2c7cd3760cd3f02f3f2a6cf48a6ea0"
+          },
+          {
+            "name": "collect-00259.npz",
+            "frames": 128,
+            "bytes": 53302301,
+            "sha256": "a25ccbb74175f1ddfe03563ab57fd30d1a2a42b2624cc682dfff30730a2711eb"
+          },
+          {
+            "name": "collect-00260.npz",
+            "frames": 128,
+            "bytes": 52721495,
+            "sha256": "7ff33a86f6f6debf84c6e241b8f1854d3b30131bbf2a499e5ece87b382d6926b"
+          },
+          {
+            "name": "collect-00261.npz",
+            "frames": 128,
+            "bytes": 51366293,
+            "sha256": "0fad25ff9c476247d18a4fb994972f021ddcec0a433364a18fb6427fb67d8070"
+          },
+          {
+            "name": "collect-00262.npz",
+            "frames": 128,
+            "bytes": 50537508,
+            "sha256": "906b5ea15faa0b59ae68bd1faedcbd98e9422af61be3cec79b9fa2bf1bc6da45"
+          },
+          {
+            "name": "collect-00263.npz",
+            "frames": 128,
+            "bytes": 46602139,
+            "sha256": "0a9bef60bfa7367dcbe67cbf2168bfb8795cc5d6fa3c5293a1eb7c2127b606b1"
+          },
+          {
+            "name": "collect-00264.npz",
+            "frames": 128,
+            "bytes": 34288205,
+            "sha256": "0ac96e48786c7d6c7fd5d1a6790df4e378ddbf94c8ab1468cffd0aa283b9d1f5"
+          },
+          {
+            "name": "collect-00265.npz",
+            "frames": 128,
+            "bytes": 32722556,
+            "sha256": "09a765d653e9f013097eb99c322971ce8e1ab18002ec2062c897d10413e5909b"
+          },
+          {
+            "name": "collect-00266.npz",
+            "frames": 128,
+            "bytes": 34351736,
+            "sha256": "1f7e7031d7975cf2520d32a31fbc0d567abfb1927e13fbc246cf2d399a039ecc"
+          },
+          {
+            "name": "collect-00267.npz",
+            "frames": 128,
+            "bytes": 34759676,
+            "sha256": "5f63b3553ce1b1e5127988e4c655a9b72c5f0f10e034c77fe9eb9811e1bfb582"
+          },
+          {
+            "name": "collect-00268.npz",
+            "frames": 128,
+            "bytes": 35981255,
+            "sha256": "197b079227c4cb93a038ff7b6fe8bcc7c33e19df9df95d6c3e2c31cae40f90a3"
+          },
+          {
+            "name": "collect-00269.npz",
+            "frames": 128,
+            "bytes": 36155689,
+            "sha256": "d4b15b2db916d3f5182f5c6f329fb89207d9fa0e25f924e02112fff7d5f49c57"
+          },
+          {
+            "name": "collect-00270.npz",
+            "frames": 128,
+            "bytes": 32055172,
+            "sha256": "43b08ee48840e65c5190f03e9d2d0ba08ef26dfc7ada160fc5420a9f4b5d34e1"
+          },
+          {
+            "name": "collect-00271.npz",
+            "frames": 128,
+            "bytes": 37107006,
+            "sha256": "e4c2f6eb8ad556f48400f8811e06ca99d32c85364d1811e92f225898baaa5a27"
+          },
+          {
+            "name": "collect-00272.npz",
+            "frames": 128,
+            "bytes": 37595050,
+            "sha256": "aa4a29fe2d47135c260ad8676a867e9831c100db0898d1d7fc604bfb672b263e"
+          },
+          {
+            "name": "collect-00273.npz",
+            "frames": 128,
+            "bytes": 33779346,
+            "sha256": "3bf836c8d2fdfa7e470eb1a5d8dc030abc7b3da507d7bfb8f0f636232d9821d9"
+          },
+          {
+            "name": "collect-00274.npz",
+            "frames": 128,
+            "bytes": 38483419,
+            "sha256": "c51f734713e5218e940390d1b28c1de9fd8b5ea69cab92cddb5cdc84fa269fef"
+          },
+          {
+            "name": "collect-00275.npz",
+            "frames": 128,
+            "bytes": 44539708,
+            "sha256": "f7f46e13272525d4cb87283ce9e64a76612840f1fb0b7d349c040d82c9fe6979"
+          },
+          {
+            "name": "collect-00276.npz",
+            "frames": 128,
+            "bytes": 45021416,
+            "sha256": "d3b015ce7bc089c0a8b8b2450f1642443436cae9b6f9e5caf9a575d2a9562ca2"
+          },
+          {
+            "name": "collect-00277.npz",
+            "frames": 128,
+            "bytes": 44681855,
+            "sha256": "185426a94733e22d319c43502352957c00c0c9bad5146bae9291b8a9b62c0f7a"
+          },
+          {
+            "name": "collect-00278.npz",
+            "frames": 128,
+            "bytes": 35888538,
+            "sha256": "3671e4e9ea0eeceb1553cf4a058955644098a4b1f20a0450d1e74382843a141e"
+          },
+          {
+            "name": "collect-00279.npz",
+            "frames": 128,
+            "bytes": 35014338,
+            "sha256": "4d071aba575c1c73e32e8543d1364685d32883dbfd762649eb2fb8fdeb81a005"
+          },
+          {
+            "name": "collect-00280.npz",
+            "frames": 128,
+            "bytes": 35108176,
+            "sha256": "3fc611dc5d4fa1372ec75bbc4056f59115f82f83f152e3e5a5033c21c2a54b97"
+          },
+          {
+            "name": "collect-00281.npz",
+            "frames": 128,
+            "bytes": 39998123,
+            "sha256": "3f428c671bfe4ca79eaa445825d0ac0b860740aabd3226b3572325f83e9205d5"
+          },
+          {
+            "name": "collect-00282.npz",
+            "frames": 128,
+            "bytes": 44831927,
+            "sha256": "74ca10a736b624b53217c9a3d4e7346d92cb0f2b14d8b4293dad72718b381676"
+          },
+          {
+            "name": "collect-00283.npz",
+            "frames": 128,
+            "bytes": 45594450,
+            "sha256": "1656eb9990120fb49e35db4035a88a7cf645c7cc6c5d6975fc99f7d227102594"
+          },
+          {
+            "name": "collect-00284.npz",
+            "frames": 128,
+            "bytes": 47354556,
+            "sha256": "b0f5919529ea7c2eff175c3960b99b14a53a07969c75367a410538de73857369"
+          },
+          {
+            "name": "collect-00285.npz",
+            "frames": 128,
+            "bytes": 47608126,
+            "sha256": "09964fb62f2b8d63961f3ea35f8433fd00368a29f4ef4693656e5deb5d0ece7d"
+          },
+          {
+            "name": "collect-00286.npz",
+            "frames": 128,
+            "bytes": 44973294,
+            "sha256": "5d4136a1a41b43a80d84d4af3dea87d9f7b5a54bd4cf3cc77a5f7cde48beb63d"
+          },
+          {
+            "name": "collect-00287.npz",
+            "frames": 128,
+            "bytes": 46722978,
+            "sha256": "4cf17e0f415260a30777726fd629b723e282dfee7afb3f8ebc0cb777cf5eb5af"
+          },
+          {
+            "name": "collect-00288.npz",
+            "frames": 128,
+            "bytes": 50134517,
+            "sha256": "e049cc85d46f2ef53644af6d4c68154f8fb38dc7066d982cb778730af73a4b7c"
+          },
+          {
+            "name": "collect-00289.npz",
+            "frames": 128,
+            "bytes": 49928165,
+            "sha256": "29e6ba79cb324eb787eb4fb5f933ec2596de1d0b7e3177b104d0bf970767b65f"
+          },
+          {
+            "name": "collect-00290.npz",
+            "frames": 128,
+            "bytes": 48233057,
+            "sha256": "3516b3dd10743deff9d3939714bbe158a5e22599181cead7ab3ce9f461077b6b"
+          },
+          {
+            "name": "collect-00291.npz",
+            "frames": 128,
+            "bytes": 48066604,
+            "sha256": "752b32c35f51995b50b95ccebe709ec600cc23d664b562708bc81d710a529f5f"
+          },
+          {
+            "name": "collect-00292.npz",
+            "frames": 128,
+            "bytes": 45977767,
+            "sha256": "ef1d0b3cde67f835db8df66f8351269e8458191d2144afca9aadf626cea287b5"
+          },
+          {
+            "name": "collect-00293.npz",
+            "frames": 128,
+            "bytes": 46215819,
+            "sha256": "186793d146b315c8d1db4099215a7eb632655335aece41af19c95ff849016aa4"
+          },
+          {
+            "name": "collect-00294.npz",
+            "frames": 128,
+            "bytes": 46280905,
+            "sha256": "36460985d7f565594df3eb3950e9dba1a5fb1e87beba1d2674a3dda9d500de79"
+          },
+          {
+            "name": "collect-00295.npz",
+            "frames": 128,
+            "bytes": 46960965,
+            "sha256": "a5146821c582e39977170f5aa1cf13eac0cff6f298671c9f128fa076e6608505"
+          },
+          {
+            "name": "collect-00296.npz",
+            "frames": 128,
+            "bytes": 35046535,
+            "sha256": "3391eb999fa03940def1dc81395fb2965174d404b1a5db04c580243dddb176bb"
+          },
+          {
+            "name": "collect-00297.npz",
+            "frames": 128,
+            "bytes": 48562310,
+            "sha256": "77414fca579639b1335543696c27e772a928ef0037bd459f377879e38d23af5c"
+          },
+          {
+            "name": "collect-00298.npz",
+            "frames": 128,
+            "bytes": 40973792,
+            "sha256": "0fec53629d7d03ad976cb6062ced193bc321fcdaa6d922996f75516e9c885f3e"
+          },
+          {
+            "name": "collect-00299.npz",
+            "frames": 128,
+            "bytes": 49704299,
+            "sha256": "a1da0fef5f1863840841aa76c6ce7d046318ade138099f9f40357696ebc00e80"
+          },
+          {
+            "name": "collect-00300.npz",
+            "frames": 128,
+            "bytes": 46918303,
+            "sha256": "2f2ed9e3e29c2caed2cffe69ca52c8b616df699d8eb10e31212995ea9a4fa71c"
+          },
+          {
+            "name": "collect-00301.npz",
+            "frames": 128,
+            "bytes": 45908571,
+            "sha256": "2a29ce7fcc40015550336e199bf7c3c07e52146263a411220f919018d862772d"
+          },
+          {
+            "name": "collect-00302.npz",
+            "frames": 128,
+            "bytes": 47654612,
+            "sha256": "db953209f6d016e36995ac956888e61f489fdc0f79d17f6af0543d0e49934ae6"
+          },
+          {
+            "name": "collect-00303.npz",
+            "frames": 128,
+            "bytes": 48210698,
+            "sha256": "fc248076c672cc223603f1d570440676c74b200a001168d03c43200d8efd6644"
+          },
+          {
+            "name": "collect-00304.npz",
+            "frames": 128,
+            "bytes": 48330948,
+            "sha256": "7cd419609f30504a5af8825cadc778a7a6f7f2679ddbda6070b23376789f98ec"
+          },
+          {
+            "name": "collect-00305.npz",
+            "frames": 128,
+            "bytes": 48733341,
+            "sha256": "ad22e1dc6720b619274c778ed69e0416bad6d9342a20bbb37f5ab84901e7bc86"
+          },
+          {
+            "name": "collect-00306.npz",
+            "frames": 128,
+            "bytes": 46920805,
+            "sha256": "b78078f592dba2d831f81ba0bb7a091450a18ecab6151604e08a2fc42dbbd480"
+          },
+          {
+            "name": "collect-00307.npz",
+            "frames": 128,
+            "bytes": 45803713,
+            "sha256": "1c4eac36ee99f24d2d46f8fdeb7884edf2c4d862a1b9c1c800a95c0b99b3df43"
+          },
+          {
+            "name": "collect-00308.npz",
+            "frames": 128,
+            "bytes": 44822874,
+            "sha256": "8fa70a90e910c8f3ccbb5d0584155e388da3aa5142ccc9394647a898f0e0944d"
+          },
+          {
+            "name": "collect-00309.npz",
+            "frames": 128,
+            "bytes": 42216392,
+            "sha256": "1eb713550be2a95ffb5f9ce1c4d95ab68a13284dd5720938bf3e8ae8f919c858"
+          },
+          {
+            "name": "collect-00310.npz",
+            "frames": 128,
+            "bytes": 43729925,
+            "sha256": "7518a5c28d74ebd1c41470b6ae39ccded9ed7388dab95df305d42ea80178af53"
+          },
+          {
+            "name": "collect-00311.npz",
+            "frames": 128,
+            "bytes": 37443270,
+            "sha256": "43fba6e161acc230fea4b72edc6936e22734a00bfab25c5fd9e32c1381fae5da"
+          },
+          {
+            "name": "collect-00312.npz",
+            "frames": 128,
+            "bytes": 46771405,
+            "sha256": "6d8a9abb3bbc4a2703840189743148c8c880bd0e96e2cfa9694b895a33ff2c83"
+          },
+          {
+            "name": "collect-00313.npz",
+            "frames": 128,
+            "bytes": 42757960,
+            "sha256": "5db4419dfbc28be17f6cf107e61741f120a3c1838b3fe19b1924a5c8df20e112"
+          },
+          {
+            "name": "collect-00314.npz",
+            "frames": 128,
+            "bytes": 43516787,
+            "sha256": "068becbd2c5abeda2e8f8e403de39635aef0dd67e6cc3a92ae31d04c72630e55"
+          },
+          {
+            "name": "collect-00315.npz",
+            "frames": 128,
+            "bytes": 43610579,
+            "sha256": "6e9d11e3ddad3ec4b13e12d3b34004dfb3eaa94f994b0c625689f593e80dc8ca"
+          },
+          {
+            "name": "collect-00316.npz",
+            "frames": 128,
+            "bytes": 42642176,
+            "sha256": "b4b1f906a9b721bfbe715e697bfa725162e8dcf636da1482f127383141e7fb98"
+          },
+          {
+            "name": "collect-00317.npz",
+            "frames": 128,
+            "bytes": 17735429,
+            "sha256": "e9f4c5eb26e4624d6e65c0ca62cd0eeb99f5e35db2e06ee2d4712d573fda241e"
+          },
+          {
+            "name": "collect-00318.npz",
+            "frames": 128,
+            "bytes": 22482597,
+            "sha256": "e4e6665a2fc2f88f5e985167dbdded1b30e3eccea16f076c088c187c2cf1f917"
+          },
+          {
+            "name": "collect-00319.npz",
+            "frames": 128,
+            "bytes": 23370175,
+            "sha256": "c74feb6ba4d580f8527584c4ffe5d3849ead5db19df2dc5aacff535a9232a91f"
+          },
+          {
+            "name": "collect-00320.npz",
+            "frames": 128,
+            "bytes": 31032461,
+            "sha256": "671f6da77effadbf87cb8b0e179432ca355c75167140c855fc22a2a39eb01702"
+          },
+          {
+            "name": "collect-00321.npz",
+            "frames": 128,
+            "bytes": 31679904,
+            "sha256": "3cec8e27350d1a4aeaa8ce326af644df4ad521637253dd082970d8aafcc18a45"
+          },
+          {
+            "name": "collect-00322.npz",
+            "frames": 128,
+            "bytes": 33221927,
+            "sha256": "d11f419833861845da41a3bda7ad0c7932d88faf2380a108737e1fcf9e6e4004"
+          },
+          {
+            "name": "collect-00323.npz",
+            "frames": 128,
+            "bytes": 34501651,
+            "sha256": "d08409f8f2af44704fe8d2224e0f0fb8615f93518d8250b0c7776bbaaade1baa"
+          },
+          {
+            "name": "collect-00324.npz",
+            "frames": 128,
+            "bytes": 35882833,
+            "sha256": "1e725e16acaa03a8dd31ef2241a6057796d9945a8049cde7dead5aa2e6d394ce"
+          },
+          {
+            "name": "collect-00325.npz",
+            "frames": 128,
+            "bytes": 34179262,
+            "sha256": "9268ca84f6ad8c44893552adb188b3e715cb8601e7cf52672741847274650456"
+          },
+          {
+            "name": "collect-00326.npz",
+            "frames": 128,
+            "bytes": 35416896,
+            "sha256": "1221b336da109cfacc53cae268ada17bd25174dca193fdd695cd0ecb8250d2f6"
+          },
+          {
+            "name": "collect-00327.npz",
+            "frames": 128,
+            "bytes": 41750574,
+            "sha256": "b10d661bfc93fd6e9222290513c1217924ad7bbc78dcfc6fff3c5d91dc63dc75"
+          },
+          {
+            "name": "collect-00328.npz",
+            "frames": 128,
+            "bytes": 30951064,
+            "sha256": "6a56de9e65686d1f0169bef34aeccaabbafeac7ceb921a3ca2a069585fb69d13"
+          },
+          {
+            "name": "collect-00329.npz",
+            "frames": 128,
+            "bytes": 35395760,
+            "sha256": "b2073378b16559adffdf3d273811d652c95414193525c257e6f14ba102097088"
+          },
+          {
+            "name": "collect-00330.npz",
+            "frames": 128,
+            "bytes": 33525950,
+            "sha256": "60d812298a7e534d49870605d2539279b84d06e14bba9a79c89b28c4cc7021b1"
+          },
+          {
+            "name": "collect-00331.npz",
+            "frames": 128,
+            "bytes": 34416637,
+            "sha256": "08e5c34c3e64c401b9a8d201ae241ae4fa98f814d1be8233ae5ba5966fd141a6"
+          },
+          {
+            "name": "collect-00332.npz",
+            "frames": 128,
+            "bytes": 32486550,
+            "sha256": "005726ca0e7e409d4887c3ad043bb5d0cda87d65106d4001d9ac27aebb839f21"
+          },
+          {
+            "name": "collect-00333.npz",
+            "frames": 128,
+            "bytes": 32197551,
+            "sha256": "6531d6791b26178827d9aa4d9a6f772b70faeca5a3b2a311ced99e608ba4cf2a"
+          },
+          {
+            "name": "collect-00334.npz",
+            "frames": 128,
+            "bytes": 30272060,
+            "sha256": "10a2329ef6855829ab26e67ac32469f1ee64d38b40df04bd8369663e4dc7fe35"
+          },
+          {
+            "name": "collect-00335.npz",
+            "frames": 128,
+            "bytes": 35484829,
+            "sha256": "7d96bb3ebd66deb1d5bd79e0a6951214229795f621094e50d0a7fd8405841658"
+          },
+          {
+            "name": "collect-00336.npz",
+            "frames": 128,
+            "bytes": 35882783,
+            "sha256": "884654194d00ae1ef9b3955865d4c5742d951d1b2ab4a7abf1e34771c2de625a"
+          },
+          {
+            "name": "collect-00337.npz",
+            "frames": 128,
+            "bytes": 36959540,
+            "sha256": "3f979d8e81bb70f0e3bf547f83e73186b5a1eb543077734b5b6ed8d7964a6a8e"
+          },
+          {
+            "name": "collect-00338.npz",
+            "frames": 128,
+            "bytes": 35360095,
+            "sha256": "b1f98bce4ff420a31283fa4dd68b40e2aaee96b63ae5276aff1d89784bd6fea5"
+          },
+          {
+            "name": "collect-00339.npz",
+            "frames": 128,
+            "bytes": 35670920,
+            "sha256": "098ef399716662233aec1206c98456a4e068ab7a01d7934f3aa64f948e3949fd"
+          },
+          {
+            "name": "collect-00340.npz",
+            "frames": 128,
+            "bytes": 42419551,
+            "sha256": "0454ad6618dff574e0219f256f95cd3fdf54726ed001c305d248fe773fa0acc6"
+          },
+          {
+            "name": "collect-00341.npz",
+            "frames": 128,
+            "bytes": 38282885,
+            "sha256": "35b1e3603432e1e2be279738af52a429aafe6ff3f8bffd6b9ba3f989b0817e18"
+          },
+          {
+            "name": "collect-00342.npz",
+            "frames": 128,
+            "bytes": 33485230,
+            "sha256": "a2eadc69b5ba7d161a633f527d34737c852458b898c43a20101762c2d07bf117"
+          },
+          {
+            "name": "collect-00343.npz",
+            "frames": 128,
+            "bytes": 34527113,
+            "sha256": "6b4947b778eb3aa76714ed5f8015f5566a23f814057d2700b35348a3206410e1"
+          },
+          {
+            "name": "collect-00344.npz",
+            "frames": 128,
+            "bytes": 34982921,
+            "sha256": "3210ced7de28f951d44644e09956d687386d239248e59865288118c524ac7ca7"
+          },
+          {
+            "name": "collect-00345.npz",
+            "frames": 128,
+            "bytes": 35604409,
+            "sha256": "82cbd085b4286cabb81f523d9939a64763ddc6566a0de5324e2200540561f287"
+          },
+          {
+            "name": "collect-00346.npz",
+            "frames": 128,
+            "bytes": 31903705,
+            "sha256": "8c91f9c755028827123f4d1999edaa450a55851327811f1f6e1a74a1c7ac3dfb"
+          },
+          {
+            "name": "collect-00347.npz",
+            "frames": 128,
+            "bytes": 32035711,
+            "sha256": "2ae894abd4fd4b8a81cdf8419da92b9748d94c268b9e3f7b9dc31e4755929e4e"
+          },
+          {
+            "name": "collect-00348.npz",
+            "frames": 128,
+            "bytes": 32485438,
+            "sha256": "4dda03caf50216fbe1b6d68b7549ca98aeb8477b03beda87b1f949ea915c7d07"
+          },
+          {
+            "name": "collect-00349.npz",
+            "frames": 128,
+            "bytes": 31580378,
+            "sha256": "bfc9ea66b38700b74fa64c4c0ec85862b381158c3a16e704b535af7289c4959e"
+          },
+          {
+            "name": "collect-00350.npz",
+            "frames": 128,
+            "bytes": 30883950,
+            "sha256": "18901ee2c01db464db6f39a8f75ff2d4d50c5ba9a956a4c94d61779dfdd5d67f"
+          },
+          {
+            "name": "collect-00351.npz",
+            "frames": 128,
+            "bytes": 33624578,
+            "sha256": "5e484951e4abcdbe22d50ab4812ef0e06a8ed36238d9b5a30e324927047a26fc"
+          },
+          {
+            "name": "collect-00352.npz",
+            "frames": 128,
+            "bytes": 29793743,
+            "sha256": "2f8c7eb3aad072a57fb49950fee683e39c9fe521c95adf0c6151ee9488eb7c75"
+          },
+          {
+            "name": "collect-00353.npz",
+            "frames": 128,
+            "bytes": 29448995,
+            "sha256": "36ba8728ffb546690a2fd911c5c2f1fa116a85387ed449c2bdb2424243e24151"
+          },
+          {
+            "name": "collect-00354.npz",
+            "frames": 128,
+            "bytes": 30997812,
+            "sha256": "204b47c0754fdf4819be34b7066148c0f748aad9adf7febff3d086d9d08794c6"
+          },
+          {
+            "name": "collect-00355.npz",
+            "frames": 128,
+            "bytes": 31319730,
+            "sha256": "53d202fdc7f51dbc2eadec60705dfc8ce98211eaffcbdf93ed2102af48bb0019"
+          },
+          {
+            "name": "collect-00356.npz",
+            "frames": 128,
+            "bytes": 32346489,
+            "sha256": "322855094fecc2dc2f5c20edc6f54e347973de51a72e8bd62d8207a744e9f8ec"
+          },
+          {
+            "name": "collect-00357.npz",
+            "frames": 128,
+            "bytes": 32696372,
+            "sha256": "8b0c83fd19aeb5c4dc12fa6cb2dcb97d6345191ad5086966976718ea0eb13501"
+          },
+          {
+            "name": "collect-00358.npz",
+            "frames": 128,
+            "bytes": 32523005,
+            "sha256": "95a5ff10dd5298f3b1a2fec7c5c827154c0fbcfb5cf2e8ebaddd6fa4da780ef2"
+          },
+          {
+            "name": "collect-00359.npz",
+            "frames": 128,
+            "bytes": 31670136,
+            "sha256": "198d73fcdbda0f89e2705607a769b92a0ff76b49453a1414261556291a26bb2f"
+          },
+          {
+            "name": "collect-00360.npz",
+            "frames": 128,
+            "bytes": 31779376,
+            "sha256": "e6d7ecaf18a5df532ca7747c93b4044d2e058149a7cffd7f1728ddd0e2bf0f37"
+          },
+          {
+            "name": "collect-00361.npz",
+            "frames": 128,
+            "bytes": 31970247,
+            "sha256": "7c6d5d7034bf498ba096a54999561ba5013c62343aa1f9a82fb49dbb43dc690d"
+          },
+          {
+            "name": "collect-00362.npz",
+            "frames": 128,
+            "bytes": 32449847,
+            "sha256": "8649ce0f0f8e3e7a45e8dff8d44334af1c3fbf5333b34fe6c228a70173f8ef25"
+          },
+          {
+            "name": "collect-00363.npz",
+            "frames": 128,
+            "bytes": 32644794,
+            "sha256": "dad927002ba1ca025fdecdfd86161853d1acf1c702d2954002636e86d7de9dd0"
+          },
+          {
+            "name": "collect-00364.npz",
+            "frames": 128,
+            "bytes": 32183107,
+            "sha256": "0680ac17ac54f2d4c7d9c52b051ed8b50f2daff7e93d905f971804d8018d9378"
+          },
+          {
+            "name": "collect-00365.npz",
+            "frames": 128,
+            "bytes": 31121947,
+            "sha256": "f91b0e79716d853338b154a529b20707f9d054f1ca2bbdab9e920d9731bcb5c6"
+          },
+          {
+            "name": "collect-00366.npz",
+            "frames": 128,
+            "bytes": 38073109,
+            "sha256": "3698e0e956e10b19a1acb18296f1e0b68c53b3e8853ad44458244f4dea1951cf"
+          },
+          {
+            "name": "collect-00367.npz",
+            "frames": 128,
+            "bytes": 37582065,
+            "sha256": "07a42eeccd4b855d8b75d7c7debc6933ccf4bc1ed7ea13ffa53b13410e6d5e0e"
+          },
+          {
+            "name": "collect-00368.npz",
+            "frames": 128,
+            "bytes": 38150730,
+            "sha256": "0cf9cd1354ee496387045dd7d4f87e7113d56c57723947e88d411caebe727d1a"
+          },
+          {
+            "name": "collect-00369.npz",
+            "frames": 128,
+            "bytes": 39758376,
+            "sha256": "c8d1889f6879e480b3b1e0d9279825765e91a040eb9aec3732d89ebe0d7d3e24"
+          },
+          {
+            "name": "collect-00370.npz",
+            "frames": 128,
+            "bytes": 44192702,
+            "sha256": "4306b7523c084866d001caad7ef600ce05f95aad7e8d3a5396a5fa15241f159a"
+          },
+          {
+            "name": "collect-00371.npz",
+            "frames": 128,
+            "bytes": 48048758,
+            "sha256": "e37fe1fc667dcc8f2fb56cc20f728d07ef70d75317639fc2ac844d4255905828"
+          },
+          {
+            "name": "collect-00372.npz",
+            "frames": 128,
+            "bytes": 48311774,
+            "sha256": "3ba8efad6dd4a74daa84acfa875cf2157015e484b3f6b2e14ec9c5b28a66f8ac"
+          },
+          {
+            "name": "collect-00373.npz",
+            "frames": 128,
+            "bytes": 48698874,
+            "sha256": "aca5c25b93dff1bac007026fed2ab758b4bdde00eec2b25aeed8012793ba31dd"
+          },
+          {
+            "name": "collect-00374.npz",
+            "frames": 128,
+            "bytes": 49719429,
+            "sha256": "bce3fa3c7c01491f2c26f3b694662d98b012a2a2588c46fe1c5318f9b1d0792c"
+          },
+          {
+            "name": "collect-00375.npz",
+            "frames": 128,
+            "bytes": 49805994,
+            "sha256": "4a1e321659236edd5dee05989d1e22283b0ece440a2ec2aa082967a40a8e3a91"
+          },
+          {
+            "name": "collect-00376.npz",
+            "frames": 128,
+            "bytes": 48141794,
+            "sha256": "31371954131112d04696b84d6f5e34a0a2ae3958308ae81a84c9f7ed8f3c54e2"
+          },
+          {
+            "name": "collect-00377.npz",
+            "frames": 128,
+            "bytes": 47843015,
+            "sha256": "ee9c16a9f98bc39ef6970d5ba7c32eb873bf3a37d4dad60842144f2fa758bf6e"
+          },
+          {
+            "name": "collect-00378.npz",
+            "frames": 128,
+            "bytes": 48739105,
+            "sha256": "5b9a04a17ae7df2fd155a5d0938b6ed61590944b9c14d9d70eaab0f9fe39e717"
+          },
+          {
+            "name": "collect-00379.npz",
+            "frames": 128,
+            "bytes": 49387373,
+            "sha256": "8016219223009a53e42ce168a4a65b9c148210a46c406793e48654a0d4fdac77"
+          },
+          {
+            "name": "collect-00380.npz",
+            "frames": 128,
+            "bytes": 40442325,
+            "sha256": "ff9a65249cab091802b9fa18e6e972771324856f832dffcfbce99d560f3c3fc5"
+          },
+          {
+            "name": "collect-00381.npz",
+            "frames": 128,
+            "bytes": 43747146,
+            "sha256": "e16d64f9022fea6f4733aa8a199f5341cfd06e3c87196f0897488ee7f9e90e09"
+          },
+          {
+            "name": "collect-00382.npz",
+            "frames": 128,
+            "bytes": 44176405,
+            "sha256": "b1b5fb260621038b4e52e2bf4c7706b9e1076b05bed0b9c7c0ec0459466a951c"
+          },
+          {
+            "name": "collect-00383.npz",
+            "frames": 128,
+            "bytes": 41545545,
+            "sha256": "4d94546ce1ebd6639d3789274c0494e226d94142c31563dbe5cec7b3ffde93d9"
+          },
+          {
+            "name": "collect-00384.npz",
+            "frames": 128,
+            "bytes": 42883062,
+            "sha256": "9d13d6f6f9539466ab65576cce2a78771fb9a4344d66896dd18616f542a5a0b9"
+          },
+          {
+            "name": "collect-00385.npz",
+            "frames": 128,
+            "bytes": 44535111,
+            "sha256": "863ca89aaa9d09b4cf5b429c5cce3930ea47a1a8be24954d778080ad689541af"
+          },
+          {
+            "name": "collect-00386.npz",
+            "frames": 128,
+            "bytes": 45415911,
+            "sha256": "18591dc4e6176dbe3038a43d1eeeed9fe7f4e5fe92063c6090c09218723fecdb"
+          },
+          {
+            "name": "collect-00387.npz",
+            "frames": 128,
+            "bytes": 46450266,
+            "sha256": "909d2eadcad5eed7be3cbb66b539cfef187e2e163734fdb64c2d6a933b83ecca"
+          },
+          {
+            "name": "collect-00388.npz",
+            "frames": 128,
+            "bytes": 46507070,
+            "sha256": "a0f1fd9b43ed34a47e99ea055bdd19679d7579b1d82220558b6a4cfbf845dcde"
+          },
+          {
+            "name": "collect-00389.npz",
+            "frames": 128,
+            "bytes": 46017319,
+            "sha256": "8c5281d04788fd0d62eb0b457bd0a14cdc6c98076356bcc832ad1f9d957bbe04"
+          },
+          {
+            "name": "collect-00390.npz",
+            "frames": 128,
+            "bytes": 45112426,
+            "sha256": "6fd1aaf2535ab329be08bf0bc324558f6078131f85e5f47a32ce3ab7c0fac236"
+          },
+          {
+            "name": "collect-00391.npz",
+            "frames": 128,
+            "bytes": 36588517,
+            "sha256": "5c2cd5bf70895a2d41a41a480e341f9917be8737130e60a2114eb062d185b92b"
+          },
+          {
+            "name": "collect-00392.npz",
+            "frames": 128,
+            "bytes": 39112294,
+            "sha256": "7784df277a8ee660701290cfa5d3da18ad562bd03b89684fcbdc2d5d14e8548f"
+          },
+          {
+            "name": "collect-00393.npz",
+            "frames": 128,
+            "bytes": 39210086,
+            "sha256": "f8b794eda2f7b0104ac4a9f45a55d100c21ac6e07747e03003e93d70d2cfb2a5"
+          },
+          {
+            "name": "collect-00394.npz",
+            "frames": 128,
+            "bytes": 38231633,
+            "sha256": "bc6eee9edc2595f440a5690f6b6e6397844dca804d51a48f96d6e7c393e73fdc"
+          },
+          {
+            "name": "collect-00395.npz",
+            "frames": 128,
+            "bytes": 38444681,
+            "sha256": "efdb059c0e58c07218d7c77f04bc85a3eeb5e6894499cdbc9d24778179cd9ce8"
+          },
+          {
+            "name": "collect-00396.npz",
+            "frames": 128,
+            "bytes": 38143052,
+            "sha256": "921999cc91c6b84c9374372ac40917087f83bd3125948bbea54d95fbb7dece39"
+          },
+          {
+            "name": "collect-00397.npz",
+            "frames": 128,
+            "bytes": 39179228,
+            "sha256": "defbc2b9957ab0b0d2835583625c690dc05b4886c533c8ab95cc37df660e33cc"
+          },
+          {
+            "name": "collect-00398.npz",
+            "frames": 128,
+            "bytes": 38963615,
+            "sha256": "62010b9f6af2b1480d5b13999d19d7f041abb9fadffa193f7cddef6d73ce4927"
+          },
+          {
+            "name": "collect-00399.npz",
+            "frames": 128,
+            "bytes": 39103390,
+            "sha256": "87a9b809df2a2c02aaf168ab6e0a7a0eff5441d1e27cb4361e03ab3edb5fe223"
+          },
+          {
+            "name": "collect-00400.npz",
+            "frames": 128,
+            "bytes": 35610382,
+            "sha256": "e6570389e076926b8385ed19f3db53739bee7cb49d867962e7269a7247fe7edd"
+          },
+          {
+            "name": "collect-00401.npz",
+            "frames": 128,
+            "bytes": 40732712,
+            "sha256": "4519358e15af23c3d2f6bffe61f4c8c91cf41954cf0c2f1d4a67ce6139a6e36a"
+          },
+          {
+            "name": "collect-00402.npz",
+            "frames": 128,
+            "bytes": 40243533,
+            "sha256": "719f3d99fb9104bdd41c257a27351ba1b0404b6f6082ab374629bc5e94d9dc2b"
+          },
+          {
+            "name": "collect-00403.npz",
+            "frames": 128,
+            "bytes": 38299838,
+            "sha256": "59f1210574f330ec4d3c0be7393fda4bbaaa0fd3e4b067e3b75286bffcc62e5d"
+          },
+          {
+            "name": "collect-00404.npz",
+            "frames": 128,
+            "bytes": 41417919,
+            "sha256": "2cf1dbdb3ece9fa1e9c2693ab12c61d469685d573a77c6f5371e7963a2c53363"
+          },
+          {
+            "name": "collect-00405.npz",
+            "frames": 128,
+            "bytes": 43369671,
+            "sha256": "2b99790c4b40be5d10d1087af2e3f36bee35db71ef9b7dcae18acff72439f386"
+          },
+          {
+            "name": "collect-00406.npz",
+            "frames": 128,
+            "bytes": 46584975,
+            "sha256": "71295635e9299537e4d8c37379658a3c55c7698e35ef03dbb3e36204ed59177d"
+          },
+          {
+            "name": "collect-00407.npz",
+            "frames": 128,
+            "bytes": 46544698,
+            "sha256": "c3e953d3744a0c5e9de328a7b58c8cc5a7e14d3b1206ff797be477296d0c82e5"
+          },
+          {
+            "name": "collect-00408.npz",
+            "frames": 128,
+            "bytes": 46910945,
+            "sha256": "db3408aca144467b98a0fd95f17289138ab3850bbee17bb49132a60880c4fa36"
+          },
+          {
+            "name": "collect-00409.npz",
+            "frames": 128,
+            "bytes": 47370146,
+            "sha256": "877d70fecb2d57642b1a4849f3b91e7a17670b4c4c28d6a13e467ff6c2f6b5f1"
+          },
+          {
+            "name": "collect-00410.npz",
+            "frames": 128,
+            "bytes": 46467276,
+            "sha256": "2dca50a1cf3890b485b175d91d34fa339f128144d71950573176ff7cbe3f314d"
+          },
+          {
+            "name": "collect-00411.npz",
+            "frames": 128,
+            "bytes": 39609611,
+            "sha256": "d42692a192329422a8fb64b836a6d942f99613e609bdb4ef0ab52f3716fc0eaf"
+          },
+          {
+            "name": "collect-00412.npz",
+            "frames": 128,
+            "bytes": 42307901,
+            "sha256": "7d8972dce7bc5cbbec22b97cfde9799286ea9c078420fe870ec80aa81e3ce0b9"
+          },
+          {
+            "name": "collect-00413.npz",
+            "frames": 128,
+            "bytes": 44522885,
+            "sha256": "4c9769c61eab6621317e273c5afec349ef298acd47c5cb7624d7283c8b94e547"
+          },
+          {
+            "name": "collect-00414.npz",
+            "frames": 128,
+            "bytes": 42895985,
+            "sha256": "a200f163877abf95943462deed4f0dd5e15c3a788bdd1d2f03abbfabfac9528f"
+          },
+          {
+            "name": "collect-00415.npz",
+            "frames": 128,
+            "bytes": 43330425,
+            "sha256": "8805d4e01b5b9c2f23d11d499898610419cac99c98cfc29343ade0789bdfb2f8"
+          },
+          {
+            "name": "collect-00416.npz",
+            "frames": 128,
+            "bytes": 44755688,
+            "sha256": "3c8c3de6eacbe55c10828667187f626d152a80cf5a297ccbd2d14ddc2e5d7bc1"
+          },
+          {
+            "name": "collect-00417.npz",
+            "frames": 128,
+            "bytes": 44670998,
+            "sha256": "a103d41ba0164d2534a9cbc772bb10ea4c8019fc1ffab5f8414b3be94f21ee28"
+          },
+          {
+            "name": "collect-00418.npz",
+            "frames": 128,
+            "bytes": 43129883,
+            "sha256": "bd820de4b91be863e256137c3ddeb7d7f50170482c555cce67e2d4e220be004c"
+          },
+          {
+            "name": "collect-00419.npz",
+            "frames": 128,
+            "bytes": 42144980,
+            "sha256": "1f103db05d680963df0ab3cae1069228fc8d367a1c3380da55b88ccbb4357ebd"
+          },
+          {
+            "name": "collect-00420.npz",
+            "frames": 128,
+            "bytes": 43785993,
+            "sha256": "263cf857c893b6453b5f62aa535c095dc5ae37ca8f3de76647da254d80cc8ad7"
+          },
+          {
+            "name": "collect-00421.npz",
+            "frames": 128,
+            "bytes": 43537025,
+            "sha256": "3fa693145bd1573a21fe10f95198712e53ab007861d87b2ca8a3dbeee5182137"
+          },
+          {
+            "name": "collect-00422.npz",
+            "frames": 128,
+            "bytes": 40268911,
+            "sha256": "0f5d6e9f67fe1962e482162ae73b1c171b82deb00137c1da43a6b34000bea43a"
+          },
+          {
+            "name": "collect-00423.npz",
+            "frames": 128,
+            "bytes": 41026903,
+            "sha256": "25bca999bd019cce0a7d35564bdbbaa1bd2f1eebc039db44439bf67375107e80"
+          },
+          {
+            "name": "collect-00424.npz",
+            "frames": 128,
+            "bytes": 41462999,
+            "sha256": "0aaf63f0ff05da82b87d893aadd9f062f5730bcbf0704cde0df9e5721e3954bc"
+          },
+          {
+            "name": "collect-00425.npz",
+            "frames": 128,
+            "bytes": 40037802,
+            "sha256": "6db7555fae996117a839eab633635c1ce8c020d58cd7f9d43ac87439f145b874"
+          },
+          {
+            "name": "collect-00426.npz",
+            "frames": 128,
+            "bytes": 28745962,
+            "sha256": "a755bca65e2e3105ec969353333896ad55f69cf58f8dace74f9d6e734f11cac6"
+          },
+          {
+            "name": "collect-00427.npz",
+            "frames": 128,
+            "bytes": 28021416,
+            "sha256": "ef2aa5796bad0836d3a1b59873a6f428edfbd1388ea8827a083a0b933569b6b3"
+          },
+          {
+            "name": "collect-00428.npz",
+            "frames": 128,
+            "bytes": 32007218,
+            "sha256": "8b05c8e843a251c0750b78776e1eff9135c6139df7b77321932c81cdc4ab7526"
+          },
+          {
+            "name": "collect-00429.npz",
+            "frames": 128,
+            "bytes": 33811776,
+            "sha256": "eb4bcaf1388150522926efc4f2c8c92f73aadd71097a022f15a12fde8db33313"
+          },
+          {
+            "name": "collect-00430.npz",
+            "frames": 128,
+            "bytes": 25899504,
+            "sha256": "bcdebb5f28568fab4ca28c8b78e5a0d6a7884e80ace40498fc1b9eca5481db06"
+          },
+          {
+            "name": "collect-00431.npz",
+            "frames": 128,
+            "bytes": 21301958,
+            "sha256": "8cc75ad46f78bdad813151cca015f2f8ec296ea985e8c729b088dbab554b61fe"
+          },
+          {
+            "name": "collect-00432.npz",
+            "frames": 128,
+            "bytes": 23862326,
+            "sha256": "58e21f27c0549019d496fec1cf8c0330285b4f838399c9c9902d5a62be5a76cc"
+          },
+          {
+            "name": "collect-00433.npz",
+            "frames": 128,
+            "bytes": 17095700,
+            "sha256": "6964631694ece4e87e54a5478da12730bf326900f6b362b827722cbbcf510601"
+          },
+          {
+            "name": "collect-00434.npz",
+            "frames": 128,
+            "bytes": 19570775,
+            "sha256": "e585959f2da1136d3473170b57c1e7123555faab5e62dd171f003842837d6992"
+          },
+          {
+            "name": "collect-00435.npz",
+            "frames": 128,
+            "bytes": 29953832,
+            "sha256": "9e690c3f96bb60a4c4638a4d512105a0eed4278928124ec5389a337cd0d6a732"
+          },
+          {
+            "name": "collect-00436.npz",
+            "frames": 128,
+            "bytes": 23706426,
+            "sha256": "1d3d2dee0f6ada6071de5862d1dad3026ddf1eeb7ed58f872d0a45ae63600a2a"
+          },
+          {
+            "name": "collect-00437.npz",
+            "frames": 128,
+            "bytes": 20125510,
+            "sha256": "435bf88b1dcfc26a9d4d1e349bcef85bdd4d6fc8123b585db77a25463bf464bd"
+          },
+          {
+            "name": "collect-00438.npz",
+            "frames": 128,
+            "bytes": 23675468,
+            "sha256": "2067f372cdef7d4f79c458bc1c8228d8eb59f29cc27bd3674c16e4650fd03eed"
+          },
+          {
+            "name": "collect-00439.npz",
+            "frames": 128,
+            "bytes": 17187979,
+            "sha256": "a23884fd98d54c0a7010f27bc7a5c802fa895fc7b4fdc2eb433122d70ac33dbc"
+          },
+          {
+            "name": "collect-00440.npz",
+            "frames": 128,
+            "bytes": 25541326,
+            "sha256": "ec45c9c8b7e2e44cad4c755538df102e59f3edf882b6c585ce1514b6722b7549"
+          },
+          {
+            "name": "collect-00441.npz",
+            "frames": 128,
+            "bytes": 27794989,
+            "sha256": "5f78c79a64eaa962e88f4fe2442abb69bfbb0f2ea276d2b0076bf7f93670834a"
+          },
+          {
+            "name": "collect-00442.npz",
+            "frames": 128,
+            "bytes": 29979350,
+            "sha256": "26d0550005590747b712187f1e19f60b406d6d789ea92cfed984bbb8e945cfb1"
+          },
+          {
+            "name": "collect-00443.npz",
+            "frames": 128,
+            "bytes": 25589212,
+            "sha256": "a505bb7a424f7694c74ee90a3b46fa861b0a2e802c56fbbe05f7be5929309e1c"
+          },
+          {
+            "name": "collect-00444.npz",
+            "frames": 128,
+            "bytes": 26971462,
+            "sha256": "a0336a9c605be63f3078973a82ee98e198f15fc8b94fafcc5141ec964d1032f9"
+          },
+          {
+            "name": "collect-00445.npz",
+            "frames": 128,
+            "bytes": 30997890,
+            "sha256": "a15ba0ab422699fc80ee55fdfb73322e0ba785fdc718efec3bb2ae45e811ff23"
+          },
+          {
+            "name": "collect-00446.npz",
+            "frames": 128,
+            "bytes": 32028908,
+            "sha256": "b36b25163f356dc366be40aba3d0b7c2b5cf1f56466fb874973adf33cc21f138"
+          },
+          {
+            "name": "collect-00447.npz",
+            "frames": 128,
+            "bytes": 30178669,
+            "sha256": "0a4a89d6d68bf5e1de60b2a3b1f33a229bab4e5d0ca81523562c357f2a1538c7"
+          },
+          {
+            "name": "collect-00448.npz",
+            "frames": 128,
+            "bytes": 30729789,
+            "sha256": "eab4f9a9cac6238d3eabfd8b21aaee69ba9baaaab5087273b21898efcb62c19d"
+          },
+          {
+            "name": "collect-00449.npz",
+            "frames": 128,
+            "bytes": 32428422,
+            "sha256": "c395b323fc657ce793e78903fcebe47b87a8f19aeb14404a0e2f9e42ef6d99a1"
+          },
+          {
+            "name": "collect-00450.npz",
+            "frames": 128,
+            "bytes": 32448753,
+            "sha256": "c91577d67900bcd9fcb097046a634eb80642299b9142582304374533668e4015"
+          },
+          {
+            "name": "collect-00451.npz",
+            "frames": 128,
+            "bytes": 33692955,
+            "sha256": "ec37b65392e7c8e758b6a7406cea9f772b9124bee70b1c195d88d6365ca09d26"
+          },
+          {
+            "name": "collect-00452.npz",
+            "frames": 128,
+            "bytes": 41224418,
+            "sha256": "3971a62c6008f9bf50931dc33a327780bf1274e17858f0a4e3b2e236e12ce513"
+          },
+          {
+            "name": "collect-00453.npz",
+            "frames": 128,
+            "bytes": 42817987,
+            "sha256": "52d10d964cbec9c543db61b9685a20719601106bc065031155b0f5b9cebc47f4"
+          },
+          {
+            "name": "collect-00454.npz",
+            "frames": 128,
+            "bytes": 42100452,
+            "sha256": "51d4b3f6d7988e60f87b081d117d352078ae857a5147b263230d078324253086"
+          },
+          {
+            "name": "collect-00455.npz",
+            "frames": 128,
+            "bytes": 42884523,
+            "sha256": "94691862c1e5c0b7760ed2c8866c29c8eb15505903c8547e5a48caca8a81b403"
+          },
+          {
+            "name": "collect-00456.npz",
+            "frames": 128,
+            "bytes": 43543373,
+            "sha256": "81b114650ed6d25deef29c5dd007eebd11e882b22b81c7dada6292af09990f38"
+          },
+          {
+            "name": "collect-00457.npz",
+            "frames": 128,
+            "bytes": 28627798,
+            "sha256": "303a5e10142f147a6e1338d7362f001c54d8af2c73ba1f240a8521fd0a1c7163"
+          },
+          {
+            "name": "collect-00458.npz",
+            "frames": 128,
+            "bytes": 32416582,
+            "sha256": "f9c1fe087f9a81b833a21f572e75ef62639ba552e14e8ad58aff4d80671d197d"
+          },
+          {
+            "name": "collect-00459.npz",
+            "frames": 128,
+            "bytes": 32732611,
+            "sha256": "1e42814c4ee499d25930138dbb202a9a78176695dd9c3d52a914a7b2e43c0980"
+          },
+          {
+            "name": "collect-00460.npz",
+            "frames": 128,
+            "bytes": 33487477,
+            "sha256": "765cab0941a504a9cdc704952bcaf31d7ad31bc3112050ced60fd9698b259867"
+          },
+          {
+            "name": "collect-00461.npz",
+            "frames": 128,
+            "bytes": 33686477,
+            "sha256": "0ed2644967dda89b52cdae6b1423794889c4ecc1c782f322959ffeda8d15663a"
+          },
+          {
+            "name": "collect-00462.npz",
+            "frames": 128,
+            "bytes": 33222588,
+            "sha256": "a004fbf4e6c4d0ecfdd3c0d6eebd427f33864ea3f93778d9ab5288c9e574184b"
+          },
+          {
+            "name": "collect-00463.npz",
+            "frames": 128,
+            "bytes": 36964914,
+            "sha256": "6f0d27b7a9383731cf9629efaa54870d6c043881aae7ab4485a3712ca8af2cbc"
+          },
+          {
+            "name": "collect-00464.npz",
+            "frames": 128,
+            "bytes": 41866294,
+            "sha256": "e5887db80d3cc21dc42e8d0bb44555207fc3ae4b605163d9bc9cb534b280fb3e"
+          },
+          {
+            "name": "collect-00465.npz",
+            "frames": 128,
+            "bytes": 36034331,
+            "sha256": "1ffc17e5deb5d67615082df2b2156fa27294a8ea9562907ec20262d770b9cdc4"
+          },
+          {
+            "name": "collect-00466.npz",
+            "frames": 128,
+            "bytes": 36215612,
+            "sha256": "9cd8bab7335fc5bf6e8fcf3f3ba799567578767d889000238541c38f13fc004a"
+          },
+          {
+            "name": "collect-00467.npz",
+            "frames": 128,
+            "bytes": 42416818,
+            "sha256": "f2411f6ec7d3378122a6d6e11a9a1ad48ab34dfb58592368b930e42b6a16dda3"
+          },
+          {
+            "name": "collect-00468.npz",
+            "frames": 128,
+            "bytes": 41182592,
+            "sha256": "2ca7470d0786305f49453f2f8a021cbb3b951f0bdf73a57b74e68b1a056ff91b"
+          },
+          {
+            "name": "collect-00469.npz",
+            "frames": 128,
+            "bytes": 40940992,
+            "sha256": "b547f6127b71294ad50cc75a7a41efeebcad8cf95665fd6cb37b5c0786f85bc8"
+          },
+          {
+            "name": "collect-00470.npz",
+            "frames": 128,
+            "bytes": 40905617,
+            "sha256": "4e2adb6c80db866c9db38437130670ce6a0d03bb3b47cee0c2a9e11657f6a7b3"
+          },
+          {
+            "name": "collect-00471.npz",
+            "frames": 128,
+            "bytes": 41406304,
+            "sha256": "34009b082c705ae86d374f510ffd2b214a99ff05704d9c4e6b2adbde43641cea"
+          },
+          {
+            "name": "collect-00472.npz",
+            "frames": 128,
+            "bytes": 39902085,
+            "sha256": "028c1cd3f4ebdfecd137088090042a0fe80534a5881ab1997917181fe6723f78"
+          },
+          {
+            "name": "collect-00473.npz",
+            "frames": 128,
+            "bytes": 39749113,
+            "sha256": "4a66abe2e60a22ba833c6834c093c984df6f0e466549e6ef812405eae6f873e7"
+          },
+          {
+            "name": "collect-00474.npz",
+            "frames": 128,
+            "bytes": 40555164,
+            "sha256": "7b6f8e3bf03f64235cd122cd4263875f26266328c79972e0aa64be09e19bda62"
+          },
+          {
+            "name": "collect-00475.npz",
+            "frames": 128,
+            "bytes": 39090707,
+            "sha256": "9fd4256c9ef18705ba5cfa3514335b5e80f5757cd0098e16b7236de68cfb9b1c"
+          },
+          {
+            "name": "collect-00476.npz",
+            "frames": 128,
+            "bytes": 40298287,
+            "sha256": "c851d3564822bbff0e1e44838704bb23ed911b77e46233d2ce39b381b96b6390"
+          },
+          {
+            "name": "collect-00477.npz",
+            "frames": 128,
+            "bytes": 40597239,
+            "sha256": "c43502d496aa52149698ae2b5b3418bd60bac6935ff8f5016b1316853a5265ad"
+          },
+          {
+            "name": "collect-00478.npz",
+            "frames": 128,
+            "bytes": 39892527,
+            "sha256": "0d1a519990a927b9af8766bb302554688e4272ec0fcc41eee4cca58a284aeada"
+          },
+          {
+            "name": "collect-00479.npz",
+            "frames": 128,
+            "bytes": 39046642,
+            "sha256": "ca5dba7ccc6672d08c8d6ec915d812d1161bb629fc492f3f7afe506d83f96328"
+          },
+          {
+            "name": "collect-00480.npz",
+            "frames": 128,
+            "bytes": 38864237,
+            "sha256": "bfb6e7573c459752c19ca6be447d6225f8ddd0f803ab50b43bfc1bf2b8592268"
+          },
+          {
+            "name": "collect-00481.npz",
+            "frames": 128,
+            "bytes": 38793008,
+            "sha256": "eaf34373749ebfb53eef8c9f123453a326de714e4f92bb9da176aa7e4a070e14"
+          },
+          {
+            "name": "collect-00482.npz",
+            "frames": 128,
+            "bytes": 39645591,
+            "sha256": "0854f26dee6ff16e7cb7c32720830ebd57062894ad76ba5cc6007d67935f2395"
+          },
+          {
+            "name": "collect-00483.npz",
+            "frames": 128,
+            "bytes": 38637853,
+            "sha256": "2663078726d180bbf8bcf39178f6800bc3a94b69064547a9387ef510f961e6b4"
+          },
+          {
+            "name": "collect-00484.npz",
+            "frames": 128,
+            "bytes": 38352934,
+            "sha256": "357ef6ec58316bb641694a669c3ae446f398e589a94af58bc442cb0eb5e38ebf"
+          },
+          {
+            "name": "collect-00485.npz",
+            "frames": 128,
+            "bytes": 41444990,
+            "sha256": "313093434c55046ebb764f3627e545691d1aa59c5214a503428565da9885e5be"
+          },
+          {
+            "name": "collect-00486.npz",
+            "frames": 128,
+            "bytes": 40463398,
+            "sha256": "b7411029d7c154f1383f75209842576c82d11301152559730a1011c13a80f770"
+          },
+          {
+            "name": "collect-00487.npz",
+            "frames": 128,
+            "bytes": 43224387,
+            "sha256": "6ca192eee39ea0ec7145d579430231f7605b0548c7537a15cffb9813b81e5051"
+          },
+          {
+            "name": "collect-00488.npz",
+            "frames": 128,
+            "bytes": 46193411,
+            "sha256": "644be0b462d1840f37f1fc5fdc57b45461ff2fd62731c369f1c662abc3ed0dbc"
+          },
+          {
+            "name": "collect-00489.npz",
+            "frames": 128,
+            "bytes": 46358843,
+            "sha256": "536440ee13ff307ffa431b85f67b53e15e91d06699c4b8c83282d6c2914ddcf3"
+          },
+          {
+            "name": "collect-00490.npz",
+            "frames": 128,
+            "bytes": 46461279,
+            "sha256": "2d253696ed94c433b276d2077c1e810a608925dc7674ec3914fc975e61c8740f"
+          },
+          {
+            "name": "collect-00491.npz",
+            "frames": 128,
+            "bytes": 46275366,
+            "sha256": "df00327ebb7da779561a88d0711069ad7f587e0c626d4478bafd0e95c5514b1a"
+          },
+          {
+            "name": "collect-00492.npz",
+            "frames": 128,
+            "bytes": 43699610,
+            "sha256": "1e534ac37c3297d4c18974606c4733a4b6524903c81fba5a1b1de060b777cbb5"
+          },
+          {
+            "name": "collect-00493.npz",
+            "frames": 128,
+            "bytes": 36646534,
+            "sha256": "8beb380ba18d64211381e732270db06780542f4d41478e94a33c1119e92c4f7e"
+          },
+          {
+            "name": "collect-00494.npz",
+            "frames": 128,
+            "bytes": 35906915,
+            "sha256": "5f954f43dbfd52ea93c760842d5a4b9ca3997434b5f85fa02a158cd6f531ac88"
+          },
+          {
+            "name": "collect-00495.npz",
+            "frames": 128,
+            "bytes": 35912394,
+            "sha256": "1190e25a5dd694d1f54fd9e8f924409a945c958d5ede43d3dc54901898f8a332"
+          },
+          {
+            "name": "collect-00496.npz",
+            "frames": 128,
+            "bytes": 36129449,
+            "sha256": "eede4395068780ae4fdcd8f2620ebfb635a787cd80cca5b1db6548d3e143b62c"
+          },
+          {
+            "name": "collect-00497.npz",
+            "frames": 128,
+            "bytes": 37389317,
+            "sha256": "4f006eae26001f45183363ea251efdbd79dd8067fbec824d7c904d27de7632d0"
+          },
+          {
+            "name": "collect-00498.npz",
+            "frames": 128,
+            "bytes": 42280594,
+            "sha256": "a86423d03a122be8d1ef5f961d4b8ec2f8f73b0421c1d0dc1f5234e3cd42b4be"
+          },
+          {
+            "name": "collect-00499.npz",
+            "frames": 128,
+            "bytes": 40016174,
+            "sha256": "a94bbb3f0fd9c9b9493e350e41425559a58681de9fd579186a17b18137e26ee4"
+          },
+          {
+            "name": "collect-00500.npz",
+            "frames": 128,
+            "bytes": 40300353,
+            "sha256": "b7fa235e32b78180eb563d653f54497555fdf9ea6c613f11c3d4def28c5912c8"
+          },
+          {
+            "name": "collect-00501.npz",
+            "frames": 128,
+            "bytes": 40255176,
+            "sha256": "7e916c6c3a962cd1c550f2cbce6b900e0384c0d0a9321cd253a890416a93c363"
+          },
+          {
+            "name": "collect-00502.npz",
+            "frames": 128,
+            "bytes": 45178418,
+            "sha256": "0049387652b390e42b23fd05f719ba97afac2ba387373c2874edec087f7866a0"
+          },
+          {
+            "name": "collect-00503.npz",
+            "frames": 128,
+            "bytes": 40030055,
+            "sha256": "89a6e6c10d14f2227545bd5dac875e6aeb9c31e79f153ca4ebdc66e9c38efec2"
+          },
+          {
+            "name": "collect-00504.npz",
+            "frames": 128,
+            "bytes": 41761664,
+            "sha256": "d84357b4ca2aa01cad187aaf56047865b95dbe7877e53be19b4d79c130113ae8"
+          },
+          {
+            "name": "collect-00505.npz",
+            "frames": 128,
+            "bytes": 42292256,
+            "sha256": "bc07cc53a9f462043c70c3c6c97bed4356cf0d862607020958d5a08d57a82592"
+          },
+          {
+            "name": "collect-00506.npz",
+            "frames": 128,
+            "bytes": 43332069,
+            "sha256": "f7d5a810ab5174a0d1a32bcae96df0091710c6ad9ee184f5b8bad0cfc7187e1b"
+          },
+          {
+            "name": "collect-00507.npz",
+            "frames": 128,
+            "bytes": 42727193,
+            "sha256": "1a50cde7a411093f360b3f6471f50a7d73c2299b91ac56b4391e2f60097f6575"
+          },
+          {
+            "name": "collect-00508.npz",
+            "frames": 128,
+            "bytes": 42080439,
+            "sha256": "e8a550a86fbc4205b0dbb8b382e97970c974b6ecc8db780ae1967247cf8acd61"
+          },
+          {
+            "name": "collect-00509.npz",
+            "frames": 128,
+            "bytes": 43146127,
+            "sha256": "1b89b50d4aad352a5b2297a2fe336915f180d83aef8bc15bf0d5b5b37ad6b885"
+          },
+          {
+            "name": "collect-00510.npz",
+            "frames": 128,
+            "bytes": 43192712,
+            "sha256": "fe53c9fd4fec6ead1d0b4c6973041d473c266984f35d0c35971414c065311a5b"
+          },
+          {
+            "name": "collect-00511.npz",
+            "frames": 128,
+            "bytes": 43616279,
+            "sha256": "c9a141c8d200a690a2d3cdeb805a1f732b26e73b73090f32607f926ba7d0656c"
+          },
+          {
+            "name": "collect-00512.npz",
+            "frames": 128,
+            "bytes": 45455675,
+            "sha256": "d7b413bed22237c0f6e164c380d792b4a1fe730bbd9c99e44098498a7650976e"
+          },
+          {
+            "name": "collect-00513.npz",
+            "frames": 128,
+            "bytes": 41374248,
+            "sha256": "38cdbb4fec9dda74f917015c27ae2d28acbc787eafbdb2e9129aaee986cddffe"
+          },
+          {
+            "name": "collect-00514.npz",
+            "frames": 128,
+            "bytes": 42536087,
+            "sha256": "cee309c4c7bfce74ec8fc166d441dabf5d15bd65055645a57aa76a3f6d54c140"
+          },
+          {
+            "name": "collect-00515.npz",
+            "frames": 128,
+            "bytes": 40759107,
+            "sha256": "5851238fa0be4a967d1d5e05f57406d130d8d7c7494ad7a9156c43de325e50da"
+          },
+          {
+            "name": "collect-00516.npz",
+            "frames": 128,
+            "bytes": 41678107,
+            "sha256": "0c774870682e3a3547a6a3d7334f5671e5b036d16e57d6b479950c505b9a1f23"
+          },
+          {
+            "name": "collect-00517.npz",
+            "frames": 128,
+            "bytes": 42010477,
+            "sha256": "7299406cadfb97d7bdef5fc63369607076465a9fa2797d4079c7ff20a1601c24"
+          },
+          {
+            "name": "collect-00518.npz",
+            "frames": 128,
+            "bytes": 41868712,
+            "sha256": "1902306e3325545d61b3010a75838e437053a7b6b1b6d3b94580088cfba2d539"
+          },
+          {
+            "name": "collect-00519.npz",
+            "frames": 128,
+            "bytes": 41886942,
+            "sha256": "d66af48196fdb87d937cfd2cb481c4eaa12da1781945be91f39b2f3de63b4591"
+          },
+          {
+            "name": "collect-00520.npz",
+            "frames": 128,
+            "bytes": 42335653,
+            "sha256": "7b15dc86c8d335c5a680b0f3395a3fc6ccd02c92f5b0be8f49ee460f4e0477b1"
+          },
+          {
+            "name": "collect-00521.npz",
+            "frames": 128,
+            "bytes": 42077046,
+            "sha256": "a110c044e5021eff9e000447c97ffbb18eb014a1d664d6798674bd1a9711f6ff"
+          },
+          {
+            "name": "collect-00522.npz",
+            "frames": 128,
+            "bytes": 42015262,
+            "sha256": "bbc933d292f75b8a95cde3ee9767397a360b7b5fd61505a800301a440b2b12fb"
+          },
+          {
+            "name": "collect-00523.npz",
+            "frames": 128,
+            "bytes": 42040442,
+            "sha256": "6417027583da440e2534003fba963a5de8d0cebf84982ea52025af3a5857dbac"
+          },
+          {
+            "name": "collect-00524.npz",
+            "frames": 128,
+            "bytes": 42274550,
+            "sha256": "48669f73c99e1a44768d9e960bcabcafc35d1544a3a9454930023fa2a7b2e1cd"
+          },
+          {
+            "name": "collect-00525.npz",
+            "frames": 128,
+            "bytes": 42213440,
+            "sha256": "c1e6c084ba86e4fad9a4eaa66e182001eac68e6e8dfe830487cb6e62ce945879"
+          },
+          {
+            "name": "collect-00526.npz",
+            "frames": 128,
+            "bytes": 42397484,
+            "sha256": "c935a607eab2b727eeccce99a9a551957e68bc3a351e131ed7a4a4fe840c6cb7"
+          },
+          {
+            "name": "collect-00527.npz",
+            "frames": 128,
+            "bytes": 42408820,
+            "sha256": "ba5015d64596bd9e7bab92b1616e74d1a5beb1a5838fb9b6558a35705524371e"
+          },
+          {
+            "name": "collect-00528.npz",
+            "frames": 128,
+            "bytes": 42463519,
+            "sha256": "3d135d88067437bbe7150149cd5bc2bb8122af31f3701d4e3b3ec78227f08ebb"
+          },
+          {
+            "name": "collect-00529.npz",
+            "frames": 128,
+            "bytes": 42652494,
+            "sha256": "9875acaeb5482e8e166ad417c24893b2d566ebb5e6baec6b9898cf4c4a5d6189"
+          },
+          {
+            "name": "collect-00530.npz",
+            "frames": 128,
+            "bytes": 42185962,
+            "sha256": "3dc3bf96d98da064ff283d8c3284e596e9a1913535dd0cfc816f41c5c8d6e934"
+          },
+          {
+            "name": "collect-00531.npz",
+            "frames": 128,
+            "bytes": 42322317,
+            "sha256": "f55e332b72dbae4b03681ad4ffdfe91760754975c4f7965d8a17ba5266d8053f"
+          },
+          {
+            "name": "collect-00532.npz",
+            "frames": 128,
+            "bytes": 42941212,
+            "sha256": "9eb554935714e8815344b5e77446de9475f2b0c3d2837994e6fff94fbd187f21"
+          },
+          {
+            "name": "collect-00533.npz",
+            "frames": 128,
+            "bytes": 36273544,
+            "sha256": "ebfc6947f0dab9b58b476368445b51f708bbbc9b9d30f905880df53a445678ee"
+          },
+          {
+            "name": "collect-00534.npz",
+            "frames": 128,
+            "bytes": 35598200,
+            "sha256": "e9cd409c985f644720f10ec44ca373df04ab2839161ec5a5838ff4babb055b12"
+          },
+          {
+            "name": "collect-00535.npz",
+            "frames": 128,
+            "bytes": 44250675,
+            "sha256": "17a9331ce0fc5888f50e967c495fcc15f873cd08bd26b7f8f1aa02955b30cd9e"
+          },
+          {
+            "name": "collect-00536.npz",
+            "frames": 128,
+            "bytes": 45844725,
+            "sha256": "605e4ab81122755a91c10906b67253f0a2230aa007444e3f0702a78fb5478b72"
+          },
+          {
+            "name": "collect-00537.npz",
+            "frames": 128,
+            "bytes": 48005577,
+            "sha256": "66c66d2d03fac73fda9a88e479f4704de6b60c04253d131bebc54b5da4e13ed3"
+          },
+          {
+            "name": "collect-00538.npz",
+            "frames": 128,
+            "bytes": 47294547,
+            "sha256": "93b6c8a1ab5e3db6b22044540ad71862af517a91d8933dda1b89ed3157fadf74"
+          },
+          {
+            "name": "collect-00539.npz",
+            "frames": 128,
+            "bytes": 45767775,
+            "sha256": "376fdd2d9fcf070928e4e5fdc2a7a2397dff496348272a71efc9774d68ba2312"
+          },
+          {
+            "name": "collect-00540.npz",
+            "frames": 128,
+            "bytes": 45483864,
+            "sha256": "b9a3651937766bc33b5cff6dcaf89c223a5cbef746bf17159456dbe71cefff0e"
+          },
+          {
+            "name": "collect-00541.npz",
+            "frames": 128,
+            "bytes": 48372020,
+            "sha256": "b11215b9ee9f898750cd9811b967974094951f151992ff5888fffd28221f759f"
+          },
+          {
+            "name": "collect-00542.npz",
+            "frames": 128,
+            "bytes": 49165149,
+            "sha256": "b550f5f627e76d433f94a85048a6f4024e4666aa5c88b71252e544f3ee7171af"
+          },
+          {
+            "name": "collect-00543.npz",
+            "frames": 128,
+            "bytes": 48487716,
+            "sha256": "dee1910bc98a3a4e4f474a61eb6ca9582a85d1e96d7e5d1d89d2f426d44e5b5b"
+          },
+          {
+            "name": "collect-00544.npz",
+            "frames": 128,
+            "bytes": 48250767,
+            "sha256": "73a99ec3bbdecdc0bd959ac78f58f69e7afbacb10d956f0f3fdb54a20c4c0013"
+          },
+          {
+            "name": "collect-00545.npz",
+            "frames": 128,
+            "bytes": 45873567,
+            "sha256": "c280916eb063cf8634286ba1e9b42a129e1534633b6ce697d3daee3374a8ba44"
+          },
+          {
+            "name": "collect-00546.npz",
+            "frames": 128,
+            "bytes": 45380049,
+            "sha256": "4601cae35bd036a45e66bb6a29ddd242a065b28bee8ce5beca3063ac0b9f821e"
+          },
+          {
+            "name": "collect-00547.npz",
+            "frames": 128,
+            "bytes": 46104112,
+            "sha256": "45e3acb38c350ba9e805264b6e2aa96a2845c6a4bdc657e8a8143120b2347408"
+          },
+          {
+            "name": "collect-00548.npz",
+            "frames": 128,
+            "bytes": 44305236,
+            "sha256": "8c3e14749c0b3ab17638753981dbbdc8f2a3aaf5f3830ff7a6d6e6e35150401c"
+          },
+          {
+            "name": "collect-00549.npz",
+            "frames": 128,
+            "bytes": 43125704,
+            "sha256": "a9b51ad975d673d5d7ac59ca6847b17aae2c2b69625ee4d716bbfde84d4b5519"
+          },
+          {
+            "name": "collect-00550.npz",
+            "frames": 128,
+            "bytes": 38458291,
+            "sha256": "c0dab2a866325461158b7fe39d48ceeae03ec0b1d13aa5b70721fe72e245c923"
+          },
+          {
+            "name": "collect-00551.npz",
+            "frames": 128,
+            "bytes": 42581536,
+            "sha256": "cc7a2ad416ca1c2531701cb1656a12185dd00bb7bc89b7fb54ae555b9b81e66b"
+          },
+          {
+            "name": "collect-00552.npz",
+            "frames": 128,
+            "bytes": 45277190,
+            "sha256": "04f0915229fecd22c6e30fa2e1f88e10baff8d257963c65b72ee7e9cb59097f8"
+          },
+          {
+            "name": "collect-00553.npz",
+            "frames": 128,
+            "bytes": 45921204,
+            "sha256": "e9b6b8df98ba9feda887bfbf6c809e99eaf4c9a95d3f086bf384406ad8eb0598"
+          },
+          {
+            "name": "collect-00554.npz",
+            "frames": 128,
+            "bytes": 43781780,
+            "sha256": "b6bd3b812d9a43341eac35c2bfb138ef1ff5045db01489b21e3bf3f52cdc5de9"
+          },
+          {
+            "name": "collect-00555.npz",
+            "frames": 128,
+            "bytes": 43568125,
+            "sha256": "7e54523cda7b437b342bf55e051a57973bea48c4306390eb7273dcdd89d9a3dd"
+          },
+          {
+            "name": "collect-00556.npz",
+            "frames": 128,
+            "bytes": 44511623,
+            "sha256": "957c8524396c06658ee9896e0cac7c51e34f34faa5395d17914cc4b1764238b2"
+          },
+          {
+            "name": "collect-00557.npz",
+            "frames": 128,
+            "bytes": 43828181,
+            "sha256": "97a9018f0a5b1a7369088f2cced9493e4c994c42a9ca69a12fdf8f699faca5b6"
+          },
+          {
+            "name": "collect-00558.npz",
+            "frames": 128,
+            "bytes": 42596250,
+            "sha256": "e843cf28a0a3f5c4be2f46cff2dce0fd1784c5d159fac5864040eee6720b5ea4"
+          },
+          {
+            "name": "collect-00559.npz",
+            "frames": 128,
+            "bytes": 45557393,
+            "sha256": "c5316b2acf260eb58e892ab3784cdeda0d6b7e45239924b3850ecd62dffcd5d2"
+          },
+          {
+            "name": "collect-00560.npz",
+            "frames": 128,
+            "bytes": 44790566,
+            "sha256": "85c0d8076ae34c8779a77a892737dc8a5827d1ebf35de8718191b9c9d04607c0"
+          },
+          {
+            "name": "collect-00561.npz",
+            "frames": 128,
+            "bytes": 45769634,
+            "sha256": "2836862c7aad794e6f869836f5de4478239e00b308e57f949831ac8baa3d667f"
+          },
+          {
+            "name": "collect-00562.npz",
+            "frames": 128,
+            "bytes": 38807196,
+            "sha256": "57b109f3cfcc658d9d2f6eea52111813ddc34eba01c4ecdb3d29f937476e4cdb"
+          },
+          {
+            "name": "collect-00563.npz",
+            "frames": 128,
+            "bytes": 33861216,
+            "sha256": "d016d6a63bf1b45f4195a79a1cf8b9239a0a9216a84bc293e2130916a5527e58"
+          },
+          {
+            "name": "collect-00564.npz",
+            "frames": 128,
+            "bytes": 35254390,
+            "sha256": "c51dc6baebe98270acf45147b03f959b4b631f948dc28899cd02c12b0cf956db"
+          },
+          {
+            "name": "collect-00565.npz",
+            "frames": 93,
+            "bytes": 15850467,
+            "sha256": "49d7ae9225203a4fed687f0ba1fd9126b6cdf48308c21e96a66c93597814be68"
+          }
+        ],
+        "shard_digest_source": "manifest"
+      },
+      "manifest_sha256": "aa89c48893eb7e69628a5fd1c414c7c9b8b04cd5b88a225a6f4feb70373c949f",
+      "val_index_sha256": "e5d4ebbe6d8de05793520a393fc1fdbea2b1e2c4db9ff7c1632908340c76655f",
+      "candidate_order_version": "focus9-move-v1",
+      "label_version": "avoidpilot-clearance-px/1",
+      "teacher": {
+        "name": "pilot",
+        "class": "AvoidPilot",
+        "config": {
+          "frameskip": 2,
+          "horizon_steps": 10,
+          "beam": 24,
+          "quota_per_action": 2,
+          "speed": 4.0,
+          "speed_diag": 2.8284,
+          "focus_speed": 2.0,
+          "focus_speed_diag": 1.4142,
+          "player_half": 0.825,
+          "bullet_pad": 0.5,
+          "near_radius": 240.0,
+          "max_bullets": 320,
+          "bottom_bias": 0.3,
+          "aim_weight": 0.0,
+          "switch_penalty": 0.0,
+          "bomb_min_clearance": -1.5,
+          "bomb_cooldown": 40,
+          "always_shoot": true
+        },
+        "source_sha256": "405382d7f271679672ef9ea3338ac50e180269fae2bf8e9f155e01d076cdeab2"
+      },
+      "dtype": "float16",
+      "value_shape": [
+        72413,
+        18
+      ],
+      "score_semantics": "raw_clearance_px"
+    },
+    "audit": {
+      "frames": 72413,
+      "candidates": 18,
+      "pairs_per_frame": 153,
+      "dtype": "float16",
+      "value_min_px": -24.0,
+      "value_max_px": 370.0,
+      "pair_gap_p50_px": 2.640625,
+      "pair_gap_mean_px": 3.3352221451349595,
+      "pair_gap_p90_px": 7.99609375,
+      "tied_pairs": 2048309,
+      "pair_tie_fraction": 0.18487896541885873,
+      "fully_tied_frames": 8745,
+      "frames_with_a_tied_pair": 72413,
+      "frame_min_gap_p50_px": 0.0,
+      "random_choice_regret_mean_px": 4.894845809887092,
+      "quantisation_policy": "float16 kept; ties audited and excluded from rank pairs"
+    },
+    "manifest_has_teacher_values": true,
+    "shard_value_used": false
+  },
+  "source_state": {
+    "path": "third_party/th08/build/rl/runs/v104-state-d1-s7/state.pt",
+    "sha256": "37e910b5a9bad2bbd809046ada109ab963ed1917fbe9633cc5da0d53d86bd32c",
+    "epoch": 55,
+    "stage": "state",
+    "selection_rule": "explicit-init-from",
+    "strict_load": true,
+    "history_contract": "causal-segment-v1",
+    "contract_version": "v104-A/1"
+  },
+  "optim": {
+    "weight_decay": 0.0001,
+    "encoder_lr": 0.0001,
+    "policy_head_lr": 0.0003,
+    "freeze_epochs": 2,
+    "initial": {
+      "phase": "frozen",
+      "groups": {
+        "encoder": {
+          "lr": 0.0,
+          "tensors": 32,
+          "parameters": 461666,
+          "trainable": false,
+          "weight_decay": 0.0001
+        },
+        "perception": {
+          "lr": 0.0,
+          "tensors": 4,
+          "parameters": 71446,
+          "trainable": false,
+          "weight_decay": 0.0001
+        },
+        "candidate_head": {
+          "lr": 0.0003,
+          "tensors": 5,
+          "parameters": 21761,
+          "trainable": true,
+          "weight_decay": 0.0001
+        }
+      },
+      "trainable_parameters": 21761
+    },
+    "switch_epoch": 3,
+    "joint_phase_reached": true,
+    "rebuilds": [
+      {
+        "epoch": 3,
+        "from": "frozen",
+        "to": "joint",
+        "groups": {
+          "encoder": {
+            "lr": 0.0001,
+            "tensors": 32,
+            "parameters": 461666,
+            "trainable": true,
+            "weight_decay": 0.0001
+          },
+          "perception": {
+            "lr": 0.0001,
+            "tensors": 4,
+            "parameters": 71446,
+            "trainable": true,
+            "weight_decay": 0.0001
+          },
+          "candidate_head": {
+            "lr": 0.0003,
+            "tensors": 5,
+            "parameters": 21761,
+            "trainable": true,
+            "weight_decay": 0.0001
+          }
+        }
+      }
+    ],
+    "joint": {
+      "phase": "joint",
+      "groups": {
+        "encoder": {
+          "lr": 0.0001,
+          "tensors": 32,
+          "parameters": 461666,
+          "trainable": true,
+          "weight_decay": 0.0001
+        },
+        "perception": {
+          "lr": 0.0001,
+          "tensors": 4,
+          "parameters": 71446,
+          "trainable": true,
+          "weight_decay": 0.0001
+        },
+        "candidate_head": {
+          "lr": 0.0003,
+          "tensors": 5,
+          "parameters": 21761,
+          "trainable": true,
+          "weight_decay": 0.0001
+        }
+      },
+      "trainable_parameters": 554873
+    }
+  },
+  "partial": false,
+  "contract_version": "v104-A/1",
+  "acceptance_eligible": true,
+  "recipe": {
+    "selection_contract": "v104",
+    "history_contract": "causal-segment-v1",
+    "stage": "policy",
+    "epochs_state": 0,
+    "epochs_policy": 12,
+    "batch_size": 96,
+    "depth": 1,
+    "seed": 7,
+    "max_train_batches": 0,
+    "max_val_batches": 0,
+    "screening": false,
+    "train_fraction": 1.0
+  },
+  "data": {
+    "dataset": "third_party/th08/build/rl/datasets/pilot-ud0059-v2",
+    "frames": 72413,
+    "train_frames": 65172,
+    "val_frames": 7241,
+    "val_index_sha256": "e5d4ebbe6d8de05793520a393fc1fdbea2b1e2c4db9ff7c1632908340c76655f",
+    "manifest_sha256": "aa89c48893eb7e69628a5fd1c414c7c9b8b04cd5b88a225a6f4feb70373c949f",
+    "manifest_verified": true,
+    "history_contract": "causal-segment-v1",
+    "history_audit_depth3_available": true
+  },
+  "input": {
+    "contract": "rgb255-v1",
+    "arch": "v2",
+    "depth": 1,
+    "regions": {
+      "playfield": [
+        224,
+        192
+      ],
+      "hud_score": [
+        34,
+        216
+      ],
+      "hud_status": [
+        126,
+        216
+      ]
+    },
+    "frame_shape": {
+      "playfield": [
+        224,
+        192,
+        3
+      ],
+      "hud_score": [
+        34,
+        216,
+        3
+      ],
+      "hud_status": [
+        126,
+        216,
+        3
+      ]
+    },
+    "candidate_order_version": "focus9-move-v1",
+    "score_semantics": "preference_logits"
+  },
+  "loss": {
+    "policy": {
+      "objective": "legacy-reg",
+      "rank_delta_px": 0.5,
+      "rank_weight": 0.0,
+      "regression_weight": 1.0,
+      "weights_forced_by_contract": false
+    },
+    "aux_perception": {
+      "heatmap": 1.0,
+      "coord": 1.0,
+      "danger": 1.0,
+      "self": 1.0
+    },
+    "aux_policy": {
+      "heatmap": 0.1,
+      "coord": 1.0,
+      "danger": 0.2,
+      "self": 0.1
+    },
+    "self_mask_indices": [
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23
+    ],
+    "self_mask_dims": 19,
+    "danger_scale": 8.0
+  },
+  "coverage": {
+    "val": {
+      "expected_frames": 7241,
+      "actual_frames": 7241,
+      "expected_index_sha256": "e5d4ebbe6d8de05793520a393fc1fdbea2b1e2c4db9ff7c1632908340c76655f",
+      "visited_index_sha256": "e5d4ebbe6d8de05793520a393fc1fdbea2b1e2c4db9ff7c1632908340c76655f",
+      "duplicated_indices": 0,
+      "missing_indices": 0,
+      "unexpected_indices": 0,
+      "complete": true,
+      "drop_last": false
+    },
+    "train": {
+      "expected_frames": 65172,
+      "actual_frames": 65088,
+      "expected_index_sha256": "fc11c8d387eef8be1aec10ea5b272a7bf7c6ca59064ff221b56cc6cf6802235b",
+      "visited_index_sha256": "0ba1d64b37b9594d014f4a347ce00cf41d3e28afba308c01b5bfa9184336b388",
+      "duplicated_indices": 0,
+      "missing_indices": 84,
+      "unexpected_indices": 0,
+      "complete": false,
+      "drop_last": true
+    }
+  },
+  "hardware": {
+    "device": "cuda",
+    "torch_threads": 1,
+    "cuda_peak_memory_bytes": 649316864,
+    "elapsed_seconds": 576.12
+  },
+  "finished": "2026-10-19T09:43:05"
+}
+
+[exit] 0

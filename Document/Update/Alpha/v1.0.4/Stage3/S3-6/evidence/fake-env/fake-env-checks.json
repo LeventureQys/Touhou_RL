@@ -1,0 +1,366 @@
+{
+  "schema": "s3-6-fake-env-check/1",
+  "note": "fake environment (EvalConfig.env_factory stub): proves the deployment plumbing and isolation only. It is not a real-game run and cannot stand in for A-04.",
+  "checkpoint": "Document\\Update\\Alpha\\v1.0.4\\Stage3\\S3-6\\evidence\\fake-env\\fake-v2-depth3.pt",
+  "checkpoint_sha256": "775aa1b377045b3933a464ecd96f85049162eadc0da3b270a5e60044f9ae26df",
+  "vision_node": {
+    "checkpoint": "Document\\Update\\Alpha\\v1.0.4\\Stage3\\S3-6\\evidence\\fake-env\\fake-v2-depth3.pt",
+    "arch": "v2",
+    "depth": 3,
+    "region_sizes": {
+      "playfield": [
+        224,
+        192
+      ],
+      "hud_score": [
+        34,
+        216
+      ],
+      "hud_status": [
+        126,
+        216
+      ]
+    },
+    "frame_shape": {
+      "playfield": [
+        224,
+        192,
+        3
+      ],
+      "hud_score": [
+        34,
+        216,
+        3
+      ],
+      "hud_status": [
+        126,
+        216,
+        3
+      ]
+    },
+    "isolation": "I-1: policy input is regions_to_batch(env.render crops) only; env bookkeeping still reads memory",
+    "max_steps": 12000
+  },
+  "episode_0": {
+    "episode": 1,
+    "steps": 4,
+    "frames_reported": 8,
+    "stages_reached": 0,
+    "deaths": 0,
+    "lives_left": 2.0,
+    "score": 0,
+    "graze": 0,
+    "episode_reward": 0.0,
+    "terminated": true,
+    "truncated": false,
+    "termination_reason": "game over",
+    "wall_seconds": 0.0,
+    "decisions_per_s": 125.62,
+    "last_state": {
+      "stage": 0,
+      "frame": 8,
+      "bullets": 0
+    },
+    "vision_diagnostics": {
+      "bomb_actions_requested": 0,
+      "screenshot_to_action_ms": {
+        "count": 4,
+        "mean": 5.871,
+        "p50": 4.43,
+        "p95": 9.657,
+        "max": 10.579
+      },
+      "observed_frame_delta": {
+        "count": 3,
+        "min": 2,
+        "p50": 2.0,
+        "p95": 2.0,
+        "max": 2,
+        "nonpositive": 0
+      }
+    }
+  },
+  "raw_diagnostics_note": "raw per-decision samples behind vision_diagnostics; latency is measured from the start of this decision's env.render() to the action handed to env.step(), and the frame delta only counts consecutive same-stage decisions with a positive delta (nonpositive ones are counted separately, never used as a statistic). Neither value is fed to the policy or used to reset history.",
+  "v3": {
+    "checkpoint": "Document\\Update\\Alpha\\v1.0.4\\Stage3\\S3-6\\evidence\\fake-env\\fake-v3-depth3.pt",
+    "checkpoint_sha256": "94c8d437452daf6dfaff956e708bc970626024fb26467ebdcf6cdf9fff1b74ee",
+    "vision_node": {
+      "checkpoint": "Document\\Update\\Alpha\\v1.0.4\\Stage3\\S3-6\\evidence\\fake-env\\fake-v3-depth3.pt",
+      "arch": "v3-st",
+      "depth": 3,
+      "region_sizes": {
+        "playfield": [
+          224,
+          192
+        ],
+        "hud_score": [
+          34,
+          216
+        ],
+        "hud_status": [
+          126,
+          216
+        ]
+      },
+      "frame_shape": {
+        "playfield": [
+          224,
+          192,
+          3
+        ],
+        "hud_score": [
+          34,
+          216,
+          3
+        ],
+        "hud_status": [
+          126,
+          216,
+          3
+        ]
+      },
+      "isolation": "I-1: policy input is regions_to_batch(env.render crops) only; env bookkeeping still reads memory",
+      "max_steps": 12000,
+      "contract": {
+        "schema": "vision-checkpoint/3",
+        "arch": "v3-st",
+        "depth": 3,
+        "channels": 3,
+        "normalization": "rgb255-v1",
+        "candidate_order_version": "focus9-move-v1",
+        "score_semantics": "preference_logits",
+        "roi_native_hw": [
+          128,
+          128
+        ],
+        "local_grid_hw": [
+          16,
+          16
+        ],
+        "align_corners": false,
+        "history_contract": "causal-segment-v1",
+        "region_sizes": {
+          "playfield": [
+            224,
+            192
+          ],
+          "hud_score": [
+            34,
+            216
+          ],
+          "hud_status": [
+            126,
+            216
+          ]
+        },
+        "legacy_frame": {},
+        "identity": {
+          "source_state_sha": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+          "teacher_fingerprint": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "manifest_sha": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "val_index_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+          "loss_config": {
+            "objective": "rank",
+            "rank_delta_px": 0.5
+          }
+        }
+      }
+    },
+    "eval_report": "Document\\Update\\Alpha\\v1.0.4\\Stage3\\S3-6\\evidence\\fake-env\\v3-plain\\eval-report.json"
+  },
+  "checks": [
+    {
+      "check": "policy_is_vision",
+      "ok": true,
+      "detail": "vision"
+    },
+    {
+      "check": "vision_arch_is_v2",
+      "ok": true,
+      "detail": "v2"
+    },
+    {
+      "check": "depth_follows_the_checkpoint",
+      "ok": true,
+      "detail": 3
+    },
+    {
+      "check": "region_sizes_are_the_three_roi",
+      "ok": true,
+      "detail": {
+        "playfield": [
+          224,
+          192
+        ],
+        "hud_score": [
+          34,
+          216
+        ],
+        "hud_status": [
+          126,
+          216
+        ]
+      }
+    },
+    {
+      "check": "frame_shape_includes_rgb3",
+      "ok": true,
+      "detail": {
+        "playfield": [
+          224,
+          192,
+          3
+        ],
+        "hud_score": [
+          34,
+          216,
+          3
+        ],
+        "hud_status": [
+          126,
+          216,
+          3
+        ]
+      }
+    },
+    {
+      "check": "isolation_statement_is_recorded",
+      "ok": true,
+      "detail": "I-1: policy input is regions_to_batch(env.render crops) only; env bookkeeping still reads memory"
+    },
+    {
+      "check": "step_cap_is_recorded",
+      "ok": true,
+      "detail": 12000
+    },
+    {
+      "check": "no_v3_contract_node_without_g_v3",
+      "ok": true,
+      "detail": [
+        "arch",
+        "checkpoint",
+        "depth",
+        "frame_shape",
+        "isolation",
+        "max_steps",
+        "region_sizes"
+      ]
+    },
+    {
+      "check": "eval_report_written",
+      "ok": true,
+      "detail": "Document\\Update\\Alpha\\v1.0.4\\Stage3\\S3-6\\evidence\\fake-env\\plain\\eval-report.json"
+    },
+    {
+      "check": "episode_count",
+      "ok": true,
+      "detail": 3
+    },
+    {
+      "check": "episode_fields_complete",
+      "ok": true,
+      "detail": "terminated/truncated/termination_reason"
+    },
+    {
+      "check": "vision_diagnostics_contract",
+      "ok": true,
+      "detail": "3 keys, counts, p50<=p95<=max"
+    },
+    {
+      "check": "raw_diagnostics_saved",
+      "ok": true,
+      "detail": "Document\\Update\\Alpha\\v1.0.4\\Stage3\\S3-6\\evidence\\fake-env\\plain\\vision-diagnostics-raw.json"
+    },
+    {
+      "check": "poisoned_privileged_info_does_not_change_actions",
+      "ok": true,
+      "detail": "(12, 4) identical=True"
+    },
+    {
+      "check": "env_state_never_read",
+      "ok": true,
+      "detail": "plain=0 poison=0"
+    },
+    {
+      "check": "env_closed",
+      "ok": true,
+      "detail": "close() called"
+    },
+    {
+      "check": "action_shape_is_the_four_tuple",
+      "ok": true,
+      "detail": "shape=(12, 4) actions=[[2, 1, 0, 0], [2, 1, 0, 0]]"
+    },
+    {
+      "check": "v3_policy_is_vision",
+      "ok": true,
+      "detail": "vision"
+    },
+    {
+      "check": "v3_arch_is_v3st",
+      "ok": true,
+      "detail": "v3-st"
+    },
+    {
+      "check": "v3_depth_follows_the_checkpoint",
+      "ok": true,
+      "detail": 3
+    },
+    {
+      "check": "v3_contract_node",
+      "ok": true,
+      "detail": [
+        "align_corners",
+        "arch",
+        "candidate_order_version",
+        "channels",
+        "depth",
+        "history_contract",
+        "identity",
+        "legacy_frame",
+        "local_grid_hw",
+        "normalization",
+        "region_sizes",
+        "roi_native_hw",
+        "schema",
+        "score_semantics"
+      ]
+    },
+    {
+      "check": "v3_contract_identity",
+      "ok": true,
+      "detail": {
+        "source_state_sha": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+        "teacher_fingerprint": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "manifest_sha": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "val_index_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "loss_config": {
+          "objective": "rank",
+          "rank_delta_px": 0.5
+        }
+      }
+    },
+    {
+      "check": "v3_diagnostics_contract",
+      "ok": true,
+      "detail": "3 keys on every v3 episode"
+    },
+    {
+      "check": "v3_poisoned_privileged_info_does_not_change_actions",
+      "ok": true,
+      "detail": "(12, 4) identical=True"
+    },
+    {
+      "check": "v3_env_state_never_read",
+      "ok": true,
+      "detail": "0 reads"
+    },
+    {
+      "check": "v3_action_shape_is_the_four_tuple",
+      "ok": true,
+      "detail": "shape=(12, 4) actions=[[7, 1, 1, 0], [7, 1, 1, 0]]"
+    }
+  ],
+  "passed": true,
+  "eval_report": "Document\\Update\\Alpha\\v1.0.4\\Stage3\\S3-6\\evidence\\fake-env\\plain\\eval-report.json"
+}

@@ -125,6 +125,7 @@ def run_collect(spec: CollectSpec) -> dict:
             max_seconds=spec.max_seconds,
             stage=None if spec.stage < 0 else spec.stage,
             allow_append=spec.overwrite,
+            freeze_limit=int(spec.extra.get("freeze_limit", 5)),
             verbose=spec.verbose,
         )
     else:  # pragma: no cover - guarded by validate()

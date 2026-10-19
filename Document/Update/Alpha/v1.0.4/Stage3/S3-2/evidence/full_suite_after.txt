@@ -1,0 +1,41 @@
+........................................................................ [ 26%]
+........................................................................ [ 53%]
+........................................................................ [ 80%]
+......................F...............................                   [100%]
+================================== FAILURES ===================================
+_______________ test_policy_stage_records_by_danger_every_epoch _______________
+
+tmp_path = WindowsPath('D:/WorkShop/Touhou_RL/.pytest-tmp/S3-2/pytest-of-a5935/pytest-9/test_policy_stage_records_by_d0')
+
+    def test_policy_stage_records_by_danger_every_epoch(tmp_path):
+        dataset_dir = _synthetic_dataset(tmp_path)
+        out = tmp_path / "run"
+        summary = vision_train.train(
+            _cfg(dataset_dir, out, stage="policy", epochs_policy=2, max_train_batches=1)
+        )
+    
+        history = summary["stages"]["policy"]["history"]
+        assert [row["epoch"] for row in history] == [1, 2]
+        for row in history:
+            assert [bucket["bucket"] for bucket in row["by_danger"]] == BUCKET_LABELS
+            for bucket in row["by_danger"]:
+>               assert set(bucket) == {"bucket", "frames", "top1", "regret_px"}
+E               AssertionError: assert {'bucket', 'f..., 'top1', ...} == {'bucket', 'f...t_px', 'top1'}
+E                 
+E                 Extra items in the left set:
+E                 'regret_p90_px'
+E                 'near_optimal_05'
+E                 'top3'
+E                 'top3_tie'
+E                 Use -v to get more diff
+
+touhou_rl\tests\test_vision_train.py:248: AssertionError
+---------------------------- Captured stdout call -----------------------------
+[vision] D:\WorkShop\Touhou_RL\.pytest-tmp\S3-2\pytest-of-a5935\pytest-9\test_policy_stage_records_by_d0\ds: 24 frames, train 20 (fraction 1.0), val 4, arch v2, manifest_verified False
+[vision] teacher-labelled 24/24 frames
+[vision] labelling took 0.1s
+[vision:policy] {"epoch": 1, "train_loss": 1.64523, "val_loss": 2.42528, "seconds": 0.0, "val_frames": 4, "val_top1": 0.0, "val_regret_px": 5.176, "val_regret_px_bucket_0_15": 0.0, "by_danger": [{"bucket": "0-15", "frames": 0, "top1": 0.0, "top3": 0.0, "top3_tie": 0.0, "near_optimal_05": 0.0, "regret_px": 0.0, "regret_p90_px": 0.0}, {"bucket": "15-30", "frames": 3, "top1": 0.0, "top3": 0.0, "top3_tie": 0.0, "near_optimal_05": 0.0, "regret_px": 4.609, "regret_p90_px": 5.625}, {"bucket": "30-60", "frames": 1, "top1": 0.0, "top3": 0.0, "top3_tie": 0.0, "near_optimal_05": 0.0, "regret_px": 6.875, "regret_p90_px": 6.875}, {"bucket": "60-120", "frames": 0, "top1": 0.0, "top3": 0.0, "top3_tie": 0.0, "near_optimal_05": 0.0, "regret_px": 0.0, "regret_p90_px": 0.0}, {"bucket": "120+", "frames": 0, "top1": 0.0, "top3": 0.0, "top3_tie": 0.0, "near_optimal_05": 0.0, "regret_px": 0.0, "regret_p90_px": 0.0}]}
+[vision:policy] {"epoch": 2, "train_loss": 1.45394, "val_loss": 2.40834, "seconds": 0.0, "val_frames": 4, "val_top1": 0.0, "val_regret_px": 5.176, "val_regret_px_bucket_0_15": 0.0, "by_danger": [{"bucket": "0-15", "frames": 0, "top1": 0.0, "top3": 0.0, "top3_tie": 0.0, "near_optimal_05": 0.0, "regret_px": 0.0, "regret_p90_px": 0.0}, {"bucket": "15-30", "frames": 3, "top1": 0.0, "top3": 0.0, "top3_tie": 0.0, "near_optimal_05": 0.0, "regret_px": 4.609, "regret_p90_px": 5.625}, {"bucket": "30-60", "frames": 1, "top1": 0.0, "top3": 0.0, "top3_tie": 0.0, "near_optimal_05": 0.0, "regret_px": 6.875, "regret_p90_px": 6.875}, {"bucket": "60-120", "frames": 0, "top1": 0.0, "top3": 0.0, "top3_tie": 0.0, "near_optimal_05": 0.0, "regret_px": 0.0, "regret_p90_px": 0.0}, {"bucket": "120+", "frames": 0, "top1": 0.0, "top3": 0.0, "top3_tie": 0.0, "near_optimal_05": 0.0, "regret_px": 0.0, "regret_p90_px": 0.0}]}
+=========================== short test summary info ===========================
+FAILED touhou_rl/tests/test_vision_train.py::test_policy_stage_records_by_danger_every_epoch
+1 failed, 269 passed in 13.56s

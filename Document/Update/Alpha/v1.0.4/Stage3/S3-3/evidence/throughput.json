@@ -1,0 +1,275 @@
+{
+  "note": "round1 = full 4-config sweep on the first de-duplication code (depth-1 also paid np.unique+gather); round2 = depth-1 fast path added (no repeats possible at depth 1), final code. depth-3 path is identical in both rounds.",
+  "spot_check": {
+    "indices": [
+      70000,
+      70095
+    ],
+    "depth": 3,
+    "slots": 288,
+    "unique_frames": 98,
+    "duplicate_slots": 190,
+    "tensors_identical": true,
+    "labels_identical": true
+  },
+  "round1": {
+    "code": "dedup-all-depths",
+    "runs": [
+      {
+        "depth": 1,
+        "mode": "fast",
+        "epochs": [
+          {
+            "epoch": 1,
+            "seconds": 101.4,
+            "train_loss": 7.20897,
+            "val_player_pos_px": 84.3323,
+            "val_frames": 7241
+          },
+          {
+            "epoch": 2,
+            "seconds": 71.8,
+            "train_loss": 6.80919,
+            "val_player_pos_px": 71.9244,
+            "val_frames": 7241
+          },
+          {
+            "epoch": 3,
+            "seconds": 45.1,
+            "train_loss": 6.48081,
+            "val_player_pos_px": 60.0867,
+            "val_frames": 7241
+          },
+          {
+            "epoch": 4,
+            "seconds": 43.7,
+            "train_loss": 6.27574,
+            "val_player_pos_px": 60.3627,
+            "val_frames": 7241
+          }
+        ],
+        "epoch3_seconds": 45.1,
+        "epoch4_seconds": 43.7,
+        "steady_mean_seconds": 44.4,
+        "steady_min_seconds": 43.7,
+        "max_seconds": 101.4,
+        "elapsed_seconds": 263.7,
+        "val_frames": 7241,
+        "coverage_val_actual_frames": 7241,
+        "coverage_val_complete": true,
+        "coverage_val_sha256": "e5d4ebbe6d8de05793520a393fc1fdbea2b1e2c4db9ff7c1632908340c76655f",
+        "summary": "third_party\\th08\\build\\rl\\runs\\v104-s33-throughput-fast-d1-s7\\vision-summary.json"
+      },
+      {
+        "depth": 1,
+        "mode": "naive",
+        "epochs": [
+          {
+            "epoch": 1,
+            "seconds": 97.4,
+            "train_loss": 7.20935,
+            "val_player_pos_px": 84.3359,
+            "val_frames": 7241
+          },
+          {
+            "epoch": 2,
+            "seconds": 67.0,
+            "train_loss": 6.80545,
+            "val_player_pos_px": 71.9326,
+            "val_frames": 7241
+          },
+          {
+            "epoch": 3,
+            "seconds": 40.7,
+            "train_loss": 6.47888,
+            "val_player_pos_px": 59.6685,
+            "val_frames": 7241
+          },
+          {
+            "epoch": 4,
+            "seconds": 40.3,
+            "train_loss": 6.28275,
+            "val_player_pos_px": 60.4857,
+            "val_frames": 7241
+          }
+        ],
+        "epoch3_seconds": 40.7,
+        "epoch4_seconds": 40.3,
+        "steady_mean_seconds": 40.5,
+        "steady_min_seconds": 40.3,
+        "max_seconds": 97.4,
+        "elapsed_seconds": 246.0,
+        "val_frames": 7241,
+        "coverage_val_actual_frames": 7241,
+        "coverage_val_complete": true,
+        "coverage_val_sha256": "e5d4ebbe6d8de05793520a393fc1fdbea2b1e2c4db9ff7c1632908340c76655f",
+        "summary": "third_party\\th08\\build\\rl\\runs\\v104-s33-throughput-naive-d1-s7\\vision-summary.json"
+      },
+      {
+        "depth": 3,
+        "mode": "fast",
+        "epochs": [
+          {
+            "epoch": 1,
+            "seconds": 120.1,
+            "train_loss": 7.2125,
+            "val_player_pos_px": 83.5029,
+            "val_frames": 7241
+          },
+          {
+            "epoch": 2,
+            "seconds": 88.5,
+            "train_loss": 6.77942,
+            "val_player_pos_px": 67.1453,
+            "val_frames": 7241
+          },
+          {
+            "epoch": 3,
+            "seconds": 71.3,
+            "train_loss": 6.41651,
+            "val_player_pos_px": 58.0521,
+            "val_frames": 7241
+          },
+          {
+            "epoch": 4,
+            "seconds": 71.0,
+            "train_loss": 6.17444,
+            "val_player_pos_px": 56.8363,
+            "val_frames": 7241
+          }
+        ],
+        "epoch3_seconds": 71.3,
+        "epoch4_seconds": 71.0,
+        "steady_mean_seconds": 71.15,
+        "steady_min_seconds": 71.0,
+        "max_seconds": 120.1,
+        "elapsed_seconds": 351.4,
+        "val_frames": 7241,
+        "coverage_val_actual_frames": 7241,
+        "coverage_val_complete": true,
+        "coverage_val_sha256": "e5d4ebbe6d8de05793520a393fc1fdbea2b1e2c4db9ff7c1632908340c76655f",
+        "summary": "third_party\\th08\\build\\rl\\runs\\v104-s33-throughput-fast-d3-s7\\vision-summary.json"
+      },
+      {
+        "depth": 3,
+        "mode": "naive",
+        "epochs": [
+          {
+            "epoch": 1,
+            "seconds": 142.6,
+            "train_loss": 7.20771,
+            "val_player_pos_px": 83.0118,
+            "val_frames": 7241
+          },
+          {
+            "epoch": 2,
+            "seconds": 97.3,
+            "train_loss": 6.77953,
+            "val_player_pos_px": 66.8738,
+            "val_frames": 7241
+          },
+          {
+            "epoch": 3,
+            "seconds": 73.1,
+            "train_loss": 6.39933,
+            "val_player_pos_px": 57.7477,
+            "val_frames": 7241
+          },
+          {
+            "epoch": 4,
+            "seconds": 70.9,
+            "train_loss": 6.17114,
+            "val_player_pos_px": 57.1132,
+            "val_frames": 7241
+          }
+        ],
+        "epoch3_seconds": 73.1,
+        "epoch4_seconds": 70.9,
+        "steady_mean_seconds": 72.0,
+        "steady_min_seconds": 70.9,
+        "max_seconds": 142.6,
+        "elapsed_seconds": 384.4,
+        "val_frames": 7241,
+        "coverage_val_actual_frames": 7241,
+        "coverage_val_complete": true,
+        "coverage_val_sha256": "e5d4ebbe6d8de05793520a393fc1fdbea2b1e2c4db9ff7c1632908340c76655f",
+        "summary": "third_party\\th08\\build\\rl\\runs\\v104-s33-throughput-naive-d3-s7\\vision-summary.json"
+      }
+    ]
+  },
+  "round2": {
+    "code": "dedup-depth3-only",
+    "runs": [
+      {
+        "depth": 1,
+        "mode": "fast",
+        "epochs": [
+          {
+            "epoch": 1,
+            "seconds": 106.3,
+            "train_loss": 7.21024,
+            "val_player_pos_px": 84.176,
+            "val_frames": 7241
+          },
+          {
+            "epoch": 2,
+            "seconds": 67.1,
+            "train_loss": 6.81102,
+            "val_player_pos_px": 72.6794,
+            "val_frames": 7241
+          },
+          {
+            "epoch": 3,
+            "seconds": 39.0,
+            "train_loss": 6.49405,
+            "val_player_pos_px": 60.5285,
+            "val_frames": 7241
+          },
+          {
+            "epoch": 4,
+            "seconds": 39.2,
+            "train_loss": 6.28968,
+            "val_player_pos_px": 60.9152,
+            "val_frames": 7241
+          }
+        ],
+        "epoch3_seconds": 39.0,
+        "epoch4_seconds": 39.2,
+        "steady_mean_seconds": 39.1,
+        "steady_min_seconds": 39.0,
+        "max_seconds": 106.3,
+        "elapsed_seconds": 253.4,
+        "val_frames": 7241,
+        "coverage_val_actual_frames": 7241,
+        "coverage_val_complete": true,
+        "coverage_val_sha256": "e5d4ebbe6d8de05793520a393fc1fdbea2b1e2c4db9ff7c1632908340c76655f",
+        "summary": "third_party\\th08\\build\\rl\\runs\\v104-s33-throughput-fast-d1-recheck-s7\\vision-summary.json"
+      }
+    ]
+  },
+  "comparison": {
+    "depth1_naive_epoch3_4": [
+      40.7,
+      40.3
+    ],
+    "depth1_dedup_all_depths_epoch3_4": [
+      45.1,
+      43.7
+    ],
+    "depth1_dedup_final_epoch3_4": [
+      39.0,
+      39.2
+    ],
+    "depth3_naive_epoch3_4": [
+      73.1,
+      70.9
+    ],
+    "depth3_dedup_epoch3_4": [
+      71.3,
+      71.0
+    ],
+    "gate_seconds": 60.0,
+    "depth3_under_gate": false,
+    "note": "depth 3 stays ~71 s with and without de-duplication; the 60 s/epoch gate is NOT met."
+  }
+}

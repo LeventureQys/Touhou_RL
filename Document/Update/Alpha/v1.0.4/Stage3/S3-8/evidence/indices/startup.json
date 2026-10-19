@@ -1,0 +1,66 @@
+{
+  "schema": "v104-evidence/1",
+  "kind": "startup",
+  "status": "blocked",
+  "created_at": "2026-10-20T02:58:16+08:00",
+  "producer": "Document/Update/Alpha/v1.0.4/Stage3/S3-8/evidence/make_a04_evidence.py",
+  "command": "python Document/Update/Alpha/v1.0.4/Stage3/S3-8/evidence/startup_evidence_probe.py",
+  "cwd": "D:\\WorkShop\\Touhou_RL",
+  "exit_code": 0,
+  "artifacts": [
+    {
+      "path": "Document/Update/Alpha/v1.0.4/Stage3/S3-8/evidence/startup-evidence.json",
+      "sha256": "2ea5b0b4629a15d8a854fced6947e86ed35d1bb9857b91be12e6a84d2483c5ba"
+    },
+    {
+      "path": "Document/Update/Alpha/v1.0.4/Stage3/S3-8/evidence/startup-probe.json",
+      "sha256": "48e839b74696a2afd9bbde8f96d568e8da3c6d15fcc591c5e91eeedd9c384f24"
+    },
+    {
+      "path": "Document/Update/Alpha/v1.0.4/Stage3/S3-8/evidence/foreground-diagnostic.json",
+      "sha256": "ee5c8a5c5ea1703b40869e40aa90ba0a853d8c5e26a43af9bf339482b17dae19"
+    },
+    {
+      "path": "Document/Update/Alpha/v1.0.4/Stage3/S3-8/evidence/startup-title-a.png",
+      "sha256": "42291ed70c3a42bc11ca65c3cf854dd64cbface6fbd2a560eb00fb0cf2ae00ac"
+    },
+    {
+      "path": "Document/Update/Alpha/v1.0.4/Stage3/S3-8/evidence/startup-title-b.png",
+      "sha256": "44443af9668d5349734a52c672eaa62cf88049d813e02391125efce8a50a86d4"
+    }
+  ],
+  "observations": {
+    "real_game_started": true,
+    "pixels_only": false,
+    "no_crash": true,
+    "no_exception_log": false,
+    "ui_checked": true,
+    "screenshots": [
+      "Document/Update/Alpha/v1.0.4/Stage3/S3-8/evidence/startup-title-a.png",
+      "Document/Update/Alpha/v1.0.4/Stage3/S3-8/evidence/startup-title-b.png"
+    ],
+    "exe_path": "D:\\WorkShop\\Touhou_RL\\third_party\\th08\\build\\rl\\eval\\v104-s38-startup-evidence\\th08.exe",
+    "exe_sha256": "cdd23bca0c724941866efda5da280be67eb6cdd935f83548045c2a8e037f1ddf",
+    "exe_bytes": 898048,
+    "original_exe_sha256": "330fbdbf58a710829d65277b4f312cfbb38d5448b3df523e79350b879213d924",
+    "original_exe_bytes": 840704,
+    "window_title": "搶曽塱栭彺丂乣 Imperishable Night. ver 1.00d",
+    "window_class": "BASE",
+    "window_client_rect": [
+      259,
+      288,
+      640,
+      480
+    ],
+    "window_foreground": false,
+    "boot_seconds": 3.02,
+    "capture_std": 38.154,
+    "capture_second_std": 83.134,
+    "frames_differ": true,
+    "checkpoint_loaded": true,
+    "no_action_produced": true,
+    "client_timeout_error": true,
+    "failure_stage": "env.reset -> menu.select_difficulty (screen 4 did not become ready)"
+  },
+  "reason": "the game process starts, the frozen v3 policy.pt loads, and the 640x480 client area really renders (two raw screenshots 1.6 s apart, different pixels, 58-60 fps on screen), so the exe/window/capture path is proven; but no key can reach the game: the foreground is held by the user's elevated Task Manager while this agent runs at medium integrity, so SetForegroundWindow / SwitchToThisWindow / synthetic input are all denied (UIPI + ForegroundLockTimeout=0x7FFFFFFF). reset therefore never reaches gameplay, no action is produced, and the startup smoke cannot complete its act/step half. no_exception_log is false because the client side ended in a TimeoutError (the game's own session log is clean). This is an environment/security boundary, not a model or code failure; reported as blocked, never as pass."
+}

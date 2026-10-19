@@ -1,0 +1,61 @@
+{
+  "schema": "v104-position-weights/1",
+  "created_at": "2026-10-19T21:48:52+08:00",
+  "producer": "tools/rl/refine_v104.py --phase hard-frames",
+  "command": "C:\\Users\\a5935\\AppData\\Local\\Programs\\Python\\Python312\\python.exe tools\\rl\\refine_v104.py --phase hard-frames --route v2 --source-state third_party/th08/build/rl/runs/v104-a01-72ep/state.pt --out Document\\Update\\Alpha\\v1.0.4\\Stage3\\S3-7\\evidence\\hard-frames --execute",
+  "cwd": "D:\\WorkShop\\Touhou_RL",
+  "route": "v2",
+  "phase": "hard-frames",
+  "dataset": "third_party/th08/build/rl/datasets/pilot-ud0059-v2",
+  "manifest_sha256": "aa89c48893eb7e69628a5fd1c414c7c9b8b04cd5b88a225a6f4feb70373c949f",
+  "val_index_sha256": "e5d4ebbe6d8de05793520a393fc1fdbea2b1e2c4db9ff7c1632908340c76655f",
+  "val_frames": 7241,
+  "source_state_checkpoint": "third_party/th08/build/rl/runs/v104-a01-72ep/state.pt",
+  "source_state_sha256": "e93b967420211aa936be22d55c1e90b522d1f21bd709c35f3b2cf7251859f12c",
+  "source_state_epoch": 55,
+  "history_contract": "causal-segment-v1",
+  "source_history_contract": "legacy",
+  "depth": 1,
+  "roi": {
+    "playfield": [
+      224,
+      192
+    ],
+    "hud_score": [
+      34,
+      216
+    ],
+    "hud_status": [
+      126,
+      216
+    ]
+  },
+  "frames": 65172,
+  "train_indices_sha256": "fc11c8d387eef8be1aec10ea5b272a7bf7c6ca59064ff221b56cc6cf6802235b",
+  "npz": "Document/Update/Alpha/v1.0.4/Stage3/S3-7/evidence/hard-frames/hard-frames-a-train.npz",
+  "npz_sha256": "bce85b7671bf7c1a714aef01c7004172185dad757c06897b05e97cbfc55758b5",
+  "error_metric": "(|dx|*384 + |dy|*448)/2 native px, model position vs privileged label",
+  "thresholds": [
+    10.0,
+    30.0
+  ],
+  "weight_values": [
+    1.0,
+    1.5,
+    2.0
+  ],
+  "error_mean_px": 12.528127437726441,
+  "error_median_px": 7.0048017501831055,
+  "error_p90_px": 27.722693634033213,
+  "error_max_px": 315.170654296875,
+  "frame_counts": {
+    "1.0": 40409,
+    "1.5": 19078,
+    "2.0": 5685
+  },
+  "weight_sum": 80396.0,
+  "indices_are_train_only": true,
+  "elapsed_seconds": 75.97,
+  "device": "cuda",
+  "note": "v2 route: read-only v104-a01-72ep/state.pt as the error source (independent recipe)."
+}

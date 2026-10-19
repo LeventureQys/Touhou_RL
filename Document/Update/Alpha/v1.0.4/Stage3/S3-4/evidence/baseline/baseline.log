@@ -1,0 +1,23 @@
+baseline re-evaluation (read-only) vs the frozen summaries
+  dataset            : third_party/th08/build/rl/datasets/pilot-ud0059-v2
+  validation frames  : 7241  sha256=e5d4ebbe6d8de05793520a393fc1fdbea2b1e2c4db9ff7c1632908340c76655f
+  old state ckpt     : third_party/th08/build/rl/runs/v104-a01-72ep/state.pt
+                       sha256=e93b967420211aa936be22d55c1e90b522d1f21bd709c35f3b2cf7251859f12c
+  old policy ckpt    : third_party/th08/build/rl/runs/v104-clean-24e12e/policy.pt
+                       sha256=0070433f20c5dc7310cdbc3afc29faf930466dfcb3a1d87147f2244de6315029
+
+  state stage
+    old summary (7200 frames): pos=12.808 px  danger_median=0.6382
+    recheck     (7241 frames): pos=13.234 px  danger_median=0.635
+  policy stage
+    old summary (7200 frames): regret=3.744 px  0-15=3.967 px  top1=0.0699
+    recheck     (7241 frames): regret=3.729 px  0-15=3.967 px  top1=0.0699
+
+  policy buckets (7241-frame recheck)
+       0-15  frames=1076  regret=3.967 px  top3=0.1803
+      15-30  frames=2009  regret=4.222 px  top3=0.2026
+      30-60  frames=1367  regret=5.152 px  top3=0.1807
+     60-120  frames= 802  regret=5.061 px  top3=0.1983
+       120+  frames=1987  regret=1.585 px  top3=0.1928
+
+  note: The frozen summaries' per-epoch rows report val_frames=7200 (the validation slice that existed when they were trained); this re-evaluation uses the fixed A validation split of 7241 frames.  7200 != 7241: both columns are listed side by side and must not be mixed.  The old summaries were read, never written.

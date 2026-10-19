@@ -1,0 +1,49 @@
+{
+  "generated": "2026-10-18T20:07:07",
+  "inputs": {
+    "summaries": [
+      "third_party/th08/build/rl/runs/v103-exp-05/vision-summary.json",
+      "third_party/th08/build/rl/runs/v103-exp-03/vision-summary.json"
+    ],
+    "r3": {}
+  },
+  "primary": {
+    "path": "third_party/th08/build/rl/runs/v103-exp-05/vision-summary.json",
+    "arch": "v2",
+    "epoch": 8,
+    "checkpoint": "state.pt",
+    "pos_px": 68.0718,
+    "perframe_median": 0.3418,
+    "regret_px_bucket_0_15": 4.081
+  },
+  "a01": {
+    "status": "fail",
+    "epoch": null,
+    "pos_px": null,
+    "perframe_median": null,
+    "best_epoch": 8,
+    "best_pos_px": 68.0718,
+    "best_perframe_median": 0.3418,
+    "epochs_checked": 8,
+    "thresholds": {
+      "pos_px": 10.0,
+      "perframe_median": 0.8
+    },
+    "reason": "no epoch with val_player_pos_px < 10.0 and val_danger_corr_perframe_median > 0.8"
+  },
+  "a02": {
+    "status": "fail",
+    "regret_px_bucket_0_15": 4.081,
+    "threshold": 1.5
+  },
+  "a03": {
+    "status": "blocked",
+    "rule": "pos(1.00) <= 0.85*pos(0.50) or regret(1.00) <= 0.90*regret(0.50)",
+    "points": [],
+    "gain_pos": null,
+    "gain_regret": null,
+    "reason": "A-01 not met; R3 premise (architecture first) unmet"
+  },
+  "r4_authorized": false,
+  "note": "A-03 has_gain only authorizes collecting 3 more replays for a cross-replay curve"
+}

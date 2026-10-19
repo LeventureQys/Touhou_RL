@@ -1,0 +1,19 @@
+config fields: ['align_corners', 'candidate_order_version', 'center_detach', 'depth', 'heatmap_gauss_sigma', 'history_contract', 'hud_score_hw', 'hud_status_hw', 'hud_width', 'local_enabled', 'local_grid_hw', 'pf_width', 'playfield_hw', 'roi_native_hw', 'score_semantics', 'trunk_hidden']
+params: 1507162
+region_sizes: {'playfield': (224, 192), 'hud_score': (34, 216), 'hud_status': (126, 216)} heatmap_hw: (56, 48)
+forward keys: ['danger_log', 'features', 'heatmap_logits', 'location_stats', 'policy_logits', 'position', 'self_pred']
+shapes: {'policy_logits': (1, 18), 'heatmap_logits': (1, 56, 48), 'position': (1, 2), 'danger_log': (1, 128), 'self_pred': (1, 24), 'features': (1, 256), 'location_stats': (1, 2)}
+payload keys: ['arch', 'config', 'extra', 'frame', 'kind', 'schema', 'state_dict']
+schema/kind/arch: vision-checkpoint/3 vision_scorer v3-st
+schema is v3: True
+frame: {'H': 128, 'W': 112, 'C': 3, 'depth': 3}
+extra has all identity keys: True
+contract: {'schema': 'vision-checkpoint/3', 'arch': 'v3-st', 'depth': 3, 'history_contract': 'causal-segment-v1'}
+loaded type: VisionSpatialTemporalPolicy arch: v3-st
+extra round-trips: True
+strict weights equal: True
+score bit-identical: True
+act tuple: (1, 4) torch.int64 (1,) (1,) (1,)
+act action: [4, 1, 1, 0]
+report contract keys: ['align_corners', 'arch', 'candidate_order_version', 'channels', 'depth', 'history_contract', 'identity', 'legacy_frame', 'local_grid_hw', 'normalization', 'region_sizes', 'roi_native_hw', 'schema', 'score_semantics']
+report contract: {"schema": "vision-checkpoint/3", "arch": "v3-st", "candidate_order_version": "focus9-move-v1", "score_semantics": "preference_logits", "roi_native_hw": [128, 128], "local_grid_hw": [16, 16], "align_corners": false}

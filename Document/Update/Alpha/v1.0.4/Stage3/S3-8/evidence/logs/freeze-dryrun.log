@@ -1,0 +1,23 @@
+{
+  "state_checkpoint": "third_party/th08/build/rl/runs/v104-v3-E5-s7/state-pass.pt",
+  "state_checkpoint_sha256": "00a2d28472e4169879f481ca28e664d0fb4c8291f2741ea58ab14967da8c8f46",
+  "state_summary": "third_party/th08/build/rl/runs/v104-v3-E5-s7/vision-summary.json",
+  "policy_checkpoint": "third_party/th08/build/rl/runs/v104-v3-E5-s7/policy.pt",
+  "policy_checkpoint_sha256": "74abde8a996c13fae832913e4e5533bc9490688bc4c0aa73560e695f065d14be",
+  "policy_summary": "third_party/th08/build/rl/runs/v104-v3-E5-s7/vision-summary.json",
+  "teacher_cache": "third_party/th08/build/rl/datasets/pilot-ud0059-v2-teacher-values-v104-a52416f9342fa00a0185c061771d09c22ba735bbe01c83dd7910a6c3bc8ec0f6.npz",
+  "teacher_fingerprint": "a52416f9342fa00a0185c061771d09c22ba735bbe01c83dd7910a6c3bc8ec0f6",
+  "manifest_a": "third_party/th08/build/rl/datasets/pilot-ud0059-v2/manifest.json",
+  "manifest_a_sha256": "aa89c48893eb7e69628a5fd1c414c7c9b8b04cd5b88a225a6f4feb70373c949f",
+  "manifest_b": "Document/Update/Alpha/v1.0.4/Stage3/S3-1/evidence/ud0063-evaluation-manifest.json",
+  "manifest_b_sha256": "748f2382df301d34f9bfeb85c200aedbdde09bbc9a40e43c720d423e616725a7",
+  "val_index_sha256": "e5d4ebbe6d8de05793520a393fc1fdbea2b1e2c4db9ff7c1632908340c76655f",
+  "arch": "v3-st",
+  "depth": 3,
+  "seed": 7,
+  "experiment_table": "Document/Update/Alpha/v1.0.4/Stage3/S3-4/experiment-table.json",
+  "selection_reason": "候选 = v3-st E5（local_enabled=true，rank 1/1，depth=3，seed=7，72 感知 + 12 策略，acceptance_eligible=true，partial=false，contract_version=v104-A/1）。选择只依据 A 固定验证集 7241 帧（val_index_sha256=e5d4ebbe6d8de05793520a393fc1fdbea2b1e2c4db9ff7c1632908340c76655f），全程未参与任何外部守卫数据，external_guard_uses 冻结时为 0。\nstate：按 C4 的 state.best 规则，epoch 28 是首个「同一 epoch 内位置 <10.0 px 且 danger per-frame 中位 >0.8」的联合达标轮（位置 2.4066 px、danger 中位 0.8166、valid 7241、frames 7241），故 state_checkpoint 取 state-pass.pt（sha256 00a2d28472e4169879f481ca28e664d0fb4c8291f2741ea58ab14967da8c8f46）；位置最优的 state.pt（epoch 69，位置 1.6159 px、danger 中位 0.8842）不作为 A-01 对象，因为 A-01 判同一 checkpoint 的联合硬线，不能拿两轮指标拼接。\npolicy：按 0-15 px 危险桶后悔最小、其次全体后悔、再其次较早 epoch 的次序，epoch 12 的 policy.pt（sha256 74abde8a996c13fae832913e4e5533bc9490688bc4c0aa73560e695f065d14be）胜出：0-15 桶后悔 1.271 px（1076 帧、top3 0.6403、top3_tie 0.6877、near_optimal_05 0.5204、p90 3.675），全体后悔 0.870 px，top3 0.6601，top3_tie 0.8207，near_optimal_05 0.6904，p90 2.898，score_std 0.4756。同一 policy.pt 供 A-02/A-03/A-04 使用。\n路线：同 A 固定验证集上 v3 高于 v2 —— v3 E5 筛选（24+12）已把 0-15 桶后悔压到 1.355 px、全局 0.961 px，而 v2 E3c（72+12）为 3.049 / 2.635 px、state 位置 13.0557 px、danger 中位 0.6198；正式 v3 E5（72+12）进一步到 1.271 / 0.870 px，故冻结 v3-st 而非 v2。\n未因 B 守卫结果、未因任何外部分数修改模型、seed、权重或 epoch 选择；未在冻结后重训、重采集或调参。",
+  "frozen_at": "2026-10-20T02:36:46+08:00",
+  "external_guard_uses": 0
+}
+[refine] dry run: would freeze v3-st depth 3 seed 7 into Document/Update/Alpha/v1.0.4/Stage3/S3-8/evidence/freeze-dryrun/final-artifacts.json (readiness: hard-lines-met); pass --execute to write

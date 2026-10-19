@@ -1,0 +1,250 @@
+{
+  "schema": "v104-s3-8-full-val/1",
+  "kind": "policy_full_val",
+  "created_at": "2026-10-20T02:43:16+08:00",
+  "producer": "Document/Update/Alpha/v1.0.4/Stage3/S3-8/evidence/full_val_recheck.py",
+  "command": [
+    "C:\\Users\\a5935\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+    "Document\\Update\\Alpha\\v1.0.4\\Stage3\\S3-8\\evidence\\full_val_recheck.py",
+    "--kind",
+    "policy_full_val",
+    "--checkpoint",
+    "third_party\\th08\\build\\rl\\runs\\v104-v3-E5-s7\\policy.pt",
+    "--teacher-cache",
+    "third_party\\th08\\build\\rl\\datasets\\pilot-ud0059-v2-teacher-values-v104-a52416f9342fa00a0185c061771d09c22ba735bbe01c83dd7910a6c3bc8ec0f6.npz",
+    "--teacher-fingerprint",
+    "a52416f9342fa00a0185c061771d09c22ba735bbe01c83dd7910a6c3bc8ec0f6",
+    "--out",
+    "Document\\Update\\Alpha\\v1.0.4\\Stage3\\S3-8\\evidence\\policy-full-val.json",
+    "--device",
+    "cuda"
+  ],
+  "cwd": "D:\\WorkShop\\Touhou_RL",
+  "device": "cuda",
+  "elapsed_seconds": 55.39,
+  "checkpoint": "third_party/th08/build/rl/runs/v104-v3-E5-s7/policy.pt",
+  "checkpoint_sha256": "74abde8a996c13fae832913e4e5533bc9490688bc4c0aa73560e695f065d14be",
+  "arch": "v3-st",
+  "depth": 3,
+  "history_contract": "causal-segment-v1",
+  "legacy_history": false,
+  "parameters": 1507162,
+  "dataset": "third_party/th08/build/rl/datasets/pilot-ud0059-v2",
+  "manifest": "third_party/th08/build/rl/datasets/pilot-ud0059-v2/manifest.json",
+  "manifest_sha256": "aa89c48893eb7e69628a5fd1c414c7c9b8b04cd5b88a225a6f4feb70373c949f",
+  "val_index_sha256": "e5d4ebbe6d8de05793520a393fc1fdbea2b1e2c4db9ff7c1632908340c76655f",
+  "frames": 7241,
+  "coverage": {
+    "expected_frames": 7241,
+    "actual_frames": 7241,
+    "expected_index_sha256": "e5d4ebbe6d8de05793520a393fc1fdbea2b1e2c4db9ff7c1632908340c76655f",
+    "visited_index_sha256": "e5d4ebbe6d8de05793520a393fc1fdbea2b1e2c4db9ff7c1632908340c76655f",
+    "duplicated_indices": 0,
+    "missing_indices": 0,
+    "unexpected_indices": 0,
+    "complete": true
+  },
+  "metrics": {
+    "self_mae": 0.1485,
+    "player_pos_px": 1.7699,
+    "player_pos_p95_px": 5.9069,
+    "ray_mae": 0.1578,
+    "bullet_count_mae": 68.2,
+    "danger_mae_log": 0.0734,
+    "danger_corr": 0.874,
+    "danger_corr_perframe_mean": 0.7645,
+    "danger_corr_perframe_median": 0.8317,
+    "danger_corr_perframe_valid": 7241,
+    "danger_iou": 0.6179,
+    "danger_cell_acc": 0.9078,
+    "heatmap_hit_rate": 0.9844
+  },
+  "position_distribution_px": {
+    "mean": 1.7698895502227792,
+    "median": 0.3591880798339844,
+    "p90": 1.9030838012695312,
+    "p95": 5.906862512230873,
+    "p99": 21.706995916366576,
+    "max": 186.2789764404297,
+    "under_10px_share": 0.9617456152465129,
+    "tail_gt30_share": 0.007871840905952216
+  },
+  "by_stage": {
+    "0": {
+      "frames": 821,
+      "position_mean_px": 1.0315940807620008,
+      "position_median_px": 0.3736715316772461,
+      "position_p90_px": 1.3807640075683594
+    },
+    "1": {
+      "frames": 951,
+      "position_mean_px": 1.8850311190046598,
+      "position_median_px": 0.3965473175048828,
+      "position_p90_px": 2.3696584701538086
+    },
+    "2": {
+      "frames": 1014,
+      "position_mean_px": 1.6975524104131419,
+      "position_median_px": 0.3374999761581421,
+      "position_p90_px": 1.988456296920777
+    },
+    "4": {
+      "frames": 1317,
+      "position_mean_px": 2.452284558532631,
+      "position_median_px": 0.34291648864746094,
+      "position_p90_px": 2.110049641132357
+    },
+    "5": {
+      "frames": 1398,
+      "position_mean_px": 1.9445723623879392,
+      "position_median_px": 0.3258790969848633,
+      "position_p90_px": 1.843248081207274
+    },
+    "7": {
+      "frames": 1740,
+      "position_mean_px": 1.4406194415628568,
+      "position_median_px": 0.3746218681335449,
+      "position_p90_px": 1.7801143646240236
+    }
+  },
+  "teacher": {
+    "cache": "third_party/th08/build/rl/datasets/pilot-ud0059-v2-teacher-values-v104-a52416f9342fa00a0185c061771d09c22ba735bbe01c83dd7910a6c3bc8ec0f6.npz",
+    "cache_sha256": "7de5fe166ab147eb7e16e6bd406496bd764b9d98c5ea1e97551bc50d4f402d0c",
+    "fingerprint": "a52416f9342fa00a0185c061771d09c22ba735bbe01c83dd7910a6c3bc8ec0f6",
+    "dtype": "float16",
+    "shape": [
+      72413,
+      18
+    ],
+    "verified_by": "vision_train._inspect_teacher_cache (schema/fingerprint/shape/dtype/finite/digest)"
+  },
+  "note": "state_recheck = A-01 object; policy_full_val position/danger are diagnostics of the final policy checkpoint and never replace A-01",
+  "policy_metrics": {
+    "top1": 0.4006,
+    "top3": 0.6601,
+    "top3_tie": 0.8207,
+    "near_optimal_05": 0.6904,
+    "regret_px": 0.87,
+    "regret_p90_px": 2.898,
+    "by_danger": [
+      {
+        "bucket": "0-15",
+        "frames": 1076,
+        "top1": 0.3476,
+        "top3": 0.6403,
+        "top3_tie": 0.6877,
+        "near_optimal_05": 0.5204,
+        "regret_px": 1.271,
+        "regret_p90_px": 3.675
+      },
+      {
+        "bucket": "15-30",
+        "frames": 2009,
+        "top1": 0.4146,
+        "top3": 0.7173,
+        "top3_tie": 0.768,
+        "near_optimal_05": 0.6307,
+        "regret_px": 0.967,
+        "regret_p90_px": 3.081
+      },
+      {
+        "bucket": "30-60",
+        "frames": 1367,
+        "top1": 0.4338,
+        "top3": 0.752,
+        "top3_tie": 0.7915,
+        "near_optimal_05": 0.5801,
+        "regret_px": 1.205,
+        "regret_p90_px": 3.763
+      },
+      {
+        "bucket": "60-120",
+        "frames": 802,
+        "top1": 0.5387,
+        "top3": 0.8342,
+        "top3_tie": 0.8541,
+        "near_optimal_05": 0.6521,
+        "regret_px": 1.147,
+        "regret_p90_px": 3.812
+      },
+      {
+        "bucket": "120+",
+        "frames": 1987,
+        "top1": 0.3367,
+        "top3": 0.4796,
+        "top3_tie": 0.9527,
+        "near_optimal_05": 0.9341,
+        "regret_px": 0.214,
+        "regret_p90_px": 0.031
+      }
+    ]
+  },
+  "policy_checkpoint_stage": "policy",
+  "observations": {
+    "checkpoint_sha256": "74abde8a996c13fae832913e4e5533bc9490688bc4c0aa73560e695f065d14be",
+    "frames": 7241,
+    "coverage_sha256": "e5d4ebbe6d8de05793520a393fc1fdbea2b1e2c4db9ff7c1632908340c76655f",
+    "player_pos_px": 1.7699,
+    "danger_corr_perframe_median": 0.8317,
+    "danger_corr_perframe_valid": 7241,
+    "by_danger": [
+      {
+        "bucket": "0-15",
+        "frames": 1076,
+        "top1": 0.3476,
+        "top3": 0.6403,
+        "top3_tie": 0.6877,
+        "near_optimal_05": 0.5204,
+        "regret_px": 1.271,
+        "regret_p90_px": 3.675
+      },
+      {
+        "bucket": "15-30",
+        "frames": 2009,
+        "top1": 0.4146,
+        "top3": 0.7173,
+        "top3_tie": 0.768,
+        "near_optimal_05": 0.6307,
+        "regret_px": 0.967,
+        "regret_p90_px": 3.081
+      },
+      {
+        "bucket": "30-60",
+        "frames": 1367,
+        "top1": 0.4338,
+        "top3": 0.752,
+        "top3_tie": 0.7915,
+        "near_optimal_05": 0.5801,
+        "regret_px": 1.205,
+        "regret_p90_px": 3.763
+      },
+      {
+        "bucket": "60-120",
+        "frames": 802,
+        "top1": 0.5387,
+        "top3": 0.8342,
+        "top3_tie": 0.8541,
+        "near_optimal_05": 0.6521,
+        "regret_px": 1.147,
+        "regret_p90_px": 3.812
+      },
+      {
+        "bucket": "120+",
+        "frames": 1987,
+        "top1": 0.3367,
+        "top3": 0.4796,
+        "top3_tie": 0.9527,
+        "near_optimal_05": 0.9341,
+        "regret_px": 0.214,
+        "regret_p90_px": 0.031
+      }
+    ],
+    "top3": 0.6601,
+    "regret_px": 0.87,
+    "position_diagnostic": {
+      "player_pos_px": 1.7699,
+      "danger_corr_perframe_median": 0.8317,
+      "note": "final policy checkpoint perception - diagnostic only, A-01 stays with state-pass.pt"
+    }
+  }
+}

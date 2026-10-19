@@ -1,0 +1,21 @@
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "D:\WorkShop\Touhou_RL\touhou_rl\evaluate.py", line 611, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "D:\WorkShop\Touhou_RL\touhou_rl\evaluate.py", line 594, in main
+    report = run_evaluation(cfg)
+             ^^^^^^^^^^^^^^^^^^^
+  File "D:\WorkShop\Touhou_RL\touhou_rl\evaluate.py", line 345, in run_evaluation
+    obs, info = env.reset()
+                ^^^^^^^^^^^
+  File "D:\WorkShop\Touhou_RL\touhou_rl\env.py", line 156, in reset
+    menu.enter_game(
+  File "D:\WorkShop\Touhou_RL\touhou_rl\menu.py", line 194, in enter_game
+    select_difficulty(session, difficulty)
+  File "D:\WorkShop\Touhou_RL\touhou_rl\menu.py", line 146, in select_difficulty
+    _wait_screen(session, spec.SCREEN_DIFFICULTY_SELECT, timeout)
+  File "D:\WorkShop\Touhou_RL\touhou_rl\menu.py", line 137, in _wait_screen
+    raise TimeoutError(f"screen {screen} did not become ready (last={last})")
+TimeoutError: screen 4 did not become ready (last=(0, 1, 518))

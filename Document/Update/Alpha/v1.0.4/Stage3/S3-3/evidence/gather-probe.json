@@ -1,0 +1,171 @@
+{
+  "dataset": "third_party/th08/build/rl/datasets/pilot-ud0059-v2",
+  "batch_size": 96,
+  "sizes": {
+    "playfield": [
+      224,
+      192
+    ],
+    "hud_score": [
+      34,
+      216
+    ],
+    "hud_status": [
+      126,
+      216
+    ]
+  },
+  "runs": [
+    {
+      "depth": 1,
+      "mode": "fast",
+      "order": "train-shard-chunked",
+      "measured_batches": 25,
+      "cold": {
+        "seconds": 1.299,
+        "seconds_per_batch_ms": 51.96,
+        "slot_reduction": 0.0
+      },
+      "warm": {
+        "seconds": 0.65,
+        "seconds_per_batch_ms": 26.0,
+        "slot_reduction": 0.0
+      },
+      "epoch_seconds_from_warm": 17.7
+    },
+    {
+      "depth": 1,
+      "mode": "fast",
+      "order": "val-order",
+      "measured_batches": 25,
+      "cold": {
+        "seconds": 5.503,
+        "seconds_per_batch_ms": 220.1,
+        "slot_reduction": 0.0
+      },
+      "warm": {
+        "seconds": 0.984,
+        "seconds_per_batch_ms": 39.34,
+        "slot_reduction": 0.0
+      },
+      "epoch_seconds_from_warm": 3.0
+    },
+    {
+      "depth": 1,
+      "mode": "naive",
+      "order": "train-shard-chunked",
+      "measured_batches": 25,
+      "cold": {
+        "seconds": 0.653,
+        "seconds_per_batch_ms": 26.13,
+        "slot_reduction": 0.0
+      },
+      "warm": {
+        "seconds": 0.63,
+        "seconds_per_batch_ms": 25.2,
+        "slot_reduction": 0.0
+      },
+      "epoch_seconds_from_warm": 17.1
+    },
+    {
+      "depth": 1,
+      "mode": "naive",
+      "order": "val-order",
+      "measured_batches": 25,
+      "cold": {
+        "seconds": 0.967,
+        "seconds_per_batch_ms": 38.68,
+        "slot_reduction": 0.0
+      },
+      "warm": {
+        "seconds": 0.951,
+        "seconds_per_batch_ms": 38.03,
+        "slot_reduction": 0.0
+      },
+      "epoch_seconds_from_warm": 2.9
+    },
+    {
+      "depth": 3,
+      "mode": "fast",
+      "order": "train-shard-chunked",
+      "measured_batches": 25,
+      "cold": {
+        "seconds": 1.299,
+        "seconds_per_batch_ms": 51.96,
+        "slot_reduction": 0.4351
+      },
+      "warm": {
+        "seconds": 1.304,
+        "seconds_per_batch_ms": 52.15,
+        "slot_reduction": 0.4351
+      },
+      "epoch_seconds_from_warm": 35.4
+    },
+    {
+      "depth": 3,
+      "mode": "fast",
+      "order": "val-order",
+      "measured_batches": 25,
+      "cold": {
+        "seconds": 2.026,
+        "seconds_per_batch_ms": 81.04,
+        "slot_reduction": 0.1394
+      },
+      "warm": {
+        "seconds": 2.025,
+        "seconds_per_batch_ms": 80.99,
+        "slot_reduction": 0.1394
+      },
+      "epoch_seconds_from_warm": 6.2
+    },
+    {
+      "depth": 3,
+      "mode": "naive",
+      "order": "train-shard-chunked",
+      "measured_batches": 25,
+      "cold": {
+        "seconds": 1.354,
+        "seconds_per_batch_ms": 54.17,
+        "slot_reduction": 0.4351
+      },
+      "warm": {
+        "seconds": 1.333,
+        "seconds_per_batch_ms": 53.33,
+        "slot_reduction": 0.4351
+      },
+      "epoch_seconds_from_warm": 36.2
+    },
+    {
+      "depth": 3,
+      "mode": "naive",
+      "order": "val-order",
+      "measured_batches": 25,
+      "cold": {
+        "seconds": 1.788,
+        "seconds_per_batch_ms": 71.53,
+        "slot_reduction": 0.1394
+      },
+      "warm": {
+        "seconds": 1.788,
+        "seconds_per_batch_ms": 71.5,
+        "slot_reduction": 0.1394
+      },
+      "epoch_seconds_from_warm": 5.4
+    }
+  ],
+  "cache_stats": {
+    "budget_bytes": 536870912,
+    "resident_bytes": 27133392,
+    "hits": 2215,
+    "misses": 201,
+    "evictions": 0,
+    "full": {
+      "entries": 0,
+      "bytes": 0
+    },
+    "label": {
+      "entries": 201,
+      "bytes": 27133392
+    }
+  }
+}

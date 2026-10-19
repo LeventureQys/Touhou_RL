@@ -1,0 +1,60 @@
+{
+  "schema": "v104-refine-throughput/1",
+  "phase": "throughput",
+  "route": "v3-st",
+  "status": "done",
+  "created_at": "2026-10-19T21:40:02+08:00",
+  "command": "C:\\Users\\a5935\\AppData\\Local\\Programs\\Python\\Python312\\python.exe tools\\rl\\refine_v104.py --phase v3-matrix --route v3-st --throughput --out Document\\Update\\Alpha\\v1.0.4\\Stage3\\S3-7\\evidence\\throughput-v3 --recipe Document\\Update\\Alpha\\v1.0.4\\Stage3\\S3-7\\recipes\\E5.json --execute",
+  "cwd": "D:\\WorkShop\\Touhou_RL",
+  "environment": {
+    "python": "3.12.10",
+    "executable": "C:\\Users\\a5935\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+    "torch": "2.14.1+cu132",
+    "cuda_available": true,
+    "device_name": "NVIDIA GeForce RTX 4070 SUPER",
+    "numpy": "2.5.4",
+    "platform": "win32",
+    "cwd": "D:\\WorkShop\\Touhou_RL"
+  },
+  "device": "cuda",
+  "arch": "v3-st",
+  "depth": 3,
+  "local_enabled": true,
+  "parameters": 1507162,
+  "peak_memory_bytes": 1774075392,
+  "dataset": "third_party/th08/build/rl/datasets/pilot-ud0059-v2",
+  "val_index_sha256": "e5d4ebbe6d8de05793520a393fc1fdbea2b1e2c4db9ff7c1632908340c76655f",
+  "manifest_verified": true,
+  "paths": {
+    "perception": {
+      "name": "perception",
+      "train_ms_per_batch": 126.773,
+      "val_ms_per_batch": 137.215,
+      "forecast_epoch_seconds": 96.38,
+      "forecast_formula": "678*train + 76*val",
+      "warmup_batches": 10,
+      "measured_batches": 100,
+      "val_batches": 76,
+      "within_budget_60s": false,
+      "overrun_fraction": 0.6063
+    },
+    "policy_joint": {
+      "name": "policy_joint",
+      "train_ms_per_batch": 132.608,
+      "val_ms_per_batch": 135.668,
+      "forecast_epoch_seconds": 100.22,
+      "forecast_formula": "678*train + 76*val",
+      "warmup_batches": 10,
+      "measured_batches": 100,
+      "val_batches": 76,
+      "within_budget_60s": false,
+      "overrun_fraction": 0.6703
+    }
+  },
+  "epochs": {
+    "train_batches": 678,
+    "val_batches": 76
+  },
+  "budget_seconds": 60.0,
+  "gate_implication": "Q6 §3: if the v3 epoch is clearly above v2's 72 s (e.g. >100 s), stop and report the numbers before any formal v3 run"
+}

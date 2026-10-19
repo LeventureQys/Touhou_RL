@@ -1,0 +1,691 @@
+{
+  "schema": "v104-s37-smoke-verify/1",
+  "created_at": "2026-10-20T00:00:51+08:00",
+  "producer": "Document/Update/Alpha/v1.0.4/Stage3/S3-7/evidence/verify_smoke.py",
+  "device": "cuda",
+  "val_index_sha256": "e5d4ebbe6d8de05793520a393fc1fdbea2b1e2c4db9ff7c1632908340c76655f",
+  "runs": [
+    {
+      "run_dir": "third_party/th08/build/rl/runs/v104-v3-E4-s7-smoke",
+      "summary": "third_party/th08/build/rl/runs/v104-v3-E4-s7-smoke/vision-summary.json",
+      "summary_sha256": "5c7e6cdd736e26379e4b7263a4e40c4387208d1a85f0649f35692bbca5cbed70",
+      "schema": "vision-summary/2",
+      "contract_version": "v104-A/1",
+      "arch": "v3-st",
+      "depth": 3,
+      "parameters": 1507162,
+      "acceptance_eligible": false,
+      "screening": true,
+      "local_enabled": false,
+      "heatmap_sigma": 2.0,
+      "coverage": {
+        "expected_frames": 7241,
+        "actual_frames": 7241,
+        "expected_index_sha256": "e5d4ebbe6d8de05793520a393fc1fdbea2b1e2c4db9ff7c1632908340c76655f",
+        "visited_index_sha256": "e5d4ebbe6d8de05793520a393fc1fdbea2b1e2c4db9ff7c1632908340c76655f",
+        "duplicated_indices": 0,
+        "missing_indices": 0,
+        "unexpected_indices": 0,
+        "complete": true,
+        "drop_last": false
+      },
+      "epoch_seconds": {
+        "state": [
+          32.5
+        ],
+        "policy": [
+          13.9
+        ]
+      },
+      "checkpoints": {
+        "state": {
+          "file": "third_party/th08/build/rl/runs/v104-v3-E4-s7-smoke/state.pt",
+          "exists": true,
+          "best_epoch": 1,
+          "best_checkpoint": "state.pt",
+          "recorded_sha256": "80a8b46732bc95557e010daee889043fb55a21fe11d9d80bbc82bfbfeebcf59a",
+          "actual_sha256": "80a8b46732bc95557e010daee889043fb55a21fe11d9d80bbc82bfbfeebcf59a",
+          "selection_rule": "position",
+          "sha_matches": true,
+          "best_points_at_the_file": true
+        },
+        "policy": {
+          "file": "third_party/th08/build/rl/runs/v104-v3-E4-s7-smoke/policy.pt",
+          "exists": true,
+          "best_epoch": 1,
+          "best_checkpoint": "policy.pt",
+          "recorded_sha256": "d61632a1285c73e7efc75036b8147b0817035885b4618a43353ae42daea29c17",
+          "actual_sha256": "d61632a1285c73e7efc75036b8147b0817035885b4618a43353ae42daea29c17",
+          "selection_rule": "bucket-0-15-regret",
+          "sha_matches": true,
+          "best_points_at_the_file": true
+        }
+      },
+      "identities": {
+        "state": {
+          "schema": "vision-checkpoint/3",
+          "arch": "v3-st",
+          "strict_load": true,
+          "contract": {
+            "depth": 3,
+            "roi_native_hw": [
+              128,
+              128
+            ],
+            "local_grid_hw": [
+              16,
+              16
+            ],
+            "history_contract": "causal-segment-v1"
+          },
+          "extra_keys": [
+            "arch",
+            "bullet_count_mae",
+            "contract_version",
+            "danger_cell_acc",
+            "danger_corr",
+            "danger_corr_perframe_mean",
+            "danger_corr_perframe_median",
+            "danger_corr_perframe_valid",
+            "danger_head_variant",
+            "danger_iou",
+            "danger_mae_log",
+            "depth",
+            "epoch",
+            "frames",
+            "heatmap_hit_rate",
+            "heatmap_sigma",
+            "history_contract",
+            "local_enabled",
+            "loss",
+            "loss_config",
+            "manifest_sha",
+            "player_pos_p95_px",
+            "player_pos_px",
+            "policy_objective",
+            "ray_mae",
+            "region_sizes",
+            "selection_contract",
+            "self_mae",
+            "source_state_sha",
+            "stage",
+            "teacher_fingerprint",
+            "train_fraction",
+            "val_index_sha256"
+          ],
+          "source_state_sha_len": 0,
+          "teacher_fingerprint": "a52416f9342fa00a",
+          "manifest_sha_len": 64,
+          "val_index_sha256": "e5d4ebbe6d8de05793520a393fc1fdbea2b1e2c4db9ff7c1632908340c76655f",
+          "loss_config_objective": "rank",
+          "history_contract": "causal-segment-v1",
+          "local_enabled": false
+        },
+        "policy": {
+          "schema": "vision-checkpoint/3",
+          "arch": "v3-st",
+          "strict_load": true,
+          "contract": {
+            "depth": 3,
+            "roi_native_hw": [
+              128,
+              128
+            ],
+            "local_grid_hw": [
+              16,
+              16
+            ],
+            "history_contract": "causal-segment-v1"
+          },
+          "extra_keys": [
+            "arch",
+            "contract_version",
+            "danger_head_variant",
+            "depth",
+            "epoch",
+            "heatmap_sigma",
+            "history_contract",
+            "local_enabled",
+            "loss_config",
+            "manifest_sha",
+            "policy_objective",
+            "region_sizes",
+            "selection_contract",
+            "selection_key",
+            "source_state_sha",
+            "source_state_sha256",
+            "stage",
+            "teacher_fingerprint",
+            "train_fraction",
+            "val_index_sha256"
+          ],
+          "source_state_sha_len": 64,
+          "teacher_fingerprint": "a52416f9342fa00a",
+          "manifest_sha_len": 64,
+          "val_index_sha256": "e5d4ebbe6d8de05793520a393fc1fdbea2b1e2c4db9ff7c1632908340c76655f",
+          "loss_config_objective": "rank",
+          "history_contract": "causal-segment-v1",
+          "local_enabled": false
+        }
+      },
+      "inference": {
+        "state": {
+          "scores_shape": [
+            4,
+            18
+          ],
+          "scores_finite": true,
+          "actions_shape": [
+            4,
+            4
+          ],
+          "actions_dtype": "torch.int64",
+          "shoot_column_all_one": true,
+          "bomb_column_all_zero": true,
+          "decode_state_keys": [
+            "danger_log",
+            "heatmap_logits",
+            "self_feat"
+          ],
+          "local_vector_zero": true,
+          "vision_arch": "v3-st",
+          "extra_history_contract": "causal-segment-v1"
+        },
+        "policy": {
+          "scores_shape": [
+            4,
+            18
+          ],
+          "scores_finite": true,
+          "actions_shape": [
+            4,
+            4
+          ],
+          "actions_dtype": "torch.int64",
+          "shoot_column_all_one": true,
+          "bomb_column_all_zero": true,
+          "decode_state_keys": [
+            "danger_log",
+            "heatmap_logits",
+            "self_feat"
+          ],
+          "local_vector_zero": true,
+          "vision_arch": "v3-st",
+          "extra_history_contract": "causal-segment-v1"
+        }
+      },
+      "checks": {
+        "arch_is_v3st": true,
+        "depth_is_three": true,
+        "smoke_is_not_eligible": true,
+        "full_validation": true,
+        "checkpoint_shas_match": true,
+        "state_payload_valid": true,
+        "state_strict_load_and_inference": true,
+        "state_identity_complete": true,
+        "state_has_no_source_state": true,
+        "policy_payload_valid": true,
+        "policy_strict_load_and_inference": true,
+        "policy_identity_complete": true,
+        "policy_has_source_state_sha": true
+      },
+      "passed": true,
+      "experiment": "E4"
+    },
+    {
+      "run_dir": "third_party/th08/build/rl/runs/v104-v3-E5-s7-smoke",
+      "summary": "third_party/th08/build/rl/runs/v104-v3-E5-s7-smoke/vision-summary.json",
+      "summary_sha256": "826bae4b516742b5a81d0bd86dcf99379f20f022c6a619a44313fdb4884abe32",
+      "schema": "vision-summary/2",
+      "contract_version": "v104-A/1",
+      "arch": "v3-st",
+      "depth": 3,
+      "parameters": 1507162,
+      "acceptance_eligible": false,
+      "screening": true,
+      "local_enabled": true,
+      "heatmap_sigma": 2.0,
+      "coverage": {
+        "expected_frames": 7241,
+        "actual_frames": 7241,
+        "expected_index_sha256": "e5d4ebbe6d8de05793520a393fc1fdbea2b1e2c4db9ff7c1632908340c76655f",
+        "visited_index_sha256": "e5d4ebbe6d8de05793520a393fc1fdbea2b1e2c4db9ff7c1632908340c76655f",
+        "duplicated_indices": 0,
+        "missing_indices": 0,
+        "unexpected_indices": 0,
+        "complete": true,
+        "drop_last": false
+      },
+      "epoch_seconds": {
+        "state": [
+          32.1
+        ],
+        "policy": [
+          14.2
+        ]
+      },
+      "checkpoints": {
+        "state": {
+          "file": "third_party/th08/build/rl/runs/v104-v3-E5-s7-smoke/state.pt",
+          "exists": true,
+          "best_epoch": 1,
+          "best_checkpoint": "state.pt",
+          "recorded_sha256": "05968a3b5035487bda18dfa5a0c7b3d9133c76d227f59c81c121fde528e4acc6",
+          "actual_sha256": "05968a3b5035487bda18dfa5a0c7b3d9133c76d227f59c81c121fde528e4acc6",
+          "selection_rule": "position",
+          "sha_matches": true,
+          "best_points_at_the_file": true
+        },
+        "policy": {
+          "file": "third_party/th08/build/rl/runs/v104-v3-E5-s7-smoke/policy.pt",
+          "exists": true,
+          "best_epoch": 1,
+          "best_checkpoint": "policy.pt",
+          "recorded_sha256": "d1ca2af389e04ad607192ce2f3e9bcfa0c6e7541546c60e2d5a4da070cb6d8c4",
+          "actual_sha256": "d1ca2af389e04ad607192ce2f3e9bcfa0c6e7541546c60e2d5a4da070cb6d8c4",
+          "selection_rule": "bucket-0-15-regret",
+          "sha_matches": true,
+          "best_points_at_the_file": true
+        }
+      },
+      "identities": {
+        "state": {
+          "schema": "vision-checkpoint/3",
+          "arch": "v3-st",
+          "strict_load": true,
+          "contract": {
+            "depth": 3,
+            "roi_native_hw": [
+              128,
+              128
+            ],
+            "local_grid_hw": [
+              16,
+              16
+            ],
+            "history_contract": "causal-segment-v1"
+          },
+          "extra_keys": [
+            "arch",
+            "bullet_count_mae",
+            "contract_version",
+            "danger_cell_acc",
+            "danger_corr",
+            "danger_corr_perframe_mean",
+            "danger_corr_perframe_median",
+            "danger_corr_perframe_valid",
+            "danger_head_variant",
+            "danger_iou",
+            "danger_mae_log",
+            "depth",
+            "epoch",
+            "frames",
+            "heatmap_hit_rate",
+            "heatmap_sigma",
+            "history_contract",
+            "local_enabled",
+            "loss",
+            "loss_config",
+            "manifest_sha",
+            "player_pos_p95_px",
+            "player_pos_px",
+            "policy_objective",
+            "ray_mae",
+            "region_sizes",
+            "selection_contract",
+            "self_mae",
+            "source_state_sha",
+            "stage",
+            "teacher_fingerprint",
+            "train_fraction",
+            "val_index_sha256"
+          ],
+          "source_state_sha_len": 0,
+          "teacher_fingerprint": "a52416f9342fa00a",
+          "manifest_sha_len": 64,
+          "val_index_sha256": "e5d4ebbe6d8de05793520a393fc1fdbea2b1e2c4db9ff7c1632908340c76655f",
+          "loss_config_objective": "rank",
+          "history_contract": "causal-segment-v1",
+          "local_enabled": true
+        },
+        "policy": {
+          "schema": "vision-checkpoint/3",
+          "arch": "v3-st",
+          "strict_load": true,
+          "contract": {
+            "depth": 3,
+            "roi_native_hw": [
+              128,
+              128
+            ],
+            "local_grid_hw": [
+              16,
+              16
+            ],
+            "history_contract": "causal-segment-v1"
+          },
+          "extra_keys": [
+            "arch",
+            "contract_version",
+            "danger_head_variant",
+            "depth",
+            "epoch",
+            "heatmap_sigma",
+            "history_contract",
+            "local_enabled",
+            "loss_config",
+            "manifest_sha",
+            "policy_objective",
+            "region_sizes",
+            "selection_contract",
+            "selection_key",
+            "source_state_sha",
+            "source_state_sha256",
+            "stage",
+            "teacher_fingerprint",
+            "train_fraction",
+            "val_index_sha256"
+          ],
+          "source_state_sha_len": 64,
+          "teacher_fingerprint": "a52416f9342fa00a",
+          "manifest_sha_len": 64,
+          "val_index_sha256": "e5d4ebbe6d8de05793520a393fc1fdbea2b1e2c4db9ff7c1632908340c76655f",
+          "loss_config_objective": "rank",
+          "history_contract": "causal-segment-v1",
+          "local_enabled": true
+        }
+      },
+      "inference": {
+        "state": {
+          "scores_shape": [
+            4,
+            18
+          ],
+          "scores_finite": true,
+          "actions_shape": [
+            4,
+            4
+          ],
+          "actions_dtype": "torch.int64",
+          "shoot_column_all_one": true,
+          "bomb_column_all_zero": true,
+          "decode_state_keys": [
+            "danger_log",
+            "heatmap_logits",
+            "self_feat"
+          ],
+          "local_vector_zero": false,
+          "vision_arch": "v3-st",
+          "extra_history_contract": "causal-segment-v1"
+        },
+        "policy": {
+          "scores_shape": [
+            4,
+            18
+          ],
+          "scores_finite": true,
+          "actions_shape": [
+            4,
+            4
+          ],
+          "actions_dtype": "torch.int64",
+          "shoot_column_all_one": true,
+          "bomb_column_all_zero": true,
+          "decode_state_keys": [
+            "danger_log",
+            "heatmap_logits",
+            "self_feat"
+          ],
+          "local_vector_zero": false,
+          "vision_arch": "v3-st",
+          "extra_history_contract": "causal-segment-v1"
+        }
+      },
+      "checks": {
+        "arch_is_v3st": true,
+        "depth_is_three": true,
+        "smoke_is_not_eligible": true,
+        "full_validation": true,
+        "checkpoint_shas_match": true,
+        "state_payload_valid": true,
+        "state_strict_load_and_inference": true,
+        "state_identity_complete": true,
+        "state_has_no_source_state": true,
+        "policy_payload_valid": true,
+        "policy_strict_load_and_inference": true,
+        "policy_identity_complete": true,
+        "policy_has_source_state_sha": true
+      },
+      "passed": true,
+      "experiment": "E5"
+    },
+    {
+      "run_dir": "third_party/th08/build/rl/runs/v104-v3-E6-s7-smoke",
+      "summary": "third_party/th08/build/rl/runs/v104-v3-E6-s7-smoke/vision-summary.json",
+      "summary_sha256": "922571be7776814815c31de9dec52b766181cc8270309de4c2afac64f0fe48ea",
+      "schema": "vision-summary/2",
+      "contract_version": "v104-A/1",
+      "arch": "v3-st",
+      "depth": 3,
+      "parameters": 1507162,
+      "acceptance_eligible": false,
+      "screening": true,
+      "local_enabled": true,
+      "heatmap_sigma": 2.0,
+      "coverage": {
+        "expected_frames": 7241,
+        "actual_frames": 7241,
+        "expected_index_sha256": "e5d4ebbe6d8de05793520a393fc1fdbea2b1e2c4db9ff7c1632908340c76655f",
+        "visited_index_sha256": "e5d4ebbe6d8de05793520a393fc1fdbea2b1e2c4db9ff7c1632908340c76655f",
+        "duplicated_indices": 0,
+        "missing_indices": 0,
+        "unexpected_indices": 0,
+        "complete": true,
+        "drop_last": false
+      },
+      "epoch_seconds": {
+        "state": [
+          32.0
+        ],
+        "policy": [
+          14.4
+        ]
+      },
+      "checkpoints": {
+        "state": {
+          "file": "third_party/th08/build/rl/runs/v104-v3-E6-s7-smoke/state.pt",
+          "exists": true,
+          "best_epoch": 1,
+          "best_checkpoint": "state.pt",
+          "recorded_sha256": "9ca175cb0b42eb0219b6a378a435c04c95337623ec5f2793d5da154568803fd7",
+          "actual_sha256": "9ca175cb0b42eb0219b6a378a435c04c95337623ec5f2793d5da154568803fd7",
+          "selection_rule": "position",
+          "sha_matches": true,
+          "best_points_at_the_file": true
+        },
+        "policy": {
+          "file": "third_party/th08/build/rl/runs/v104-v3-E6-s7-smoke/policy.pt",
+          "exists": true,
+          "best_epoch": 1,
+          "best_checkpoint": "policy.pt",
+          "recorded_sha256": "29a0c19a259b18845fae3add0cf37dc0a29c2d54ed0526ae1b622c6562207955",
+          "actual_sha256": "29a0c19a259b18845fae3add0cf37dc0a29c2d54ed0526ae1b622c6562207955",
+          "selection_rule": "bucket-0-15-regret",
+          "sha_matches": true,
+          "best_points_at_the_file": true
+        }
+      },
+      "identities": {
+        "state": {
+          "schema": "vision-checkpoint/3",
+          "arch": "v3-st",
+          "strict_load": true,
+          "contract": {
+            "depth": 3,
+            "roi_native_hw": [
+              128,
+              128
+            ],
+            "local_grid_hw": [
+              16,
+              16
+            ],
+            "history_contract": "causal-segment-v1"
+          },
+          "extra_keys": [
+            "arch",
+            "bullet_count_mae",
+            "contract_version",
+            "danger_cell_acc",
+            "danger_corr",
+            "danger_corr_perframe_mean",
+            "danger_corr_perframe_median",
+            "danger_corr_perframe_valid",
+            "danger_head_variant",
+            "danger_iou",
+            "danger_mae_log",
+            "depth",
+            "epoch",
+            "frames",
+            "heatmap_hit_rate",
+            "heatmap_sigma",
+            "history_contract",
+            "local_enabled",
+            "loss",
+            "loss_config",
+            "manifest_sha",
+            "player_pos_p95_px",
+            "player_pos_px",
+            "policy_objective",
+            "ray_mae",
+            "region_sizes",
+            "selection_contract",
+            "self_mae",
+            "source_state_sha",
+            "stage",
+            "teacher_fingerprint",
+            "train_fraction",
+            "val_index_sha256"
+          ],
+          "source_state_sha_len": 0,
+          "teacher_fingerprint": "a52416f9342fa00a",
+          "manifest_sha_len": 64,
+          "val_index_sha256": "e5d4ebbe6d8de05793520a393fc1fdbea2b1e2c4db9ff7c1632908340c76655f",
+          "loss_config_objective": "rank",
+          "history_contract": "causal-segment-v1",
+          "local_enabled": true
+        },
+        "policy": {
+          "schema": "vision-checkpoint/3",
+          "arch": "v3-st",
+          "strict_load": true,
+          "contract": {
+            "depth": 3,
+            "roi_native_hw": [
+              128,
+              128
+            ],
+            "local_grid_hw": [
+              16,
+              16
+            ],
+            "history_contract": "causal-segment-v1"
+          },
+          "extra_keys": [
+            "arch",
+            "contract_version",
+            "danger_head_variant",
+            "depth",
+            "epoch",
+            "heatmap_sigma",
+            "history_contract",
+            "local_enabled",
+            "loss_config",
+            "manifest_sha",
+            "policy_objective",
+            "region_sizes",
+            "selection_contract",
+            "selection_key",
+            "source_state_sha",
+            "source_state_sha256",
+            "stage",
+            "teacher_fingerprint",
+            "train_fraction",
+            "val_index_sha256"
+          ],
+          "source_state_sha_len": 64,
+          "teacher_fingerprint": "a52416f9342fa00a",
+          "manifest_sha_len": 64,
+          "val_index_sha256": "e5d4ebbe6d8de05793520a393fc1fdbea2b1e2c4db9ff7c1632908340c76655f",
+          "loss_config_objective": "rank",
+          "history_contract": "causal-segment-v1",
+          "local_enabled": true
+        }
+      },
+      "inference": {
+        "state": {
+          "scores_shape": [
+            4,
+            18
+          ],
+          "scores_finite": true,
+          "actions_shape": [
+            4,
+            4
+          ],
+          "actions_dtype": "torch.int64",
+          "shoot_column_all_one": true,
+          "bomb_column_all_zero": true,
+          "decode_state_keys": [
+            "danger_log",
+            "heatmap_logits",
+            "self_feat"
+          ],
+          "local_vector_zero": false,
+          "vision_arch": "v3-st",
+          "extra_history_contract": "causal-segment-v1"
+        },
+        "policy": {
+          "scores_shape": [
+            4,
+            18
+          ],
+          "scores_finite": true,
+          "actions_shape": [
+            4,
+            4
+          ],
+          "actions_dtype": "torch.int64",
+          "shoot_column_all_one": true,
+          "bomb_column_all_zero": true,
+          "decode_state_keys": [
+            "danger_log",
+            "heatmap_logits",
+            "self_feat"
+          ],
+          "local_vector_zero": false,
+          "vision_arch": "v3-st",
+          "extra_history_contract": "causal-segment-v1"
+        }
+      },
+      "checks": {
+        "arch_is_v3st": true,
+        "depth_is_three": true,
+        "smoke_is_not_eligible": true,
+        "full_validation": true,
+        "checkpoint_shas_match": true,
+        "state_payload_valid": true,
+        "state_strict_load_and_inference": true,
+        "state_identity_complete": true,
+        "state_has_no_source_state": true,
+        "policy_payload_valid": true,
+        "policy_strict_load_and_inference": true,
+        "policy_identity_complete": true,
+        "policy_has_source_state_sha": true
+      },
+      "passed": true,
+      "experiment": "E6"
+    }
+  ],
+  "all_passed": true
+}

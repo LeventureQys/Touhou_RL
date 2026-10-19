@@ -1,0 +1,343 @@
+{
+  "schema": "v104-s34-phase/1",
+  "phase": "baseline",
+  "status": "done",
+  "created_at": "2026-10-19T06:58:05+08:00",
+  "command": "C:\\Users\\a5935\\AppData\\Local\\Programs\\Python\\Python312\\python.exe tools\\rl\\run_v104_experiments.py --phase baseline --out D:\\WorkShop\\Touhou_RL\\Document\\Update\\Alpha\\v1.0.4\\Stage3\\S3-4\\evidence\\baseline --execute",
+  "cwd": "D:\\WorkShop\\Touhou_RL",
+  "execute": true,
+  "dataset": "third_party/th08/build/rl/datasets/pilot-ud0059-v2",
+  "manifest": "third_party/th08/build/rl/datasets/pilot-ud0059-v2/manifest.json",
+  "manifest_sha256": "aa89c48893eb7e69628a5fd1c414c7c9b8b04cd5b88a225a6f4feb70373c949f",
+  "val_index_sha256": "e5d4ebbe6d8de05793520a393fc1fdbea2b1e2c4db9ff7c1632908340c76655f",
+  "val_frames": 7241,
+  "teacher": {
+    "fingerprint": "a52416f9342fa00a0185c061771d09c22ba735bbe01c83dd7910a6c3bc8ec0f6",
+    "cache": "third_party/th08/build/rl/datasets/pilot-ud0059-v2-teacher-values-v104-a52416f9342fa00a0185c061771d09c22ba735bbe01c83dd7910a6c3bc8ec0f6.npz",
+    "cache_sha256": "7de5fe166ab147eb7e16e6bd406496bd764b9d98c5ea1e97551bc50d4f402d0c"
+  },
+  "device": "cuda",
+  "env": {
+    "python": "3.12.10",
+    "executable": "C:\\Users\\a5935\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+    "torch": "2.14.1+cu132",
+    "cuda_available": true,
+    "device_name": "NVIDIA GeForce RTX 4070 SUPER",
+    "numpy": "2.5.4",
+    "platform": "win32",
+    "cwd": "D:\\WorkShop\\Touhou_RL"
+  },
+  "old": {
+    "state": {
+      "run": "third_party/th08/build/rl/runs/v104-a01-72ep",
+      "checkpoint": "third_party/th08/build/rl/runs/v104-a01-72ep/state.pt",
+      "checkpoint_sha256": "e93b967420211aa936be22d55c1e90b522d1f21bd709c35f3b2cf7251859f12c",
+      "summary": "third_party/th08/build/rl/runs/v104-a01-72ep/vision-summary.json",
+      "summary_sha256": "4f58c641fc273934d13ad57e2a0b5f03da28eae5c959b923d055ff0b6742f91a",
+      "summary_best": {
+        "epoch": 55,
+        "train_loss": 3.7809,
+        "val_loss": 3.77651,
+        "seconds": 37.7,
+        "val_frames": 7200,
+        "val_self_mae": 0.088,
+        "val_player_pos_px": 12.808,
+        "val_player_pos_p95_px": 40.9585,
+        "val_ray_mae": 0.1785,
+        "val_bullet_count_mae": 47.9,
+        "val_danger_mae_log": 0.1078,
+        "val_danger_corr": 0.7639,
+        "val_danger_corr_perframe_mean": 0.5489,
+        "val_danger_corr_perframe_median": 0.6382,
+        "val_danger_corr_perframe_valid": 7200,
+        "val_danger_iou": 0.4361,
+        "val_danger_cell_acc": 0.8642,
+        "val_heatmap_hit_rate": 0.9407
+      },
+      "summary_val_frames": 7200
+    },
+    "policy": {
+      "run": "third_party/th08/build/rl/runs/v104-clean-24e12e",
+      "checkpoint": "third_party/th08/build/rl/runs/v104-clean-24e12e/policy.pt",
+      "checkpoint_sha256": "0070433f20c5dc7310cdbc3afc29faf930466dfcb3a1d87147f2244de6315029",
+      "summary": "third_party/th08/build/rl/runs/v104-clean-24e12e/vision-summary.json",
+      "summary_sha256": "361ff575f35d3211a94f3a9a52d3cc9f439cb333fa6908a45f0d47644a02ea71",
+      "summary_best": {
+        "epoch": 9,
+        "train_loss": 0.13458,
+        "val_loss": 0.13505,
+        "seconds": 93.5,
+        "val_frames": 7200,
+        "val_top1": 0.0699,
+        "val_regret_px": 3.744,
+        "val_regret_px_bucket_0_15": 3.967,
+        "by_danger": [
+          {
+            "bucket": "0-15",
+            "frames": 1076,
+            "top1": 0.0595,
+            "regret_px": 3.967
+          },
+          {
+            "bucket": "15-30",
+            "frames": 2009,
+            "top1": 0.0562,
+            "regret_px": 4.222
+          },
+          {
+            "bucket": "30-60",
+            "frames": 1367,
+            "top1": 0.0549,
+            "regret_px": 5.152
+          },
+          {
+            "bucket": "60-120",
+            "frames": 789,
+            "top1": 0.0634,
+            "regret_px": 5.099
+          },
+          {
+            "bucket": "120+",
+            "frames": 1959,
+            "top1": 0.1026,
+            "regret_px": 1.604
+          }
+        ]
+      },
+      "summary_val_frames": 7200
+    }
+  },
+  "recheck": {
+    "state": {
+      "checkpoint": "third_party/th08/build/rl/runs/v104-a01-72ep/state.pt",
+      "checkpoint_sha256": "e93b967420211aa936be22d55c1e90b522d1f21bd709c35f3b2cf7251859f12c",
+      "arch": "v2",
+      "depth": 1,
+      "history_contract": "legacy",
+      "legacy_history": true,
+      "frames": 7241,
+      "coverage": {
+        "expected_frames": 7241,
+        "actual_frames": 7241,
+        "expected_index_sha256": "e5d4ebbe6d8de05793520a393fc1fdbea2b1e2c4db9ff7c1632908340c76655f",
+        "visited_index_sha256": "e5d4ebbe6d8de05793520a393fc1fdbea2b1e2c4db9ff7c1632908340c76655f",
+        "duplicated_indices": 0,
+        "missing_indices": 0,
+        "unexpected_indices": 0,
+        "complete": true
+      },
+      "metrics": {
+        "self_mae": 0.0879,
+        "player_pos_px": 13.234,
+        "player_pos_p95_px": 43.1621,
+        "ray_mae": 0.178,
+        "bullet_count_mae": 47.8,
+        "danger_mae_log": 0.1076,
+        "danger_corr": 0.764,
+        "danger_corr_perframe_mean": 0.5465,
+        "danger_corr_perframe_median": 0.635,
+        "danger_corr_perframe_valid": 7241,
+        "danger_iou": 0.4339,
+        "danger_cell_acc": 0.8648,
+        "heatmap_hit_rate": 0.939
+      },
+      "seconds": 23.04
+    },
+    "policy": {
+      "checkpoint": "third_party/th08/build/rl/runs/v104-clean-24e12e/policy.pt",
+      "checkpoint_sha256": "0070433f20c5dc7310cdbc3afc29faf930466dfcb3a1d87147f2244de6315029",
+      "arch": "v2",
+      "depth": 1,
+      "frames": 7241,
+      "metrics": {
+        "top1": 0.0699,
+        "top3": 0.192,
+        "top3_tie": 0.366,
+        "near_optimal_05": 0.3095,
+        "regret_px": 3.729,
+        "regret_p90_px": 8.625,
+        "by_danger": [
+          {
+            "bucket": "0-15",
+            "frames": 1076,
+            "top1": 0.0595,
+            "top3": 0.1803,
+            "top3_tie": 0.2463,
+            "near_optimal_05": 0.1682,
+            "regret_px": 3.967,
+            "regret_p90_px": 7.93
+          },
+          {
+            "bucket": "15-30",
+            "frames": 2009,
+            "top1": 0.0562,
+            "top3": 0.2026,
+            "top3_tie": 0.2588,
+            "near_optimal_05": 0.2021,
+            "regret_px": 4.222,
+            "regret_p90_px": 8.322
+          },
+          {
+            "bucket": "30-60",
+            "frames": 1367,
+            "top1": 0.0549,
+            "top3": 0.1807,
+            "top3_tie": 0.218,
+            "near_optimal_05": 0.1375,
+            "regret_px": 5.152,
+            "regret_p90_px": 10.656
+          },
+          {
+            "bucket": "60-120",
+            "frames": 802,
+            "top1": 0.0661,
+            "top3": 0.1983,
+            "top3_tie": 0.2382,
+            "near_optimal_05": 0.1222,
+            "regret_px": 5.061,
+            "regret_p90_px": 11.031
+          },
+          {
+            "bucket": "120+",
+            "frames": 1987,
+            "top1": 0.1012,
+            "top3": 0.1928,
+            "top3_tie": 0.6925,
+            "near_optimal_05": 0.6885,
+            "regret_px": 1.585,
+            "regret_p90_px": 5.25
+          }
+        ]
+      },
+      "score_std": 0.04788805916905403,
+      "seconds": 24.64
+    }
+  },
+  "comparison": {
+    "state": {
+      "old_summary_7200": {
+        "val_frames": 7200,
+        "val_player_pos_px": 12.808,
+        "val_player_pos_p95_px": 40.9585,
+        "val_danger_corr_perframe_median": 0.6382,
+        "val_danger_corr_perframe_valid": 7200,
+        "epoch": 55
+      },
+      "recheck_7241": {
+        "frames": 7241,
+        "val_player_pos_px": 13.234,
+        "val_player_pos_p95_px": 43.1621,
+        "val_danger_corr_perframe_median": 0.635,
+        "val_danger_corr_perframe_valid": 7241
+      }
+    },
+    "policy": {
+      "old_summary_7200": {
+        "val_frames": 7200,
+        "val_regret_px": 3.744,
+        "val_regret_px_bucket_0_15": 3.967,
+        "val_top1": 0.0699,
+        "by_danger": [
+          {
+            "bucket": "0-15",
+            "frames": 1076,
+            "top1": 0.0595,
+            "regret_px": 3.967
+          },
+          {
+            "bucket": "15-30",
+            "frames": 2009,
+            "top1": 0.0562,
+            "regret_px": 4.222
+          },
+          {
+            "bucket": "30-60",
+            "frames": 1367,
+            "top1": 0.0549,
+            "regret_px": 5.152
+          },
+          {
+            "bucket": "60-120",
+            "frames": 789,
+            "top1": 0.0634,
+            "regret_px": 5.099
+          },
+          {
+            "bucket": "120+",
+            "frames": 1959,
+            "top1": 0.1026,
+            "regret_px": 1.604
+          }
+        ],
+        "epoch": 9
+      },
+      "recheck_7241": {
+        "frames": 7241,
+        "val_regret_px": 3.729,
+        "val_regret_px_bucket_0_15": 3.967,
+        "val_top1": 0.0699,
+        "by_danger": [
+          {
+            "bucket": "0-15",
+            "frames": 1076,
+            "top1": 0.0595,
+            "top3": 0.1803,
+            "top3_tie": 0.2463,
+            "near_optimal_05": 0.1682,
+            "regret_px": 3.967,
+            "regret_p90_px": 7.93
+          },
+          {
+            "bucket": "15-30",
+            "frames": 2009,
+            "top1": 0.0562,
+            "top3": 0.2026,
+            "top3_tie": 0.2588,
+            "near_optimal_05": 0.2021,
+            "regret_px": 4.222,
+            "regret_p90_px": 8.322
+          },
+          {
+            "bucket": "30-60",
+            "frames": 1367,
+            "top1": 0.0549,
+            "top3": 0.1807,
+            "top3_tie": 0.218,
+            "near_optimal_05": 0.1375,
+            "regret_px": 5.152,
+            "regret_p90_px": 10.656
+          },
+          {
+            "bucket": "60-120",
+            "frames": 802,
+            "top1": 0.0661,
+            "top3": 0.1983,
+            "top3_tie": 0.2382,
+            "near_optimal_05": 0.1222,
+            "regret_px": 5.061,
+            "regret_p90_px": 11.031
+          },
+          {
+            "bucket": "120+",
+            "frames": 1987,
+            "top1": 0.1012,
+            "top3": 0.1928,
+            "top3_tie": 0.6925,
+            "near_optimal_05": 0.6885,
+            "regret_px": 1.585,
+            "regret_p90_px": 5.25
+          }
+        ]
+      }
+    }
+  },
+  "frames_note": "The frozen summaries' per-epoch rows report val_frames=7200 (the validation slice that existed when they were trained); this re-evaluation uses the fixed A validation split of 7241 frames.  7200 != 7241: both columns are listed side by side and must not be mixed.  The old summaries were read, never written.",
+  "new_E0": {
+    "status": "pending",
+    "note": "E0 is a new run of this stage (runs/v104-E0-s7); it is listed separately from this read-only re-evaluation and cannot stand in for the old baseline.",
+    "source": "matrix phase / experiment-table.json",
+    "row": null
+  },
+  "seconds": 47.8,
+  "overwrote_frozen_runs": false
+}

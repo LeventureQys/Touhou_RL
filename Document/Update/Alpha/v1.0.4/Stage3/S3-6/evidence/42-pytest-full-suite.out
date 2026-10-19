@@ -1,0 +1,15 @@
+........................................................................ [ 14%]
+........................................................................ [ 29%]
+........................................................................ [ 44%]
+........................................................................ [ 59%]
+........................................................................ [ 74%]
+........................................................................ [ 89%]
+.................................................                        [100%]
+============================== warnings summary ===============================
+touhou_rl/tests/test_v104_train_contract.py::test_self_auxiliary_is_masked_to_the_nineteen_original_columns
+  D:\WorkShop\Touhou_RL\touhou_rl\tests\test_v104_train_contract.py:396: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+  Consider using tensor.detach() first. (Triggered internally at C:\actions-runner\_work\pytorch\pytorch\torch\csrc\autograd\generated\python_variable_methods.cpp:821.)
+    assert float(F.smooth_l1_loss(predicted[:, 2:24], truth[:, 2:24])) != float(masked)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+481 passed, 1 warning in 49.66s

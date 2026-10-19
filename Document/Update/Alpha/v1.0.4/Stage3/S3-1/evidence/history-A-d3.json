@@ -1,0 +1,115 @@
+{
+  "contract_version": "v104-history-audit/1",
+  "history_contract": "causal-segment-v1",
+  "dataset": "third_party\\th08\\build\\rl\\datasets\\pilot-ud0059-v2",
+  "frames": 72413,
+  "shards": 566,
+  "depth": 3,
+  "delta_histogram": {
+    "-30942": 1,
+    "-26908": 1,
+    "-22393": 1,
+    "-19008": 1,
+    "-16731": 1,
+    "2": 66549,
+    "3": 5008,
+    "4": 87,
+    "5": 44,
+    "6": 154
+  },
+  "delta_pairs": 71847,
+  "history_delta_histogram": {
+    "-30942": 1,
+    "-30940": 1,
+    "-30938": 1,
+    "-26908": 1,
+    "-26906": 1,
+    "-26904": 1,
+    "-22393": 1,
+    "-22391": 1,
+    "-22389": 1,
+    "-19008": 1,
+    "-19006": 1,
+    "-19004": 1,
+    "-16731": 1,
+    "-16729": 1,
+    "-16727": 1,
+    "0": 2478,
+    "2": 197167,
+    "3": 14590,
+    "4": 134,
+    "5": 298,
+    "6": 561,
+    "7": 239,
+    "8": 21,
+    "9": 29,
+    "10": 9
+  },
+  "resets": {
+    "shard": 565,
+    "stage": 5,
+    "death": 1,
+    "gap": 5298,
+    "untrusted": 0,
+    "total": 5864
+  },
+  "segments": 5865,
+  "longest_segment_frames": 128,
+  "untrusted_frames": 0,
+  "cross_shard": {
+    "stage": 0,
+    "death": 0,
+    "delta_histogram": {
+      "2": 34,
+      "3": 227,
+      "4": 239,
+      "5": 16,
+      "9": 20,
+      "10": 2,
+      "12": 21,
+      "14": 1,
+      "15": 5
+    }
+  },
+  "repeated_history_samples": 6714,
+  "repeated_history_ratio": 0.09271815834173422,
+  "resets_rule": "resets counts break events; one break can satisfy several categories (for example a stage change that also skips frames sets stage and gap), so sum(resets[kind]) >= resets.total. The dataset's first sample starts the stream and is not counted.",
+  "repeated_history_rule": "a centre sample counts once when any two of its depth slots carry the same frame, so depth 1 always reports 0 repeated samples",
+  "repeated_history_denominator": "frames",
+  "decode_cache": {
+    "enabled": true,
+    "hits": 0,
+    "missing": 0,
+    "invalid": 0,
+    "disabled": 0,
+    "reasons": {},
+    "verified_source_digests": 0,
+    "contract": "v104-decode-cache/1"
+  },
+  "cache_stats": {
+    "budget_bytes": 536870912,
+    "resident_bytes": 0,
+    "hits": 0,
+    "misses": 0,
+    "evictions": 0,
+    "full": {
+      "entries": 0,
+      "bytes": 0
+    },
+    "label": {
+      "entries": 0,
+      "bytes": 0
+    }
+  },
+  "mode": "audit",
+  "manifest": {
+    "path": "third_party\\th08\\build\\rl\\datasets\\pilot-ud0059-v2\\manifest.json",
+    "total_frames": 72413,
+    "shards": 566,
+    "seed": 7,
+    "val_fraction": 0.1,
+    "val_frames": 7241,
+    "val_index_sha256": "e5d4ebbe6d8de05793520a393fc1fdbea2b1e2c4db9ff7c1632908340c76655f"
+  },
+  "generated": "2026-10-19T03:09:16"
+}

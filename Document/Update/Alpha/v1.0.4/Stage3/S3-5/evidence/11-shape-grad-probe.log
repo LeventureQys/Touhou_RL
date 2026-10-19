@@ -1,0 +1,470 @@
+{
+  "seed": 5,
+  "batch": 1,
+  "parameters": 1507162,
+  "parameters_by_child": {
+    "playfield": 560992,
+    "heat_conv": 92224,
+    "heatmap_head": 65,
+    "location_mlp": 80,
+    "local": 289632,
+    "global_conv": 3104,
+    "global_pool": 0,
+    "global_fc": 182912,
+    "hud_score": 68944,
+    "hud_status": 118096,
+    "trunk": 168448,
+    "policy_head": 4626,
+    "self_head": 5654,
+    "danger": 12385
+  },
+  "parameters_v2_reference": 554873,
+  "parameter_ratio_to_v2": 2.7162,
+  "A_declared_tensors": [
+    {
+      "tensor": "input.playfield[B,3*depth,H,W]",
+      "shape": "1x9x224x192",
+      "dtype": "torch.float32",
+      "finite": true
+    },
+    {
+      "tensor": "input.hud_score newest frame[B,3,H,W]",
+      "shape": "1x3x34x216",
+      "dtype": "torch.float32",
+      "finite": true
+    },
+    {
+      "tensor": "input.hud_status newest frame[B,3,H,W]",
+      "shape": "1x3x126x216",
+      "dtype": "torch.float32",
+      "finite": true
+    },
+    {
+      "tensor": "playfield.F4",
+      "shape": "1x64x56x48",
+      "dtype": "torch.float32",
+      "finite": true
+    },
+    {
+      "tensor": "playfield.F8",
+      "shape": "1x96x28x24",
+      "dtype": "torch.float32",
+      "finite": true
+    },
+    {
+      "tensor": "locate.heatmap_logits",
+      "shape": "1x56x48",
+      "dtype": "torch.float32",
+      "finite": true
+    },
+    {
+      "tensor": "decode.position",
+      "shape": "1x2",
+      "dtype": "torch.float32",
+      "finite": true
+    },
+    {
+      "tensor": "decode.location_stats",
+      "shape": "1x2",
+      "dtype": "torch.float32",
+      "finite": true
+    },
+    {
+      "tensor": "location_mlp.out",
+      "shape": "1x16",
+      "dtype": "torch.float32",
+      "finite": true
+    },
+    {
+      "tensor": "local.patch",
+      "shape": "1x64x16x16",
+      "dtype": "torch.float32",
+      "finite": true
+    },
+    {
+      "tensor": "local.validity",
+      "shape": "1x1x16x16",
+      "dtype": "torch.float32",
+      "finite": true
+    },
+    {
+      "tensor": "local.vector",
+      "shape": "1x128",
+      "dtype": "torch.float32",
+      "finite": true
+    },
+    {
+      "tensor": "global.vector",
+      "shape": "1x128",
+      "dtype": "torch.float32",
+      "finite": true
+    },
+    {
+      "tensor": "hud_score.vector",
+      "shape": "1x64",
+      "dtype": "torch.float32",
+      "finite": true
+    },
+    {
+      "tensor": "hud_status.vector",
+      "shape": "1x64",
+      "dtype": "torch.float32",
+      "finite": true
+    },
+    {
+      "tensor": "fusion.input",
+      "shape": "1x400",
+      "dtype": "torch.float32",
+      "finite": true
+    },
+    {
+      "tensor": "trunk.features",
+      "shape": "1x256",
+      "dtype": "torch.float32",
+      "finite": true
+    },
+    {
+      "tensor": "policy_head.policy_logits",
+      "shape": "1x18",
+      "dtype": "torch.float32",
+      "finite": true
+    },
+    {
+      "tensor": "self_head.self_pred",
+      "shape": "1x24",
+      "dtype": "torch.float32",
+      "finite": true
+    },
+    {
+      "tensor": "danger.danger_log",
+      "shape": "1x128",
+      "dtype": "torch.float32",
+      "finite": true
+    }
+  ],
+  "B_modules": [
+    {
+      "module": "playfield.stem.0",
+      "type": "Conv2d",
+      "out_shape": "1x32x112x96",
+      "parameters": 7232
+    },
+    {
+      "module": "playfield.stage4.0",
+      "type": "Conv2d",
+      "out_shape": "1x64x56x48",
+      "parameters": 18496
+    },
+    {
+      "module": "playfield.res4.0.body.0",
+      "type": "Conv2d",
+      "out_shape": "1x64x56x48",
+      "parameters": 36928
+    },
+    {
+      "module": "playfield.res4.0.body.2",
+      "type": "Conv2d",
+      "out_shape": "1x64x56x48",
+      "parameters": 36928
+    },
+    {
+      "module": "playfield.res4.1.body.0",
+      "type": "Conv2d",
+      "out_shape": "1x64x56x48",
+      "parameters": 36928
+    },
+    {
+      "module": "playfield.res4.1.body.2",
+      "type": "Conv2d",
+      "out_shape": "1x64x56x48",
+      "parameters": 36928
+    },
+    {
+      "module": "playfield.stage8.0",
+      "type": "Conv2d",
+      "out_shape": "1x96x28x24",
+      "parameters": 55392
+    },
+    {
+      "module": "playfield.res8.0.body.0",
+      "type": "Conv2d",
+      "out_shape": "1x96x28x24",
+      "parameters": 83040
+    },
+    {
+      "module": "playfield.res8.0.body.2",
+      "type": "Conv2d",
+      "out_shape": "1x96x28x24",
+      "parameters": 83040
+    },
+    {
+      "module": "playfield.res8.1.body.0",
+      "type": "Conv2d",
+      "out_shape": "1x96x28x24",
+      "parameters": 83040
+    },
+    {
+      "module": "playfield.res8.1.body.2",
+      "type": "Conv2d",
+      "out_shape": "1x96x28x24",
+      "parameters": 83040
+    },
+    {
+      "module": "heat_conv.0",
+      "type": "Conv2d",
+      "out_shape": "1x64x56x48",
+      "parameters": 92224
+    },
+    {
+      "module": "heatmap_head",
+      "type": "Conv2d",
+      "out_shape": "1x1x56x48",
+      "parameters": 65
+    },
+    {
+      "module": "location_mlp.0",
+      "type": "Linear",
+      "out_shape": "1x16",
+      "parameters": 80
+    },
+    {
+      "module": "local.conv1",
+      "type": "Conv2d",
+      "out_shape": "1x64x8x8",
+      "parameters": 37504
+    },
+    {
+      "module": "local.conv2",
+      "type": "Conv2d",
+      "out_shape": "1x96x4x4",
+      "parameters": 55392
+    },
+    {
+      "module": "local.fc",
+      "type": "Linear",
+      "out_shape": "1x128",
+      "parameters": 196736
+    },
+    {
+      "module": "global_conv",
+      "type": "Conv2d",
+      "out_shape": "1x32x28x24",
+      "parameters": 3104
+    },
+    {
+      "module": "global_pool",
+      "type": "AdaptiveAvgPool2d",
+      "out_shape": "1x32x7x6",
+      "parameters": 0
+    },
+    {
+      "module": "global_fc.0",
+      "type": "Linear",
+      "out_shape": "1x128",
+      "parameters": 182912
+    },
+    {
+      "module": "hud_score.body.0",
+      "type": "Conv2d",
+      "out_shape": "1x16x17x108",
+      "parameters": 1216
+    },
+    {
+      "module": "hud_score.body.2",
+      "type": "Conv2d",
+      "out_shape": "1x32x9x54",
+      "parameters": 4640
+    },
+    {
+      "module": "hud_score.body.4",
+      "type": "Conv2d",
+      "out_shape": "1x48x5x27",
+      "parameters": 13872
+    },
+    {
+      "module": "hud_score.body.6",
+      "type": "AdaptiveAvgPool2d",
+      "out_shape": "1x48x2x8",
+      "parameters": 0
+    },
+    {
+      "module": "hud_score.body.8",
+      "type": "Linear",
+      "out_shape": "1x64",
+      "parameters": 49216
+    },
+    {
+      "module": "hud_status.body.0",
+      "type": "Conv2d",
+      "out_shape": "1x16x63x108",
+      "parameters": 1216
+    },
+    {
+      "module": "hud_status.body.2",
+      "type": "Conv2d",
+      "out_shape": "1x32x32x54",
+      "parameters": 4640
+    },
+    {
+      "module": "hud_status.body.4",
+      "type": "Conv2d",
+      "out_shape": "1x48x16x27",
+      "parameters": 13872
+    },
+    {
+      "module": "hud_status.body.6",
+      "type": "AdaptiveAvgPool2d",
+      "out_shape": "1x48x8x4",
+      "parameters": 0
+    },
+    {
+      "module": "hud_status.body.8",
+      "type": "Linear",
+      "out_shape": "1x64",
+      "parameters": 98368
+    },
+    {
+      "module": "trunk.0",
+      "type": "Linear",
+      "out_shape": "1x256",
+      "parameters": 102656
+    },
+    {
+      "module": "trunk.2",
+      "type": "Linear",
+      "out_shape": "1x256",
+      "parameters": 65792
+    },
+    {
+      "module": "self_head",
+      "type": "Linear",
+      "out_shape": "1x22",
+      "parameters": 5654
+    },
+    {
+      "module": "policy_head",
+      "type": "Linear",
+      "out_shape": "1x18",
+      "parameters": 4626
+    },
+    {
+      "module": "danger.reduce",
+      "type": "Conv2d",
+      "out_shape": "1x32x28x24",
+      "parameters": 3104
+    },
+    {
+      "module": "danger.conv",
+      "type": "Conv2d",
+      "out_shape": "1x32x32x16",
+      "parameters": 9248
+    },
+    {
+      "module": "danger.pool",
+      "type": "AvgPool2d",
+      "out_shape": "1x32x16x8",
+      "parameters": 0
+    },
+    {
+      "module": "danger.head",
+      "type": "Conv2d",
+      "out_shape": "1x1x16x8",
+      "parameters": 33
+    }
+  ],
+  "C_local_geometry": {
+    "roi_native_hw": "128x128",
+    "local_grid_hw": "16x16",
+    "bin_centres_x_native_px": [
+      -60.0,
+      -52.0,
+      -44.0,
+      -36.0,
+      -28.0,
+      -20.0,
+      -12.0,
+      -4.0,
+      4.0,
+      12.0,
+      20.0,
+      28.0,
+      36.0,
+      44.0,
+      52.0,
+      60.0
+    ],
+    "bin_centres_y_native_px": [
+      -60.0,
+      -52.0,
+      -44.0,
+      -36.0,
+      -28.0,
+      -20.0,
+      -12.0,
+      -4.0,
+      4.0,
+      12.0,
+      20.0,
+      28.0,
+      36.0,
+      44.0,
+      52.0,
+      60.0
+    ],
+    "bin_pitch_native_px": 8.0,
+    "window_span_native_px": 128.0,
+    "mask_centre_min": 1.0,
+    "mask_centre_max": 1.0,
+    "mask_corner_min": 0.0,
+    "mask_corner_max": 1.0,
+    "grid_centre_column_x": -0.3125
+  },
+  "D_gradient_routing": {
+    "heatmap_loss": {
+      "playfield_trunk": "334814.903992",
+      "heat_conv": "422024.312012",
+      "heatmap_head": "5852.561279",
+      "location_mlp": "None",
+      "local": "None",
+      "global": "None",
+      "hud_score": "None",
+      "hud_status": "None",
+      "trunk": "None",
+      "policy_head": "None",
+      "self_head": "None",
+      "danger": "None"
+    },
+    "policy_loss": {
+      "playfield_trunk": "28.794776",
+      "heat_conv": "0.023125",
+      "heatmap_head": "0.000128",
+      "location_mlp": "0.430183",
+      "local": "62.488390",
+      "global": "101.654139",
+      "hud_score": "16.386229",
+      "hud_status": "33.603288",
+      "trunk": "154.288632",
+      "policy_head": "91.319206",
+      "self_head": "None",
+      "danger": "None"
+    }
+  },
+  "E_ablations": {
+    "parameter_count_enabled": 1507162,
+    "parameter_count_disabled": 1507162,
+    "state_dict_keys_identical": true,
+    "disabled_local_vector_nonzero": 0,
+    "disabled_local_vector_shape": "1x128",
+    "detached_position_grad_sum": null,
+    "attached_position_grad_sum": 6.89288902
+  },
+  "F_cpu_forward": {
+    "batch_1_seconds": 0.00807,
+    "batch_1_ms_per_frame": 8.071,
+    "batch_8_seconds": 0.04074,
+    "batch_8_ms_per_frame": 5.093,
+    "note": "CPU forward only; not a training throughput claim (S3-7 measures that)"
+  },
+  "fusion_width": 400,
+  "danger_cells": 128
+}
