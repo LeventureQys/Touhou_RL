@@ -1,7 +1,39 @@
 {
   "schema": "v104-s3-8-code-integrity/1",
-  "before": 94,
-  "after": 94,
-  "changed": [],
-  "identical": true
+  "checked_at": "2026-10-20T10:58:29+08:00",
+  "files_at_s3_8_start": 94,
+  "files_now": 94,
+  "changed_since_start": [
+    "touhou_rl/tests/test_v104_refine.py",
+    "touhou_rl/vision_train.py"
+  ],
+  "identical": false,
+  "s3_8_wrote_no_business_code": true,
+  "attribution": "S3-8 (this agent) did not modify any touhou_rl/ or tools/ file: its writes are confined to Document/Update/Alpha/v1.0.4/Stage3/** and third_party/th08/build/rl/eval/v104-*. The two changed files come from another owner: commit b508b7e0178ed0efdfb88b5354f9659abdf91498 at 2026-10-20T10:50:50+08:00 (﻿fix(v1.0.4): 修复 --seed / --w-coord 两个伪参数，并用 AST 通用网锁死), which fixes the fake --seed / --w-coord CLI parameters and their AST test.",
+  "changed_file_detail": {
+    "touhou_rl/vision_train.py": {
+      "sha256_before": "fc87e7898a912236db446e26c7a362377135c219b8593630660feba0bafe13b8",
+      "sha256_now": "8d44fb2b3949fd1cfce5f20100d0706cd1c690f22b15ad415240f46af05011ff",
+      "mtime": "2026-10-20T10:37:36+08:00"
+    },
+    "touhou_rl/tests/test_v104_refine.py": {
+      "sha256_before": "23c3bfdf8150859dcb8b3d00f22a5142f2d8bb476f4196d181f3715702199a0f",
+      "sha256_now": "8c437eb2a5be41647cf604b44e7df9ab86ea0df3ee669f361e92ca9f63af5b8e",
+      "mtime": "2026-10-20T10:37:26+08:00"
+    }
+  },
+  "evidence_paths_untouched": {
+    "touhou_rl/evaluate.py": "not in the commit; A-04 deployment path unchanged",
+    "touhou_rl/env.py": "not in the commit",
+    "touhou_rl/menu.py": "not in the commit",
+    "touhou_rl/vmodels.py": "not in the commit",
+    "touhou_rl/vision_metrics.py": "not in the commit",
+    "touhou_rl/vision_data.py": "not in the commit",
+    "tools/rl/compare_state_models.py": "not in the commit",
+    "tools/rl/check_v104.py": "not in the commit"
+  },
+  "notes": [
+    "A-05 pytest evidence was captured at 02:48:51-02:49:16 under the pre-fix tree (vision_train.py fc87e789); a supplementary re-run under the current tree is logged in logs/pytest-full-post-seedfix.log.",
+    "the A-04 run at 10:51 used the current tree, but only evaluate/env/menu/vmodels (unchanged by the commit) are on that path."
+  ]
 }

@@ -1,47 +1,49 @@
 {
   "schema": "v104-evidence/1",
   "kind": "eval_report",
-  "status": "blocked",
-  "created_at": "2026-10-20T02:58:16+08:00",
+  "status": "fail",
+  "created_at": "2026-10-20T10:56:15+08:00",
   "producer": "python -m touhou_rl.evaluate (vision branch)",
-  "command": "python -m touhou_rl.evaluate --vision-checkpoint third_party/th08/build/rl/runs/v104-v3-E5-s7/policy.pt --out third_party/th08/build/rl/eval/v104-acceptance --episodes 3 --difficulty lunatic --team 0 --frameskip 2 --max-steps 12000 --device cuda",
+  "command": "python -m touhou_rl.evaluate --vision-checkpoint third_party/th08/build/rl/runs/v104-v3-E5-s7/policy.pt --out third_party/th08/build/rl/eval/v104-acceptance-2 --episodes 3 --difficulty lunatic --team 0 --frameskip 2 --max-steps 12000 --device cuda --deterministic",
   "cwd": "D:\\WorkShop\\Touhou_RL",
-  "exit_code": 1,
+  "exit_code": 0,
   "artifacts": [
     {
-      "path": "Document/Update/Alpha/v1.0.4/Stage3/S3-8/evidence/a04-attempt.json",
-      "sha256": "0af83d38b65f70714e70695a6789d7d203b419a1f4ac668e7f8ac65035052e55"
+      "path": "Document/Update/Alpha/v1.0.4/Stage3/S3-8/evidence/a04-run.json",
+      "sha256": "9585db49149b3baacb4c67c112c9c55a48dc9b00770d08dc397682cfd7829677"
     },
     {
-      "path": "Document/Update/Alpha/v1.0.4/Stage3/S3-8/evidence/startup-evidence.json",
-      "sha256": "2ea5b0b4629a15d8a854fced6947e86ed35d1bb9857b91be12e6a84d2483c5ba"
+      "path": "third_party/th08/build/rl/eval/v104-acceptance-2/eval-report.json",
+      "sha256": "116d6303af3f9eab39a9ec0c0cfe9d5ab3c8194b7a9aa5fd8e1cd443740f2303"
+    },
+    {
+      "path": "third_party/th08/build/rl/eval/v104-acceptance-2/vision-diagnostics-raw.json",
+      "sha256": "5a1db93d6d46e0a0fdc81f41c65cf565e4c6a538790800fb9daf1e0afcc0f741"
     },
     {
       "path": "Document/Update/Alpha/v1.0.4/Stage3/S3-8/evidence/a04-compare-evals.json",
-      "sha256": "685248d50df69bca0dee062c8cd2f1b94e69bf221d014c516f33a7951b581f44"
+      "sha256": "12af56cfb5af5a482c025aecdf004eec61c95cb2a74d6c984455d8b60705018f"
     },
     {
-      "path": "Document/Update/Alpha/v1.0.4/Stage3/S3-8/evidence/logs/a04-evaluate.err",
-      "sha256": "15be3abba9935a7bc0d87a801a0ec9e3f388aabfefc484943b76fae298cf25ad"
+      "path": "Document/Update/Alpha/v1.0.4/Stage3/S3-8/evidence/a04-evaluate-retry.log",
+      "sha256": "bc1b6fe8b4a00cfd8264f0099de0ba77d69b9e4805ca1932222fae61c9d2115a"
     },
     {
-      "path": "Document/Update/Alpha/v1.0.4/Stage3/S3-8/evidence/logs/a04-evaluate.log",
-      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      "path": "third_party/th08/build/rl/eval-session/rl-session.log",
+      "sha256": "96bc57cfb4b2c8085f67ab698918a2700ee7d8dbd04aaa2f4c63b18d15b256de"
     },
     {
       "path": "Document/Update/Alpha/v1.0.4/Stage3/S3-8/evidence/logs/a04-compare-evals.log",
-      "sha256": "15c0c4a5c557ed0dd4f194cdf6c23279b48f3eef2ec2b6acd268f8acf8c9fb23"
+      "sha256": "cdebcc940ce74cbb6fa9ea8c913835c11e285bc44111a8d40459bc0cf2799481"
     }
   ],
   "observations": {
     "checkpoint_sha256": "74abde8a996c13fae832913e4e5533bc9490688bc4c0aa73560e695f065d14be",
-    "episodes": 0,
-    "frames_mean": 0.0,
+    "episodes": 3,
+    "frames_mean": 1627.7,
     "hit_step_cap": 0,
-    "episode_fields_complete": false,
-    "started": "2026-10-20T02:51:21",
-    "finished": "2026-10-20T02:51:33",
+    "episode_fields_complete": true,
     "max_steps": 12000
   },
-  "reason": "the exact A-04 command ran with the frozen policy.pt and the correct lunatic/team0/frameskip2/practice=-1/max_steps=12000 configuration, but env.reset raised TimeoutError('screen 4 did not become ready') after 0 episodes: the game window cannot be made foreground because the user's elevated Task Manager holds the foreground and this agent is medium integrity (UIPI blocks SetForegroundWindow / SwitchToThisWindow / synthetic input). No episode exists, so frames_mean/hit_step_cap cannot be asserted - blocked, not pass, and a retry needs the foreground released (or an approved input-path change)."
+  "reason": "the A-04 command ran on the real game with the frozen policy.pt: 3 complete Lunatic episodes (frames 1446 / 1800 / 1637, mean 1627.7), every episode terminated by 'frame stalled' after the third death, none truncated and hit_step_cap = 0, and every per-episode field is present. This is a real fail on one criterion only: frames_mean 1627.7 is not > 4000. The closed-loop result is reported as measured and is not replaced by the offline A-02 numbers (the first 0-episode attempt, blocked by the UIPI foreground lock, is kept as history in a04-attempt.json)."
 }

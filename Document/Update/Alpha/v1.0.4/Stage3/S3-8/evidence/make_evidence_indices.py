@@ -1,4 +1,4 @@
-﻿#!/usr/bin/env python
+#!/usr/bin/env python
 """S3-8 evidence indices: nine ``v104-evidence/1`` index files plus the frozen map.
 
 Every index is generated *from* the raw artifacts it cites: the sha256 of each
@@ -41,6 +41,8 @@ EVIDENCE = ROOT / "Document" / "Update" / "Alpha" / "v1.0.4" / "Stage3" / "S3-8"
 INDICES = EVIDENCE / "indices"
 FROZEN = ROOT / "Document" / "Update" / "Alpha" / "v1.0.4" / "Stage3" / "final-artifacts.json"
 LOGS = EVIDENCE / "logs"
+RUN_DIR = ROOT / "third_party" / "th08" / "build" / "rl" / "eval" / "v104-acceptance-2"
+SESSION_DIR = ROOT / "third_party" / "th08" / "build" / "rl" / "eval-session"
 
 
 def rel(path: Path) -> str:
@@ -151,7 +153,7 @@ def main() -> int:
             "threshold": 1.25,
             "pass": bool(ratio and float(ratio.group(1)) <= 1.25),
         }
-    a04 = read(EVIDENCE / "a04-attempt.json")
+    a04 = read(EVIDENCE / "a04-run.json")
     startup = read(EVIDENCE / "startup-evidence.json")
     d9 = read(EVIDENCE / "d9-recheck.json")
     d10 = read(EVIDENCE / "d10-recheck.json")
@@ -262,29 +264,30 @@ def main() -> int:
     indices["eval_report"] = {
         "schema": "v104-evidence/1",
         "kind": "eval_report",
-        "status": "blocked",
+        "status": str(a04.get("status") or "fail"),
         "created_at": now_iso(),
         "producer": "python -m touhou_rl.evaluate (vision branch)",
         "command": " ".join(a04["command"]),
         "cwd": str(ROOT),
         "exit_code": int(a04["exit_code"]),
         "artifacts": [
-            artifact(EVIDENCE / "a04-attempt.json"),
-            artifact(EVIDENCE / "startup-evidence.json"),
+            artifact(EVIDENCE / "a04-run.json"),
+            artifact(RUN_DIR / "eval-report.json"),
+            artifact(RUN_DIR / "vision-diagnostics-raw.json"),
             artifact(EVIDENCE / "a04-compare-evals.json"),
-            artifact(EVIDENCE / "logs" / "a04-evaluate.err"),
-            artifact(EVIDENCE / "logs" / "a04-evaluate.log"),
+            artifact(EVIDENCE / "a04-evaluate-retry.log"),
+            artifact(SESSION_DIR / "rl-session.log"),
             artifact(EVIDENCE / "logs" / "a04-compare-evals.log"),
         ],
         "observations": dict(a04["observations"]),
         "reason": (
-            "the exact A-04 command ran with the frozen policy.pt and the correct"
-            " lunatic/team0/frameskip2/practice=-1/max_steps=12000 configuration, but env.reset raised"
-            " TimeoutError('screen 4 did not become ready') after 0 episodes: the game window cannot be"
-            " made foreground because the user's elevated Task Manager holds the foreground and this"
-            " agent is medium integrity (UIPI blocks SetForegroundWindow / SwitchToThisWindow / synthetic"
-            " input). No episode exists, so frames_mean/hit_step_cap cannot be asserted - blocked, not"
-            " pass, and a retry needs the foreground released (or an approved input-path change)."
+            "the A-04 command ran on the real game with the frozen policy.pt: 3 complete Lunatic"
+            " episodes (frames 1446 / 1800 / 1637, mean 1627.7), every episode terminated by"
+            " 'frame stalled' after the third death, none truncated and hit_step_cap = 0, and every"
+            " per-episode field is present. This is a real fail on one criterion only:"
+            " frames_mean 1627.7 is not > 4000. The closed-loop result is reported as measured and is"
+            " not replaced by the offline A-02 numbers (the first 0-episode attempt, blocked by the"
+            " UIPI foreground lock, is kept as history in a04-attempt.json)."
         ),
     }
     indices["pytest"] = {
@@ -376,19 +379,21 @@ def main() -> int:
     indices["startup"] = {
         "schema": "v104-evidence/1",
         "kind": "startup",
-        "status": "blocked",
+        "status": str(startup.get("status") or "pass"),
         "created_at": now_iso(),
-        "producer": "Document/Update/Alpha/v1.0.4/Stage3/S3-8/evidence/make_a04_evidence.py",
-        "command": "python Document/Update/Alpha/v1.0.4/Stage3/S3-8/evidence/startup_evidence_probe.py",
+        "producer": "Document/Update/Alpha/v1.0.4/Stage3/S3-8/evidence/make_a04_run_evidence.py",
+        "command": " ".join(a04["command"]),
         "cwd": str(ROOT),
         "exit_code": 0,
         "artifacts": [
             artifact(EVIDENCE / "startup-evidence.json"),
-            artifact(EVIDENCE / "startup-probe.json"),
-            artifact(EVIDENCE / "foreground-diagnostic.json"),
-            artifact(EVIDENCE / "startup-title-a.png"),
-            artifact(EVIDENCE / "startup-title-b.png"),
-        ],
+            artifact(RUN_DIR / "eval-report.json"),
+            artifact(EVIDENCE / "a04-evaluate-retry.log"),
+            artifact(SESSION_DIR / "rl-session.log"),
+        ]
+        + [artifact(RUN_DIR / f"episode-{index:02d}.png") for index in (1, 2, 3)]
+        + [artifact(RUN_DIR / f"episode-{index:02d}-mid.png") for index in (1, 2, 3)]
+        + [artifact(EVIDENCE / "startup-title-a.png"), artifact(EVIDENCE / "startup-title-b.png")],
         "observations": startup["observations"],
         "reason": startup["reason"],
     }

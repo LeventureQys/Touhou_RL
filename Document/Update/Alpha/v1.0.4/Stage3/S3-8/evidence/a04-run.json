@@ -1,0 +1,466 @@
+{
+  "schema": "v104-s3-8-a04-run/1",
+  "kind": "eval_report",
+  "created_at": "2026-10-20T10:55:42+08:00",
+  "producer": "Document/Update/Alpha/v1.0.4/Stage3/S3-8/evidence/make_a04_run_evidence.py",
+  "command": [
+    "python",
+    "-m",
+    "touhou_rl.evaluate",
+    "--vision-checkpoint",
+    "third_party/th08/build/rl/runs/v104-v3-E5-s7/policy.pt",
+    "--out",
+    "third_party/th08/build/rl/eval/v104-acceptance-2",
+    "--episodes",
+    "3",
+    "--difficulty",
+    "lunatic",
+    "--team",
+    "0",
+    "--frameskip",
+    "2",
+    "--max-steps",
+    "12000",
+    "--device",
+    "cuda",
+    "--deterministic"
+  ],
+  "cwd": "D:\\WorkShop\\Touhou_RL",
+  "exit_code": 0,
+  "status": "fail",
+  "started": "2026-10-20T10:51:21",
+  "finished": "2026-10-20T10:53:00",
+  "checkpoint": "third_party/th08/build/rl/runs/v104-v3-E5-s7/policy.pt",
+  "checkpoint_sha256": "74abde8a996c13fae832913e4e5533bc9490688bc4c0aa73560e695f065d14be",
+  "deployed_checkpoint": "third_party\\th08\\build\\rl\\runs\\v104-v3-E5-s7\\policy.pt",
+  "deployed_checkpoint_sha256": "74abde8a996c13fae832913e4e5533bc9490688bc4c0aa73560e695f065d14be",
+  "arch": "v3-st",
+  "depth": 3,
+  "difficulty": 3,
+  "team": 0,
+  "frameskip": 2,
+  "practice_stage": null,
+  "deterministic": true,
+  "max_steps_configured": 12000,
+  "contract": {
+    "schema": "vision-checkpoint/3",
+    "arch": "v3-st",
+    "depth": 3,
+    "channels": 3,
+    "normalization": "rgb255-v1",
+    "candidate_order_version": "focus9-move-v1",
+    "score_semantics": "preference_logits",
+    "roi_native_hw": [
+      128,
+      128
+    ],
+    "local_grid_hw": [
+      16,
+      16
+    ],
+    "align_corners": false,
+    "history_contract": "causal-segment-v1",
+    "region_sizes": {
+      "playfield": [
+        224,
+        192
+      ],
+      "hud_score": [
+        34,
+        216
+      ],
+      "hud_status": [
+        126,
+        216
+      ]
+    },
+    "legacy_frame": {},
+    "identity": {
+      "source_state_sha": "00a2d28472e4169879f481ca28e664d0fb4c8291f2741ea58ab14967da8c8f46",
+      "teacher_fingerprint": "a52416f9342fa00a0185c061771d09c22ba735bbe01c83dd7910a6c3bc8ec0f6",
+      "manifest_sha": "aa89c48893eb7e69628a5fd1c414c7c9b8b04cd5b88a225a6f4feb70373c949f",
+      "val_index_sha256": "e5d4ebbe6d8de05793520a393fc1fdbea2b1e2c4db9ff7c1632908340c76655f",
+      "loss_config": {
+        "policy": {
+          "objective": "rank",
+          "rank_delta_px": 0.5,
+          "rank_weight": 1.0,
+          "regression_weight": 1.0,
+          "weights_forced_by_contract": false
+        },
+        "aux_perception": {
+          "heatmap": 1.0,
+          "coord": 1.0,
+          "danger": 1.0,
+          "self": 1.0
+        },
+        "aux_policy": {
+          "heatmap": 0.1,
+          "coord": 1.0,
+          "danger": 0.2,
+          "self": 0.1
+        },
+        "self_mask_indices": [
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23
+        ],
+        "danger_scale": 8.0,
+        "heatmap_sigma": 2.0,
+        "position_sample_weights_sha256": ""
+      }
+    }
+  },
+  "isolation": "I-1: policy input is regions_to_batch(env.render crops) only; env bookkeeping still reads memory",
+  "episodes": [
+    {
+      "episode": 1,
+      "steps": 714,
+      "frames_reported": 1446,
+      "stages_reached": 0,
+      "deaths": 3,
+      "lives_left": 0.0,
+      "score": 20306,
+      "graze": 60,
+      "episode_reward": -19.322,
+      "terminated": true,
+      "truncated": false,
+      "termination_reason": "frame stalled",
+      "wall_seconds": 25.1,
+      "decisions_per_s": 28.49,
+      "last_state": {
+        "stage": 0,
+        "frame": 1446,
+        "bullets": 50
+      },
+      "vision_diagnostics": {
+        "bomb_actions_requested": 0,
+        "screenshot_to_action_ms": {
+          "count": 714,
+          "mean": 10.99,
+          "p50": 10.347,
+          "p95": 15.298,
+          "max": 333.546
+        },
+        "observed_frame_delta": {
+          "count": 712,
+          "min": 1,
+          "p50": 2.0,
+          "p95": 2.0,
+          "max": 2,
+          "nonpositive": 1
+        }
+      },
+      "screenshot": "third_party\\th08\\build\\rl\\eval\\v104-acceptance-2\\episode-01.png"
+    },
+    {
+      "episode": 2,
+      "steps": 900,
+      "frames_reported": 1800,
+      "stages_reached": 0,
+      "deaths": 3,
+      "lives_left": 0.0,
+      "score": 165459,
+      "graze": 107,
+      "episode_reward": -19.133,
+      "terminated": true,
+      "truncated": false,
+      "termination_reason": "frame stalled",
+      "wall_seconds": 30.5,
+      "decisions_per_s": 29.54,
+      "last_state": {
+        "stage": 0,
+        "frame": 1800,
+        "bullets": 131
+      },
+      "vision_diagnostics": {
+        "bomb_actions_requested": 0,
+        "screenshot_to_action_ms": {
+          "count": 900,
+          "mean": 10.948,
+          "p50": 12.192,
+          "p95": 15.441,
+          "max": 17.128
+        },
+        "observed_frame_delta": {
+          "count": 898,
+          "min": 2,
+          "p50": 2.0,
+          "p95": 2.0,
+          "max": 2,
+          "nonpositive": 1
+        }
+      },
+      "screenshot": "third_party\\th08\\build\\rl\\eval\\v104-acceptance-2\\episode-02.png"
+    },
+    {
+      "episode": 3,
+      "steps": 819,
+      "frames_reported": 1637,
+      "stages_reached": 0,
+      "deaths": 3,
+      "lives_left": 0.0,
+      "score": 19071,
+      "graze": 62,
+      "episode_reward": -20.463,
+      "terminated": true,
+      "truncated": false,
+      "termination_reason": "frame stalled",
+      "wall_seconds": 28.3,
+      "decisions_per_s": 28.98,
+      "last_state": {
+        "stage": 0,
+        "frame": 1637,
+        "bullets": 205
+      },
+      "vision_diagnostics": {
+        "bomb_actions_requested": 0,
+        "screenshot_to_action_ms": {
+          "count": 819,
+          "mean": 10.747,
+          "p50": 11.023,
+          "p95": 15.432,
+          "max": 17.633
+        },
+        "observed_frame_delta": {
+          "count": 817,
+          "min": 1,
+          "p50": 2.0,
+          "p95": 2.0,
+          "max": 2,
+          "nonpositive": 1
+        }
+      },
+      "screenshot": "third_party\\th08\\build\\rl\\eval\\v104-acceptance-2\\episode-03.png"
+    }
+  ],
+  "episode_count": 3,
+  "episode_fields_complete": true,
+  "frames_reported": [
+    1446,
+    1800,
+    1637
+  ],
+  "frames_mean": 1627.7,
+  "frames_max": 1800,
+  "frames_min": 1446,
+  "hit_step_cap": 0,
+  "truncated_episodes": 0,
+  "termination_reasons": [
+    "frame stalled",
+    "frame stalled",
+    "frame stalled"
+  ],
+  "deaths": [
+    3,
+    3,
+    3
+  ],
+  "stages_reached": [
+    0,
+    0,
+    0
+  ],
+  "scores": [
+    20306,
+    165459,
+    19071
+  ],
+  "graze": [
+    60,
+    107,
+    62
+  ],
+  "wall_seconds": [
+    25.1,
+    30.5,
+    28.3
+  ],
+  "decisions_total": 2433,
+  "bomb_actions_requested_all_zero": true,
+  "screenshot_to_action_ms": [
+    {
+      "count": 714,
+      "mean": 10.99,
+      "p50": 10.347,
+      "p95": 15.298,
+      "max": 333.546
+    },
+    {
+      "count": 900,
+      "mean": 10.948,
+      "p50": 12.192,
+      "p95": 15.441,
+      "max": 17.128
+    },
+    {
+      "count": 819,
+      "mean": 10.747,
+      "p50": 11.023,
+      "p95": 15.432,
+      "max": 17.633
+    }
+  ],
+  "observed_frame_delta": [
+    {
+      "count": 712,
+      "min": 1,
+      "p50": 2.0,
+      "p95": 2.0,
+      "max": 2,
+      "nonpositive": 1
+    },
+    {
+      "count": 898,
+      "min": 2,
+      "p50": 2.0,
+      "p95": 2.0,
+      "max": 2,
+      "nonpositive": 1
+    },
+    {
+      "count": 817,
+      "min": 1,
+      "p50": 2.0,
+      "p95": 2.0,
+      "max": 2,
+      "nonpositive": 1
+    }
+  ],
+  "summary_from_report": {
+    "episodes": 3,
+    "frames_mean": 1627.7,
+    "frames_max": 1800,
+    "stages_max": 0,
+    "deaths_mean": 3.0
+  },
+  "screenshots": [
+    "third_party/th08/build/rl/eval/v104-acceptance-2/episode-01.png",
+    "third_party/th08/build/rl/eval/v104-acceptance-2/episode-01-mid.png",
+    "third_party/th08/build/rl/eval/v104-acceptance-2/episode-02.png",
+    "third_party/th08/build/rl/eval/v104-acceptance-2/episode-02-mid.png",
+    "third_party/th08/build/rl/eval/v104-acceptance-2/episode-03.png",
+    "third_party/th08/build/rl/eval/v104-acceptance-2/episode-03-mid.png"
+  ],
+  "exe": {
+    "actual_run_dir_exe": {
+      "path": "third_party/th08/build/rl/eval-session/th08.exe",
+      "sha256": "cdd23bca0c724941866efda5da280be67eb6cdd935f83548045c2a8e037f1ddf",
+      "exists": true,
+      "bytes_expected": 898048
+    },
+    "template": {
+      "path": "third_party/th08/build/play/th08.exe",
+      "sha256": "cdd23bca0c724941866efda5da280be67eb6cdd935f83548045c2a8e037f1ddf",
+      "exists": true
+    },
+    "original_resources": {
+      "path": "third_party/th08/resources/th08.exe",
+      "sha256": "330fbdbf58a710829d65277b4f312cfbb38d5448b3df523e79350b879213d924",
+      "exists": true,
+      "note": "pristine original, never used as the run directory exe"
+    },
+    "note": "the evaluation uses the default run_dir third_party/th08/build/rl/eval-session, whose th08.exe is the 898048-byte rebuilt build (hard link of build/play); the 840704-byte original is recorded separately and was not executed"
+  },
+  "session_log": {
+    "path": "third_party/th08/build/rl/eval-session/rl-session.log",
+    "sha256": "96bc57cfb4b2c8085f67ab698918a2700ee7d8dbd04aaa2f4c63b18d15b256de",
+    "exists": true
+  },
+  "session_launch_lines": [
+    "10:52:27 launched pid=16964 dir=D:\\WorkShop\\Touhou_RL\\third_party\\th08\\build\\rl\\eval-session"
+  ],
+  "session_exception_markers": [],
+  "observations": {
+    "checkpoint_sha256": "74abde8a996c13fae832913e4e5533bc9490688bc4c0aa73560e695f065d14be",
+    "episodes": 3,
+    "frames_mean": 1627.7,
+    "hit_step_cap": 0,
+    "episode_fields_complete": true,
+    "max_steps": 12000
+  },
+  "thresholds": {
+    "min_episodes": 3,
+    "frames_mean_min": 4000.0,
+    "hit_step_cap": 0,
+    "max_steps": 12000
+  },
+  "reason": "three complete Lunatic episodes ran on the real game with the frozen v3 policy; every episode terminated by 'frame stalled' (all three lives lost, the game-over / continue prompt stops advancing gameplayFrameCounter), no episode hit the 12000-step cap and none was truncated, and every per-episode field is present. A-04 therefore fails on exactly one criterion: frames_mean 1627.7 <= 4000.0. This is a real closed-loop strength result of the policy, not an evaluation-harness problem, and it is not replaced by the offline A-02 numbers.",
+  "history": {
+    "first_attempt": {
+      "created_at": "2026-10-20T02:55:38+08:00",
+      "exit_code": 1,
+      "episodes": 0,
+      "reason": "the exact A-04 command ran and the deployment identity was correct (vision.checkpoint = the frozen policy.pt, arch v3-st depth 3, lunatic/team0/frameskip2/practice -1), but env.reset raised TimeoutError('screen 4 did not become ready') because the game window cannot be foregrounded (elevated Task Manager holds the foreground; medium-integrity agent). Zero episodes were produced; the partial eval-report is attached with its sha. Reported as blocked; a retry needs the user to release the foreground (close/minimise Task Manager) or an approved input-path change."
+    },
+    "note": "the first attempt could not take the foreground (UIPI vs an elevated Task Manager) and produced zero episodes; it is kept as history, not as the A-04 result"
+  },
+  "artifacts_cited": [
+    {
+      "path": "third_party/th08/build/rl/eval/v104-acceptance-2/eval-report.json",
+      "sha256": "116d6303af3f9eab39a9ec0c0cfe9d5ab3c8194b7a9aa5fd8e1cd443740f2303",
+      "exists": true
+    },
+    {
+      "path": "third_party/th08/build/rl/eval/v104-acceptance-2/vision-diagnostics-raw.json",
+      "sha256": "5a1db93d6d46e0a0fdc81f41c65cf565e4c6a538790800fb9daf1e0afcc0f741",
+      "exists": true
+    },
+    {
+      "path": "Document/Update/Alpha/v1.0.4/Stage3/S3-8/evidence/a04-evaluate-retry.log",
+      "sha256": "bc1b6fe8b4a00cfd8264f0099de0ba77d69b9e4805ca1932222fae61c9d2115a",
+      "exists": true
+    },
+    {
+      "path": "third_party/th08/build/rl/eval-session/rl-session.log",
+      "sha256": "96bc57cfb4b2c8085f67ab698918a2700ee7d8dbd04aaa2f4c63b18d15b256de",
+      "exists": true
+    },
+    {
+      "path": "third_party/th08/build/rl/eval/v104-acceptance-2/episode-01.png",
+      "sha256": "b0fe43d0d310a5ef1ad7616bcc104c9e0909d69dcc4638afff3bbcf15d68965c",
+      "exists": true
+    },
+    {
+      "path": "third_party/th08/build/rl/eval/v104-acceptance-2/episode-01-mid.png",
+      "sha256": "4e1472f29e5662ab984243621a0299811804ec7875246ed0d81c2f997da8cdc9",
+      "exists": true
+    },
+    {
+      "path": "third_party/th08/build/rl/eval/v104-acceptance-2/episode-02.png",
+      "sha256": "247cac16875a2d3bf969abdb1e2e503f7e6abc4211609cf7f108fd35e400b0c5",
+      "exists": true
+    },
+    {
+      "path": "third_party/th08/build/rl/eval/v104-acceptance-2/episode-02-mid.png",
+      "sha256": "a1903ae88c5a7ff691badec2842c74e9b72dca289ea4783b1ac53667fd4a69a4",
+      "exists": true
+    },
+    {
+      "path": "third_party/th08/build/rl/eval/v104-acceptance-2/episode-03.png",
+      "sha256": "34b82239c3692e18adf25e33a7dfd86212db0e8607397a53397ea90031d606f8",
+      "exists": true
+    },
+    {
+      "path": "third_party/th08/build/rl/eval/v104-acceptance-2/episode-03-mid.png",
+      "sha256": "298b0b1a00f306a7be84139415de1a22ab52f8122cedb8f384961df15298edc6",
+      "exists": true
+    }
+  ]
+}

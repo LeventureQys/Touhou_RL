@@ -1,7 +1,7 @@
 A-01 pass pos_px=2.4066 perframe=0.8166 frames=7241
 A-02 pass bucket=0-15 frames=1076 regret=1.271 top3=0.6403
 A-03 fail a_mae_raw=0.8050109655014239 b_mae_raw=1.0203658348182216 ratio=1.2675179327310875 thresholds<=1.25 | cross-replay ratio 1.267518 > 1.25
-A-04 blocked | the evidence index itself is blocked: the exact A-04 command ran with the frozen policy.pt and the correct lunatic/team0/frameskip2/practice=-1/max_steps=12000 configuration, but env.reset raised TimeoutError('screen 4 did not become ready') after 0 episodes: the game window cannot be made foreground because the user's elevated Task Manager holds the foreground and this agent is medium integrity (UIPI blocks SetForegroundWindow / SwitchToThisWindow / synthetic input). No episode exists, so frames_mean/hit_step_cap cannot be asserted - blocked, not pass, and a retry needs the foreground released (or an approved input-path change).
+A-04 fail episodes=3 frames_mean=1627.7 hit_step_cap=0 | frames_mean 1627.7 not > 4000.0
 A-05 pass passed=698 failed=0 threshold>=178
 A-06 pass
-pass=4 fail=1 blocked=1 exit=2
+pass=4 fail=2 blocked=0 exit=1
