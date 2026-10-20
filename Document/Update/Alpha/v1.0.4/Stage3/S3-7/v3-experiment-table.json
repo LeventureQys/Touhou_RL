@@ -9,7 +9,8 @@
     "third_party/th08/build/rl/runs/v104-v3-E6-s7",
     "third_party/th08/build/rl/runs/v104-E4-screen-s7",
     "third_party/th08/build/rl/runs/v104-E5-screen-s7",
-    "third_party/th08/build/rl/runs/v104-v3-E5-s17"
+    "third_party/th08/build/rl/runs/v104-v3-E5-s17",
+    "third_party/th08/build/rl/runs/v104-v3-E5-seed17"
   ],
   "append_only": true,
   "generated_by": "Document/Update/Alpha/v1.0.4/Stage3/S3-7/evidence/make_v3_table.py",
@@ -1397,6 +1398,256 @@
       "seed_identity_mismatch": true,
       "seed_note": "directory and log label say s17/seed17, but the trainer summary records recipe.seed=7 and config.seed=7, and its config block is identical to runs/v104-v3-E5-s7: this is a same-seed replicate, not a seed-17 run",
       "replicate_of": "third_party/th08/build/rl/runs/v104-v3-E5-s7"
+    },
+    {
+      "experiment": "E5",
+      "run_kind": "stability",
+      "route": "v3-st",
+      "depth": 3,
+      "local_enabled": true,
+      "policy_aux": {
+        "heatmap": 0.1,
+        "coord": 1.0,
+        "danger": 0.2,
+        "self": 0.1
+      },
+      "perception_aux": {
+        "heatmap": 1.0,
+        "coord": 1.0,
+        "danger": 1.0,
+        "self": 1.0
+      },
+      "heatmap_sigma": 2.0,
+      "seed": 17,
+      "parameters": 1507162,
+      "source_state_sha": "0caac0006ced9502f929b1b0fe5168e38eba994cdce1a6c424fd6cf9c73bddf3",
+      "source_state_checkpoint": "third_party/th08/build/rl/runs/v104-v3-E5-seed17/state-pass.pt",
+      "source_state_rule": "joint-pass",
+      "teacher_fingerprint": "a52416f9342fa00a0185c061771d09c22ba735bbe01c83dd7910a6c3bc8ec0f6",
+      "val_index_sha256": "e5d4ebbe6d8de05793520a393fc1fdbea2b1e2c4db9ff7c1632908340c76655f",
+      "epochs": {
+        "state": 72,
+        "policy": 12
+      },
+      "wall_seconds": 8543.96,
+      "epoch_seconds": {
+        "perception": {
+          "epochs": 72,
+          "cold_start_seconds": [
+            146.3,
+            120.1
+          ],
+          "steady_mean_seconds": 101.28,
+          "steady_max_seconds": 113.4,
+          "all_seconds": [
+            146.3,
+            120.1,
+            103.4,
+            113.4,
+            102.8,
+            102.1,
+            101.8,
+            102.1,
+            101.5,
+            101.1,
+            101.5,
+            101.8,
+            100.9,
+            101.7,
+            102.1,
+            102.8,
+            101.0,
+            103.2,
+            102.9,
+            102.4,
+            101.4,
+            102.2,
+            102.6,
+            102.2,
+            103.0,
+            102.7,
+            101.2,
+            100.4,
+            100.6,
+            100.6,
+            100.4,
+            100.7,
+            100.9,
+            100.8,
+            100.4,
+            100.8,
+            100.5,
+            100.3,
+            100.3,
+            100.6,
+            100.5,
+            100.4,
+            100.8,
+            100.7,
+            100.4,
+            100.6,
+            102.1,
+            100.7,
+            100.5,
+            100.7,
+            100.5,
+            100.9,
+            100.4,
+            100.6,
+            100.5,
+            100.5,
+            100.4,
+            100.5,
+            100.4,
+            100.5,
+            100.5,
+            100.5,
+            100.5,
+            100.6,
+            100.5,
+            100.4,
+            100.3,
+            100.3,
+            100.7,
+            100.5,
+            100.3,
+            100.8
+          ],
+          "budget": {
+            "limit_seconds": 60.0,
+            "exceeded": true,
+            "overrun_fraction": 0.89,
+            "note": "Q6 waiver: the <=60 s v3 entry condition stays fail (waived_by=Q6); the overrun is recorded, never silently accepted"
+          }
+        },
+        "policy": {
+          "epochs": 12,
+          "cold_start_seconds": [
+            73.3,
+            73.6
+          ],
+          "steady_mean_seconds": 103.8,
+          "steady_max_seconds": 104.2,
+          "all_seconds": [
+            73.3,
+            73.6,
+            103.5,
+            104.0,
+            103.8,
+            103.7,
+            104.2,
+            104.1,
+            103.7,
+            103.5,
+            103.9,
+            103.6
+          ],
+          "budget": {
+            "limit_seconds": 60.0,
+            "exceeded": true,
+            "overrun_fraction": 0.7367,
+            "note": "Q6 waiver: the <=60 s v3 entry condition stays fail (waived_by=Q6); the overrun is recorded, never silently accepted"
+          }
+        }
+      },
+      "eligible": true,
+      "screening": false,
+      "partial": false,
+      "status": "done",
+      "coverage": {
+        "expected_frames": 7241,
+        "actual_frames": 7241,
+        "complete": true,
+        "visited_index_sha256": "e5d4ebbe6d8de05793520a393fc1fdbea2b1e2c4db9ff7c1632908340c76655f"
+      },
+      "raw": {
+        "state": {
+          "best_epoch": 30,
+          "selection_rule": "joint-pass",
+          "pass_epoch": 30,
+          "player_pos_px": 2.2863,
+          "player_pos_p95_px": 7.8547,
+          "danger_corr_perframe_median": 0.8082,
+          "danger_corr_perframe_valid": 7241,
+          "danger_corr": 0.8521,
+          "checkpoint": "state-pass.pt",
+          "checkpoint_sha256": "0caac0006ced9502f929b1b0fe5168e38eba994cdce1a6c424fd6cf9c73bddf3"
+        },
+        "policy": {
+          "best_epoch": 11,
+          "selection_rule": "bucket-0-15-regret",
+          "bucket_0_15_regret_px": 1.383,
+          "bucket_0_15_frames": 1076,
+          "bucket_0_15_top3": 0.6357,
+          "global_regret_px": 0.924,
+          "top1": 0.3845,
+          "top3": 0.652,
+          "top3_tie": 0.8024,
+          "near_optimal_05": 0.679,
+          "regret_p90_px": 3.062,
+          "by_danger": [
+            {
+              "bucket": "0-15",
+              "frames": 1076,
+              "top1": 0.3439,
+              "top3": 0.6357,
+              "top3_tie": 0.6719,
+              "near_optimal_05": 0.5093,
+              "regret_px": 1.383,
+              "regret_p90_px": 3.857
+            },
+            {
+              "bucket": "15-30",
+              "frames": 2009,
+              "top1": 0.3823,
+              "top3": 0.6924,
+              "top3_tie": 0.7402,
+              "near_optimal_05": 0.6137,
+              "regret_px": 1.025,
+              "regret_p90_px": 3.475
+            },
+            {
+              "bucket": "30-60",
+              "frames": 1367,
+              "top1": 0.4272,
+              "top3": 0.7476,
+              "top3_tie": 0.782,
+              "near_optimal_05": 0.5721,
+              "regret_px": 1.268,
+              "regret_p90_px": 3.938
+            },
+            {
+              "bucket": "60-120",
+              "frames": 802,
+              "top1": 0.5324,
+              "top3": 0.8354,
+              "top3_tie": 0.8579,
+              "near_optimal_05": 0.6459,
+              "regret_px": 1.127,
+              "regret_p90_px": 3.556
+            },
+            {
+              "bucket": "120+",
+              "frames": 1987,
+              "top1": 0.3196,
+              "top3": 0.4801,
+              "top3_tie": 0.9275,
+              "near_optimal_05": 0.924,
+              "regret_px": 0.255,
+              "regret_p90_px": 0.25
+            }
+          ],
+          "checkpoint": "policy.pt",
+          "checkpoint_sha256": "5fabcc9cb80a5634615d37709596e3401eb28fec78935313a181439c9d8f79bc"
+        }
+      },
+      "run_dir": "third_party/th08/build/rl/runs/v104-v3-E5-seed17",
+      "summary": "third_party/th08/build/rl/runs/v104-v3-E5-seed17/vision-summary.json",
+      "summary_sha256": "96b12c35d12c3af22ca33176922e1beec21c7c48d80fa72051fbf64e987f3faf",
+      "requested_seed": 17,
+      "seed_identity_mismatch": false,
+      "seed_note": "genuine seed-17 run after the --seed wiring fix: the summary records recipe.seed=17 and config.seed=17, which is the end-to-end proof that the CLI flag now reaches VisionTrainConfig",
+      "paired_with": "third_party/th08/build/rl/runs/v104-v3-E5-s7"
     }
   ]
 }

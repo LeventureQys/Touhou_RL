@@ -23,12 +23,14 @@ TABLE = S37 / "v3-experiment-table.json"
 
 SCHEMA = "v104-v3-experiment-table/1"
 BUDGET_SECONDS = 60.0
-#: Formal rows first, then the screening rows that preceded them, then the
-#: stability replicate (append-only: new rows go to the end, old rows never move).
+#: Formal rows first, then the screening rows that preceded them, then the two
+#: stability runs (append-only: new rows go to the end, old rows never move).
 #:
-#: The ``E5 / stability`` row is the run whose directory says ``s17`` but whose
-#: trainer summary records ``recipe.seed = config.seed = 7``; ``requested_seed``
-#: keeps the label visible instead of silently relabelling the run as seed 17.
+#: ``v104-v3-E5-s17`` is the run whose directory says ``s17`` but whose trainer
+#: summary records ``recipe.seed = config.seed = 7``; ``requested_seed`` keeps the
+#: label visible instead of silently relabelling the run as seed 17.
+#: ``v104-v3-E5-seed17`` is the **genuine** seed-17 run made after the ``--seed``
+#: wiring fix, and its summary records 17 (that is the end-to-end proof).
 SOURCES = (
     ("E4", "formal", "v104-v3-E4-s7", {}),
     ("E5", "formal", "v104-v3-E5-s7", {}),
@@ -48,6 +50,21 @@ SOURCES = (
                 " runs/v104-v3-E5-s7: this is a same-seed replicate, not a seed-17 run"
             ),
             "replicate_of": "third_party/th08/build/rl/runs/v104-v3-E5-s7",
+        },
+    ),
+    (
+        "E5",
+        "stability",
+        "v104-v3-E5-seed17",
+        {
+            "requested_seed": 17,
+            "seed_identity_mismatch": False,
+            "seed_note": (
+                "genuine seed-17 run after the --seed wiring fix: the summary records"
+                " recipe.seed=17 and config.seed=17, which is the end-to-end proof that"
+                " the CLI flag now reaches VisionTrainConfig"
+            ),
+            "paired_with": "third_party/th08/build/rl/runs/v104-v3-E5-s7",
         },
     ),
 )
@@ -204,6 +221,7 @@ def main() -> int:
             "third_party/th08/build/rl/runs/v104-E4-screen-s7",
             "third_party/th08/build/rl/runs/v104-E5-screen-s7",
             "third_party/th08/build/rl/runs/v104-v3-E5-s17",
+            "third_party/th08/build/rl/runs/v104-v3-E5-seed17",
         ],
         "append_only": True,
         "generated_by": "Document/Update/Alpha/v1.0.4/Stage3/S3-7/evidence/make_v3_table.py",
