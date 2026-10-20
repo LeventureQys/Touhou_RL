@@ -95,6 +95,49 @@ EXPECTED = {
         "frames": 1076,
         "wall": 3846.57,
     },
+    # §11.10: the run whose directory says s17 but whose summary records seed 7.
+    ("E5", "stability"): {
+        "pos": 2.1918,
+        "danger": 0.8167,
+        "bucket": 1.231,
+        "global": 0.883,
+        "top3": 0.6637,
+        "top1": 0.3964,
+        "near": 0.6879,
+        "p90": 2.945,
+        "frames": 1076,
+        "wall": 8546.07,
+        "perception_steady_mean": 101.31,
+        "perception_steady_max": 105.6,
+        "policy_steady_mean": 103.76,
+        "policy_steady_max": 104.1,
+        "state_sha_prefix": "e2ba07c2",
+        "policy_sha_prefix": "c1d8f538",
+    },
+}
+#: §11.10 identity: the replicate records seed 7 even though its label asks for 17.
+REPLICATE_KEY = ("E5", "stability")
+REPLICATE_EXPECT = {
+    "seed": 7,
+    "requested_seed": 17,
+    "seed_identity_mismatch": True,
+    "screening": False,
+    "eligible": True,
+    "source_state_rule": "joint-pass",
+}
+REPLICATE_SUMMARY = "third_party/th08/build/rl/runs/v104-v3-E5-s17/vision-summary.json"
+REFERENCE_SUMMARY = "third_party/th08/build/rl/runs/v104-v3-E5-s7/vision-summary.json"
+#: §11.10.2 deltas between the frozen seed-7 run and the same-seed replicate.
+EXPECTED_REPLICATE_DELTA = {
+    "pos_abs": -0.2148,
+    "pos_rel": -8.93,
+    "danger_abs": 0.0001,
+    "bucket_abs": -0.0400,
+    "bucket_rel": -3.15,
+    "global_rel": 1.49,
+    "top3_rel": 0.55,
+    "pooled_corr": (0.8722, 0.8752),
+    "p95": (7.8724, 7.6771),
 }
 #: Report §11.7 / §11.6 percentages (percent, 1 decimal).
 EXPECTED_PERCENT = {
@@ -190,8 +233,61 @@ def main() -> int:
     if abs(total - TOTAL_WALL) > 0.01:
         failures.append(f"total wall: {total} != report {TOTAL_WALL}")
 
+    # §11.10: identity of the s17-labelled run and its deltas vs the frozen seed-7 run.
+    replicate = rows[REPLICATE_KEY]
+    for field, expected in REPLICATE_EXPECT.items():
+        if replicate.get(field) != expected:
+            failures.append(f"replicate {field}: table {replicate.get(field)!r} != report {expected!r}")
+    replicate_summary = json.loads((ROOT / REPLICATE_SUMMARY).read_text(encoding="utf-8"))
+    reference_summary = json.loads((ROOT / REFERENCE_SUMMARY).read_text(encoding="utf-8"))
+    if replicate_summary["recipe"]["seed"] != 7 or replicate_summary["config"]["seed"] != 7:
+        failures.append(
+            "replicate summary no longer records seed 7: "
+            f"{replicate_summary['recipe']['seed']}/{replicate_summary['config']['seed']}"
+        )
+    differing = [
+        key
+        for key in set(replicate_summary["config"]) | set(reference_summary["config"])
+        if replicate_summary["config"].get(key) != reference_summary["config"].get(key)
+    ]
+    if differing:
+        failures.append(f"replicate config differs from E5-s7 in {sorted(differing)}")
+    rep_state = replicate_summary["stages"]["state"]["best"]
+    ref_state = reference_summary["stages"]["state"]["best"]
+    rep_policy = replicate_summary["stages"]["policy"]["best"]
+    ref_policy = reference_summary["stages"]["policy"]["best"]
+    delta = {
+        "pos_abs": round(rep_state["val_player_pos_px"] - ref_state["val_player_pos_px"], 4),
+        "pos_rel": round((rep_state["val_player_pos_px"] / ref_state["val_player_pos_px"] - 1) * 100, 2),
+        "danger_abs": round(
+            rep_state["val_danger_corr_perframe_median"] - ref_state["val_danger_corr_perframe_median"], 4
+        ),
+        "bucket_abs": round(
+            rep_policy["val_regret_px_bucket_0_15"] - ref_policy["val_regret_px_bucket_0_15"], 4
+        ),
+        "bucket_rel": round(
+            (rep_policy["val_regret_px_bucket_0_15"] / ref_policy["val_regret_px_bucket_0_15"] - 1) * 100, 2
+        ),
+        "global_rel": round((rep_policy["val_regret_px"] / ref_policy["val_regret_px"] - 1) * 100, 2),
+        "top3_rel": round((rep_policy["val_top3"] / ref_policy["val_top3"] - 1) * 100, 2),
+        "pooled_corr": (ref_state["val_danger_corr"], rep_state["val_danger_corr"]),
+        "p95": (ref_state["val_player_pos_p95_px"], rep_state["val_player_pos_p95_px"]),
+    }
+    for field, expected in EXPECTED_REPLICATE_DELTA.items():
+        got = delta[field]
+        if isinstance(expected, tuple):
+            if any(abs(float(a) - float(b)) > 1e-4 for a, b in zip(got, expected)):
+                failures.append(f"replicate {field}: {got} != report {expected}")
+        elif abs(float(got) - float(expected)) > 0.005:
+            failures.append(f"replicate {field}: {got} != report {expected}")
+    if replicate_summary["stages"]["state"].get("pass_epoch") != 28:
+        failures.append("replicate joint-pass epoch is not 28")
+
     print(f"rows checked: {len(EXPECTED)}; percentages checked: {len(EXPECTED_PERCENT)}")
     print(f"formal total wall: {total:.2f} s = {total / 3600:.2f} h")
+    print(f"replicate identity: seed={replicate['seed']} requested={replicate['requested_seed']}"
+          f" mismatch={replicate['seed_identity_mismatch']}; config identical to E5-s7")
+    print(f"replicate deltas: {json.dumps({k: v for k, v in delta.items()}, ensure_ascii=False)}")
     if failures:
         print("FAILURES:")
         for line in failures:

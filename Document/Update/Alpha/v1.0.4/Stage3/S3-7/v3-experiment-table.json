@@ -8,7 +8,8 @@
     "third_party/th08/build/rl/runs/v104-v3-E5-s7",
     "third_party/th08/build/rl/runs/v104-v3-E6-s7",
     "third_party/th08/build/rl/runs/v104-E4-screen-s7",
-    "third_party/th08/build/rl/runs/v104-E5-screen-s7"
+    "third_party/th08/build/rl/runs/v104-E5-screen-s7",
+    "third_party/th08/build/rl/runs/v104-v3-E5-s17"
   ],
   "append_only": true,
   "generated_by": "Document/Update/Alpha/v1.0.4/Stage3/S3-7/evidence/make_v3_table.py",
@@ -1146,6 +1147,256 @@
       "run_dir": "third_party/th08/build/rl/runs/v104-E5-screen-s7",
       "summary": "third_party/th08/build/rl/runs/v104-E5-screen-s7/vision-summary.json",
       "summary_sha256": "39ae990d1f315f358303e340cacf0c1ca1958d885367445aabcaf0ec8d80f6fa"
+    },
+    {
+      "experiment": "E5",
+      "run_kind": "stability",
+      "route": "v3-st",
+      "depth": 3,
+      "local_enabled": true,
+      "policy_aux": {
+        "heatmap": 0.1,
+        "coord": 1.0,
+        "danger": 0.2,
+        "self": 0.1
+      },
+      "perception_aux": {
+        "heatmap": 1.0,
+        "coord": 1.0,
+        "danger": 1.0,
+        "self": 1.0
+      },
+      "heatmap_sigma": 2.0,
+      "seed": 7,
+      "parameters": 1507162,
+      "source_state_sha": "e2ba07c26dfb223288c7f3721ad631346893a6d48f08ba9091110221c37f45d9",
+      "source_state_checkpoint": "third_party/th08/build/rl/runs/v104-v3-E5-s17/state-pass.pt",
+      "source_state_rule": "joint-pass",
+      "teacher_fingerprint": "a52416f9342fa00a0185c061771d09c22ba735bbe01c83dd7910a6c3bc8ec0f6",
+      "val_index_sha256": "e5d4ebbe6d8de05793520a393fc1fdbea2b1e2c4db9ff7c1632908340c76655f",
+      "epochs": {
+        "state": 72,
+        "policy": 12
+      },
+      "wall_seconds": 8546.07,
+      "epoch_seconds": {
+        "perception": {
+          "epochs": 72,
+          "cold_start_seconds": [
+            146.2,
+            121.0
+          ],
+          "steady_mean_seconds": 101.31,
+          "steady_max_seconds": 105.6,
+          "all_seconds": [
+            146.2,
+            121.0,
+            101.7,
+            103.7,
+            102.9,
+            102.1,
+            101.6,
+            101.3,
+            102.2,
+            102.3,
+            104.3,
+            102.5,
+            103.6,
+            103.9,
+            101.8,
+            101.7,
+            101.4,
+            101.4,
+            101.7,
+            101.4,
+            101.2,
+            101.6,
+            101.6,
+            101.5,
+            101.5,
+            101.5,
+            101.3,
+            101.3,
+            101.5,
+            101.4,
+            101.3,
+            101.3,
+            101.5,
+            101.4,
+            101.3,
+            101.5,
+            102.8,
+            101.3,
+            105.6,
+            100.7,
+            100.2,
+            100.2,
+            101.2,
+            100.3,
+            100.5,
+            100.4,
+            100.5,
+            100.5,
+            100.5,
+            100.5,
+            100.8,
+            100.7,
+            100.3,
+            100.5,
+            100.6,
+            100.3,
+            100.4,
+            101.5,
+            100.8,
+            100.5,
+            100.6,
+            100.7,
+            100.5,
+            100.5,
+            100.6,
+            100.6,
+            100.4,
+            100.4,
+            100.5,
+            100.3,
+            100.4,
+            100.6
+          ],
+          "budget": {
+            "limit_seconds": 60.0,
+            "exceeded": true,
+            "overrun_fraction": 0.76,
+            "note": "Q6 waiver: the <=60 s v3 entry condition stays fail (waived_by=Q6); the overrun is recorded, never silently accepted"
+          }
+        },
+        "policy": {
+          "epochs": 12,
+          "cold_start_seconds": [
+            73.3,
+            73.0
+          ],
+          "steady_mean_seconds": 103.76,
+          "steady_max_seconds": 104.1,
+          "all_seconds": [
+            73.3,
+            73.0,
+            103.3,
+            103.8,
+            104.1,
+            104.0,
+            103.5,
+            103.8,
+            103.8,
+            103.7,
+            103.9,
+            103.7
+          ],
+          "budget": {
+            "limit_seconds": 60.0,
+            "exceeded": true,
+            "overrun_fraction": 0.735,
+            "note": "Q6 waiver: the <=60 s v3 entry condition stays fail (waived_by=Q6); the overrun is recorded, never silently accepted"
+          }
+        }
+      },
+      "eligible": true,
+      "screening": false,
+      "partial": false,
+      "status": "done",
+      "coverage": {
+        "expected_frames": 7241,
+        "actual_frames": 7241,
+        "complete": true,
+        "visited_index_sha256": "e5d4ebbe6d8de05793520a393fc1fdbea2b1e2c4db9ff7c1632908340c76655f"
+      },
+      "raw": {
+        "state": {
+          "best_epoch": 28,
+          "selection_rule": "joint-pass",
+          "pass_epoch": 28,
+          "player_pos_px": 2.1918,
+          "player_pos_p95_px": 7.6771,
+          "danger_corr_perframe_median": 0.8167,
+          "danger_corr_perframe_valid": 7241,
+          "danger_corr": 0.8752,
+          "checkpoint": "state-pass.pt",
+          "checkpoint_sha256": "e2ba07c26dfb223288c7f3721ad631346893a6d48f08ba9091110221c37f45d9"
+        },
+        "policy": {
+          "best_epoch": 12,
+          "selection_rule": "bucket-0-15-regret",
+          "bucket_0_15_regret_px": 1.231,
+          "bucket_0_15_frames": 1076,
+          "bucket_0_15_top3": 0.6589,
+          "global_regret_px": 0.883,
+          "top1": 0.3964,
+          "top3": 0.6637,
+          "top3_tie": 0.8183,
+          "near_optimal_05": 0.6879,
+          "regret_p90_px": 2.945,
+          "by_danger": [
+            {
+              "bucket": "0-15",
+              "frames": 1076,
+              "top1": 0.369,
+              "top3": 0.6589,
+              "top3_tie": 0.6952,
+              "near_optimal_05": 0.5381,
+              "regret_px": 1.231,
+              "regret_p90_px": 3.452
+            },
+            {
+              "bucket": "15-30",
+              "frames": 2009,
+              "top1": 0.3808,
+              "top3": 0.7013,
+              "top3_tie": 0.7526,
+              "near_optimal_05": 0.6108,
+              "regret_px": 1.032,
+              "regret_p90_px": 3.33
+            },
+            {
+              "bucket": "30-60",
+              "frames": 1367,
+              "top1": 0.447,
+              "top3": 0.7476,
+              "top3_tie": 0.7864,
+              "near_optimal_05": 0.5845,
+              "regret_px": 1.196,
+              "regret_p90_px": 3.75
+            },
+            {
+              "bucket": "60-120",
+              "frames": 802,
+              "top1": 0.5362,
+              "top3": 0.8441,
+              "top3_tie": 0.8603,
+              "near_optimal_05": 0.6509,
+              "regret_px": 1.115,
+              "regret_p90_px": 3.383
+            },
+            {
+              "bucket": "120+",
+              "frames": 1987,
+              "top1": 0.3357,
+              "top3": 0.4977,
+              "top3_tie": 0.9562,
+              "near_optimal_05": 0.9331,
+              "regret_px": 0.235,
+              "regret_p90_px": 0.031
+            }
+          ],
+          "checkpoint": "policy.pt",
+          "checkpoint_sha256": "c1d8f5388214fa3607178ff97d48a575d1d354d82eacfe15d9bdf46f84c3cea8"
+        }
+      },
+      "run_dir": "third_party/th08/build/rl/runs/v104-v3-E5-s17",
+      "summary": "third_party/th08/build/rl/runs/v104-v3-E5-s17/vision-summary.json",
+      "summary_sha256": "d0ffb509075ec4e03a1b10a0250bdaa501dabccd1bc4d74e61cb4035365c1368",
+      "requested_seed": 17,
+      "seed_identity_mismatch": true,
+      "seed_note": "directory and log label say s17/seed17, but the trainer summary records recipe.seed=7 and config.seed=7, and its config block is identical to runs/v104-v3-E5-s7: this is a same-seed replicate, not a seed-17 run",
+      "replicate_of": "third_party/th08/build/rl/runs/v104-v3-E5-s7"
     }
   ]
 }

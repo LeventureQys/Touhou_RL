@@ -71,7 +71,7 @@ v1.0.4 opt-in contract (``--selection-contract v104``)
 ------------------------------------------------------
 The defaults above are v1.0.3 behaviour, kept bit-identical so old runs stay
 reproducible.  Passing ``--selection-contract v104`` turns on the written
-contract of `设计文档` §4 C1-C6 / the S3-3 task book, and only then:
+contract of `璁捐鏂囨。` 搂4 C1-C6 / the S3-3 task book, and only then:
 
 * ``history_contract=causal-segment-v1`` is forwarded to
   :class:`VisionDataset` (``legacy`` default keeps the v1.0.3 clamp);
@@ -151,7 +151,7 @@ N_CANDIDATES = 18
 #: (C5) and only reachable through the v1.0.4 contract.
 ARCHES = ("v1", "v2", "v3-st")
 ARCH_V3 = "v3-st"
-#: R2 (設計 §5.3): the only extra recipe this round - one pre-declared per-frame
+#: R2 (瑷▓ 搂5.3): the only extra recipe this round - one pre-declared per-frame
 #: weighting of the localisation terms.  The file is an NPZ with exactly
 #: ``train_indices``/``errors``/``weights`` plus a separate JSON identity (no
 #: pickle), so a loaded weight table cannot be mistaken for another run's.
@@ -160,7 +160,7 @@ POSITION_WEIGHT_THRESHOLDS = (10.0, 30.0)
 POSITION_WEIGHT_VALUES = (1.0, 1.5, 2.0)
 #: The v1.0.4 contract version recorded in every v104 summary/checkpoint.
 CONTRACT_VERSION = "v104-A/1"
-#: Sidecar schema of the fingerprinted teacher cache (task book §3).
+#: Sidecar schema of the fingerprinted teacher cache (task book 搂3).
 TEACHER_SCHEMA = "v104-teacher/1"
 TEACHER_LABEL_VERSION = "avoidpilot-clearance-px/1"
 CANDIDATE_ORDER_VERSION = "focus9-move-v1"
@@ -175,12 +175,12 @@ A01_PERFRAME_THRESHOLD = 0.8
 FROZEN_RUN = ROOT / "third_party" / "th08" / "build" / "rl" / "runs" / "pilot-v1"
 FROZEN_RUN_NAME = "pilot-v1"
 RUNS_ROOT = ROOT / "third_party" / "th08" / "build" / "rl" / "runs"
-#: v1.0.4 baselines are frozen too (设计文档 C4): the 72-epoch A-01 baseline and the
+#: v1.0.4 baselines are frozen too (璁捐鏂囨。 C4): the 72-epoch A-01 baseline and the
 #: 24-epoch clean-data baseline.  Their sub-directories and name aliases count.
 FROZEN_V104_NAMES = ("v104-a01-72ep", "v104-clean-24e12e")
 #: v1.0.4's self auxiliary only supervises the *original* self_feat columns:
 #: 4..12 (9 dims) plus 14..23 (10 dims) = 19.  Index 13 is the constant
-#: stage-clear flag and 2/3 are reserved, so they are excluded (设计文档 C3).
+#: stage-clear flag and 2/3 are reserved, so they are excluded (璁捐鏂囨。 C3).
 SELF_AUX_INDICES = tuple(range(4, 13)) + tuple(range(14, 24))
 CHECKPOINT_NAMES = ("state.pt", "state-pass.pt", "state-bestdanger.pt", "policy.pt")
 
@@ -382,7 +382,7 @@ def validate_config(cfg: "VisionTrainConfig") -> LossPlan:
         forced = False
     else:
         # The contract fixes (0, 1) for the regression objectives; a caller cannot
-        # scale the regression term through these knobs (S3-2 §7.4), and a silent
+        # scale the regression term through these knobs (S3-2 搂7.4), and a silent
         # zero loss is exactly what the explicit check in policy_loss prevents.
         forced = (float(cfg.rank_weight) != 0.0) or (float(cfg.regression_weight) != 1.0)
         rank_weight = 0.0
@@ -469,7 +469,7 @@ class VisionTrainConfig:
     danger_head_variant: str = DANGER_HEAD_LEGACY
     #: R2: per-frame localisation weights for A's *training* indices.
     position_sample_weights: Path | None = None
-    #: A declared screening run (設計 §5.1: 24 perception epochs may save budget,
+    #: A declared screening run (瑷▓ 搂5.1: 24 perception epochs may save budget,
     #: but they can never stand in for the formal 72).  Never acceptance eligible,
     #: even with an unrestricted, fully covered validation pass.
     screening: bool = False
@@ -559,7 +559,7 @@ def teacher_sidecar_path(cache: Path) -> Path:
 def teacher_audit(values: np.ndarray) -> dict:
     """Recomputable audit of the float16 labels, including the quantisation ties.
 
-    The precision is *not* changed (设计文档 C3: "本轮默认保持原 float16"), so the
+    The precision is *not* changed (璁捐鏂囨。 C3: "鏈疆榛樿淇濇寔鍘?float16"), so the
     ties float16 creates have to be reported instead: a pair of candidates whose
     teacher values collapse to the same half float carries no rank information and
     is excluded by the loss, which is only honest if the size of that set is known.
@@ -916,7 +916,7 @@ def self_aux_mask(device: torch.device | str = "cpu") -> torch.Tensor:
 
 
 def masked_self_loss(predicted: torch.Tensor, truth: torch.Tensor, mask: torch.Tensor) -> torch.Tensor:
-    """SmoothL1 over the 19 supervised self columns (設計 C3)."""
+    """SmoothL1 over the 19 supervised self columns (瑷▓ C3)."""
     return F.smooth_l1_loss(predicted.index_select(1, mask), truth.index_select(1, mask))
 
 
@@ -927,7 +927,7 @@ def _danger_target(danger: np.ndarray) -> np.ndarray:
 # --------------------------------------------------------------------------- #
 # R2: pre-declared hard-frame weights for the localisation terms
 # --------------------------------------------------------------------------- #
-#: R2 (設計 §5.3, 問題清单 S2-D06) - one pre-declared recipe, no online mining:
+#: R2 (瑷▓ 搂5.3, 鍟忛娓呭崟 S2-D06) - one pre-declared recipe, no online mining:
 #:
 #: * the error source is a *train-split only* pass of an already frozen
 #:   perception checkpoint (v2: the read-only ``v104-a01-72ep/state.pt``
@@ -1199,7 +1199,7 @@ def policy_selection_key(row: dict) -> tuple[float, float, int] | None:
     """``(0-15 bucket regret, global regret, epoch)`` or ``None`` when unusable.
 
     An empty 0-15 bucket cannot be selected: its zero-valued diagnostics are a
-    placeholder for "no frame here", not a perfect score (設計 C3/C4).  Returning
+    placeholder for "no frame here", not a perfect score (瑷▓ C3/C4).  Returning
     ``None`` keeps such a row out of the running instead of letting it win.
     """
     regret = row.get("val_regret_px")
@@ -1247,7 +1247,7 @@ def policy_parameter_groups(model: torch.nn.Module) -> dict[str, list[tuple[str,
     ``perception`` is the shared state head (heatmap/self/danger decoder) and
     ``candidate_head`` is the 18-way scoring head including the candidate
     embedding.  The policy stage freezes the first two for
-    ``policy_freeze_epochs`` epochs (設計 C4).
+    ``policy_freeze_epochs`` epochs (瑷▓ C4).
 
     v3 has no candidate embedding (``policy_head`` scores the trunk directly) and
     its perception decoders are separate modules, so the same three roles are
@@ -1961,7 +1961,7 @@ def train(cfg: VisionTrainConfig) -> dict:
                             device=device,
                         )
                         if v104:
-                            # 設計 C3: the v104 auxiliary supervises only columns
+                            # 瑷▓ C3: the v104 auxiliary supervises only columns
                             # 4..12 + 14..23; columns 2/3 (reserved) and 13 (the
                             # constant stage-clear flag) carry no signal.
                             loss_self = masked_self_loss(out["self_feat"], truth_self, mask)
@@ -2193,7 +2193,7 @@ def train(cfg: VisionTrainConfig) -> dict:
                 "score_std": float(predicted_scores.std(axis=1).mean()),
             }
             if not training:
-                # policy_metrics is a numpy interface (S3-2 §7.4): CUDA tensors must
+                # policy_metrics is a numpy interface (S3-2 搂7.4): CUDA tensors must
                 # be moved to the host first, which the predictions already are.
                 result.update(
                     vision_metrics.policy_metrics(
@@ -2680,6 +2680,11 @@ def main(argv: list[str] | None = None) -> int:
         lr=args.lr,
         weight_decay=args.weight_decay,
         depth=args.depth,
+        # ``--seed`` used to be accepted by argparse and then dropped here, so
+        # every run silently trained with the dataclass default (7).  Pinned by
+        # test_v104_refine.py::test_cli_seed_reaches_the_config and
+        # ::test_cli_flags_are_not_silently_ignored.
+        seed=args.seed,
         device=args.device,
         train_fraction=args.train_fraction,
         val_fraction=args.val_fraction,
@@ -2690,6 +2695,12 @@ def main(argv: list[str] | None = None) -> int:
         w_heatmap=args.w_heatmap,
         w_self=args.w_self,
         w_danger=args.w_danger,
+        # Same defect class as ``--seed`` above: ``--w-coord`` was parsed and then
+        # dropped, so ``cfg.w_coord`` was stuck at 1.0 and the documented
+        # "0 disables" switch did nothing.  Pinned by
+        # test_v104_refine.py::test_cli_flags_are_not_silently_ignored and
+        # ::test_every_cli_flag_is_read_when_building_the_config.
+        w_coord=args.w_coord,
         torch_threads=args.torch_threads,
         playfield_hw=(tuple(int(v) for v in args.playfield_hw.lower().split('x')) if args.playfield_hw else None),
         pf_width=args.pf_width,
@@ -2723,7 +2734,7 @@ def main(argv: list[str] | None = None) -> int:
         summary = train(cfg)
     except ManifestError as error:
         # A known manifest/IO contract failure: message to stderr, exit 2, no
-        # traceback (設計 C6).  Unknown exceptions keep their traceback.
+        # traceback (瑷▓ C6).  Unknown exceptions keep their traceback.
         print(str(error), file=sys.stderr, flush=True)
         return 2
     except ValueError as error:

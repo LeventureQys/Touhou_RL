@@ -1334,6 +1334,161 @@ def test_screening_recipe_epoch_rule_and_partial_matrix(tmp_path):
 
 
 # --------------------------------------------------------------------------- #
+# CLI wiring: no parameter may be accepted and then silently dropped
+# --------------------------------------------------------------------------- #
+def _captured_config(monkeypatch, argv: list[str]) -> vision_train.VisionTrainConfig:
+    """Run ``main(argv)`` up to the trainer call and return the config it built."""
+    captured: dict = {}
+
+    def fake_train(cfg):
+        captured["cfg"] = cfg
+        raise SystemExit(0)
+
+    monkeypatch.setattr(vision_train, "train", fake_train)
+    with pytest.raises(SystemExit):
+        vision_train.main(argv)
+    assert "cfg" in captured, "main() never reached train()"
+    return captured["cfg"]
+
+
+def test_cli_seed_reaches_the_config(monkeypatch):
+    """``--seed`` used to be accepted by argparse and dropped on the floor.
+
+    ``main()`` built ``VisionTrainConfig`` without ``seed=args.seed``, so every
+    ``--seed 17`` run silently trained with the dataclass default 7 - which is
+    exactly how the S3-7 "seed 17" stability run ended up recording seed 7.
+    """
+    base = ["--dataset", "ds", "--out", "run"]
+    assert _captured_config(monkeypatch, base + ["--seed", "17"]).seed == 17
+    assert _captured_config(monkeypatch, base + ["--seed", "27"]).seed == 27
+    # ... and the declared default is still 7.
+    assert _captured_config(monkeypatch, base).seed == 7
+
+
+def test_cli_flags_are_not_silently_ignored(monkeypatch):
+    """Generic net: every one of these switches must land in the config.
+
+    A flag that argparse accepts but ``main()`` forgets to forward looks green in
+    every summary (the default is plausible) and is invisible to the whole suite;
+    this table makes that class of bug fail loudly instead.
+    """
+    base = ["--dataset", "ds", "--out", "run"]
+    cases = [
+        (["--batch-size", "48"], "batch_size", 48),
+        (["--epochs-state", "3"], "epochs_state", 3),
+        (["--epochs-policy", "4"], "epochs_policy", 4),
+        (["--depth", "3"], "depth", 3),
+        (["--lr", "0.0005"], "lr", 0.0005),
+        (["--weight-decay", "0.0002"], "weight_decay", 0.0002),
+        (["--heatmap-sigma", "2.0"], "heatmap_sigma", 2.0),
+        (["--encoder-lr", "0.0002"], "encoder_lr", 0.0002),
+        (["--policy-head-lr", "0.0006"], "policy_head_lr", 0.0006),
+        (["--policy-freeze-epochs", "1"], "policy_freeze_epochs", 1),
+        (["--policy-aux-danger", "0.0"], "policy_aux_danger", 0.0),
+        (["--w-heatmap", "0.5"], "w_heatmap", 0.5),
+        (["--w-self", "0.25"], "w_self", 0.25),
+        (["--w-danger", "0.75"], "w_danger", 0.75),
+        (["--w-coord", "0.0"], "w_coord", 0.0),
+        (["--selection-contract", "v104"], "selection_contract", "v104"),
+        (["--history-contract", "causal-segment-v1"], "history_contract", "causal-segment-v1"),
+        (["--policy-objective", "centered-reg"], "policy_objective", "centered-reg"),
+        (["--max-train-batches", "2"], "max_train_batches", 2),
+        (["--max-val-batches", "1"], "max_val_batches", 1),
+        (["--danger-head-variant", "learnable-v104"], "danger_head_variant", "learnable-v104"),
+        (["--screening"], "screening", True),
+        (["--no-local-enabled"], "local_enabled", False),
+        (["--seed", "17"], "seed", 17),
+    ]
+    for extra, attribute, expected in cases:
+        config = _captured_config(monkeypatch, base + extra)
+        assert getattr(config, attribute) == expected, (extra, attribute)
+
+
+def test_every_cli_flag_is_read_when_building_the_config():
+    """AST audit of the whole switchboard, not just a hand-picked table.
+
+    Two invariants, both of which ``--seed`` and ``--w-coord`` violated:
+
+    1. every ``--flag`` the parser accepts is read somewhere in ``main()``
+       (as ``args.<dest>``, or folded into a local first);
+    2. no ``VisionTrainConfig`` keyword that has a same-named flag is passed a
+       bare literal constant (that is how a flag gets "read" but ignored).
+
+    ``--seed`` was neither read nor forwarded; ``--w-coord`` was not forwarded
+    (the constructor hardcoded the default through ``cfg``'s default value), and
+    no summary could reveal either.
+    """
+    import ast
+
+    source = Path(vision_train.__file__).read_text(encoding="utf-8")
+    tree = ast.parse(source)
+    main_fn = next(
+        node for node in tree.body if isinstance(node, ast.FunctionDef) and node.name == "main"
+    )
+    flags: set[str] = set()
+    for node in ast.walk(main_fn):
+        if isinstance(node, ast.Call) and isinstance(node.func, ast.Attribute) and node.func.attr == "add_argument":
+            for argument in node.args:
+                if isinstance(argument, ast.Constant) and isinstance(argument.value, str):
+                    if argument.value.startswith("--"):
+                        flags.add(argument.value.lstrip("-").replace("-", "_"))
+    assert len(flags) > 40, f"the audit itself is broken; found only {len(flags)} flags"
+
+    read: set[str] = set()
+    for node in ast.walk(main_fn):
+        if (
+            isinstance(node, ast.Attribute)
+            and isinstance(node.value, ast.Name)
+            and node.value.id == "args"
+        ):
+            read.add(node.attr)
+    dropped = sorted(flags - read)
+    assert dropped == [], f"CLI flags accepted but never read in main(): {dropped}"
+
+    ctor = next(
+        node
+        for node in ast.walk(main_fn)
+        if isinstance(node, ast.Call)
+        and isinstance(node.func, ast.Name)
+        and node.func.id == "VisionTrainConfig"
+    )
+    hardcoded = [
+        keyword.arg
+        for keyword in ctor.keywords
+        if keyword.arg in flags and isinstance(keyword.value, ast.Constant)
+    ]
+    assert hardcoded == [], f"config fields hardcoded instead of forwarded: {hardcoded}"
+
+
+def test_seed_is_recorded_in_the_summary_and_recipe(tmp_path):
+    """Reverse regression: the summary must carry the seed that was requested."""
+    dataset_dir = synthetic_dataset(tmp_path)
+    common = dict(
+        arch="v2",
+        stage="state",
+        epochs_state=1,
+        selection_contract="v104",
+        history_contract="causal-segment-v1",
+        policy_objective="legacy-reg",
+        depth=1,
+        max_train_batches=1,
+        max_val_batches=0,
+        allow_missing_manifest=False,
+    )
+    for seed in (17, 7):
+        summary = vision_train.train(
+            cfg(dataset_dir, tmp_path / f"run-s{seed}", seed=seed, **common)
+        )
+        assert summary["config"]["seed"] == seed, seed
+        assert summary["recipe"]["seed"] == seed, seed
+    # A default config still records 7 (nothing changed for old call sites).
+    default = vision_train.VisionTrainConfig(dataset=dataset_dir, out_dir=tmp_path / "d")
+    assert vision_train._summary_config(default, 0)["seed"] == 7  # noqa: SLF001
+    custom = vision_train.VisionTrainConfig(dataset=dataset_dir, out_dir=tmp_path / "e", seed=23)
+    assert vision_train._summary_config(custom, 0)["seed"] == 23  # noqa: SLF001
+
+
+# --------------------------------------------------------------------------- #
 # dry run / CLI contract
 # --------------------------------------------------------------------------- #
 def test_v3_matrix_dry_run_creates_nothing(tmp_path, capsys):

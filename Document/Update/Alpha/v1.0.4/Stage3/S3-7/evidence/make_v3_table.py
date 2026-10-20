@@ -23,13 +23,33 @@ TABLE = S37 / "v3-experiment-table.json"
 
 SCHEMA = "v104-v3-experiment-table/1"
 BUDGET_SECONDS = 60.0
-#: Formal rows first, then the screening rows that preceded them.
+#: Formal rows first, then the screening rows that preceded them, then the
+#: stability replicate (append-only: new rows go to the end, old rows never move).
+#:
+#: The ``E5 / stability`` row is the run whose directory says ``s17`` but whose
+#: trainer summary records ``recipe.seed = config.seed = 7``; ``requested_seed``
+#: keeps the label visible instead of silently relabelling the run as seed 17.
 SOURCES = (
-    ("E4", "formal", "v104-v3-E4-s7"),
-    ("E5", "formal", "v104-v3-E5-s7"),
-    ("E6", "formal", "v104-v3-E6-s7"),
-    ("E4", "screening", "v104-E4-screen-s7"),
-    ("E5", "screening", "v104-E5-screen-s7"),
+    ("E4", "formal", "v104-v3-E4-s7", {}),
+    ("E5", "formal", "v104-v3-E5-s7", {}),
+    ("E6", "formal", "v104-v3-E6-s7", {}),
+    ("E4", "screening", "v104-E4-screen-s7", {}),
+    ("E5", "screening", "v104-E5-screen-s7", {}),
+    (
+        "E5",
+        "stability",
+        "v104-v3-E5-s17",
+        {
+            "requested_seed": 17,
+            "seed_identity_mismatch": True,
+            "seed_note": (
+                "directory and log label say s17/seed17, but the trainer summary records"
+                " recipe.seed=7 and config.seed=7, and its config block is identical to"
+                " runs/v104-v3-E5-s7: this is a same-seed replicate, not a seed-17 run"
+            ),
+            "replicate_of": "third_party/th08/build/rl/runs/v104-v3-E5-s7",
+        },
+    ),
 )
 
 
@@ -60,7 +80,7 @@ def epoch_block(history: list[dict], *, cold_start: int = 2) -> dict:
     }
 
 
-def row_for(experiment: str, kind: str, run_name: str) -> dict:
+def row_for(experiment: str, kind: str, run_name: str, extra: dict | None = None) -> dict:
     run_dir = RUNS / run_name
     summary_path = run_dir / "vision-summary.json"
     summary = json.loads(summary_path.read_text(encoding="utf-8"))
@@ -146,6 +166,7 @@ def row_for(experiment: str, kind: str, run_name: str) -> dict:
         "run_dir": run_dir.relative_to(ROOT).as_posix(),
         "summary": summary_path.relative_to(ROOT).as_posix(),
         "summary_sha256": digest(summary_path),
+        **(extra or {}),
     }
 
 
@@ -164,8 +185,8 @@ def main() -> int:
         header = {key: value for key, value in payload.items() if key != "rows"}
     seen = {row_key(row) for row in existing}
     appended = []
-    for experiment, kind, run_name in SOURCES:
-        row = row_for(experiment, kind, run_name)
+    for experiment, kind, run_name, extra in SOURCES:
+        row = row_for(experiment, kind, run_name, extra)
         if row_key(row) in seen:
             continue
         appended.append(row)
@@ -182,6 +203,7 @@ def main() -> int:
             "third_party/th08/build/rl/runs/v104-v3-E6-s7",
             "third_party/th08/build/rl/runs/v104-E4-screen-s7",
             "third_party/th08/build/rl/runs/v104-E5-screen-s7",
+            "third_party/th08/build/rl/runs/v104-v3-E5-s17",
         ],
         "append_only": True,
         "generated_by": "Document/Update/Alpha/v1.0.4/Stage3/S3-7/evidence/make_v3_table.py",
