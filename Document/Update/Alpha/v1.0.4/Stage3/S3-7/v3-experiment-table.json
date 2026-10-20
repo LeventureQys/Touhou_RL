@@ -1,0 +1,1151 @@
+{
+  "schema": "v104-v3-experiment-table/1",
+  "dataset": "third_party/th08/build/rl/datasets/pilot-ud0059-v2",
+  "val_index_sha256": "e5d4ebbe6d8de05793520a393fc1fdbea2b1e2c4db9ff7c1632908340c76655f",
+  "val_frames": 7241,
+  "read_only_inputs": [
+    "third_party/th08/build/rl/runs/v104-v3-E4-s7",
+    "third_party/th08/build/rl/runs/v104-v3-E5-s7",
+    "third_party/th08/build/rl/runs/v104-v3-E6-s7",
+    "third_party/th08/build/rl/runs/v104-E4-screen-s7",
+    "third_party/th08/build/rl/runs/v104-E5-screen-s7"
+  ],
+  "append_only": true,
+  "generated_by": "Document/Update/Alpha/v1.0.4/Stage3/S3-7/evidence/make_v3_table.py",
+  "rows": [
+    {
+      "experiment": "E4",
+      "run_kind": "formal",
+      "route": "v3-st",
+      "depth": 3,
+      "local_enabled": false,
+      "policy_aux": {
+        "heatmap": 0.1,
+        "coord": 1.0,
+        "danger": 0.2,
+        "self": 0.1
+      },
+      "perception_aux": {
+        "heatmap": 1.0,
+        "coord": 1.0,
+        "danger": 1.0,
+        "self": 1.0
+      },
+      "heatmap_sigma": 2.0,
+      "seed": 7,
+      "parameters": 1507162,
+      "source_state_sha": "01bef067fc2d264cb28745a2345c129f39d4e80b817c5c75e044326b49fe0445",
+      "source_state_checkpoint": "third_party/th08/build/rl/runs/v104-v3-E4-s7/state-pass.pt",
+      "source_state_rule": "joint-pass",
+      "teacher_fingerprint": "a52416f9342fa00a0185c061771d09c22ba735bbe01c83dd7910a6c3bc8ec0f6",
+      "val_index_sha256": "e5d4ebbe6d8de05793520a393fc1fdbea2b1e2c4db9ff7c1632908340c76655f",
+      "epochs": {
+        "state": 72,
+        "policy": 12
+      },
+      "wall_seconds": 8490.61,
+      "epoch_seconds": {
+        "perception": {
+          "epochs": 72,
+          "cold_start_seconds": [
+            146.1,
+            118.8
+          ],
+          "steady_mean_seconds": 100.54,
+          "steady_max_seconds": 103.6,
+          "all_seconds": [
+            146.1,
+            118.8,
+            103.6,
+            101.4,
+            102.1,
+            102.9,
+            103.1,
+            102.1,
+            102.0,
+            100.3,
+            100.5,
+            100.5,
+            100.2,
+            100.5,
+            100.6,
+            100.4,
+            100.2,
+            100.2,
+            100.7,
+            101.6,
+            100.3,
+            100.3,
+            100.5,
+            100.3,
+            100.2,
+            100.3,
+            100.1,
+            100.3,
+            100.1,
+            99.9,
+            100.0,
+            100.1,
+            100.3,
+            100.2,
+            100.2,
+            100.2,
+            100.2,
+            100.1,
+            100.2,
+            100.4,
+            100.4,
+            101.0,
+            100.2,
+            100.3,
+            100.2,
+            100.1,
+            100.2,
+            100.2,
+            100.2,
+            100.1,
+            100.6,
+            100.5,
+            100.2,
+            100.1,
+            100.1,
+            100.2,
+            100.4,
+            100.4,
+            100.2,
+            100.2,
+            100.3,
+            100.5,
+            100.2,
+            100.2,
+            100.2,
+            100.4,
+            100.2,
+            100.2,
+            102.3,
+            100.4,
+            100.1,
+            100.2
+          ],
+          "budget": {
+            "limit_seconds": 60.0,
+            "exceeded": true,
+            "overrun_fraction": 0.7267,
+            "note": "Q6 waiver: the <=60 s v3 entry condition stays fail (waived_by=Q6); the overrun is recorded, never silently accepted"
+          }
+        },
+        "policy": {
+          "epochs": 12,
+          "cold_start_seconds": [
+            73.8,
+            73.6
+          ],
+          "steady_mean_seconds": 103.66,
+          "steady_max_seconds": 103.9,
+          "all_seconds": [
+            73.8,
+            73.6,
+            103.5,
+            103.6,
+            103.7,
+            103.9,
+            103.6,
+            103.9,
+            103.5,
+            103.5,
+            103.6,
+            103.8
+          ],
+          "budget": {
+            "limit_seconds": 60.0,
+            "exceeded": true,
+            "overrun_fraction": 0.7317,
+            "note": "Q6 waiver: the <=60 s v3 entry condition stays fail (waived_by=Q6); the overrun is recorded, never silently accepted"
+          }
+        }
+      },
+      "eligible": true,
+      "screening": false,
+      "partial": false,
+      "status": "done",
+      "coverage": {
+        "expected_frames": 7241,
+        "actual_frames": 7241,
+        "complete": true,
+        "visited_index_sha256": "e5d4ebbe6d8de05793520a393fc1fdbea2b1e2c4db9ff7c1632908340c76655f"
+      },
+      "raw": {
+        "state": {
+          "best_epoch": 28,
+          "selection_rule": "joint-pass",
+          "pass_epoch": 28,
+          "player_pos_px": 2.3314,
+          "player_pos_p95_px": 7.9498,
+          "danger_corr_perframe_median": 0.8006,
+          "danger_corr_perframe_valid": 7241,
+          "danger_corr": 0.8604,
+          "checkpoint": "state-pass.pt",
+          "checkpoint_sha256": "01bef067fc2d264cb28745a2345c129f39d4e80b817c5c75e044326b49fe0445"
+        },
+        "policy": {
+          "best_epoch": 12,
+          "selection_rule": "bucket-0-15-regret",
+          "bucket_0_15_regret_px": 1.899,
+          "bucket_0_15_frames": 1076,
+          "bucket_0_15_top3": 0.5121,
+          "global_regret_px": 1.28,
+          "top1": 0.3506,
+          "top3": 0.5959,
+          "top3_tie": 0.7429,
+          "near_optimal_05": 0.6194,
+          "regret_p90_px": 4.188,
+          "by_danger": [
+            {
+              "bucket": "0-15",
+              "frames": 1076,
+              "top1": 0.2556,
+              "top3": 0.5121,
+              "top3_tie": 0.5595,
+              "near_optimal_05": 0.4006,
+              "regret_px": 1.899,
+              "regret_p90_px": 4.988
+            },
+            {
+              "bucket": "15-30",
+              "frames": 2009,
+              "top1": 0.3136,
+              "top3": 0.5784,
+              "top3_tie": 0.6257,
+              "near_optimal_05": 0.4828,
+              "regret_px": 1.707,
+              "regret_p90_px": 5.062
+            },
+            {
+              "bucket": "30-60",
+              "frames": 1367,
+              "top1": 0.3972,
+              "top3": 0.6942,
+              "top3_tie": 0.7279,
+              "near_optimal_05": 0.5223,
+              "regret_px": 1.716,
+              "regret_p90_px": 5.5
+            },
+            {
+              "bucket": "60-120",
+              "frames": 802,
+              "top1": 0.5187,
+              "top3": 0.8267,
+              "top3_tie": 0.8454,
+              "near_optimal_05": 0.6397,
+              "regret_px": 1.208,
+              "regret_p90_px": 3.812
+            },
+            {
+              "bucket": "120+",
+              "frames": 1987,
+              "top1": 0.3397,
+              "top3": 0.4982,
+              "top3_tie": 0.9295,
+              "near_optimal_05": 0.9346,
+              "regret_px": 0.242,
+              "regret_p90_px": 0.031
+            }
+          ],
+          "checkpoint": "policy.pt",
+          "checkpoint_sha256": "b50577dd60a3596367853470f2a9753b08dfae9ab965942b4f378d80eac37b2b"
+        }
+      },
+      "run_dir": "third_party/th08/build/rl/runs/v104-v3-E4-s7",
+      "summary": "third_party/th08/build/rl/runs/v104-v3-E4-s7/vision-summary.json",
+      "summary_sha256": "070769f9548c1c0d13c8e0ddfa806d637d4803a7ad3dae418d93ce515b41ebf0"
+    },
+    {
+      "experiment": "E5",
+      "run_kind": "formal",
+      "route": "v3-st",
+      "depth": 3,
+      "local_enabled": true,
+      "policy_aux": {
+        "heatmap": 0.1,
+        "coord": 1.0,
+        "danger": 0.2,
+        "self": 0.1
+      },
+      "perception_aux": {
+        "heatmap": 1.0,
+        "coord": 1.0,
+        "danger": 1.0,
+        "self": 1.0
+      },
+      "heatmap_sigma": 2.0,
+      "seed": 7,
+      "parameters": 1507162,
+      "source_state_sha": "00a2d28472e4169879f481ca28e664d0fb4c8291f2741ea58ab14967da8c8f46",
+      "source_state_checkpoint": "third_party/th08/build/rl/runs/v104-v3-E5-s7/state-pass.pt",
+      "source_state_rule": "joint-pass",
+      "teacher_fingerprint": "a52416f9342fa00a0185c061771d09c22ba735bbe01c83dd7910a6c3bc8ec0f6",
+      "val_index_sha256": "e5d4ebbe6d8de05793520a393fc1fdbea2b1e2c4db9ff7c1632908340c76655f",
+      "epochs": {
+        "state": 72,
+        "policy": 12
+      },
+      "wall_seconds": 8735.0,
+      "epoch_seconds": {
+        "perception": {
+          "epochs": 72,
+          "cold_start_seconds": [
+            146.4,
+            119.6
+          ],
+          "steady_mean_seconds": 103.73,
+          "steady_max_seconds": 104.7,
+          "all_seconds": [
+            146.4,
+            119.6,
+            104.4,
+            104.7,
+            103.8,
+            104.0,
+            104.3,
+            104.4,
+            104.1,
+            103.7,
+            103.7,
+            103.7,
+            103.7,
+            103.6,
+            103.7,
+            103.5,
+            103.7,
+            104.1,
+            104.5,
+            103.7,
+            104.4,
+            104.5,
+            103.9,
+            103.9,
+            104.5,
+            103.7,
+            102.8,
+            104.1,
+            103.4,
+            104.1,
+            104.3,
+            104.4,
+            104.0,
+            102.8,
+            103.7,
+            103.6,
+            104.3,
+            103.8,
+            104.1,
+            104.0,
+            103.1,
+            103.3,
+            103.2,
+            103.8,
+            104.3,
+            104.3,
+            103.3,
+            104.2,
+            104.4,
+            104.0,
+            103.9,
+            103.8,
+            103.8,
+            103.8,
+            103.8,
+            103.6,
+            103.8,
+            103.7,
+            103.5,
+            104.4,
+            103.0,
+            101.7,
+            102.8,
+            103.9,
+            104.2,
+            103.8,
+            102.6,
+            103.2,
+            102.7,
+            103.1,
+            102.2,
+            102.2
+          ],
+          "budget": {
+            "limit_seconds": 60.0,
+            "exceeded": true,
+            "overrun_fraction": 0.745,
+            "note": "Q6 waiver: the <=60 s v3 entry condition stays fail (waived_by=Q6); the overrun is recorded, never silently accepted"
+          }
+        },
+        "policy": {
+          "epochs": 12,
+          "cold_start_seconds": [
+            73.4,
+            74.6
+          ],
+          "steady_mean_seconds": 105.64,
+          "steady_max_seconds": 106.5,
+          "all_seconds": [
+            73.4,
+            74.6,
+            105.0,
+            106.5,
+            105.6,
+            105.4,
+            105.7,
+            105.0,
+            105.7,
+            106.2,
+            105.0,
+            106.3
+          ],
+          "budget": {
+            "limit_seconds": 60.0,
+            "exceeded": true,
+            "overrun_fraction": 0.775,
+            "note": "Q6 waiver: the <=60 s v3 entry condition stays fail (waived_by=Q6); the overrun is recorded, never silently accepted"
+          }
+        }
+      },
+      "eligible": true,
+      "screening": false,
+      "partial": false,
+      "status": "done",
+      "coverage": {
+        "expected_frames": 7241,
+        "actual_frames": 7241,
+        "complete": true,
+        "visited_index_sha256": "e5d4ebbe6d8de05793520a393fc1fdbea2b1e2c4db9ff7c1632908340c76655f"
+      },
+      "raw": {
+        "state": {
+          "best_epoch": 28,
+          "selection_rule": "joint-pass",
+          "pass_epoch": 28,
+          "player_pos_px": 2.4066,
+          "player_pos_p95_px": 7.8724,
+          "danger_corr_perframe_median": 0.8166,
+          "danger_corr_perframe_valid": 7241,
+          "danger_corr": 0.8722,
+          "checkpoint": "state-pass.pt",
+          "checkpoint_sha256": "00a2d28472e4169879f481ca28e664d0fb4c8291f2741ea58ab14967da8c8f46"
+        },
+        "policy": {
+          "best_epoch": 12,
+          "selection_rule": "bucket-0-15-regret",
+          "bucket_0_15_regret_px": 1.271,
+          "bucket_0_15_frames": 1076,
+          "bucket_0_15_top3": 0.6403,
+          "global_regret_px": 0.87,
+          "top1": 0.4006,
+          "top3": 0.6601,
+          "top3_tie": 0.8207,
+          "near_optimal_05": 0.6904,
+          "regret_p90_px": 2.898,
+          "by_danger": [
+            {
+              "bucket": "0-15",
+              "frames": 1076,
+              "top1": 0.3476,
+              "top3": 0.6403,
+              "top3_tie": 0.6877,
+              "near_optimal_05": 0.5204,
+              "regret_px": 1.271,
+              "regret_p90_px": 3.675
+            },
+            {
+              "bucket": "15-30",
+              "frames": 2009,
+              "top1": 0.4146,
+              "top3": 0.7173,
+              "top3_tie": 0.768,
+              "near_optimal_05": 0.6307,
+              "regret_px": 0.967,
+              "regret_p90_px": 3.081
+            },
+            {
+              "bucket": "30-60",
+              "frames": 1367,
+              "top1": 0.4338,
+              "top3": 0.752,
+              "top3_tie": 0.7915,
+              "near_optimal_05": 0.5801,
+              "regret_px": 1.205,
+              "regret_p90_px": 3.763
+            },
+            {
+              "bucket": "60-120",
+              "frames": 802,
+              "top1": 0.5387,
+              "top3": 0.8342,
+              "top3_tie": 0.8541,
+              "near_optimal_05": 0.6521,
+              "regret_px": 1.147,
+              "regret_p90_px": 3.812
+            },
+            {
+              "bucket": "120+",
+              "frames": 1987,
+              "top1": 0.3367,
+              "top3": 0.4796,
+              "top3_tie": 0.9527,
+              "near_optimal_05": 0.9341,
+              "regret_px": 0.214,
+              "regret_p90_px": 0.031
+            }
+          ],
+          "checkpoint": "policy.pt",
+          "checkpoint_sha256": "74abde8a996c13fae832913e4e5533bc9490688bc4c0aa73560e695f065d14be"
+        }
+      },
+      "run_dir": "third_party/th08/build/rl/runs/v104-v3-E5-s7",
+      "summary": "third_party/th08/build/rl/runs/v104-v3-E5-s7/vision-summary.json",
+      "summary_sha256": "5700bea766ca551a376ed171472be7cf4713489bf5aa926c1ceded228eb77f2a"
+    },
+    {
+      "experiment": "E6",
+      "run_kind": "formal",
+      "route": "v3-st",
+      "depth": 3,
+      "local_enabled": true,
+      "policy_aux": {
+        "heatmap": 0.0,
+        "coord": 0.0,
+        "danger": 0.0,
+        "self": 0.0
+      },
+      "perception_aux": {
+        "heatmap": 1.0,
+        "coord": 1.0,
+        "danger": 1.0,
+        "self": 1.0
+      },
+      "heatmap_sigma": 2.0,
+      "seed": 7,
+      "parameters": 1507162,
+      "source_state_sha": "ec3dda35ff45f815bbc0ad9ca87900feef5d3118c78656195d9d65d1cc4b76cb",
+      "source_state_checkpoint": "third_party/th08/build/rl/runs/v104-v3-E6-s7/state-pass.pt",
+      "source_state_rule": "joint-pass",
+      "teacher_fingerprint": "a52416f9342fa00a0185c061771d09c22ba735bbe01c83dd7910a6c3bc8ec0f6",
+      "val_index_sha256": "e5d4ebbe6d8de05793520a393fc1fdbea2b1e2c4db9ff7c1632908340c76655f",
+      "epochs": {
+        "state": 72,
+        "policy": 12
+      },
+      "wall_seconds": 8662.98,
+      "epoch_seconds": {
+        "perception": {
+          "epochs": 72,
+          "cold_start_seconds": [
+            152.5,
+            120.6
+          ],
+          "steady_mean_seconds": 102.57,
+          "steady_max_seconds": 104.3,
+          "all_seconds": [
+            152.5,
+            120.6,
+            104.3,
+            101.6,
+            102.1,
+            101.6,
+            101.7,
+            102.4,
+            101.6,
+            103.0,
+            102.5,
+            102.7,
+            102.6,
+            103.6,
+            102.8,
+            102.5,
+            102.1,
+            102.1,
+            102.8,
+            102.0,
+            102.6,
+            101.9,
+            102.3,
+            102.9,
+            103.6,
+            103.6,
+            103.4,
+            101.8,
+            103.1,
+            103.3,
+            102.3,
+            103.2,
+            101.9,
+            102.6,
+            102.9,
+            103.5,
+            102.5,
+            102.4,
+            102.2,
+            101.9,
+            103.4,
+            103.3,
+            102.3,
+            103.0,
+            102.9,
+            101.6,
+            102.1,
+            102.1,
+            102.4,
+            101.9,
+            102.2,
+            103.1,
+            103.3,
+            103.8,
+            102.2,
+            102.3,
+            101.4,
+            102.6,
+            103.5,
+            103.1,
+            103.4,
+            102.6,
+            103.4,
+            102.4,
+            103.3,
+            101.6,
+            102.0,
+            102.6,
+            101.4,
+            102.6,
+            102.2,
+            102.2
+          ],
+          "budget": {
+            "limit_seconds": 60.0,
+            "exceeded": true,
+            "overrun_fraction": 0.7383,
+            "note": "Q6 waiver: the <=60 s v3 entry condition stays fail (waived_by=Q6); the overrun is recorded, never silently accepted"
+          }
+        },
+        "policy": {
+          "epochs": 12,
+          "cold_start_seconds": [
+            74.4,
+            74.7
+          ],
+          "steady_mean_seconds": 105.75,
+          "steady_max_seconds": 106.8,
+          "all_seconds": [
+            74.4,
+            74.7,
+            106.6,
+            105.8,
+            106.1,
+            105.5,
+            105.1,
+            105.4,
+            106.8,
+            106.2,
+            105.0,
+            105.0
+          ],
+          "budget": {
+            "limit_seconds": 60.0,
+            "exceeded": true,
+            "overrun_fraction": 0.78,
+            "note": "Q6 waiver: the <=60 s v3 entry condition stays fail (waived_by=Q6); the overrun is recorded, never silently accepted"
+          }
+        }
+      },
+      "eligible": true,
+      "screening": false,
+      "partial": false,
+      "status": "done",
+      "coverage": {
+        "expected_frames": 7241,
+        "actual_frames": 7241,
+        "complete": true,
+        "visited_index_sha256": "e5d4ebbe6d8de05793520a393fc1fdbea2b1e2c4db9ff7c1632908340c76655f"
+      },
+      "raw": {
+        "state": {
+          "best_epoch": 28,
+          "selection_rule": "joint-pass",
+          "pass_epoch": 28,
+          "player_pos_px": 2.1873,
+          "player_pos_p95_px": 7.9662,
+          "danger_corr_perframe_median": 0.8037,
+          "danger_corr_perframe_valid": 7241,
+          "danger_corr": 0.8689,
+          "checkpoint": "state-pass.pt",
+          "checkpoint_sha256": "ec3dda35ff45f815bbc0ad9ca87900feef5d3118c78656195d9d65d1cc4b76cb"
+        },
+        "policy": {
+          "best_epoch": 12,
+          "selection_rule": "bucket-0-15-regret",
+          "bucket_0_15_regret_px": 1.519,
+          "bucket_0_15_frames": 1076,
+          "bucket_0_15_top3": 0.6041,
+          "global_regret_px": 1.013,
+          "top1": 0.3801,
+          "top3": 0.6354,
+          "top3_tie": 0.7868,
+          "near_optimal_05": 0.6687,
+          "regret_p90_px": 3.406,
+          "by_danger": [
+            {
+              "bucket": "0-15",
+              "frames": 1076,
+              "top1": 0.3206,
+              "top3": 0.6041,
+              "top3_tie": 0.6413,
+              "near_optimal_05": 0.4898,
+              "regret_px": 1.519,
+              "regret_p90_px": 4.254
+            },
+            {
+              "bucket": "15-30",
+              "frames": 2009,
+              "top1": 0.3654,
+              "top3": 0.6695,
+              "top3_tie": 0.7158,
+              "near_optimal_05": 0.5774,
+              "regret_px": 1.228,
+              "regret_p90_px": 3.845
+            },
+            {
+              "bucket": "30-60",
+              "frames": 1367,
+              "top1": 0.4257,
+              "top3": 0.7286,
+              "top3_tie": 0.763,
+              "near_optimal_05": 0.5691,
+              "regret_px": 1.299,
+              "regret_p90_px": 4.062
+            },
+            {
+              "bucket": "60-120",
+              "frames": 802,
+              "top1": 0.5461,
+              "top3": 0.8142,
+              "top3_tie": 0.8379,
+              "near_optimal_05": 0.6534,
+              "regret_px": 1.2,
+              "regret_p90_px": 3.931
+            },
+            {
+              "bucket": "120+",
+              "frames": 1987,
+              "top1": 0.3286,
+              "top3": 0.4816,
+              "top3_tie": 0.9331,
+              "near_optimal_05": 0.9326,
+              "regret_px": 0.249,
+              "regret_p90_px": 0.031
+            }
+          ],
+          "checkpoint": "policy.pt",
+          "checkpoint_sha256": "035c7d1682afa415b3ca5a38fc3a4848d85a84aa25a9b9727ea5543f326d66b9"
+        }
+      },
+      "run_dir": "third_party/th08/build/rl/runs/v104-v3-E6-s7",
+      "summary": "third_party/th08/build/rl/runs/v104-v3-E6-s7/vision-summary.json",
+      "summary_sha256": "54b4f40081e0f537d17ba9a0c9efe53bc4847ad42bdae3227257825acecc6176"
+    },
+    {
+      "experiment": "E4",
+      "run_kind": "screening",
+      "route": "v3-st",
+      "depth": 3,
+      "local_enabled": false,
+      "policy_aux": {
+        "heatmap": 0.1,
+        "coord": 1.0,
+        "danger": 0.2,
+        "self": 0.1
+      },
+      "perception_aux": {
+        "heatmap": 1.0,
+        "coord": 1.0,
+        "danger": 1.0,
+        "self": 1.0
+      },
+      "heatmap_sigma": 2.0,
+      "seed": 7,
+      "parameters": 1507162,
+      "source_state_sha": "d283e38c8557db29e7ad41be89a279c51e5130406aeff9557c33ea4b693db3de",
+      "source_state_checkpoint": "third_party/th08/build/rl/runs/v104-E4-screen-s7/state.pt",
+      "source_state_rule": "position",
+      "teacher_fingerprint": "a52416f9342fa00a0185c061771d09c22ba735bbe01c83dd7910a6c3bc8ec0f6",
+      "val_index_sha256": "e5d4ebbe6d8de05793520a393fc1fdbea2b1e2c4db9ff7c1632908340c76655f",
+      "epochs": {
+        "state": 24,
+        "policy": 12
+      },
+      "wall_seconds": 3814.74,
+      "epoch_seconds": {
+        "perception": {
+          "epochs": 24,
+          "cold_start_seconds": [
+            150.4,
+            121.7
+          ],
+          "steady_mean_seconds": 104.8,
+          "steady_max_seconds": 105.3,
+          "all_seconds": [
+            150.4,
+            121.7,
+            104.2,
+            104.2,
+            103.9,
+            104.8,
+            104.3,
+            104.0,
+            104.8,
+            104.9,
+            105.0,
+            104.9,
+            104.8,
+            105.1,
+            105.2,
+            105.1,
+            105.1,
+            105.3,
+            105.2,
+            104.9,
+            105.0,
+            105.3,
+            104.6,
+            105.0
+          ],
+          "budget": {
+            "limit_seconds": 60.0,
+            "exceeded": true,
+            "overrun_fraction": 0.755,
+            "note": "Q6 waiver: the <=60 s v3 entry condition stays fail (waived_by=Q6); the overrun is recorded, never silently accepted"
+          }
+        },
+        "policy": {
+          "epochs": 12,
+          "cold_start_seconds": [
+            76.1,
+            75.7
+          ],
+          "steady_mean_seconds": 108.2,
+          "steady_max_seconds": 108.5,
+          "all_seconds": [
+            76.1,
+            75.7,
+            107.9,
+            108.5,
+            108.4,
+            108.3,
+            108.3,
+            108.5,
+            108.1,
+            108.1,
+            108.3,
+            107.6
+          ],
+          "budget": {
+            "limit_seconds": 60.0,
+            "exceeded": true,
+            "overrun_fraction": 0.8083,
+            "note": "Q6 waiver: the <=60 s v3 entry condition stays fail (waived_by=Q6); the overrun is recorded, never silently accepted"
+          }
+        }
+      },
+      "eligible": false,
+      "screening": true,
+      "partial": false,
+      "status": "done",
+      "coverage": {
+        "expected_frames": 7241,
+        "actual_frames": 7241,
+        "complete": true,
+        "visited_index_sha256": "e5d4ebbe6d8de05793520a393fc1fdbea2b1e2c4db9ff7c1632908340c76655f"
+      },
+      "raw": {
+        "state": {
+          "best_epoch": 23,
+          "selection_rule": "position",
+          "pass_epoch": null,
+          "player_pos_px": 2.3558,
+          "player_pos_p95_px": 7.8581,
+          "danger_corr_perframe_median": 0.7595,
+          "danger_corr_perframe_valid": 7241,
+          "danger_corr": 0.8366,
+          "checkpoint": "state.pt",
+          "checkpoint_sha256": "d283e38c8557db29e7ad41be89a279c51e5130406aeff9557c33ea4b693db3de"
+        },
+        "policy": {
+          "best_epoch": 11,
+          "selection_rule": "bucket-0-15-regret",
+          "bucket_0_15_regret_px": 2.082,
+          "bucket_0_15_frames": 1076,
+          "bucket_0_15_top3": 0.4768,
+          "global_regret_px": 1.451,
+          "top1": 0.3372,
+          "top3": 0.5815,
+          "top3_tie": 0.7136,
+          "near_optimal_05": 0.5992,
+          "regret_p90_px": 4.859,
+          "by_danger": [
+            {
+              "bucket": "0-15",
+              "frames": 1076,
+              "top1": 0.2565,
+              "top3": 0.4768,
+              "top3_tie": 0.5279,
+              "near_optimal_05": 0.3838,
+              "regret_px": 2.082,
+              "regret_p90_px": 5.436
+            },
+            {
+              "bucket": "15-30",
+              "frames": 2009,
+              "top1": 0.2932,
+              "top3": 0.5336,
+              "top3_tie": 0.5859,
+              "near_optimal_05": 0.4559,
+              "regret_px": 1.967,
+              "regret_p90_px": 5.562
+            },
+            {
+              "bucket": "30-60",
+              "frames": 1367,
+              "top1": 0.357,
+              "top3": 0.6496,
+              "top3_tie": 0.6906,
+              "near_optimal_05": 0.4821,
+              "regret_px": 2.0,
+              "regret_p90_px": 5.944
+            },
+            {
+              "bucket": "60-120",
+              "frames": 802,
+              "top1": 0.5249,
+              "top3": 0.8042,
+              "top3_tie": 0.8279,
+              "near_optimal_05": 0.6409,
+              "regret_px": 1.31,
+              "regret_p90_px": 4.062
+            },
+            {
+              "bucket": "120+",
+              "frames": 1987,
+              "top1": 0.3362,
+              "top3": 0.5501,
+              "top3_tie": 0.9129,
+              "near_optimal_05": 0.9245,
+              "regret_px": 0.267,
+              "regret_p90_px": 0.125
+            }
+          ],
+          "checkpoint": "policy.pt",
+          "checkpoint_sha256": "9132a68d05528f7258f4356f945e7f92f0c4dcf2b5eb8284c1acb0aa866501a8"
+        }
+      },
+      "run_dir": "third_party/th08/build/rl/runs/v104-E4-screen-s7",
+      "summary": "third_party/th08/build/rl/runs/v104-E4-screen-s7/vision-summary.json",
+      "summary_sha256": "f8cd1b5447693afb0506b3ec65b8fa91be3f85c86cdf9042a2bc1c8257aa52b2"
+    },
+    {
+      "experiment": "E5",
+      "run_kind": "screening",
+      "route": "v3-st",
+      "depth": 3,
+      "local_enabled": true,
+      "policy_aux": {
+        "heatmap": 0.1,
+        "coord": 1.0,
+        "danger": 0.2,
+        "self": 0.1
+      },
+      "perception_aux": {
+        "heatmap": 1.0,
+        "coord": 1.0,
+        "danger": 1.0,
+        "self": 1.0
+      },
+      "heatmap_sigma": 2.0,
+      "seed": 7,
+      "parameters": 1507162,
+      "source_state_sha": "c3f7c43ad1b043e3c7c37f213167ff4eee0a7f5032b3422315fe05117f10dbb1",
+      "source_state_checkpoint": "third_party/th08/build/rl/runs/v104-E5-screen-s7/state.pt",
+      "source_state_rule": "position",
+      "teacher_fingerprint": "a52416f9342fa00a0185c061771d09c22ba735bbe01c83dd7910a6c3bc8ec0f6",
+      "val_index_sha256": "e5d4ebbe6d8de05793520a393fc1fdbea2b1e2c4db9ff7c1632908340c76655f",
+      "epochs": {
+        "state": 24,
+        "policy": 12
+      },
+      "wall_seconds": 3846.57,
+      "epoch_seconds": {
+        "perception": {
+          "epochs": 24,
+          "cold_start_seconds": [
+            148.6,
+            123.6
+          ],
+          "steady_mean_seconds": 105.8,
+          "steady_max_seconds": 106.5,
+          "all_seconds": [
+            148.6,
+            123.6,
+            106.0,
+            106.5,
+            106.4,
+            105.8,
+            105.7,
+            105.8,
+            104.1,
+            105.9,
+            105.8,
+            105.6,
+            106.3,
+            106.1,
+            106.1,
+            106.3,
+            106.2,
+            106.2,
+            106.4,
+            103.8,
+            103.7,
+            106.4,
+            106.4,
+            106.1
+          ],
+          "budget": {
+            "limit_seconds": 60.0,
+            "exceeded": true,
+            "overrun_fraction": 0.775,
+            "note": "Q6 waiver: the <=60 s v3 entry condition stays fail (waived_by=Q6); the overrun is recorded, never silently accepted"
+          }
+        },
+        "policy": {
+          "epochs": 12,
+          "cold_start_seconds": [
+            75.9,
+            75.9
+          ],
+          "steady_mean_seconds": 109.28,
+          "steady_max_seconds": 109.7,
+          "all_seconds": [
+            75.9,
+            75.9,
+            109.7,
+            108.9,
+            109.3,
+            109.5,
+            109.1,
+            109.1,
+            109.4,
+            109.1,
+            109.1,
+            109.6
+          ],
+          "budget": {
+            "limit_seconds": 60.0,
+            "exceeded": true,
+            "overrun_fraction": 0.8283,
+            "note": "Q6 waiver: the <=60 s v3 entry condition stays fail (waived_by=Q6); the overrun is recorded, never silently accepted"
+          }
+        }
+      },
+      "eligible": false,
+      "screening": true,
+      "partial": false,
+      "status": "done",
+      "coverage": {
+        "expected_frames": 7241,
+        "actual_frames": 7241,
+        "complete": true,
+        "visited_index_sha256": "e5d4ebbe6d8de05793520a393fc1fdbea2b1e2c4db9ff7c1632908340c76655f"
+      },
+      "raw": {
+        "state": {
+          "best_epoch": 24,
+          "selection_rule": "position",
+          "pass_epoch": null,
+          "player_pos_px": 2.4602,
+          "player_pos_p95_px": 8.332,
+          "danger_corr_perframe_median": 0.7467,
+          "danger_corr_perframe_valid": 7241,
+          "danger_corr": 0.8163,
+          "checkpoint": "state.pt",
+          "checkpoint_sha256": "c3f7c43ad1b043e3c7c37f213167ff4eee0a7f5032b3422315fe05117f10dbb1"
+        },
+        "policy": {
+          "best_epoch": 12,
+          "selection_rule": "bucket-0-15-regret",
+          "bucket_0_15_regret_px": 1.355,
+          "bucket_0_15_frames": 1076,
+          "bucket_0_15_top3": 0.6041,
+          "global_regret_px": 0.961,
+          "top1": 0.3807,
+          "top3": 0.6441,
+          "top3_tie": 0.7957,
+          "near_optimal_05": 0.6674,
+          "regret_p90_px": 3.219,
+          "by_danger": [
+            {
+              "bucket": "0-15",
+              "frames": 1076,
+              "top1": 0.3225,
+              "top3": 0.6041,
+              "top3_tie": 0.6561,
+              "near_optimal_05": 0.4861,
+              "regret_px": 1.355,
+              "regret_p90_px": 3.666
+            },
+            {
+              "bucket": "15-30",
+              "frames": 2009,
+              "top1": 0.3713,
+              "top3": 0.6819,
+              "top3_tie": 0.7317,
+              "near_optimal_05": 0.5864,
+              "regret_px": 1.111,
+              "regret_p90_px": 3.556
+            },
+            {
+              "bucket": "30-60",
+              "frames": 1367,
+              "top1": 0.4535,
+              "top3": 0.741,
+              "top3_tie": 0.7849,
+              "near_optimal_05": 0.5955,
+              "regret_px": 1.235,
+              "regret_p90_px": 3.938
+            },
+            {
+              "bucket": "60-120",
+              "frames": 802,
+              "top1": 0.5387,
+              "top3": 0.8416,
+              "top3_tie": 0.8591,
+              "near_optimal_05": 0.6496,
+              "regret_px": 1.172,
+              "regret_p90_px": 3.5
+            },
+            {
+              "bucket": "120+",
+              "frames": 1987,
+              "top1": 0.308,
+              "top3": 0.4811,
+              "top3_tie": 0.918,
+              "near_optimal_05": 0.9044,
+              "regret_px": 0.323,
+              "regret_p90_px": 0.5
+            }
+          ],
+          "checkpoint": "policy.pt",
+          "checkpoint_sha256": "71d9f63531b9f7e65ced94cea9f688b52eefd717a15052cd9828d85667bf631c"
+        }
+      },
+      "run_dir": "third_party/th08/build/rl/runs/v104-E5-screen-s7",
+      "summary": "third_party/th08/build/rl/runs/v104-E5-screen-s7/vision-summary.json",
+      "summary_sha256": "39ae990d1f315f358303e340cacf0c1ca1958d885367445aabcaf0ec8d80f6fa"
+    }
+  ]
+}
