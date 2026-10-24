@@ -1,0 +1,752 @@
+{
+  "schema": "v340-stage0-offline/1",
+  "generated": "2026-10-24T10:54:16",
+  "cache": "Document/Update/Alpha/v3.4.0/stage0/cache.npz",
+  "config": {
+    "device": "cuda",
+    "seed": 11,
+    "batch_size": 256,
+    "learning_rate": 0.001,
+    "value_epochs": 10,
+    "q_epochs": 12,
+    "hidden": 256,
+    "horizons": [
+      10,
+      20,
+      40
+    ],
+    "clearance_cap": 60.0,
+    "survival_frames": [
+      60,
+      240
+    ],
+    "frame_scale": 8000.0,
+    "split": "sorted episode index % 4 == 3"
+  },
+  "data": {
+    "cache": "Document/Update/Alpha/v3.4.0/stage0/cache.npz",
+    "decisions": 77668,
+    "episodes": 260,
+    "parsed_rows": 99667,
+    "valid_fraction": 0.7793,
+    "dropped": {
+      "incomplete": 6748,
+      "player_state": 6925,
+      "missing": 8326
+    },
+    "corpora": {
+      "rollouts": {
+        "parsed": 80438,
+        "kept": 63699
+      },
+      "teacher": {
+        "parsed": 19229,
+        "kept": 13969
+      }
+    },
+    "validation_episodes": 62,
+    "validation_states": 19668
+  },
+  "training": {
+    "value": {
+      "kind": "value",
+      "epochs": 10,
+      "train_states": 58000,
+      "validation_states": 19668,
+      "best": {
+        "validation_loss": 0.06606022753571504,
+        "epoch": 9
+      },
+      "history": [
+        {
+          "epoch": 1,
+          "train_loss": 0.112511,
+          "validation_loss": 0.087188
+        },
+        {
+          "epoch": 2,
+          "train_loss": 0.08138,
+          "validation_loss": 0.074701
+        },
+        {
+          "epoch": 3,
+          "train_loss": 0.072249,
+          "validation_loss": 0.070744
+        },
+        {
+          "epoch": 4,
+          "train_loss": 0.068772,
+          "validation_loss": 0.070125
+        },
+        {
+          "epoch": 5,
+          "train_loss": 0.06558,
+          "validation_loss": 0.068468
+        },
+        {
+          "epoch": 6,
+          "train_loss": 0.064323,
+          "validation_loss": 0.070267
+        },
+        {
+          "epoch": 7,
+          "train_loss": 0.062006,
+          "validation_loss": 0.069186
+        },
+        {
+          "epoch": 8,
+          "train_loss": 0.061118,
+          "validation_loss": 0.070103
+        },
+        {
+          "epoch": 9,
+          "train_loss": 0.059202,
+          "validation_loss": 0.06606
+        },
+        {
+          "epoch": 10,
+          "train_loss": 0.057876,
+          "validation_loss": 0.068243
+        }
+      ],
+      "checkpoint": "Document\\Update\\Alpha\\v3.4.0\\stage0\\value.pt"
+    },
+    "q": {
+      "kind": "candidate_q",
+      "epochs": 12,
+      "train_states": 58000,
+      "validation_states": 19668,
+      "best": {
+        "validation_loss": 0.011624350091482242,
+        "epoch": 12
+      },
+      "history": [
+        {
+          "epoch": 1,
+          "train_loss": 0.069899,
+          "validation_loss": 0.023901
+        },
+        {
+          "epoch": 2,
+          "train_loss": 0.021019,
+          "validation_loss": 0.018559
+        },
+        {
+          "epoch": 3,
+          "train_loss": 0.017471,
+          "validation_loss": 0.016627
+        },
+        {
+          "epoch": 4,
+          "train_loss": 0.01579,
+          "validation_loss": 0.015111
+        },
+        {
+          "epoch": 5,
+          "train_loss": 0.014774,
+          "validation_loss": 0.014358
+        },
+        {
+          "epoch": 6,
+          "train_loss": 0.01413,
+          "validation_loss": 0.013837
+        },
+        {
+          "epoch": 7,
+          "train_loss": 0.013512,
+          "validation_loss": 0.01355
+        },
+        {
+          "epoch": 8,
+          "train_loss": 0.013065,
+          "validation_loss": 0.012892
+        },
+        {
+          "epoch": 9,
+          "train_loss": 0.012711,
+          "validation_loss": 0.012623
+        },
+        {
+          "epoch": 10,
+          "train_loss": 0.012386,
+          "validation_loss": 0.012275
+        },
+        {
+          "epoch": 11,
+          "train_loss": 0.012077,
+          "validation_loss": 0.011843
+        },
+        {
+          "epoch": 12,
+          "train_loss": 0.011785,
+          "validation_loss": 0.011624
+        }
+      ],
+      "checkpoint": "Document\\Update\\Alpha\\v3.4.0\\stage0\\q.pt"
+    }
+  },
+  "metrics": {
+    "summary": {
+      "validation_states": 19668,
+      "validation_episodes": 62,
+      "validation_teacher_states": 3533,
+      "held_out_groups": [
+        "rollouts/p3-r1-phase2-student/episode-004-decisions",
+        "rollouts/p3-r1-phase2-student/episode-008-decisions",
+        "rollouts/p3-r1-phase2-student/episode-012-decisions",
+        "rollouts/p3-r1-phase2-student/episode-016-decisions",
+        "rollouts/p3-r2-phase2-student/episode-004-decisions",
+        "rollouts/p3-r2-phase2-student/episode-008-decisions",
+        "rollouts/p3-r2-phase2-student/episode-012-decisions",
+        "rollouts/p3-r2-phase2-student/episode-016-decisions",
+        "rollouts/p3-r2-phase2-student/episode-020-decisions",
+        "rollouts/p3-r3-phase2-student/episode-004-decisions",
+        "rollouts/p3-r3-phase2-student/episode-008-decisions",
+        "rollouts/p3-r3-phase2-student/episode-012-decisions",
+        "rollouts/p3-r3-phase2-student/episode-016-decisions",
+        "rollouts/p3-r3-phase2-student/episode-020-decisions",
+        "rollouts/p3-r4-phase2-student/episode-004-decisions",
+        "rollouts/p3-r4-phase2-student/episode-008-decisions",
+        "rollouts/p3-r4-phase2-student/episode-012-decisions",
+        "rollouts/p3-r4-phase2-student/episode-016-decisions",
+        "rollouts/p3-r4-phase2-student/episode-020-decisions",
+        "rollouts/p3-r5-phase2-student/episode-004-decisions",
+        "rollouts/p3-r5-phase2-student/episode-008-decisions",
+        "rollouts/p3-r5-phase2-student/episode-012-decisions",
+        "rollouts/p3-r5-phase2-student/episode-016-decisions",
+        "rollouts/p3-r5-phase2-student/episode-020-decisions",
+        "rollouts/p3-r6-phase2-student/episode-004-decisions",
+        "rollouts/p3-r6-phase2-student/episode-008-decisions",
+        "rollouts/p3-r6-phase2-student/episode-012-decisions",
+        "rollouts/p3-r6-phase2-student/episode-016-decisions",
+        "rollouts/p3-r6-phase2-student/episode-020-decisions",
+        "rollouts/p3-r7-phase2-student/episode-004-decisions",
+        "rollouts/p3-r7-phase2-student/episode-008-decisions",
+        "rollouts/p3-r7-phase2-student/episode-012-decisions",
+        "rollouts/p3-r7-phase2-student/episode-016-decisions",
+        "rollouts/p3-r7-phase2-student/episode-020-decisions",
+        "rollouts/r10-student-t0-sealed/episode-002-decisions",
+        "rollouts/r10-student-t0-sealed/episode-006-decisions",
+        "rollouts/r10-student-t0-sealed/episode-010-decisions",
+        "rollouts/r10-student-t0-sealed/episode-014-decisions",
+        "rollouts/r11-student-t0-sealed/episode-004-decisions",
+        "rollouts/r11-student-t0-sealed/episode-008-decisions",
+        "rollouts/r11-student-t0-sealed/episode-012-decisions",
+        "rollouts/r2-engineering-teacher-b/episode-002-decisions",
+        "rollouts/r3-engineering-teacher-b/episode-002-decisions",
+        "rollouts/r5-engineering-teacher-a/episode-002-decisions",
+        "rollouts/r5-student-t0-sealed/episode-004-decisions",
+        "rollouts/r5-student-t0-sealed/episode-008-decisions",
+        "rollouts/r6-student-t0-sealed/episode-003-decisions",
+        "rollouts/r6-student-t0-sealed/episode-007-decisions",
+        "rollouts/r7-student-t0-sealed/episode-002-decisions",
+        "rollouts/r7-student-t0-sealed/episode-006-decisions",
+        "rollouts/r7-student-t0-sealed/episode-010-decisions",
+        "rollouts/r8-student-t0-sealed/episode-002-decisions",
+        "rollouts/r8-student-t0-sealed/episode-006-decisions",
+        "rollouts/r8-student-t0-sealed/episode-010-decisions",
+        "rollouts/r9-student-t0-sealed/episode-002-decisions",
+        "rollouts/r9-student-t0-sealed/episode-006-decisions",
+        "rollouts/r9-student-t0-sealed/episode-010-decisions",
+        "rollouts/r9-student-t0-sealed/episode-014-decisions",
+        "teacher/step2-teacher-demos/episode-004-decisions",
+        "teacher/step2-teacher-demos/episode-008-decisions",
+        "teacher/step2-teacher-demos/episode-012-decisions",
+        "teacher/step2-teacher-demos/episode-016-decisions"
+      ]
+    },
+    "value": {
+      "spearman_pooled": 0.665,
+      "spearman_per_episode_mean": 0.749,
+      "spearman_per_episode_median": 0.7886,
+      "spearman_per_episode_min": 0.3476,
+      "episodes": 62,
+      "episode_rows": [
+        {
+          "episode": "rollouts/p3-r1-phase2-student/episode-004-decisions",
+          "states": 237,
+          "spearman": 0.8355,
+          "remaining_mean_frames": 803.5
+        },
+        {
+          "episode": "rollouts/p3-r1-phase2-student/episode-008-decisions",
+          "states": 462,
+          "spearman": 0.578,
+          "remaining_mean_frames": 1465.7
+        },
+        {
+          "episode": "rollouts/p3-r1-phase2-student/episode-012-decisions",
+          "states": 286,
+          "spearman": 0.8202,
+          "remaining_mean_frames": 939.9
+        },
+        {
+          "episode": "rollouts/p3-r1-phase2-student/episode-016-decisions",
+          "states": 291,
+          "spearman": 0.8179,
+          "remaining_mean_frames": 966.6
+        },
+        {
+          "episode": "rollouts/p3-r2-phase2-student/episode-004-decisions",
+          "states": 247,
+          "spearman": 0.8121,
+          "remaining_mean_frames": 829.4
+        },
+        {
+          "episode": "rollouts/p3-r2-phase2-student/episode-008-decisions",
+          "states": 294,
+          "spearman": 0.8032,
+          "remaining_mean_frames": 965.1
+        },
+        {
+          "episode": "rollouts/p3-r2-phase2-student/episode-012-decisions",
+          "states": 284,
+          "spearman": 0.7567,
+          "remaining_mean_frames": 901.1
+        },
+        {
+          "episode": "rollouts/p3-r2-phase2-student/episode-016-decisions",
+          "states": 243,
+          "spearman": 0.752,
+          "remaining_mean_frames": 810.7
+        },
+        {
+          "episode": "rollouts/p3-r2-phase2-student/episode-020-decisions",
+          "states": 239,
+          "spearman": 0.8101,
+          "remaining_mean_frames": 808.8
+        },
+        {
+          "episode": "rollouts/p3-r3-phase2-student/episode-004-decisions",
+          "states": 291,
+          "spearman": 0.8299,
+          "remaining_mean_frames": 967.3
+        },
+        {
+          "episode": "rollouts/p3-r3-phase2-student/episode-008-decisions",
+          "states": 338,
+          "spearman": 0.7914,
+          "remaining_mean_frames": 1121.4
+        },
+        {
+          "episode": "rollouts/p3-r3-phase2-student/episode-012-decisions",
+          "states": 284,
+          "spearman": 0.7233,
+          "remaining_mean_frames": 948.8
+        },
+        {
+          "episode": "rollouts/p3-r3-phase2-student/episode-016-decisions",
+          "states": 241,
+          "spearman": 0.7445,
+          "remaining_mean_frames": 821.1
+        },
+        {
+          "episode": "rollouts/p3-r3-phase2-student/episode-020-decisions",
+          "states": 268,
+          "spearman": 0.3584,
+          "remaining_mean_frames": 897.0
+        },
+        {
+          "episode": "rollouts/p3-r4-phase2-student/episode-004-decisions",
+          "states": 248,
+          "spearman": 0.841,
+          "remaining_mean_frames": 843.2
+        },
+        {
+          "episode": "rollouts/p3-r4-phase2-student/episode-008-decisions",
+          "states": 283,
+          "spearman": 0.8063,
+          "remaining_mean_frames": 953.1
+        },
+        {
+          "episode": "rollouts/p3-r4-phase2-student/episode-012-decisions",
+          "states": 282,
+          "spearman": 0.8152,
+          "remaining_mean_frames": 930.4
+        },
+        {
+          "episode": "rollouts/p3-r4-phase2-student/episode-016-decisions",
+          "states": 285,
+          "spearman": 0.8696,
+          "remaining_mean_frames": 943.2
+        },
+        {
+          "episode": "rollouts/p3-r4-phase2-student/episode-020-decisions",
+          "states": 281,
+          "spearman": 0.7195,
+          "remaining_mean_frames": 905.3
+        },
+        {
+          "episode": "rollouts/p3-r5-phase2-student/episode-004-decisions",
+          "states": 329,
+          "spearman": 0.8115,
+          "remaining_mean_frames": 1074.2
+        },
+        {
+          "episode": "rollouts/p3-r5-phase2-student/episode-008-decisions",
+          "states": 369,
+          "spearman": 0.6976,
+          "remaining_mean_frames": 1181.5
+        },
+        {
+          "episode": "rollouts/p3-r5-phase2-student/episode-012-decisions",
+          "states": 276,
+          "spearman": 0.7665,
+          "remaining_mean_frames": 928.7
+        },
+        {
+          "episode": "rollouts/p3-r5-phase2-student/episode-016-decisions",
+          "states": 301,
+          "spearman": 0.8076,
+          "remaining_mean_frames": 990.9
+        },
+        {
+          "episode": "rollouts/p3-r5-phase2-student/episode-020-decisions",
+          "states": 236,
+          "spearman": 0.79,
+          "remaining_mean_frames": 806.4
+        },
+        {
+          "episode": "rollouts/p3-r6-phase2-student/episode-004-decisions",
+          "states": 242,
+          "spearman": 0.814,
+          "remaining_mean_frames": 813.8
+        },
+        {
+          "episode": "rollouts/p3-r6-phase2-student/episode-008-decisions",
+          "states": 270,
+          "spearman": 0.5894,
+          "remaining_mean_frames": 886.6
+        },
+        {
+          "episode": "rollouts/p3-r6-phase2-student/episode-012-decisions",
+          "states": 239,
+          "spearman": 0.8928,
+          "remaining_mean_frames": 816.7
+        },
+        {
+          "episode": "rollouts/p3-r6-phase2-student/episode-016-decisions",
+          "states": 294,
+          "spearman": 0.8217,
+          "remaining_mean_frames": 977.3
+        },
+        {
+          "episode": "rollouts/p3-r6-phase2-student/episode-020-decisions",
+          "states": 240,
+          "spearman": 0.7035,
+          "remaining_mean_frames": 807.1
+        },
+        {
+          "episode": "rollouts/p3-r7-phase2-student/episode-004-decisions",
+          "states": 325,
+          "spearman": 0.6283,
+          "remaining_mean_frames": 1076.3
+        },
+        {
+          "episode": "rollouts/p3-r7-phase2-student/episode-008-decisions",
+          "states": 288,
+          "spearman": 0.6887,
+          "remaining_mean_frames": 945.8
+        },
+        {
+          "episode": "rollouts/p3-r7-phase2-student/episode-012-decisions",
+          "states": 268,
+          "spearman": 0.7861,
+          "remaining_mean_frames": 912.8
+        },
+        {
+          "episode": "rollouts/p3-r7-phase2-student/episode-016-decisions",
+          "states": 285,
+          "spearman": 0.8714,
+          "remaining_mean_frames": 964.2
+        },
+        {
+          "episode": "rollouts/p3-r7-phase2-student/episode-020-decisions",
+          "states": 291,
+          "spearman": 0.7459,
+          "remaining_mean_frames": 947.7
+        },
+        {
+          "episode": "rollouts/r10-student-t0-sealed/episode-002-decisions",
+          "states": 280,
+          "spearman": 0.7259,
+          "remaining_mean_frames": 869.4
+        },
+        {
+          "episode": "rollouts/r10-student-t0-sealed/episode-006-decisions",
+          "states": 304,
+          "spearman": 0.7417,
+          "remaining_mean_frames": 931.8
+        },
+        {
+          "episode": "rollouts/r10-student-t0-sealed/episode-010-decisions",
+          "states": 333,
+          "spearman": 0.6639,
+          "remaining_mean_frames": 1092.4
+        },
+        {
+          "episode": "rollouts/r10-student-t0-sealed/episode-014-decisions",
+          "states": 266,
+          "spearman": 0.6068,
+          "remaining_mean_frames": 893.7
+        },
+        {
+          "episode": "rollouts/r11-student-t0-sealed/episode-004-decisions",
+          "states": 330,
+          "spearman": 0.6514,
+          "remaining_mean_frames": 1068.5
+        },
+        {
+          "episode": "rollouts/r11-student-t0-sealed/episode-008-decisions",
+          "states": 362,
+          "spearman": 0.517,
+          "remaining_mean_frames": 1177.1
+        },
+        {
+          "episode": "rollouts/r11-student-t0-sealed/episode-012-decisions",
+          "states": 276,
+          "spearman": 0.7872,
+          "remaining_mean_frames": 915.1
+        },
+        {
+          "episode": "rollouts/r2-engineering-teacher-b/episode-002-decisions",
+          "states": 156,
+          "spearman": 0.6557,
+          "remaining_mean_frames": 642.2
+        },
+        {
+          "episode": "rollouts/r3-engineering-teacher-b/episode-002-decisions",
+          "states": 192,
+          "spearman": 0.8127,
+          "remaining_mean_frames": 545.4
+        },
+        {
+          "episode": "rollouts/r5-engineering-teacher-a/episode-002-decisions",
+          "states": 197,
+          "spearman": 0.6943,
+          "remaining_mean_frames": 571.8
+        },
+        {
+          "episode": "rollouts/r5-student-t0-sealed/episode-004-decisions",
+          "states": 290,
+          "spearman": 0.7921,
+          "remaining_mean_frames": 966.0
+        },
+        {
+          "episode": "rollouts/r5-student-t0-sealed/episode-008-decisions",
+          "states": 286,
+          "spearman": 0.7186,
+          "remaining_mean_frames": 923.2
+        },
+        {
+          "episode": "rollouts/r6-student-t0-sealed/episode-003-decisions",
+          "states": 305,
+          "spearman": 0.6206,
+          "remaining_mean_frames": 951.2
+        },
+        {
+          "episode": "rollouts/r6-student-t0-sealed/episode-007-decisions",
+          "states": 286,
+          "spearman": 0.8527,
+          "remaining_mean_frames": 943.5
+        },
+        {
+          "episode": "rollouts/r7-student-t0-sealed/episode-002-decisions",
+          "states": 252,
+          "spearman": 0.842,
+          "remaining_mean_frames": 813.4
+        },
+        {
+          "episode": "rollouts/r7-student-t0-sealed/episode-006-decisions",
+          "states": 296,
+          "spearman": 0.8523,
+          "remaining_mean_frames": 971.9
+        },
+        {
+          "episode": "rollouts/r7-student-t0-sealed/episode-010-decisions",
+          "states": 264,
+          "spearman": 0.8234,
+          "remaining_mean_frames": 888.3
+        },
+        {
+          "episode": "rollouts/r8-student-t0-sealed/episode-002-decisions",
+          "states": 231,
+          "spearman": 0.7094,
+          "remaining_mean_frames": 774.9
+        },
+        {
+          "episode": "rollouts/r8-student-t0-sealed/episode-006-decisions",
+          "states": 273,
+          "spearman": 0.7652,
+          "remaining_mean_frames": 909.8
+        },
+        {
+          "episode": "rollouts/r8-student-t0-sealed/episode-010-decisions",
+          "states": 248,
+          "spearman": 0.8147,
+          "remaining_mean_frames": 817.6
+        },
+        {
+          "episode": "rollouts/r9-student-t0-sealed/episode-002-decisions",
+          "states": 281,
+          "spearman": 0.8107,
+          "remaining_mean_frames": 933.3
+        },
+        {
+          "episode": "rollouts/r9-student-t0-sealed/episode-006-decisions",
+          "states": 279,
+          "spearman": 0.8682,
+          "remaining_mean_frames": 929.2
+        },
+        {
+          "episode": "rollouts/r9-student-t0-sealed/episode-010-decisions",
+          "states": 250,
+          "spearman": 0.846,
+          "remaining_mean_frames": 843.8
+        },
+        {
+          "episode": "rollouts/r9-student-t0-sealed/episode-014-decisions",
+          "states": 261,
+          "spearman": 0.5913,
+          "remaining_mean_frames": 828.1
+        },
+        {
+          "episode": "teacher/step2-teacher-demos/episode-004-decisions",
+          "states": 828,
+          "spearman": 0.8091,
+          "remaining_mean_frames": 1027.9
+        },
+        {
+          "episode": "teacher/step2-teacher-demos/episode-008-decisions",
+          "states": 742,
+          "spearman": 0.8494,
+          "remaining_mean_frames": 1014.5
+        },
+        {
+          "episode": "teacher/step2-teacher-demos/episode-012-decisions",
+          "states": 1373,
+          "spearman": 0.3476,
+          "remaining_mean_frames": 1805.5
+        },
+        {
+          "episode": "teacher/step2-teacher-demos/episode-016-decisions",
+          "states": 590,
+          "spearman": 0.768,
+          "remaining_mean_frames": 931.3
+        }
+      ],
+      "remaining_mae_frames": 329.1821,
+      "survive_60_auc": 0.9252,
+      "survive_240_auc": 0.9344
+    },
+    "q": {
+      "horizons": [
+        10,
+        20,
+        40
+      ],
+      "headline_horizon": 20,
+      "metrics": {
+        "10": {
+          "safe_auc": 0.9838,
+          "safe_fraction": 0.9514,
+          "top1_safe_rate": 0.9844,
+          "oracle_safe_rate": 0.9948,
+          "predicted_top1_clearance_px": 51.17,
+          "safe_auc_teacher_states": 0.9728,
+          "within_state_safe_auc_mean": 0.852,
+          "within_state_states": 3292
+        },
+        "20": {
+          "safe_auc": 0.9768,
+          "safe_fraction": 0.9096,
+          "top1_safe_rate": 0.9682,
+          "oracle_safe_rate": 0.9927,
+          "predicted_top1_clearance_px": 49.88,
+          "safe_auc_teacher_states": 0.9709,
+          "within_state_safe_auc_mean": 0.8575,
+          "within_state_states": 5699
+        },
+        "40": {
+          "safe_auc": 0.9648,
+          "safe_fraction": 0.8348,
+          "top1_safe_rate": 0.9334,
+          "oracle_safe_rate": 0.9806,
+          "predicted_top1_clearance_px": 46.73,
+          "safe_auc_teacher_states": 0.962,
+          "within_state_safe_auc_mean": 0.8661,
+          "within_state_states": 8958
+        }
+      }
+    },
+    "agreement": {
+      "states": 3533,
+      "random_baseline": 0.0556,
+      "horizon": 20,
+      "q_argmax_vs_teacher": 0.3513,
+      "label_argmax_vs_teacher": 0.4829,
+      "teacher_moved_states": 1523,
+      "teacher_idle_share": 0.5689,
+      "q_argmax_vs_teacher_moved": 0.1064,
+      "label_argmax_vs_teacher_moved": 0.0991
+    },
+    "death_risk": {
+      "auc": 0.938,
+      "p_value": 0.005,
+      "positives": 336,
+      "negatives": 336,
+      "risk_mean_positive": 0.2457,
+      "risk_mean_negative": 0.0088
+    },
+    "label_validity": {
+      "executed_clearance_vs_death60_auc": 0.9005,
+      "note": "diagnostic only: does the geometric label point at real danger?"
+    }
+  },
+  "gates": {
+    "gates": {
+      "S0-0_data_integrity": {
+        "valid_fraction": 0.7793,
+        "validation_episodes": 62,
+        "corpora": {
+          "rollouts": 63699,
+          "teacher": 13969
+        },
+        "threshold": "valid_fraction >= 0.9, validation_episodes >= 10, every corpus non-empty",
+        "pass": false
+      },
+      "S0-1_value_spearman": {
+        "value": 0.749,
+        "threshold": 0.6,
+        "pass": true
+      },
+      "S0-2_q_safe_auc": {
+        "value": {
+          "10": 0.9838,
+          "20": 0.9768,
+          "40": 0.9648
+        },
+        "threshold": 0.75,
+        "pass": true
+      },
+      "S0-3_teacher_agreement": {
+        "value": 0.3513,
+        "threshold": 0.5,
+        "pass": false
+      },
+      "S0-4_death_ranking": {
+        "auc": 0.938,
+        "p_value": 0.005,
+        "threshold": "auc >= 0.7 and p < 0.01",
+        "pass": true
+      }
+    },
+    "passed": false,
+    "failed": [
+      "S0-0_data_integrity",
+      "S0-3_teacher_agreement"
+    ],
+    "verdict": "fail"
+  },
+  "elapsed_seconds": 25.5
+}
