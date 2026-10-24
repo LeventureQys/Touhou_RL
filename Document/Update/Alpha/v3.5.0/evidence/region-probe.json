@@ -1,0 +1,156 @@
+{
+  "gates": {
+    "S1-1": {
+      "name": "死亡前区域内样本可识别率",
+      "value": 0.7944444444444444,
+      "threshold": 0.8,
+      "numerator": 143,
+      "denominator": 180,
+      "pass": false
+    },
+    "S1-2": {
+      "name": "至少 20 帧前可识别的大区域攻击比例",
+      "value": 0.7777777777777778,
+      "threshold": 0.7,
+      "numerator": 14,
+      "denominator": 18,
+      "pass": true
+    },
+    "S1-3": {
+      "name": "安全连通分量计算成功率",
+      "value": 0.9707713125845737,
+      "threshold": 0.95,
+      "numerator": 3587,
+      "denominator": 3695,
+      "pass": true
+    },
+    "S1-4": {
+      "name": "区域特征相对 clearance 的增量",
+      "value": -0.11513028356256916,
+      "threshold": 0.05,
+      "region_auc": 0.8094602897425948,
+      "clearance_auc": 0.9245905733051639,
+      "permutation_p": 0.001996007984031936,
+      "permutations": 500,
+      "pass": false
+    }
+  },
+  "overall": {
+    "pass": false,
+    "failed": [
+      "S1-1",
+      "S1-4"
+    ]
+  },
+  "per_episode": [
+    {
+      "episode": "collect-ep01",
+      "decisions": 3000,
+      "deaths": 2,
+      "death_samples": 20,
+      "death_region_samples": 20,
+      "early": 2,
+      "split": "train"
+    },
+    {
+      "episode": "collect-ep02",
+      "decisions": 834,
+      "deaths": 3,
+      "death_samples": 30,
+      "death_region_samples": 21,
+      "early": 3,
+      "split": "train"
+    },
+    {
+      "episode": "collect-ep03",
+      "decisions": 1041,
+      "deaths": 3,
+      "death_samples": 30,
+      "death_region_samples": 30,
+      "early": 3,
+      "split": "train"
+    },
+    {
+      "episode": "collect-ep04",
+      "decisions": 3000,
+      "deaths": 1,
+      "death_samples": 10,
+      "death_region_samples": 3,
+      "early": 0,
+      "split": "train"
+    },
+    {
+      "episode": "collect-ep05",
+      "decisions": 3000,
+      "deaths": 2,
+      "death_samples": 20,
+      "death_region_samples": 19,
+      "early": 2,
+      "split": "train"
+    },
+    {
+      "episode": "collect-ep06",
+      "decisions": 3000,
+      "deaths": 2,
+      "death_samples": 20,
+      "death_region_samples": 20,
+      "early": 2,
+      "split": "validation"
+    },
+    {
+      "episode": "collect-ep07",
+      "decisions": 3000,
+      "deaths": 1,
+      "death_samples": 10,
+      "death_region_samples": 7,
+      "early": 0,
+      "split": "validation"
+    },
+    {
+      "episode": "collect-ep08",
+      "decisions": 3000,
+      "deaths": 1,
+      "death_samples": 10,
+      "death_region_samples": 10,
+      "early": 1,
+      "split": "train"
+    },
+    {
+      "episode": "collect-ep09",
+      "decisions": 1281,
+      "deaths": 3,
+      "death_samples": 30,
+      "death_region_samples": 13,
+      "early": 1,
+      "split": "train"
+    }
+  ],
+  "totals": {
+    "episodes": 9,
+    "decisions": 21156,
+    "deaths": 18,
+    "death_samples": 180,
+    "region_decisions": 3695,
+    "safe_ok": 3587
+  },
+  "schema": "v350-region-probe/1",
+  "generated": "2026-10-25T07:27:43",
+  "source": "Document\\Update\\Alpha\\v3.5.0\\probe\\s0-teacher",
+  "config": {
+    "cell_px": 8.0,
+    "grid": [
+      56,
+      48
+    ],
+    "times": [
+      0,
+      10,
+      20,
+      40,
+      60
+    ],
+    "min_region_cells": 80,
+    "safe_min_cells": 8,
+    "death_prefix_decisions": 10
+  }
+}
