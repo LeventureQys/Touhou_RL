@@ -30,6 +30,27 @@ _PLAYER_BLOCK_SIZE = 0x410
 
 
 @dataclass(slots=True)
+class BossInfo:
+    """One live boss slot: position plus current HP.
+
+    ``Enemy.life`` is an ``i32`` at ``OFF_ENEMY_LIFE`` (EnemyManager.hpp:278 and
+    the ``C_ASSERT`` at :395), not a float.  ``slot`` is the index in
+    ``EnemyManager::bosses[8]``; ``pointer`` is kept so a trace can tell two
+    successive bosses apart even when they share a slot.
+    """
+
+    slot: int
+    pointer: int
+    x: float
+    y: float
+    life: int
+
+    @property
+    def hp(self) -> int:
+        return int(self.life)
+
+
+@dataclass(slots=True)
 class GameState:
     """Scalar state of one sampled frame (contract §2.1)."""
 
@@ -74,6 +95,7 @@ class GameState:
     bombs_used: int = 0
     power: float = 0.0
     # player
+    player_state: int = -1  # Player.hpp: first i8; alive=0, spawning=1, dying=2, invulnerable=3
     player_x: float = 0.0
     player_y: float = 0.0
     player_vx: float = 0.0
@@ -91,6 +113,14 @@ class GameState:
     last_input_mask: int = 0
     gui_input_current: int = 0
     gui_input_previous: int = 0
+    # g_Gui derived signals (see spec.ADDR_GUI)
+    gui_dialogue_present: bool = False
+    gui_dialogue_msg_idx: int = -1
+    gui_stage_clear_screen_state: int = 0
+    gui_boss_present: bool = False
+    # False when the g_Gui reads hit a torn-down object; the fields above then
+    # keep their defaults and must not be read as "no dialogue / no clear".
+    gui_read_ok: bool = True
     # bullets
     active_bullets: int = 0
     bullet_capacity: int = spec.BULLET_COUNT
@@ -107,6 +137,85 @@ class GameState:
     def is_run_over(self) -> bool:
         """True when the run can no longer continue (game over / back to title)."""
         return self.supervisor_state != spec.STATE_GAME_MANAGER or self.lives < 0
+
+    @property
+    def game_cleared(self) -> bool:
+        """``GameManagerFlags::gameCleared`` (bit 4), the full-game ending flag."""
+        return bool(self.flags & spec.FLAG_GAME_CLEARED)
+
+    @property
+    def stage_clear_sequence_active(self) -> bool:
+        """``GameManagerFlags::stageClearSequenceActive`` (bit 9).
+
+        This is the only reliable "the stage is being cleared right now" signal:
+        ``currentStageClearFlag`` (``OFF_GM_STAGE_CLEAR_FLAG``) is a persistent
+        per-run bitfield and reads 1 on ordinary gameplay frames too.
+        """
+        return bool(self.flags & spec.FLAG_STAGE_CLEAR_SEQUENCE)
+
+    @property
+    def stage_transition_state(self) -> int:
+        """Two-bit ``stageTransitionState`` (bits 5..6), 0 when not transitioning."""
+        return (self.flags & spec.FLAG_STAGE_TRANSITION_MASK) >> spec.FLAG_STAGE_TRANSITION_SHIFT
+
+
+@dataclass(slots=True)
+class EnemyInfo:
+    """One live normal enemy or boss slot (``EnemyManager::enemies[]``).
+
+    ``slot`` is the index in the contiguous 481-entry array (``Enemy.enemyIndex``
+    is the same value).  ``sub_id`` is the ECL subroutine id taken from the
+    enemy's active ECL context; it is the only stable "what kind of enemy is
+    this" identifier available without reading the stage ECL tables, and is
+    ``None`` when the context pointer is null or the read raced a despawn.
+
+    The dataclass is deliberately explicit rather than a raw struct dump: the
+    v3.5.0 S0 contract requires every field to be traceable (known value or
+    ``None``/``unknown``), never a silent zero.
+    """
+
+    slot: int
+    x: float
+    y: float
+    life: int
+    max_life: int
+    active: bool
+    boss: bool
+    sub_id: int | None
+    item_drop: int
+    boss_slot: int
+    flags1: int
+
+
+@dataclass(slots=True)
+class ItemInfo:
+    """One in-use item (``ItemManager::items[]``).
+
+    ``item_type``/``state`` are raw enum values from ``ItemManager.hpp`` so an
+    unknown future value stays visible instead of being mapped to a guess.
+    """
+
+    slot: int
+    x: float
+    y: float
+    item_type: int
+    state: int
+    onscreen: bool
+    is_max_value: bool
+
+
+@dataclass(slots=True)
+class ShotParams:
+    """Per-shot-type item rules read from ``Player::primaryShtFile``.
+
+    ``point_item_value_line`` is the y threshold under which items enter
+    auto-collect (the player-facing "25% line"); ``item_collection_box_size``
+    is the pickup box half-size used by ``Player::CalcItemBoxCollision``.
+    """
+
+    item_auto_collect_speed: float
+    item_collection_box_size: float
+    point_item_value_line: float
 
 
 @dataclass(slots=True)
@@ -149,9 +258,12 @@ class GameStateReader:
         self._player = spec.ADDR_PLAYER + delta
         self._bm = spec.ADDR_BULLET_MANAGER + delta
         self._em = spec.ADDR_ENEMY_MANAGER + delta
+        self._im = spec.ADDR_ITEM_MANAGER + delta
         self._title = spec.ADDR_TITLE_SCREEN + delta
         self._input = spec.ADDR_LAST_FRAME_INPUT + delta
         self._gui_input = spec.ADDR_GUI_INPUT_CURRENT + delta
+        self._gui_base = spec.ADDR_GUI + delta
+        self._replay_manager = spec.ADDR_REPLAY_MANAGER + delta
 
         self._gm_buf = ctypes.create_string_buffer(_GM_BLOCK_SIZE)
         self._input_buf = ctypes.create_string_buffer(_INPUT_BLOCK_SIZE)
@@ -165,8 +277,22 @@ class GameStateReader:
         self._title_tail_buf = ctypes.create_string_buffer(0x18)
         self._counter_buf = ctypes.create_string_buffer(4)
         self._bullet_buf = ctypes.create_string_buffer(spec.BULLET_BLOCK_SIZE)
+        # v3.5.0 S0: one bulk read for the whole enemy array and one for the item
+        # array.  Both buffers are allocated once so a per-decision scan does not
+        # allocate 10 MB every call; NumPy strided views below never copy them.
+        self._enemy_buf = ctypes.create_string_buffer(spec.ENEMY_SIZE * spec.ENEMY_SCAN_COUNT)
+        self._item_buf = ctypes.create_string_buffer(spec.ITEM_SIZE * spec.ITEM_COUNT)
+        self._sht_ptr_buf = ctypes.create_string_buffer(4)
+        self._sht_buf = ctypes.create_string_buffer(spec.SHT_READ_SIZE)
+        self._replay_ptr_buf = ctypes.create_string_buffer(4)
+        self._replay_events_buf = ctypes.create_string_buffer(2)
         self._boss_ptr_buf = ctypes.create_string_buffer(4 * spec.BOSS_COUNT)
         self._boss_pos_buf = ctypes.create_string_buffer(0xC)
+        self._boss_life_buf = ctypes.create_string_buffer(4)
+        self._gui_impl_buf = ctypes.create_string_buffer(4)
+        self._gui_msg_buf = ctypes.create_string_buffer(4)
+        self._gui_clear_buf = ctypes.create_string_buffer(4)
+        self._gui_boss_buf = ctypes.create_string_buffer(1)
 
     # -- scalars ----------------------------------------------------------
     def read_state(self, with_bullets: bool = True, with_title: bool = True) -> GameState:
@@ -230,6 +356,7 @@ class GameStateReader:
 
         mem.read_into(self._player, self._player_buf)
         p = self._player_buf.raw
+        state.player_state = struct.unpack_from('<b', p, 0)[0]
         state.focus_mode = p[spec.OFF_PLAYER_FOCUS_MODE]
         state.player_x, state.player_y, _pz = struct.unpack_from("<fff", p, spec.OFF_PLAYER_POSITION)
         state.player_vx, state.player_vy, _pvz = struct.unpack_from("<fff", p, spec.OFF_PLAYER_VELOCITY)
@@ -241,6 +368,34 @@ class GameStateReader:
         state.last_input_mask, state.input_mask = struct.unpack_from("<HH", self._input_buf.raw, 0)
         mem.read_into(self._gui_input, self._gui_buf)
         state.gui_input_current, state.gui_input_previous = struct.unpack_from("<HH", self._gui_buf.raw, 0)
+
+        # g_Gui: dialogue presence and the stage-clear screen state.  These are
+        # read-only decodes of the same global the game's IsDialoguePresent()
+        # uses; a missing/zero impl pointer simply means the GUI is not up yet.
+        state.gui_read_ok = True
+        try:
+            mem.read_into(self._gui_base + spec.OFF_GUI_IMPL, self._gui_impl_buf)
+            gui_impl = struct.unpack_from("<I", self._gui_impl_buf.raw, 0)[0]
+            mem.read_into(self._gui_base + spec.OFF_GUI_BOSS_PRESENT, self._gui_boss_buf)
+            state.gui_boss_present = self._gui_boss_buf.raw[0] != 0
+            if gui_impl:
+                mem.read_into(
+                    gui_impl + spec.OFF_GUI_IMPL_MESSAGE_CURRENT_MSG_IDX, self._gui_msg_buf
+                )
+                state.gui_dialogue_msg_idx = struct.unpack_from("<i", self._gui_msg_buf.raw, 0)[0]
+                state.gui_dialogue_present = (
+                    state.gui_dialogue_msg_idx >= 0 or state.gui_dialogue_msg_idx == -2
+                )
+                mem.read_into(
+                    gui_impl + spec.OFF_GUI_IMPL_STAGE_CLEAR_SCREEN_STATE, self._gui_clear_buf
+                )
+                state.gui_stage_clear_screen_state = struct.unpack_from(
+                    "<i", self._gui_clear_buf.raw, 0
+                )[0]
+        except OSError:
+            # The GUI object is torn down between screens; record that the group
+            # is unknown instead of leaving the defaults to look like real data.
+            state.gui_read_ok = False
 
         if with_title:
             # The TitleScreen object is created and freed on every screen change;
@@ -306,6 +461,34 @@ class GameStateReader:
                              dtype=np.uint8).reshape(spec.LASER_COUNT, spec.LASER_SIZE)
 
     # -- bosses -----------------------------------------------------------
+    def read_boss_info(self) -> list[BossInfo]:
+        """Live bosses with position and HP, ordered by boss slot.
+
+        Costs one 32-byte pointer read plus 16 bytes per live boss (12 position
+        + 4 life).  The common case (no boss) is still a single read.  Dead or
+        half-freed slots are skipped instead of raising: a boss can disappear
+        between the pointer read and the field read, which is exactly the
+        transition a stage-clear probe needs to observe.
+        """
+        mem = self.mem
+        mem.read_into(self._em + spec.OFF_EM_BOSSES, self._boss_ptr_buf)
+        pointers = struct.unpack_from(f"<{spec.BOSS_COUNT}I", self._boss_ptr_buf.raw, 0)
+        found: list[BossInfo] = []
+        for slot, pointer in enumerate(pointers):
+            if not pointer:
+                continue
+            try:
+                mem.read_into(pointer + spec.OFF_ENEMY_POSITION, self._boss_pos_buf)
+                x, y, _z = struct.unpack_from("<fff", self._boss_pos_buf.raw, 0)
+                if not (0.0 < x < 640.0 and 0.0 < y < 480.0):
+                    continue
+                mem.read_into(pointer + spec.OFF_ENEMY_LIFE, self._boss_life_buf)
+                life = struct.unpack_from("<i", self._boss_life_buf.raw, 0)[0]
+            except OSError:
+                continue
+            found.append(BossInfo(slot=slot, pointer=pointer, x=x, y=y, life=life))
+        return found
+
     def read_boss_positions(self) -> np.ndarray:
         """Positions of the live bosses, shape ``(n, 2)`` float32, ``n <= 8``.
 
@@ -335,6 +518,154 @@ class GameStateReader:
                 continue
             found.append((x, y))
         return np.asarray(found, dtype=np.float32).reshape(-1, 2)
+
+    # -- normal enemies / items / shot params -----------------------------
+    @staticmethod
+    def _strided_view(buffer, offset: int, dtype, count: int, size: int) -> np.ndarray:
+        """Read-only view of ``count`` records of ``size`` bytes at ``offset``."""
+        return np.ndarray(
+            shape=(count,),
+            dtype=dtype,
+            buffer=buffer,
+            offset=offset,
+            strides=(size,),
+        )
+
+    def read_enemies(self, active_only: bool = True, with_sub_id: bool = True) -> list[EnemyInfo]:
+        """Live enemies from the contiguous ``EnemyManager::enemies`` array.
+
+        Cost: one ~9.8 MB ``ReadProcessMemory`` plus one 2-byte read per live
+        enemy when ``with_sub_id`` is true (typically < 50 reads).  The bulk read
+        is what makes an all-enemy scan cheaper than 481 individual reads; the
+        array is fixed-size and contiguous, so a single read is also a coherent
+        enough snapshot for tracing.
+
+        Sub-id reads can race a despawn; a failed dereference is recorded as
+        ``None`` (unknown type) instead of aborting the whole scan.
+        """
+        mem = self.mem
+        count = spec.ENEMY_SCAN_COUNT
+        size = spec.ENEMY_SIZE
+        mem.read_into(self._em + spec.OFF_EM_ENEMIES, self._enemy_buf)
+        buf = self._enemy_buf
+        flags = self._strided_view(buf, spec.OFF_ENEMY_FLAGS1, np.uint32, count, size)
+        xs = self._strided_view(buf, spec.OFF_ENEMY_POSITION, np.float32, count, size)
+        ys = self._strided_view(buf, spec.OFF_ENEMY_POSITION + 4, np.float32, count, size)
+        lifes = self._strided_view(buf, spec.OFF_ENEMY_LIFE, np.int32, count, size)
+        max_lifes = self._strided_view(buf, spec.OFF_ENEMY_MAX_LIFE, np.int32, count, size)
+        item_drops = self._strided_view(buf, spec.OFF_ENEMY_ITEM_DROP, np.int8, count, size)
+        boss_slots = self._strided_view(buf, spec.OFF_ENEMY_BOSS_SLOT, np.uint8, count, size)
+        ecl_ptrs = self._strided_view(buf, spec.OFF_ENEMY_ACTIVE_ECL_CONTEXT, np.uint32, count, size)
+
+        indices = np.flatnonzero(flags & spec.ENEMY_FLAG_ACTIVE) if active_only else np.arange(count)
+        sub_id_cache: dict[int, int | None] = {}
+        result: list[EnemyInfo] = []
+        for index in indices:
+            slot = int(index)
+            sub_id: int | None = None
+            if with_sub_id:
+                pointer = int(ecl_ptrs[slot])
+                if pointer:
+                    if pointer in sub_id_cache:
+                        sub_id = sub_id_cache[pointer]
+                    else:
+                        try:
+                            raw = mem.read(pointer + spec.OFF_ECL_CONTEXT_SUB_ID, 2)
+                            sub_id = int(struct.unpack("<h", raw)[0])
+                        except OSError:
+                            sub_id = None
+                        sub_id_cache[pointer] = sub_id
+            flags1 = int(flags[slot])
+            result.append(
+                EnemyInfo(
+                    slot=slot,
+                    x=float(xs[slot]),
+                    y=float(ys[slot]),
+                    life=int(lifes[slot]),
+                    max_life=int(max_lifes[slot]),
+                    active=bool(flags1 & spec.ENEMY_FLAG_ACTIVE),
+                    boss=bool(flags1 & spec.ENEMY_FLAG_BOSS),
+                    sub_id=sub_id,
+                    item_drop=int(item_drops[slot]),
+                    boss_slot=int(boss_slots[slot]),
+                    flags1=flags1,
+                )
+            )
+        return result
+
+    def read_items(self, active_only: bool = True) -> list[ItemInfo]:
+        """In-use items from ``ItemManager::items`` (one ~1.5 MB bulk read)."""
+        mem = self.mem
+        count = spec.ITEM_COUNT
+        size = spec.ITEM_SIZE
+        mem.read_into(self._im + spec.OFF_IM_ITEMS, self._item_buf)
+        buf = self._item_buf
+        in_use = self._strided_view(buf, spec.OFF_ITEM_IN_USE, np.uint8, count, size)
+        xs = self._strided_view(buf, spec.OFF_ITEM_CURRENT_POSITION, np.float32, count, size)
+        ys = self._strided_view(buf, spec.OFF_ITEM_CURRENT_POSITION + 4, np.float32, count, size)
+        types = self._strided_view(buf, spec.OFF_ITEM_TYPE, np.int8, count, size)
+        onscreen = self._strided_view(buf, spec.OFF_ITEM_ONSCREEN, np.uint8, count, size)
+        states = self._strided_view(buf, spec.OFF_ITEM_STATE, np.int8, count, size)
+        max_values = self._strided_view(buf, spec.OFF_ITEM_MAX_VALUE, np.int8, count, size)
+        indices = np.flatnonzero(in_use) if active_only else np.arange(count)
+        return [
+            ItemInfo(
+                slot=int(index),
+                x=float(xs[index]),
+                y=float(ys[index]),
+                item_type=int(types[index]),
+                state=int(states[index]),
+                onscreen=bool(onscreen[index]),
+                is_max_value=bool(max_values[index]),
+            )
+            for index in indices
+        ]
+
+    def read_shot_params(self) -> ShotParams | None:
+        """Read the active shot file's item rules, or ``None`` when not loaded.
+
+        The player block read by :meth:`read_state` is only the first 0x410
+        bytes; ``primaryShtFile`` lives at +0xE2A74, so this is a separate
+        4-byte pointer read plus one 0x38-byte read.  It is not on the hot path
+        (once per decision at most) and lets the trace record the *actual*
+        auto-collect line instead of hard-coding 128.
+        """
+        mem = self.mem
+        try:
+            mem.read_into(self._player + spec.OFF_PLAYER_PRIMARY_SHT_FILE, self._sht_ptr_buf)
+            pointer = struct.unpack_from("<I", self._sht_ptr_buf.raw, 0)[0]
+            if not pointer:
+                return None
+            mem.read_into(pointer, self._sht_buf)
+        except OSError:
+            return None
+        auto_speed, box, line = struct.unpack_from("<fff", self._sht_buf.raw, 0x14)
+        if not all(np.isfinite([auto_speed, box, line])):
+            return None
+        return ShotParams(
+            item_auto_collect_speed=float(auto_speed),
+            item_collection_box_size=float(box),
+            point_item_value_line=float(line),
+        )
+
+    def read_frame_event_flags(self) -> int | None:
+        """Per-frame ``ReplayManager.frameEventFlags``, or ``None`` if unreadable.
+
+        Bit ``FRAME_EVENT_ITEM_COLLECTED`` is set by ``Item::CollectPowerSmall``
+        and friends during the simulated frame.  It is the only direct signal
+        that a power increase came from an item pick-up rather than a spawn that
+        was collected inside one decision's blind window.
+        """
+        mem = self.mem
+        try:
+            mem.read_into(self._replay_manager, self._replay_ptr_buf)
+            pointer = struct.unpack_from("<I", self._replay_ptr_buf.raw, 0)[0]
+            if not pointer:
+                return None
+            mem.read_into(pointer + spec.OFF_RM_FRAME_EVENT_FLAGS, self._replay_events_buf)
+            return int(struct.unpack_from("<H", self._replay_events_buf.raw, 0)[0])
+        except OSError:
+            return None
 
     # -- input ------------------------------------------------------------
     def read_input_mask(self) -> int:

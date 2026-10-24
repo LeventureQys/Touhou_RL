@@ -48,6 +48,10 @@ class EnvConfig:
     death_penalty_lives: float = 0.0
     reward: RewardWeights = field(default_factory=RewardWeights)
     windowed: bool = True
+    # Use the PostMessage input backend (``dontUseDirectInput``).  SendInput
+    # needs the game window in the foreground; a headless/probe run cannot
+    # reliably satisfy that, while PostMessage works in the background.
+    use_postmessage_input: bool = False
     # Expose the full bullet snapshot (absolute coordinates) in ``info`` so
     # scripted policies / teachers can plan from every active bullet instead of
     # the 64 nearest ones the network observation keeps.
@@ -55,6 +59,18 @@ class EnvConfig:
     # Expose live boss positions in ``info["bosses"]`` (shape (n, 2)); the pilot
     # uses them to stay under the boss so that stages actually progress.
     expose_bosses: bool = False
+    # Expose live bosses with HP in ``info["boss_info"]`` (list[state.BossInfo]).
+    # Used by the boss probe: HP is what separates "the stage did not advance"
+    # from "the boss was never damaged".
+    expose_boss_info: bool = False
+    # OR ReplayManager.frameEventFlags across every poll of one step and expose
+    # it as info["frame_events"].  The S0 P-contract needs the ITEM_COLLECTED
+    # bit, which a single post-step read can miss: at frameskip=2 the game resets
+    # the u16 at the start of the second frame, so a collection during the first
+    # frame would otherwise be invisible.
+    expose_frame_events: bool = False
+    record_input_evidence: bool = False
+    evidence_full_pool: bool = False
 
     def validate(self) -> None:
         if self.frameskip < 1:
@@ -100,6 +116,7 @@ class Th08Env(gym.Env):  # type: ignore[misc]
         self._deaths = 0
         self._start_score = 0
         self._start_graze = 0
+        self._frame_events = 0
 
     # -- session management ----------------------------------------------
     def _ensure_session(self) -> GameSession:
@@ -112,7 +129,12 @@ class Th08Env(gym.Env):  # type: ignore[misc]
             except Exception:
                 pass
             self.session = None
-        prepare_run_dir(self.config.run_dir, self.config.template_dir, windowed=self.config.windowed)
+        prepare_run_dir(
+            self.config.run_dir,
+            self.config.template_dir,
+            windowed=self.config.windowed,
+            use_postmessage_input=self.config.use_postmessage_input,
+        )
         self.session = GameSession(SessionOptions(run_dir=self.config.run_dir, log_to_file=True))
         self.session.start()
         return self.session
@@ -130,10 +152,16 @@ class Th08Env(gym.Env):  # type: ignore[misc]
         field = self._last_bullets
         mask = field.active_mask()
         half = field.half_size[mask]
+        half_xy = np.array(half, dtype=np.float32)
+        slot_id = np.flatnonzero(mask).astype(np.int32)
         return {
             "position": np.array(field.position[mask], dtype=np.float32),
             "velocity": np.array(field.velocity[mask], dtype=np.float32),
             "half": np.maximum(np.asarray(half, dtype=np.float32).max(axis=1, initial=0.5), 0.5),
+            "half_xy": half_xy,
+            "slot_id": slot_id,
+            "state": np.array(field.state[mask], dtype=np.uint16),
+            "collision_disabled": np.array(field.disabled[mask], dtype=np.int8),
         }
 
     # -- gym API ----------------------------------------------------------
@@ -212,6 +240,11 @@ class Th08Env(gym.Env):  # type: ignore[misc]
         state = reader.read_state(with_bullets=False, with_title=False)
         while time.perf_counter() < deadline:
             state = reader.read_state(with_bullets=False, with_title=False)
+            if self.config.expose_frame_events:
+                try:
+                    self._frame_events |= reader.read_frame_event_flags() or 0
+                except OSError:
+                    pass
             if state.supervisor_state != spec.STATE_GAME_MANAGER:
                 return state
             if state.gameplay_frame != self._last_frame:
@@ -231,6 +264,7 @@ class Th08Env(gym.Env):  # type: ignore[misc]
     def step(self, action):
         assert self.session is not None and self.session.keyboard is not None
         self._focus_guard()
+        self._frame_events = 0
         move, shoot, focus, bomb = (int(v) for v in action)
         buttons = spec.action_to_buttons((move, shoot, focus, bomb))
         keys = set()
@@ -245,9 +279,13 @@ class Th08Env(gym.Env):  # type: ignore[misc]
         ):
             if buttons & bit:
                 keys.add(name)
-        self.session.keyboard.set_keys(keys)
-
-        state = self._wait_frames(self.config.frameskip)
+        input_timing = None
+        if self.config.record_input_evidence:
+            from .input_evidence import observe_hold
+            state, input_timing = observe_hold(self.session.reader, self.session.keyboard, keys, buttons, self.config.frameskip, capture_pool=self.config.evidence_full_pool)
+        else:
+            self.session.keyboard.set_keys(keys)
+            state = self._wait_frames(self.config.frameskip)
         terminated = False
         truncated = False
         reason = ""
@@ -288,6 +326,10 @@ class Th08Env(gym.Env):  # type: ignore[misc]
                 **self._state_dict(full_state),
             }
         )
+        if input_timing is not None:
+            info["input_timing"] = input_timing
+        if self.config.expose_frame_events:
+            info["frame_events"] = int(self._frame_events)
         if self.config.expose_raw_bullets and self._last_bullets is not None:
             info["bullets_raw"] = self._raw_bullet_dict()
         if self.config.expose_bosses:
@@ -296,6 +338,12 @@ class Th08Env(gym.Env):  # type: ignore[misc]
                 info["bosses"] = self.session.reader.read_boss_positions()
             except OSError:
                 info["bosses"] = np.zeros((0, 2), dtype=np.float32)
+        if self.config.expose_boss_info:
+            assert self.session is not None and self.session.reader is not None
+            try:
+                info["boss_info"] = self.session.reader.read_boss_info()
+            except OSError:
+                info["boss_info"] = []
         if terminated or truncated:
             info["termination_reason"] = reason or ("max_steps" if truncated else "")
             info["episode"] = {

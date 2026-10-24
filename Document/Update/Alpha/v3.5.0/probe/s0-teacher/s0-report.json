@@ -1,0 +1,217 @@
+{
+  "schema": "v350-s0-report/1",
+  "generated": "2026-10-25T07:20:52",
+  "git_head": "2196d37113dce28378fd7792e2c3ab108aef2098",
+  "out_dir": "Document\\Update\\Alpha\\v3.5.0\\probe\\s0-teacher",
+  "episodes": 9,
+  "gates": {
+    "S0-1": {
+      "name": "逐决策时间戳单调",
+      "value": 1.0,
+      "threshold": 1.0,
+      "numerator": 21156,
+      "denominator": 21156,
+      "pass": true
+    },
+    "S0-2": {
+      "name": "enemy/item/power 字段可追溯",
+      "value": 1.0,
+      "threshold": 1.0,
+      "numerator": 20639,
+      "denominator": 20639,
+      "pass": true
+    },
+    "S0-3": {
+      "name": "clear/game-over/left-game 可区分",
+      "value": 1.0,
+      "threshold": 1.0,
+      "numerator": 3,
+      "denominator": 3,
+      "ambiguous": [],
+      "pass": true
+    },
+    "S0-4": {
+      "name": "新采集 complete 有效率",
+      "value": 0.999952,
+      "threshold": 0.95,
+      "numerator": 20638,
+      "denominator": 20639,
+      "pass": true
+    },
+    "S0-5": {
+      "name": "整局切分",
+      "value": 1.0,
+      "threshold": 1.0,
+      "errors": [],
+      "duplicate_episodes": [],
+      "pass": true
+    },
+    "S0-M": {
+      "name": "manifest 与磁盘一致",
+      "value": 1.0,
+      "threshold": 1.0,
+      "pass": true
+    }
+  },
+  "diagnostics": {
+    "records": 21156,
+    "steady": 20639,
+    "missing_traces": [],
+    "record_mismatch": [],
+    "duplicate_episodes": [],
+    "schema_error_counts": {},
+    "event_counts": {
+      "bomb_used": 13,
+      "death": 18,
+      "spell": 3
+    },
+    "termination_counts": {
+      "max_steps": 6,
+      "game_over": 3
+    },
+    "complete_rate_by_episode": {
+      "collect-ep01": 1.0,
+      "collect-ep02": 1.0,
+      "collect-ep03": 1.0,
+      "collect-ep04": 1.0,
+      "collect-ep05": 1.0,
+      "collect-ep06": 0.9997,
+      "collect-ep07": 1.0,
+      "collect-ep08": 1.0,
+      "collect-ep09": 1.0
+    },
+    "episodes_with_errors": []
+  },
+  "manifest": {
+    "checked": true,
+    "file_count": 19,
+    "missing": [],
+    "extra": [],
+    "hash_mismatch": [],
+    "pass": true
+  },
+  "episode_rows": [
+    {
+      "episode": "collect-ep01",
+      "records": 3000,
+      "expected_records": 3000,
+      "steady": 2933,
+      "traceable": 2933,
+      "complete": 2933,
+      "complete_rate": 1.0,
+      "termination": "max_steps",
+      "split": "train",
+      "split_consistent": true,
+      "records_match": true
+    },
+    {
+      "episode": "collect-ep02",
+      "records": 834,
+      "expected_records": 834,
+      "steady": 757,
+      "traceable": 757,
+      "complete": 757,
+      "complete_rate": 1.0,
+      "termination": "game_over",
+      "split": "train",
+      "split_consistent": true,
+      "records_match": true
+    },
+    {
+      "episode": "collect-ep03",
+      "records": 1041,
+      "expected_records": 1041,
+      "steady": 964,
+      "traceable": 964,
+      "complete": 964,
+      "complete_rate": 1.0,
+      "termination": "game_over",
+      "split": "train",
+      "split_consistent": true,
+      "records_match": true
+    },
+    {
+      "episode": "collect-ep04",
+      "records": 3000,
+      "expected_records": 3000,
+      "steady": 2961,
+      "traceable": 2961,
+      "complete": 2961,
+      "complete_rate": 1.0,
+      "termination": "max_steps",
+      "split": "train",
+      "split_consistent": true,
+      "records_match": true
+    },
+    {
+      "episode": "collect-ep05",
+      "records": 3000,
+      "expected_records": 3000,
+      "steady": 2940,
+      "traceable": 2940,
+      "complete": 2940,
+      "complete_rate": 1.0,
+      "termination": "max_steps",
+      "split": "train",
+      "split_consistent": true,
+      "records_match": true
+    },
+    {
+      "episode": "collect-ep06",
+      "records": 3000,
+      "expected_records": 3000,
+      "steady": 2940,
+      "traceable": 2940,
+      "complete": 2939,
+      "complete_rate": 0.9997,
+      "termination": "max_steps",
+      "split": "validation",
+      "split_consistent": true,
+      "records_match": true
+    },
+    {
+      "episode": "collect-ep07",
+      "records": 3000,
+      "expected_records": 3000,
+      "steady": 2970,
+      "traceable": 2970,
+      "complete": 2970,
+      "complete_rate": 1.0,
+      "termination": "max_steps",
+      "split": "validation",
+      "split_consistent": true,
+      "records_match": true
+    },
+    {
+      "episode": "collect-ep08",
+      "records": 3000,
+      "expected_records": 3000,
+      "steady": 2970,
+      "traceable": 2970,
+      "complete": 2970,
+      "complete_rate": 1.0,
+      "termination": "max_steps",
+      "split": "train",
+      "split_consistent": true,
+      "records_match": true
+    },
+    {
+      "episode": "collect-ep09",
+      "records": 1281,
+      "expected_records": 1281,
+      "steady": 1204,
+      "traceable": 1204,
+      "complete": 1204,
+      "complete_rate": 1.0,
+      "termination": "game_over",
+      "split": "train",
+      "split_consistent": true,
+      "records_match": true
+    }
+  ],
+  "overall": {
+    "pass": true,
+    "failed": [],
+    "integrity_ok": true
+  }
+}

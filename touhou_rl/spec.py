@@ -32,6 +32,15 @@ ADDR_LAST_FRAME_INPUT = 0x0165A804  # g_LastFrameInput (u16)
 # including replay-fed input during playback (ReplayManager.cpp:329).
 ADDR_GUI_INPUT_CURRENT = 0x0161C674
 ADDR_GUI_INPUT_PREVIOUS = 0x0161C678
+# g_Gui (Gui.hpp:339-365).  The object is 0x9c bytes; ``impl`` is at +0x8 and
+# ``bossPresent`` at +0x2c.  GuiImpl::message is at +0x21814 and GuiMsgVm's
+# ``currentMsgIdx`` is the first non-pointer field (Gui.hpp:185-215).
+ADDR_GUI = 0x0161C680
+OFF_GUI_IMPL = 0x8
+OFF_GUI_BOSS_PRESENT = 0x2C
+OFF_GUI_IMPL_MESSAGE = 0x21814
+OFF_GUI_IMPL_MESSAGE_CURRENT_MSG_IDX = OFF_GUI_IMPL_MESSAGE + 0x8
+OFF_GUI_IMPL_STAGE_CLEAR_SCREEN_STATE = 0x22D84
 
 # ---------------------------------------------------------------------------
 # Structure offsets
@@ -116,16 +125,94 @@ OFF_BULLET_STATE = 0xDB8
 OFF_BULLET_COLLISION_DISABLED = 0x10B4
 BULLET_BLOCK_SIZE = BULLET_SIZE * BULLET_COUNT
 
-# EnemyManager / Enemy (EnemyManager.hpp).  Only the boss slots are read
-# individually: ``enemies`` is 481 *contiguous* 0x53D0-byte structs (~10 MB), so
-# scanning it would cost 481 reads per frame, while ``bosses[8]`` is a pointer
-# array that is 8 reads plus one per live boss.
+# EnemyManager / Enemy (EnemyManager.hpp).  ``enemies`` is 481 *contiguous*
+# 0x53D0-byte structs (~10 MB): one bulk read is cheaper than 481 separate
+# reads (measured in v3.5.0 S0 smoke), and every field below is a strided
+# NumPy view over that single buffer.  ``bosses[8]`` stays a separate pointer
+# array because it is what the boss probe needs without the 10 MB read.
+#
+# Field provenance (all ``C_ASSERT(offsetof(Enemy, ...))`` in
+# third_party/th08/src/EnemyManager.hpp):
+#   position 0x2D34, life 0x2DFC, maxLife 0x2E00,
+#   activeEclContext 0x2CA0, itemDropType 0x3304, bossSlot 0x3313,
+#   flags1 0x3324 (bit0 active, bit1 boss).
 BOSS_COUNT = 8
+OFF_EM_ENEMIES = 0x53D0
+ENEMY_SCAN_COUNT = 481  # sizeof(EnemyManager) layout; SpawnEnemy1 uses 0..479
 OFF_EM_BOSSES = 0x9DCDA0
 OFF_EM_ACTIVE_ENEMY_COUNT = 0x9DCDC4
 ENEMY_SIZE = 0x53D0
 OFF_ENEMY_POSITION = 0x2D34
 OFF_ENEMY_LIFE = 0x2DFC
+OFF_ENEMY_MAX_LIFE = 0x2E00
+OFF_ENEMY_ACTIVE_ECL_CONTEXT = 0x2CA0
+OFF_ENEMY_ITEM_DROP = 0x3304
+OFF_ENEMY_BOSS_SLOT = 0x3313
+OFF_ENEMY_FLAGS1 = 0x3324
+ENEMY_FLAG_ACTIVE = 1 << 0
+ENEMY_FLAG_BOSS = 1 << 1
+# EnemyEclContext::subId (i16 at 0x224; EnemyManager.hpp type check).
+OFF_ECL_CONTEXT_SUB_ID = 0x224
+
+# ItemManager / Item (ItemManager.hpp).  No per-field C_ASSERTs exist for Item,
+# but every offset below is fixed by the structure layout and the
+# ``C_ASSERT(sizeof(Item) == 0x2e4)`` / ``sizeof(ItemManager) == 0x17b094``
+# checks:
+#   AnmVm(0x2A4) | currentPosition 0x2A4 | velocity 0x2B0 | target 0x2BC |
+#   ZunTimer(0xC) 0x2C8 | itemType 0x2D4 | isInUse 0x2D5 | isOnscreen 0x2D6 |
+#   state 0x2D7 | isMaxValue 0x2D8 | next 0x2DC | prev 0x2E0.
+ADDR_ITEM_MANAGER = 0x01660880  # g_ItemManager (linker map, rebuilt image)
+OFF_IM_ITEMS = 0x0
+ITEM_COUNT = 2097  # MAX_ITEMS + 1
+ITEM_SIZE = 0x2E4
+OFF_ITEM_CURRENT_POSITION = 0x2A4
+OFF_ITEM_TYPE = 0x2D4
+OFF_ITEM_IN_USE = 0x2D5
+OFF_ITEM_ONSCREEN = 0x2D6
+OFF_ITEM_STATE = 0x2D7
+OFF_ITEM_MAX_VALUE = 0x2D8
+OFF_IM_NEXT_INDEX = ITEM_COUNT * ITEM_SIZE
+OFF_IM_ITEM_COUNT = OFF_IM_NEXT_INDEX + 4
+
+# ItemType / ItemState (ItemManager.hpp:8-39).  Only the values that the
+# collection contract names are exported; everything else stays a raw integer
+# in the trace so an unknown type is visible instead of being coerced.
+ITEM_POWER_SMALL = 0
+ITEM_POINT = 1
+ITEM_POWER_BIG = 2
+ITEM_BOMB = 3
+ITEM_POWER_FULL = 4
+ITEM_EXTEND = 5
+ITEM_POINT_STAR = 6
+ITEM_TIME = 7
+ITEM_POINT_SMALL = 8
+ITEM_POWER_TYPES = (ITEM_POWER_SMALL, ITEM_POWER_BIG, ITEM_POWER_FULL)
+ITEM_STATE_DEFAULT = 0
+ITEM_STATE_AUTOCOLLECT = 1
+ITEM_STATE_DEATH_DROP_SPREAD = 2
+ITEM_STATE_TIME_RISING = 3
+ITEM_STATE_TIME_RISING_TO_APEX = 5
+
+# PlayerRawShtFile (Player.hpp:22-56): the per-shot-type file the item rules
+# read.  ``pointItemValueLine`` is the auto-collect line (the "25% line"),
+# ``itemCollectionBoxSize`` the pickup box around the player, and
+# ``itemAutoCollectSpeed`` the speed items fly at once auto-collected.
+OFF_PLAYER_PRIMARY_SHT_FILE = 0xE2A74
+SHT_READ_SIZE = 0x38
+OFF_SHT_ITEM_AUTOCOLLECT_SPEED = 0x14
+OFF_SHT_ITEM_COLLECTION_BOX = 0x18
+OFF_SHT_POINT_ITEM_VALUE_LINE = 0x1C
+# GameManager.cpp / ItemManager.cpp hard-cap power at 0x80.
+POWER_MAX = 128.0
+
+# ReplayManager (ReplayManager.hpp:155-228).  ``frameEventFlags`` is a u16 that
+# the game ORs while a frame is simulated; bit 0x40 is set by
+# ``Item::CollectPower*``/``CollectPoint`` (REPLAY_FRAME_EVENT_ITEM_COLLECTED).
+# It is the only per-frame "an item was actually collected" signal we can read
+# without inferring collection from a slot disappearing between two samples.
+ADDR_REPLAY_MANAGER = 0x018C5C50  # g_ReplayManager (pointer)
+OFF_RM_FRAME_EVENT_FLAGS = 0xDA
+FRAME_EVENT_ITEM_COLLECTED = 0x0040
 
 LASER_COUNT = 0x100
 LASER_SIZE = 0x59C
@@ -187,6 +274,11 @@ EXTRA = 4
 FLAG_PRACTICE = 1 << 0
 FLAG_DEMO = 1 << 1
 FLAG_REPLAY = 1 << 3
+FLAG_GAME_CLEARED = 1 << 4
+FLAG_STAGE_TRANSITION_SHIFT = 5
+FLAG_STAGE_TRANSITION_MASK = 3 << FLAG_STAGE_TRANSITION_SHIFT
+FLAG_STAGE_CLEAR_SEQUENCE = 1 << 9
+FLAG_DEATHBOMB_FREEZE = 1 << 10
 FLAG_SPELL_PRACTICE = 1 << 14
 
 # Gameplay buttons (Global.hpp:149-175)
