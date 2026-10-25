@@ -479,6 +479,7 @@ class TraceWriter:
         self._positions: list[np.ndarray] = []
         self._velocities: list[np.ndarray] = []
         self._half: list[np.ndarray] = []
+        self._slots: list[np.ndarray] = []
         self._counters: list[int] = []
         self._closed = False
 
@@ -493,6 +494,20 @@ class TraceWriter:
             self._positions.append(pos)
             self._velocities.append(vel)
             self._half.append(half)
+            # The pool slot id is what makes "this bullet is new" decidable.  A
+            # position-only sidecar cannot separate a spawn from a survivor whose
+            # motion is not exactly pos + vel*frameskip: measured spawn rate was
+            # 11.3/decision at a 1.5 px match tolerance and 2.2/decision at 10 px,
+            # with no convergence (see touhou_rl/bullet_track.py).  -1 means the
+            # caller did not supply slot ids.
+            slot_ids = snapshot.bullets.get("slot_id")
+            if slot_ids is None:
+                slots = np.full(pos.shape[0], -1, dtype=np.int32)
+            else:
+                slots = np.asarray(slot_ids, dtype=np.int32).reshape(-1)
+                if slots.size != pos.shape[0]:
+                    slots = np.full(pos.shape[0], -1, dtype=np.int32)
+            self._slots.append(slots)
             self._offsets.append(self._offsets[-1] + int(pos.shape[0]))
         else:
             self._offsets.append(self._offsets[-1])
@@ -510,11 +525,13 @@ class TraceWriter:
                 np.concatenate(self._velocities, axis=0) if self._velocities else np.zeros((0, 2), np.float32)
             )
             half = np.concatenate(self._half, axis=0) if self._half else np.zeros((0,), np.float32)
+            slots = np.concatenate(self._slots, axis=0) if self._slots else np.zeros((0,), np.int32)
             np.savez(
                 self.bullets_path,
                 positions=positions.astype(np.float32),
                 velocities=velocities.astype(np.float32),
                 half=half.astype(np.float32),
+                slots=slots.astype(np.int32),
                 offsets=np.asarray(self._offsets, dtype=np.int64),
                 counters=np.asarray(self._counters, dtype=np.int32),
             )
@@ -524,6 +541,7 @@ class TraceWriter:
             "bullets": str(self.bullets_path),
             "decisions": len(self._counters),
             "bullets_total": int(self._offsets[-1]),
+            "slot_ids": bool(self._slots),
         }
 
 
