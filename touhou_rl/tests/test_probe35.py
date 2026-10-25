@@ -199,14 +199,51 @@ def _fake_replay(tmp_path: Path, name: str) -> Path:
 
 def test_episode_plan_teacher_loop():
     cfg = ProbeConfig(episodes=3)
-    assert episode_plan(cfg, 1) == [(1, None), (2, None), (3, None)]
-    assert episode_plan(cfg, 5) == [(5, None), (6, None), (7, None)]
+    assert episode_plan(cfg, 1) == [(1, None, "none", 0), (2, None, "none", 1), (3, None, "none", 2)]
+    assert episode_plan(cfg, 5) == [(5, None, "none", 0), (6, None, "none", 1), (7, None, "none", 2)]
+
+
+def test_episode_plan_cycles_the_tactics_and_pairs_them():
+    """v3.6.1 T2: arms alternate per episode and two episodes form one pair."""
+    cfg = ProbeConfig(episodes=6, tactics=("none", "clear_enemy"), arm_seed=11)
+    plan = episode_plan(cfg, 1)
+    assert [row[2] for row in plan] == ["none", "clear_enemy"] * 3
+    assert [row[3] for row in plan] == [0, 0, 1, 1, 2, 2]
+    # A single arm repeats without alternating.
+    single = ProbeConfig(episodes=3, tactics=("collect_power",))
+    assert [row[2] for row in episode_plan(single, 1)] == ["collect_power"] * 3
+
+
+def test_warmup_is_shared_by_both_arms_and_differs_between_pairs():
+    from touhou_rl.tactics import warmup_plan
+
+    cfg = ProbeConfig(episodes=4, tactics=("none", "clear_enemy"), arm_seed=7)
+    plan = episode_plan(cfg, 1)
+    pairs = [row[3] for row in plan]
+    # Both arms of pair 0 get the same warm-up, or the pair would not be paired.
+    assert warmup_plan(cfg.arm_seed, pairs[0]) == warmup_plan(cfg.arm_seed, pairs[1])
+    # Pair 0 and pair 1 must differ, otherwise every episode is a duplicate.
+    assert warmup_plan(cfg.arm_seed, pairs[0]) != warmup_plan(cfg.arm_seed, pairs[2])
+    # Distinct across the 20 pairs of the planned T2 run.
+    draws = {tuple(warmup_plan(7, k)) for k in range(20)}
+    assert len(draws) == 20
+    # The warm-up is bounded and never bombs.
+    for k in range(20):
+        plan_k = warmup_plan(7, k)
+        assert 20 <= len(plan_k) <= 60
+        assert all(0 <= move <= 8 and focus in (0, 1) for move, focus in plan_k)
+
+
+def test_warmup_is_empty_without_a_seed():
+    from touhou_rl.tactics import warmup_plan
+
+    assert warmup_plan(None, 5) == []
 
 
 def test_episode_plan_single_replay_arm(tmp_path):
     replay = _fake_replay(tmp_path, "a.rpy")
     cfg = ProbeConfig(mode="p-contract", episodes=2, replay_path=replay)
-    assert episode_plan(cfg, 1) == [(1, replay), (2, replay)]
+    assert episode_plan(cfg, 1) == [(1, replay, "none", 0), (2, replay, "none", 0)]
 
 
 def test_episode_plan_replay_batch_one_episode_per_replay(tmp_path):
@@ -214,9 +251,22 @@ def test_episode_plan_replay_batch_one_episode_per_replay(tmp_path):
     second = _fake_replay(tmp_path, "b.rpy")
     cfg = ProbeConfig(mode="collect", episodes=len(cfg_episodes := [first, second]), replays=(first, second))
     plan = episode_plan(cfg, 1)
-    assert plan == [(1, first), (2, second)]
+    assert plan == [(1, first, "none", 0), (2, second, "none", 0)]
     # The batch ignores ``episodes``: one episode per replay, never padded.
-    assert episode_plan(ProbeConfig(mode="collect", episodes=9, replays=(first,)), 1) == [(1, first)]
+    assert episode_plan(ProbeConfig(mode="collect", episodes=9, replays=(first,)), 1) == [(1, first, "none", 0)]
+
+
+def test_validate_rejects_a_tactic_on_a_replay_batch(tmp_path):
+    """A replay plays the human's input; a tactic would silently be a baseline."""
+    replay = _fake_replay(tmp_path, "a.rpy")
+    cfg = ProbeConfig(mode="collect", replays=(replay,), tactics=("clear_enemy",))
+    with pytest.raises(ValueError, match="cannot take a tactic"):
+        cfg.validate()
+
+
+def test_validate_rejects_an_unknown_tactic():
+    with pytest.raises(ValueError, match="unknown tactic"):
+        ProbeConfig(tactics=("lure",)).validate()
 
 
 def test_validate_rejects_multiple_replays_for_p_contract(tmp_path):

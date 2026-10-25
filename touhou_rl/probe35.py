@@ -40,6 +40,14 @@ import numpy as np
 from . import menu, spec, winapi
 from .env import EnvConfig, Th08Env
 from .pilot import AvoidPilot, PilotConfig
+from .tactics import (
+    choose_target,
+    collect_power_override,
+    describe_target,
+    pilot_config_kwargs,
+    target_as_boss_array,
+    warmup_plan,
+)
 from .session import GameSession, SessionOptions, prepare_run_dir
 from .state import BossInfo, GameState, ItemInfo
 from .trace35 import (
@@ -138,6 +146,13 @@ class ProbeConfig:
     # v3.6.0 D2: collect several human replays in one run.  ``replay_path`` stays
     # the single-arm field the P-contract analysis uses; ``replays`` is the batch.
     replays: tuple[Path, ...] = ()
+    # v3.6.1 T2: arms cycled per episode so machine drift hits both equally.
+    # Only meaningful with ``policy="teacher"``; the replay arm ignores it.
+    tactics: tuple[str, ...] = ("none",)
+    # T2 pairing: pair k uses policy jitter derived from arm_seed + k in BOTH arms,
+    # because the game is deterministic and identical arms would otherwise record
+    # identical episodes (measured: byte-identical actions and player positions).
+    arm_seed: int | None = None
 
     def validate(self) -> None:
         if self.mode not in ("collect", "p-contract"):
@@ -162,6 +177,13 @@ class ProbeConfig:
             raise ValueError("p-contract accepts at most one replay")
         if self.replays and self.policy != "teacher":
             raise ValueError("replay collection does not take a policy")
+        for tactic in self.tactics:
+            if tactic not in ("none", "clear_enemy", "collect_power"):
+                raise ValueError(f"unknown tactic {tactic!r}")
+        if self.replays and any(tactic != "none" for tactic in self.tactics):
+            # A replay plays the human's input; a tactic would be ignored and the
+            # episode would silently be a baseline.  Refuse instead of pretending.
+            raise ValueError("replay collection cannot take a tactic")
 
     def as_dict(self) -> dict:
         return {
@@ -179,21 +201,32 @@ class ProbeConfig:
             "replay_path": None if self.replay_path is None else str(self.replay_path),
             "replay_stage": self.replay_stage,
             "replays": [str(path) for path in self.replays],
+            "tactics": list(self.tactics),
+            "arm_seed": self.arm_seed,
         }
 
 
-def episode_plan(cfg: ProbeConfig, start: int) -> list[tuple[int, Path | None]]:
-    """``(episode_index, replay_path_or_None)`` for every episode this run records.
+def episode_plan(cfg: ProbeConfig, start: int) -> list[tuple[int, Path | None, str, int]]:
+    """``(episode_index, replay_path_or_None, tactic)`` for every episode this run records.
 
     Pure so the batch wiring is unit-testable without a game: a replay batch
     yields one episode per replay, everything else falls back to the teacher loop
     (or the single ``replay_path`` arm used by the P contract).
+
+    The tactic list is **cycled**, which is what makes the T2 comparison paired:
+    with ``tactics=("none", "clear_enemy")`` episode 1 is baseline, episode 2 is
+    the tactic, episode 3 is baseline again, and so on, so any machine or game
+    drift between runs hits both arms in equal proportion.
     """
+    tactics = cfg.tactics or ("none",)
     if cfg.replays:
-        return [(index, Path(path)) for index, path in enumerate(cfg.replays, start=start)]
+        return [(index, Path(path), "none", 0) for index, path in enumerate(cfg.replays, start=start)]
     if cfg.replay_path is not None:
-        return [(index, Path(cfg.replay_path)) for index in range(start, start + cfg.episodes)]
-    return [(index, None) for index in range(start, start + cfg.episodes)]
+        return [(index, Path(cfg.replay_path), "none", 0) for index in range(start, start + cfg.episodes)]
+    return [
+        (index, None, tactics[offset % len(tactics)], offset // len(tactics))
+        for offset, index in enumerate(range(start, start + cfg.episodes))
+    ]
 
 
 def _env_config(cfg: ProbeConfig) -> EnvConfig:
@@ -387,16 +420,40 @@ def _choose_action(
     info: dict,
     pre_snapshot: Snapshot,
     dialogue_phase: int,
+    tactic: str = "none",
+    step: int = 0,
+    warmup: list[tuple[int, int]] | None = None,
 ) -> tuple[np.ndarray, dict | None, int]:
-    """Teacher action plus the p-contract override; dialogue taps stay separate."""
+    """Teacher action plus the tactic / p-contract override; dialogue stays separate.
+
+    ``tactic="clear_enemy"`` only substitutes the *aim target* handed to the
+    pilot's existing aim term (its ``bosses`` argument), so the beam search,
+    horizon, bomb logic and safety floor are untouched.  ``collect_power`` keeps
+    the untouched pilot and may replace the action only when the pilot's own
+    chosen action is safe, which is recorded in ``controller`` per decision.
+    """
     state = pre_snapshot.state
+    if warmup and 1 <= step <= len(warmup):
+        # Seeded warm-up: random move, shoot on, no bomb, focus from the draw.
+        move, focus = warmup[step - 1]
+        controller = {"phase": "warmup", "move": move, "focus": focus}
+        if cfg.dialogue_taps and state.gui_dialogue_present:
+            action = np.array([move, int(dialogue_phase) & 1, focus, 0], dtype=np.int64)
+            return action, controller, dialogue_phase ^ 1
+        return np.array([move, 1, focus, 0], dtype=np.int64), controller, dialogue_phase
+    bosses = _boss_array(pre_snapshot.bosses)
+    controller: dict | None = None
+    if tactic == "clear_enemy":
+        target = choose_target(list(pre_snapshot.enemies or []), float(state.player_y))
+        if target is not None:
+            bosses = target_as_boss_array(target)
+        controller = describe_target(target)
     teacher = pilot.act(
         obs,
         info.get("bullets_raw"),
         bombs=int(round(float(state.bombs))),
-        bosses=_boss_array(pre_snapshot.bosses),
+        bosses=bosses,
     )
-    controller: dict | None = None
     action = np.array(teacher, dtype=np.int64, copy=True)
     if cfg.policy == "suicide":
         # Stand still and shoot: a controlled death used only to exercise the
@@ -424,6 +481,21 @@ def _choose_action(
                 "player_y": round(float(state.player_y), 3),
                 "clearance": round(clearance, 3),
             }
+    elif tactic == "collect_power":
+        decision = collect_power_override(
+            power=float(state.power),
+            player_y=float(state.player_y),
+            items=list(pre_snapshot.items or []),
+            clearance=float(pilot.debug.best_clearance),
+        )
+        controller = {"tactic": "collect_power", "reason": decision["reason"]}
+        if decision.get("p_items") is not None:
+            controller["p_items"] = int(decision["p_items"])
+        if decision.get("clearance") is not None:
+            controller["clearance"] = decision["clearance"]
+        if decision.get("override") is not None:
+            action = np.array(decision["override"], dtype=np.int64)
+            controller["override"] = decision["reason"]
     if cfg.dialogue_taps and state.gui_dialogue_present:
         # Gui advances dialogue on a shoot edge; holding Z forever stalls the run
         # after a midboss/boss phase (Gui.cpp:599).  Toggle only the shoot bit.
@@ -523,17 +595,22 @@ def _probe_post_terminal(env: Th08Env, seconds: float) -> list[dict]:
 # ---------------------------------------------------------------------------
 
 
-def run_episode(cfg: ProbeConfig, index: int) -> dict:
+def run_episode(cfg: ProbeConfig, index: int, tactic: str = "none", pair: int = 0) -> dict:
     prefix = cfg.mode if cfg.policy == "teacher" else f"{cfg.mode}-{cfg.policy}"
     episode = f"{prefix}-ep{index:02d}"
     env = Th08Env(_env_config(cfg))
-    pilot = AvoidPilot(PilotConfig(frameskip=cfg.frameskip, aim_weight=0.0))
+    # The ClearEnemy arm is defined *only* by these two pilot fields plus the aim
+    # target substitution; every other arm keeps the baseline configuration.
+    pilot = AvoidPilot(PilotConfig(frameskip=cfg.frameskip, **pilot_config_kwargs(tactic)))
+    warmup = warmup_plan(cfg.arm_seed, pair)
     writer = TraceWriter(cfg.out_dir, episode) if cfg.trace else None
     started = time.perf_counter()
     ep: dict = {
         "schema": EPISODE_SCHEMA,
         "episode": episode,
         "mode": cfg.mode,
+        "tactic": tactic,
+        "warmup_decisions": len(warmup),
         "config": cfg.as_dict(),
         "started": time.strftime("%Y-%m-%dT%H:%M:%S"),
         "start": {},
@@ -577,7 +654,8 @@ def run_episode(cfg: ProbeConfig, index: int) -> dict:
                 controller = {"policy": "quit"}
             else:
                 action, controller, dialogue_phase = _choose_action(
-                    cfg, pilot, obs, info, prev_snapshot, dialogue_phase
+                    cfg, pilot, obs, info, prev_snapshot, dialogue_phase, tactic,
+                    step=step, warmup=warmup,
                 )
             obs, _reward, terminated, truncated, info = env.step(action)
             post = _capture_snapshot(env, info, _now_ms())
@@ -1527,6 +1605,15 @@ def _parser() -> argparse.ArgumentParser:
                        help="play these replay(s) instead of running the teacher; "
                             "repeat the flag to collect a batch (v3.6.0 D2)")
         p.add_argument("--replay-stage", type=int, default=0)
+        p.add_argument("--tactic", action="append", choices=["none", "clear_enemy", "collect_power"],
+                       default=None,
+                       help="v3.6.1 T2 arm(s); repeat to cycle per episode "
+                            "(e.g. --tactic none --tactic clear_enemy gives an interleaved "
+                            "paired schedule)")
+        p.add_argument("--arm-seed", type=int, default=None,
+                       help="v3.6.1 T2 pairing seed; pair k jitters the pilot policy with "
+                            "seed+k in BOTH arms (the game is deterministic, so without this "
+                            "every episode in an arm would be identical)")
         p.add_argument("--append", action="store_true",
                        help="append to an existing output directory instead of starting a new collection")
         p.add_argument("--episode-start", type=int, default=1,
@@ -1572,6 +1659,8 @@ def main(argv: list[str] | None = None) -> int:
         replay_path=args.replay[0] if args.replay and len(args.replay) == 1 else None,
         replay_stage=args.replay_stage,
         replays=tuple(args.replay) if args.replay and len(args.replay) > 1 else (),
+        tactics=tuple(args.tactic) if args.tactic else ("none",),
+        arm_seed=args.arm_seed,
     )
     cfg.validate()
     cfg.out_dir.mkdir(parents=True, exist_ok=True)
@@ -1589,12 +1678,15 @@ def main(argv: list[str] | None = None) -> int:
             episodes_path.unlink()
     plan = episode_plan(cfg, args.episode_start)
     started = time.perf_counter()
-    for offset, (index, replay) in enumerate(plan, start=1):
-        print(f"[{offset}/{len(plan)}] {cfg.mode} episode {index} replay={replay} ...", flush=True)
+    for offset, (index, replay, tactic, pair) in enumerate(plan, start=1):
+        print(
+            f"[{offset}/{len(plan)}] {cfg.mode} episode {index} tactic={tactic} pair={pair} replay={replay} ...",
+            flush=True,
+        )
         if replay is not None:
             ep = run_replay_episode(cfg, index, replay)
         else:
-            ep = run_episode(cfg, index)
+            ep = run_episode(cfg, index, tactic, pair)
         episodes.append(ep)
         stats = ep.get("stats", {})
         print(
