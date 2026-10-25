@@ -105,6 +105,11 @@ def main(argv: list[str] | None = None) -> int:
         "generated": time.strftime("%Y-%m-%dT%H:%M:%S"),
         "root": str(root).replace("\\", "/"),
         "git": git_summary(args.repo),
+        # Requirement doc §7 lists a checkpoint per experiment.  There is none on
+        # purpose: every v3.6.0 experiment is a ridge regression (T1) whose
+        # reproducible artefact is the feature cache + seeds, or a rule-based
+        # controller (T2) whose artefact is the config + arm seed.
+        "checkpoint": None,
         "files": files,
         "excluded_caches": excluded,
         "totals": {
