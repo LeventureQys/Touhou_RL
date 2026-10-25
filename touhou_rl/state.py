@@ -185,6 +185,16 @@ class EnemyInfo:
     item_drop: int
     boss_slot: int
     flags1: int
+    # v3.6.0 damage/phase contract (all read from C_ASSERT-backed offsets):
+    # ``damageable``/``accepts_damage`` are the game's own invulnerability gates,
+    # ``phase_starting_life`` marks phase boundaries, ``enemy_index`` is stable
+    # per-enemy identity, ``shoot_interval_frames`` is the current volley cadence.
+    damageable: bool = False
+    accepts_damage: bool = False
+    phase_starting_life: int = 0
+    enemy_index: int = -1
+    shoot_interval_frames: int = 0
+    flags2: int = 0
 
 
 @dataclass(slots=True)
@@ -569,6 +579,10 @@ class GameStateReader:
         item_drops = self._strided_view(buf, spec.OFF_ENEMY_ITEM_DROP, np.int8, count, size)
         boss_slots = self._strided_view(buf, spec.OFF_ENEMY_BOSS_SLOT, np.uint8, count, size)
         ecl_ptrs = self._strided_view(buf, spec.OFF_ENEMY_ACTIVE_ECL_CONTEXT, np.uint32, count, size)
+        phase_lifes = self._strided_view(buf, spec.OFF_ENEMY_PHASE_STARTING_LIFE, np.int32, count, size)
+        enemy_indices = self._strided_view(buf, spec.OFF_ENEMY_INDEX, np.int32, count, size)
+        shoot_intervals = self._strided_view(buf, spec.OFF_ENEMY_SHOOT_INTERVAL, np.int32, count, size)
+        flags2s = self._strided_view(buf, spec.OFF_ENEMY_FLAGS2, np.uint32, count, size)
 
         indices = np.flatnonzero(flags & spec.ENEMY_FLAG_ACTIVE) if active_only else np.arange(count)
         sub_id_cache: dict[int, int | None] = {}
@@ -602,6 +616,12 @@ class GameStateReader:
                     item_drop=int(item_drops[slot]),
                     boss_slot=int(boss_slots[slot]),
                     flags1=flags1,
+                    damageable=bool(flags1 & spec.ENEMY_FLAG_DAMAGEABLE),
+                    accepts_damage=bool(flags1 & spec.ENEMY_FLAG_ACCEPTS_DAMAGE),
+                    phase_starting_life=int(phase_lifes[slot]),
+                    enemy_index=int(enemy_indices[slot]),
+                    shoot_interval_frames=int(shoot_intervals[slot]),
+                    flags2=int(flags2s[slot]),
                 )
             )
         return result

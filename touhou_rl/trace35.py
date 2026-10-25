@@ -157,6 +157,15 @@ def _enemy_dict(enemy: EnemyInfo) -> dict:
         "sub_id": None if enemy.sub_id is None else int(enemy.sub_id),
         "item_drop": int(enemy.item_drop),
         "boss_slot": int(enemy.boss_slot),
+        # v3.6.0 damage/phase fields: without these the ClearEnemy and DamageWindow
+        # labels have no ground truth (see reports/标签来源调查.md §2.2).
+        "flags1": int(enemy.flags1),
+        "flags2": int(enemy.flags2),
+        "damageable": bool(enemy.damageable),
+        "accepts_damage": bool(enemy.accepts_damage),
+        "phase_starting_life": int(enemy.phase_starting_life),
+        "enemy_index": int(enemy.enemy_index),
+        "shoot_interval_frames": int(enemy.shoot_interval_frames),
     }
 
 

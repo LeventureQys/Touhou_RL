@@ -145,12 +145,27 @@ ENEMY_SIZE = 0x53D0
 OFF_ENEMY_POSITION = 0x2D34
 OFF_ENEMY_LIFE = 0x2DFC
 OFF_ENEMY_MAX_LIFE = 0x2E00
+# v3.6.0: the three fields that make a damage/phase label possible.  All three
+# carry a C_ASSERT in third_party/th08/src/EnemyManager.hpp, so they are read
+# directly rather than derived from adjacent bytes.
+OFF_ENEMY_PHASE_STARTING_LIFE = 0x2E04  # i32; life at the start of the current phase
+OFF_ENEMY_INDEX = 0x2E0C  # i32; per-enemy identity, stable across frames
+OFF_ENEMY_SHOOT_INTERVAL = 0x3060  # i32; frames between pattern volleys
 OFF_ENEMY_ACTIVE_ECL_CONTEXT = 0x2CA0
 OFF_ENEMY_ITEM_DROP = 0x3304
 OFF_ENEMY_BOSS_SLOT = 0x3313
 OFF_ENEMY_FLAGS1 = 0x3324
+OFF_ENEMY_FLAGS2 = 0x3328
 ENEMY_FLAG_ACTIVE = 1 << 0
 ENEMY_FLAG_BOSS = 1 << 1
+# EnemyFlag1Bits (EnemyManager.hpp): bit 3 damageable, bit 6 acceptsDamage,
+# bit 31 noDamageDuringStop.  These are the game's own invulnerability gates and
+# the only readable source of a "boss output window"; GameManager's
+# currentSpellCardNumber is not populated during normal play (see
+# Document/Update/Alpha/v3.6.0/reports/标签来源调查.md §2).
+ENEMY_FLAG_DAMAGEABLE = 1 << 3
+ENEMY_FLAG_ACCEPTS_DAMAGE = 1 << 6
+ENEMY_FLAG_NO_DAMAGE_DURING_STOP = 1 << 31
 # EnemyEclContext::subId (i16 at 0x224; EnemyManager.hpp type check).
 OFF_ECL_CONTEXT_SUB_ID = 0x224
 

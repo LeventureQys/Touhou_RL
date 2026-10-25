@@ -57,6 +57,7 @@ from typing import Any, Iterable
 import numpy as np
 
 from . import spec
+from .bullet_track import attribute_spawns, spawns_by_slot
 from .region_probe import auc as rank_auc
 from .region_probe import component_from
 from .trace35 import read_episodes, read_trace, sha256_file, stable_split
@@ -81,6 +82,9 @@ MAX_BULLETS = 320
 # player never moved), so ``measure_speeds`` must fall back instead of returning
 # a near-zero speed that would disable every horizon feature.
 MIN_MEASURED_SPEED = 1.0
+# Spawn->enemy attribution radius (see reports/标签来源调查.md).  Fixed before any
+# D3 result; a spawn farther than this from every enemy centre is unattributed.
+SPAWN_RADIUS = 32.0
 
 BLOCKS = ("BASE", "REGION", "LURE", "ENEMY", "POWER", "BOSS", "EMERGENCY", "HISTORY")
 
@@ -104,6 +108,11 @@ LABELS: dict[str, str] = {
     "boss_life_delta_240": "spearman",
     "bomb_needed_60": "auc",
     "bomb_used_60": "auc",
+    # v3.6.0 D3: bullets actually spawned by a *visible enemy* within the next 60
+    # frames.  This replaces the global bullet-count proxy that made ENEMY pass its
+    # increment twice (D1 +0.0699, D2 +0.1100) while failing its absolute gate
+    # twice (0.439 / 0.371) - the label, not the block, was the bottleneck.
+    "attributed_spawns_60": "spearman",
 }
 
 # Pre-registered gate registry, transcribed from 执行计划 §6.1.
@@ -184,6 +193,33 @@ CELLS: tuple[dict[str, Any], ...] = (
     },
 )
 
+
+def _with_d3_enemy_gate(cells: tuple[dict[str, Any], ...]) -> tuple[dict[str, Any], ...]:
+    """D3 gate set (执行计划-D3补遗 §4): only ENEMY moves.
+
+    Its gate moves from the global ``bullet_delta_60`` proxy to the
+    attributed-spawn label with the *same* thresholds (absolute Spearman >= 0.50,
+    increment >= +0.05), so comparing D1/D2/D3 compares labels, not thresholds.
+    """
+    out = []
+    for cell in cells:
+        if cell["strategy"] == "ENEMY":
+            out.append(
+                {
+                    **cell,
+                    "primary": ("attributed_spawns_60", ("spearman", 0.50)),
+                    "increments": (("attributed_spawns_60", "spearman", 0.05, "and"),),
+                    "extras": (("bullet_delta_60", "spearman", 0.50),),
+                }
+            )
+        else:
+            out.append(cell)
+    return tuple(out)
+
+
+CELLS_D3 = _with_d3_enemy_gate(CELLS)
+GATE_SETS: dict[str, tuple[dict[str, Any], ...]] = {"v1": CELLS, "d3": CELLS_D3}
+
 PERMUTATIONS = 200
 SEED = 3600
 PERM_SEED = 3601
@@ -243,12 +279,20 @@ def resolve_survival_fallback(dataset: "Dataset") -> dict:
     }
 
 
-def resolve_cells(fallback: dict) -> tuple[dict[str, Any], ...]:
-    """Apply the survival-label fallback to the pre-registered gate registry."""
+def resolve_cells(
+    fallback: dict,
+    base: tuple[dict[str, Any], ...] | None = None,
+) -> tuple[dict[str, Any], ...]:
+    """Apply the survival-label fallback to a pre-registered gate registry.
+
+    ``base`` selects the gate set (``GATE_SETS``); it defaults to ``CELLS`` so
+    every D1/D2 number is reproduced by the same code path.
+    """
+    spec = CELLS if base is None else base
     if not fallback.get("fallback"):
-        return CELLS
+        return spec
     resolved = []
-    for spec_cell in CELLS:
+    for spec_cell in spec:
         new = dict(spec_cell)
         label, absolute = new["primary"]
         if label == SURVIVAL_LABEL:
@@ -541,12 +585,19 @@ def _finite(value: Any, default: float = 0.0) -> float:
     return out if math.isfinite(out) else default
 
 
-def _closest_bullets(pos: np.ndarray, vel: np.ndarray, half: np.ndarray, px: float, py: float) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+def _closest_bullets(
+    pos: np.ndarray, vel: np.ndarray, half: np.ndarray, px: float, py: float
+) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray | None]:
+    """Keep the ``MAX_BULLETS`` nearest bullets and return the kept indices.
+
+    The index array is returned because the sidecar's ``slots`` must be permuted
+    the same way; keeping them aligned is what makes spawn detection exact.
+    """
     if pos.shape[0] <= MAX_BULLETS:
-        return pos, vel, half
+        return pos, vel, half, None
     d = (pos[:, 0] - px) ** 2 + (pos[:, 1] - py) ** 2
     order = np.argsort(d)[:MAX_BULLETS]
-    return pos[order], vel[order], half[order]
+    return pos[order], vel[order], half[order], order
 
 
 def extract_episode(
@@ -578,6 +629,7 @@ def extract_episode(
     velocities_all = bullets["velocities"]
     half_all = bullets["half"]
     offsets = bullets["offsets"]
+    slots_all = bullets["slots"] if "slots" in bullets else None
 
     rows: list[dict[str, float]] = []
     prim: dict[str, list[float]] = {
@@ -595,7 +647,10 @@ def extract_episode(
         "py": [],
         "item_collected": [],
         "death": [],
+        "attributed_spawns": [],
+        "attributed_spawns_known": [],
     }
+    prev_slots: np.ndarray | None = None
     history_clear: deque[float] = deque(maxlen=4)
     history_bullets: deque[float] = deque(maxlen=4)
     history_py: deque[float] = deque(maxlen=4)
@@ -619,8 +674,11 @@ def extract_episode(
         pos = positions_all[start:end]
         vel = velocities_all[start:end]
         half = half_all[start:end]
+        cur_slots = slots_all[start:end] if slots_all is not None else None
         if pos.shape[0] > 0:
-            pos, vel, half = _closest_bullets(pos, vel, half, px, py)
+            pos, vel, half, keep = _closest_bullets(pos, vel, half, px, py)
+            if keep is not None and cur_slots is not None:
+                cur_slots = cur_slots[keep]
         n_bullets = int(pos.shape[0])
 
         resources = record.get("resources") or {}
@@ -762,6 +820,22 @@ def extract_episode(
             row["ENEMY_column_threat"] = float((np.abs(ex - px) < 24.0).sum())
             row["ENEMY_boss_slots"] = float(sum(1 for e in enemies if e.get("boss")))
             row["ENEMY_item_drop"] = float(sum(max(0, int(_finite(e.get("item_drop"), -1.0))) for e in enemies))
+            # v3.6.0 D3 columns.  On D1/D2 traces these keys are absent, so they
+            # become constant 0 and - after centring - contribute nothing to the
+            # ridge fit, which is what keeps those runs reproducible.
+            row["ENEMY_damageable_count"] = float(sum(1 for e in enemies if e.get("damageable")))
+            row["ENEMY_boss_damageable"] = float(any(e.get("damageable") for e in enemies if e.get("boss")))
+            limits = []
+            for e in enemies:
+                phase_life = _finite(e.get("phase_starting_life"), 0.0)
+                if phase_life > 0.0:
+                    limits.append(max(0.0, min(1.0, _finite(e.get("life"), 0.0) / phase_life)))
+            row["ENEMY_phase_frac_mean"] = float(np.mean(limits)) if limits else 0.0
+            intervals = [_finite(e.get("shoot_interval_frames"), 0.0) for e in enemies]
+            row["ENEMY_shoot_interval_mean"] = float(np.mean(intervals)) if intervals else 0.0
+            row["ENEMY_unique_indices"] = float(
+                len({int(_finite(e.get("enemy_index"), -1.0)) for e in enemies} - {-1})
+            )
         else:
             for key in (
                 "nearest_dist",
@@ -774,9 +848,42 @@ def extract_episode(
                 "column_threat",
                 "boss_slots",
                 "item_drop",
+                "damageable_count",
+                "boss_damageable",
+                "phase_frac_mean",
+                "shoot_interval_mean",
+                "unique_indices",
             ):
                 row[f"ENEMY_{key}"] = 0.0
             row["ENEMY_nearest_dist"] = 999.0
+
+        # --- spawn attribution (v3.6.0 D3) ---------------------------------
+        # Slot ids make "this bullet is new" exact (see reports/标签来源调查.md §1);
+        # nearest-enemy within SPAWN_RADIUS attaches it to a shooter.  Both the
+        # per-decision attributed count (a feature) and its forward window sum (the
+        # ClearEnemy label) come from here.  Without slot ids the count is 0 and the
+        # label is NaN, so old traces cannot silently produce a fake label.
+        attributed = 0.0
+        if cur_slots is None:
+            # No slot ids in this sidecar: the label is unknown, not zero spawns.
+            prim["attributed_spawns"].append(0.0)
+            prim["attributed_spawns_known"].append(0.0)
+        else:
+            # Being known is a property of the sidecar, not of having a previous
+            # snapshot: the first decision legitimately has no spawn to count but
+            # still belongs to the label denominator.
+            prim["attributed_spawns_known"].append(1.0)
+            if prev_slots is not None:
+                new_mask = spawns_by_slot(prev_slots, cur_slots)
+                spawn_pos = pos[new_mask]
+                if spawn_pos.shape[0]:
+                    enemy_xy = np.array(
+                        [[_finite(e.get("x")), _finite(e.get("y"))] for e in enemies], dtype=np.float32
+                    ).reshape(-1, 2)
+                    attributed = float(attribute_spawns(spawn_pos, enemy_xy, SPAWN_RADIUS)["counts"].sum())
+            prim["attributed_spawns"].append(attributed)
+        row["ENEMY_attributed_spawns"] = attributed
+        prev_slots = None if cur_slots is None else cur_slots.copy()
 
         # --- POWER: collection opportunity ---------------------------------
         power = _finite(resources.get("power"))
@@ -815,14 +922,41 @@ def extract_episode(
             row["BOSS_life"] = boss_hp
             row["BOSS_life_log"] = float(math.log1p(max(0.0, boss_hp)))
             row["BOSS_count"] = float(len(bosses))
-            row["BOSS_spell"] = _finite(clock.get("current_spell"))
+            # ``clock.current_spell`` used to sit here.  It is a dead field (0 in
+            # D1, -1 in D2): the game does not populate currentSpellCardNumber
+            # during normal play, and the old 4-byte read also leaked the retry
+            # menu into it.  ``flags1.damageable`` and ``phase_starting_life`` are
+            # the real invulnerability/phase source (EnemyManager.hpp C_ASSERTs).
+            row["BOSS_damageable"] = float(any(b.get("damageable") for b in bosses))
+            row["BOSS_accepts_damage"] = float(any(b.get("accepts_damage") for b in bosses))
+            phase_limit = 0.0
+            for b in bosses:
+                phase_life = _finite(b.get("phase_starting_life"), 0.0)
+                if phase_life > 0.0:
+                    phase_limit = max(phase_limit, max(0.0, min(1.0, _finite(b.get("life"), 0.0) / phase_life)))
+            row["BOSS_phase_frac"] = phase_limit
+            row["BOSS_shoot_interval"] = float(
+                np.mean([_finite(b.get("shoot_interval_frames"), 0.0) for b in bosses])
+            )
             aligned = np.abs(traj[:, -1, 0] - bx.min()) < 8.0
             safe = mins > 12.0
             row["BOSS_align_safe"] = 1.0 if (aligned & safe).any() else 0.0
             row["BOSS_align_safe_margin"] = float(mins[aligned].max()) if aligned.any() else 0.0
             row["BOSS_damage_window"] = 1.0 if clear0 > 20.0 else 0.0
         else:
-            for key in ("dx", "life", "life_log", "count", "spell", "align_safe", "align_safe_margin", "damage_window"):
+            for key in (
+                "dx",
+                "life",
+                "life_log",
+                "count",
+                "damageable",
+                "accepts_damage",
+                "phase_frac",
+                "shoot_interval",
+                "align_safe",
+                "align_safe_margin",
+                "damage_window",
+            ):
                 row[f"BOSS_{key}"] = 0.0
             row["BOSS_present"] = 0.0
 
@@ -959,6 +1093,21 @@ def _lookahead_point(px: np.ndarray, py: np.ndarray, horizon: int) -> np.ndarray
     return out
 
 
+def _lookahead_sum(values: np.ndarray, horizon: int) -> np.ndarray:
+    """Sum of ``values[i+1 : i+1+horizon]`` with NaN when the window is short."""
+    n = values.shape[0]
+    out = np.full(n, np.nan)
+    if n == 0:
+        return out
+    csum = np.concatenate([[0.0], np.cumsum(np.asarray(values, dtype=np.float64))])
+    for i in range(n):
+        end = i + 1 + horizon
+        if end > n:
+            continue
+        out[i] = csum[end] - csum[i + 1]
+    return out
+
+
 def _lookahead_at(values: np.ndarray, horizon: int) -> np.ndarray:
     """Value at ``i + horizon`` with NaN when the episode ends first."""
     n = values.shape[0]
@@ -998,6 +1147,14 @@ def build_labels(prim: dict[str, np.ndarray]) -> dict[str, np.ndarray]:
     labels["boss_life_delta_240"] = -_lookahead_delta(boss_life, M)
     death60 = labels["death_60"]
     labels["bomb_needed_60"] = np.where(np.isnan(death60), np.nan, (np.nan_to_num(death60) > 0.0) & (bombs > 0.0))
+    # Attributed spawns exist only where the sidecar carried slot ids; elsewhere the
+    # label stays NaN instead of masquerading as "zero spawns".
+    known = prim.get("attributed_spawns_known")
+    if known is not None and float(np.nansum(known)) > 0.0:
+        spawn_sum = _lookahead_sum(prim["attributed_spawns"], S)
+        labels["attributed_spawns_60"] = np.where(known > 0.0, spawn_sum, np.nan)
+    else:
+        labels["attributed_spawns_60"] = np.full(prim["power"].shape[0], np.nan)
     return labels
 
 
@@ -1741,6 +1898,13 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--permutations", type=int, default=PERMUTATIONS)
     parser.add_argument("--seed", type=int, default=SEED)
     parser.add_argument(
+        "--gate-set",
+        choices=sorted(GATE_SETS),
+        default="v1",
+        help="pre-registered gate registry: 'v1' is the D1/D2 set; 'd3' moves the "
+        "ENEMY gate onto attributed_spawns_60 (执行计划-D3补遗 §4)",
+    )
+    parser.add_argument(
         "--strict-frames",
         action="store_true",
         help="drop decisions whose sampled frame span != frameskip (replay polling "
@@ -1766,7 +1930,7 @@ def main(argv: list[str] | None = None) -> int:
     )
     extract_seconds = time.perf_counter() - started
     fallback = resolve_survival_fallback(dataset)
-    cells_spec = resolve_cells(fallback)
+    cells_spec = resolve_cells(fallback, base=GATE_SETS[args.gate_set])
     ablation = run_ablation(dataset, permutations=args.permutations, seed=args.seed + 1, cells_spec=cells_spec)
 
     # Global cells use the *effective* survival label (执行计划-D2补遗 §3).  On a
@@ -1834,6 +1998,7 @@ def main(argv: list[str] | None = None) -> int:
         "generated": time.strftime("%Y-%m-%dT%H:%M:%S"),
         "source": str(args.probe),
         "protocol": {
+            "gate_set": args.gate_set,
             "cv": "leave-one-episode-out",
             "model": "ridge",
             "lambda": RIDGE_LAMBDA,

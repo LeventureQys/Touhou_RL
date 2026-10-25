@@ -407,6 +407,137 @@ def test_labels_registry_covers_every_built_label():
 
 
 # ---------------------------------------------------------------------------
+# D3: attributed_spawns_60 and the d3 gate set
+# ---------------------------------------------------------------------------
+
+
+def test_attributed_spawns_label_is_nan_without_slot_ids():
+    records, bullets = _synth_episode(60)
+    payload = extract_episode(records, bullets)
+    label = payload["labels"]["attributed_spawns_60"]
+    # Old traces have no slots, so the label must be unknown - never "zero spawns".
+    assert np.isnan(label).all()
+
+
+def test_attributed_spawns_label_sums_the_forward_window():
+    prim = _primitives(120)
+    prim["attributed_spawns"] = np.ones(120)
+    prim["attributed_spawns_known"] = np.ones(120)
+    labels = build_labels(prim)
+    assert labels["attributed_spawns_60"][0] == pytest.approx(30.0)
+    assert np.isnan(labels["attributed_spawns_60"][-1])
+    prim["attributed_spawns_known"] = np.zeros(120)
+    assert np.isnan(build_labels(prim)["attributed_spawns_60"]).all()
+
+
+def test_extract_episode_attributes_spawns_to_nearby_enemies():
+    """A bullet that appears next to an enemy must count as that enemy's spawn."""
+    frames = 40
+    records = []
+    positions, velocities, halves, slots, offsets = [], [], [], [], [0]
+    for i in range(frames):
+        px, py = 192.0, 380.0
+        # One persistent bullet (slot 1) plus one fresh bullet each decision that
+        # appears next to the enemy at (180, 60).
+        positions.append([192.0, 300.0])
+        velocities.append([0.0, 0.0])
+        halves.append(2.0)
+        slots.append(1)
+        if i > 0:
+            # Fixed spawn point 10 px below the enemy: inside SPAWN_RADIUS (32 px)
+            # for every decision, so the attribution radius is not what changes.
+            positions.append([180.0, 70.0])
+            velocities.append([0.0, 0.0])
+            halves.append(2.0)
+            # A fresh pool slot per decision is what the game does for a new
+            # bullet; reusing one slot id would (correctly) look like a survivor.
+            slots.append(100 + i)
+        offsets.append(len(slots))
+        records.append(
+            {
+                "decision": i + 1,
+                "frameskip": 2,
+                "frame_pre": 2 * i,
+                "frame_post": 2 * (i + 1),
+                "clock": {"stage": 0, "stage_frames": 2 * (i + 1), "current_spell": -1},
+                "player": {"x": px, "y": py, "vx": 0.0, "vy": 0.0, "state": 3, "focus_mode": 0},
+                "resources": {"power": 10.0, "lives": 2.0, "bombs": 3.0, "bombs_used": 0.0, "deaths": 0.0},
+                "bosses": [],
+                "enemies": [
+                    {
+                        "slot": 0,
+                        "x": 180.0,
+                        "y": 60.0,
+                        "life": 20,
+                        "max_life": 20,
+                        "boss": False,
+                        "item_drop": 1,
+                        "damageable": True,
+                        "enemy_index": 7,
+                        "phase_starting_life": 20,
+                        "shoot_interval_frames": 30,
+                    }
+                ],
+                "items": [],
+                "shot": {"point_item_value_line": 128.0},
+                "frame_events": {"item_collected": False},
+                "events": [],
+            }
+        )
+    bullets = {
+        "positions": np.asarray(positions, dtype=np.float32),
+        "velocities": np.asarray(velocities, dtype=np.float32),
+        "half": np.asarray(halves, dtype=np.float32),
+        "slots": np.asarray(slots, dtype=np.int32),
+        "offsets": np.asarray(offsets, dtype=np.int64),
+    }
+    payload = extract_episode(records, bullets)
+    block = payload["blocks"]["ENEMY"]
+    column = payload["columns"]["ENEMY"].index("ENEMY_attributed_spawns")
+    # Decision 0 has no previous snapshot; every later decision sees one spawn
+    # next to the enemy, i.e. exactly one attributed bullet.
+    assert block[1:, column].tolist() == [1.0] * (frames - 1)
+    assert payload["labels"]["attributed_spawns_60"][0] == pytest.approx(30.0)
+    # The new enemy columns are populated, not dead.
+    enemy_columns = payload["columns"]["ENEMY"]
+    damageable = payload["blocks"]["ENEMY"][:, enemy_columns.index("ENEMY_damageable_count")]
+    assert damageable.min() == 1.0
+    phase = payload["blocks"]["ENEMY"][:, enemy_columns.index("ENEMY_phase_frac_mean")]
+    assert phase.max() <= 1.0 and phase.min() > 0.0
+
+
+def test_gate_sets_only_move_the_enemy_gate():
+    from touhou_rl.ablate36 import CELLS, CELLS_D3, GATE_SETS
+
+    assert set(GATE_SETS) == {"v1", "d3"}
+    assert GATE_SETS["v1"] is CELLS
+    v1 = {cell["strategy"]: cell for cell in CELLS}
+    d3 = {cell["strategy"]: cell for cell in CELLS_D3}
+    assert d3["ENEMY"]["primary"] == ("attributed_spawns_60", ("spearman", 0.50))
+    assert d3["ENEMY"]["increments"] == (("attributed_spawns_60", "spearman", 0.05, "and"),)
+    assert d3["ENEMY"]["extras"] == (("bullet_delta_60", "spearman", 0.50),)
+    for strategy in v1:
+        if strategy == "ENEMY":
+            continue
+        assert d3[strategy] == v1[strategy]
+    # Thresholds are identical between the two ENEMY gates - only the label moves.
+    assert d3["ENEMY"]["primary"][1] == v1["ENEMY"]["primary"][1]
+    assert d3["ENEMY"]["increments"][0][2] == v1["ENEMY"]["increments"][0][2]
+
+
+def test_resolve_cells_keeps_the_d3_enemy_gate():
+    from touhou_rl.ablate36 import GATE_SETS
+
+    dataset, _ = _toy_dataset(deaths=0)
+    fallback = resolve_survival_fallback(dataset)
+    spec = resolve_cells(fallback, base=GATE_SETS["d3"])
+    enemy = next(cell for cell in spec if cell["strategy"] == "ENEMY")
+    assert enemy["primary"][0] == "attributed_spawns_60"
+    v1_enemy = next(cell for cell in resolve_cells(fallback) if cell["strategy"] == "ENEMY")
+    assert v1_enemy["primary"][0] == "bullet_delta_60"
+
+
+# ---------------------------------------------------------------------------
 # per-shot-type movement speeds (D2)
 # ---------------------------------------------------------------------------
 

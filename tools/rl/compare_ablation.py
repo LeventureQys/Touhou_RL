@@ -222,16 +222,84 @@ def render(d1: dict, d2: dict, d1_name: str, d2_name: str) -> str:
     return "\n".join(lines) + "\n"
 
 
+def render_three(d1: dict, d2: dict, d3: dict, names: tuple[str, str, str]) -> str:
+    """Three-source table: verdicts and gate deltas side by side."""
+    gate_label = {
+        source: surveillance_gate_label(report)
+        for source, report in zip(("D1", "D2", "D3"), (d1, d2, d3))
+    }
+    lines = [
+        "",
+        "## 6 D1 / D2 / D3 三源对照",
+        "",
+        f"- D1：{names[0]}（{d1['inventory']['episodes']} 局，gate set `{d1['protocol'].get('gate_set', 'v1')}`，"
+        f"生存标签 {survival_metric(d1)}）",
+        f"- D2：{names[1]}（{d2['inventory']['episodes']} 局，gate set `{d2['protocol'].get('gate_set', 'v1')}`，"
+        f"生存标签 {survival_metric(d2)}）",
+        f"- D3：{names[2]}（{d3['inventory']['episodes']} 局，gate set `{d3['protocol'].get('gate_set', 'v1')}`，"
+        f"生存标签 {survival_metric(d3)}）",
+        "",
+        "| 策略 | D1 | D2 | D3 | D1 增量 | D2 增量 | D3 增量 | D3 门禁标签 |",
+        "|---|---|---|---|---:|---:|---:|---|",
+    ]
+    for strategy in STRATEGIES:
+        cells = []
+        for report in (d1, d2, d3):
+            verdict = report["verdicts"]["per_strategy"].get(strategy, {}).get("verdict")
+            cells.append(VERDICT_MARK.get(verdict, "—"))
+        deltas = []
+        for report in (d1, d2, d3):
+            cell = gate_cell(report, strategy)
+            deltas.append(fmt(None if cell is None else cell.get("delta"), signed=True))
+        label = D3_LABELS.get(strategy, "")
+        lines.append(
+            f"| {strategy} | {cells[0]} | {cells[1]} | {cells[2]} | {deltas[0]} | {deltas[1]} | {deltas[2]} | {label} |"
+        )
+    lines += ["", "| 全局门 | D1 | D2 | D3 |", "|---|---|---|---|"]
+    for name in ("G-1", "G-2", "G-3", "G-4"):
+        marks = []
+        for report in (d1, d2, d3):
+            gate = report["verdicts"]["gates"][name]
+            marks.append(f"{fmt(gate.get('value'), signed=(name == 'G-3'))} → {'通过' if gate['pass'] else '未过'}")
+        lines.append(f"| {name} | {marks[0]} | {marks[1]} | {marks[2]} |")
+    lines += [
+        "",
+        f"- `enters_T2`：D1 **{d1['verdicts']['enters_T2']}** / D2 **{d2['verdicts']['enters_T2']}** / "
+        f"D3 **{d3['verdicts']['enters_T2']}**",
+        f"- D3 生存指标门禁标签：{gate_label['D3']}",
+        "",
+    ]
+    return "\n".join(lines) + "\n"
+
+
+D3_LABELS = {
+    "ENEMY": "attributed_spawns_60（换标签）",
+    "BOSS": "boss_life_delta_60（新相位列）",
+}
+
+
+def surveillance_gate_label(report: dict) -> str:
+    fallback = report.get("survival_fallback") or {}
+    if fallback.get("fallback"):
+        return f"{fallback['fallback_label']} (spearman)"
+    return f"{fallback.get('label', 'death_60')} (auc)"
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(prog="python tools/rl/compare_ablation.py")
     parser.add_argument("--d1", type=Path, required=True)
     parser.add_argument("--d2", type=Path, required=True)
+    parser.add_argument("--d3", type=Path, default=None)
     parser.add_argument("--out", type=Path, required=True)
     args = parser.parse_args(argv)
     d1 = load(args.d1)
     d2 = load(args.d2)
+    text = render(d1, d2, str(args.d1), str(args.d2))
+    if args.d3 is not None:
+        d3 = load(args.d3)
+        text += render_three(d1, d2, d3, (str(args.d1), str(args.d2), str(args.d3)))
     args.out.parent.mkdir(parents=True, exist_ok=True)
-    args.out.write_text(render(d1, d2, str(args.d1), str(args.d2)), encoding="utf-8")
+    args.out.write_text(text, encoding="utf-8")
     print(f"wrote {args.out}")
     return 0
 

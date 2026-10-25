@@ -1,0 +1,176 @@
+{
+  "schema": "v350-s0-report/1",
+  "generated": "2026-10-25T14:16:01",
+  "git_head": "59b7b6cb989d1db88245e3188eb2ff829e56043c",
+  "out_dir": "Document\\Update\\Alpha\\v3.6.0\\data\\probe\\d3-fields",
+  "episodes": 6,
+  "gates": {
+    "S0-1": {
+      "name": "逐决策时间戳单调",
+      "value": 1.0,
+      "threshold": 1.0,
+      "numerator": 30000,
+      "denominator": 30000,
+      "pass": true
+    },
+    "S0-2": {
+      "name": "enemy/item/power 字段可追溯",
+      "value": 1.0,
+      "threshold": 1.0,
+      "numerator": 29984,
+      "denominator": 29984,
+      "pass": true
+    },
+    "S0-3": {
+      "name": "clear/game-over/left-game 可区分",
+      "value": null,
+      "threshold": 1.0,
+      "numerator": 0,
+      "denominator": 0,
+      "ambiguous": [],
+      "pass": false
+    },
+    "S0-4": {
+      "name": "新采集 complete 有效率",
+      "value": 0.985726,
+      "threshold": 0.95,
+      "numerator": 29556,
+      "denominator": 29984,
+      "pass": true
+    },
+    "S0-5": {
+      "name": "整局切分",
+      "value": 1.0,
+      "threshold": 1.0,
+      "errors": [],
+      "duplicate_episodes": [],
+      "pass": true
+    },
+    "S0-M": {
+      "name": "manifest 与磁盘一致",
+      "value": 1.0,
+      "threshold": 1.0,
+      "pass": true
+    }
+  },
+  "diagnostics": {
+    "records": 30000,
+    "steady": 29984,
+    "missing_traces": [],
+    "record_mismatch": [],
+    "duplicate_episodes": [],
+    "schema_error_counts": {},
+    "event_counts": {
+      "dialogue_start": 6,
+      "dialogue_end": 10,
+      "bomb_used": 3
+    },
+    "termination_counts": {
+      "max_steps": 6
+    },
+    "complete_rate_by_episode": {
+      "replay-ep01": 0.9796,
+      "replay-ep02": 0.9632,
+      "replay-ep03": 0.9958,
+      "replay-ep04": 0.9938,
+      "replay-ep05": 0.9872,
+      "replay-ep06": 0.9948
+    },
+    "episodes_with_errors": []
+  },
+  "manifest": {
+    "checked": true,
+    "file_count": 13,
+    "missing": [],
+    "extra": [],
+    "hash_mismatch": [],
+    "pass": true
+  },
+  "episode_rows": [
+    {
+      "episode": "replay-ep01",
+      "records": 5000,
+      "expected_records": 5000,
+      "steady": 4998,
+      "traceable": 4998,
+      "complete": 4896,
+      "complete_rate": 0.9796,
+      "termination": "max_steps",
+      "split": "train",
+      "split_consistent": true,
+      "records_match": true
+    },
+    {
+      "episode": "replay-ep02",
+      "records": 5000,
+      "expected_records": 5000,
+      "steady": 4997,
+      "traceable": 4997,
+      "complete": 4813,
+      "complete_rate": 0.9632,
+      "termination": "max_steps",
+      "split": "train",
+      "split_consistent": true,
+      "records_match": true
+    },
+    {
+      "episode": "replay-ep03",
+      "records": 5000,
+      "expected_records": 5000,
+      "steady": 4998,
+      "traceable": 4998,
+      "complete": 4977,
+      "complete_rate": 0.9958,
+      "termination": "max_steps",
+      "split": "train",
+      "split_consistent": true,
+      "records_match": true
+    },
+    {
+      "episode": "replay-ep04",
+      "records": 5000,
+      "expected_records": 5000,
+      "steady": 4997,
+      "traceable": 4997,
+      "complete": 4966,
+      "complete_rate": 0.9938,
+      "termination": "max_steps",
+      "split": "train",
+      "split_consistent": true,
+      "records_match": true
+    },
+    {
+      "episode": "replay-ep05",
+      "records": 5000,
+      "expected_records": 5000,
+      "steady": 4997,
+      "traceable": 4997,
+      "complete": 4933,
+      "complete_rate": 0.9872,
+      "termination": "max_steps",
+      "split": "train",
+      "split_consistent": true,
+      "records_match": true
+    },
+    {
+      "episode": "replay-ep06",
+      "records": 5000,
+      "expected_records": 5000,
+      "steady": 4997,
+      "traceable": 4997,
+      "complete": 4971,
+      "complete_rate": 0.9948,
+      "termination": "max_steps",
+      "split": "train",
+      "split_consistent": true,
+      "records_match": true
+    }
+  ],
+  "overall": {
+    "pass": false,
+    "failed": [
+      "S0-3"
+    ],
+    "integrity_ok": true
+  }
+}

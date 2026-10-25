@@ -1,6 +1,6 @@
 # v3.6.0 T1 消融主表（预注册协议）
 
-- 生成：2026-10-25T13:28:17
+- 生成：2026-10-25T13:54:34
 - 数据：`Document\Update\Alpha\v3.6.0\data\probe\d2-replay`（6 局 / 30000 决策）
 - 协议：LOEO 6 折；岭回归 λ=1；局内列置换 200 次
 - 总判定：**不进入 T2**
@@ -29,7 +29,7 @@
 | ENEMY | bullet_delta_60 | primary | spearman | 0.2610 | 0.3710 | +0.1100 | +0.1083 | 0.005 | no | 29820 | - |
 | POWER | p_collected_60 | primary | auc | 0.9929 | 0.9982 | +0.0053 | +0.0033 | 0.005 | no | 29820 | 28303 |
 | POWER::power_delta_60 | power_delta_60 | increment | spearman | 0.3265 | 0.4795 | +0.1529 | +0.1585 | 0.005 | no | 29820 | - |
-| BOSS | boss_life_delta_60 | primary | spearman | 0.5551 | 0.4882 | -0.0668 | -0.0555 | 1 | no | 16740 | - |
+| BOSS | boss_life_delta_60 | primary | spearman | 0.5551 | 0.4882 | -0.0668 | -0.0554 | 1 | no | 16740 | - |
 | EMERGENCY | bomb_needed_60 | primary | auc | n/a | n/a | n/a | n/a | n/a | n/a | 29820 | 0 |
 | EMERGENCY::bomb_used_60 | bomb_used_60 | extra | auc | 0.3321 | 0.3683 | +0.0362 | 0 | 0.005 | no | 29820 | 30 |
 | HISTORY | min_clearance_60 | primary | spearman | 0.8465 | 0.8522 | +0.0057 | +0.0044 | 0.005 | no | 29820 | - |
@@ -74,9 +74,9 @@
   "BASE": 11,
   "REGION": 40,
   "LURE": 13,
-  "ENEMY": 11,
+  "ENEMY": 17,
   "POWER": 12,
-  "BOSS": 9,
+  "BOSS": 12,
   "EMERGENCY": 7,
   "HISTORY": 20
  },
@@ -153,16 +153,22 @@
   ],
   "ENEMY": [
    "ENEMY_above",
+   "ENEMY_attributed_spawns",
+   "ENEMY_boss_damageable",
    "ENEMY_boss_slots",
    "ENEMY_column_threat",
    "ENEMY_count",
+   "ENEMY_damageable_count",
    "ENEMY_item_drop",
    "ENEMY_life_frac_mean",
    "ENEMY_life_sum",
    "ENEMY_near_120",
    "ENEMY_nearest_dist",
    "ENEMY_nearest_life",
-   "ENEMY_pressure"
+   "ENEMY_phase_frac_mean",
+   "ENEMY_pressure",
+   "ENEMY_shoot_interval_mean",
+   "ENEMY_unique_indices"
   ],
   "POWER": [
    "POWER_deficit",
@@ -179,15 +185,18 @@
    "POWER_y_to_line"
   ],
   "BOSS": [
+   "BOSS_accepts_damage",
    "BOSS_align_safe",
    "BOSS_align_safe_margin",
    "BOSS_count",
    "BOSS_damage_window",
+   "BOSS_damageable",
    "BOSS_dx",
    "BOSS_life",
    "BOSS_life_log",
+   "BOSS_phase_frac",
    "BOSS_present",
-   "BOSS_spell"
+   "BOSS_shoot_interval"
   ],
   "EMERGENCY": [
    "EMERGENCY_all_blocked",
@@ -236,7 +245,8 @@
   "boss_life_delta_60": "spearman",
   "boss_life_delta_240": "spearman",
   "bomb_needed_60": "auc",
-  "bomb_used_60": "auc"
+  "bomb_used_60": "auc",
+  "attributed_spawns_60": "spearman"
  },
  "speed_mode": "measure",
  "measured_speeds": [

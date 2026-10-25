@@ -16,7 +16,7 @@
 | LURE | ❌ fail | +0.0203 | 0.005 | ❌ fail | +0.0014 | 0.005 | 是 |  |
 | ENEMY | ❌ fail | +0.0699 | 0.005 | ❌ fail | +0.1100 | 0.005 | 是 |  |
 | POWER | ✅ pass | +0.0405 | 0.005 | ✅ pass | +0.0053 | 0.005 | 是 |  |
-| BOSS | ⚠ unstable | -0.0108 | 0.990 | ❌ fail | -0.0668 | 1 | 是 | unstable → **fail** |
+| BOSS | ⚠ unstable | -0.0107 | 0.990 | ❌ fail | -0.0668 | 1 | 是 | unstable → **fail** |
 | EMERGENCY | ❌ fail | +0.0022 | 0.005 | ⚠ underpowered | n/a | n/a | — | fail → **underpowered** |
 | HISTORY | ❌ fail | -0.0004 | 0.990 | ❌ fail | +0.0057 | 0.005 | **否** |  |
 

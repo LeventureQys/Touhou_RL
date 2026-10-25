@@ -57,12 +57,16 @@ def _enemy_buffer() -> bytearray:
     put(5, spec.OFF_ENEMY_BOSS_SLOT, "<B", 0)
     put(5, spec.OFF_ENEMY_ACTIVE_ECL_CONTEXT, "<I", 0x30000000)
     # slot 7: inactive (must be filtered out).
-    # slot 9: live boss.
-    put(9, spec.OFF_ENEMY_FLAGS1, "<I", spec.ENEMY_FLAG_ACTIVE | spec.ENEMY_FLAG_BOSS)
+    # slot 9: live boss, damageable, second phase.
+    put(9, spec.OFF_ENEMY_FLAGS1, "<I", spec.ENEMY_FLAG_ACTIVE | spec.ENEMY_FLAG_BOSS | spec.ENEMY_FLAG_DAMAGEABLE)
     put(9, spec.OFF_ENEMY_POSITION, "<fff", 192.0, 80.0, 0.0)
     put(9, spec.OFF_ENEMY_LIFE, "<i", 7300)
     put(9, spec.OFF_ENEMY_MAX_LIFE, "<i", 7300)
     put(9, spec.OFF_ENEMY_BOSS_SLOT, "<B", 0)
+    put(9, spec.OFF_ENEMY_PHASE_STARTING_LIFE, "<i", 9000)
+    put(9, spec.OFF_ENEMY_INDEX, "<i", 42)
+    put(9, spec.OFF_ENEMY_SHOOT_INTERVAL, "<i", 60)
+    put(9, spec.OFF_ENEMY_FLAGS2, "<I", 0x20)
     return buf
 
 
@@ -149,6 +153,27 @@ def test_read_enemies_filters_and_parses():
     assert boss.boss is True
     assert boss.life == 7300
     assert boss.sub_id is None  # null context pointer -> unknown type
+
+
+def test_read_enemies_exposes_damage_and_phase_fields():
+    """v3.6.0: DamageWindow / ClearEnemy labels need this ground truth.
+
+    ``damageable`` and ``phase_starting_life`` come from C_ASSERT-backed offsets
+    in EnemyManager.hpp (0x3324 bit 3 and 0x2E04).  Without them the boss block
+    had no readable invulnerability gate and fell back to a dead ``spell`` column.
+    """
+    reader, _mem = _reader()
+    enemies = reader.read_enemies()
+    normal, boss = enemies
+    assert normal.damageable is False
+    assert normal.accepts_damage is False
+    assert boss.damageable is True
+    assert boss.accepts_damage is False
+    assert boss.phase_starting_life == 9000
+    assert boss.enemy_index == 42
+    assert boss.shoot_interval_frames == 60
+    assert boss.flags2 == 0x20
+    assert normal.enemy_index == 0  # zeroed slot, read as 0 rather than invented
 
 
 def test_read_enemies_inactive_only_keeps_all_slots():

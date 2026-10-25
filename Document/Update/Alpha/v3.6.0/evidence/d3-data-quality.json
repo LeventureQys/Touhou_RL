@@ -1,0 +1,148 @@
+{
+  "schema": "v360-d3-data-quality/1",
+  "probe": "Document\\Update\\Alpha\\v3.6.0\\data\\probe\\d3-fields",
+  "gates": {
+    "D3-1": {
+      "name": "slots 覆盖率",
+      "value": 1.0,
+      "threshold": 1.0,
+      "pass": true
+    },
+    "D3-2": {
+      "name": "damageable 两态比例（Boss 在场）",
+      "value_yes": 0.9283393292329117,
+      "value_no": 0.07166067076708832,
+      "threshold": 0.1,
+      "pass": false
+    },
+    "D3-3": {
+      "name": "phase_starting_life 每局跳变次数",
+      "value": 4,
+      "threshold": 2,
+      "pass": true
+    },
+    "D3-4": {
+      "name": "归属率（32 px）",
+      "value": 0.7487572066134078,
+      "threshold": [
+        0.3,
+        0.8
+      ],
+      "pass": true
+    },
+    "D3-5": {
+      "name": "槽位法新弹率/决策",
+      "value": 2.09918650396746,
+      "threshold": [
+        0.2,
+        6.0
+      ],
+      "pass": true
+    }
+  },
+  "overall": {
+    "pass": false
+  },
+  "per_episode": [
+    {
+      "episode": "replay-ep01",
+      "decisions": 5000,
+      "bullets": 824774,
+      "slots_missing": 0,
+      "boss_decisions": 2895,
+      "damageable_yes": 2635,
+      "damageable_no": 260,
+      "damageable_yes_frac": 0.9101899827288429,
+      "phase_jumps": 5,
+      "spawns": 10783,
+      "spawns_per_decision": 2.157031406281256,
+      "attributed": 7420,
+      "attribution_rate": 0.6881201891866827
+    },
+    {
+      "episode": "replay-ep02",
+      "decisions": 5000,
+      "bullets": 912217,
+      "slots_missing": 0,
+      "boss_decisions": 2742,
+      "damageable_yes": 2551,
+      "damageable_no": 191,
+      "damageable_yes_frac": 0.9303428154631656,
+      "phase_jumps": 4,
+      "spawns": 11070,
+      "spawns_per_decision": 2.2144428885777154,
+      "attributed": 7644,
+      "attribution_rate": 0.6905149051490515
+    },
+    {
+      "episode": "replay-ep03",
+      "decisions": 5000,
+      "bullets": 855859,
+      "slots_missing": 0,
+      "boss_decisions": 2896,
+      "damageable_yes": 2716,
+      "damageable_no": 180,
+      "damageable_yes_frac": 0.9378453038674033,
+      "phase_jumps": 5,
+      "spawns": 10779,
+      "spawns_per_decision": 2.15623124624925,
+      "attributed": 8481,
+      "attribution_rate": 0.7868076816031172
+    },
+    {
+      "episode": "replay-ep04",
+      "decisions": 5000,
+      "bullets": 804078,
+      "slots_missing": 0,
+      "boss_decisions": 2889,
+      "damageable_yes": 2710,
+      "damageable_no": 179,
+      "damageable_yes_frac": 0.9380408445829007,
+      "phase_jumps": 5,
+      "spawns": 10224,
+      "spawns_per_decision": 2.0452090418083615,
+      "attributed": 7929,
+      "attribution_rate": 0.7755281690140845
+    },
+    {
+      "episode": "replay-ep05",
+      "decisions": 5000,
+      "bullets": 827421,
+      "slots_missing": 0,
+      "boss_decisions": 2910,
+      "damageable_yes": 2674,
+      "damageable_no": 236,
+      "damageable_yes_frac": 0.9189003436426116,
+      "phase_jumps": 5,
+      "spawns": 10339,
+      "spawns_per_decision": 2.0682136427285456,
+      "attributed": 8197,
+      "attribution_rate": 0.7928232904536222
+    },
+    {
+      "episode": "replay-ep06",
+      "decisions": 5000,
+      "bullets": 763249,
+      "slots_missing": 0,
+      "boss_decisions": 2902,
+      "damageable_yes": 2713,
+      "damageable_no": 189,
+      "damageable_yes_frac": 0.9348725017229497,
+      "phase_jumps": 5,
+      "spawns": 9768,
+      "spawns_per_decision": 1.9539907981596318,
+      "attributed": 7473,
+      "attribution_rate": 0.76504914004914
+    }
+  ],
+  "totals": {
+    "bullets": 4987598,
+    "slots_missing": 0,
+    "boss_decisions": 17234,
+    "damageable_yes": 15999,
+    "damageable_no": 1235,
+    "spawns": 62963,
+    "attributed": 47144,
+    "decisions": 29994
+  }
+}

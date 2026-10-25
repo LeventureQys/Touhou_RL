@@ -1,6 +1,6 @@
 # v3.6.0 T1 消融主表（预注册协议）
 
-- 生成：2026-10-25T13:25:25
+- 生成：2026-10-25T13:58:12
 - 数据：`Document\Update\Alpha\v3.5.0\probe\s0-teacher`（9 局 / 21156 决策）
 - 协议：LOEO 9 折；岭回归 λ=1；局内列置换 200 次
 - 总判定：**不进入 T2**
@@ -14,7 +14,7 @@
 | LURE | min_clearance_60 | spearman 0.3 | 0.8808 | 0.9011 | min_clearance_60 spearman +0.05 / death_60 auc +0.02 (or) | +0.0203 / -0.0041 | 0.005 / 1 | **fail** |
 | ENEMY | bullet_delta_60 | spearman 0.5 | 0.3691 | 0.4390 | bullet_delta_60 spearman +0.05 (and) | +0.0699 | 0.005 | **fail** |
 | POWER | p_collected_60 | auc 0.6 | 0.7848 | 0.8252 | p_collected_60 auc +0.02 / power_delta_60 spearman +0.05 (or) | +0.0405 / +0.1666 | 0.005 / 0.005 | **pass** |
-| BOSS | boss_life_delta_60 | spearman 0.3 | 0.3796 | 0.3689 | boss_life_delta_60 spearman +0.05 (and) | -0.0108 | 0.990 | **unstable** |
+| BOSS | boss_life_delta_60 | spearman 0.3 | 0.3796 | 0.3689 | boss_life_delta_60 spearman +0.05 (and) | -0.0107 | 0.990 | **unstable** |
 | EMERGENCY | bomb_needed_60 | brier <= 0.2 (实测 0.0159) | 0.9551 | 0.9573 | bomb_needed_60 auc +0.02 (and) | +0.0022 | 0.005 | **fail** |
 | HISTORY | death_60 | n/a | 0.9560 | 0.9556 | death_60 auc +0.02 (and) | -0.0004 | 0.990 | **fail** |
 
@@ -31,7 +31,7 @@
 | ENEMY | bullet_delta_60 | primary | spearman | 0.3691 | 0.4390 | +0.0699 | +0.0939 | 0.005 | no | 20886 | - |
 | POWER | p_collected_60 | primary | auc | 0.7848 | 0.8252 | +0.0405 | +0.0554 | 0.005 | no | 20886 | 12691 |
 | POWER::power_delta_60 | power_delta_60 | increment | spearman | 0.0745 | 0.2410 | +0.1666 | +0.0951 | 0.005 | no | 20886 | - |
-| BOSS | boss_life_delta_60 | primary | spearman | 0.3796 | 0.3689 | -0.0108 | +0.0914 | 0.990 | no | 7598 | - |
+| BOSS | boss_life_delta_60 | primary | spearman | 0.3796 | 0.3689 | -0.0107 | +0.0914 | 0.990 | no | 7598 | - |
 | EMERGENCY | bomb_needed_60 | primary | auc | 0.9551 | 0.9573 | +0.0022 | +0.0058 | 0.005 | no | 20886 | 432 |
 | EMERGENCY::bomb_used_60 | bomb_used_60 | extra | auc | 0.8111 | 0.7702 | -0.0408 | +0.0236 | 1 | no | 20886 | 390 |
 | HISTORY | death_60 | primary | auc | 0.9560 | 0.9556 | -0.0004 | -0.0011 | 0.990 | no | 20886 | 462 |
@@ -81,9 +81,9 @@
   "BASE": 11,
   "REGION": 40,
   "LURE": 13,
-  "ENEMY": 11,
+  "ENEMY": 17,
   "POWER": 12,
-  "BOSS": 9,
+  "BOSS": 12,
   "EMERGENCY": 7,
   "HISTORY": 20
  },
@@ -160,16 +160,22 @@
   ],
   "ENEMY": [
    "ENEMY_above",
+   "ENEMY_attributed_spawns",
+   "ENEMY_boss_damageable",
    "ENEMY_boss_slots",
    "ENEMY_column_threat",
    "ENEMY_count",
+   "ENEMY_damageable_count",
    "ENEMY_item_drop",
    "ENEMY_life_frac_mean",
    "ENEMY_life_sum",
    "ENEMY_near_120",
    "ENEMY_nearest_dist",
    "ENEMY_nearest_life",
-   "ENEMY_pressure"
+   "ENEMY_phase_frac_mean",
+   "ENEMY_pressure",
+   "ENEMY_shoot_interval_mean",
+   "ENEMY_unique_indices"
   ],
   "POWER": [
    "POWER_deficit",
@@ -186,15 +192,18 @@
    "POWER_y_to_line"
   ],
   "BOSS": [
+   "BOSS_accepts_damage",
    "BOSS_align_safe",
    "BOSS_align_safe_margin",
    "BOSS_count",
    "BOSS_damage_window",
+   "BOSS_damageable",
    "BOSS_dx",
    "BOSS_life",
    "BOSS_life_log",
+   "BOSS_phase_frac",
    "BOSS_present",
-   "BOSS_spell"
+   "BOSS_shoot_interval"
   ],
   "EMERGENCY": [
    "EMERGENCY_all_blocked",
@@ -243,10 +252,21 @@
   "boss_life_delta_60": "spearman",
   "boss_life_delta_240": "spearman",
   "bomb_needed_60": "auc",
-  "bomb_used_60": "auc"
+  "bomb_used_60": "auc",
+  "attributed_spawns_60": "spearman"
  },
  "speed_mode": "config",
- "measured_speeds": [],
+ "measured_speeds": [
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null
+ ],
  "per_episode": [
   {
    "episode": "collect-ep01",
