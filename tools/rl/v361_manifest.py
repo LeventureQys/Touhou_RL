@@ -5,8 +5,27 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import subprocess
 import time
 from pathlib import Path
+
+
+def git_summary(root: Path) -> dict:
+    """Requirement doc §7 asks every experiment to save a git workspace summary."""
+
+    def run(*args: str) -> str:
+        try:
+            return subprocess.run(
+                ["git", *args], cwd=root, capture_output=True, text=True, timeout=30, check=False
+            ).stdout.strip()
+        except (OSError, subprocess.SubprocessError):
+            return ""
+
+    return {
+        "head": run("rev-parse", "HEAD"),
+        "branch": run("rev-parse", "--abbrev-ref", "HEAD"),
+        "dirty_files": len([line for line in run("status", "--porcelain").splitlines() if line.strip()]),
+    }
 
 
 def sha256_file(path: Path) -> str:
@@ -20,6 +39,7 @@ def sha256_file(path: Path) -> str:
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(prog="python tools/rl/v361_manifest.py")
     parser.add_argument("--root", type=Path, required=True)
+    parser.add_argument("--repo", type=Path, default=Path("."))
     args = parser.parse_args(argv)
 
     root = args.root
@@ -44,6 +64,12 @@ def main(argv: list[str] | None = None) -> int:
         "schema": "v361-evidence-manifest/1",
         "generated": time.strftime("%Y-%m-%dT%H:%M:%S"),
         "root": str(root).replace("\\", "/"),
+        "git": git_summary(args.repo),
+        # Requirement doc §7 also lists "checkpoint" per experiment.  T2 has none
+        # on purpose: both arms are rule-based controllers over AvoidPilot, so the
+        # reproducible artefact is the (configuration, arm_seed) pair recorded in
+        # every episode's metadata, not a saved model.
+        "checkpoint": None,
         "files": files,
         "excluded_caches": excluded,
         "totals": {"files": len(files), "bytes": sum(item["bytes"] for item in files)},

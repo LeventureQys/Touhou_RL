@@ -1,0 +1,479 @@
+{
+  "schema": "v360-verdict-index/1",
+  "generated": "2026-10-25T17:14:52",
+  "scope": {
+    "T0": "v3.6.0 reports/T0-首步快照核查.md（5 项门禁全部闭合）",
+    "T1": "v3.6.0 experiments/T1-ablation{,-D2,-D3}（7 策略 × 3 语料）",
+    "T2": "v3.6.1 experiments/t2-{enemy,power}（2 条准入策略 × 20 对真机）"
+  },
+  "admission": {
+    "rule": "v3.6.1 §1 范围修正：策略在自己的 T1 门上通过即可进入 T2；无阈值改动",
+    "admitted": [
+      "ENEMY",
+      "POWER"
+    ],
+    "rejected": {
+      "REGION": "fail",
+      "LURE": "fail",
+      "BOSS": "fail",
+      "EMERGENCY": "underpowered",
+      "HISTORY": "fail"
+    }
+  },
+  "rows": [
+    {
+      "strategy": "LocalDodge",
+      "name": "LocalDodge（局部避弹，对照）",
+      "t1": {
+        "D1": {
+          "verdict": "pass",
+          "gate_label": "death_60",
+          "absolute_value": 0.9560238527629832,
+          "increments": [],
+          "cells": 21156,
+          "episodes": 9,
+          "primary_delta": 0.638981513981514
+        },
+        "D2": {
+          "verdict": "pass",
+          "gate_label": "min_clearance_60",
+          "absolute_value": 0.8465164738339384,
+          "increments": [],
+          "cells": 30000,
+          "episodes": 6,
+          "primary_delta": 0.9257297403505564
+        },
+        "D3": {
+          "verdict": "pass",
+          "gate_label": "min_clearance_60",
+          "absolute_value": 0.8458342724811383,
+          "increments": [],
+          "cells": 30000,
+          "episodes": 6,
+          "primary_delta": 0.9235469039173959
+        }
+      },
+      "t2": null
+    },
+    {
+      "strategy": "REGION",
+      "name": "LeaveRegion（大范围危险区域）",
+      "t1": {
+        "D1": {
+          "verdict": "fail",
+          "gate_label": "in_region_60",
+          "absolute_value": 0.8663277258691904,
+          "increments": [
+            {
+              "label": "death_60",
+              "delta": -0.014797441427876201,
+              "p": 1.0
+            }
+          ],
+          "cells": 21156,
+          "episodes": 9,
+          "primary_delta": 0.02916585796206439
+        },
+        "D2": {
+          "verdict": "fail",
+          "gate_label": "in_region_60",
+          "absolute_value": 0.8599800064935021,
+          "increments": [
+            {
+              "label": "min_clearance_60",
+              "delta": -0.001772673348109044,
+              "p": 1.0
+            }
+          ],
+          "cells": 30000,
+          "episodes": 6,
+          "primary_delta": 0.010810812513514123
+        },
+        "D3": {
+          "verdict": "fail",
+          "gate_label": "in_region_60",
+          "absolute_value": 0.8605964186808563,
+          "increments": [
+            {
+              "label": "min_clearance_60",
+              "delta": -0.0023577853314765695,
+              "p": 1.0
+            }
+          ],
+          "cells": 30000,
+          "episodes": 6,
+          "primary_delta": 0.011058748741629043
+        }
+      },
+      "t2": null
+    },
+    {
+      "strategy": "LURE",
+      "name": "Lure / Reposition（诱导换边）",
+      "t1": {
+        "D1": {
+          "verdict": "fail",
+          "gate_label": "min_clearance_60",
+          "absolute_value": 0.9010769667468691,
+          "increments": [
+            {
+              "label": "min_clearance_60",
+              "delta": 0.02028252910013717,
+              "p": 0.004975124378109453
+            },
+            {
+              "label": "death_60",
+              "delta": -0.004064058411884508,
+              "p": 1.0
+            }
+          ],
+          "cells": 21156,
+          "episodes": 9,
+          "primary_delta": 0.02028252910013717
+        },
+        "D2": {
+          "verdict": "fail",
+          "gate_label": "min_clearance_60",
+          "absolute_value": 0.8479284730435325,
+          "increments": [
+            {
+              "label": "min_clearance_60",
+              "delta": 0.001411999209594117,
+              "p": 0.004975124378109453
+            }
+          ],
+          "cells": 30000,
+          "episodes": 6,
+          "primary_delta": 0.001411999209594117
+        },
+        "D3": {
+          "verdict": "fail",
+          "gate_label": "min_clearance_60",
+          "absolute_value": 0.8470894115648864,
+          "increments": [
+            {
+              "label": "min_clearance_60",
+              "delta": 0.0012551390837480803,
+              "p": 0.004975124378109453
+            }
+          ],
+          "cells": 30000,
+          "episodes": 6,
+          "primary_delta": 0.0012551390837480803
+        }
+      },
+      "t2": null
+    },
+    {
+      "strategy": "ENEMY",
+      "name": "ClearEnemy（主动清怪）",
+      "t1": {
+        "D1": {
+          "verdict": "fail",
+          "gate_label": "bullet_delta_60",
+          "absolute_value": 0.43895096665423694,
+          "increments": [
+            {
+              "label": "bullet_delta_60",
+              "delta": 0.0698621127594693,
+              "p": 0.004975124378109453
+            }
+          ],
+          "cells": 21156,
+          "episodes": 9,
+          "primary_delta": 0.0698621127594693
+        },
+        "D2": {
+          "verdict": "fail",
+          "gate_label": "bullet_delta_60",
+          "absolute_value": 0.37099379444237396,
+          "increments": [
+            {
+              "label": "bullet_delta_60",
+              "delta": 0.10999298554327269,
+              "p": 0.004975124378109453
+            }
+          ],
+          "cells": 30000,
+          "episodes": 6,
+          "primary_delta": 0.10999298554327269
+        },
+        "D3": {
+          "verdict": "pass",
+          "gate_label": "attributed_spawns_60",
+          "absolute_value": 0.5458730046208479,
+          "increments": [
+            {
+              "label": "attributed_spawns_60",
+              "delta": 0.1046830123073435,
+              "p": 0.004975124378109453
+            }
+          ],
+          "cells": 30000,
+          "episodes": 6,
+          "primary_delta": 0.1046830123073435
+        }
+      },
+      "t2": {
+        "arm": "clear_enemy",
+        "pairs": 20,
+        "primary": "attributed_spawns_per_decision",
+        "effect": 0.036290469829946576,
+        "effect_ci": [
+          -0.005344541526259377,
+          0.077197330589441
+        ],
+        "deaths_delta": -0.6,
+        "gates": {
+          "T2-E1_primary": false,
+          "T2-E2_survival": "retired (degenerate under truncation)",
+          "T2-E3_deaths": true,
+          "T2-E4_bombs": true,
+          "T2-E5_clearance": true
+        },
+        "verdict": "fail"
+      }
+    },
+    {
+      "strategy": "POWER",
+      "name": "CollectPower（条件收集 P）",
+      "t1": {
+        "D1": {
+          "verdict": "pass",
+          "gate_label": "p_collected_60",
+          "absolute_value": 0.825243237570316,
+          "increments": [
+            {
+              "label": "p_collected_60",
+              "delta": 0.04045841290054408,
+              "p": 0.004975124378109453
+            },
+            {
+              "label": "power_delta_60",
+              "delta": 0.16657005501594746,
+              "p": 0.004975124378109453
+            }
+          ],
+          "cells": 21156,
+          "episodes": 9,
+          "primary_delta": 0.04045841290054408
+        },
+        "D2": {
+          "verdict": "pass",
+          "gate_label": "p_collected_60",
+          "absolute_value": 0.9981978612598654,
+          "increments": [
+            {
+              "label": "p_collected_60",
+              "delta": 0.005254700807960311,
+              "p": 0.004975124378109453
+            },
+            {
+              "label": "power_delta_60",
+              "delta": 0.15293446377888226,
+              "p": 0.004975124378109453
+            }
+          ],
+          "cells": 30000,
+          "episodes": 6,
+          "primary_delta": 0.005254700807960311
+        },
+        "D3": {
+          "verdict": "pass",
+          "gate_label": "p_collected_60",
+          "absolute_value": 0.998180719328094,
+          "increments": [
+            {
+              "label": "p_collected_60",
+              "delta": 0.005320659980210807,
+              "p": 0.004975124378109453
+            },
+            {
+              "label": "power_delta_60",
+              "delta": 0.1534927528576518,
+              "p": 0.004975124378109453
+            }
+          ],
+          "cells": 30000,
+          "episodes": 6,
+          "primary_delta": 0.005320659980210807
+        }
+      },
+      "t2": {
+        "arm": "collect_power",
+        "pairs": 20,
+        "primary": "safe_power_gain_per_frame",
+        "effect": 10.693517796414309,
+        "effect_ci": [
+          7.433948620017128,
+          14.259027849099327
+        ],
+        "deaths_delta": 2.65,
+        "gates": {
+          "T2-E1_primary": true,
+          "T2-E2_survival": "retired (degenerate under truncation)",
+          "T2-E3_deaths": false,
+          "T2-E4_bombs": true,
+          "T2-E5_clearance": true
+        },
+        "verdict": "fail_safety"
+      }
+    },
+    {
+      "strategy": "BOSS",
+      "name": "BossDamage（输出窗口）",
+      "t1": {
+        "D1": {
+          "verdict": "unstable",
+          "gate_label": "boss_life_delta_60",
+          "absolute_value": 0.3688908145438986,
+          "increments": [
+            {
+              "label": "boss_life_delta_60",
+              "delta": -0.010743983080303332,
+              "p": 0.9900497512437811
+            }
+          ],
+          "cells": 21156,
+          "episodes": 9,
+          "primary_delta": -0.010743983080303332
+        },
+        "D2": {
+          "verdict": "fail",
+          "gate_label": "boss_life_delta_60",
+          "absolute_value": 0.4882100974274425,
+          "increments": [
+            {
+              "label": "boss_life_delta_60",
+              "delta": -0.06684755172230328,
+              "p": 1.0
+            }
+          ],
+          "cells": 30000,
+          "episodes": 6,
+          "primary_delta": -0.06684755172230328
+        },
+        "D3": {
+          "verdict": "fail",
+          "gate_label": "boss_life_delta_60",
+          "absolute_value": 0.4904102587973214,
+          "increments": [
+            {
+              "label": "boss_life_delta_60",
+              "delta": -0.06454870978338384,
+              "p": 1.0
+            }
+          ],
+          "cells": 30000,
+          "episodes": 6,
+          "primary_delta": -0.06454870978338384
+        }
+      },
+      "t2": null
+    },
+    {
+      "strategy": "EMERGENCY",
+      "name": "Emergency / Bomb",
+      "t1": {
+        "D1": {
+          "verdict": "fail",
+          "gate_label": "bomb_needed_60",
+          "absolute_value": 0.9573006411858226,
+          "increments": [
+            {
+              "label": "bomb_needed_60",
+              "delta": 0.0021932683636995964,
+              "p": 0.004975124378109453
+            }
+          ],
+          "cells": 21156,
+          "episodes": 9,
+          "primary_delta": 0.0021932683636995964
+        },
+        "D2": {
+          "verdict": "underpowered",
+          "gate_label": "bomb_needed_60",
+          "absolute_value": null,
+          "increments": [
+            {
+              "label": "bomb_needed_60",
+              "delta": null,
+              "p": null
+            }
+          ],
+          "cells": 30000,
+          "episodes": 6,
+          "primary_delta": null
+        },
+        "D3": {
+          "verdict": "underpowered",
+          "gate_label": "bomb_needed_60",
+          "absolute_value": null,
+          "increments": [
+            {
+              "label": "bomb_needed_60",
+              "delta": null,
+              "p": null
+            }
+          ],
+          "cells": 30000,
+          "episodes": 6,
+          "primary_delta": null
+        }
+      },
+      "t2": null
+    },
+    {
+      "strategy": "HISTORY",
+      "name": "Temporal encoder（历史块，§3.1）",
+      "t1": {
+        "D1": {
+          "verdict": "fail",
+          "gate_label": "death_60",
+          "absolute_value": 0.9556054501706676,
+          "increments": [
+            {
+              "label": "death_60",
+              "delta": -0.0004184025923156254,
+              "p": 0.9900497512437811
+            }
+          ],
+          "cells": 21156,
+          "episodes": 9,
+          "primary_delta": -0.0004184025923156254
+        },
+        "D2": {
+          "verdict": "fail",
+          "gate_label": "min_clearance_60",
+          "absolute_value": 0.8521739391767531,
+          "increments": [
+            {
+              "label": "min_clearance_60",
+              "delta": 0.005657465342814749,
+              "p": 0.004975124378109453
+            }
+          ],
+          "cells": 30000,
+          "episodes": 6,
+          "primary_delta": 0.005657465342814749
+        },
+        "D3": {
+          "verdict": "fail",
+          "gate_label": "min_clearance_60",
+          "absolute_value": 0.8514234106039911,
+          "increments": [
+            {
+              "label": "min_clearance_60",
+              "delta": 0.005589138122852777,
+              "p": 0.004975124378109453
+            }
+          ],
+          "cells": 30000,
+          "episodes": 6,
+          "primary_delta": 0.005589138122852777
+        }
+      },
+      "t2": null
+    }
+  ]
+}
