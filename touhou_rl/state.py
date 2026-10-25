@@ -239,9 +239,28 @@ class BulletField:
     disabled: np.ndarray  # (N,) int8
     half_size: np.ndarray  # (N, 2) float32
 
+    # Position/velocity magnitude below which an entry is considered zeroed.
+    _ZERO_EPS = 1e-3
+
     def active_mask(self) -> np.ndarray:
+        """Bullets that are really in flight.
+
+        ``state`` alone is not enough: the pool permanently holds one zeroed entry
+        whose state is neither ``BULLET_UNUSED`` nor ``BULLET_DESPAWNING``.  Its
+        position is exactly (0, 0) and its velocity exactly (0, 0), which cannot be
+        a real projectile because the playfield origin is (32, 16).  Leaving it in
+        made every snapshot claim one extra bullet, which also let the "first
+        snapshot is complete" check pass vacuously (the phantom matched itself).
+        """
         state = self.state
-        return (state != spec.BULLET_UNUSED) & (state != spec.BULLET_DESPAWNING) & (self.disabled == 0)
+        live = (state != spec.BULLET_UNUSED) & (state != spec.BULLET_DESPAWNING) & (self.disabled == 0)
+        zeroed = (
+            (np.abs(self.position[:, 0]) < self._ZERO_EPS)
+            & (np.abs(self.position[:, 1]) < self._ZERO_EPS)
+            & (np.abs(self.velocity[:, 0]) < self._ZERO_EPS)
+            & (np.abs(self.velocity[:, 1]) < self._ZERO_EPS)
+        )
+        return live & ~zeroed
 
 
 def _strided(buffer: np.ndarray, offset: int, shape: tuple[int, ...], dtype, stride: int):
