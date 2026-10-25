@@ -1,11 +1,11 @@
 {
   "schema": "v360-evidence-manifest/1",
-  "generated": "2026-10-25T14:24:33",
+  "generated": "2026-10-25T14:32:26",
   "root": "Document/Update/Alpha/v3.6.0",
   "git": {
-    "head": "c97f65f5537c96090c07ae1ec52e1e157a12ecd7",
+    "head": "6c8c329bfcb164449aef54a81e8afad5bef87001",
     "branch": "main",
-    "dirty_files": 116
+    "dirty_files": 128
   },
   "files": [
     {
@@ -25,7 +25,7 @@
     },
     {
       "path": "data/D3-inventory.json",
-      "sha256": "0d7ffa2b8c74bcc52aa0e1b826cedaeb011463c0a8b9e9ce27e01109fc0ee885",
+      "sha256": "55b5aa0743ad4d8fa5c1aaced7edd7c14df52a3b1d395fd7245e38318fe433f0",
       "bytes": 9450
     },
     {
@@ -84,6 +84,16 @@
       "bytes": 3895
     },
     {
+      "path": "evidence/region-stratified-fixedwidth.json",
+      "sha256": "b12524b9fc8aeb53e7e43b9e98a7981b11ac94a44d0136c05ea2ba09b4e60605",
+      "bytes": 7352
+    },
+    {
+      "path": "evidence/region-stratified.json",
+      "sha256": "4d4662b6ed90b823a68022c884f566700e1c4c9a473a0ac9d45a8105c6d6d453",
+      "bytes": 2416
+    },
+    {
       "path": "experiments/comparison-D1-D2-D3.md",
       "sha256": "cf6f92ac44763c5822edfc94f378ea1675a5b374201ca0542c9f2a3cc644956c",
       "bytes": 5251
@@ -124,6 +134,36 @@
       "bytes": 12919
     },
     {
+      "path": "experiments/T1b-g3-diagnosis/ALL/ablation.json",
+      "sha256": "8e16f9d273ad0ea66a1c4406b68f77c4cee31d42b83e50a9516c58432eced6db",
+      "bytes": 30392
+    },
+    {
+      "path": "experiments/T1b-g3-diagnosis/ALL/ablation.md",
+      "sha256": "8d014c4416a0a06cfce3d5036059c0404e74e19231aa80c528062907a1f37954",
+      "bytes": 12918
+    },
+    {
+      "path": "experiments/T1b-g3-diagnosis/DIAG-CORE/ablation.json",
+      "sha256": "1122262c8aa04ac6040a3dd366b8c3c2878891811e99f083a2fb9fd774c16cc6",
+      "bytes": 30236
+    },
+    {
+      "path": "experiments/T1b-g3-diagnosis/DIAG-CORE/ablation.md",
+      "sha256": "d6f8bdfa87a44f765753d479dae06abd0138bd1faa9751d6aaa169022d890847",
+      "bytes": 12918
+    },
+    {
+      "path": "experiments/T1b-g3-diagnosis/DIAG-noNEG/ablation.json",
+      "sha256": "6621eb624bcc46429310353242e9bfb253345037d31e3cf6cb2c57690de9ac07",
+      "bytes": 30367
+    },
+    {
+      "path": "experiments/T1b-g3-diagnosis/DIAG-noNEG/ablation.md",
+      "sha256": "0a28b795a6126e34dcce973364b80b4abd0b71bc2c73466b564decf1a523863e",
+      "bytes": 12918
+    },
+    {
       "path": "reports/T0-T1报告.md",
       "sha256": "b6a5eee83f1caead3bbed51b60a5916f971c0dd6632a2a067d38e8b215b5a9be",
       "bytes": 17559
@@ -135,8 +175,18 @@
     },
     {
       "path": "reports/T1-D3报告.md",
-      "sha256": "89038372c9350a681c72e888916e26d86569d20426dffc6ced3f3b60fea44c3f",
-      "bytes": 11907
+      "sha256": "083d91b1a3358bea4ee7eea3c07f28968b3620f1acaeed1e6799ee1bb5a0ff14",
+      "bytes": 12694
+    },
+    {
+      "path": "reports/T1b-G3诊断.md",
+      "sha256": "a73c514dc3c66179bad39c522259cdf590e654ac8bc0b9f18dd40ca1007b194d",
+      "bytes": 6023
+    },
+    {
+      "path": "reports/T1c-T1d-REGION条件化.md",
+      "sha256": "664c54da587941bbbcbaf3768b564fc25a7d3787d2e4c707d32b0b25c065602c",
+      "bytes": 7421
     },
     {
       "path": "reports/标签来源调查.md",
@@ -152,6 +202,21 @@
       "path": "执行计划-D3补遗.md",
       "sha256": "42fc8e5004adef909923c9d5d9ec4b4aa964d3fa02eb2b32b9e8477ad115a78e",
       "bytes": 5353
+    },
+    {
+      "path": "执行计划-T1b补遗.md",
+      "sha256": "61cd83bae3d0a3cef496b19e74edb24c3850051e81b8668438ff1d7cd5a07cf4",
+      "bytes": 4047
+    },
+    {
+      "path": "执行计划-T1c补遗.md",
+      "sha256": "556b862c832af56070494ae5d2f5791fb75be9651c6089290dc39273a403498a",
+      "bytes": 4301
+    },
+    {
+      "path": "执行计划-T1d补遗.md",
+      "sha256": "5cde5a3719b1a6bb0c4cc014e577248ebe0c861c9979507e67fb753640d63c07",
+      "bytes": 3527
     },
     {
       "path": "执行计划.md",
@@ -198,7 +263,7 @@
     "data/probe/d3-fields/trace/replay-ep06.jsonl"
   ],
   "totals": {
-    "files": 31,
-    "bytes": 322260
+    "files": 44,
+    "bytes": 487883
   }
 }

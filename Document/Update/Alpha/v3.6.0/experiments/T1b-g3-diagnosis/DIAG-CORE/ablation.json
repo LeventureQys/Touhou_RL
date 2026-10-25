@@ -1,0 +1,1050 @@
+{
+  "schema": "v360-ablation/1",
+  "generated": "2026-10-25T14:29:22",
+  "source": "Document\\Update\\Alpha\\v3.6.0\\data\\probe\\d3-fields",
+  "protocol": {
+    "gate_set": "d3",
+    "global_blocks": [
+      "BASE",
+      "ENEMY",
+      "POWER"
+    ],
+    "cv": "leave-one-episode-out",
+    "model": "ridge",
+    "lambda": 1.0,
+    "stride": 1,
+    "seed": 3600,
+    "permutations": 60,
+    "short_horizon_decisions": 30,
+    "mid_horizon_decisions": 120,
+    "frozen_before_results": true
+  },
+  "inventory": {
+    "episodes": 6,
+    "rows": 30000,
+    "blocks": {
+      "BASE": 11,
+      "REGION": 40,
+      "LURE": 13,
+      "ENEMY": 17,
+      "POWER": 12,
+      "BOSS": 12,
+      "EMERGENCY": 7,
+      "HISTORY": 20
+    },
+    "columns": {
+      "BASE": [
+        "BASE_boss_hp",
+        "BASE_bullets_near_120",
+        "BASE_bullets_near_60",
+        "BASE_clearance",
+        "BASE_horizon_best",
+        "BASE_horizon_mean",
+        "BASE_horizon_worst",
+        "BASE_n_bullets",
+        "BASE_power",
+        "BASE_stage_frames",
+        "BASE_survivable_actions"
+      ],
+      "REGION": [
+        "REGION_centroid_x_rel",
+        "REGION_centroid_y_rel",
+        "REGION_den8_t0",
+        "REGION_den8_t10",
+        "REGION_den8_t20",
+        "REGION_den8_t40",
+        "REGION_den8_t60",
+        "REGION_dense16_t0",
+        "REGION_dense16_t10",
+        "REGION_dense16_t20",
+        "REGION_dense16_t40",
+        "REGION_dense16_t60",
+        "REGION_exit_area",
+        "REGION_exit_dx",
+        "REGION_exit_dy",
+        "REGION_exit_ring",
+        "REGION_expand_norm",
+        "REGION_expand_x",
+        "REGION_expand_y",
+        "REGION_in_region20",
+        "REGION_in_region40",
+        "REGION_occ16_t0",
+        "REGION_occ16_t10",
+        "REGION_occ16_t20",
+        "REGION_occ16_t40",
+        "REGION_occ16_t60",
+        "REGION_occ8_t0",
+        "REGION_occ8_t10",
+        "REGION_occ8_t20",
+        "REGION_occ8_t40",
+        "REGION_occ8_t60",
+        "REGION_path_density",
+        "REGION_player_comp20",
+        "REGION_player_comp40",
+        "REGION_union_comp",
+        "REGION_union_frac",
+        "REGION_wall_bottom",
+        "REGION_wall_left",
+        "REGION_wall_min",
+        "REGION_wall_right"
+      ],
+      "LURE": [
+        "LURE_aim_left",
+        "LURE_aim_point_dx",
+        "LURE_aim_right",
+        "LURE_aimed_60",
+        "LURE_aimed_count",
+        "LURE_aimed_ttc_mean",
+        "LURE_aimed_ttc_min",
+        "LURE_approach_count",
+        "LURE_corridor_20",
+        "LURE_crosstrack_rate",
+        "LURE_exit_progress",
+        "LURE_room_left",
+        "LURE_room_right"
+      ],
+      "ENEMY": [
+        "ENEMY_above",
+        "ENEMY_attributed_spawns",
+        "ENEMY_boss_damageable",
+        "ENEMY_boss_slots",
+        "ENEMY_column_threat",
+        "ENEMY_count",
+        "ENEMY_damageable_count",
+        "ENEMY_item_drop",
+        "ENEMY_life_frac_mean",
+        "ENEMY_life_sum",
+        "ENEMY_near_120",
+        "ENEMY_nearest_dist",
+        "ENEMY_nearest_life",
+        "ENEMY_phase_frac_mean",
+        "ENEMY_pressure",
+        "ENEMY_shoot_interval_mean",
+        "ENEMY_unique_indices"
+      ],
+      "POWER": [
+        "POWER_deficit",
+        "POWER_deficit_frac",
+        "POWER_p_above_line",
+        "POWER_p_count",
+        "POWER_p_max_value",
+        "POWER_p_mean_y",
+        "POWER_p_nearest",
+        "POWER_p_onscreen",
+        "POWER_power",
+        "POWER_rate",
+        "POWER_up_clearance",
+        "POWER_y_to_line"
+      ],
+      "BOSS": [
+        "BOSS_accepts_damage",
+        "BOSS_align_safe",
+        "BOSS_align_safe_margin",
+        "BOSS_count",
+        "BOSS_damage_window",
+        "BOSS_damageable",
+        "BOSS_dx",
+        "BOSS_life",
+        "BOSS_life_log",
+        "BOSS_phase_frac",
+        "BOSS_present",
+        "BOSS_shoot_interval"
+      ],
+      "EMERGENCY": [
+        "EMERGENCY_all_blocked",
+        "EMERGENCY_best_route",
+        "EMERGENCY_bombs",
+        "EMERGENCY_deaths",
+        "EMERGENCY_lives",
+        "EMERGENCY_player_state",
+        "EMERGENCY_routes"
+      ],
+      "HISTORY": [
+        "HISTORY_bullets1",
+        "HISTORY_bullets2",
+        "HISTORY_bullets3",
+        "HISTORY_bullets4",
+        "HISTORY_clear1",
+        "HISTORY_clear2",
+        "HISTORY_clear3",
+        "HISTORY_clear4",
+        "HISTORY_d_bullets",
+        "HISTORY_d_clear",
+        "HISTORY_d_power",
+        "HISTORY_d_py",
+        "HISTORY_power1",
+        "HISTORY_power2",
+        "HISTORY_power3",
+        "HISTORY_power4",
+        "HISTORY_py1",
+        "HISTORY_py2",
+        "HISTORY_py3",
+        "HISTORY_py4"
+      ]
+    },
+    "labels": {
+      "death_60": "auc",
+      "death_240": "auc",
+      "min_clearance_60": "spearman",
+      "min_clearance_240": "spearman",
+      "danger_60": "spearman",
+      "in_region_60": "auc",
+      "bullet_delta_60": "spearman",
+      "bullet_delta_240": "spearman",
+      "power_delta_60": "spearman",
+      "power_delta_240": "spearman",
+      "p_collected_60": "auc",
+      "boss_life_delta_60": "spearman",
+      "boss_life_delta_240": "spearman",
+      "bomb_needed_60": "auc",
+      "bomb_used_60": "auc",
+      "attributed_spawns_60": "spearman"
+    },
+    "speed_mode": "measure",
+    "measured_speeds": [
+      {
+        "speed": 5.0,
+        "focus_speed": 1.9,
+        "speed_diag": 3.5355339059327373,
+        "focus_speed_diag": 1.34350288425444,
+        "samples_axis_normal": 1280,
+        "samples_axis_focus": 1000,
+        "samples_diag_normal": 343,
+        "samples_diag_focus": 138,
+        "fallback": []
+      },
+      {
+        "speed": 5.0,
+        "focus_speed": 1.9,
+        "speed_diag": 3.5355339059327373,
+        "focus_speed_diag": 1.34350288425444,
+        "samples_axis_normal": 1399,
+        "samples_axis_focus": 303,
+        "samples_diag_normal": 395,
+        "samples_diag_focus": 55,
+        "fallback": []
+      },
+      {
+        "speed": 4.0,
+        "focus_speed": 2.0,
+        "speed_diag": 2.82842712474619,
+        "focus_speed_diag": 1.414213562373095,
+        "samples_axis_normal": 1319,
+        "samples_axis_focus": 479,
+        "samples_diag_normal": 400,
+        "samples_diag_focus": 162,
+        "fallback": []
+      },
+      {
+        "speed": 5.0,
+        "focus_speed": 2.2,
+        "speed_diag": 3.5355339059327373,
+        "focus_speed_diag": 1.5556349186104046,
+        "samples_axis_normal": 1278,
+        "samples_axis_focus": 187,
+        "samples_diag_normal": 479,
+        "samples_diag_focus": 80,
+        "fallback": []
+      },
+      {
+        "speed": 4.0,
+        "focus_speed": 2.3,
+        "speed_diag": 2.82842712474619,
+        "focus_speed_diag": 1.626345596729059,
+        "samples_axis_normal": 1452,
+        "samples_axis_focus": 396,
+        "samples_diag_normal": 340,
+        "samples_diag_focus": 198,
+        "fallback": []
+      },
+      {
+        "speed": 5.0,
+        "focus_speed": 1.9,
+        "speed_diag": 3.5355339059327373,
+        "focus_speed_diag": 1.34350288425444,
+        "samples_axis_normal": 1084,
+        "samples_axis_focus": 243,
+        "samples_diag_normal": 415,
+        "samples_diag_focus": 23,
+        "fallback": []
+      }
+    ],
+    "per_episode": [
+      {
+        "episode": "replay-ep01",
+        "split": "train",
+        "decisions": 5000,
+        "deaths": 0,
+        "death_60_positives": 0,
+        "bomb_used_60_positives": 30,
+        "p_collected_60_positives": 4672,
+        "boss_present_decisions": 2812
+      },
+      {
+        "episode": "replay-ep02",
+        "split": "train",
+        "decisions": 5000,
+        "deaths": 0,
+        "death_60_positives": 0,
+        "bomb_used_60_positives": 0,
+        "p_collected_60_positives": 4761,
+        "boss_present_decisions": 2662
+      },
+      {
+        "episode": "replay-ep03",
+        "split": "train",
+        "decisions": 5000,
+        "deaths": 0,
+        "death_60_positives": 0,
+        "bomb_used_60_positives": 0,
+        "p_collected_60_positives": 4694,
+        "boss_present_decisions": 2814
+      },
+      {
+        "episode": "replay-ep04",
+        "split": "train",
+        "decisions": 5000,
+        "deaths": 0,
+        "death_60_positives": 0,
+        "bomb_used_60_positives": 0,
+        "p_collected_60_positives": 4697,
+        "boss_present_decisions": 2807
+      },
+      {
+        "episode": "replay-ep05",
+        "split": "train",
+        "decisions": 5000,
+        "deaths": 0,
+        "death_60_positives": 0,
+        "bomb_used_60_positives": 0,
+        "p_collected_60_positives": 4709,
+        "boss_present_decisions": 2827
+      },
+      {
+        "episode": "replay-ep06",
+        "split": "train",
+        "decisions": 5000,
+        "deaths": 0,
+        "death_60_positives": 0,
+        "bomb_used_60_positives": 0,
+        "p_collected_60_positives": 4770,
+        "boss_present_decisions": 2819
+      }
+    ]
+  },
+  "cells": [
+    {
+      "owner": "LocalDodge",
+      "strategy": "LocalDodge",
+      "role": "primary",
+      "block": "BASE",
+      "label": "min_clearance_60",
+      "kind": "spearman",
+      "direction": "add-one-in",
+      "base_blocks": [],
+      "without": -0.07771263143625759,
+      "with": 0.8458342724811383,
+      "without_ep": null,
+      "with_ep": 0.8488289524976885,
+      "delta": 0.9235469039173959,
+      "delta_ep": null,
+      "permutation_p": 0.01639344262295082,
+      "permutation_null_mean": 0.03340517898476945,
+      "permutation_null_std": 0.012616998563619303,
+      "null_degenerate": false,
+      "permutations": 60,
+      "n_samples": 29820,
+      "positives": null,
+      "brier_with": 0.07421662098468058,
+      "brier_without": 0.06797451374916164
+    },
+    {
+      "owner": "REGION",
+      "strategy": "REGION",
+      "role": "primary",
+      "block": "REGION",
+      "label": "in_region_60",
+      "kind": "auc",
+      "direction": "add-one-in",
+      "base_blocks": [
+        "BASE"
+      ],
+      "without": 0.8495376699392273,
+      "with": 0.8605964186808563,
+      "without_ep": 0.8499206795019466,
+      "with_ep": 0.8607022481918553,
+      "delta": 0.011058748741629043,
+      "delta_ep": 0.01078156868990865,
+      "permutation_p": 0.01639344262295082,
+      "permutation_null_mean": -0.0011490736720214092,
+      "permutation_null_std": 0.000442527866141952,
+      "null_degenerate": false,
+      "permutations": 60,
+      "n_samples": 29820,
+      "positives": 4383,
+      "brier_with": 0.08970329987427011,
+      "brier_without": 0.09192011764863821
+    },
+    {
+      "owner": "REGION",
+      "strategy": "REGION::min_clearance_60",
+      "role": "increment",
+      "block": "REGION",
+      "label": "min_clearance_60",
+      "kind": "spearman",
+      "direction": "add-one-in",
+      "base_blocks": [
+        "BASE"
+      ],
+      "without": 0.8458342724811383,
+      "with": 0.8434764871496617,
+      "without_ep": 0.8488289524976885,
+      "with_ep": 0.8467628631805013,
+      "delta": -0.0023577853314765695,
+      "delta_ep": -0.002066089317187214,
+      "permutation_p": 1.0,
+      "permutation_null_mean": 0.0002810531304272779,
+      "permutation_null_std": 0.00034027629016188376,
+      "null_degenerate": false,
+      "permutations": 60,
+      "n_samples": 29820,
+      "positives": null,
+      "brier_with": 0.08456038213775402,
+      "brier_without": 0.07421662098468058
+    },
+    {
+      "owner": "LURE",
+      "strategy": "LURE",
+      "role": "primary",
+      "block": "LURE",
+      "label": "min_clearance_60",
+      "kind": "spearman",
+      "direction": "add-one-in",
+      "base_blocks": [
+        "BASE"
+      ],
+      "without": 0.8458342724811383,
+      "with": 0.8470894115648864,
+      "without_ep": 0.8488289524976885,
+      "with_ep": 0.8511388869344677,
+      "delta": 0.0012551390837480803,
+      "delta_ep": 0.002309934436779182,
+      "permutation_p": 0.01639344262295082,
+      "permutation_null_mean": 0.0004159698790484723,
+      "permutation_null_std": 0.000262037900983634,
+      "null_degenerate": false,
+      "permutations": 60,
+      "n_samples": 29820,
+      "positives": null,
+      "brier_with": 0.07523650516613793,
+      "brier_without": 0.07421662098468058
+    },
+    {
+      "owner": "ENEMY",
+      "strategy": "ENEMY",
+      "role": "primary",
+      "block": "ENEMY",
+      "label": "attributed_spawns_60",
+      "kind": "spearman",
+      "direction": "add-one-in",
+      "base_blocks": [
+        "BASE"
+      ],
+      "without": 0.44118999231350436,
+      "with": 0.5458730046208479,
+      "without_ep": 0.4362199267342879,
+      "with_ep": 0.5419659923698376,
+      "delta": 0.1046830123073435,
+      "delta_ep": 0.10574606563554967,
+      "permutation_p": 0.01639344262295082,
+      "permutation_null_mean": -0.0002208779182089356,
+      "permutation_null_std": 0.00047058764883738943,
+      "null_degenerate": false,
+      "permutations": 60,
+      "n_samples": 29820,
+      "positives": null,
+      "brier_with": 0.42151456516131947,
+      "brier_without": 0.4574628271136562
+    },
+    {
+      "owner": "ENEMY",
+      "strategy": "ENEMY::bullet_delta_60",
+      "role": "extra",
+      "block": "ENEMY",
+      "label": "bullet_delta_60",
+      "kind": "spearman",
+      "direction": "add-one-in",
+      "base_blocks": [
+        "BASE"
+      ],
+      "without": 0.2608070234524256,
+      "with": 0.39004027865568797,
+      "without_ep": 0.2633082900425199,
+      "with_ep": 0.3908742086560297,
+      "delta": 0.12923325520326234,
+      "delta_ep": 0.1275659186135098,
+      "permutation_p": 0.01639344262295082,
+      "permutation_null_mean": -0.0006071825817460241,
+      "permutation_null_std": 0.00040043328576904683,
+      "null_degenerate": false,
+      "permutations": 60,
+      "n_samples": 29820,
+      "positives": null,
+      "brier_with": 0.35328339445836393,
+      "brier_without": 0.4315582699348309
+    },
+    {
+      "owner": "POWER",
+      "strategy": "POWER",
+      "role": "primary",
+      "block": "POWER",
+      "label": "p_collected_60",
+      "kind": "auc",
+      "direction": "add-one-in",
+      "base_blocks": [
+        "BASE"
+      ],
+      "without": 0.9928600593478832,
+      "with": 0.998180719328094,
+      "without_ep": 0.994758909898161,
+      "with_ep": 0.9980886454379343,
+      "delta": 0.005320659980210807,
+      "delta_ep": 0.0033297355397733375,
+      "permutation_p": 0.01639344262295082,
+      "permutation_null_mean": -3.5603668072684927e-06,
+      "permutation_null_std": 6.475178578581812e-05,
+      "null_degenerate": false,
+      "permutations": 60,
+      "n_samples": 29820,
+      "positives": 28303,
+      "brier_with": 0.023035027972187323,
+      "brier_without": 0.029126436500536226
+    },
+    {
+      "owner": "POWER",
+      "strategy": "POWER::power_delta_60",
+      "role": "increment",
+      "block": "POWER",
+      "label": "power_delta_60",
+      "kind": "spearman",
+      "direction": "add-one-in",
+      "base_blocks": [
+        "BASE"
+      ],
+      "without": 0.32617600724529977,
+      "with": 0.47966876010295156,
+      "without_ep": 0.32430990675381105,
+      "with_ep": 0.4832493860262705,
+      "delta": 0.1534927528576518,
+      "delta_ep": 0.15893947927245944,
+      "permutation_p": 0.01639344262295082,
+      "permutation_null_mean": -0.000717348219710769,
+      "permutation_null_std": 0.00030344224255880297,
+      "null_degenerate": false,
+      "permutations": 60,
+      "n_samples": 29820,
+      "positives": null,
+      "brier_with": 0.1881141664230783,
+      "brier_without": 0.3763770980933426
+    },
+    {
+      "owner": "BOSS",
+      "strategy": "BOSS",
+      "role": "primary",
+      "block": "BOSS",
+      "label": "boss_life_delta_60",
+      "kind": "spearman",
+      "direction": "add-one-in",
+      "base_blocks": [
+        "BASE"
+      ],
+      "without": 0.5549589685807053,
+      "with": 0.4904102587973214,
+      "without_ep": 0.5450967488818054,
+      "with_ep": 0.4919835838615508,
+      "delta": -0.06454870978338384,
+      "delta_ep": -0.053113165020254594,
+      "permutation_p": 1.0,
+      "permutation_null_mean": -0.004059309492938662,
+      "permutation_null_std": 0.0015047700614248185,
+      "null_degenerate": false,
+      "permutations": 60,
+      "n_samples": 16741,
+      "positives": null,
+      "brier_with": 0.3427285748853633,
+      "brier_without": 0.3023243600304669
+    },
+    {
+      "owner": "EMERGENCY",
+      "strategy": "EMERGENCY",
+      "role": "primary",
+      "block": "EMERGENCY",
+      "label": "bomb_needed_60",
+      "kind": "auc",
+      "direction": "add-one-in",
+      "base_blocks": [
+        "BASE"
+      ],
+      "without": null,
+      "with": null,
+      "without_ep": null,
+      "with_ep": null,
+      "delta": null,
+      "delta_ep": null,
+      "permutation_p": null,
+      "permutation_null_mean": null,
+      "permutation_null_std": null,
+      "null_degenerate": null,
+      "permutations": 60,
+      "n_samples": 29820,
+      "positives": 0,
+      "brier_with": 0.0,
+      "brier_without": 0.0
+    },
+    {
+      "owner": "EMERGENCY",
+      "strategy": "EMERGENCY::bomb_used_60",
+      "role": "extra",
+      "block": "EMERGENCY",
+      "label": "bomb_used_60",
+      "kind": "auc",
+      "direction": "add-one-in",
+      "base_blocks": [
+        "BASE"
+      ],
+      "without": 0.3328633769721383,
+      "with": 0.36928499496475325,
+      "without_ep": 0.5,
+      "with_ep": 0.5,
+      "delta": 0.03642161799261495,
+      "delta_ep": 0.0,
+      "permutation_p": 0.01639344262295082,
+      "permutation_null_mean": -0.014699004140091756,
+      "permutation_null_std": 0.010214461003375464,
+      "null_degenerate": false,
+      "permutations": 60,
+      "n_samples": 29820,
+      "positives": 30,
+      "brier_with": 0.0010140927778945232,
+      "brier_without": 0.001012015917250374
+    },
+    {
+      "owner": "HISTORY",
+      "strategy": "HISTORY",
+      "role": "primary",
+      "block": "HISTORY",
+      "label": "min_clearance_60",
+      "kind": "spearman",
+      "direction": "add-one-in",
+      "base_blocks": [
+        "BASE"
+      ],
+      "without": 0.8458342724811383,
+      "with": 0.8514234106039911,
+      "without_ep": 0.8488289524976885,
+      "with_ep": 0.8532556332227214,
+      "delta": 0.005589138122852777,
+      "delta_ep": 0.004426680725032828,
+      "permutation_p": 0.01639344262295082,
+      "permutation_null_mean": 0.0001408102466405825,
+      "permutation_null_std": 0.0002446556611211851,
+      "null_degenerate": false,
+      "permutations": 60,
+      "n_samples": 29820,
+      "positives": null,
+      "brier_with": 0.07540203031132013,
+      "brier_without": 0.07421662098468058
+    }
+  ],
+  "global_cells": {
+    "ALL_vs_BASE_min_clearance_60": {
+      "label": "min_clearance_60",
+      "kind": "spearman",
+      "without": 0.8458342724811383,
+      "with": 0.8496340345804029,
+      "without_ep": 0.8488289524976885,
+      "with_ep": 0.8519711339084012,
+      "delta": 0.003799762099264581,
+      "delta_ep": 0.0031421814107126522,
+      "permutation_p": 0.01639344262295082,
+      "permutations": 60
+    }
+  },
+  "global_blocks": [
+    "BASE",
+    "ENEMY",
+    "POWER"
+  ],
+  "verdicts": {
+    "per_strategy": {
+      "LocalDodge": {
+        "verdict": "pass",
+        "stability": "stable",
+        "primary_label": "min_clearance_60",
+        "absolute_gate": [
+          "spearman",
+          0.3
+        ],
+        "absolute_value": 0.8458342724811383,
+        "absolute_value_ep": 0.8488289524976885,
+        "absolute_brier": 0.07421662098468058,
+        "absolute_pass": true,
+        "increment_combine": null,
+        "increments": [],
+        "increment_pass": true,
+        "n_samples": 29820,
+        "positives": null,
+        "pooled_vs_ep_agree": null
+      },
+      "REGION": {
+        "verdict": "fail",
+        "stability": "stable",
+        "primary_label": "in_region_60",
+        "absolute_gate": [
+          "auc",
+          0.8
+        ],
+        "absolute_value": 0.8605964186808563,
+        "absolute_value_ep": 0.8607022481918553,
+        "absolute_brier": 0.08970329987427011,
+        "absolute_pass": true,
+        "increment_combine": "and",
+        "increments": [
+          {
+            "label": "min_clearance_60",
+            "metric": "spearman",
+            "threshold": 0.05,
+            "combine": "and",
+            "delta": -0.0023577853314765695,
+            "delta_ep": -0.002066089317187214,
+            "p": 1.0,
+            "null_degenerate": false,
+            "positive": false,
+            "macro_ok": false,
+            "significant": false,
+            "sign_agrees": true,
+            "pass": false
+          }
+        ],
+        "increment_pass": false,
+        "n_samples": 29820,
+        "positives": 4383,
+        "pooled_vs_ep_agree": true
+      },
+      "LURE": {
+        "verdict": "fail",
+        "stability": "stable",
+        "primary_label": "min_clearance_60",
+        "absolute_gate": [
+          "spearman",
+          0.3
+        ],
+        "absolute_value": 0.8470894115648864,
+        "absolute_value_ep": 0.8511388869344677,
+        "absolute_brier": 0.07523650516613793,
+        "absolute_pass": true,
+        "increment_combine": "or",
+        "increments": [
+          {
+            "label": "min_clearance_60",
+            "metric": "spearman",
+            "threshold": 0.05,
+            "combine": "or",
+            "delta": 0.0012551390837480803,
+            "delta_ep": 0.002309934436779182,
+            "p": 0.01639344262295082,
+            "null_degenerate": false,
+            "positive": false,
+            "macro_ok": false,
+            "significant": true,
+            "sign_agrees": true,
+            "pass": false
+          }
+        ],
+        "increment_pass": false,
+        "n_samples": 29820,
+        "positives": null,
+        "pooled_vs_ep_agree": true
+      },
+      "ENEMY": {
+        "verdict": "pass",
+        "stability": "stable",
+        "primary_label": "attributed_spawns_60",
+        "absolute_gate": [
+          "spearman",
+          0.5
+        ],
+        "absolute_value": 0.5458730046208479,
+        "absolute_value_ep": 0.5419659923698376,
+        "absolute_brier": 0.42151456516131947,
+        "absolute_pass": true,
+        "increment_combine": "and",
+        "increments": [
+          {
+            "label": "attributed_spawns_60",
+            "metric": "spearman",
+            "threshold": 0.05,
+            "combine": "and",
+            "delta": 0.1046830123073435,
+            "delta_ep": 0.10574606563554967,
+            "p": 0.01639344262295082,
+            "null_degenerate": false,
+            "positive": true,
+            "macro_ok": true,
+            "significant": true,
+            "sign_agrees": true,
+            "pass": true
+          }
+        ],
+        "increment_pass": true,
+        "n_samples": 29820,
+        "positives": null,
+        "pooled_vs_ep_agree": true
+      },
+      "POWER": {
+        "verdict": "pass",
+        "stability": "stable",
+        "primary_label": "p_collected_60",
+        "absolute_gate": [
+          "auc",
+          0.6
+        ],
+        "absolute_value": 0.998180719328094,
+        "absolute_value_ep": 0.9980886454379343,
+        "absolute_brier": 0.023035027972187323,
+        "absolute_pass": true,
+        "increment_combine": "or",
+        "increments": [
+          {
+            "label": "p_collected_60",
+            "metric": "auc",
+            "threshold": 0.02,
+            "combine": "or",
+            "delta": 0.005320659980210807,
+            "delta_ep": 0.0033297355397733375,
+            "p": 0.01639344262295082,
+            "null_degenerate": false,
+            "positive": false,
+            "macro_ok": false,
+            "significant": true,
+            "sign_agrees": true,
+            "pass": false
+          },
+          {
+            "label": "power_delta_60",
+            "metric": "spearman",
+            "threshold": 0.05,
+            "combine": "or",
+            "delta": 0.1534927528576518,
+            "delta_ep": 0.15893947927245944,
+            "p": 0.01639344262295082,
+            "null_degenerate": false,
+            "positive": true,
+            "macro_ok": true,
+            "significant": true,
+            "sign_agrees": true,
+            "pass": true
+          }
+        ],
+        "increment_pass": true,
+        "n_samples": 29820,
+        "positives": 28303,
+        "pooled_vs_ep_agree": true
+      },
+      "BOSS": {
+        "verdict": "fail",
+        "stability": "stable",
+        "primary_label": "boss_life_delta_60",
+        "absolute_gate": [
+          "spearman",
+          0.3
+        ],
+        "absolute_value": 0.4904102587973214,
+        "absolute_value_ep": 0.4919835838615508,
+        "absolute_brier": 0.3427285748853633,
+        "absolute_pass": true,
+        "increment_combine": "and",
+        "increments": [
+          {
+            "label": "boss_life_delta_60",
+            "metric": "spearman",
+            "threshold": 0.05,
+            "combine": "and",
+            "delta": -0.06454870978338384,
+            "delta_ep": -0.053113165020254594,
+            "p": 1.0,
+            "null_degenerate": false,
+            "positive": false,
+            "macro_ok": false,
+            "significant": false,
+            "sign_agrees": true,
+            "pass": false
+          }
+        ],
+        "increment_pass": false,
+        "n_samples": 16741,
+        "positives": null,
+        "pooled_vs_ep_agree": true
+      },
+      "EMERGENCY": {
+        "verdict": "underpowered",
+        "stability": "stable",
+        "primary_label": "bomb_needed_60",
+        "absolute_gate": [
+          "brier",
+          0.2
+        ],
+        "absolute_value": null,
+        "absolute_value_ep": null,
+        "absolute_brier": 0.0,
+        "absolute_pass": true,
+        "increment_combine": "and",
+        "increments": [
+          {
+            "label": "bomb_needed_60",
+            "metric": "auc",
+            "threshold": 0.02,
+            "combine": "and",
+            "delta": null,
+            "delta_ep": null,
+            "p": null,
+            "null_degenerate": null,
+            "positive": false,
+            "macro_ok": false,
+            "significant": false,
+            "sign_agrees": null,
+            "pass": false
+          }
+        ],
+        "increment_pass": false,
+        "n_samples": 29820,
+        "positives": 0,
+        "pooled_vs_ep_agree": null
+      },
+      "HISTORY": {
+        "verdict": "fail",
+        "stability": "stable",
+        "primary_label": "min_clearance_60",
+        "absolute_gate": null,
+        "absolute_value": 0.8514234106039911,
+        "absolute_value_ep": 0.8532556332227214,
+        "absolute_brier": 0.07540203031132013,
+        "absolute_pass": true,
+        "increment_combine": "and",
+        "increments": [
+          {
+            "label": "min_clearance_60",
+            "metric": "spearman",
+            "threshold": 0.05,
+            "combine": "and",
+            "delta": 0.005589138122852777,
+            "delta_ep": 0.004426680725032828,
+            "p": 0.01639344262295082,
+            "null_degenerate": false,
+            "positive": false,
+            "macro_ok": false,
+            "significant": true,
+            "sign_agrees": true,
+            "pass": false
+          }
+        ],
+        "increment_pass": false,
+        "n_samples": 29820,
+        "positives": null,
+        "pooled_vs_ep_agree": true
+      }
+    },
+    "passed": [
+      "LocalDodge",
+      "ENEMY",
+      "POWER"
+    ],
+    "gates": {
+      "G-1": {
+        "name": "pass 策略数 >= 3",
+        "value": 3,
+        "threshold": 3,
+        "pass": true
+      },
+      "G-2": {
+        "name": "通过块的增量点估计为正且 p<0.05",
+        "value": 0,
+        "threshold": 0,
+        "pass": true,
+        "offenders": []
+      },
+      "G-3": {
+        "name": "ALL vs BASE death_60 ΔAUC >= +0.05",
+        "value": 0.003799762099264581,
+        "threshold": 0.05,
+        "pass": false
+      },
+      "G-4": {
+        "name": "无块的置换 p 与主结果符号相反",
+        "value": 0,
+        "threshold": 0,
+        "pass": true,
+        "offenders": []
+      }
+    },
+    "enters_T2": false
+  },
+  "survival_fallback": {
+    "label": "death_60",
+    "positives": 0,
+    "n_samples": 29820,
+    "fallback": true,
+    "fallback_label": "min_clearance_60",
+    "fallback_absolute": [
+      "spearman",
+      0.3
+    ],
+    "fallback_increment": 0.05
+  },
+  "label_rates": {
+    "death_60": {
+      "positives": 0,
+      "n": 29820,
+      "rate": 0.0
+    },
+    "death_240": {
+      "positives": 0,
+      "n": 29280,
+      "rate": 0.0
+    },
+    "in_region_60": {
+      "positives": 4383,
+      "n": 29820,
+      "rate": 0.147
+    },
+    "p_collected_60": {
+      "positives": 28303,
+      "n": 29820,
+      "rate": 0.9491
+    },
+    "bomb_needed_60": {
+      "positives": 0,
+      "n": 29820,
+      "rate": 0.0
+    },
+    "bomb_used_60": {
+      "positives": 30,
+      "n": 29820,
+      "rate": 0.001
+    }
+  },
+  "diagnostics": {
+    "degenerate_labels": [
+      "p_collected_60",
+      "bomb_used_60"
+    ],
+    "degenerate_auc": -0.07771263143625759,
+    "degenerate_auc_ep": null,
+    "degenerate_cells": [],
+    "unstable_cells": [],
+    "pooled_vs_ep_disagreements": []
+  },
+  "timing": {
+    "extract_seconds": 0.0
+  }
+}

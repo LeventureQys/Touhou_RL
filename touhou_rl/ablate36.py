@@ -1898,6 +1898,13 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--permutations", type=int, default=PERMUTATIONS)
     parser.add_argument("--seed", type=int, default=SEED)
     parser.add_argument(
+        "--global-blocks",
+        default=None,
+        help="comma-separated block union used for the G-3 cell (default: all eight). "
+        "A restricted union is a DIAGNOSTIC - G-3 itself is defined on all eight and "
+        "is not redefined by this flag",
+    )
+    parser.add_argument(
         "--gate-set",
         choices=sorted(GATE_SETS),
         default="v1",
@@ -1939,6 +1946,14 @@ def main(argv: list[str] | None = None) -> int:
     survival_label = fallback["fallback_label"] if fallback["fallback"] else SURVIVAL_LABEL
     survival_kind = LABELS[survival_label]
     all_blocks = list(ALL_BLOCKS)
+    if args.global_blocks:
+        requested = [name.strip().upper() for name in args.global_blocks.split(",") if name.strip()]
+        unknown = [name for name in requested if name not in ALL_BLOCKS]
+        if unknown:
+            raise SystemExit(f"unknown block(s) in --global-blocks: {unknown}; known: {list(ALL_BLOCKS)}")
+        all_blocks = requested
+    if "BASE" not in all_blocks:
+        all_blocks = ["BASE"] + all_blocks
     all_with = _cell_value(dataset, all_blocks, survival_label)
     all_without = _cell_value(dataset, ["BASE"], survival_label)
     all_delta = None
@@ -1999,6 +2014,7 @@ def main(argv: list[str] | None = None) -> int:
         "source": str(args.probe),
         "protocol": {
             "gate_set": args.gate_set,
+            "global_blocks": list(all_blocks),
             "cv": "leave-one-episode-out",
             "model": "ridge",
             "lambda": RIDGE_LAMBDA,
@@ -2012,6 +2028,7 @@ def main(argv: list[str] | None = None) -> int:
         "inventory": inventory(dataset),
         "cells": ablation["cells"],
         "global_cells": {f"ALL_vs_BASE_{survival_label}": global_cell},
+        "global_blocks": list(all_blocks),
         "verdicts": verdicts,
         "survival_fallback": fallback,
         "label_rates": label_rates,

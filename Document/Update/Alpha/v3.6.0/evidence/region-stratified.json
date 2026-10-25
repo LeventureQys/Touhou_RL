@@ -1,0 +1,90 @@
+{
+  "schema": "v360-region-stratified/1",
+  "generated": "2026-10-25T14:30:40",
+  "features": "Document\\Update\\Alpha\\v3.6.0\\data\\features-D1.npz",
+  "config": {
+    "deciles": 10,
+    "permutations": 200,
+    "seed": 3610,
+    "stratifier": "prim_clearance (current local clearance)",
+    "score": "prim_region20 (player-connected danger region area, 8 px grid, t=20)",
+    "label": "death_60",
+    "cv": "leave-one-episode-out"
+  },
+  "totals": {
+    "rows": 21156,
+    "valid_rows": 20886,
+    "positives": 462
+  },
+  "direct_comparison": {
+    "region_auc": 0.8203281980455893,
+    "clearance_auc": 0.9308290327312067
+  },
+  "stratified": {
+    "auc": 0.6760093627290596,
+    "baseline_auc": 0.6628534244037287,
+    "per_fold": [
+      {
+        "held_out": "0",
+        "auc": 0.6757649808614237,
+        "baseline_auc": 0.6576984695205735,
+        "positives_used": 462
+      },
+      {
+        "held_out": "1",
+        "auc": 0.6756717105150714,
+        "baseline_auc": 0.6674231232887913,
+        "positives_used": 462
+      },
+      {
+        "held_out": "2",
+        "auc": 0.6755915059559746,
+        "baseline_auc": 0.6665093104207894,
+        "positives_used": 462
+      },
+      {
+        "held_out": "3",
+        "auc": 0.675260518227298,
+        "baseline_auc": 0.6545461017184434,
+        "positives_used": 462
+      },
+      {
+        "held_out": "4",
+        "auc": 0.677122026508945,
+        "baseline_auc": 0.6626182872391793,
+        "positives_used": 462
+      },
+      {
+        "held_out": "5",
+        "auc": 0.6774624708047897,
+        "baseline_auc": 0.6664494264608846,
+        "positives_used": 462
+      },
+      {
+        "held_out": "6",
+        "auc": 0.6754931874068165,
+        "baseline_auc": 0.6609473152429146,
+        "positives_used": 462
+      },
+      {
+        "held_out": "7",
+        "auc": 0.6760763144482557,
+        "baseline_auc": 0.6632708843651435,
+        "positives_used": 462
+      },
+      {
+        "held_out": "8",
+        "auc": 0.6756415498329622,
+        "baseline_auc": 0.6662179013768396,
+        "positives_used": 462
+      }
+    ]
+  },
+  "permutation": {
+    "p": 0.004975124378109453,
+    "null_mean": 0.4967902309785836,
+    "permutations": 200
+  },
+  "verdict": "invalid",
+  "reason": "stratification failed: within-stratum baseline AUC 0.6629 > 0.55"
+}
