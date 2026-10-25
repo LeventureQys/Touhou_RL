@@ -32,6 +32,20 @@ from touhou_rl.trace35 import read_episodes, read_trace
 
 SPAWN_RADIUS = 32.0
 SAFE_CLEARANCE = 6.0
+# Pre-registered safety gates (v3.6.1/执行计划-POWER补遗 §2).
+DEATH_DELTA_MAX = 0.10  # T2-E3: deaths per pair, tactic - baseline
+BOMB_DELTA_MAX = 0.50  # T2-E4: bombs per pair
+CLEARANCE_RATIO_MIN = 0.80  # T2-E5: mean clearance, tactic / baseline
+PRIMARY_REDUCTION_MIN = 0.15  # T2-E1
+# Which direction is better for each primary metric.  Pre-registered per metric:
+# ENEMY wants fewer attributed spawns (a reduction), POWER wants more safe-window
+# power gain (an increase).  Deriving this from the metric name keeps the two
+# reports from sharing one sign convention by accident.
+HIGHER_IS_BETTER = {
+    "attributed_spawns_per_decision": False,
+    "safe_power_gain_per_frame": True,
+}
+EFFECT_LABEL = {False: "reduction", True: "improvement"}
 # Must match tactics.CLEAR_ENEMY_SAFE_MARGIN: the clearance above which the aim
 # preference is allowed to act.  Recorded here as a diagnostic only.
 AIM_MARGIN = 10.0
@@ -218,42 +232,68 @@ def analyse(probe: Path, tactic: str, primary: str) -> dict:
         tact = episode_metrics(probe, pair["tactic"]["episode"])
         base_value = base.get(primary)
         tact_value = tact.get(primary)
-        reduction = None
+        higher_is_better = HIGHER_IS_BETTER.get(primary, False)
+        effect = None
         if base_value not in (None, 0) and tact_value is not None:
-            reduction = 1.0 - float(tact_value) / float(base_value)
+            ratio = float(tact_value) / float(base_value)
+            effect = (ratio - 1.0) if higher_is_better else (1.0 - ratio)
         rows.append(
             {
                 "pair": pair["pair"],
                 "baseline": base,
                 "tactic": tact,
-                primary: {"baseline": base_value, "tactic": tact_value, "reduction": reduction},
+                primary: {
+                    "baseline": base_value,
+                    "tactic": tact_value,
+                    "effect": effect,
+                    "higher_is_better": higher_is_better,
+                },
                 "final_frame_ratio": (tact["final_frame"] / base["final_frame"]) if base["final_frame"] else None,
             }
         )
-    reductions = np.asarray([row[primary]["reduction"] for row in rows if row[primary]["reduction"] is not None], dtype=float)
+    effects = np.asarray([row[primary]["effect"] for row in rows if row[primary]["effect"] is not None], dtype=float)
     frame_ratios = np.asarray([row["final_frame_ratio"] for row in rows if row["final_frame_ratio"] is not None], dtype=float)
     death_delta = np.asarray(
         [row["tactic"]["deaths"] - row["baseline"]["deaths"] for row in rows], dtype=float
     )
+    bomb_delta = np.asarray(
+        [row["tactic"]["bombs_used"] - row["baseline"]["bombs_used"] for row in rows], dtype=float
+    )
+    clearance_ratio = np.asarray(
+        [
+            (row["tactic"]["mean_clearance"] / row["baseline"]["mean_clearance"]) - 1.0
+            for row in rows
+            if row["baseline"]["mean_clearance"] and row["tactic"]["mean_clearance"] is not None
+        ],
+        dtype=float,
+    )
 
-    stats = bootstrap_ci(reductions) if reductions.size >= 3 else {"mean": None, "p_le_zero": None}
+    stats = bootstrap_ci(effects) if effects.size >= 3 else {"mean": None, "p_le_zero": None}
     frame_stats = bootstrap_ci(frame_ratios - 1.0) if frame_ratios.size >= 3 else {"mean": None}
     death_stats = bootstrap_ci(death_delta) if death_delta.size else {"mean": None}
+    bomb_stats = bootstrap_ci(bomb_delta) if bomb_delta.size else {"mean": None}
+    clearance_stats = bootstrap_ci(clearance_ratio) if clearance_ratio.size >= 3 else {"mean": None}
 
     usable = len(rows)
     gate_e1 = None
     if stats.get("mean") is not None and stats.get("p_le_zero") is not None:
-        gate_e1 = bool(stats["mean"] >= 0.15 and stats["p_le_zero"] < 0.05)
-    # Final frame ratio >= 0.90 means the tactic arm survived at least 90% as long.
-    gate_e2 = None
-    if frame_stats.get("mean") is not None:
-        gate_e2 = bool((1.0 + frame_stats["mean"]) >= 0.90)
+        gate_e1 = bool(
+            stats["mean"] >= PRIMARY_REDUCTION_MIN and stats["p_le_zero"] < 0.05
+        )
     gate_e3 = None
     if death_stats.get("mean") is not None:
-        gate_e3 = bool(death_stats["mean"] <= 0.10)
+        gate_e3 = bool(death_stats["mean"] <= DEATH_DELTA_MAX)
+    gate_e4 = None
+    if bomb_stats.get("mean") is not None:
+        gate_e4 = bool(bomb_stats["mean"] <= BOMB_DELTA_MAX)
+    gate_e5 = None
+    if clearance_stats.get("mean") is not None:
+        gate_e5 = bool((1.0 + clearance_stats["mean"]) >= CLEARANCE_RATIO_MIN)
+    safety = [gate_e3, gate_e4, gate_e5]
+    safety_failed = any(value is False for value in safety)
     if usable < 16:
         verdict = "underpowered"
-    elif gate_e2 is False or gate_e3 is False:
+    elif safety_failed:
         verdict = "fail_safety"
     elif gate_e1:
         verdict = "pass"
@@ -266,6 +306,8 @@ def analyse(probe: Path, tactic: str, primary: str) -> dict:
         "probe": str(probe),
         "tactic": tactic,
         "primary": primary,
+        "effect": EFFECT_LABEL[HIGHER_IS_BETTER.get(primary, False)],
+        "higher_is_better": HIGHER_IS_BETTER.get(primary, False),
         "design": {
             "spawn_radius_px": SPAWN_RADIUS,
             "aim_margin_px": AIM_MARGIN,
@@ -273,6 +315,12 @@ def analyse(probe: Path, tactic: str, primary: str) -> dict:
             "bootstrap_draws": BOOTSTRAP,
             "bootstrap_seed": BOOTSTRAP_SEED,
             "pairs": usable,
+            "thresholds": {
+                "T2-E1_primary_reduction": PRIMARY_REDUCTION_MIN,
+                "T2-E3_death_delta_max": DEATH_DELTA_MAX,
+                "T2-E4_bomb_delta_max": BOMB_DELTA_MAX,
+                "T2-E5_clearance_ratio_min": CLEARANCE_RATIO_MIN,
+            },
         },
         "problems": problems,
         "pairs": rows,
@@ -280,6 +328,8 @@ def analyse(probe: Path, tactic: str, primary: str) -> dict:
             "primary_reduction": stats,
             "final_frame_ratio": frame_stats,
             "death_delta": death_stats,
+            "bomb_delta": bomb_stats,
+            "clearance_ratio_delta": clearance_stats,
             "mean_final_frame": {
                 "baseline": float(np.mean([row["baseline"]["final_frame"] for row in rows])) if rows else None,
                 "tactic": float(np.mean([row["tactic"]["final_frame"] for row in rows])) if rows else None,
@@ -290,8 +340,10 @@ def analyse(probe: Path, tactic: str, primary: str) -> dict:
             },
             "gates": {
                 "T2-E1_primary": gate_e1,
-                "T2-E2_survival": gate_e2,
+                "T2-E2_survival": "retired (degenerate under truncation)",
                 "T2-E3_deaths": gate_e3,
+                "T2-E4_bombs": gate_e4,
+                "T2-E5_clearance": gate_e5,
             },
             "verdict": verdict,
         },
@@ -314,24 +366,28 @@ def render_markdown(report: dict) -> str:
         "",
         "| 编号 | 判据 | 阈值 | 实测 | 判定 |",
         "|---|---|---:|---:|---|",
-        f"| T2-E1 | 主指标下降（配对均值） | ≥15% | {100 * (summary['primary_reduction'].get('mean') or 0):.1f}% "
+        f"| T2-E1 | 主指标{report['effect']}（配对均值） | ≥15% | {100 * (summary['primary_reduction'].get('mean') or 0):.1f}% "
         f"(95% CI {100 * (summary['primary_reduction'].get('ci_low') or 0):.1f}% … {100 * (summary['primary_reduction'].get('ci_high') or 0):.1f}%) "
         f"| {'✅' if summary['gates']['T2-E1_primary'] else '❌'} |",
-        f"| T2-E2 | 生存帧数比 | ≥90% | {100 * (1 + (summary['final_frame_ratio'].get('mean') or 0)):.1f}% "
-        f"| {'✅' if summary['gates']['T2-E2_survival'] else '❌'} |",
+        f"| T2-E2 | 生存帧数比 | — | 已停用（截断下恒等，无区分力） | — |",
         f"| T2-E3 | 死亡次数增量 | ≤+0.10 | {summary['death_delta'].get('mean'):+.3f} "
         f"| {'✅' if summary['gates']['T2-E3_deaths'] else '❌'} |",
+        f"| T2-E4 | bomb 使用增量 | ≤+0.50 | {summary['bomb_delta'].get('mean'):+.3f} "
+        f"| {'✅' if summary['gates']['T2-E4_bombs'] else '❌'} |",
+        f"| T2-E5 | clearance 相对变化 | ≥−20% | "
+        f"{100 * (summary['clearance_ratio_delta'].get('mean') or 0):+.1f}% "
+        f"| {'✅' if summary['gates']['T2-E5_clearance'] else '❌'} |",
         "",
         "## 2 逐对",
         "",
-        f"| 对 | baseline {primary} | tactic {primary} | 下降 | baseline 帧 | tactic 帧 | 比 | 死亡 Δ |",
+        f"| 对 | baseline {primary} | tactic {primary} | {report['effect']} | baseline 帧 | tactic 帧 | 比 | 死亡 Δ |",
         "|---:|---:|---:|---:|---:|---:|---:|---:|",
     ]
     for row in pairs:
         value = row[primary]
         lines.append(
             f"| {row['pair']} | {value['baseline']:.4f} | {value['tactic']:.4f} | "
-            f"{100 * (value['reduction'] or 0):.1f}% | {row['baseline']['final_frame']} | "
+            f"{100 * (value['effect'] or 0):.1f}% | {row['baseline']['final_frame']} | "
             f"{row['tactic']['final_frame']} | {row['final_frame_ratio']:.3f} | "
             f"{row['tactic']['deaths'] - row['baseline']['deaths']:+d} |"
         )

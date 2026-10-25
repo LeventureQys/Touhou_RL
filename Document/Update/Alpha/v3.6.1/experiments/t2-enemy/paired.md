@@ -1,6 +1,6 @@
 # T2 配对比较：clear_enemy vs baseline
 
-- 生成：2026-10-25T15:55:20
+- 生成：2026-10-25T17:13:09
 - 数据：`Document\Update\Alpha\v3.6.1\data\probe\t2-enemy`（20 对）
 - 主指标：`attributed_spawns_per_decision`；归属半径 32.0 px；bootstrap 5000 次
 - 判定：**fail**
@@ -9,13 +9,15 @@
 
 | 编号 | 判据 | 阈值 | 实测 | 判定 |
 |---|---|---:|---:|---|
-| T2-E1 | 主指标下降（配对均值） | ≥15% | 3.6% (95% CI -0.5% … 7.7%) | ❌ |
-| T2-E2 | 生存帧数比 | ≥90% | 100.0% | ✅ |
+| T2-E1 | 主指标reduction（配对均值） | ≥15% | 3.6% (95% CI -0.5% … 7.7%) | ❌ |
+| T2-E2 | 生存帧数比 | — | 已停用（截断下恒等，无区分力） | — |
 | T2-E3 | 死亡次数增量 | ≤+0.10 | -0.600 | ✅ |
+| T2-E4 | bomb 使用增量 | ≤+0.50 | -0.300 | ✅ |
+| T2-E5 | clearance 相对变化 | ≥−20% | +2.0% | ✅ |
 
 ## 2 逐对
 
-| 对 | baseline attributed_spawns_per_decision | tactic attributed_spawns_per_decision | 下降 | baseline 帧 | tactic 帧 | 比 | 死亡 Δ |
+| 对 | baseline attributed_spawns_per_decision | tactic attributed_spawns_per_decision | reduction | baseline 帧 | tactic 帧 | 比 | 死亡 Δ |
 |---:|---:|---:|---:|---:|---:|---:|---:|
 | 0 | 2.2234 | 1.8473 | 16.9% | 6002 | 6003 | 1.000 | -1 |
 | 1 | 1.8736 | 1.8293 | 2.4% | 6002 | 6002 | 1.000 | -3 |

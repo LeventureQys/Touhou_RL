@@ -1,16 +1,24 @@
 {
   "schema": "v361-t2-paired/1",
-  "generated": "2026-10-25T15:55:20",
+  "generated": "2026-10-25T17:13:09",
   "probe": "Document\\Update\\Alpha\\v3.6.1\\data\\probe\\t2-enemy",
   "tactic": "clear_enemy",
   "primary": "attributed_spawns_per_decision",
+  "effect": "reduction",
+  "higher_is_better": false,
   "design": {
     "spawn_radius_px": 32.0,
     "aim_margin_px": 10.0,
     "safe_clearance_px": 6.0,
     "bootstrap_draws": 5000,
     "bootstrap_seed": 3611,
-    "pairs": 20
+    "pairs": 20,
+    "thresholds": {
+      "T2-E1_primary_reduction": 0.15,
+      "T2-E3_death_delta_max": 0.1,
+      "T2-E4_bomb_delta_max": 0.5,
+      "T2-E5_clearance_ratio_min": 0.8
+    }
   },
   "problems": [],
   "pairs": [
@@ -67,7 +75,8 @@
       "attributed_spawns_per_decision": {
         "baseline": 2.223407802600867,
         "tactic": 1.8472824274758253,
-        "reduction": 0.16916616676664664
+        "effect": 0.16916616676664664,
+        "higher_is_better": false
       },
       "final_frame_ratio": 1.0001666111296235
     },
@@ -124,7 +133,8 @@
       "attributed_spawns_per_decision": {
         "baseline": 1.873624541513838,
         "tactic": 1.8292764254751583,
-        "reduction": 0.02366969211603487
+        "effect": 0.02366969211603487,
+        "higher_is_better": false
       },
       "final_frame_ratio": 1.0
     },
@@ -181,7 +191,8 @@
       "attributed_spawns_per_decision": {
         "baseline": 2.2560853617872625,
         "tactic": 1.9386462154051352,
-        "reduction": 0.14070351758793964
+        "effect": 0.14070351758793964,
+        "higher_is_better": false
       },
       "final_frame_ratio": 1.0
     },
@@ -238,7 +249,8 @@
       "attributed_spawns_per_decision": {
         "baseline": 1.798266088696232,
         "tactic": 1.8552850950316773,
-        "reduction": -0.03170776933061381
+        "effect": -0.03170776933061381,
+        "higher_is_better": false
       },
       "final_frame_ratio": 1.0006664445184938
     },
@@ -295,7 +307,8 @@
       "attributed_spawns_per_decision": {
         "baseline": 2.0683561187062356,
         "tactic": 2.219073024341447,
-        "reduction": -0.07286796711268728
+        "effect": -0.07286796711268728,
+        "higher_is_better": false
       },
       "final_frame_ratio": 0.9993339993339994
     },
@@ -352,7 +365,8 @@
       "attributed_spawns_per_decision": {
         "baseline": 2.1093697899299766,
         "tactic": 1.9156385461820606,
-        "reduction": 0.09184318684792914
+        "effect": 0.09184318684792914,
+        "higher_is_better": false
       },
       "final_frame_ratio": 1.0
     },
@@ -409,7 +423,8 @@
       "attributed_spawns_per_decision": {
         "baseline": 2.196065355118373,
         "tactic": 1.7679226408802935,
-        "reduction": 0.194959003947768
+        "effect": 0.194959003947768,
+        "higher_is_better": false
       },
       "final_frame_ratio": 1.0001666111296235
     },
@@ -466,7 +481,8 @@
       "attributed_spawns_per_decision": {
         "baseline": 2.3171057019006334,
         "tactic": 1.989996665555185,
-        "reduction": 0.14117139156713188
+        "effect": 0.14117139156713188,
+        "higher_is_better": false
       },
       "final_frame_ratio": 1.0
     },
@@ -523,7 +539,8 @@
       "attributed_spawns_per_decision": {
         "baseline": 2.185728576192064,
         "tactic": 2.2030676892297434,
-        "reduction": -0.007932875667429506
+        "effect": -0.007932875667429506,
+        "higher_is_better": false
       },
       "final_frame_ratio": 1.0
     },
@@ -580,7 +597,8 @@
       "attributed_spawns_per_decision": {
         "baseline": 1.7579193064354786,
         "tactic": 1.8789596532177393,
-        "reduction": -0.06885432473444619
+        "effect": -0.06885432473444619,
+        "higher_is_better": false
       },
       "final_frame_ratio": 1.0
     },
@@ -637,7 +655,8 @@
       "attributed_spawns_per_decision": {
         "baseline": 1.9666555518506168,
         "tactic": 1.6605535178392798,
-        "reduction": 0.1556459816887079
+        "effect": 0.1556459816887079,
+        "higher_is_better": false
       },
       "final_frame_ratio": 1.0009996667777408
     },
@@ -694,7 +713,8 @@
       "attributed_spawns_per_decision": {
         "baseline": 1.950316772257419,
         "tactic": 2.172390796932311,
-        "reduction": -0.11386561805436846
+        "effect": -0.11386561805436846,
+        "higher_is_better": false
       },
       "final_frame_ratio": 1.0
     },
@@ -751,7 +771,8 @@
       "attributed_spawns_per_decision": {
         "baseline": 1.768589529843281,
         "tactic": 1.9403134378126041,
-        "reduction": -0.09709653092006043
+        "effect": -0.09709653092006043,
+        "higher_is_better": false
       },
       "final_frame_ratio": 1.0
     },
@@ -808,7 +829,8 @@
       "attributed_spawns_per_decision": {
         "baseline": 1.9453151050350117,
         "tactic": 1.9256418806268756,
-        "reduction": 0.01011312992800828
+        "effect": 0.01011312992800828,
+        "higher_is_better": false
       },
       "final_frame_ratio": 1.0001666111296235
     },
@@ -865,7 +887,8 @@
       "attributed_spawns_per_decision": {
         "baseline": 2.1603867955985327,
         "tactic": 2.0183394464821607,
-        "reduction": 0.06575088748263613
+        "effect": 0.06575088748263613,
+        "higher_is_better": false
       },
       "final_frame_ratio": 1.0001666111296235
     },
@@ -922,7 +945,8 @@
       "attributed_spawns_per_decision": {
         "baseline": 2.1370456818939645,
         "tactic": 2.005668556185395,
-        "reduction": 0.06147604930566386
+        "effect": 0.06147604930566386,
+        "higher_is_better": false
       },
       "final_frame_ratio": 0.9991676377559514
     },
@@ -979,7 +1003,8 @@
       "attributed_spawns_per_decision": {
         "baseline": 1.9003001000333444,
         "tactic": 2.1397132377459154,
-        "reduction": -0.12598701526583622
+        "effect": -0.12598701526583622,
+        "higher_is_better": false
       },
       "final_frame_ratio": 1.0
     },
@@ -1036,7 +1061,8 @@
       "attributed_spawns_per_decision": {
         "baseline": 1.8846282094031344,
         "tactic": 1.8296098699566523,
-        "reduction": 0.02919320594479824
+        "effect": 0.02919320594479824,
+        "higher_is_better": false
       },
       "final_frame_ratio": 1.0
     },
@@ -1093,7 +1119,8 @@
       "attributed_spawns_per_decision": {
         "baseline": 1.75891963987996,
         "tactic": 1.6198732910970324,
-        "reduction": 0.07905213270142175
+        "effect": 0.07905213270142175,
+        "higher_is_better": false
       },
       "final_frame_ratio": 1.0
     },
@@ -1150,7 +1177,8 @@
       "attributed_spawns_per_decision": {
         "baseline": 2.130710236745582,
         "tactic": 1.9573191063687896,
-        "reduction": 0.08137715179968708
+        "effect": 0.08137715179968708,
+        "higher_is_better": false
       },
       "final_frame_ratio": 0.9991676377559514
     }
@@ -1180,6 +1208,22 @@
       "draws": 5000,
       "seed": 3611
     },
+    "bomb_delta": {
+      "mean": -0.3,
+      "ci_low": -0.65,
+      "ci_high": 0.05,
+      "p_le_zero": 0.9586,
+      "draws": 5000,
+      "seed": 3611
+    },
+    "clearance_ratio_delta": {
+      "mean": 0.01973052228464141,
+      "ci_low": -0.01441245061537267,
+      "ci_high": 0.054690224869956276,
+      "p_le_zero": 0.1286,
+      "draws": 5000,
+      "seed": 3611
+    },
     "mean_final_frame": {
       "baseline": 6002.7,
       "tactic": 6002.7
@@ -1190,8 +1234,10 @@
     },
     "gates": {
       "T2-E1_primary": false,
-      "T2-E2_survival": true,
-      "T2-E3_deaths": true
+      "T2-E2_survival": "retired (degenerate under truncation)",
+      "T2-E3_deaths": true,
+      "T2-E4_bombs": true,
+      "T2-E5_clearance": true
     },
     "verdict": "fail"
   }
