@@ -1,37 +1,97 @@
 {
   "schema": "v360-evidence-manifest/1",
-  "generated": "2026-10-25T12:36:08",
+  "generated": "2026-10-25T13:39:06",
   "root": "Document/Update/Alpha/v3.6.0",
   "git": {
-    "head": "c38e522aaffa1edb09e8d0d08970d912876bb631",
+    "head": "8aeeee58661aa3886c55003c0df1f5c9bf79af14",
     "branch": "main",
-    "dirty_files": 180
+    "dirty_files": 136
   },
   "files": [
     {
       "path": "contract/策略标签契约.md",
-      "sha256": "4f4fde82dfbb569ddb65b09b85279168d700405b1c444e829c6783dc7e646607",
-      "bytes": 8019
+      "sha256": "c1bc61ccc20e7b90ae45235fd972b084083118b3ca892f809f8959b897571c8b",
+      "bytes": 10554
     },
     {
       "path": "data/D1-inventory.json",
-      "sha256": "d33f35bb57d947dc3d6bf18e3c3f543ea175261bcf37ce36f77d822901a9841e",
-      "bytes": 7612
+      "sha256": "d0439c1757f1614a71708735586b017940a444a9f07ae15f7fa3bc761e66e86d",
+      "bytes": 7909
+    },
+    {
+      "path": "data/D2-inventory.json",
+      "sha256": "5feec71216f4f920813b6603bc3b07a7a9538d749cb61ec3c8d7967de27ce8c1",
+      "bytes": 9076
+    },
+    {
+      "path": "data/probe/d2-replay/episodes.jsonl",
+      "sha256": "8f1f0f2691dff7f5da9faa50b7e93e13410ec1efacc95bfa810889aedf6feeeb",
+      "bytes": 8399
+    },
+    {
+      "path": "data/probe/d2-replay/manifest.json",
+      "sha256": "3a96729ffa79563a050f631a8370d9b9d62c417d524216bbe585c517a86a557a",
+      "bytes": 3324
+    },
+    {
+      "path": "data/probe/d2-replay/s0-report.json",
+      "sha256": "7a0ba9079617f3e4c97ff59b3c7896f7123d43aee4945efe58bbb5c0173954d8",
+      "bytes": 4239
+    },
+    {
+      "path": "data/probe/d2-stageclear/episodes.jsonl",
+      "sha256": "8380c2e0565b57913763340347512fa1c663b73a3e2dfec96b72e05d59d1a90e",
+      "bytes": 2608
+    },
+    {
+      "path": "data/probe/d2-stageclear/manifest.json",
+      "sha256": "70cdc0826142dbdc31a3dfe6d6b4d3409b2a509845f822236de23c3b84bbccd5",
+      "bytes": 1580
+    },
+    {
+      "path": "data/probe/d2-stageclear/s0-report.json",
+      "sha256": "46d2bd22fe7ba5c492e401852ac7581a9f668223f9e2bb016c11360f6cfd7f94",
+      "bytes": 2800
+    },
+    {
+      "path": "experiments/comparison-D1-D2.md",
+      "sha256": "d8db20b7c374f36811dccd4b019943e48fe7b988bea1a8d1115e23c75bb44f2c",
+      "bytes": 3559
     },
     {
       "path": "experiments/T1-ablation/ablation.json",
-      "sha256": "46384b691eae2a63de267d9921b2d923990f938891775b25077a9908211da7f6",
-      "bytes": 29115
+      "sha256": "5e41d6d308aba07bd86c4a1d21cd9a297775519990da93b4cf239a3628135b31",
+      "bytes": 30034
     },
     {
       "path": "experiments/T1-ablation/ablation.md",
-      "sha256": "8a4f548778219ad8423cc34ca380c350e8927bb9beaa8aeeebcd59edecaa1e35",
-      "bytes": 11190
+      "sha256": "1cd0055506ffa0a6a7123ccc89ab43985ebaa4620da2c221aaf7b93de9c33f1d",
+      "bytes": 11702
+    },
+    {
+      "path": "experiments/T1-ablation-D2/ablation.json",
+      "sha256": "c8bbca5fb4665cd7888e126a2aaa2296f3b3fdaef167466b0d83ed0a0ce2521b",
+      "bytes": 28846
+    },
+    {
+      "path": "experiments/T1-ablation-D2/ablation.md",
+      "sha256": "3364a36dd1487c0cf8daafbef177c9d6691eafbc87e89f756fe0036943b92f4a",
+      "bytes": 12472
     },
     {
       "path": "reports/T0-T1报告.md",
       "sha256": "b790dd8a6311e3665159bb5e380ee626ee0c723136834afab280009319855ec1",
       "bytes": 17116
+    },
+    {
+      "path": "reports/T1-D2报告.md",
+      "sha256": "fcf7f0f833e6a5a309cbb3932177dffd28fd81400386bbc74d56dc286cebddfc",
+      "bytes": 20974
+    },
+    {
+      "path": "执行计划-D2补遗.md",
+      "sha256": "9d5ffacca29b12adc31f228a4768761ede73495ac049e969b854c46a369656f9",
+      "bytes": 7012
     },
     {
       "path": "执行计划.md",
@@ -45,10 +105,27 @@
     }
   ],
   "excluded_caches": [
-    "data/features-D1.npz"
+    "data/features-D1.npz",
+    "data/features-D2.npz",
+    "data/probe/d2-replay/bullets/replay-ep01.npz",
+    "data/probe/d2-replay/bullets/replay-ep02.npz",
+    "data/probe/d2-replay/bullets/replay-ep03.npz",
+    "data/probe/d2-replay/bullets/replay-ep04.npz",
+    "data/probe/d2-replay/bullets/replay-ep05.npz",
+    "data/probe/d2-replay/bullets/replay-ep06.npz",
+    "data/probe/d2-replay/trace/replay-ep01.jsonl",
+    "data/probe/d2-replay/trace/replay-ep02.jsonl",
+    "data/probe/d2-replay/trace/replay-ep03.jsonl",
+    "data/probe/d2-replay/trace/replay-ep04.jsonl",
+    "data/probe/d2-replay/trace/replay-ep05.jsonl",
+    "data/probe/d2-replay/trace/replay-ep06.jsonl",
+    "data/probe/d2-stageclear/bullets/replay-ep01.npz",
+    "data/probe/d2-stageclear/bullets/replay-ep02.npz",
+    "data/probe/d2-stageclear/trace/replay-ep01.jsonl",
+    "data/probe/d2-stageclear/trace/replay-ep02.jsonl"
   ],
   "totals": {
-    "files": 7,
-    "bytes": 103124
+    "files": 19,
+    "bytes": 212276
   }
 }

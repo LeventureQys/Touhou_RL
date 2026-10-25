@@ -49,6 +49,7 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(prog="python tools/rl/v360_manifest.py")
     parser.add_argument("--root", type=Path, required=True, help="v3.6.0 document root")
     parser.add_argument("--ablation", type=Path, required=True)
+    parser.add_argument("--name", default="D2", help="inventory name, e.g. D1 or D2")
     parser.add_argument("--repo", type=Path, default=Path("."))
     args = parser.parse_args(argv)
 
@@ -59,11 +60,13 @@ def main(argv: list[str] | None = None) -> int:
     inventory = {
         "schema": "v360-data-inventory/1",
         "generated": time.strftime("%Y-%m-%dT%H:%M:%S"),
+        "name": args.name,
         "source_probe": report["source"],
         "protocol": report["protocol"],
+        "survival_fallback": report.get("survival_fallback"),
         "corpus": report["inventory"],
     }
-    (data_dir / "D1-inventory.json").write_text(
+    (data_dir / f"{args.name}-inventory.json").write_text(
         json.dumps(inventory, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
     )
 
@@ -80,9 +83,14 @@ def main(argv: list[str] | None = None) -> int:
             continue
         # ``np.savez`` stamps zip entries with the current time, so the cache hash
         # is not reproducible across runs and cannot verify anything.  It is a
-        # 53-second derivative of the S0 traces, not evidence: hash the inputs
+        # derivative of the S0 traces, not evidence: hash the inputs
         # (ablation.json / inventory) instead, and list the cache here by name.
         if path.suffix == ".npz" and path.parent.name == "data":
+            excluded.append(str(path.relative_to(root)).replace("\\", "/"))
+            continue
+        # Probe traces are large and gitignored by the same reasoning; the episode
+        # index (episodes.jsonl) is kept so the corpus composition is still hashed.
+        if path.parent.name in ("trace", "bullets") and "probe" in path.parts:
             excluded.append(str(path.relative_to(root)).replace("\\", "/"))
             continue
         files.append(

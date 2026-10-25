@@ -1,6 +1,6 @@
 {
   "schema": "v360-ablation/1",
-  "generated": "2026-10-25T12:34:48",
+  "generated": "2026-10-25T13:25:25",
   "source": "Document\\Update\\Alpha\\v3.5.0\\probe\\s0-teacher",
   "protocol": {
     "cv": "leave-one-episode-out",
@@ -184,6 +184,8 @@
       "bomb_needed_60": "auc",
       "bomb_used_60": "auc"
     },
+    "speed_mode": "config",
+    "measured_speeds": [],
     "per_episode": [
       {
         "episode": "collect-ep01",
@@ -636,8 +638,8 @@
       "with_ep": 0.9508607412353108,
       "delta": -0.021019537323885173,
       "delta_ep": -0.014087472961022196,
-      "permutation_p": null,
-      "permutations": 0
+      "permutation_p": 1.0,
+      "permutations": 200
     }
   },
   "verdicts": {
@@ -968,7 +970,49 @@
     },
     "enters_T2": false
   },
+  "survival_fallback": {
+    "label": "death_60",
+    "positives": 462,
+    "n_samples": 20886,
+    "fallback": false,
+    "fallback_label": null,
+    "fallback_absolute": null,
+    "fallback_increment": null
+  },
+  "label_rates": {
+    "death_60": {
+      "positives": 462,
+      "n": 20886,
+      "rate": 0.0221
+    },
+    "death_240": {
+      "positives": 1810,
+      "n": 20076,
+      "rate": 0.0902
+    },
+    "in_region_60": {
+      "positives": 2750,
+      "n": 20886,
+      "rate": 0.1317
+    },
+    "p_collected_60": {
+      "positives": 12691,
+      "n": 20886,
+      "rate": 0.6076
+    },
+    "bomb_needed_60": {
+      "positives": 432,
+      "n": 20886,
+      "rate": 0.0207
+    },
+    "bomb_used_60": {
+      "positives": 390,
+      "n": 20886,
+      "rate": 0.0187
+    }
+  },
   "diagnostics": {
+    "degenerate_labels": [],
     "degenerate_auc": 0.3170423387814692,
     "degenerate_auc_ep": 0.5,
     "degenerate_cells": [],

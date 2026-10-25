@@ -14,6 +14,7 @@ guards:
 
 from __future__ import annotations
 
+import json
 import math
 
 import numpy as np
@@ -27,6 +28,7 @@ from touhou_rl.ablate36 import (
     _lookahead_at,
     _lookahead_delta,
     _lookahead_min,
+    _per_step_disp,
     binary_auc,
     brier,
     build_labels,
@@ -35,9 +37,13 @@ from touhou_rl.ablate36 import (
     extract_episode,
     horizon_clearance,
     judge,
+    load_dataset,
     loeo_predict,
+    measure_speeds,
     occupancy,
     player_cell,
+    resolve_cells,
+    resolve_survival_fallback,
     run_ablation,
     spearman,
     topk_accuracy,
@@ -325,6 +331,8 @@ def _synth_episode(n: int = 40) -> tuple[list[dict], dict]:
         records.append(
             {
                 "decision": i + 1,
+                "frameskip": 2,
+                "frame_pre": 2 * i,
                 "frame_post": 2 * (i + 1),
                 "clock": {"stage": 0, "stage_frames": 2 * (i + 1), "current_spell": -1},
                 "player": {"x": px, "y": py, "vx": 0.0, "vy": 0.0, "state": 3, "focus_mode": 0},
@@ -396,3 +404,206 @@ def test_labels_registry_covers_every_built_label():
     records, bullets = _synth_episode(10)
     built = set(build_labels(extract_episode(records, bullets)["primitives"]))
     assert set(LABELS) == built
+
+
+# ---------------------------------------------------------------------------
+# per-shot-type movement speeds (D2)
+# ---------------------------------------------------------------------------
+
+
+def _moving_records(n: int = 240, speed: float = 5.0, focus_speed: float = 1.9) -> list[dict]:
+    from touhou_rl.ablate36 import _MOVE_VECTORS
+
+    records = []
+    for i in range(n):
+        move = 1 + (i % 8)
+        focus = i % 2
+        ux, uy = _MOVE_VECTORS[move]
+        comp = (focus_speed if focus else speed) / math.sqrt(2.0) if (ux and uy) else (focus_speed if focus else speed)
+        records.append(
+            {
+                "action": [move, 1, focus, 0],
+                "player": {"vx": float(ux * comp), "vy": float(uy * comp), "x": 192.0, "y": 300.0},
+            }
+        )
+    return records
+
+
+def test_measure_speeds_recovers_youmu_speeds():
+    speeds = measure_speeds(_moving_records())
+    assert speeds["fallback"] == []
+    assert speeds["speed"] == pytest.approx(5.0, abs=0.05)
+    assert speeds["focus_speed"] == pytest.approx(1.9, abs=0.05)
+    assert speeds["speed_diag"] == pytest.approx(5.0 / math.sqrt(2.0), abs=0.05)
+
+
+def test_measure_speeds_falls_back_when_the_player_never_moves():
+    records = [
+        {"action": [0, 1, 0, 0], "player": {"vx": 0.0, "vy": 0.0, "x": 192.0, "y": 300.0}} for _ in range(50)
+    ]
+    speeds = measure_speeds(records)
+    assert set(speeds["fallback"]) == {"speed", "focus_speed"}
+    assert speeds["speed"] == 4.0
+    assert speeds["focus_speed"] == 2.0
+
+
+def test_per_step_disp_uses_speed_over_sqrt_two_on_diagonals():
+    disp = _per_step_disp(frameskip=2, speeds={"speed": 5.0, "focus_speed": 1.9})
+    # action 3 = east, unfocused -> (2 * 5.0, 0)
+    assert disp[3][0] == pytest.approx(10.0)
+    assert disp[3][1] == pytest.approx(0.0)
+    # action 2 = north-east, unfocused -> per-axis 5/sqrt(2) * 2, so |d| = 10
+    assert math.hypot(disp[2][0], disp[2][1]) == pytest.approx(10.0)
+    # focus rows are the 9..17 half
+    assert math.hypot(disp[9 + 2][0], disp[9 + 2][1]) == pytest.approx(2 * 1.9)
+
+
+def test_faster_speed_reaches_further_in_the_horizon():
+    pos = np.zeros((0, 2), dtype=np.float32)
+    vel = np.zeros((0, 2), dtype=np.float32)
+    half = np.zeros((0,), dtype=np.float32)
+    slow = _per_step_disp(2, {"speed": 4.0, "focus_speed": 2.0})
+    fast = _per_step_disp(2, {"speed": 5.0, "focus_speed": 1.9})
+    _m1, traj_slow = horizon_clearance(192.0, 300.0, pos, vel, half, disp=slow)
+    _m2, traj_fast = horizon_clearance(192.0, 300.0, pos, vel, half, disp=fast)
+    assert abs(traj_fast[3, -1, 0] - 192.0) > abs(traj_slow[3, -1, 0] - 192.0)
+
+
+def test_extract_episode_speed_mode_is_opt_in():
+    records, bullets = _synth_episode(60)
+    default = extract_episode(records, bullets)
+    config = extract_episode(records, bullets, speed_mode="config")
+    assert default["speed_mode"] == "config"
+    assert np.array_equal(default["blocks"]["BASE"], config["blocks"]["BASE"])
+    measured = extract_episode(records, bullets, speed_mode="measure")
+    # The synthetic trace barely moves, so measure must fall back to the same
+    # constants and therefore produce the same features.
+    assert measured["speeds"]["fallback"]
+    assert np.array_equal(measured["blocks"]["BASE"], config["blocks"]["BASE"])
+    with pytest.raises(ValueError, match="unknown speed_mode"):
+        extract_episode(records, bullets, speed_mode="bogus")
+
+
+def _write_synth_probe(tmp_path, episodes: int = 2):
+    probe = tmp_path / "probe"
+    (probe / "trace").mkdir(parents=True)
+    (probe / "bullets").mkdir()
+    meta = []
+    for index in range(episodes):
+        name = f"ep{index:02d}"
+        records, bullets = _synth_episode(80)
+        with (probe / "trace" / f"{name}.jsonl").open("w", encoding="utf-8") as handle:
+            for record in records:
+                record["episode"] = name
+                handle.write(json.dumps(record) + "\n")
+        np.savez(probe / "bullets" / f"{name}.npz", **bullets)
+        meta.append({"episode": name})
+    (probe / "episodes.jsonl").write_text(
+        "\n".join(json.dumps(item) for item in meta) + "\n", encoding="utf-8"
+    )
+    return probe
+
+
+def test_cache_records_speed_mode_and_refuses_a_mismatch(tmp_path):
+    probe = _write_synth_probe(tmp_path)
+    cache = tmp_path / "features.npz"
+    first = load_dataset(probe, cache=cache, speed_mode="config")
+    assert first.speed_mode == "config"
+    second = load_dataset(probe, cache=cache, speed_mode="config")
+    for name in BLOCKS:
+        assert np.array_equal(first.blocks[name], second.blocks[name])
+    measured_cache = tmp_path / "features-measure.npz"
+    measured = load_dataset(probe, cache=measured_cache, speed_mode="measure")
+    assert measured.speed_mode == "measure"
+    assert len(measured.speeds) == 2
+    with pytest.raises(ValueError, match="speed_mode"):
+        load_dataset(probe, cache=measured_cache, speed_mode="config")
+
+
+def test_strict_frames_drops_mismatched_decisions():
+    records, bullets = _synth_episode(60)
+    # Poison two decisions' frame span the way replay polling does.
+    records[10]["frame_post"] = records[10]["frame_pre"] + 3
+    records[20]["frame_post"] = records[20]["frame_pre"] + 4
+    loose = extract_episode(records, bullets)
+    strict = extract_episode(records, bullets, strict_frames=True)
+    assert loose["rows"] == 60
+    assert strict["rows"] == 58
+
+
+# ---------------------------------------------------------------------------
+# survival-label fallback (执行计划-D2补遗 §3)
+# ---------------------------------------------------------------------------
+
+
+def _toy_dataset(deaths: int, n: int = 480, groups: int = 4):
+    from touhou_rl.ablate36 import CELLS, Dataset
+
+    rng = np.random.default_rng(11)
+    group_ids = np.repeat(np.arange(groups), n // groups)
+    size = group_ids.size
+    labels: dict[str, np.ndarray] = {}
+    for key in LABELS:
+        labels[key] = rng.normal(size=size)
+    labels["death_60"] = np.zeros(size)
+    labels["death_60"][:deaths] = 1.0
+    blocks = {}
+    columns = {}
+    for name in BLOCKS:
+        count = 3
+        blocks[name] = rng.normal(size=(size, count)).astype(np.float32)
+        columns[name] = [f"{name}_x{i}" for i in range(count)]
+    dataset = Dataset(
+        blocks=blocks,
+        columns=columns,
+        labels=labels,
+        groups=group_ids,
+        episodes=[f"g{i}" for i in range(groups)],
+        primitives={"death": np.zeros(size)},
+    )
+    return dataset, CELLS
+
+
+def test_survival_fallback_not_triggered_with_enough_deaths():
+    dataset, _ = _toy_dataset(deaths=200)
+    info = resolve_survival_fallback(dataset)
+    assert info["fallback"] is False
+    assert resolve_cells(info) is not None
+    assert resolve_cells(info)[0]["primary"][0] == "death_60"
+
+
+def test_survival_fallback_rewrites_only_the_survival_label():
+    dataset, cells = _toy_dataset(deaths=0)
+    info = resolve_survival_fallback(dataset)
+    assert info["fallback"] is True and info["positives"] == 0
+    resolved = resolve_cells(info)
+    by_name = {cell["strategy"]: cell for cell in resolved}
+    original = {cell["strategy"]: cell for cell in cells}
+
+    # LocalDodge's absolute gate moves to the continuous clearance label.
+    assert by_name["LocalDodge"]["primary"] == ("min_clearance_60", ("spearman", 0.30))
+    # REGION keeps its own label as primary and moves the increment to clearance.
+    assert by_name["REGION"]["primary"][0] == "in_region_60"
+    assert by_name["REGION"]["increments"] == (("min_clearance_60", "spearman", 0.05, "and"),)
+    # LURE's two "or" branches collapse into one after the substitution.
+    assert by_name["LURE"]["increments"] == (("min_clearance_60", "spearman", 0.05, "or"),)
+    # Unrelated strategies are untouched.
+    assert by_name["POWER"]["increments"] == original["POWER"]["increments"]
+    assert by_name["ENEMY"]["primary"] == original["ENEMY"]["primary"]
+    assert by_name["EMERGENCY"]["extras"] == original["EMERGENCY"]["extras"]
+
+
+def test_fallback_spec_runs_end_to_end():
+    dataset, _ = _toy_dataset(deaths=0)
+    info = resolve_survival_fallback(dataset)
+    spec = resolve_cells(info)
+    ablation = run_ablation(dataset, permutations=2, seed=3, cells_spec=spec)
+    verdict = judge(ablation["cells"], cells_spec=spec)
+    assert set(verdict["per_strategy"]) == {cell["strategy"] for cell in spec}
+    # Every judged label must come from the resolved registry, never death_60.
+    for row in verdict["per_strategy"].values():
+        if row.get("verdict") == "not_tested":
+            continue
+        assert row["primary_label"] != "death_60"
+        for branch in row["increments"]:
+            assert branch["label"] != "death_60"

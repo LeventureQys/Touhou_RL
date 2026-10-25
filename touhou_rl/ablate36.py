@@ -77,6 +77,10 @@ HORIZON_STEPS = 10  # 10 * 2 = 20 frames, the local pilot's horizon
 S = 30  # short label horizon in decisions = 60 frames
 M = 120  # mid label horizon in decisions = 240 frames
 MAX_BULLETS = 320
+# Below this many px/frame a trace does not reveal the movement model (the
+# player never moved), so ``measure_speeds`` must fall back instead of returning
+# a near-zero speed that would disable every horizon feature.
+MIN_MEASURED_SPEED = 1.0
 
 BLOCKS = ("BASE", "REGION", "LURE", "ENEMY", "POWER", "BOSS", "EMERGENCY", "HISTORY")
 
@@ -184,6 +188,16 @@ PERMUTATIONS = 200
 SEED = 3600
 PERM_SEED = 3601
 RIDGE_LAMBDA = 1.0
+# Below this many positive samples a binary label cannot support an AUC gate.
+UNDERPOWERED_POSITIVES = 100
+# 执行计划-D2补遗 §3: when ``death_60`` has too few positives (human 1CC replays do
+# not die), the *survival* label falls back to the continuous executed clearance
+# with fixed substitute thresholds.  Only the label changes; the direction and
+# magnitude requirements of every other gate stay identical.
+SURVIVAL_LABEL = "death_60"
+SURVIVAL_FALLBACK_LABEL = "min_clearance_60"
+SURVIVAL_FALLBACK_ABS = ("spearman", 0.30)
+SURVIVAL_FALLBACK_INC = 0.05
 # A permutation null whose spread is numerically zero carries no p-value: it
 # happens when the ablated block is (nearly) constant inside an episode, e.g.
 # the EMERGENCY block in D1 where bombs/lives/player_state barely move.  Those
@@ -205,6 +219,57 @@ _MOVE_VECTORS = np.array(
     ],
     dtype=np.float32,
 )
+
+
+def resolve_survival_fallback(dataset: "Dataset") -> dict:
+    """Decide whether the survival label is testable on this dataset.
+
+    Pre-registered in 执行计划-D2补遗 §3.  A human 1CC stage-1 replay never dies, so
+    ``death_60`` can end up with zero positives and an undefined AUC; the label
+    then falls back to the continuous executed clearance.  The decision is a pure
+    function of the *label counts*, which is why it can be pre-registered.
+    """
+    y = dataset.labels[SURVIVAL_LABEL]
+    positives = int((np.nan_to_num(y) > 0.5).sum())
+    fallback = positives < UNDERPOWERED_POSITIVES
+    return {
+        "label": SURVIVAL_LABEL,
+        "positives": positives,
+        "n_samples": int(np.isfinite(y).sum()),
+        "fallback": bool(fallback),
+        "fallback_label": SURVIVAL_FALLBACK_LABEL if fallback else None,
+        "fallback_absolute": list(SURVIVAL_FALLBACK_ABS) if fallback else None,
+        "fallback_increment": SURVIVAL_FALLBACK_INC if fallback else None,
+    }
+
+
+def resolve_cells(fallback: dict) -> tuple[dict[str, Any], ...]:
+    """Apply the survival-label fallback to the pre-registered gate registry."""
+    if not fallback.get("fallback"):
+        return CELLS
+    resolved = []
+    for spec_cell in CELLS:
+        new = dict(spec_cell)
+        label, absolute = new["primary"]
+        if label == SURVIVAL_LABEL:
+            new["primary"] = (SURVIVAL_FALLBACK_LABEL, SURVIVAL_FALLBACK_ABS if absolute is not None else None)
+        increments = []
+        for inc_label, inc_metric, inc_threshold, combine in new["increments"]:
+            if inc_label == SURVIVAL_LABEL:
+                increments.append((SURVIVAL_FALLBACK_LABEL, "spearman", SURVIVAL_FALLBACK_INC, combine))
+            else:
+                increments.append((inc_label, inc_metric, inc_threshold, combine))
+        # LURE lists both labels with "or"; after substitution they collapse.
+        new["increments"] = tuple(dict.fromkeys(increments))
+        extras = []
+        for extra_label, extra_metric, extra_threshold in new.get("extras", ()):
+            if extra_label == SURVIVAL_LABEL:
+                extras.append((SURVIVAL_FALLBACK_LABEL, "spearman", SURVIVAL_FALLBACK_INC))
+            else:
+                extras.append((extra_label, extra_metric, extra_threshold))
+        new["extras"] = tuple(dict.fromkeys(extras))
+        resolved.append(new)
+    return tuple(resolved)
 
 
 # ---------------------------------------------------------------------------
@@ -314,10 +379,26 @@ def clearance_now(px: float, py: float, pos: np.ndarray, half: np.ndarray, t: in
     return float(max(CLR_FLOOR, min(CLR_CAP, dist.min())))
 
 
-def _per_step_disp(frameskip: int = FRAMESKIP) -> np.ndarray:
-    """(18, 2) displacement per decision, ordered as focus*9 + move."""
-    axis = np.array([4.0, 2.0], dtype=np.float32)
-    diag = np.array([2.8284, 1.4142], dtype=np.float32)
+def _per_step_disp(frameskip: int = FRAMESKIP, speeds: dict[str, float] | None = None) -> np.ndarray:
+    """(18, 2) displacement per decision, ordered as focus*9 + move.
+
+    ``speeds`` overrides the pilot's constants.  TH08 stores per-shot-type
+    ``axisSpeed`` / ``diagonalSpeed`` in the player SHT file, and a D2 check on
+    recorded human replays measured 5.0 / 1.9 px per frame for Youmu against
+    4.0 / 2.0 for Border Team.  A 25% speed error over a 20-frame plan is a 20 px
+    position error, so mixing characters with the Border constants would corrupt
+    the horizon features rather than just add noise.
+    """
+    if speeds is None:
+        axis_speed = 4.0
+        focus_speed = 2.0
+    else:
+        axis_speed = float(speeds["speed"])
+        focus_speed = float(speeds["focus_speed"])
+    axis = np.array([axis_speed, focus_speed], dtype=np.float32)
+    # The diagonal per-axis component is speed / sqrt(2); measured |v| on both
+    # Border Team and Youmu replays matches that structure to <1%.
+    diag = axis / np.sqrt(2.0)
     disp = np.zeros((2, 9, 2), dtype=np.float32)
     for focus in (0, 1):
         for move in range(9):
@@ -330,6 +411,69 @@ def _per_step_disp(frameskip: int = FRAMESKIP) -> np.ndarray:
 _DISP = _per_step_disp()
 
 
+def measure_speeds(records: list[dict], percentile: float = 95.0) -> dict[str, float]:
+    """Estimate the shot type's per-frame speeds from recorded velocities.
+
+    Uses a high percentile of ``|v|`` inside each (direction, focus) bucket: the
+    game accelerates over a few frames after a direction change, so the *mean*
+    under-reports the steady-state speed (Border measures 3.95 by mean and 4.0 by
+    p95).  Falls back to the Border constants when a bucket is empty, and records
+    which fallback was used so a report can show it instead of assuming.
+    """
+    buckets: dict[tuple[int, int], list[float]] = {(0, 0): [], (0, 1): [], (1, 0): [], (1, 1): []}
+    for record in records:
+        action = record.get("action") or [0, 0, 0, 0]
+        move = int(action[0]) if len(action) > 0 else 0
+        focus = int(action[2]) if len(action) > 2 else 0
+        player = record.get("player") or {}
+        vx, vy = player.get("vx"), player.get("vy")
+        if vx is None or vy is None:
+            continue
+        ux, uy = _MOVE_VECTORS[move]
+        axis = 1 if (abs(ux) + abs(uy)) == 1 else 0
+        diagonal = 1 if (ux != 0.0 and uy != 0.0) else 0
+        speed = math.hypot(float(vx), float(vy))
+        if axis:
+            buckets[(0, focus)].append(speed)
+        elif diagonal:
+            buckets[(1, focus)].append(speed)
+    def p(values: list[float]) -> float | None:
+        return float(np.percentile(values, percentile)) if len(values) >= 20 else None
+    axis_normal = p(buckets[(0, 0)])
+    axis_focus = p(buckets[(0, 1)])
+    diag_normal = p(buckets[(1, 0)])
+    diag_focus = p(buckets[(1, 1)])
+    # Prefer axis buckets; fall back to diagonal |v| (same quantity by construction).
+    speed = axis_normal if axis_normal is not None else diag_normal
+    focus_speed = axis_focus if axis_focus is not None else diag_focus
+    # A trace where the player barely moves does not reveal the movement model;
+    # treating 0.0 as "measured 0 px/frame" would silently disable every horizon
+    # feature, so below the floor it is a fallback with a named reason.
+    if speed is not None and speed < MIN_MEASURED_SPEED:
+        speed = None
+    if focus_speed is not None and focus_speed < MIN_MEASURED_SPEED:
+        focus_speed = None
+    measured = {"speed": speed, "focus_speed": focus_speed}
+    fallback = []
+    if speed is None:
+        measured["speed"] = 4.0
+        fallback.append("speed")
+    if focus_speed is None:
+        measured["focus_speed"] = 2.0
+        fallback.append("focus_speed")
+    return {
+        "speed": float(measured["speed"]),
+        "focus_speed": float(measured["focus_speed"]),
+        "speed_diag": float(measured["speed"]) / math.sqrt(2.0),
+        "focus_speed_diag": float(measured["focus_speed"]) / math.sqrt(2.0),
+        "samples_axis_normal": len(buckets[(0, 0)]),
+        "samples_axis_focus": len(buckets[(0, 1)]),
+        "samples_diag_normal": len(buckets[(1, 0)]),
+        "samples_diag_focus": len(buckets[(1, 1)]),
+        "fallback": fallback,
+    }
+
+
 def horizon_clearance(
     px: float,
     py: float,
@@ -338,6 +482,7 @@ def horizon_clearance(
     half: np.ndarray,
     steps: int = HORIZON_STEPS,
     frameskip: int = FRAMESKIP,
+    disp: np.ndarray | None = None,
 ) -> tuple[np.ndarray, np.ndarray]:
     """Per-action min clearance along a constant-action rollout.
 
@@ -346,6 +491,7 @@ def horizon_clearance(
     strictly weaker planner, but it is the same information and it makes the 18
     action values independent of the pilot's tie-breaking.
     """
+    step_disp = _DISP if disp is None else disp
     x_lo = spec.MOVE_AREA_X + PLAYER_HALF
     x_hi = spec.MOVE_AREA_X + spec.MOVE_AREA_W - PLAYER_HALF
     y_lo = spec.MOVE_AREA_Y + PLAYER_HALF
@@ -356,8 +502,8 @@ def horizon_clearance(
     traj = np.zeros((18, steps, 2), dtype=np.float32)
     n = pos.shape[0]
     for step in range(1, steps + 1):
-        cur[:, 0] = np.clip(cur[:, 0] + _DISP[:, 0], x_lo, x_hi)
-        cur[:, 1] = np.clip(cur[:, 1] + _DISP[:, 1], y_lo, y_hi)
+        cur[:, 0] = np.clip(cur[:, 0] + step_disp[:, 0], x_lo, x_hi)
+        cur[:, 1] = np.clip(cur[:, 1] + step_disp[:, 1], y_lo, y_hi)
         traj[:, step - 1] = cur
         if n:
             t = float(step * frameskip)
@@ -403,8 +549,31 @@ def _closest_bullets(pos: np.ndarray, vel: np.ndarray, half: np.ndarray, px: flo
     return pos[order], vel[order], half[order]
 
 
-def extract_episode(records: list[dict], bullets, stride: int = 1) -> dict:
-    """Build feature blocks, labels, and audit primitives for one episode."""
+def extract_episode(
+    records: list[dict],
+    bullets,
+    stride: int = 1,
+    speed_mode: str = "config",
+    strict_frames: bool = False,
+) -> dict:
+    """Build feature blocks, labels, and audit primitives for one episode.
+
+    ``speed_mode`` selects the movement model used by the horizon features:
+    ``"config"`` keeps the pilot's Border-Team constants (bit-identical to the
+    D1 numbers), ``"measure"`` estimates them from this episode's own velocity
+    field, which is required for non-Border characters (see ``measure_speeds``).
+
+    ``strict_frames`` drops decisions whose sampled frame span is not exactly
+    ``frameskip``.  Replay playback is *polled* and the recorder is marginally
+    slower than 60 fps, so ~1.4% of D2 decisions span 3+ frames instead of 2.
+    Those records are complete in every *field* sense (no ``schema_*_error``),
+    only the continuity assertion fails; the flag exists so a report can show
+    that the conclusions do not depend on them.
+    """
+    if speed_mode not in ("config", "measure"):
+        raise ValueError(f"unknown speed_mode {speed_mode}")
+    speeds = None if speed_mode == "config" else measure_speeds(records)
+    disp = _DISP if speeds is None else _per_step_disp(FRAMESKIP, speeds)
     positions_all = bullets["positions"]
     velocities_all = bullets["velocities"]
     half_all = bullets["half"]
@@ -435,6 +604,12 @@ def extract_episode(records: list[dict], bullets, stride: int = 1) -> dict:
     for index, record in enumerate(records):
         if index % stride:
             continue
+        if strict_frames:
+            frame_pre, frame_post = record.get("frame_pre"), record.get("frame_post")
+            if frame_pre is None or frame_post is None:
+                continue
+            if int(frame_post) - int(frame_pre) != FRAMESKIP:
+                continue
         player = record.get("player") or {}
         px, py = player.get("x"), player.get("y")
         if px is None or py is None:
@@ -461,7 +636,7 @@ def extract_episode(records: list[dict], bullets, stride: int = 1) -> dict:
 
         # --- BASE: the temporal proxies named by v3.6.0 §4 T1 ---------------
         clear0 = clearance_now(px, py, pos, half)
-        mins, traj = horizon_clearance(px, py, pos, vel, half)
+        mins, traj = horizon_clearance(px, py, pos, vel, half, disp=disp)
         boss_hp = float(sum(_finite(b.get("life")) for b in bosses)) if bosses else 0.0
         row["BASE_clearance"] = clear0
         row["BASE_n_bullets"] = float(n_bullets)
@@ -716,6 +891,8 @@ def extract_episode(records: list[dict], bullets, stride: int = 1) -> dict:
         "labels": labels,
         "primitives": prim_arr,
         "rows": len(rows),
+        "speeds": speeds,
+        "speed_mode": speed_mode,
     }
 
 
@@ -837,16 +1014,31 @@ class Dataset:
     groups: np.ndarray  # episode index per row
     episodes: list[str]
     primitives: dict[str, np.ndarray] = field(default_factory=dict)
+    speeds: list[dict | None] = field(default_factory=list)
+    speed_mode: str = "config"
 
     @property
     def rows(self) -> int:
         return int(self.groups.shape[0])
 
 
-def load_dataset(probe_dir: Path, stride: int = 1, cache: Path | None = None) -> Dataset:
+def load_dataset(
+    probe_dir: Path,
+    stride: int = 1,
+    cache: Path | None = None,
+    speed_mode: str = "config",
+    strict_frames: bool = False,
+) -> Dataset:
     probe_dir = Path(probe_dir)
     if cache is not None and cache.exists():
         payload = np.load(cache, allow_pickle=True)
+        cached_mode = str(payload["speed_mode"]) if "speed_mode" in payload else "config"
+        cached_strict = bool(payload["strict_frames"]) if "strict_frames" in payload else False
+        if cached_mode != speed_mode or cached_strict != strict_frames:
+            raise ValueError(
+                f"feature cache {cache} was built with speed_mode={cached_mode!r} strict_frames={cached_strict}, "
+                f"requested speed_mode={speed_mode!r} strict_frames={strict_frames}; use a different --cache path"
+            )
         return Dataset(
             blocks={name: payload[f"block_{name}"] for name in BLOCKS},
             columns={name: list(payload[f"cols_{name}"]) for name in BLOCKS},
@@ -854,6 +1046,8 @@ def load_dataset(probe_dir: Path, stride: int = 1, cache: Path | None = None) ->
             groups=payload["groups"],
             episodes=[str(x) for x in payload["episodes"]],
             primitives={key: payload[f"prim_{key}"] for key in payload["prim_keys"]},
+            speeds=[json.loads(str(x)) for x in payload["speeds"]] if "speeds" in payload else [],
+            speed_mode=cached_mode,
         )
     episodes_meta = read_episodes(probe_dir)
     names = [ep.get("episode") for ep in episodes_meta]
@@ -862,10 +1056,13 @@ def load_dataset(probe_dir: Path, stride: int = 1, cache: Path | None = None) ->
     prim_acc: dict[str, list[np.ndarray]] = {}
     groups: list[np.ndarray] = []
     columns: dict[str, list[str]] = {}
+    speeds_acc: list[dict | None] = []
     for index, name in enumerate(names):
         records = read_trace(probe_dir / "trace" / f"{name}.jsonl")
         bullets = np.load(probe_dir / "bullets" / f"{name}.npz")
-        payload = extract_episode(records, bullets, stride=stride)
+        payload = extract_episode(
+            records, bullets, stride=stride, speed_mode=speed_mode, strict_frames=strict_frames
+        )
         for block in BLOCKS:
             blocks_acc[block].append(payload["blocks"][block])
             columns.setdefault(block, payload["columns"][block])
@@ -873,6 +1070,7 @@ def load_dataset(probe_dir: Path, stride: int = 1, cache: Path | None = None) ->
             labels_acc[key].append(payload["labels"][key])
         for key, value in payload["primitives"].items():
             prim_acc.setdefault(key, []).append(value)
+        speeds_acc.append(payload["speeds"])
         groups.append(np.full(payload["rows"], index, dtype=np.int64))
     dataset = Dataset(
         blocks={name: np.concatenate(values, axis=0) for name, values in blocks_acc.items()},
@@ -881,10 +1079,18 @@ def load_dataset(probe_dir: Path, stride: int = 1, cache: Path | None = None) ->
         groups=np.concatenate(groups, axis=0),
         episodes=names,
         primitives={key: np.concatenate(values, axis=0) for key, values in prim_acc.items()},
+        speeds=speeds_acc,
+        speed_mode=speed_mode,
     )
     if cache is not None:
         cache.parent.mkdir(parents=True, exist_ok=True)
-        arrays: dict[str, np.ndarray] = {"groups": dataset.groups, "episodes": np.array(names, dtype=object)}
+        arrays: dict[str, np.ndarray] = {
+            "groups": dataset.groups,
+            "episodes": np.array(names, dtype=object),
+            "speed_mode": np.array(speed_mode, dtype=object),
+            "strict_frames": np.array(strict_frames, dtype=bool),
+            "speeds": np.array([json.dumps(speed) for speed in speeds_acc], dtype=object),
+        }
         for name in BLOCKS:
             arrays[f"block_{name}"] = dataset.blocks[name]
             arrays[f"cols_{name}"] = np.array(columns[name], dtype=object)
@@ -1147,10 +1353,15 @@ def _permutation_p(
     }
 
 
-def run_ablation(dataset: Dataset, permutations: int = PERMUTATIONS, seed: int = PERM_SEED) -> dict:
+def run_ablation(
+    dataset: Dataset,
+    permutations: int = PERMUTATIONS,
+    seed: int = PERM_SEED,
+    cells_spec: tuple[dict[str, Any], ...] | None = None,
+) -> dict:
     rng = np.random.default_rng(seed)
     cells = []
-    for spec_cell in CELLS:
+    for spec_cell in (CELLS if cells_spec is None else cells_spec):
         strategy = spec_cell["strategy"]
         block = spec_cell["block"]
         base_blocks: list[str] = [] if strategy == "LocalDodge" else ["BASE"]
@@ -1216,15 +1427,21 @@ def run_ablation(dataset: Dataset, permutations: int = PERMUTATIONS, seed: int =
 # ---------------------------------------------------------------------------
 
 
-def judge(cells: list[dict], all_death_cell: dict | None = None) -> dict:
+def judge(
+    cells: list[dict],
+    all_death_cell: dict | None = None,
+    cells_spec: tuple[dict[str, Any], ...] | None = None,
+) -> dict:
     """Apply 执行计划 §6 to the cell table.
 
     The gate a number is judged on is part of the pre-registration, so this
-    function reads the label from ``CELLS`` and never from the outcome.
+    function reads the label from the (possibly fallback-resolved) cell spec and
+    never from the outcome.
     """
+    spec = CELLS if cells_spec is None else cells_spec
     index = {(cell["owner"], cell["label"]): cell for cell in cells}
     verdicts: dict[str, dict] = {}
-    for spec_cell in CELLS:
+    for spec_cell in spec:
         strategy = spec_cell["strategy"]
         primary_label, absolute = spec_cell["primary"]
         cell = index.get((strategy, primary_label))
@@ -1277,7 +1494,8 @@ def judge(cells: list[dict], all_death_cell: dict | None = None) -> dict:
             combine = branches[0]["combine"]
             inc_pass = any(b["pass"] for b in branches) if combine == "or" else all(b["pass"] for b in branches)
         underpowered = bool(
-            (cell["positives"] is not None and 0 < cell["positives"] < 100) or cell["n_samples"] < 100
+            (cell["positives"] is not None and cell["positives"] < UNDERPOWERED_POSITIVES)
+            or cell["n_samples"] < UNDERPOWERED_POSITIVES
         )
         unstable = any(b["sign_agrees"] is False for b in branches)
         if underpowered:
@@ -1442,11 +1660,28 @@ def render_markdown(report: dict) -> str:
             f"- Δ = {_fmt(global_cell['delta'], signed=True)}（局均 {_fmt(global_cell['delta_ep'], signed=True)}），p = {_fmt(global_cell['permutation_p'], 3)}",
         ]
     diag = report.get("diagnostics", {})
+    fallback = report.get("survival_fallback") or {}
+    lines += ["", "## 4 生存标签与标签平衡", ""]
+    if fallback.get("fallback"):
+        lines.append(
+            f"- **生存标签回退已触发**：`{fallback['label']}` 阳性 {fallback['positives']} < 100，"
+            f"按执行计划-D2补遗 §3 改用 `{fallback['fallback_label']}`（绝对门 {fallback['fallback_absolute']}，"
+            f"增量门 +{fallback['fallback_increment']}）。阈值方向未变，只换了判生存的标签。"
+        )
+    else:
+        lines.append(
+            f"- 生存标签 `{fallback.get('label')}` 阳性 {fallback.get('positives')} ≥ 100，按原门禁用 AUC。"
+        )
+    lines += ["", "| 二值标签 | 阳性 | 样本 | 基准率 | 备注 |", "|---|---:|---:|---:|---|"]
+    rates = report.get("label_rates", {})
+    for label, row in rates.items():
+        note = "⚠ 近常量，AUC 不可与常规标签并列" if label in diag.get("degenerate_labels", []) else ""
+        lines.append(f"| {label} | {row['positives']} | {row['n']} | {row['rate']:.4f} | {note} |")
     lines += [
         "",
-        "## 4 诊断（读表前必读）",
+        "## 5 诊断（读表前必读）",
         "",
-        f"- **退化为常数预测器时的 pooled AUC**：`death_60` 空特征 = {_fmt(diag.get('degenerate_auc'))}"
+        f"- **退化为常数预测器时的 pooled 指标**：生存标签空特征 = {_fmt(diag.get('degenerate_auc'))}"
         f"（局均 {_fmt(diag.get('degenerate_auc_ep'))}）。",
         "  pooled LOEO AUC 会把『每折基准率不同』混进排序：死亡集中的短局恰好是训练集基准率更低的折，"
         "常数预测器因此拿到 0.317 而不是 0.5。所有 Δ 都在同一协议下计算、两侧同受影响，所以**方向可信**；"
@@ -1465,7 +1700,7 @@ def render_markdown(report: dict) -> str:
     if pooled_ep:
         same = sum(1 for c in pooled_ep if _sign_agrees(c["delta"], c["delta_ep"]))
         lines.append(f"- **pooled / 局均符号一致**：{same}/{len(pooled_ep)} 个单元格。不一致的单元格已在第 2 节可见，需单独读。")
-    lines += ["", "## 5 数据清点", "", "```json", json.dumps(inv, ensure_ascii=False, indent=1), "```"]
+    lines += ["", "## 6 数据清点", "", "```json", json.dumps(inv, ensure_ascii=False, indent=1), "```"]
     return "\n".join(lines) + "\n"
 
 
@@ -1491,6 +1726,8 @@ def inventory(dataset: Dataset) -> dict:
         "blocks": {name: int(dataset.blocks[name].shape[1]) for name in BLOCKS},
         "columns": {name: list(dataset.columns[name]) for name in BLOCKS},
         "labels": {key: value for key, value in LABELS.items()},
+        "speed_mode": dataset.speed_mode,
+        "measured_speeds": dataset.speeds,
         "per_episode": rows,
     }
 
@@ -1503,38 +1740,94 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--stride", type=int, default=1)
     parser.add_argument("--permutations", type=int, default=PERMUTATIONS)
     parser.add_argument("--seed", type=int, default=SEED)
+    parser.add_argument(
+        "--strict-frames",
+        action="store_true",
+        help="drop decisions whose sampled frame span != frameskip (replay polling "
+        "produces ~1.4%% such records); used to show the conclusions do not depend on them",
+    )
+    parser.add_argument(
+        "--speed-mode",
+        choices=["config", "measure"],
+        default="config",
+        help="movement model for horizon features: 'config' = the pilot's Border-Team "
+        "constants (D1 numbers are bit-identical); 'measure' = estimate per episode "
+        "from the recorded velocity field (required for non-Border characters)",
+    )
     args = parser.parse_args(argv)
 
     started = time.perf_counter()
-    dataset = load_dataset(args.probe, stride=args.stride, cache=args.cache)
+    dataset = load_dataset(
+        args.probe,
+        stride=args.stride,
+        cache=args.cache,
+        speed_mode=args.speed_mode,
+        strict_frames=args.strict_frames,
+    )
     extract_seconds = time.perf_counter() - started
-    ablation = run_ablation(dataset, permutations=args.permutations, seed=args.seed + 1)
+    fallback = resolve_survival_fallback(dataset)
+    cells_spec = resolve_cells(fallback)
+    ablation = run_ablation(dataset, permutations=args.permutations, seed=args.seed + 1, cells_spec=cells_spec)
 
-    # Global cells: the union of every block, and the empty-feature reference.
+    # Global cells use the *effective* survival label (执行计划-D2补遗 §3).  On a
+    # human replay corpus death_60 can have zero positives, and a G-3 computed on
+    # an untestable label would silently print "n/a" instead of the real number.
+    survival_label = fallback["fallback_label"] if fallback["fallback"] else SURVIVAL_LABEL
+    survival_kind = LABELS[survival_label]
     all_blocks = list(ALL_BLOCKS)
-    all_with = _cell_value(dataset, all_blocks, "death_60")
-    all_without = _cell_value(dataset, ["BASE"], "death_60")
+    all_with = _cell_value(dataset, all_blocks, survival_label)
+    all_without = _cell_value(dataset, ["BASE"], survival_label)
     all_delta = None
     if all_with["value"] is not None and all_without["value"] is not None:
         all_delta = all_with["value"] - all_without["value"]
     all_delta_ep = None
     if all_with["value_ep"] is not None and all_without["value_ep"] is not None:
         all_delta_ep = all_with["value_ep"] - all_without["value_ep"]
+    all_perm = None
+    if args.permutations and all_delta is not None:
+        all_perm = _permutation_p(
+            dataset,
+            ["BASE"],
+            "REGION",
+            survival_label,
+            survival_kind,
+            all_delta,
+            all_without["value"],
+            args.permutations,
+            np.random.default_rng(args.seed + 2),
+        ).get("p")
     global_cell = {
-        "label": "death_60",
-        "kind": "auc",
+        "label": survival_label,
+        "kind": survival_kind,
         "without": all_without["value"],
         "with": all_with["value"],
         "without_ep": all_without["value_ep"],
         "with_ep": all_with["value_ep"],
         "delta": all_delta,
         "delta_ep": all_delta_ep,
-        "permutation_p": None,
-        "permutations": 0,
+        "permutation_p": all_perm,
+        "permutations": args.permutations,
     }
-    degenerate = _cell_value(dataset, [], "death_60")
+    degenerate = _cell_value(dataset, [], survival_label)
+    # An AUC on a 95/5 split is not the same quantity as one on a 40/60 split.
+    # Report the balance of every binary label so a "pass" resting on a
+    # near-constant label is visible instead of impressive.  A 2% rare event is
+    # *not* degenerate - 462 positives support an AUC - so the low bound is 1%.
+    label_rates = {}
+    for label, kind in LABELS.items():
+        if kind != "auc":
+            continue
+        y = dataset.labels[label]
+        finite = int(np.isfinite(y).sum())
+        if not finite:
+            continue
+        positives = int((np.nan_to_num(y) > 0.5).sum())
+        label_rates[label] = {"positives": positives, "n": finite, "rate": round(positives / finite, 4)}
+    degenerate_labels = [
+        label for label, row in label_rates.items() if 0.0 < row["rate"] < 0.01 or row["rate"] > 0.90
+    ]
 
-    verdicts = judge(ablation["cells"], global_cell)
+    verdicts = judge(ablation["cells"], global_cell, cells_spec=cells_spec)
     degenerate_cells = [c["strategy"] for c in ablation["cells"] if c["null_degenerate"]]
     report = {
         "schema": SCHEMA,
@@ -1553,9 +1846,12 @@ def main(argv: list[str] | None = None) -> int:
         },
         "inventory": inventory(dataset),
         "cells": ablation["cells"],
-        "global_cells": {"ALL_vs_BASE_death_60": global_cell},
+        "global_cells": {f"ALL_vs_BASE_{survival_label}": global_cell},
         "verdicts": verdicts,
+        "survival_fallback": fallback,
+        "label_rates": label_rates,
         "diagnostics": {
+            "degenerate_labels": degenerate_labels,
             "degenerate_auc": degenerate["value"],
             "degenerate_auc_ep": degenerate["value_ep"],
             "degenerate_cells": degenerate_cells,

@@ -244,6 +244,19 @@ def _strided(buffer: np.ndarray, offset: int, shape: tuple[int, ...], dtype, str
     )
 
 
+def _read_current_spell(gm: bytes | bytearray) -> int:
+    """Signed 16-bit ``GameManager::currentSpellCardNumber`` (0x3DBB0).
+
+    The field is an i16 (``C_ASSERT(offsetof(GameManager, currentSpellCardNumber)
+    == 0x3DBB0)``), but it used to be unpacked as a 4-byte int.  That pulled in
+    ``isInGameMenu`` (0x3DBB2) and ``showRetryMenu`` (0x3DBB3), so a game-over
+    retry menu read back as 0x01000000 and ``trace35.events_between`` recorded it
+    as a ``spell`` event.  That is exactly why v3.5.0 S0's three "spell" events
+    landed on the three game-over episodes.
+    """
+    return struct.unpack_from("<h", gm, spec.OFF_GM_CURRENT_SPELL - _GM_BLOCK_START)[0]
+
+
 class GameStateReader:
     """Reads scalars and the bullet pool from one TH08 process."""
 
@@ -318,7 +331,7 @@ class GameStateReader:
         state.is_spell_practice = bool(state.flags & spec.FLAG_SPELL_PRACTICE)
         state.in_game_menu = gm_u8(spec.OFF_GM_IS_IN_GAME_MENU) != 0
         state.replay_mode = gm_u8(spec.OFF_GM_REPLAY_MODE)
-        state.current_spell = struct.unpack_from("<i", gm, spec.OFF_GM_CURRENT_SPELL - _GM_BLOCK_START)[0]
+        state.current_spell = _read_current_spell(gm)
         state.gameplay_frame = gm_u32(spec.OFF_GM_GAMEPLAY_FRAME)
         state.stage = struct.unpack_from("<i", gm, spec.OFF_GM_CURRENT_STAGE - _GM_BLOCK_START)[0]
         state.stage_clear_flag = gm_u32(spec.OFF_GM_STAGE_CLEAR_FLAG)

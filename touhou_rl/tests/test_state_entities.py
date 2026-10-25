@@ -106,6 +106,34 @@ def _reader() -> tuple[GameStateReader, FakeMemory]:
     return reader, mem
 
 
+def test_current_spell_is_read_as_i16_not_contaminated_by_menu_flags():
+    """v3.6.0: reading 4 bytes at 0x3DBB0 pulled in isInGameMenu/showRetryMenu.
+
+    A game-over retry menu therefore read back as 0x01000000, and
+    ``trace35.events_between`` recorded it as a ``spell`` event - which is why
+    v3.5.0 S0's three "spell" events landed on the three game-over episodes.
+    The field is a signed 16-bit spell card number: -1 means "no spell".
+    """
+    from touhou_rl.state import _GM_BLOCK_START, _read_current_spell
+
+    buffer = bytearray(16)
+    offset = spec.OFF_GM_CURRENT_SPELL - _GM_BLOCK_START
+    # Spell field 0 with the retry menu open: the old 4-byte read saw 0x01000000,
+    # which is the exact value found in the D1 traces.
+    struct.pack_into("<h", buffer, offset, 0)
+    struct.pack_into("<B", buffer, offset + 2, 0)  # isInGameMenu
+    struct.pack_into("<B", buffer, offset + 3, 1)  # showRetryMenu
+    assert _read_current_spell(buffer) == 0
+    assert struct.unpack_from("<i", buffer, offset)[0] == 0x01000000
+    # "No spell" is -1, not 65535: the D2 replay traces recorded 65535.
+    struct.pack_into("<h", buffer, offset, -1)
+    assert _read_current_spell(buffer) == -1
+    assert struct.unpack_from("<H", buffer, offset)[0] == 0xFFFF
+    # A real spell number is preserved.
+    struct.pack_into("<h", buffer, offset, 7)
+    assert _read_current_spell(buffer) == 7
+
+
 def test_read_enemies_filters_and_parses():
     reader, _mem = _reader()
     enemies = reader.read_enemies()

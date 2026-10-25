@@ -1,0 +1,119 @@
+{
+  "schema": "v350-s0-report/1",
+  "generated": "2026-10-25T13:37:44",
+  "git_head": "8aeeee58661aa3886c55003c0df1f5c9bf79af14",
+  "out_dir": "Document\\Update\\Alpha\\v3.6.0\\data\\probe\\d2-stageclear",
+  "episodes": 2,
+  "gates": {
+    "S0-1": {
+      "name": "逐决策时间戳单调",
+      "value": 1.0,
+      "threshold": 1.0,
+      "numerator": 16286,
+      "denominator": 16286,
+      "pass": true
+    },
+    "S0-2": {
+      "name": "enemy/item/power 字段可追溯",
+      "value": 1.0,
+      "threshold": 1.0,
+      "numerator": 16276,
+      "denominator": 16276,
+      "pass": true
+    },
+    "S0-3": {
+      "name": "clear/game-over/left-game 可区分",
+      "value": 1.0,
+      "threshold": 1.0,
+      "numerator": 2,
+      "denominator": 2,
+      "ambiguous": [],
+      "pass": true
+    },
+    "S0-4": {
+      "name": "新采集 complete 有效率",
+      "value": 0.976038,
+      "threshold": 0.95,
+      "numerator": 15886,
+      "denominator": 16276,
+      "pass": true
+    },
+    "S0-5": {
+      "name": "整局切分",
+      "value": 1.0,
+      "threshold": 1.0,
+      "errors": [],
+      "duplicate_episodes": [],
+      "pass": true
+    },
+    "S0-M": {
+      "name": "manifest 与磁盘一致",
+      "value": 1.0,
+      "threshold": 1.0,
+      "pass": true
+    }
+  },
+  "diagnostics": {
+    "records": 16286,
+    "steady": 16276,
+    "missing_traces": [],
+    "record_mismatch": [],
+    "duplicate_episodes": [],
+    "schema_error_counts": {},
+    "event_counts": {
+      "dialogue_end": 4,
+      "dialogue_start": 4,
+      "bomb_used": 1,
+      "stage_clear": 2
+    },
+    "termination_counts": {
+      "stage_clear": 2
+    },
+    "complete_rate_by_episode": {
+      "replay-ep01": 0.9807,
+      "replay-ep02": 0.9715
+    },
+    "episodes_with_errors": []
+  },
+  "manifest": {
+    "checked": true,
+    "file_count": 5,
+    "missing": [],
+    "extra": [],
+    "hash_mismatch": [],
+    "pass": true
+  },
+  "episode_rows": [
+    {
+      "episode": "replay-ep01",
+      "records": 8000,
+      "expected_records": 8000,
+      "steady": 7995,
+      "traceable": 7995,
+      "complete": 7841,
+      "complete_rate": 0.9807,
+      "termination": "stage_clear",
+      "split": "train",
+      "split_consistent": true,
+      "records_match": true
+    },
+    {
+      "episode": "replay-ep02",
+      "records": 8286,
+      "expected_records": 8286,
+      "steady": 8281,
+      "traceable": 8281,
+      "complete": 8045,
+      "complete_rate": 0.9715,
+      "termination": "stage_clear",
+      "split": "train",
+      "split_consistent": true,
+      "records_match": true
+    }
+  ],
+  "overall": {
+    "pass": true,
+    "failed": [],
+    "integrity_ok": true
+  }
+}

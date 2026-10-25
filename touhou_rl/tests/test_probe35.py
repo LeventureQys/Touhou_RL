@@ -8,7 +8,7 @@ from pathlib import Path
 import pytest
 
 from touhou_rl import spec
-from touhou_rl.probe35 import ProbeConfig, analyse_p_contract, verify, write_manifest
+from touhou_rl.probe35 import ProbeConfig, analyse_p_contract, episode_plan, verify, write_manifest
 from touhou_rl.trace35 import stable_split
 
 
@@ -184,3 +184,65 @@ def test_p_contract_analysis_happy_path(tmp_path: Path):
     # 1 power is below the cap: H-P1/H-P2 must be reported as not tested, not as pass.
     assert report["hypotheses"]["H-P1"]["not_tested"] is True
     assert report["summary"]["pass"] is False
+
+
+# ---------------------------------------------------------------------------
+# v3.6.0 D2: batch replay collection
+# ---------------------------------------------------------------------------
+
+
+def _fake_replay(tmp_path: Path, name: str) -> Path:
+    path = tmp_path / name
+    path.write_bytes(b"T8RP" + b"\x00" * 32)
+    return path
+
+
+def test_episode_plan_teacher_loop():
+    cfg = ProbeConfig(episodes=3)
+    assert episode_plan(cfg, 1) == [(1, None), (2, None), (3, None)]
+    assert episode_plan(cfg, 5) == [(5, None), (6, None), (7, None)]
+
+
+def test_episode_plan_single_replay_arm(tmp_path):
+    replay = _fake_replay(tmp_path, "a.rpy")
+    cfg = ProbeConfig(mode="p-contract", episodes=2, replay_path=replay)
+    assert episode_plan(cfg, 1) == [(1, replay), (2, replay)]
+
+
+def test_episode_plan_replay_batch_one_episode_per_replay(tmp_path):
+    first = _fake_replay(tmp_path, "a.rpy")
+    second = _fake_replay(tmp_path, "b.rpy")
+    cfg = ProbeConfig(mode="collect", episodes=len(cfg_episodes := [first, second]), replays=(first, second))
+    plan = episode_plan(cfg, 1)
+    assert plan == [(1, first), (2, second)]
+    # The batch ignores ``episodes``: one episode per replay, never padded.
+    assert episode_plan(ProbeConfig(mode="collect", episodes=9, replays=(first,)), 1) == [(1, first)]
+
+
+def test_validate_rejects_multiple_replays_for_p_contract(tmp_path):
+    first = _fake_replay(tmp_path, "a.rpy")
+    second = _fake_replay(tmp_path, "b.rpy")
+    cfg = ProbeConfig(mode="p-contract", replays=(first, second))
+    with pytest.raises(ValueError, match="at most one replay"):
+        cfg.validate()
+
+
+def test_validate_rejects_replay_with_policy(tmp_path):
+    replay = _fake_replay(tmp_path, "a.rpy")
+    cfg = ProbeConfig(mode="collect", policy="suicide", replays=(replay,))
+    with pytest.raises(ValueError, match="does not take a policy"):
+        cfg.validate()
+
+
+def test_validate_rejects_missing_replay(tmp_path):
+    cfg = ProbeConfig(mode="collect", replays=(tmp_path / "missing.rpy",))
+    with pytest.raises(ValueError, match="replay not found"):
+        cfg.validate()
+
+
+def test_validate_accepts_replay_batch_and_records_it(tmp_path):
+    first = _fake_replay(tmp_path, "a.rpy")
+    cfg = ProbeConfig(mode="collect", replays=(first,))
+    cfg.validate()
+    assert cfg.as_dict()["replays"] == [str(first)]
+    assert cfg.as_dict()["replay_path"] is None

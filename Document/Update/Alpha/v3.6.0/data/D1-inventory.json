@@ -1,6 +1,7 @@
 {
   "schema": "v360-data-inventory/1",
-  "generated": "2026-10-25T12:36:08",
+  "generated": "2026-10-25T13:38:33",
+  "name": "D1",
   "source_probe": "Document\\Update\\Alpha\\v3.5.0\\probe\\s0-teacher",
   "protocol": {
     "cv": "leave-one-episode-out",
@@ -12,6 +13,15 @@
     "short_horizon_decisions": 30,
     "mid_horizon_decisions": 120,
     "frozen_before_results": true
+  },
+  "survival_fallback": {
+    "label": "death_60",
+    "positives": 462,
+    "n_samples": 20886,
+    "fallback": false,
+    "fallback_label": null,
+    "fallback_absolute": null,
+    "fallback_increment": null
   },
   "corpus": {
     "episodes": 9,
@@ -184,6 +194,8 @@
       "bomb_needed_60": "auc",
       "bomb_used_60": "auc"
     },
+    "speed_mode": "config",
+    "measured_speeds": [],
     "per_episode": [
       {
         "episode": "collect-ep01",

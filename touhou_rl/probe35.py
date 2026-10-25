@@ -135,6 +135,9 @@ class ProbeConfig:
     trace: bool = True
     replay_path: Path | None = None
     replay_stage: int = 0
+    # v3.6.0 D2: collect several human replays in one run.  ``replay_path`` stays
+    # the single-arm field the P-contract analysis uses; ``replays`` is the batch.
+    replays: tuple[Path, ...] = ()
 
     def validate(self) -> None:
         if self.mode not in ("collect", "p-contract"):
@@ -149,6 +152,16 @@ class ProbeConfig:
             raise ValueError("practice_stage must be in 0..6 or None")
         if self.replay_path is not None and not Path(self.replay_path).exists():
             raise ValueError(f"replay not found: {self.replay_path}")
+        for path in self.replays:
+            if not Path(path).exists():
+                raise ValueError(f"replay not found: {path}")
+        if self.replays and self.mode == "p-contract" and len(self.replays) > 1:
+            # The P-contract analysis compares one controlled arm with one replay
+            # arm and matches episodes by index; a batch would silently pool
+            # replays from different players.
+            raise ValueError("p-contract accepts at most one replay")
+        if self.replays and self.policy != "teacher":
+            raise ValueError("replay collection does not take a policy")
 
     def as_dict(self) -> dict:
         return {
@@ -165,7 +178,22 @@ class ProbeConfig:
             "dialogue_taps": self.dialogue_taps,
             "replay_path": None if self.replay_path is None else str(self.replay_path),
             "replay_stage": self.replay_stage,
+            "replays": [str(path) for path in self.replays],
         }
+
+
+def episode_plan(cfg: ProbeConfig, start: int) -> list[tuple[int, Path | None]]:
+    """``(episode_index, replay_path_or_None)`` for every episode this run records.
+
+    Pure so the batch wiring is unit-testable without a game: a replay batch
+    yields one episode per replay, everything else falls back to the teacher loop
+    (or the single ``replay_path`` arm used by the P contract).
+    """
+    if cfg.replays:
+        return [(index, Path(path)) for index, path in enumerate(cfg.replays, start=start)]
+    if cfg.replay_path is not None:
+        return [(index, Path(cfg.replay_path)) for index in range(start, start + cfg.episodes)]
+    return [(index, None) for index in range(start, start + cfg.episodes)]
 
 
 def _env_config(cfg: ProbeConfig) -> EnvConfig:
@@ -720,8 +748,9 @@ def _probe_post_terminal_session(session: GameSession, seconds: float) -> list[d
     return samples
 
 
-def run_replay_episode(cfg: ProbeConfig, index: int) -> dict:
+def run_replay_episode(cfg: ProbeConfig, index: int, replay_path: Path | None = None) -> dict:
     """Play one human replay and record the same v350 trace, with no policy."""
+    source = Path(replay_path) if replay_path is not None else Path(cfg.replay_path)
     episode = f"replay-ep{index:02d}"
     prepare_run_dir(
         cfg.run_dir,
@@ -730,7 +759,7 @@ def run_replay_episode(cfg: ProbeConfig, index: int) -> dict:
         default_difficulty=cfg.difficulty,
         use_postmessage_input=False,
     )
-    menu.install_replay(cfg.run_dir, Path(cfg.replay_path), index=1)
+    menu.install_replay(cfg.run_dir, source, index=1)
     session = GameSession(SessionOptions(run_dir=cfg.run_dir))
     writer = TraceWriter(cfg.out_dir, episode) if cfg.trace else None
     started = time.perf_counter()
@@ -738,6 +767,8 @@ def run_replay_episode(cfg: ProbeConfig, index: int) -> dict:
         "schema": EPISODE_SCHEMA,
         "episode": episode,
         "mode": "replay",
+        "replay_file": source.name,
+        "replay_sha256": sha256_file(source),
         "config": cfg.as_dict(),
         "started": time.strftime("%Y-%m-%dT%H:%M:%S"),
         "start": {}, "end": {}, "termination": {}, "stats": {},
@@ -1492,8 +1523,9 @@ def _parser() -> argparse.ArgumentParser:
         p.add_argument("--team", type=int, default=0)
         p.add_argument("--post-terminal-seconds", type=float, default=2.0)
         p.add_argument("--no-dialogue-taps", action="store_true")
-        p.add_argument("--replay", type=Path, default=None,
-                       help="play this replay instead of running the teacher (p-contract/supplementary arm)")
+        p.add_argument("--replay", type=Path, action="append", default=None,
+                       help="play these replay(s) instead of running the teacher; "
+                            "repeat the flag to collect a batch (v3.6.0 D2)")
         p.add_argument("--replay-stage", type=int, default=0)
         p.add_argument("--append", action="store_true",
                        help="append to an existing output directory instead of starting a new collection")
@@ -1529,7 +1561,7 @@ def main(argv: list[str] | None = None) -> int:
         mode=args.command,
         policy=args.policy,
         quit_after=args.quit_after,
-        episodes=args.episodes,
+        episodes=len(args.replay) if args.replay else args.episodes,
         max_steps=args.max_steps,
         frameskip=args.frameskip,
         practice_stage=None if args.full else args.practice_stage,
@@ -1537,12 +1569,11 @@ def main(argv: list[str] | None = None) -> int:
         team=args.team,
         post_terminal_seconds=args.post_terminal_seconds,
         dialogue_taps=not args.no_dialogue_taps,
-        replay_path=args.replay,
+        replay_path=args.replay[0] if args.replay and len(args.replay) == 1 else None,
         replay_stage=args.replay_stage,
+        replays=tuple(args.replay) if args.replay and len(args.replay) > 1 else (),
     )
     cfg.validate()
-    if cfg.replay_path is not None and cfg.mode != "p-contract":
-        raise SystemExit("--replay is only supported for the p-contract arm")
     cfg.out_dir.mkdir(parents=True, exist_ok=True)
     for name in ("trace", "bullets"):
         (cfg.out_dir / name).mkdir(parents=True, exist_ok=True)
@@ -1556,11 +1587,12 @@ def main(argv: list[str] | None = None) -> int:
         episodes = []
         if episodes_path.exists():
             episodes_path.unlink()
+    plan = episode_plan(cfg, args.episode_start)
     started = time.perf_counter()
-    for offset, index in enumerate(range(args.episode_start, args.episode_start + cfg.episodes), start=1):
-        print(f"[{offset}/{cfg.episodes}] {cfg.mode} episode {index} ...", flush=True)
-        if cfg.replay_path is not None:
-            ep = run_replay_episode(cfg, index)
+    for offset, (index, replay) in enumerate(plan, start=1):
+        print(f"[{offset}/{len(plan)}] {cfg.mode} episode {index} replay={replay} ...", flush=True)
+        if replay is not None:
+            ep = run_replay_episode(cfg, index, replay)
         else:
             ep = run_episode(cfg, index)
         episodes.append(ep)
