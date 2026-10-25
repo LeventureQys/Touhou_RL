@@ -32,6 +32,9 @@ from touhou_rl.trace35 import read_episodes, read_trace
 
 SPAWN_RADIUS = 32.0
 SAFE_CLEARANCE = 6.0
+# Must match tactics.CLEAR_ENEMY_SAFE_MARGIN: the clearance above which the aim
+# preference is allowed to act.  Recorded here as a diagnostic only.
+AIM_MARGIN = 10.0
 BOOTSTRAP = 5000
 BOOTSTRAP_SEED = 3611
 WALL_MARGIN = 8.0
@@ -67,6 +70,7 @@ def episode_metrics(probe: Path, episode: str) -> dict:
     player_frames = 0
     safe_gain = 0.0
     safe_frames = 0
+    aim_window_frames = 0
     power_series: list[float] = []
     clearance_series: list[float] = []
     intent_changes = 0
@@ -121,6 +125,8 @@ def episode_metrics(probe: Path, episode: str) -> dict:
             intent_changes += 1
             last_intent = intent
 
+        if clearance >= AIM_MARGIN:
+            aim_window_frames += 1
         if prev_power is not None and clearance >= SAFE_CLEARANCE:
             safe_gain += max(0.0, power - prev_power)
             safe_frames += 1
@@ -152,6 +158,8 @@ def episode_metrics(probe: Path, episode: str) -> dict:
         "safe_power_gain_per_frame": safe_gain / safe_frames if safe_frames else None,
         "safe_frames": safe_frames,
         "mean_clearance": float(np.mean(clearance_series)) if clearance_series else None,
+        # Opportunity rate for the ClearEnemy aim term (clearance >= aim margin).
+        "aim_window_fraction": aim_window_frames / player_frames if player_frames else None,
         "wall_hug_fraction": wall_frames / player_frames if player_frames else 0.0,
         "action_entropy": entropy,
         "distinct_actions": len(action_counts),
@@ -260,6 +268,7 @@ def analyse(probe: Path, tactic: str, primary: str) -> dict:
         "primary": primary,
         "design": {
             "spawn_radius_px": SPAWN_RADIUS,
+            "aim_margin_px": AIM_MARGIN,
             "safe_clearance_px": SAFE_CLEARANCE,
             "bootstrap_draws": BOOTSTRAP,
             "bootstrap_seed": BOOTSTRAP_SEED,
@@ -341,6 +350,7 @@ def render_markdown(report: dict) -> str:
         "max_power",
         "safe_power_gain_per_frame",
         "wall_hug_fraction",
+        "aim_window_fraction",
         "action_entropy",
         "intent_changes",
         "bombs_used",
