@@ -26,8 +26,16 @@ scratch/
 
 # DSH local scratch (not part of the deliverable)
 .pytest-tmp/
+.pytest-*/
 .scratch-probe/
+.tmp/
+.tmp-*/
 
 # v3.5.0 probe traces (large JSONL/NPZ; regenerate with touhou_rl.probe35)
 Document/Update/Alpha/v3.5.0/probe/*/trace/
 Document/Update/Alpha/v3.5.0/probe/*/bullets/
+
+# v3.6.0 feature cache (15 MB derivative of the S0 traces; regenerate in ~53 s
+# with `python -m touhou_rl.ablate36 --cache <path>`).  Not evidence: np.savez
+# stamps entries with the current time, so its hash is not reproducible.
+Document/Update/Alpha/v3.6.0/data/features-*.npz
