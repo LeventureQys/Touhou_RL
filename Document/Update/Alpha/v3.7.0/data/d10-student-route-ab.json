@@ -1,0 +1,181 @@
+{
+  "schema": "v370-student-route-ab/1",
+  "synthetic_frames": true,
+  "deterministic": true,
+  "episodes": 30,
+  "samples": 1432,
+  "seeds": [
+    11,
+    23,
+    37
+  ],
+  "note": "action_head clones the teacher action; route_head predicts the normalised (dx,dy) to the plan endpoint and then picks the move whose displacement matches it. Same images/labels/split.",
+  "results": {
+    "action_head": {
+      "runs": [
+        {
+          "seed": 11,
+          "metrics": {
+            "samples": 211,
+            "accuracy": 0.7251,
+            "move_accuracy": 0.7441,
+            "focus_accuracy": 0.9479,
+            "chance": 0.0556,
+            "move_chance": 0.1111,
+            "confusion_top": {
+              "8->8": 72,
+              "4->4": 69,
+              "0->3": 10,
+              "1->8": 9,
+              "1->1": 8,
+              "3->8": 5,
+              "1->7": 4,
+              "1->3": 4
+            }
+          },
+          "final_loss": 0.275251,
+          "closed_loop_survived": 18,
+          "closed_loop_total": 23,
+          "failures": [
+            "E-05",
+            "E-06",
+            "E-07",
+            "E-11",
+            "SC-15/0"
+          ]
+        },
+        {
+          "seed": 23,
+          "metrics": {
+            "samples": 265,
+            "accuracy": 0.7547,
+            "move_accuracy": 0.8755,
+            "focus_accuracy": 0.8679,
+            "chance": 0.0556,
+            "move_chance": 0.1111,
+            "confusion_top": {
+              "8->8": 107,
+              "4->4": 93,
+              "13->4": 19,
+              "17->8": 13,
+              "0->3": 10,
+              "0->8": 10,
+              "3->8": 4,
+              "1->17": 2
+            }
+          },
+          "final_loss": 0.233507,
+          "closed_loop_survived": 17,
+          "closed_loop_total": 23,
+          "failures": [
+            "E-05",
+            "E-06",
+            "E-07",
+            "E-09",
+            "E-11",
+            "SC-15/0"
+          ]
+        },
+        {
+          "seed": 37,
+          "metrics": {
+            "samples": 260,
+            "accuracy": 0.5308,
+            "move_accuracy": 0.6731,
+            "focus_accuracy": 0.8231,
+            "chance": 0.0556,
+            "move_chance": 0.1111,
+            "confusion_top": {
+              "8->8": 68,
+              "4->4": 61,
+              "13->4": 19,
+              "8->1": 15,
+              "17->8": 13,
+              "4->1": 13,
+              "7->1": 8,
+              "1->1": 7
+            }
+          },
+          "final_loss": 0.267809,
+          "closed_loop_survived": 19,
+          "closed_loop_total": 23,
+          "failures": [
+            "E-05",
+            "E-06",
+            "E-11",
+            "SC-15/0"
+          ]
+        }
+      ],
+      "closed_loop_mean": 18,
+      "closed_loop_stdev": 0.816,
+      "accuracy_mean": 0.6702,
+      "accuracy_stdev": 0.0993
+    },
+    "route_head": {
+      "runs": [
+        {
+          "seed": 11,
+          "metrics": {
+            "route_mae": 0.1249,
+            "route_angle_deg_mean": 45.7
+          },
+          "final_loss": 0.29151,
+          "closed_loop_survived": 16,
+          "closed_loop_total": 23,
+          "failures": [
+            "E-05",
+            "E-06",
+            "E-07",
+            "E-09",
+            "E-11",
+            "SC-15/0",
+            "SC-16/0"
+          ]
+        },
+        {
+          "seed": 23,
+          "metrics": {
+            "route_mae": 0.1222,
+            "route_angle_deg_mean": 31.2
+          },
+          "final_loss": 0.234816,
+          "closed_loop_survived": 17,
+          "closed_loop_total": 23,
+          "failures": [
+            "E-05",
+            "E-06",
+            "E-09",
+            "E-11",
+            "SC-15/0",
+            "SC-16/0"
+          ]
+        },
+        {
+          "seed": 37,
+          "metrics": {
+            "route_mae": 0.146,
+            "route_angle_deg_mean": 47.48
+          },
+          "final_loss": 0.28186,
+          "closed_loop_survived": 16,
+          "closed_loop_total": 23,
+          "failures": [
+            "E-05",
+            "E-06",
+            "E-07",
+            "E-09",
+            "E-11",
+            "SC-15/0",
+            "SC-16/0"
+          ]
+        }
+      ],
+      "closed_loop_mean": 16.333,
+      "closed_loop_stdev": 0.471,
+      "route_mae_mean": 0.131,
+      "route_angle_mean": 41.46
+    }
+  },
+  "collect_s": 45.06
+}

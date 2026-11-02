@@ -1,0 +1,119 @@
+{
+  "schema": "v370-student-closed-loop/1",
+  "synthetic_frames": true,
+  "note": "student trained on 20 episodes (1 channel), then driven closed-loop; no teacher at run time",
+  "training": {
+    "samples": 544,
+    "epochs": 16,
+    "losses": [
+      1.867842,
+      1.294842,
+      1.078799,
+      1.010851,
+      0.910971,
+      0.833281,
+      0.820498,
+      0.726245,
+      0.644725,
+      0.593904,
+      0.580749,
+      0.547062,
+      0.427317,
+      0.436342,
+      0.379926,
+      0.353003
+    ]
+  },
+  "loops": [
+    {
+      "scenario": "E-01",
+      "frames": 20,
+      "hit": false,
+      "survived": true,
+      "min_clearance": 5.175,
+      "action_histogram": {
+        "1": 1,
+        "4": 5,
+        "8": 4
+      }
+    },
+    {
+      "scenario": "E-05",
+      "frames": 60,
+      "hit": false,
+      "survived": true,
+      "min_clearance": 0.3284,
+      "action_histogram": {
+        "1": 14,
+        "3": 3,
+        "7": 9,
+        "10": 1,
+        "14": 1,
+        "15": 1,
+        "16": 1
+      }
+    },
+    {
+      "scenario": "E-09",
+      "frames": 60,
+      "hit": false,
+      "survived": true,
+      "min_clearance": 61.3614,
+      "action_histogram": {
+        "4": 14,
+        "8": 16
+      }
+    },
+    {
+      "scenario": "E-11",
+      "frames": 6,
+      "hit": true,
+      "survived": false,
+      "min_clearance": -4.3398,
+      "action_histogram": {
+        "4": 1,
+        "8": 2
+      }
+    },
+    {
+      "scenario": "SC-15/0",
+      "frames": 40,
+      "hit": true,
+      "survived": false,
+      "min_clearance": -1.535,
+      "action_histogram": {
+        "0": 7,
+        "8": 13
+      }
+    },
+    {
+      "scenario": "SC-16/0",
+      "frames": 180,
+      "hit": false,
+      "survived": true,
+      "min_clearance": 9.9254,
+      "action_histogram": {
+        "1": 44,
+        "3": 12,
+        "7": 27,
+        "10": 1,
+        "14": 2,
+        "15": 2,
+        "16": 2
+      }
+    },
+    {
+      "scenario": "SC-17/0",
+      "frames": 180,
+      "hit": false,
+      "survived": true,
+      "min_clearance": 4.6083,
+      "action_histogram": {
+        "1": 14,
+        "4": 40,
+        "8": 36
+      }
+    }
+  ],
+  "elapsed_s": 0.18
+}

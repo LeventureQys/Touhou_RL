@@ -1,0 +1,378 @@
+{
+  "schema": "v370-controller-sweep/1",
+  "note": "D5 controller over the synthetic world; intent trigger uses the closure of the player's current cell; bomb availability fixed at 3 in the harness",
+  "rows": [
+    {
+      "scenario": "E-01",
+      "horizon_frames": 20,
+      "decisions": 10,
+      "survived": true,
+      "hit": false,
+      "frames": 20,
+      "min_clearance": 5.175,
+      "intents": {
+        "evacuate": 3,
+        "local": 7
+      },
+      "bombs": 0,
+      "total_s": 0.29,
+      "sample": [
+        {
+          "decision_id": 1,
+          "frame": 0,
+          "intent": "evacuate",
+          "action": [
+            1,
+            1,
+            0,
+            0
+          ],
+          "route_id": "first-f0-m1",
+          "reason": "evacuate: route survives, route_closure=None, current_closure=4, margin=4, min_clearance=5.175",
+          "fallback": null,
+          "bomb": false
+        },
+        {
+          "decision_id": 2,
+          "frame": 2,
+          "intent": "evacuate",
+          "action": [
+            1,
+            1,
+            0,
+            0
+          ],
+          "route_id": "first-f0-m1",
+          "reason": "evacuate: route survives, route_closure=None, current_closure=4, margin=2, min_clearance=5.175",
+          "fallback": null,
+          "bomb": false
+        },
+        {
+          "decision_id": 3,
+          "frame": 4,
+          "intent": "evacuate",
+          "action": [
+            2,
+            1,
+            1,
+            0
+          ],
+          "route_id": "first-f1-m2",
+          "reason": "evacuate: route survives, route_closure=None, current_closure=4, margin=0, min_clearance=18.175",
+          "fallback": null,
+          "bomb": false
+        }
+      ]
+    },
+    {
+      "scenario": "E-09",
+      "horizon_frames": 60,
+      "decisions": 30,
+      "survived": true,
+      "hit": false,
+      "frames": 60,
+      "min_clearance": 69.175,
+      "intents": {
+        "local": 30
+      },
+      "bombs": 0,
+      "total_s": 0.77,
+      "sample": [
+        {
+          "decision_id": 1,
+          "frame": 0,
+          "intent": "local",
+          "action": [
+            2,
+            1,
+            1,
+            0
+          ],
+          "route_id": "first-f1-m2",
+          "reason": "local: route survives, route_closure=None, current_closure=None, margin=None, min_clearance=69.875",
+          "fallback": null,
+          "bomb": false
+        },
+        {
+          "decision_id": 2,
+          "frame": 2,
+          "intent": "local",
+          "action": [
+            2,
+            1,
+            1,
+            0
+          ],
+          "route_id": "first-f1-m2",
+          "reason": "local: route survives, route_closure=None, current_closure=None, margin=None, min_clearance=74.1034",
+          "fallback": null,
+          "bomb": false
+        },
+        {
+          "decision_id": 3,
+          "frame": 4,
+          "intent": "local",
+          "action": [
+            2,
+            1,
+            1,
+            0
+          ],
+          "route_id": "first-f1-m2",
+          "reason": "local: route survives, route_closure=None, current_closure=None, margin=None, min_clearance=78.3318",
+          "fallback": null,
+          "bomb": false
+        }
+      ]
+    },
+    {
+      "scenario": "E-17",
+      "horizon_frames": 40,
+      "decisions": 20,
+      "survived": true,
+      "hit": false,
+      "frames": 40,
+      "min_clearance": 120.8318,
+      "intents": {
+        "local": 20
+      },
+      "bombs": 0,
+      "total_s": 0.41,
+      "sample": [
+        {
+          "decision_id": 1,
+          "frame": 0,
+          "intent": "local",
+          "action": [
+            5,
+            1,
+            0,
+            0
+          ],
+          "route_id": "first-f0-m5",
+          "reason": "local: route survives, route_closure=None, current_closure=None, margin=None, min_clearance=130.175",
+          "fallback": null,
+          "bomb": false
+        },
+        {
+          "decision_id": 2,
+          "frame": 2,
+          "intent": "local",
+          "action": [
+            5,
+            1,
+            0,
+            0
+          ],
+          "route_id": "first-f0-m5",
+          "reason": "local: route survives, route_closure=None, current_closure=None, margin=None, min_clearance=136.175",
+          "fallback": null,
+          "bomb": false
+        },
+        {
+          "decision_id": 3,
+          "frame": 4,
+          "intent": "local",
+          "action": [
+            5,
+            1,
+            0,
+            0
+          ],
+          "route_id": "first-f0-m5",
+          "reason": "local: route survives, route_closure=None, current_closure=None, margin=None, min_clearance=142.175",
+          "fallback": null,
+          "bomb": false
+        }
+      ]
+    },
+    {
+      "scenario": "closing area @30",
+      "horizon_frames": 40,
+      "decisions": 20,
+      "survived": true,
+      "hit": false,
+      "frames": 40,
+      "min_clearance": 3.6602,
+      "intents": {
+        "evacuate": 13,
+        "local": 7
+      },
+      "bombs": 0,
+      "total_s": 1.22,
+      "sample": [
+        {
+          "decision_id": 1,
+          "frame": 0,
+          "intent": "evacuate",
+          "action": [
+            1,
+            1,
+            0,
+            0
+          ],
+          "route_id": "first-f0-m1",
+          "reason": "evacuate: route survives, route_closure=None, current_closure=30, margin=30, min_clearance=inf",
+          "fallback": null,
+          "bomb": false
+        },
+        {
+          "decision_id": 2,
+          "frame": 2,
+          "intent": "evacuate",
+          "action": [
+            7,
+            1,
+            0,
+            0
+          ],
+          "route_id": "first-f0-m7",
+          "reason": "evacuate: route survives, route_closure=None, current_closure=30, margin=28, min_clearance=inf",
+          "fallback": null,
+          "bomb": false
+        },
+        {
+          "decision_id": 3,
+          "frame": 4,
+          "intent": "evacuate",
+          "action": [
+            7,
+            1,
+            0,
+            0
+          ],
+          "route_id": "first-f0-m7",
+          "reason": "evacuate: route survives, route_closure=None, current_closure=30, margin=26, min_clearance=inf",
+          "fallback": null,
+          "bomb": false
+        }
+      ]
+    },
+    {
+      "scenario": "SC-15/0",
+      "horizon_frames": 180,
+      "decisions": 90,
+      "survived": true,
+      "hit": false,
+      "frames": 180,
+      "min_clearance": 5.175,
+      "intents": {
+        "prepare_exit": 30,
+        "local": 13,
+        "evacuate": 47
+      },
+      "bombs": 0,
+      "total_s": 6.57,
+      "sample": [
+        {
+          "decision_id": 1,
+          "frame": 0,
+          "intent": "prepare_exit",
+          "action": [
+            3,
+            1,
+            0,
+            0
+          ],
+          "route_id": "first-f0-m3",
+          "reason": "prepare_exit: route survives, route_closure=144, current_closure=90, margin=90, min_clearance=5.175",
+          "fallback": null,
+          "bomb": false
+        },
+        {
+          "decision_id": 2,
+          "frame": 2,
+          "intent": "prepare_exit",
+          "action": [
+            3,
+            1,
+            0,
+            0
+          ],
+          "route_id": "first-f0-m3",
+          "reason": "prepare_exit: route survives, route_closure=156, current_closure=90, margin=88, min_clearance=5.175",
+          "fallback": null,
+          "bomb": false
+        },
+        {
+          "decision_id": 3,
+          "frame": 4,
+          "intent": "prepare_exit",
+          "action": [
+            3,
+            1,
+            1,
+            0
+          ],
+          "route_id": "first-f1-m3",
+          "reason": "prepare_exit: route survives, route_closure=156, current_closure=90, margin=86, min_clearance=5.175",
+          "fallback": null,
+          "bomb": false
+        }
+      ]
+    },
+    {
+      "scenario": "SC-16/0",
+      "horizon_frames": 180,
+      "decisions": 90,
+      "survived": true,
+      "hit": false,
+      "frames": 180,
+      "min_clearance": 5.175,
+      "intents": {
+        "prepare_exit": 20,
+        "evacuate": 47,
+        "local": 23
+      },
+      "bombs": 0,
+      "total_s": 7.53,
+      "sample": [
+        {
+          "decision_id": 1,
+          "frame": 0,
+          "intent": "prepare_exit",
+          "action": [
+            5,
+            1,
+            1,
+            0
+          ],
+          "route_id": "first-f1-m5",
+          "reason": "prepare_exit: route survives, route_closure=144, current_closure=66, margin=66, min_clearance=15.8217",
+          "fallback": null,
+          "bomb": false
+        },
+        {
+          "decision_id": 2,
+          "frame": 2,
+          "intent": "prepare_exit",
+          "action": [
+            5,
+            1,
+            0,
+            0
+          ],
+          "route_id": "first-f0-m5",
+          "reason": "prepare_exit: route survives, route_closure=144, current_closure=66, margin=64, min_clearance=15.5822",
+          "fallback": null,
+          "bomb": false
+        },
+        {
+          "decision_id": 3,
+          "frame": 4,
+          "intent": "prepare_exit",
+          "action": [
+            0,
+            1,
+            0,
+            0
+          ],
+          "route_id": "first-f0-m0",
+          "reason": "prepare_exit: route survives, route_closure=144, current_closure=66, margin=62, min_clearance=15.3427",
+          "fallback": null,
+          "bomb": false
+        }
+      ]
+    }
+  ]
+}

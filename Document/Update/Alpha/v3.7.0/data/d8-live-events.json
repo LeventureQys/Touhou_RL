@@ -1,0 +1,174 @@
+{
+  "schema": "v370-live-events/1",
+  "frames_per_episode": 1800,
+  "horizon_frames": 30,
+  "pairs": [
+    {
+      "pair": 1,
+      "baseline": {
+        "arm": "baseline",
+        "deaths": 2,
+        "summary": {
+          "decisions": 900,
+          "events": 121,
+          "timely": 20,
+          "rate": 0.1653,
+          "mean_safe_directions": 2.33
+        }
+      },
+      "subject": {
+        "arm": "subject",
+        "deaths": 3,
+        "summary": {
+          "decisions": 900,
+          "events": 62,
+          "timely": 29,
+          "rate": 0.4677,
+          "mean_safe_directions": 5.87
+        }
+      }
+    },
+    {
+      "pair": 2,
+      "baseline": {
+        "arm": "baseline",
+        "deaths": 2,
+        "summary": {
+          "decisions": 900,
+          "events": 124,
+          "timely": 33,
+          "rate": 0.2661,
+          "mean_safe_directions": 3.45
+        }
+      },
+      "subject": {
+        "arm": "subject",
+        "deaths": 0,
+        "summary": {
+          "decisions": 900,
+          "events": 74,
+          "timely": 47,
+          "rate": 0.6351,
+          "mean_safe_directions": 7.8
+        }
+      }
+    },
+    {
+      "pair": 3,
+      "baseline": {
+        "arm": "baseline",
+        "deaths": 1,
+        "summary": {
+          "decisions": 900,
+          "events": 154,
+          "timely": 21,
+          "rate": 0.1364,
+          "mean_safe_directions": 2.68
+        }
+      },
+      "subject": {
+        "arm": "subject",
+        "deaths": 1,
+        "summary": {
+          "decisions": 900,
+          "events": 32,
+          "timely": 19,
+          "rate": 0.5938,
+          "mean_safe_directions": 7.41
+        }
+      }
+    },
+    {
+      "pair": 4,
+      "baseline": {
+        "arm": "baseline",
+        "deaths": 1,
+        "summary": {
+          "decisions": 900,
+          "events": 164,
+          "timely": 41,
+          "rate": 0.25,
+          "mean_safe_directions": 2.94
+        }
+      },
+      "subject": {
+        "arm": "subject",
+        "deaths": 0,
+        "summary": {
+          "decisions": 900,
+          "events": 32,
+          "timely": 10,
+          "rate": 0.3125,
+          "mean_safe_directions": 7.44
+        }
+      }
+    },
+    {
+      "pair": 5,
+      "baseline": {
+        "arm": "baseline",
+        "deaths": 1,
+        "summary": {
+          "decisions": 900,
+          "events": 127,
+          "timely": 33,
+          "rate": 0.2598,
+          "mean_safe_directions": 4.07
+        }
+      },
+      "subject": {
+        "arm": "subject",
+        "deaths": 1,
+        "summary": {
+          "decisions": 900,
+          "events": 83,
+          "timely": 51,
+          "rate": 0.6145,
+          "mean_safe_directions": 7.46
+        }
+      }
+    },
+    {
+      "pair": 6,
+      "baseline": {
+        "arm": "baseline",
+        "deaths": 1,
+        "summary": {
+          "decisions": 900,
+          "events": 164,
+          "timely": 39,
+          "rate": 0.2378,
+          "mean_safe_directions": 3.61
+        }
+      },
+      "subject": {
+        "arm": "subject",
+        "deaths": 2,
+        "summary": {
+          "decisions": 900,
+          "events": 55,
+          "timely": 27,
+          "rate": 0.4909,
+          "mean_safe_directions": 6.58
+        }
+      }
+    }
+  ],
+  "b02": {
+    "baseline": {
+      "episodes": 6,
+      "events": 854,
+      "timely": 187,
+      "rate": 0.219
+    },
+    "subject": {
+      "episodes": 6,
+      "events": 338,
+      "timely": 183,
+      "rate": 0.5414
+    },
+    "events_per_arm_at_least_30": true,
+    "criterion": ">=90% timely on >=30 events per arm",
+    "verdict": "fail"
+  }
+}

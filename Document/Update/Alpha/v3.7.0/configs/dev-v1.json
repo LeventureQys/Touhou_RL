@@ -1,0 +1,109 @@
+{
+  "schema": "v370-dev-config/1",
+  "status": "candidate",
+  "note": "开发集候选配置。除 units/coord/collision/action/schema 外均可调整；正式测试前由 D7 冻结并另存 formal-v1。",
+  "contract_version": "v370-escape/1",
+  "baseline": {
+    "config": "touhou_rl.pilot.PilotConfig() 默认值",
+    "fixture": "fixtures/baseline-golden.json",
+    "frozen_fields": [
+      "frameskip=2",
+      "horizon_steps=10",
+      "quota_per_action=2",
+      "near_radius=240.0",
+      "max_bullets=320",
+      "player_half=0.825",
+      "bullet_pad=0.5",
+      "bomb_min_clearance=-1.5",
+      "bomb_cooldown=40"
+    ]
+  },
+  "units": {
+    "length": "px",
+    "time": "game_frame",
+    "fps_nominal": 60,
+    "wall_clock": "performance_only"
+  },
+  "coordinates": {
+    "origin": "screen_top_left",
+    "playfield_xywh": [32.0, 16.0, 384.0, 448.0],
+    "move_area_xywh": [8.0, 16.0, 368.0, 416.0],
+    "player_center_clamp": {"x": [8.0, 376.0], "y": [16.0, 432.0]},
+    "axes": "+x right, +y down"
+  },
+  "movement": {
+    "axis": 4.0,
+    "diagonal": 2.8284,
+    "focus_axis": 2.0,
+    "focus_diagonal": 1.4142,
+    "hurtbox_half": 0.825,
+    "acceleration": "instant (velocity applied the same frame)",
+    "evidence": "tools/probes/calibrate_player.py + third_party/th08/src/Player.cpp:781-871"
+  },
+  "time": {
+    "frameskip": 2,
+    "action_latency_frames": 1,
+    "time_nodes": [
+      {"from": 0, "to": 30, "step": 2},
+      {"from": 30, "to": 90, "step": 6},
+      {"from": 90, "to": 180, "step": 15}
+    ],
+    "horizon_candidates_frames": [90, 120, 180],
+    "fine_collision_step_frames": 1,
+    "continuation_window_frames": 60
+  },
+  "space": {
+    "macro_grid_candidates_px": [8, 12, 16],
+    "near_field": "actual entity geometry (no rasterisation)",
+    "per_first_action_candidates": 2,
+    "min_spatial_diversity": "two different directions per first action"
+  },
+  "safety": {
+    "collision_model": "aabb_vs_aabb",
+    "collision_predicate": "per_frame (game checks each bullet once per logic frame)",
+    "continuous_sweep_role": "conservative_margin_only (over-reports ~34% vs the game predicate)",
+    "margin_policy": "configurable inflation; must be auditable",
+    "margin_upper_bound_px": 1.5,
+    "min_clearance_px_candidates": [0.0, 0.5, 1.0],
+    "forbid_weighted_sum_over_collision": true,
+    "certified_blocked_requires": "conservative exclusion evidence inside the supported domain"
+  },
+  "action_execution": {
+    "settle_frames": 1,
+    "model": "frame 1 uses the previous action's velocity, later frames the current one, clamped each frame",
+    "evidence": "96.62% exact reconstruction of 2,903 recorded decision pairs (P95 residual 0.001 px)"
+  },
+  "cutoffs": {
+    "max_entities": 1024,
+    "drop_policy": "swept-envelope intersection, not nearest-N by current distance",
+    "on_budget_exceeded": "explicit degradation (partial coverage), never report full coverage"
+  },
+  "budget_ms_engineering_target": {
+    "adapter": 1,
+    "forecast": 4,
+    "macro_search": 8,
+    "local_search_and_sweep": 5,
+    "submit_and_log": 3,
+    "total": 21,
+    "p95_deadline": 33.3,
+    "miss_rate_max": 0.01,
+    "measured": false
+  },
+  "seeds": {
+    "file": "preregistration/seeds-v1.json",
+    "master_synthetic": 37000,
+    "master_live_pair_order": 37001,
+    "per_family": 30,
+    "split": {"dev": 12, "formal": 18}
+  },
+  "unknown_domains": {
+    "U-01": "bullet pool count vs engine counter mismatch (do not use as sync proof)",
+    "U-02": "framerateMultiplier changes by ECL (bullet time)",
+    "U-03": "sampling timeouts that advance fewer than frameskip frames",
+    "U-04": "non-linear bullet motion share",
+    "U-05": "laser/enemy/spawn contribution to closure",
+    "U-06": "death/respawn/invulnerability/bomb-clear timing",
+    "U-07": "distinct live initial conditions",
+    "U-08": "old pilot value scale as a student target"
+  }
+}

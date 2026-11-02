@@ -1,0 +1,47 @@
+{
+  "schema": "v370-formal-config/2",
+  "version": 2,
+  "supersedes": "formal-v1",
+  "void_note": "formal-v1's run (data/d7-formal-eval-v1-void.json) is declared VOID: A-03 could only label one instance (E-05) and A-07 was not_computed because the labels/pocket check were hard-coded to dev scenario ids. The void is an instrumentation defect, not a result-driven re-run; the parameters below are unchanged, and no tuning happened after seeing that run.",
+  "frozen_on": "2026-10-25",
+  "note": "Frozen after the dev 12-seed run passed all eight gates. The formal split is evaluated once with these values.",
+  "planning": {
+    "horizon_decisions": 12,
+    "continuation_decisions": 2,
+    "beam_width": 1,
+    "frameskip": 2,
+    "settle_frames": 1,
+    "max_nodes": 4000,
+    "inflation_px": 0.0,
+    "score_mode": "auto"
+  },
+  "controller": {
+    "prepare_margin_frames": 90,
+    "evacuate_margin_frames": 45,
+    "emergency_clearance_px": 2.0,
+    "min_hold_decisions": 2,
+    "bomb_cooldown": 20,
+    "route_max_age": 1,
+    "continuation_decisions": 1,
+    "corridor_decisions": 20
+  },
+  "evaluation": {
+    "workers": 16,
+    "reference_budget": 4000,
+    "dev_seeds_per_family": 12,
+    "formal_seeds_per_family": 18,
+    "formal_seed_indices": [12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29],
+    "family_subset": ["SC-02", "SC-03", "SC-08", "SC-09", "SC-15", "SC-16", "SC-17"],
+    "edges": ["E-01", "E-02", "E-05", "E-06", "E-07", "E-08", "E-09", "E-10", "E-11", "E-12", "E-16"],
+    "formal_output": "data/d7-formal-eval.json",
+    "instrumentation": "A-03 labels computed for every closing instance (SC-15/SC-16 of the split plus E-05/E-06); A-07 aggregated over every SC-15 instance",
+    "written": false
+  },
+  "known_limitations": [
+    "20x4 does not pass A-03 (SC-15 dies at 126 frames); the frozen config is 12x2",
+    "A-05/A-06 denominators are 2 instances each",
+    "the synthetic world has no bombs, so A-04 is a death-rate comparison only",
+    "A-03 labels come from backward reachability, not an exhaustive search",
+    "families.build consumes the seed *index* (0..29); the hashed list in preregistration/seeds-v1.json is not wired into the builders, so the dev/formal split is by index"
+  ]
+}

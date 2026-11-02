@@ -1,0 +1,23 @@
+{
+  "schema": "v370-reproducibility/1",
+  "date": "2026-10-25",
+  "note": "the evaluation and replay pipelines are run twice and compared on gates/outcomes (timing fields excluded); 'matches_stored_artifact' compares against the committed result file",
+  "dev_eval": [
+    {
+      "case": "dev-eval",
+      "runs_s": [
+        45.66,
+        45.6
+      ],
+      "gates_identical": true,
+      "rows_identical": true,
+      "matches_stored_artifact": true,
+      "scenarios": 97
+    }
+  ],
+  "recorded_replay": {
+    "trace": ".tmp/t2power-smoke2/trace/collect-ep01.jsonl",
+    "decisions": 60,
+    "identical": true
+  }
+}

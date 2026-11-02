@@ -1,0 +1,95 @@
+{
+  "schema": "v370-student/1",
+  "synthetic_frames": true,
+  "note": "images are rasterised from privileged state, not the game frame buffer",
+  "config": {
+    "episodes": 20,
+    "epochs": 16,
+    "learning_rate": 0.001,
+    "seed": 7,
+    "device": "cuda"
+  },
+  "samples": 544,
+  "episodes": 20,
+  "split": {
+    "by": "scenario",
+    "train_episodes": 16,
+    "test_episodes": 4,
+    "train_samples": 324,
+    "test_samples": 220
+  },
+  "losses": [
+    1.867842,
+    1.294842,
+    1.078799,
+    1.010851,
+    0.910971,
+    0.833281,
+    0.820498,
+    0.726245,
+    0.644725,
+    0.593904,
+    0.580749,
+    0.547063,
+    0.427317,
+    0.436342,
+    0.379926,
+    0.353004
+  ],
+  "train": {
+    "samples": 324,
+    "accuracy": 0.9012,
+    "chance": 0.0556,
+    "confusion_top": {
+      "8->8": 113,
+      "4->4": 107,
+      "1->1": 28,
+      "0->0": 16,
+      "7->7": 10,
+      "3->3": 10,
+      "8->4": 8,
+      "7->8": 4
+    }
+  },
+  "test": {
+    "samples": 220,
+    "accuracy": 0.6136,
+    "chance": 0.0556,
+    "confusion_top": {
+      "4->4": 80,
+      "8->8": 55,
+      "17->8": 21,
+      "8->4": 21,
+      "13->4": 19,
+      "17->4": 18,
+      "0->4": 4,
+      "1->8": 2
+    }
+  },
+  "closed_loop": [
+    {
+      "scenario": "E-01",
+      "frames": 20,
+      "hit": false,
+      "survived": true,
+      "min_clearance": 5.175,
+      "action_histogram": {
+        "1": 1,
+        "4": 5,
+        "8": 4
+      }
+    },
+    {
+      "scenario": "SC-17/0",
+      "frames": 180,
+      "hit": false,
+      "survived": true,
+      "min_clearance": 4.6083,
+      "action_histogram": {
+        "1": 14,
+        "4": 40,
+        "8": 36
+      }
+    }
+  ]
+}

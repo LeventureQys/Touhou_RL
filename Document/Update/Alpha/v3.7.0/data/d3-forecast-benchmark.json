@@ -1,0 +1,85 @@
+{
+  "schema": "v370-forecast-benchmark/1",
+  "environment": {
+    "python": "3.12.10",
+    "numpy": "2.5.4"
+  },
+  "config": {
+    "horizon_frames": 180,
+    "bands": [
+      [
+        0,
+        30,
+        2
+      ],
+      [
+        30,
+        90,
+        6
+      ],
+      [
+        90,
+        180,
+        15
+      ]
+    ],
+    "cell_px": 16.0,
+    "max_entities": 1024
+  },
+  "engineering_target_ms": 4.0,
+  "rows": [
+    {
+      "case": "SC-09 far wall",
+      "scenario_id": "SC-09/0",
+      "hazards": 88,
+      "kept": 86,
+      "dropped_irrelevant": 2,
+      "dropped_over_cap": 0,
+      "nodes": 31,
+      "build_ms_p50": 3.083,
+      "build_ms_p95": 3.43,
+      "query_us_p50": 13.6,
+      "query_us_p95": 23.2
+    },
+    {
+      "case": "SC-01 fan",
+      "scenario_id": "SC-01/0",
+      "hazards": 25,
+      "kept": 25,
+      "dropped_irrelevant": 0,
+      "dropped_over_cap": 0,
+      "nodes": 31,
+      "build_ms_p50": 2.711,
+      "build_ms_p95": 2.927,
+      "query_us_p50": 11.5,
+      "query_us_p95": 15.71
+    },
+    {
+      "case": "400 entities",
+      "scenario_id": "bench/400",
+      "hazards": 400,
+      "kept": 400,
+      "dropped_irrelevant": 0,
+      "dropped_over_cap": 0,
+      "nodes": 31,
+      "build_ms_p50": 5.172,
+      "build_ms_p95": 5.865,
+      "query_us_p50": 24.3,
+      "query_us_p95": 27.91
+    },
+    {
+      "case": "SC-12 fill (cap 1024)",
+      "scenario_id": "SC-12/0",
+      "hazards": 2695,
+      "kept": 1024,
+      "dropped_irrelevant": 204,
+      "dropped_over_cap": 1467,
+      "nodes": 31,
+      "build_ms_p50": 8.41,
+      "build_ms_p95": 9.038,
+      "query_us_p50": 45.1,
+      "query_us_p95": 49.41
+    }
+  ],
+  "note": "single-threaded, no game; build includes field construction, compression and 31 occupancy nodes"
+}

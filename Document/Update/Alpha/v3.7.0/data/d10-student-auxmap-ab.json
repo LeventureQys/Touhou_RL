@@ -1,0 +1,131 @@
+{
+  "schema": "v370-student-auxmap-ab/1",
+  "synthetic_frames": true,
+  "deterministic": true,
+  "episodes": 60,
+  "samples": 4056,
+  "seeds": [
+    11,
+    23,
+    37
+  ],
+  "note": "same images/labels/split; the auxiliary head predicts the 8x8 hazard occupancy 8 frames ahead and never sees the map at inference",
+  "results": {
+    "frame_only": {
+      "aux_future_map": false,
+      "runs": [
+        {
+          "seed": 11,
+          "test_accuracy": 0.8126,
+          "move_accuracy": 0.8201,
+          "final_loss": 0.225155,
+          "closed_loop_survived": 17,
+          "closed_loop_total": 23,
+          "failures": [
+            "E-05",
+            "E-06",
+            "E-11",
+            "SC-15/0",
+            "SC-16/0",
+            "SC-17/0"
+          ],
+          "fit_s": 18.38
+        },
+        {
+          "seed": 23,
+          "test_accuracy": 0.7356,
+          "move_accuracy": 0.8817,
+          "final_loss": 0.126534,
+          "closed_loop_survived": 18,
+          "closed_loop_total": 23,
+          "failures": [
+            "E-05",
+            "E-06",
+            "E-11",
+            "SC-15/0",
+            "SC-16/0"
+          ],
+          "fit_s": 16.71
+        },
+        {
+          "seed": 37,
+          "test_accuracy": 0.6439,
+          "move_accuracy": 0.8188,
+          "final_loss": 0.140618,
+          "closed_loop_survived": 18,
+          "closed_loop_total": 23,
+          "failures": [
+            "E-05",
+            "E-06",
+            "E-11",
+            "SC-15/0",
+            "SC-17/0"
+          ],
+          "fit_s": 18.77
+        }
+      ],
+      "test_accuracy_mean": 0.7307,
+      "test_accuracy_stdev": 0.069,
+      "closed_loop_mean": 17.667,
+      "closed_loop_stdev": 0.471
+    },
+    "frame_plus_aux_map": {
+      "aux_future_map": true,
+      "runs": [
+        {
+          "seed": 11,
+          "test_accuracy": 0.8126,
+          "move_accuracy": 0.8201,
+          "final_loss": 0.233416,
+          "closed_loop_survived": 18,
+          "closed_loop_total": 23,
+          "failures": [
+            "E-05",
+            "E-06",
+            "E-11",
+            "SC-15/0",
+            "SC-16/0"
+          ],
+          "fit_s": 36.0
+        },
+        {
+          "seed": 23,
+          "test_accuracy": 0.7409,
+          "move_accuracy": 0.8806,
+          "final_loss": 0.135491,
+          "closed_loop_survived": 18,
+          "closed_loop_total": 23,
+          "failures": [
+            "E-05",
+            "E-06",
+            "E-11",
+            "SC-15/0",
+            "SC-16/0"
+          ],
+          "fit_s": 34.28
+        },
+        {
+          "seed": 37,
+          "test_accuracy": 0.6471,
+          "move_accuracy": 0.8251,
+          "final_loss": 0.141718,
+          "closed_loop_survived": 18,
+          "closed_loop_total": 23,
+          "failures": [
+            "E-05",
+            "E-06",
+            "E-11",
+            "SC-15/0",
+            "SC-17/0"
+          ],
+          "fit_s": 38.3
+        }
+      ],
+      "test_accuracy_mean": 0.7335,
+      "test_accuracy_stdev": 0.0678,
+      "closed_loop_mean": 18,
+      "closed_loop_stdev": 0.0
+    }
+  },
+  "collect_s": 123.73
+}

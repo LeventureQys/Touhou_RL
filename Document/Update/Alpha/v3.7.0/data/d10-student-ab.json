@@ -1,0 +1,179 @@
+{
+  "schema": "v370-student-ab/1",
+  "synthetic_frames": true,
+  "note": "same seed/episodes/split; only the input channels differ",
+  "results": {
+    "channels_1": {
+      "samples": 544,
+      "episodes": 20,
+      "split": {
+        "by": "scenario",
+        "train_episodes": 16,
+        "test_episodes": 4,
+        "train_samples": 324,
+        "test_samples": 220
+      },
+      "losses": [
+        1.867842,
+        1.294842,
+        1.078799,
+        1.010851,
+        0.910971,
+        0.833279,
+        0.820497,
+        0.726244,
+        0.644725,
+        0.593896,
+        0.580749,
+        0.547043,
+        0.427306,
+        0.436328,
+        0.379917,
+        0.352986
+      ],
+      "train": {
+        "samples": 324,
+        "accuracy": 0.9012,
+        "chance": 0.0556,
+        "confusion_top": {
+          "8->8": 113,
+          "4->4": 107,
+          "1->1": 28,
+          "0->0": 16,
+          "7->7": 10,
+          "3->3": 10,
+          "8->4": 8,
+          "7->8": 4
+        }
+      },
+      "test": {
+        "samples": 220,
+        "accuracy": 0.6136,
+        "chance": 0.0556,
+        "confusion_top": {
+          "4->4": 80,
+          "8->8": 55,
+          "17->8": 21,
+          "8->4": 21,
+          "13->4": 19,
+          "17->4": 18,
+          "0->4": 4,
+          "1->8": 2
+        }
+      },
+      "closed_loop": [
+        {
+          "scenario": "E-01",
+          "frames": 20,
+          "hit": false,
+          "survived": true,
+          "min_clearance": 5.175,
+          "action_histogram": {
+            "1": 1,
+            "4": 5,
+            "8": 4
+          }
+        },
+        {
+          "scenario": "SC-17/0",
+          "frames": 180,
+          "hit": false,
+          "survived": true,
+          "min_clearance": 4.6083,
+          "action_histogram": {
+            "1": 14,
+            "4": 40,
+            "8": 36
+          }
+        }
+      ],
+      "elapsed_s": 21.06
+    },
+    "channels_2": {
+      "samples": 544,
+      "episodes": 20,
+      "split": {
+        "by": "scenario",
+        "train_episodes": 16,
+        "test_episodes": 4,
+        "train_samples": 324,
+        "test_samples": 220
+      },
+      "losses": [
+        1.879708,
+        1.272097,
+        1.097556,
+        1.033963,
+        0.948846,
+        0.88694,
+        0.888577,
+        0.819638,
+        0.768301,
+        0.72661,
+        0.707,
+        0.675935,
+        0.568786,
+        0.568445,
+        0.508918,
+        0.452627
+      ],
+      "train": {
+        "samples": 324,
+        "accuracy": 0.8333,
+        "chance": 0.0556,
+        "confusion_top": {
+          "4->4": 108,
+          "8->8": 92,
+          "8->4": 29,
+          "1->1": 27,
+          "0->0": 16,
+          "7->7": 11,
+          "3->3": 10,
+          "7->8": 3
+        }
+      },
+      "test": {
+        "samples": 220,
+        "accuracy": 0.5227,
+        "chance": 0.0556,
+        "confusion_top": {
+          "4->4": 80,
+          "8->4": 40,
+          "8->8": 35,
+          "17->8": 21,
+          "13->4": 19,
+          "17->4": 18,
+          "0->4": 4,
+          "1->8": 2
+        }
+      },
+      "closed_loop": [
+        {
+          "scenario": "E-01",
+          "frames": 20,
+          "hit": false,
+          "survived": true,
+          "min_clearance": 5.175,
+          "action_histogram": {
+            "1": 1,
+            "4": 5,
+            "8": 4
+          }
+        },
+        {
+          "scenario": "SC-17/0",
+          "frames": 180,
+          "hit": false,
+          "survived": true,
+          "min_clearance": 5.3147,
+          "action_histogram": {
+            "1": 4,
+            "4": 48,
+            "8": 38
+          }
+        }
+      ],
+      "elapsed_s": 19.2
+    }
+  }
+}

@@ -1,0 +1,642 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "v370-escape/1",
+  "title": "v3.7.0 escape records (generated from touhou_rl/escape/contracts.py)",
+  "$defs": {
+    "EscapeObservation": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "schema": {
+          "type": "string",
+          "const": "v370-escape/observation"
+        },
+        "episode_id": {
+          "type": "string"
+        },
+        "decision_id": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "frame_id": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "source": {
+          "type": "string",
+          "enum": [
+            "synthetic",
+            "privileged",
+            "human",
+            "student"
+          ]
+        },
+        "player": {
+          "$ref": "#/$defs/PlayerObs"
+        },
+        "frameskip": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "observed_frame_age": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "action_latency_frames": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "completeness": {
+          "type": "string",
+          "enum": [
+            "complete",
+            "partial",
+            "unreadable"
+          ]
+        },
+        "coordinate_contract": {
+          "type": "object",
+          "additionalProperties": {}
+        },
+        "hazards": {
+          "oneOf": [
+            {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/HazardObs"
+              }
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "previous_action": {
+          "oneOf": [
+            {
+              "type": "array",
+              "items": {
+                "type": "integer"
+              },
+              "minItems": 4,
+              "maxItems": 4
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "missing_reasons": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "unsupported_hazards": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "bullet_pool_count": {
+          "oneOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "minimum": 0
+        },
+        "bombs": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "schema",
+        "episode_id",
+        "decision_id",
+        "frame_id",
+        "source",
+        "player",
+        "frameskip",
+        "observed_frame_age",
+        "action_latency_frames",
+        "completeness",
+        "coordinate_contract"
+      ]
+    },
+    "DangerForecast": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "schema": {
+          "type": "string",
+          "const": "v370-escape/forecast"
+        },
+        "model_version": {
+          "type": "string"
+        },
+        "time_nodes_frames": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          },
+          "minItems": 1
+        },
+        "coverage_shape": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          },
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "coverage": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            }
+          }
+        },
+        "uncertainty": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          }
+        },
+        "valid_until": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "calibrated": {
+          "type": "boolean"
+        },
+        "dropped_entities": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "drop_reasons": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "schema",
+        "model_version",
+        "time_nodes_frames",
+        "coverage_shape",
+        "coverage",
+        "uncertainty",
+        "valid_until"
+      ]
+    },
+    "RoutePlan": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "schema": {
+          "type": "string",
+          "const": "v370-escape/route"
+        },
+        "route_id": {
+          "type": "string"
+        },
+        "solution_status": {
+          "type": "string",
+          "enum": [
+            "feasible",
+            "no_solution_certified",
+            "budget_exhausted",
+            "model_unknown"
+          ]
+        },
+        "first_action_status": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "feasible",
+              "certified_blocked",
+              "unknown",
+              "immediate_collision"
+            ]
+          },
+          "minItems": 18,
+          "maxItems": 18
+        },
+        "action_sequence": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            },
+            "minItems": 4,
+            "maxItems": 4
+          }
+        },
+        "position_time_knots": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/PositionKnot"
+          }
+        },
+        "corridor_by_time": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/CorridorBox"
+          }
+        },
+        "first_action_reason": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "min_clearance": {
+          "oneOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "exit_eta": {
+          "oneOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "minimum": 0
+        },
+        "closure_eta": {
+          "oneOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "minimum": 0
+        },
+        "slack": {
+          "oneOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "continuation_window": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "confidence": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 1.0
+        },
+        "valid_until": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "alternatives": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "node_budget": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "elapsed_ms": {
+          "type": "number",
+          "minimum": 0.0
+        }
+      },
+      "required": [
+        "schema",
+        "route_id",
+        "solution_status",
+        "first_action_status"
+      ]
+    },
+    "ControlDecision": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "schema": {
+          "type": "string",
+          "const": "v370-escape/decision"
+        },
+        "decision_id": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "intent": {
+          "type": "string",
+          "enum": [
+            "local",
+            "prepare_exit",
+            "evacuate",
+            "hold",
+            "replan",
+            "emergency",
+            "unknown"
+          ]
+        },
+        "accepted_action": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          },
+          "minItems": 4,
+          "maxItems": 4
+        },
+        "reason": {
+          "type": "string"
+        },
+        "route_id": {
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "rejected_actions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/RejectedAction"
+          }
+        },
+        "emergency_override": {
+          "type": "boolean"
+        },
+        "fallback": {
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "bomb_reason": {
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "deadline_miss": {
+          "type": "boolean"
+        },
+        "timing_breakdown": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "number"
+          }
+        }
+      },
+      "required": [
+        "schema",
+        "decision_id",
+        "intent",
+        "accepted_action",
+        "reason"
+      ]
+    },
+    "PlayerObs": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "x": {
+          "type": "number",
+          "description": "player centre x, px, screen coordinates"
+        },
+        "y": {
+          "type": "number",
+          "description": "player centre y, px, screen coordinates"
+        },
+        "focus": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "hurtbox_half": {
+          "type": "number",
+          "minimum": 0.0
+        },
+        "alive": {
+          "type": "boolean"
+        },
+        "invulnerable": {
+          "type": "boolean"
+        },
+        "speed_model": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "x",
+        "y",
+        "focus",
+        "hurtbox_half"
+      ]
+    },
+    "HazardObs": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "position": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          },
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "velocity": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          },
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "half": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          },
+          "minItems": 2,
+          "maxItems": 2,
+          "description": "collision half extents, px"
+        },
+        "motion_model": {
+          "type": "string",
+          "enum": [
+            "linear",
+            "unknown"
+          ]
+        },
+        "confidence": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 1.0
+        },
+        "valid_until": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "collision_disabled": {
+          "type": "boolean"
+        },
+        "track_id": {
+          "oneOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "position",
+        "velocity",
+        "half"
+      ]
+    },
+    "CorridorBox": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "frame": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "x0": {
+          "type": "number"
+        },
+        "y0": {
+          "type": "number"
+        },
+        "x1": {
+          "type": "number"
+        },
+        "y1": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "frame",
+        "x0",
+        "y0",
+        "x1",
+        "y1"
+      ]
+    },
+    "PositionKnot": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "frame": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "x": {
+          "type": "number"
+        },
+        "y": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "frame",
+        "x",
+        "y"
+      ]
+    },
+    "RejectedAction": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "action": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          },
+          "minItems": 4,
+          "maxItems": 4
+        },
+        "reason": {
+          "type": "string",
+          "enum": [
+            "certified_blocked",
+            "immediate_collision",
+            "prefer_safer_route",
+            "intent_hold",
+            "budget",
+            "unknown"
+          ]
+        },
+        "evidence": {
+          "type": "string"
+        },
+        "min_clearance": {
+          "oneOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "action",
+        "reason"
+      ]
+    }
+  },
+  "oneOf": [
+    {
+      "$ref": "#/$defs/EscapeObservation"
+    },
+    {
+      "$ref": "#/$defs/DangerForecast"
+    },
+    {
+      "$ref": "#/$defs/RoutePlan"
+    },
+    {
+      "$ref": "#/$defs/ControlDecision"
+    }
+  ]
+}

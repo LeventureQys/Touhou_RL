@@ -1,0 +1,39 @@
+{
+  "schema": "v371-config/1",
+  "version": "v3.7.1",
+  "stage": "P0",
+  "purpose": "experiment validity: real frame clock, input effectiveness, equal logical-frame exposure",
+  "frozen": "2026-10-26",
+  "status": "frozen before any P0 run",
+  "window": {
+    "termination": "gameplay_frame >= start_frame + frames",
+    "frames": 1800,
+    "frameskip": 2,
+    "actuation_lag_frames": 1,
+    "reason": "the v3.7.0 loop stopped at frames//2 = 900 decisions and let planning time become exposure time; with lag=1 the action schedule is a fixed grid and per-action exposure is exactly frameskip frames"
+  },
+  "clock": {
+    "source": "GameManager::gameplayFrameCounter via state.GameState.gameplay_frame",
+    "jump_threshold": 12,
+    "stall_s": 3.0,
+    "max_read_failures": 8,
+    "rollback_policy": "ANOMALY_ROLLBACK, epoch += 1, episode is a technical failure, exposure clamped at 0 (never negative)",
+    "left_game_policy": "technical failure, not a shortened window",
+    "timeout_policy": "a wait deadline never counts as a reached frame"
+  },
+  "input": {
+    "backend": "SendInput (foreground)",
+    "backend_reason": "PostMessage fails menu navigation on this build (v3.7.0 live-v2 preregistration)",
+    "effective_probe": "engine g_CurFrameInput readback per frame, two-frame settling",
+    "unresolved_policy": "status unknown_interval with [send_frame, send_frame + effective_probe_frames]; no fabricated point estimate",
+    "release_policy": "keys released in a finally block on every exit path"
+  },
+  "environment": {
+    "game": "TH08 1.00d",
+    "difficulty": 3,
+    "practice_stage": 0,
+    "team": 0
+  },
+  "gates": ["C-01", "C-01b", "C-01c", "C-02", "C-02b", "C-03", "C-03b", "C-04"],
+  "command": "python -m touhou_rl.escape experiment gates --out Document/Update/Alpha/v3.7.1/data/c01-c04-gates.json"
+}

@@ -1,0 +1,30 @@
+{
+  "schema": "v370-latency/1",
+  "date": "2026-10-25",
+  "note": "per-decision controller latency before/after the D23 optimisation (vectorised beam scoring, cached components, precomputed action velocities, per-axis clearance_many)",
+  "optimisations": [
+    "beam scoring computed once per expansion with numpy gathers instead of 85k cell_of calls",
+    "free-component labels cached per time node (18 flood fills per plan -> 1 per node)",
+    "one-frame action velocities precomputed at import time",
+    "clearance_many rewritten per-axis: avoids the (M,N,2) temporary and one reduce pass",
+    "future_freedom replaced by a backward DP over the time-expanded graph (O(1) lookups)"
+  ],
+  "synthetic": [
+    {"scenario": "SC-15/0", "before_p50_ms": 79.4, "before_p95_ms": 82.1, "after_p50_ms": 27.1, "after_p95_ms": 29.4, "survived": true, "frames": 180},
+    {"scenario": "SC-16/0", "before_p50_ms": 95.8, "before_p95_ms": 99.5, "after_p50_ms": 30.6, "after_p95_ms": 32.4, "survived": true, "frames": 180},
+    {"scenario": "E-05", "before_p50_ms": 70.1, "before_p95_ms": 75.5, "after_p50_ms": 25.2, "after_p95_ms": 28.1, "survived": true, "frames": 60}
+  ],
+  "recorded_game_trace": {
+    "trace": ".tmp/t2power-smoke2/trace/collect-ep01.jsonl",
+    "decisions": 100,
+    "before_p50_ms": 64.7,
+    "before_p95_ms": 82.1,
+    "after_p50_ms": 25.9,
+    "after_p95_ms": 29.5,
+    "plan_statuses": {"feasible": 93, "budget_exhausted": 7},
+    "max_hazards": 95
+  },
+  "budget_ms": 33.3,
+  "verdict": "meets the 33.3 ms budget on the measured synthetic and recorded scenarios",
+  "formal_caveat": "the frozen-config formal run (data/d7-formal-eval.json) happened before this optimisation; the dev 12-seed re-run after it reproduces identical gate outcomes (data/d7-dev-eval-12x2-seeds12-latency.json), which is evidence the change is behaviour-preserving, but a formal re-run would need a formal-v3 config and a documented void of v2"
+}

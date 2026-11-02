@@ -1,0 +1,348 @@
+{
+  "schema": "v370-student-study/1",
+  "synthetic_frames": true,
+  "note": "30 episodes, single-frame input, scenario-wise split; the closed loop executes the student only and never queries the teacher",
+  "config": {
+    "episodes": 30,
+    "epochs": 18,
+    "seed": 11,
+    "channels": 1,
+    "device": "cuda"
+  },
+  "samples": 1432,
+  "episodes": 30,
+  "split": {
+    "by": "scenario",
+    "train_episodes": 24,
+    "test_episodes": 6,
+    "train_samples": 1221,
+    "test_samples": 211
+  },
+  "losses": [
+    1.59253,
+    1.184604,
+    1.066701,
+    0.911331,
+    0.775139,
+    0.689214,
+    0.615202,
+    0.519303,
+    0.483385,
+    0.449486,
+    0.41108,
+    0.404597,
+    0.438614,
+    0.372466,
+    0.349797,
+    0.318897,
+    0.315007,
+    0.316714
+  ],
+  "train": {
+    "samples": 1221,
+    "accuracy": 0.9058,
+    "move_accuracy": 0.9697,
+    "focus_accuracy": 0.9337,
+    "chance": 0.0556,
+    "move_chance": 0.1111,
+    "confusion_top": {
+      "8->8": 466,
+      "4->4": 439,
+      "17->8": 41,
+      "1->1": 40,
+      "3->3": 38,
+      "13->4": 26,
+      "0->0": 24,
+      "7->7": 24
+    }
+  },
+  "test": {
+    "samples": 211,
+    "accuracy": 0.7299,
+    "move_accuracy": 0.7393,
+    "focus_accuracy": 0.9526,
+    "chance": 0.0556,
+    "move_chance": 0.1111,
+    "confusion_top": {
+      "8->8": 72,
+      "4->4": 68,
+      "1->7": 14,
+      "0->3": 10,
+      "1->1": 7,
+      "1->3": 6,
+      "3->3": 6,
+      "7->1": 5
+    }
+  },
+  "closed_loop": [
+    {
+      "scenario": "E-01",
+      "frames": 20,
+      "hit": false,
+      "survived": true,
+      "min_clearance": 5.175,
+      "action_histogram": {
+        "1": 2,
+        "4": 3,
+        "8": 5
+      }
+    },
+    {
+      "scenario": "E-02",
+      "frames": 20,
+      "hit": false,
+      "survived": true,
+      "min_clearance": 3.8318,
+      "action_histogram": {
+        "4": 5,
+        "8": 5
+      }
+    },
+    {
+      "scenario": "E-03",
+      "frames": 80,
+      "hit": false,
+      "survived": true,
+      "min_clearance": 65.8614,
+      "action_histogram": {
+        "4": 20,
+        "8": 20
+      }
+    },
+    {
+      "scenario": "E-04",
+      "frames": 20,
+      "hit": false,
+      "survived": true,
+      "min_clearance": 65.8614,
+      "action_histogram": {
+        "4": 4,
+        "8": 6
+      }
+    },
+    {
+      "scenario": "E-05",
+      "frames": 42,
+      "hit": true,
+      "survived": false,
+      "min_clearance": -2.825,
+      "action_histogram": {
+        "1": 6,
+        "3": 8,
+        "7": 7
+      }
+    },
+    {
+      "scenario": "E-06",
+      "frames": 42,
+      "hit": true,
+      "survived": false,
+      "min_clearance": -2.825,
+      "action_histogram": {
+        "1": 6,
+        "3": 7,
+        "5": 1,
+        "7": 7
+      }
+    },
+    {
+      "scenario": "E-07",
+      "frames": 30,
+      "hit": false,
+      "survived": true,
+      "min_clearance": 8.033,
+      "action_histogram": {
+        "3": 12,
+        "8": 2,
+        "17": 1
+      }
+    },
+    {
+      "scenario": "E-08",
+      "frames": 20,
+      "hit": false,
+      "survived": true,
+      "min_clearance": 25.175,
+      "action_histogram": {
+        "0": 10
+      }
+    },
+    {
+      "scenario": "E-09",
+      "frames": 60,
+      "hit": false,
+      "survived": true,
+      "min_clearance": 61.3614,
+      "action_histogram": {
+        "4": 14,
+        "8": 16
+      }
+    },
+    {
+      "scenario": "E-10",
+      "frames": 20,
+      "hit": false,
+      "survived": true,
+      "min_clearance": 57.8614,
+      "action_histogram": {
+        "4": 4,
+        "8": 6
+      }
+    },
+    {
+      "scenario": "E-11",
+      "frames": 6,
+      "hit": true,
+      "survived": false,
+      "min_clearance": -4.3398,
+      "action_histogram": {
+        "4": 1,
+        "8": 2
+      }
+    },
+    {
+      "scenario": "E-12",
+      "frames": 60,
+      "hit": false,
+      "survived": true,
+      "min_clearance": 314.7854,
+      "action_histogram": {
+        "4": 14,
+        "8": 16
+      }
+    },
+    {
+      "scenario": "E-13",
+      "frames": 180,
+      "hit": false,
+      "survived": true,
+      "min_clearance": 5.6602,
+      "action_histogram": {
+        "4": 44,
+        "8": 46
+      }
+    },
+    {
+      "scenario": "E-14",
+      "frames": 180,
+      "hit": false,
+      "survived": true,
+      "min_clearance": null,
+      "action_histogram": {
+        "4": 44,
+        "8": 46
+      }
+    },
+    {
+      "scenario": "E-15",
+      "frames": 60,
+      "hit": false,
+      "survived": true,
+      "min_clearance": 125.175,
+      "action_histogram": {
+        "4": 14,
+        "8": 16
+      }
+    },
+    {
+      "scenario": "E-16",
+      "frames": 40,
+      "hit": false,
+      "survived": true,
+      "min_clearance": 249.8614,
+      "action_histogram": {
+        "4": 10,
+        "8": 10
+      }
+    },
+    {
+      "scenario": "E-17",
+      "frames": 40,
+      "hit": false,
+      "survived": true,
+      "min_clearance": 82.8614,
+      "action_histogram": {
+        "4": 10,
+        "8": 10
+      }
+    },
+    {
+      "scenario": "E-18",
+      "frames": 40,
+      "hit": false,
+      "survived": true,
+      "min_clearance": 119.8614,
+      "action_histogram": {
+        "4": 10,
+        "8": 10
+      }
+    },
+    {
+      "scenario": "E-19",
+      "frames": 40,
+      "hit": false,
+      "survived": true,
+      "min_clearance": 57.9442,
+      "action_histogram": {
+        "7": 3,
+        "8": 17
+      }
+    },
+    {
+      "scenario": "E-20",
+      "frames": 60,
+      "hit": false,
+      "survived": true,
+      "min_clearance": 316.3566,
+      "action_histogram": {
+        "4": 14,
+        "8": 16
+      }
+    },
+    {
+      "scenario": "SC-15/0",
+      "frames": 53,
+      "hit": true,
+      "survived": false,
+      "min_clearance": -0.4818,
+      "action_histogram": {
+        "0": 1,
+        "1": 9,
+        "3": 10,
+        "4": 1,
+        "5": 6
+      }
+    },
+    {
+      "scenario": "SC-16/0",
+      "frames": 86,
+      "hit": true,
+      "survived": false,
+      "min_clearance": -0.825,
+      "action_histogram": {
+        "0": 1,
+        "1": 11,
+        "3": 22,
+        "7": 9
+      }
+    },
+    {
+      "scenario": "SC-17/0",
+      "frames": 180,
+      "hit": false,
+      "survived": true,
+      "min_clearance": 1.2771,
+      "action_histogram": {
+        "4": 48,
+        "8": 42
+      }
+    }
+  ],
+  "closed_loop_survived": 18,
+  "closed_loop_total": 23,
+  "elapsed_s": {
+    "collect": 45.75,
+    "fit": 2.03,
+    "total": 49.39
+  }
+}

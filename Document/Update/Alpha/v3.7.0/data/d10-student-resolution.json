@@ -1,0 +1,49 @@
+{
+  "schema": "v370-student-resolution/1",
+  "synthetic_frames": true,
+  "deterministic": true,
+  "seed": 11,
+  "note": "single seed, 30 episodes; tests whether the 4.65 px gap in E-05 is even representable at 3.4 px/column (96x112) versus 1.7 px/column (192x224)",
+  "results": {
+    "96x112": {
+      "image_shape": [
+        96,
+        112
+      ],
+      "samples": 1432,
+      "test_accuracy": 0.7583,
+      "move_accuracy": 0.7678,
+      "closed_loop_survived": 17,
+      "closed_loop_total": 23,
+      "failures": [
+        "E-05",
+        "E-06",
+        "E-11",
+        "SC-15/0",
+        "SC-16/0",
+        "SC-17/0"
+      ],
+      "elapsed_s": 51.86
+    },
+    "192x224": {
+      "image_shape": [
+        192,
+        224
+      ],
+      "samples": 1432,
+      "test_accuracy": 0.7393,
+      "move_accuracy": 0.7488,
+      "closed_loop_survived": 17,
+      "closed_loop_total": 23,
+      "failures": [
+        "E-05",
+        "E-06",
+        "E-07",
+        "E-11",
+        "SC-15/0",
+        "SC-16/0"
+      ],
+      "elapsed_s": 68.64
+    }
+  }
+}

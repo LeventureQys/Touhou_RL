@@ -1,0 +1,59 @@
+{
+  "schema": "v371-config/1",
+  "version": "v3.7.1",
+  "stage": "P1",
+  "purpose": "minimal fair single-factor comparison: baseline local control vs baseline + one macro-route veto",
+  "frozen": "2026-10-26",
+  "status": "frozen before the P1 run; changing it after seeing results voids the comparison",
+  "window": {
+    "termination": "gameplay_frame >= start_frame + frames",
+    "frames": 1800,
+    "frameskip": 2,
+    "actuation_lag_frames": 1
+  },
+  "environment": {
+    "game": "TH08 1.00d",
+    "difficulty": 3,
+    "practice_stage": 0,
+    "team": 0,
+    "reset_mode": "menu",
+    "frameskip_env": 2
+  },
+  "arms": {
+    "baseline": {
+      "policy": "AvoidPilot(PilotConfig())",
+      "note": "unmodified v3.7.0 baseline; no parameter changed",
+      "horizon_frames": 20,
+      "horizon_source": "PilotConfig.horizon_steps=10 x frameskip 2",
+      "continuations_per_action": 2,
+      "bomb_rule": "native (bomb_min_clearance=-1.5, bomb_cooldown=40)",
+      "bottom_bias": 0.3
+    },
+    "hybrid_veto": {
+      "policy": "AvoidPilot(PilotConfig()) + macro-route veto",
+      "single_factor": "the veto is the only difference from baseline",
+      "veto_trigger": "escape controller intent in {evacuate, emergency} AND a route was found (route_id != null)",
+      "veto_overrides": "move and focus only",
+      "veto_preserves": "shoot and bomb bits from the baseline action, so the bomb protocol is unchanged",
+      "horizon_decisions": 10,
+      "horizon_frames": 20,
+      "horizon_note": "same 20-frame lookahead as the baseline's horizon_steps x frameskip",
+      "beam_width": 2,
+      "beam_note": "2 = the baseline's quota_per_action, i.e. two continuations kept per first action",
+      "continuation_decisions": 0,
+      "score_mode": "auto"
+    }
+  },
+  "design": {
+    "order": "balanced_random",
+    "order_seed": 0,
+    "pairs": 30,
+    "pairing": "AB/BA balanced random: each pair runs both arms back to back in the recorded order",
+    "rng_control": "unavailable; recorded explicitly, so 'same session' is never reported as 'same curtain'",
+    "primary_metric": "deaths inside the preregistered window [start_frame, start_frame + 1800)",
+    "secondary_metrics": ["bombs inside window", "first death frame", "hold_frames", "plan_ms p50/p95", "deadline misses", "effective-input resolution on changed actions"],
+    "exclusions": "a pair is a technical failure only if an arm reports technical_failure (clock anomaly, left game, wall budget, unstable snapshot chain); such pairs are listed, not silently removed",
+    "boundary_rule": "a death whose attribution interval crosses the window boundary is counted as boundary_unknown and excluded from the death count, with the event kept in the record"
+  },
+  "command": "python -m touhou_rl.escape experiment pair --pairs 30 --order balanced_random --seed 0 --frames 1800 --frameskip 2 --actuation-lag 1 --horizon 10 --continuation 0 --beam 2 --confirm-foreground --out Document/Update/Alpha/v3.7.1/data/live-pairs.json"
+}

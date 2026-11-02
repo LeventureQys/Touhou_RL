@@ -1,0 +1,313 @@
+{
+  "schema": "v370-settlement/1",
+  "split": "dev",
+  "scenarios": 97,
+  "gates": {
+    "A-01": {
+      "status": "pass",
+      "checks": {
+        "E-01 crossing avoided": true,
+        "E-02 diagonal avoided": true,
+        "E-05 wide gap passable": true,
+        "E-06 narrow gap not passed": true
+      },
+      "note": "deterministic boundary instances only; full matrix is D7 formal"
+    },
+    "A-02": {
+      "status": "pass",
+      "rate": 1.0,
+      "denominator": 81,
+      "subset": true,
+      "per_family": {
+        "SC-01": {
+          "feasible": 1,
+          "survived": 1,
+          "rate": 1.0,
+          "counted": false
+        },
+        "SC-02": {
+          "feasible": 13,
+          "survived": 13,
+          "rate": 1.0,
+          "counted": true
+        },
+        "SC-03": {
+          "feasible": 12,
+          "survived": 12,
+          "rate": 1.0,
+          "counted": true
+        },
+        "SC-04": {
+          "feasible": 2,
+          "survived": 2,
+          "rate": 1.0,
+          "counted": false
+        },
+        "SC-06": {
+          "feasible": 2,
+          "survived": 2,
+          "rate": 1.0,
+          "counted": false
+        },
+        "SC-08": {
+          "feasible": 14,
+          "survived": 14,
+          "rate": 1.0,
+          "counted": true
+        },
+        "SC-09": {
+          "feasible": 12,
+          "survived": 12,
+          "rate": 1.0,
+          "counted": true
+        },
+        "SC-15": {
+          "feasible": 13,
+          "survived": 13,
+          "rate": 1.0,
+          "counted": true
+        },
+        "SC-17": {
+          "feasible": 12,
+          "survived": 12,
+          "rate": 1.0,
+          "counted": true
+        }
+      },
+      "weak_families": {},
+      "note": "reference-labelled subset only; each family with ≥3 feasible rows must reach ≥0.8 (acceptance A-02)"
+    },
+    "A-03": {
+      "status": "pass",
+      "denominator": 13,
+      "labels": {
+        "SC-15/0": 86,
+        "SC-15/1": 86,
+        "SC-15/2": 86,
+        "SC-15/3": 86,
+        "SC-15/4": 86,
+        "SC-15/5": 86,
+        "SC-15/6": 86,
+        "SC-15/7": 86,
+        "SC-15/8": 86,
+        "SC-15/9": 86,
+        "SC-15/10": 86,
+        "SC-15/11": 86,
+        "SC-16/0": 75,
+        "SC-16/1": 75,
+        "SC-16/2": 75,
+        "SC-16/3": 75,
+        "SC-16/4": 75,
+        "SC-16/5": 75,
+        "SC-16/6": 75,
+        "SC-16/7": 75,
+        "SC-16/8": 75,
+        "SC-16/9": 75,
+        "SC-16/10": 75,
+        "SC-16/11": 75,
+        "E-05": 25,
+        "E-06": 25,
+        "E-16": 40
+      },
+      "margin_frames": 10,
+      "note": "backward reachability label (8 px, cell-inflated) capped by the do-nothing death frame; evacuation must start 10 frames before it"
+    },
+    "A-04": {
+      "status": "pass",
+      "baseline_deaths": 21,
+      "subject_deaths": 4,
+      "pairs": 97,
+      "relative_reduction": 0.8095,
+      "threshold": 0.3,
+      "note": "relative death reduction on paired instances; no bombs in the synthetic world"
+    },
+    "A-05": {
+      "status": "pass",
+      "denominator": 4,
+      "survived_anyway": [],
+      "note": "instances labelled infeasible/blocked must not survive"
+    },
+    "A-06": {
+      "status": "pass",
+      "blocked_instance_certified": true,
+      "unproven_not_certified": true,
+      "late_cover_reported_unknown": true,
+      "blocked_statuses": {
+        "E-11": "no_solution_certified"
+      },
+      "late_statuses": {
+        "E-21": "model_unknown",
+        "E-22": "model_unknown"
+      },
+      "note": "blocked needs a proof; unknown/unproven must never be reported as certified; a cover that appears beyond the plan horizon must be unknown/budget"
+    },
+    "A-07": {
+      "status": "pass",
+      "pocket_frames": 0,
+      "note": "entered the SC-15 dead end"
+    },
+    "A-08": {
+      "status": "pass",
+      "rate": 1.0,
+      "note": "SC-17 sparse regression; small seed sample"
+    }
+  },
+  "family_breakdown": {
+    "SC-01": {
+      "rows": 1,
+      "subject_survived": 1,
+      "baseline_survived": 1,
+      "reference_feasible": 1,
+      "expected": {
+        "unknown": 1
+      },
+      "subject_rate": 1.0,
+      "baseline_rate": 1.0
+    },
+    "SC-02": {
+      "rows": 14,
+      "subject_survived": 13,
+      "baseline_survived": 12,
+      "reference_feasible": 13,
+      "expected": {
+        "none": 12,
+        "feasible": 1,
+        "infeasible_unproven": 1
+      },
+      "subject_rate": 0.9286,
+      "baseline_rate": 0.8571
+    },
+    "SC-03": {
+      "rows": 12,
+      "subject_survived": 12,
+      "baseline_survived": 12,
+      "reference_feasible": 12,
+      "expected": {
+        "none": 12
+      },
+      "subject_rate": 1.0,
+      "baseline_rate": 1.0
+    },
+    "SC-04": {
+      "rows": 2,
+      "subject_survived": 2,
+      "baseline_survived": 2,
+      "reference_feasible": 2,
+      "expected": {
+        "feasible": 2
+      },
+      "subject_rate": 1.0,
+      "baseline_rate": 1.0
+    },
+    "SC-06": {
+      "rows": 2,
+      "subject_survived": 2,
+      "baseline_survived": 2,
+      "reference_feasible": 2,
+      "expected": {
+        "feasible": 2
+      },
+      "subject_rate": 1.0,
+      "baseline_rate": 1.0
+    },
+    "SC-08": {
+      "rows": 14,
+      "subject_survived": 14,
+      "baseline_survived": 10,
+      "reference_feasible": 14,
+      "expected": {
+        "none": 12,
+        "feasible": 2
+      },
+      "subject_rate": 1.0,
+      "baseline_rate": 0.7143
+    },
+    "SC-09": {
+      "rows": 12,
+      "subject_survived": 12,
+      "baseline_survived": 12,
+      "reference_feasible": 12,
+      "expected": {
+        "none": 12
+      },
+      "subject_rate": 1.0,
+      "baseline_rate": 1.0
+    },
+    "SC-12": {
+      "rows": 3,
+      "subject_survived": 0,
+      "baseline_survived": 0,
+      "reference_feasible": 0,
+      "expected": {
+        "blocked": 1,
+        "blocked_late": 2
+      },
+      "subject_rate": 0.0,
+      "baseline_rate": 0.0
+    },
+    "SC-15": {
+      "rows": 13,
+      "subject_survived": 13,
+      "baseline_survived": 13,
+      "reference_feasible": 13,
+      "expected": {
+        "none": 12,
+        "unknown": 1
+      },
+      "subject_rate": 1.0,
+      "baseline_rate": 1.0
+    },
+    "SC-16": {
+      "rows": 12,
+      "subject_survived": 12,
+      "baseline_survived": 0,
+      "reference_feasible": 0,
+      "expected": {
+        "none": 12
+      },
+      "subject_rate": 1.0,
+      "baseline_rate": 0.0
+    },
+    "SC-17": {
+      "rows": 12,
+      "subject_survived": 12,
+      "baseline_survived": 12,
+      "reference_feasible": 12,
+      "expected": {
+        "none": 12
+      },
+      "subject_rate": 1.0,
+      "baseline_rate": 1.0
+    }
+  },
+  "reference_labels": {
+    "E-05": 25,
+    "E-06": 25,
+    "E-16": 40,
+    "SC-15/0": 86,
+    "SC-15/1": 86,
+    "SC-15/10": 86,
+    "SC-15/11": 86,
+    "SC-15/2": 86,
+    "SC-15/3": 86,
+    "SC-15/4": 86,
+    "SC-15/5": 86,
+    "SC-15/6": 86,
+    "SC-15/7": 86,
+    "SC-15/8": 86,
+    "SC-15/9": 86,
+    "SC-16/0": 75,
+    "SC-16/1": 75,
+    "SC-16/10": 75,
+    "SC-16/11": 75,
+    "SC-16/2": 75,
+    "SC-16/3": 75,
+    "SC-16/4": 75,
+    "SC-16/5": 75,
+    "SC-16/6": 75,
+    "SC-16/7": 75,
+    "SC-16/8": 75,
+    "SC-16/9": 75
+  },
+  "source": "Document/Update/Alpha/v3.7.0/data/d7-dev-eval-12x2-seeds12.json"
+}

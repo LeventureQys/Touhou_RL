@@ -1,0 +1,174 @@
+{
+  "schema": "v370-planner-sweep/3",
+  "note": "D4d: adaptive mode decided once per episode from coarse reachability; closed loop with the first action executed in synth.SyntheticEnv",
+  "targets": {
+    "plan_p95_ms": 33.3
+  },
+  "rows": [
+    {
+      "scenario": "E-01",
+      "horizon_frames": 20,
+      "config": {
+        "horizon_decisions": 4,
+        "continuation_decisions": 1,
+        "beam_width": 1,
+        "score_mode": "auto"
+      },
+      "survived": true,
+      "hit": false,
+      "frames": 20,
+      "fallbacks": 0,
+      "min_clearance": 5.175,
+      "plan_ms_p50": 26.059,
+      "status_counts": {
+        "feasible": 10
+      },
+      "total_s": 0.29
+    },
+    {
+      "scenario": "E-05 12x2",
+      "horizon_frames": 60,
+      "config": {
+        "horizon_decisions": 12,
+        "continuation_decisions": 2,
+        "beam_width": 1,
+        "score_mode": "auto"
+      },
+      "survived": false,
+      "hit": true,
+      "frames": 37,
+      "fallbacks": 7,
+      "min_clearance": -1.4818,
+      "plan_ms_p50": 68.086,
+      "status_counts": {
+        "feasible": 12,
+        "budget_exhausted": 6,
+        "no_solution_certified": 1
+      },
+      "total_s": 1.1
+    },
+    {
+      "scenario": "E-05 20x4",
+      "horizon_frames": 60,
+      "config": {
+        "horizon_decisions": 20,
+        "continuation_decisions": 4,
+        "beam_width": 1,
+        "score_mode": "auto"
+      },
+      "survived": true,
+      "hit": false,
+      "frames": 60,
+      "fallbacks": 7,
+      "min_clearance": 0.6602,
+      "plan_ms_p50": 72.127,
+      "status_counts": {
+        "feasible": 23,
+        "budget_exhausted": 7
+      },
+      "total_s": 1.9
+    },
+    {
+      "scenario": "E-06",
+      "horizon_frames": 60,
+      "config": {
+        "horizon_decisions": 12,
+        "continuation_decisions": 2,
+        "beam_width": 1,
+        "score_mode": "auto"
+      },
+      "survived": false,
+      "hit": true,
+      "frames": 37,
+      "fallbacks": 7,
+      "min_clearance": -1.4818,
+      "plan_ms_p50": 68.022,
+      "status_counts": {
+        "feasible": 12,
+        "budget_exhausted": 6,
+        "no_solution_certified": 1
+      },
+      "total_s": 1.1
+    },
+    {
+      "scenario": "E-09",
+      "horizon_frames": 60,
+      "config": {
+        "horizon_decisions": 4,
+        "continuation_decisions": 1,
+        "beam_width": 1,
+        "score_mode": "auto"
+      },
+      "survived": true,
+      "hit": false,
+      "frames": 60,
+      "fallbacks": 0,
+      "min_clearance": 69.175,
+      "plan_ms_p50": 25.075,
+      "status_counts": {
+        "feasible": 30
+      },
+      "total_s": 0.78
+    },
+    {
+      "scenario": "E-17",
+      "horizon_frames": 40,
+      "config": {
+        "horizon_decisions": 4,
+        "continuation_decisions": 1,
+        "beam_width": 1,
+        "score_mode": "auto"
+      },
+      "survived": true,
+      "hit": false,
+      "frames": 40,
+      "fallbacks": 0,
+      "min_clearance": 120.8318,
+      "plan_ms_p50": 18.811,
+      "status_counts": {
+        "feasible": 20
+      },
+      "total_s": 0.41
+    },
+    {
+      "scenario": "SC-15/0",
+      "horizon_frames": 180,
+      "config": {
+        "horizon_decisions": 12,
+        "continuation_decisions": 2,
+        "beam_width": 1,
+        "score_mode": "auto"
+      },
+      "survived": true,
+      "hit": false,
+      "frames": 180,
+      "fallbacks": 0,
+      "min_clearance": 5.175,
+      "plan_ms_p50": 76.949,
+      "status_counts": {
+        "feasible": 90
+      },
+      "total_s": 6.54
+    },
+    {
+      "scenario": "SC-16/0",
+      "horizon_frames": 180,
+      "config": {
+        "horizon_decisions": 12,
+        "continuation_decisions": 2,
+        "beam_width": 1,
+        "score_mode": "auto"
+      },
+      "survived": true,
+      "hit": false,
+      "frames": 180,
+      "fallbacks": 0,
+      "min_clearance": 5.175,
+      "plan_ms_p50": 91.111,
+      "status_counts": {
+        "feasible": 90
+      },
+      "total_s": 7.53
+    }
+  ]
+}

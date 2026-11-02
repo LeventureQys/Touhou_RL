@@ -1,0 +1,119 @@
+{
+  "schema": "v370-recorded-probe-multi/1",
+  "source": "recorded-game-trace",
+  "live": false,
+  "note": "four recorded episodes replayed through the v3.7.0 controller; each window is 100 decisions starting at record 280 to skip the empty-bullet warmup",
+  "planner": {
+    "horizon_decisions": 12,
+    "continuation_decisions": 2,
+    "beam_width": 1
+  },
+  "traces": [
+    {
+      "trace": ".tmp/t2power-smoke2/trace/collect-ep01.jsonl",
+      "decisions": 100,
+      "readable": 100,
+      "intents": {
+        "prepare_exit": 33,
+        "evacuate": 50,
+        "local": 10,
+        "unknown": 7
+      },
+      "plan_statuses": {
+        "feasible": 93,
+        "budget_exhausted": 7
+      },
+      "plan_ms_p50": 26.117,
+      "plan_ms_p95": 30.841,
+      "max_hazards": 95,
+      "over_cap_decisions": 0,
+      "budget_exhausted_mean_hazards": 75.3,
+      "feasible_mean_hazards": 77.8,
+      "elapsed_s": 3.18
+    },
+    {
+      "trace": ".tmp/t2power-smoke2/trace/collect-ep02.jsonl",
+      "decisions": 100,
+      "readable": 100,
+      "intents": {
+        "prepare_exit": 34,
+        "evacuate": 43,
+        "local": 17,
+        "unknown": 6
+      },
+      "plan_statuses": {
+        "feasible": 94,
+        "budget_exhausted": 6
+      },
+      "plan_ms_p50": 26.462,
+      "plan_ms_p95": 30.82,
+      "max_hazards": 95,
+      "over_cap_decisions": 0,
+      "budget_exhausted_mean_hazards": 75.2,
+      "feasible_mean_hazards": 77.7,
+      "elapsed_s": 3.27
+    },
+    {
+      "trace": ".tmp/v350-s0-diag2/trace/collect-ep01.jsonl",
+      "decisions": 100,
+      "readable": 100,
+      "intents": {
+        "local": 50,
+        "unknown": 9,
+        "evacuate": 41
+      },
+      "plan_statuses": {
+        "feasible": 91,
+        "budget_exhausted": 8,
+        "no_solution_certified": 1
+      },
+      "plan_ms_p50": 21.867,
+      "plan_ms_p95": 24.552,
+      "max_hazards": 96,
+      "over_cap_decisions": 0,
+      "budget_exhausted_mean_hazards": 71.4,
+      "feasible_mean_hazards": 78.8,
+      "elapsed_s": 2.88
+    },
+    {
+      "trace": ".tmp/v350-s0-diag4/trace/collect-ep01.jsonl",
+      "decisions": 100,
+      "readable": 100,
+      "intents": {
+        "local": 65,
+        "unknown": 2,
+        "evacuate": 33
+      },
+      "plan_statuses": {
+        "feasible": 98,
+        "budget_exhausted": 2
+      },
+      "plan_ms_p50": 21.849,
+      "plan_ms_p95": 24.446,
+      "max_hazards": 95,
+      "over_cap_decisions": 0,
+      "budget_exhausted_mean_hazards": 78,
+      "feasible_mean_hazards": 78.0,
+      "elapsed_s": 3.01
+    }
+  ],
+  "budget_exhausted": {
+    "count": 23,
+    "total": 399,
+    "mean_hazards": 74.1,
+    "max_hazards": 88,
+    "sample_frames": [
+      686,
+      688,
+      690,
+      696,
+      700,
+      704,
+      758,
+      686,
+      688,
+      690
+    ]
+  },
+  "feasible_mean_hazards": 78.1
+}

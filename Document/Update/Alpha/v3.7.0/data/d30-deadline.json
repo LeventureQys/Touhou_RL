@@ -1,0 +1,46 @@
+{
+  "schema": "v370-deadline/1",
+  "budget_ms": 33.3,
+  "source": "recorded-game-trace",
+  "live": false,
+  "note": "B-06's 'missed deadline ratio' measured on recorded decision latency, excluding game input/render time; end-to-end is still unmeasured",
+  "traces": [
+    {
+      "trace": ".tmp/t2power-smoke2/trace/collect-ep01.jsonl",
+      "readable": 150,
+      "plan_ms_p50": 22.17,
+      "plan_ms_p95": 30.44,
+      "deadline_misses": 1,
+      "deadline_miss_rate": 0.0067
+    },
+    {
+      "trace": ".tmp/t2power-smoke2/trace/collect-ep02.jsonl",
+      "readable": 150,
+      "plan_ms_p50": 24.977,
+      "plan_ms_p95": 29.779,
+      "deadline_misses": 1,
+      "deadline_miss_rate": 0.0067
+    },
+    {
+      "trace": ".tmp/v350-s0-diag2/trace/collect-ep01.jsonl",
+      "readable": 150,
+      "plan_ms_p50": 22.537,
+      "plan_ms_p95": 24.859,
+      "deadline_misses": 1,
+      "deadline_miss_rate": 0.0067
+    },
+    {
+      "trace": ".tmp/v350-s0-diag4/trace/collect-ep01.jsonl",
+      "readable": 150,
+      "plan_ms_p50": 21.243,
+      "plan_ms_p95": 24.868,
+      "deadline_misses": 0,
+      "deadline_miss_rate": 0.0
+    }
+  ],
+  "decisions": 600,
+  "misses": 3,
+  "miss_rate": 0.005,
+  "threshold": 0.01,
+  "verdict": "meets"
+}

@@ -1,0 +1,121 @@
+{
+  "schema": "v370-student-seeds/1",
+  "synthetic_frames": true,
+  "deterministic": true,
+  "note": "3 seeds, CPU, deterministic algorithms; the dataset is collected once per variant so only the seed of the training split/init changes",
+  "seeds": [
+    11,
+    23,
+    37
+  ],
+  "results": {
+    "frame_only": {
+      "future_features": false,
+      "runs": [
+        {
+          "seed": 11,
+          "test_accuracy": 0.7251,
+          "move_accuracy": 0.7441,
+          "final_loss": 0.275251,
+          "closed_loop_survived": 18,
+          "closed_loop_total": 23,
+          "failures": [
+            "E-05",
+            "E-06",
+            "E-07",
+            "E-11",
+            "SC-15/0"
+          ]
+        },
+        {
+          "seed": 23,
+          "test_accuracy": 0.7547,
+          "move_accuracy": 0.8755,
+          "final_loss": 0.233507,
+          "closed_loop_survived": 17,
+          "closed_loop_total": 23,
+          "failures": [
+            "E-05",
+            "E-06",
+            "E-07",
+            "E-09",
+            "E-11",
+            "SC-15/0"
+          ]
+        },
+        {
+          "seed": 37,
+          "test_accuracy": 0.5308,
+          "move_accuracy": 0.6731,
+          "final_loss": 0.267809,
+          "closed_loop_survived": 19,
+          "closed_loop_total": 23,
+          "failures": [
+            "E-05",
+            "E-06",
+            "E-11",
+            "SC-15/0"
+          ]
+        }
+      ],
+      "test_accuracy_mean": 0.6702,
+      "test_accuracy_stdev": 0.0993,
+      "closed_loop_mean": 18,
+      "closed_loop_stdev": 0.816
+    },
+    "frame_plus_future": {
+      "future_features": true,
+      "runs": [
+        {
+          "seed": 11,
+          "test_accuracy": 0.7156,
+          "move_accuracy": 0.7346,
+          "final_loss": 0.267807,
+          "closed_loop_survived": 16,
+          "closed_loop_total": 23,
+          "failures": [
+            "E-05",
+            "E-06",
+            "E-07",
+            "E-11",
+            "SC-15/0",
+            "SC-16/0",
+            "SC-17/0"
+          ]
+        },
+        {
+          "seed": 23,
+          "test_accuracy": 0.7547,
+          "move_accuracy": 0.8755,
+          "final_loss": 0.236161,
+          "closed_loop_survived": 19,
+          "closed_loop_total": 23,
+          "failures": [
+            "E-06",
+            "E-09",
+            "E-11",
+            "SC-15/0"
+          ]
+        },
+        {
+          "seed": 37,
+          "test_accuracy": 0.5346,
+          "move_accuracy": 0.6769,
+          "final_loss": 0.252998,
+          "closed_loop_survived": 19,
+          "closed_loop_total": 23,
+          "failures": [
+            "E-05",
+            "E-06",
+            "E-11",
+            "SC-15/0"
+          ]
+        }
+      ],
+      "test_accuracy_mean": 0.6683,
+      "test_accuracy_stdev": 0.0959,
+      "closed_loop_mean": 18,
+      "closed_loop_stdev": 1.414
+    }
+  }
+}

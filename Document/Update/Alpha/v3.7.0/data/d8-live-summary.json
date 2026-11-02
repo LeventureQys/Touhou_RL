@@ -1,0 +1,271 @@
+{
+  "schema": "v370-live-summary/1",
+  "frames_per_episode": 1800,
+  "arms": {
+    "baseline_6ep": {
+      "arm": "baseline",
+      "episodes": 6,
+      "deaths": [
+        2,
+        1,
+        1,
+        1,
+        0,
+        3
+      ],
+      "deaths_total": 8,
+      "deaths_mean": 1.333,
+      "plan_ms_p50": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "plan_ms_p95": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "deadline_misses": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "elapsed_s": [
+        29.985,
+        29.986,
+        29.991,
+        29.987,
+        30.0,
+        30.001
+      ],
+      "same_frame": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "complete_ratio": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    "subject_h8_6ep": {
+      "arm": "subject",
+      "episodes": 6,
+      "deaths": [
+        3,
+        2,
+        1,
+        2,
+        2,
+        3
+      ],
+      "deaths_total": 13,
+      "deaths_mean": 2.167,
+      "plan_ms_p50": [
+        16.859,
+        16.939,
+        16.371,
+        16.677,
+        15.748,
+        16.373
+      ],
+      "plan_ms_p95": [
+        22.188,
+        22.048,
+        21.143,
+        22.167,
+        21.551,
+        21.267
+      ],
+      "deadline_misses": [
+        2,
+        2,
+        1,
+        1,
+        2,
+        2
+      ],
+      "elapsed_s": [
+        32.125,
+        32.524,
+        31.775,
+        32.568,
+        32.009,
+        31.931
+      ],
+      "same_frame": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "complete_ratio": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "relative_change_vs_baseline": -0.6257
+    },
+    "subject_h12_4ep": {
+      "arm": "subject",
+      "episodes": 4,
+      "deaths": [
+        1,
+        3,
+        0,
+        2
+      ],
+      "deaths_total": 6,
+      "deaths_mean": 1.5,
+      "plan_ms_p50": [
+        22.425,
+        23.197,
+        23.016,
+        22.402
+      ],
+      "plan_ms_p95": [
+        29.175,
+        29.572,
+        29.016,
+        29.627
+      ],
+      "deadline_misses": [
+        14,
+        11,
+        13,
+        20
+      ],
+      "elapsed_s": [
+        33.232,
+        34.733,
+        34.271,
+        33.47
+      ],
+      "same_frame": [
+        true,
+        true,
+        true,
+        true
+      ],
+      "complete_ratio": [
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "relative_change_vs_baseline": -0.1253
+    },
+    "subject_h8_first3": {
+      "arm": "subject",
+      "episodes": 3,
+      "deaths": [
+        3,
+        3,
+        4
+      ],
+      "deaths_total": 10,
+      "deaths_mean": 3.333,
+      "plan_ms_p50": [
+        17.114,
+        16.66,
+        16.902
+      ],
+      "plan_ms_p95": [
+        22.124,
+        21.332,
+        22.927
+      ],
+      "deadline_misses": [
+        1,
+        3,
+        2
+      ],
+      "elapsed_s": [
+        32.549,
+        33.232,
+        33.5
+      ],
+      "same_frame": [
+        true,
+        true,
+        true
+      ],
+      "complete_ratio": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    }
+  },
+  "b01": {
+    "criterion": ">=20% reduction in deaths per episode vs baseline, paired CI upper bound < 0",
+    "baseline_deaths_mean": 1.333,
+    "subject_h8_deaths_mean": 2.167,
+    "subject_h12_deaths_mean": 1.5,
+    "verdict": "fail",
+    "note": "the subject is not better than the baseline in this protocol; the sample is small (4-6 episodes per arm) so the point estimate is weak, but the pre-registered 20% reduction is clearly not there"
+  },
+  "b06": {
+    "criterion": "P95 <= 33.3 ms and missed-deadline ratio <= 1% end to end",
+    "subject_h8_p95": [
+      22.188,
+      22.048,
+      21.143,
+      22.167,
+      21.551,
+      21.267
+    ],
+    "subject_h8_miss_rate": [
+      0.0022,
+      0.0022,
+      0.0011,
+      0.0011,
+      0.0022,
+      0.0022
+    ],
+    "subject_h12_miss_rate": [
+      0.0156,
+      0.0122,
+      0.0144,
+      0.0222
+    ],
+    "frame_lag_s": [
+      2.12,
+      2.52,
+      1.77,
+      2.57,
+      2.01,
+      1.93
+    ],
+    "verdict": "partial",
+    "note": "the controller-side miss ratio is <=1% at horizon 8 but the loop runs ~6% slower than the 60 fps budget (32 s for 1800 frames); at horizon 12 the miss ratio is ~1.5% and the lag ~12%"
+  },
+  "b05": {
+    "criterion": ">=99% complete decisions, same-frame verified",
+    "same_frame": true,
+    "complete_ratio_min": 1.0,
+    "verdict": "pass",
+    "note": "subject arm only; the baseline arm does not go through the adapter"
+  }
+}
