@@ -24,6 +24,22 @@ desktop.ini
 *.log
 scratch/
 
+# Local scratch directories from agent / experiment runs.  Measured 2026-11-02:
+# 27 dirs, 2.7 GB at the repository root (`.tmp_cache_contract_round7_a`,
+# `.tmp_full_round28`, `.tmp_p0fence_full`, ...).  Never evidence: anything worth
+# keeping is copied into Document/Update/Alpha/<version>/ before a version is
+# settled, so these are safe to delete at any time.
+.tmp_*/
+# Root-anchored only: pytest/tempfile leftovers (`tmp5g1679c_`) are created at
+# the repo root, and a bare `tmp*/` would also swallow future source dirs.
+/tmp*/
+*.tmp
+*.temp
+*~
+*.orig
+*.rej
+.DS_Store
+
 # DSH local scratch (not part of the deliverable)
 .pytest-tmp/
 .pytest-*/
