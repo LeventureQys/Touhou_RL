@@ -45,3 +45,26 @@ Document/Update/Alpha/v3.6.0/data/probe/*/bullets/
 # v3.6.1 T2 probe traces (same reasoning; 40 episodes ~1.1 GB)
 Document/Update/Alpha/v3.6.1/data/probe/*/trace/
 Document/Update/Alpha/v3.6.1/data/probe/*/bullets/
+
+# ---------------------------------------------------------------------------
+# v3.7.x live-session and synthetic-experiment payload (measured 2026-11-02:
+# 9.7 GB under v3.7.3 alone, 18.2 GB under v2.0.0).  The auditable evidence
+# stays in the repository as md/json/png/svg/jsonl; what follows does not.
+# ---------------------------------------------------------------------------
+
+# Per-run copies of the game itself.  Every `evidence/*/session/` directory is a
+# full copy of the TH08 install (th08.exe, th08.dat, thbgm.dat).  Copyrighted
+# (ZUN / Team Shanghai Alice) and over GitHub's 100 MB per-file hard limit.
+**/session/
+*.dat
+*.exe
+
+# Research weights and pixel tensors.  `pixels.pt` alone is 119 MB and there are
+# 319 of them; none is a deployable model (all are research-only), and the
+# README states the default model has never been replaced.
+*.pt
+*.pth
+
+# Frame caches, 78 MB each (capture-round5/6).  The small raw.npz evidence
+# (~1 MB, regenerable) is deliberately kept.
+**/frames.npz
