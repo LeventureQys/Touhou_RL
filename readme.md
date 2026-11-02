@@ -102,7 +102,7 @@
 | v1.0.2 | 第一批视觉落地：帧契约、视觉分片、CNN、两阶段训练、只像素部署 | "能看"成立但没用：真机 1,239 帧 **低于**随机策略的 2,418 帧 |
 | v1.0.3 | 原生分辨率分区录制、多流视觉模型 | 定位到真实故障：数据被冻结 + 解码错配（[根因分析](<Document/Update/Alpha/v1.0.3/根因分析-数据冻结与解码错配.md>)） |
 | v1.0.4 | 空间网络 v3 拿下 A-01/A-02 | 离线达标 ≠ 闭环可用：教师后悔值 1.27 px，但真机 1627.7 帧、**逐帧 argmax 翻转 50.7%** |
-| v2.0.0 | PPO18 + 候选×持续时间安全教师 + episode holdout | 只通过"有限离线门"，转成真机能力没有成功（[交接](<Document/Update/Alpha/v2.0.0/下一阶段工作交接.md>)） |
+| v2.0.0 | PPO18 + 候选×持续时间安全教师 + episode holdout | 只通过"有限离线门"，转成真机能力没有成功（v2.0.0 记录在本机文档目录，含 18 GB 会话数据，未入库） |
 | v3.1–v3.5 | 特权阶梯、离线信息门、区域探针 | 区域探针 S1 fail，按停止线不启动 S2——**不硬推** |
 | v3.6.x | 七策略离线消融 + 两条策略真机配对 | 单指标陷阱：CollectPower 功率 +1069% 却让死亡 1.95→4.60；六处结论自我更正 |
 | v3.7.0 | 时空选路（提前撤离而非近弹微操） | 合成 117/117 通过，真机反而更差（1.333 vs 1.033 死/局）、弹量 2.1 vs 0.1 |
@@ -131,7 +131,7 @@
 | **同帧证明** | 帧栅栏变体：**240/240** 帧通过 13 项检查（3120/3120），GDI 截图与游戏后台缓冲**逐字节相同**，保证期间 59.87 Hz，hold 中位 7.44 ms |
 | 对照 | 不 hold 的旧读法：120 次读取中 **20.83%** 跨 ticket、至少 **4.17%** 可证明不是该帧 |
 
-细节与边界见 [DATA-ACQUISITION.md](<DATA-ACQUISITION.md>)、[帧栅栏报告](<Document/Update/Alpha/v3.7.4/reports/P0-frame-fence-round1.md>)、[FRAME_FENCE.md](<third_party/th08/docs/FRAME_FENCE.md>)。
+细节与边界见 [DATA-ACQUISITION.md](<DATA-ACQUISITION.md>)、[帧栅栏报告](<Document/Update/Alpha/v3.7.4/reports/P0-frame-fence-round1.md>)、[FRAME_FENCE.md 快照](<Document/Update/Alpha/v3.7.4/FRAME_FENCE-镜像.md>)。
 
 **5.2 数据资产与流水线**
 
@@ -331,7 +331,7 @@ None of this was designed up front. Each item below is a conclusion that survive
 | v1.0.2 | First vision batch: frame contract, vision shards, CNN, two-stage training, pixels-only deployment | "It can see" held, but was useless: 1,239 live frames — **worse** than a random policy's 2,418 |
 | v1.0.3 | Native-resolution partitioned capture, multi-stream vision model | Found a real fault: frozen data plus decode mismatch ([root-cause analysis](<Document/Update/Alpha/v1.0.3/根因分析-数据冻结与解码错配.md>)) |
 | v1.0.4 | Spatial network v3 met A-01/A-02 | Offline numbers are not closed-loop skill: teacher regret 1.27 px, but 1627.7 live frames and **50.7% per-frame argmax flips** |
-| v2.0.0 | PPO18 + candidate × duration safety teacher + episode holdout | Passed only "limited offline gates"; never became live capability ([hand-off](<Document/Update/Alpha/v2.0.0/下一阶段工作交接.md>)) |
+| v2.0.0 | PPO18 + candidate × duration safety teacher + episode holdout | Passed only "limited offline gates"; never became live capability (v2.0.0 records stay in the local doc tree — 18 GB of session data — and are not published) |
 | v3.1–v3.5 | Privileged ladder, offline information gates, region probe | Region probe failed at S1 and S2 was never started — a stop line, honoured |
 | v3.6.x | Seven-strategy offline ablation + two live paired runs | The single-metric trap: CollectPower gained +1069% power while deaths went 1.95→4.60; six conclusions self-corrected |
 | v3.7.0 | Space-time routing (leave early instead of micro-dodging late) | Synthetic 117/117, yet live got worse (1.333 vs 1.033 deaths/episode) and bombs 2.1 vs 0.1 |
@@ -360,7 +360,7 @@ None of this was designed up front. Each item below is a conclusion that survive
 | **Same-frame proof** | Frame-fence variant: **240/240** frames pass 13 checks (3120/3120), GDI screenshots **byte-identical** to the game's back buffer, 59.87 Hz sustained, hold median 7.44 ms |
 | Control group | Old read path without hold: **20.83%** of 120 reads crossed tickets, ≥**4.17%** provably not that frame |
 
-Details and limits: [DATA-ACQUISITION.md](<DATA-ACQUISITION.md>), [frame-fence report](<Document/Update/Alpha/v3.7.4/reports/P0-frame-fence-round1.md>), [FRAME_FENCE.md](<third_party/th08/docs/FRAME_FENCE.md>).
+Details and limits: [DATA-ACQUISITION.md](<DATA-ACQUISITION.md>), [frame-fence report](<Document/Update/Alpha/v3.7.4/reports/P0-frame-fence-round1.md>), [FRAME_FENCE.md snapshot](<Document/Update/Alpha/v3.7.4/FRAME_FENCE-镜像.md>).
 
 **5.2 Data assets and pipeline**
 
