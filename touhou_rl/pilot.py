@@ -126,6 +126,12 @@ class PilotConfig:
     # at a bad exchange rate; a real aiming term has to be a constraint applied
     # only when nothing is close, not a constant bias.
     aim_weight: float = 0.0
+    # When > 0, the boss-aim preference is applied only to paths whose minimum
+    # clearance so far is at least this many pixels.  This keeps "stand under the
+    # boss" a tie-breaker among safe paths instead of a constant bias that trades
+    # safety for DPS (the 2026-10-18 aim_weight=0.6 experiment did exactly that:
+    # 1,719 / 4,067 frames versus 7,319 / 6,748 with aiming off).
+    aim_safe_margin: float = 0.0
     switch_penalty: float = 0.05  # score -= switch_penalty when direction changes
     bomb_min_clearance: float = -1.5  # bomb when even the best path is this bad
     bomb_cooldown: int = 40  # decisions to wait after a bomb
@@ -140,6 +146,8 @@ class PilotConfig:
             raise ValueError("beam must be >= 1")
         if self.speed <= 0.0 or self.focus_speed <= 0.0:
             raise ValueError("player speeds must be positive")
+        if self.aim_weight < 0.0 or self.aim_safe_margin < 0.0:
+            raise ValueError("aim_weight and aim_safe_margin must be >= 0")
 
 
 @dataclass
@@ -308,8 +316,13 @@ class AvoidPilot:
 
             # Preference terms enter only the ranking, never the safety floor.
             pref = cfg.bottom_bias * (new_y - spec.MOVE_AREA_Y) / max(1.0, spec.MOVE_AREA_H)
-            if boss_x is not None:
-                pref = pref - cfg.aim_weight * np.abs(new_x - boss_x) / max(1.0, spec.MOVE_AREA_W)
+            if boss_x is not None and cfg.aim_weight:
+                aim = cfg.aim_weight * np.abs(new_x - boss_x) / max(1.0, spec.MOVE_AREA_W)
+                if cfg.aim_safe_margin > 0.0:
+                    # Only safe paths get the aim bonus; unsafe paths keep their
+                    # pure clearance ranking.
+                    aim = np.where(new_min >= cfg.aim_safe_margin, aim, 0.0)
+                pref = pref - aim
             # The switching penalty applies to the *first* action only.  Applying
             # it to every expansion charged a whole path for its first move (a
             # constant), which made "idle" strictly dominate: measured effect was

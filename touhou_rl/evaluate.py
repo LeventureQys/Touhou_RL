@@ -30,6 +30,7 @@ from .env import EnvConfig, Th08Env
 from .models import load_checkpoint, observation_batch
 from .pilot import AvoidPilot, PilotConfig
 from .vmodels import VISION_ARCH_V3, load_vision_checkpoint, vision_arch, vision_contract_node
+from .stage0_diagnostics import candidate_index, summarize_actions
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -62,6 +63,11 @@ VISION_ISOLATION_NOTE = (
     "env bookkeeping still reads memory"
 )
 
+#: The "still" ladder arm: never move, always fire, never focus, never bomb.
+#: ``move=0`` is the idle entry of ``spec.MOVES``, so the emitted button mask is
+#: exactly ``BTN_SHOOT``.
+STILL_ACTION = (0, 1, 0, 0)
+
 
 @dataclass
 class EvalConfig:
@@ -77,6 +83,10 @@ class EvalConfig:
     device: str = "cuda"
     screenshot: bool = True
     random_policy: bool = False
+    # The ladder's "stand still and keep firing" arm (v3.1.0 step 1).  It exists so
+    # the floor of the ladder is measured rather than assumed: random already walks
+    # into bullets, so a policy that simply never moves is the cheapest control.
+    still_policy: bool = False
     reset_mode: str = "relaunch"
     run_dir: Path = ROOT / "third_party/th08/build/rl/eval-session"
     # Scripted avoidance teacher (no checkpoint needed); see touhou_rl/pilot.py.
@@ -84,11 +94,18 @@ class EvalConfig:
     pilot_config: PilotConfig | None = None
     # Vision policy: the deployment path - frames only, no privileged reads.
     vision_checkpoint: Path | None = None
-    # 0 = follow the checkpoint's ``config.depth``; a non-zero value must agree
-    # with it (the checkpoint's first conv takes ``3 * depth`` channels).
+    # Optional v3.7.2 learned macro adapter; requires the exact vision base SHA.
+    macro_checkpoint: Path | None = None
     vision_depth: int = 0
     vision_box: vision.PlayfieldBox | None = None
-    # Environment factory: ``None`` builds the real ``Th08Env`` (production).
+    # Vision deployment stabilisation.  These operate only on the 18 pixel-derived
+    # preference logits; no privileged state is consulted.  EMA=0 disables smoothing.
+    vision_score_ema: float = 0.35
+    vision_switch_penalty: float = 0.15
+    vision_switch_on_focus: bool = True
+    vision_switch_on_move: bool = True
+    # Stage 0 evidence.  Disabled by default to preserve the compact report shape.
+    decision_trace: bool = False
     # Tests inject a stub so the deployment path can be exercised with no game.
     env_factory: Callable[[EnvConfig], object] | None = None
 
@@ -149,6 +166,12 @@ def vision_report_node(
         node["max_steps"] = int(max_steps)
     if extra is not None and arch == VISION_ARCH_V3:
         node["contract"] = vision_contract_node(model, extra)
+        node["deployment_temporal"] = {
+            "ema": float(getattr(model, "_temporal_ema", 0.0)),
+            "switch_penalty": float(getattr(model, "_temporal_switch_penalty", 0.0)),
+            "switch_on_focus": bool(getattr(model, "_temporal_switch_on_focus", True)),
+            "switch_on_move": bool(getattr(model, "_temporal_switch_on_move", True)),
+        }
     return node
 
 
@@ -269,6 +292,8 @@ def _write_raw_diagnostics(out_dir: Path, episodes: list[dict]) -> None:
 
 def run_evaluation(cfg: EvalConfig) -> dict:
     device = torch.device(cfg.device if torch.cuda.is_available() else "cpu")
+    if cfg.macro_checkpoint is not None and (cfg.vision_checkpoint is None or cfg.random_policy or cfg.still_policy or cfg.pilot):
+        raise ValueError("--macro-checkpoint requires an exclusive --vision-checkpoint policy")
     pilot = build_pilot(cfg)
     vision_model = None
     vision_extra: dict = {}
@@ -276,6 +301,9 @@ def run_evaluation(cfg: EvalConfig) -> dict:
     if cfg.random_policy:
         model = None
         extra: dict = {"random_policy": True}
+    elif cfg.still_policy:
+        model = None
+        extra = {"still_policy": True, "still_action": list(STILL_ACTION)}
     elif cfg.vision_checkpoint is not None:
         model = None
         vision_model, vision_extra = load_vision_checkpoint(cfg.vision_checkpoint, map_location=device)
@@ -283,6 +311,13 @@ def run_evaluation(cfg: EvalConfig) -> dict:
         # The stack depth has to come from the checkpoint, not from a CLI default:
         # resolve it before the environment starts so a mismatch fails fast.
         vision_depth = resolve_vision_depth(vision_model, cfg.vision_depth)
+        if hasattr(vision_model, "configure_temporal_policy"):
+            vision_model.configure_temporal_policy(
+                ema=cfg.vision_score_ema,
+                switch_penalty=cfg.vision_switch_penalty,
+                switch_on_focus=cfg.vision_switch_on_focus,
+                switch_on_move=cfg.vision_switch_on_move,
+            )
         extra = {"vision_checkpoint": True, **vision_extra}
     elif pilot is not None:
         model = None
@@ -292,6 +327,19 @@ def run_evaluation(cfg: EvalConfig) -> dict:
     else:
         model, extra = load_checkpoint(cfg.checkpoint, map_location=device)
         model.to(device).eval()
+    macro_model = None
+    macro_metadata = None
+    if cfg.macro_checkpoint is not None:
+        from .macro_policy import load_macro_checkpoint
+
+        # Release the first GPU base before the sidecar loader reconstructs its
+        # SHA-bound base. The CPU copy is retained only for legacy report metadata.
+        vision_model.to("cpu")
+        macro_model, macro_metadata = load_macro_checkpoint(
+            cfg.macro_checkpoint, baseline_checkpoint=cfg.vision_checkpoint,
+            map_location=device,
+        )
+        macro_model.to(device).eval()
     env = (cfg.env_factory or Th08Env)(
         EnvConfig(
             difficulty=cfg.difficulty,
@@ -308,6 +356,8 @@ def run_evaluation(cfg: EvalConfig) -> dict:
     cfg.out_dir.mkdir(parents=True, exist_ok=True)
     if cfg.random_policy:
         policy = "random"
+    elif cfg.still_policy:
+        policy = "still"
     elif vision_model is not None:
         policy = "vision"
     elif pilot is not None:
@@ -340,6 +390,26 @@ def run_evaluation(cfg: EvalConfig) -> dict:
             max_steps=cfg.max_steps,
             extra=vision_extra,
         )
+        report["vision"]["stage0"] = {
+            "decision_trace": bool(cfg.decision_trace),
+            "deployment_temporal_requested": {
+                "ema": float(cfg.vision_score_ema),
+                "switch_penalty": float(cfg.vision_switch_penalty),
+                "switch_on_focus": bool(cfg.vision_switch_on_focus),
+                "switch_on_move": bool(cfg.vision_switch_on_move),
+            },
+        }
+        if cfg.macro_checkpoint is not None:
+            # The report above describes the base vision contract; the adapter
+            # below changes actions, not its pixel inputs or stack depth.
+            vision_model = macro_model
+            report["vision"]["macro"] = {
+                "checkpoint": str(cfg.macro_checkpoint),
+                "metadata": macro_metadata,
+                "inputs": "pixel-derived features only; no privileged route at inference",
+                "temporal_smoothing": "disabled for macro adapter; no mixing with base EMA",
+                "effect_validation": "not established by loading a checkpoint",
+            }
     try:
         for episode in range(1, cfg.episodes + 1):
             obs, info = env.reset()
@@ -349,8 +419,15 @@ def run_evaluation(cfg: EvalConfig) -> dict:
             clearances: list[float] = []
             frame_stack = None
             diagnostics = new_vision_diagnostics()
+            action_trace: list[dict] = []
+            # Non-vision arms get a flat trace (one row per decision) so the ladder
+            # can audit every arm with the same statistics; the vision branch keeps
+            # its own ``stage0_action_trace`` schema below.
+            trace_actions: list[list[int]] = []
             previous_frame: tuple[int, int] | None = None
             if vision_model is not None:
+                if hasattr(vision_model, "reset_temporal_policy"):
+                    vision_model.reset_temporal_policy()
                 # Deployment path: the policy sees only pixels, as per-region
                 # streams (playfield + HUD blocks).  Each stream is stacked so the
                 # model gets motion without a recurrent state; the depth comes from
@@ -389,6 +466,13 @@ def run_evaluation(cfg: EvalConfig) -> dict:
                     with torch.no_grad():
                         action, _logp, value, _extra = vision_model.act(vision.regions_to_batch(stacks, device))
                     action_numpy = action[0].cpu().numpy()
+                    if cfg.decision_trace:
+                        action_trace.append({
+                            "decision": int(steps),
+                            "action": [int(value) for value in action_numpy.tolist()],
+                            "candidate_index": candidate_index(action_numpy),
+                            "frameskip": int(cfg.frameskip),
+                        })
                     diagnostics["timing_ms"].append(
                         (time.perf_counter() - decision_started) * 1000.0
                     )
@@ -409,9 +493,7 @@ def run_evaluation(cfg: EvalConfig) -> dict:
                                 diagnostics["nonpositive"] += 1
                         previous_frame = (int(stage_now), int(frame_now))
                 elif model is None:
-                    if pilot is None:
-                        action = env.action_space.sample()
-                    else:
+                    if pilot is not None:
                         action = pilot.act(
                             obs,
                             info.get("bullets_raw"),
@@ -419,12 +501,21 @@ def run_evaluation(cfg: EvalConfig) -> dict:
                             bosses=info.get("bosses"),
                         )
                         clearances.append(pilot.debug.best_clearance)
+                    elif cfg.still_policy:
+                        action = np.asarray(STILL_ACTION, dtype=np.int64)
+                    else:
+                        action = env.action_space.sample()
+                    if cfg.decision_trace:
+                        trace_actions.append([int(value) for value in np.asarray(action).reshape(-1)])
                     obs, reward, terminated, truncated, info = env.step(action)
                 else:
                     batch = observation_batch(obs, device)
                     with torch.no_grad():
                         action, logp, value, _ = model.act(batch, deterministic=cfg.deterministic)
-                    obs, reward, terminated, truncated, info = env.step(action[0].cpu().numpy())
+                    policy_action = action[0].cpu().numpy()
+                    if cfg.decision_trace:
+                        trace_actions.append([int(value) for value in np.asarray(policy_action).reshape(-1)])
+                    obs, reward, terminated, truncated, info = env.step(policy_action)
                 steps += 1
                 if cfg.screenshot and steps == 60:
                     try:
@@ -461,6 +552,11 @@ def run_evaluation(cfg: EvalConfig) -> dict:
             }
             if vision_model is not None:
                 row["vision_diagnostics"] = vision_diagnostics_node(diagnostics)
+                if cfg.decision_trace:
+                    row["stage0_action_diagnostics"] = summarize_actions(
+                        [item["action"] for item in action_trace]
+                    )
+                    row["stage0_action_trace"] = action_trace
                 diagnostics_raw.append(
                     {
                         "episode": episode,
@@ -470,6 +566,12 @@ def run_evaluation(cfg: EvalConfig) -> dict:
                         "nonpositive": int(diagnostics["nonpositive"]),
                     }
                 )
+            elif cfg.decision_trace and trace_actions:
+                row["decision_trace"] = {
+                    "schema": "v311-decision-trace/1",
+                    "actions": trace_actions,
+                }
+                row["action_diagnostics"] = summarize_actions(trace_actions)
             if pilot is not None:
                 row["bombs_used"] = bombs_start - int(round(float(info.get("bombs", 0))))
                 if clearances:
@@ -523,9 +625,18 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--deterministic", action="store_true")
     parser.add_argument("--random-policy", action="store_true", help="uniform-random baseline")
     parser.add_argument(
+        "--still",
+        action="store_true",
+        help="stand-still baseline: never move, always fire, never focus, never bomb",
+    )
+    parser.add_argument(
         "--vision-checkpoint",
         default="",
         help="vision scorer checkpoint: the policy plays from a cropped+resized frame stack only",
+    )
+    parser.add_argument(
+        "--macro-checkpoint", default="",
+        help="optional v3.7.2 macro adapter bound to --vision-checkpoint; explicit opt-in",
     )
     parser.add_argument(
         "--vision-depth",
@@ -551,10 +662,38 @@ def main(argv: list[str] | None = None) -> int:
         default=0,
         help="cap the bullets the pilot may plan with (0 = default); set 64 to emulate the network observation",
     )
+    parser.add_argument(
+        "--vision-score-ema", type=float, default=0.35,
+        help="vision score EMA coefficient; 0 disables smoothing",
+    )
+    parser.add_argument(
+        "--vision-switch-penalty", type=float, default=0.15,
+        help="deployment-only penalty for changing move/focus",
+    )
+    parser.add_argument(
+        "--vision-no-focus-hysteresis", action="store_true",
+        help="do not penalize focus changes in vision deployment",
+    )
+    parser.add_argument(
+        "--vision-no-move-hysteresis", action="store_true",
+        help="do not penalize movement changes in vision deployment",
+    )
+    parser.add_argument(
+        "--decision-trace", action="store_true",
+        help="write Stage 0 per-decision action trace and continuity statistics",
+    )
     parser.add_argument("--device", default="cuda")
     args = parser.parse_args(argv)
-    if not args.random_policy and not args.pilot and not args.checkpoint and not args.vision_checkpoint:
-        parser.error("one of --checkpoint / --random-policy / --pilot / --vision-checkpoint is required")
+    if (
+        not args.random_policy
+        and not args.still
+        and not args.pilot
+        and not args.checkpoint
+        and not args.vision_checkpoint
+    ):
+        parser.error(
+            "one of --checkpoint / --random-policy / --still / --pilot / --vision-checkpoint is required"
+        )
     difficulty = {"easy": spec.EASY, "normal": spec.NORMAL, "hard": spec.HARD, "lunatic": spec.LUNATIC}[
         args.difficulty
     ]
@@ -585,10 +724,17 @@ def main(argv: list[str] | None = None) -> int:
         deterministic=args.deterministic,
         device=args.device,
         random_policy=args.random_policy,
+        still_policy=args.still,
         pilot=args.pilot,
         pilot_config=pilot_config,
         vision_checkpoint=Path(args.vision_checkpoint) if args.vision_checkpoint else None,
+        macro_checkpoint=Path(args.macro_checkpoint) if args.macro_checkpoint else None,
         vision_depth=args.vision_depth,
+        vision_score_ema=args.vision_score_ema,
+        vision_switch_penalty=args.vision_switch_penalty,
+        vision_switch_on_focus=not args.vision_no_focus_hysteresis,
+        vision_switch_on_move=not args.vision_no_move_hysteresis,
+        decision_trace=args.decision_trace,
     )
     try:
         report = run_evaluation(cfg)

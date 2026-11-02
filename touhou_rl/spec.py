@@ -8,34 +8,77 @@ the ``bugfix`` build produced by ``tools/th08/Build.ps1``: preferred image base
 
 The game is never written to: TH08's anti-tamper checksum aborts the process on
 writes to lives/bombs/power (``GameManager.hpp`` ``IsTampered``).
+
+Variant builds (for example the research-only frame-fence image, which adds a
+translation unit and therefore shifts every section) ship their own address
+table.  Point ``TH08_ADDRESS_FILE`` at that table -- emitted by
+``third_party/th08/scripts/fence-addresses.py`` from the build's linker map --
+and the addresses below are taken from it instead of the canonical constants.
+Struct *offsets* never change; only image addresses do.
 """
 
 from __future__ import annotations
 
+import json
+import os
+from pathlib import Path
+
+# ---------------------------------------------------------------------------
+# Optional per-build address table (variant images only)
+# ---------------------------------------------------------------------------
+ADDRESS_FILE_ENV = "TH08_ADDRESS_FILE"
+
+
+def _load_address_table() -> tuple[dict[str, int], dict[str, object]]:
+    raw = os.environ.get(ADDRESS_FILE_ENV)
+    if not raw:
+        return {}, {}
+    path = Path(raw)
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    if payload.get("schema") != "th08-map-addresses/1":
+        raise ValueError(f"{path}: unsupported address-table schema {payload.get('schema')!r}")
+    table = {name: int(entry["address"], 16) for name, entry in payload["symbols"].items()}
+    meta = {
+        "addressFile": str(path),
+        "addressFileSha256": payload.get("mapSha256"),
+        "addressFileImageBase": int(payload.get("imageBase", "0x00400000"), 16),
+    }
+    return table, meta
+
+
+_ADDR_OVERRIDES, ADDRESS_SOURCE = _load_address_table()
+
+
+def _addr(symbol: str, default: int) -> int:
+    """Address of ``symbol`` for the image the reader was told about."""
+    return _ADDR_OVERRIDES.get(symbol, default)
+
+
 # ---------------------------------------------------------------------------
 # Linker-map addresses (module base 0x00400000)
 # ---------------------------------------------------------------------------
-IMAGE_BASE = 0x00400000
+IMAGE_BASE = int(ADDRESS_SOURCE.get("addressFileImageBase", 0x00400000))
 
-ADDR_SUPERVISOR = 0x017DC380  # g_Supervisor
-ADDR_GAME_MANAGER = 0x0161C7A0  # g_GameManager
-ADDR_PLAYER = 0x017E3120  # g_Player
-ADDR_BULLET_MANAGER = 0x00F620B8  # g_BulletManager
+ADDR_SUPERVISOR = _addr("g_Supervisor", 0x017DC380)
+ADDR_GAME_MANAGER = _addr("g_GameManager", 0x0161C7A0)
+ADDR_PLAYER = _addr("g_Player", 0x017E3120)
+ADDR_BULLET_MANAGER = _addr("g_BulletManager", 0x00F620B8)
 # g_EnemyManager (linker map: 00585148; the struct is ~10 MB, which is why the
 # next global in the map, g_EnemyManagerCalcChain, starts at 0x00F62058).
-ADDR_ENEMY_MANAGER = 0x00585148
-ADDR_TITLE_SCREEN = 0x018CB030  # g_TitleScreen (pointer)
-ADDR_CUR_FRAME_INPUT = 0x0165A808  # g_CurFrameInput (u16)
-ADDR_LAST_FRAME_INPUT = 0x0165A804  # g_LastFrameInput (u16)
+ADDR_ENEMY_MANAGER = _addr("g_EnemyManager", 0x00585148)
+ADDR_TITLE_SCREEN = _addr("g_TitleScreen", 0x018CB030)  # pointer
+ADDR_CUR_FRAME_INPUT = _addr("g_CurFrameInput", 0x0165A808)  # u16
+ADDR_LAST_FRAME_INPUT = _addr("g_LastFrameInput", 0x0165A804)  # u16
 # g_GuiMessageInputCurrent / Previous (Gui.cpp:29-30).  Player::OnUpdate reads
 # *this*, not g_CurFrameInput, so it is the input the game actually consumes --
 # including replay-fed input during playback (ReplayManager.cpp:329).
-ADDR_GUI_INPUT_CURRENT = 0x0161C674
-ADDR_GUI_INPUT_PREVIOUS = 0x0161C678
+ADDR_GUI_INPUT_CURRENT = _addr("g_GuiMessageInputCurrent", 0x0161C674)
+ADDR_GUI_INPUT_PREVIOUS = _addr("g_GuiMessageInputPrevious", 0x0161C678)
 # g_Gui (Gui.hpp:339-365).  The object is 0x9c bytes; ``impl`` is at +0x8 and
 # ``bossPresent`` at +0x2c.  GuiImpl::message is at +0x21814 and GuiMsgVm's
 # ``currentMsgIdx`` is the first non-pointer field (Gui.hpp:185-215).
-ADDR_GUI = 0x0161C680
+ADDR_GUI = _addr("g_Gui", 0x0161C680)
+ADDR_REPLAY_MANAGER = _addr("g_ReplayManager", 0x018C5C50)
 OFF_GUI_IMPL = 0x8
 OFF_GUI_BOSS_PRESENT = 0x2C
 OFF_GUI_IMPL_MESSAGE = 0x21814
@@ -176,7 +219,7 @@ OFF_ECL_CONTEXT_SUB_ID = 0x224
 #   AnmVm(0x2A4) | currentPosition 0x2A4 | velocity 0x2B0 | target 0x2BC |
 #   ZunTimer(0xC) 0x2C8 | itemType 0x2D4 | isInUse 0x2D5 | isOnscreen 0x2D6 |
 #   state 0x2D7 | isMaxValue 0x2D8 | next 0x2DC | prev 0x2E0.
-ADDR_ITEM_MANAGER = 0x01660880  # g_ItemManager (linker map, rebuilt image)
+ADDR_ITEM_MANAGER = _addr("g_ItemManager", 0x01660880)  # g_ItemManager (linker map)
 OFF_IM_ITEMS = 0x0
 ITEM_COUNT = 2097  # MAX_ITEMS + 1
 ITEM_SIZE = 0x2E4
@@ -225,7 +268,7 @@ POWER_MAX = 128.0
 # ``Item::CollectPower*``/``CollectPoint`` (REPLAY_FRAME_EVENT_ITEM_COLLECTED).
 # It is the only per-frame "an item was actually collected" signal we can read
 # without inferring collection from a slot disappearing between two samples.
-ADDR_REPLAY_MANAGER = 0x018C5C50  # g_ReplayManager (pointer)
+ADDR_REPLAY_MANAGER = _addr("g_ReplayManager", 0x018C5C50)  # g_ReplayManager (pointer)
 OFF_RM_FRAME_EVENT_FLAGS = 0xDA
 FRAME_EVENT_ITEM_COLLECTED = 0x0040
 

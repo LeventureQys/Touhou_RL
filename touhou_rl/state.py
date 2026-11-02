@@ -25,7 +25,7 @@ from .memory import ProcessMemory
 # Block reads: one RPM per contiguous region instead of one per field.
 _GM_BLOCK_START = 0x3DBA8
 _GM_BLOCK_SIZE = 0x3DE2C - _GM_BLOCK_START
-_INPUT_BLOCK_SIZE = 8  # g_LastFrameInput(u16) + g_CurFrameInput(u16) + 4 spare
+_INPUT_BLOCK_SIZE = 8  # Last u16 at +0, Cur u16 at +4; +2/+6 are padding.
 _PLAYER_BLOCK_SIZE = 0x410
 
 
@@ -309,7 +309,7 @@ class GameStateReader:
 
         self._gm_buf = ctypes.create_string_buffer(_GM_BLOCK_SIZE)
         self._input_buf = ctypes.create_string_buffer(_INPUT_BLOCK_SIZE)
-        self._gui_buf = ctypes.create_string_buffer(4)
+        self._gui_buf = ctypes.create_string_buffer(8)
         self._player_buf = ctypes.create_string_buffer(_PLAYER_BLOCK_SIZE)
         self._sup_buf = ctypes.create_string_buffer(8)
         self._globals_buf = ctypes.create_string_buffer(spec.GLOBALS_READ_SIZE)
@@ -407,9 +407,13 @@ class GameStateReader:
         )
 
         mem.read_into(self._input, self._input_buf)
-        state.last_input_mask, state.input_mask = struct.unpack_from("<HH", self._input_buf.raw, 0)
+        state.last_input_mask = struct.unpack_from("<H", self._input_buf.raw, 0)[0]
+        state.input_mask = struct.unpack_from("<H", self._input_buf.raw,
+            spec.ADDR_CUR_FRAME_INPUT - spec.ADDR_LAST_FRAME_INPUT)[0]
         mem.read_into(self._gui_input, self._gui_buf)
-        state.gui_input_current, state.gui_input_previous = struct.unpack_from("<HH", self._gui_buf.raw, 0)
+        state.gui_input_current = struct.unpack_from("<H", self._gui_buf.raw, 0)[0]
+        state.gui_input_previous = struct.unpack_from("<H", self._gui_buf.raw,
+            spec.ADDR_GUI_INPUT_PREVIOUS - spec.ADDR_GUI_INPUT_CURRENT)[0]
 
         # g_Gui: dialogue presence and the stage-clear screen state.  These are
         # read-only decodes of the same global the game's IsDialoguePresent()

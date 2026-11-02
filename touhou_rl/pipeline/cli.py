@@ -32,7 +32,18 @@ def _collect(args: argparse.Namespace) -> dict:
         team=args.team,
         tag=args.tag,
         overwrite=args.overwrite,
-        extra={"epsilon": args.epsilon} if args.source == "teacher" else {},
+        extra=(
+            {"epsilon": args.epsilon} if args.source == "teacher" and args.modality == "privileged" else
+            {
+                "checkpoint": args.checkpoint,
+                "frameskip": args.frameskip,
+                "max_steps": args.max_steps,
+                "seed": args.seed,
+                "device": args.device,
+                "practice_stage": args.practice_stage if args.practice_stage >= 0 else None,
+                "run_dir": args.run_dir,
+            } if args.source == "teacher" and args.modality == "vision" else {}
+        ),
     )
     return run_collect(spec)
 
@@ -106,6 +117,13 @@ def build_parser() -> argparse.ArgumentParser:
     collect.add_argument("--team", type=int, default=0)
     collect.add_argument("--tag", default="collect")
     collect.add_argument("--epsilon", type=float, default=0.05, help="teacher source: perturbation")
+    collect.add_argument("--checkpoint", default="", help="teacher+vision: frozen v3-st student checkpoint")
+    collect.add_argument("--frameskip", type=int, default=2)
+    collect.add_argument("--max-steps", type=int, default=12000)
+    collect.add_argument("--seed", type=int, default=11)
+    collect.add_argument("--device", default="cuda")
+    collect.add_argument("--practice-stage", type=int, default=-1)
+    collect.add_argument("--run-dir", default="")
     collect.add_argument("--overwrite", action="store_true")
     collect.set_defaults(func=_collect)
 

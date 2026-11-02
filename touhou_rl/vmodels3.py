@@ -704,6 +704,56 @@ class VisionSpatialTemporalPolicy(nn.Module):
             "heatmap_logits": out["heatmap_logits"],
         }
 
+    def configure_temporal_policy(
+        self, ema: float = 0.0, switch_penalty: float = 0.0,
+        switch_on_focus: bool = True, switch_on_move: bool = True,
+    ) -> None:
+        """Configure optional deployment-only score smoothing/hysteresis.
+
+        The state is deliberately kept outside the checkpoint and consumes only
+        the model's own pixel-derived logits.  ``ema=0`` and ``switch_penalty=0``
+        reproduce the historical stateless argmax contract.
+        """
+        if not 0.0 <= float(ema) < 1.0:
+            raise ValueError(f"ema must be in [0,1), got {ema!r}")
+        if float(switch_penalty) < 0.0:
+            raise ValueError(f"switch_penalty must be non-negative, got {switch_penalty!r}")
+        self._temporal_ema = float(ema)
+        self._temporal_switch_penalty = float(switch_penalty)
+        self._temporal_switch_on_focus = bool(switch_on_focus)
+        self._temporal_switch_on_move = bool(switch_on_move)
+        self.reset_temporal_policy()
+
+    def reset_temporal_policy(self) -> None:
+        """Reset deployment-only history, normally at episode boundaries."""
+        self._temporal_scores = None
+        self._temporal_prev_index = None
+
+    def _temporal_scores_for_action(self, values: torch.Tensor) -> torch.Tensor:
+        ema = float(getattr(self, "_temporal_ema", 0.0))
+        penalty = float(getattr(self, "_temporal_switch_penalty", 0.0))
+        if ema > 0.0:
+            previous = getattr(self, "_temporal_scores", None)
+            if previous is None or tuple(previous.shape) != tuple(values.shape):
+                self._temporal_scores = values.detach()
+            else:
+                self._temporal_scores = ema * values.detach() + (1.0 - ema) * previous
+            scores = self._temporal_scores.to(device=values.device, dtype=values.dtype)
+        else:
+            scores = values
+        previous_index = getattr(self, "_temporal_prev_index", None)
+        if penalty > 0.0 and previous_index is not None:
+            previous_index = int(previous_index)
+            previous_move, previous_focus = previous_index % 9, previous_index // 9
+            indices = torch.arange(N_CANDIDATES, device=values.device)
+            switched = torch.zeros(N_CANDIDATES, device=values.device, dtype=torch.bool)
+            if bool(getattr(self, "_temporal_switch_on_move", True)):
+                switched |= (indices % 9) != previous_move
+            if bool(getattr(self, "_temporal_switch_on_focus", True)):
+                switched |= (indices // 9) != previous_focus
+            scores = scores - penalty * switched.to(scores.dtype).view(1, -1)
+        return scores
+
     def act(self, regions: dict[str, torch.Tensor], deterministic: bool = True):
         """Greedy ``[move, shoot, focus, bomb]`` from pixels (C1 mapping).
 
@@ -714,7 +764,12 @@ class VisionSpatialTemporalPolicy(nn.Module):
         signature; v3 only implements the greedy branch.
         """
         values = self.score(regions)
-        best = values.argmax(dim=-1)
+        decision_values = self._temporal_scores_for_action(values)
+        best = decision_values.argmax(dim=-1)
+        # Deployment is batch-size one.  For larger batches, history is ambiguous;
+        # preserve stateless behavior rather than cross-contaminating samples.
+        if decision_values.size(0) == 1:
+            self._temporal_prev_index = int(best.item())
         move = best % spec.ACTION_DIMS[0]
         focus = best // spec.ACTION_DIMS[0]
         actions = torch.stack(

@@ -339,8 +339,13 @@ def validate_config(cfg: "VisionTrainConfig") -> LossPlan:
         "policy_aux_coord",
         "policy_aux_danger",
         "policy_aux_self",
+        "human_action_weight",
     ):
         _finite_weight(name, getattr(cfg, name))
+    if float(cfg.human_action_weight) > 0.0 and cfg.arch != ARCH_V3:
+        raise _v104_error(
+            "CONFIG", "human_action_weight > 0 requires arch='v3-st'"
+        )
     if not isinstance(cfg.policy_freeze_epochs, int) or cfg.policy_freeze_epochs < 0:
         raise _v104_error(
             "CONFIG", f"policy_freeze_epochs must be an integer >= 0, got {cfg.policy_freeze_epochs!r}"
@@ -458,6 +463,7 @@ class VisionTrainConfig:
     policy_aux_coord: float = 1.0
     policy_aux_danger: float = 0.2
     policy_aux_self: float = 0.1
+    human_action_weight: float = 0.0
     policy_freeze_epochs: int = 2
     encoder_lr: float = 1e-4
     policy_head_lr: float = 3e-4
@@ -1568,6 +1574,7 @@ def _summary_config(cfg: VisionTrainConfig, max_train_batches: int, plan: LossPl
         "policy_aux_coord": cfg.policy_aux_coord,
         "policy_aux_danger": cfg.policy_aux_danger,
         "policy_aux_self": cfg.policy_aux_self,
+        "human_action_weight": cfg.human_action_weight,
         "policy_freeze_epochs": cfg.policy_freeze_epochs,
         "encoder_lr": cfg.encoder_lr,
         "policy_head_lr": cfg.policy_head_lr,
@@ -1822,6 +1829,7 @@ def train(cfg: VisionTrainConfig) -> dict:
                     "danger": float(cfg.policy_aux_danger),
                     "self": float(cfg.policy_aux_self),
                 },
+                "human_action_weight": float(cfg.human_action_weight),
                 "self_mask_indices": list(SELF_AUX_INDICES),
                 "danger_scale": DANGER_SCALE,
                 "heatmap_sigma": heatmap_sigma,
@@ -1913,6 +1921,14 @@ def train(cfg: VisionTrainConfig) -> dict:
                         "policy_loss_stats": val_row.get("loss_stats"),
                         "aux_losses": val_row.get("aux"),
                         "train_policy_loss_stats": train_row.get("loss_stats"),
+                        "val_human_action_loss": val_row.get("human_action_loss"),
+                        "val_human_action_accuracy": val_row.get("human_action_accuracy"),
+                        "val_human_move_accuracy": val_row.get("human_move_accuracy"),
+                        "val_human_focus_accuracy": val_row.get("human_focus_accuracy"),
+                        "train_human_action_loss": train_row.get("human_action_loss"),
+                        "train_human_action_accuracy": train_row.get("human_action_accuracy"),
+                        "train_human_move_accuracy": train_row.get("human_move_accuracy"),
+                        "train_human_focus_accuracy": train_row.get("human_focus_accuracy"),
                     }
                 )
             return row
@@ -2085,6 +2101,10 @@ def train(cfg: VisionTrainConfig) -> dict:
             total_loss = 0.0
             seen = 0
             policy_loss_total = 0.0
+            human_loss_total = 0.0
+            human_correct_total = 0
+            human_move_correct_total = 0
+            human_focus_correct_total = 0
             aux_total = {"heatmap": 0.0, "coord": 0.0, "danger": 0.0, "self": 0.0}
             stats_total = {
                 "valid_pairs": 0,
@@ -2116,6 +2136,17 @@ def train(cfg: VisionTrainConfig) -> dict:
                         plan.rank_weight,
                         plan.regression_weight,
                     )
+                    human_loss = scores.new_zeros(())
+                    human_candidate = None
+                    if float(cfg.human_action_weight) > 0.0:
+                        action = torch.as_tensor(labels["action"], dtype=torch.long, device=device)
+                        if action.ndim != 2 or action.shape[1] != 4:
+                            raise _v104_error("DATA", f"human action labels must have shape [B,4], got {tuple(action.shape)}")
+                        move, focus = action[:, 0], action[:, 2]
+                        if bool(torch.any((move < 0) | (move > 8) | (focus < 0) | (focus > 1))):
+                            raise _v104_error("DATA", "human action move/focus is outside the frozen candidate range")
+                        human_candidate = focus * 9 + move
+                        human_loss = F.cross_entropy(scores, human_candidate)
                     grid_h, grid_w = model.config.heatmap_hw
                     target_heatmap = torch.as_tensor(
                         heatmap_target(
@@ -2148,7 +2179,12 @@ def train(cfg: VisionTrainConfig) -> dict:
                     )
                     loss_heatmap = aux_parts["heatmap"]
                     loss_coord = aux_parts["coord"]
-                    loss = loss_policy + aux_loss
+                    loss = loss_policy + aux_loss + float(cfg.human_action_weight) * human_loss
+                    if human_candidate is not None:
+                        predicted = scores.argmax(dim=-1)
+                        human_correct_total += int((predicted == human_candidate).sum().item())
+                        human_move_correct_total += int(((predicted % 9) == (human_candidate % 9)).sum().item())
+                        human_focus_correct_total += int(((predicted // 9) == (human_candidate // 9)).sum().item())
                     if training:
                         policy_optim.zero_grad(set_to_none=True)
                         loss.backward()
@@ -2158,6 +2194,7 @@ def train(cfg: VisionTrainConfig) -> dict:
                         policy_optim.step()
                 total_loss += float(loss.detach()) * batch_size
                 policy_loss_total += float(loss_policy.detach()) * batch_size
+                human_loss_total += float(human_loss.detach()) * batch_size
                 aux_total["heatmap"] += float(loss_heatmap.detach()) * batch_size
                 aux_total["coord"] += float(loss_coord.detach()) * batch_size
                 aux_total["danger"] += float(loss_danger.detach()) * batch_size
@@ -2181,6 +2218,10 @@ def train(cfg: VisionTrainConfig) -> dict:
                 "loss": round(total_loss / max(1, seen), 5),
                 "frames": seen,
                 "policy_loss": round(policy_loss_total / max(1, seen), 6),
+                "human_action_loss": round(human_loss_total / max(1, seen), 6),
+                "human_action_accuracy": round(human_correct_total / max(1, seen), 6),
+                "human_move_accuracy": round(human_move_correct_total / max(1, seen), 6),
+                "human_focus_accuracy": round(human_focus_correct_total / max(1, seen), 6),
                 "loss_stats": {
                     "objective": plan.objective,
                     "rank_loss": round(stats_total["rank_loss"] / max(1, seen), 6),
@@ -2515,6 +2556,7 @@ def train(cfg: VisionTrainConfig) -> dict:
                         "danger": float(cfg.policy_aux_danger),
                         "self": float(cfg.policy_aux_self),
                     },
+                    "human_action_weight": float(cfg.human_action_weight),
                     "self_mask_indices": list(SELF_AUX_INDICES),
                     "self_mask_dims": len(SELF_AUX_INDICES),
                     "danger_scale": DANGER_SCALE,
@@ -2633,6 +2675,8 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--policy-aux-coord", type=float, default=1.0)
     parser.add_argument("--policy-aux-danger", type=float, default=0.2)
     parser.add_argument("--policy-aux-self", type=float, default=0.1)
+    parser.add_argument("--human-action-weight", type=float, default=0.0,
+                        help="v1.0.5 Stage 2: v3-st human action CE weight; 0 disables")
     parser.add_argument("--policy-freeze-epochs", type=int, default=2)
     parser.add_argument("--encoder-lr", type=float, default=1e-4)
     parser.add_argument("--policy-head-lr", type=float, default=3e-4)
@@ -2720,6 +2764,7 @@ def main(argv: list[str] | None = None) -> int:
         policy_aux_coord=args.policy_aux_coord,
         policy_aux_danger=args.policy_aux_danger,
         policy_aux_self=args.policy_aux_self,
+        human_action_weight=args.human_action_weight,
         policy_freeze_epochs=args.policy_freeze_epochs,
         encoder_lr=args.encoder_lr,
         policy_head_lr=args.policy_head_lr,

@@ -58,12 +58,9 @@ class CollectSpec:
         if self.source == "replay" and self.replay is None:
             raise ValueError("source=replay requires a replay file")
         if self.source == "teacher" and self.modality == "vision":
-            raise NotImplementedError(
-                "vision capture from the teacher is not implemented yet: the teacher "
-                "acts through the environment, and vision_capture currently only reads "
-                "frames during replay playback. Use modality=privileged for teacher "
-                "capture (collect_pilot) until this lands."
-            )
+            checkpoint = self.extra.get("checkpoint")
+            if not checkpoint:
+                raise ValueError("source=teacher modality=vision requires extra.checkpoint")
         if self.every < 1:
             raise ValueError("every must be >= 1")
 
@@ -115,19 +112,46 @@ def run_collect(spec: CollectSpec) -> dict:
             )
         )
     elif spec.modality == "vision":
-        from ...vision_capture import capture_vision
+        if spec.source == "teacher":
+            from ...collect_student_states import StudentRolloutConfig, collect_student_states
 
-        report = capture_vision(
-            Path(spec.replay),
-            out_dir,
-            tag=spec.tag,
-            every=spec.every,
-            max_seconds=spec.max_seconds,
-            stage=None if spec.stage < 0 else spec.stage,
-            allow_append=spec.overwrite,
-            freeze_limit=int(spec.extra.get("freeze_limit", 5)),
-            verbose=spec.verbose,
-        )
+            supported = {"checkpoint", "frameskip", "max_steps", "seed", "device", "shard_size", "practice_stage", "run_dir"}
+            unknown = set(spec.extra) - supported
+            if unknown:
+                raise ValueError(f"unsupported teacher+vision options: {sorted(unknown)}")
+            from ...pilot import PilotConfig
+            report = collect_student_states(
+                StudentRolloutConfig(
+                    checkpoint=Path(spec.extra["checkpoint"]),
+                    out_dir=out_dir,
+                    episodes=spec.episodes,
+                    max_steps=int(spec.extra.get("max_steps", 12000)),
+                    frameskip=int(spec.extra.get("frameskip", 2)),
+                    difficulty=_difficulty_code(spec.difficulty),
+                    team=spec.team,
+                    practice_stage=(int(spec.extra["practice_stage"]) if spec.extra.get("practice_stage") is not None else None),
+                    seed=int(spec.extra.get("seed", 11)),
+                    device=str(spec.extra.get("device", "cuda")),
+                    shard_size=int(spec.extra.get("shard_size", 128)),
+                    max_seconds=float(spec.max_seconds),
+                    run_dir=Path(spec.extra["run_dir"]) if spec.extra.get("run_dir") else ROOT / "third_party/th08/build/rl/v200-student-session",
+                    pilot=PilotConfig(frameskip=int(spec.extra.get("frameskip", 2)), switch_penalty=0.0),
+                )
+            )
+        else:
+            from ...vision_capture import capture_vision
+
+            report = capture_vision(
+                Path(spec.replay),
+                out_dir,
+                tag=spec.tag,
+                every=spec.every,
+                max_seconds=spec.max_seconds,
+                stage=None if spec.stage < 0 else spec.stage,
+                allow_append=spec.overwrite,
+                freeze_limit=int(spec.extra.get("freeze_limit", 5)),
+                verbose=spec.verbose,
+            )
     else:  # pragma: no cover - guarded by validate()
         raise NotImplementedError(spec.modality)
 

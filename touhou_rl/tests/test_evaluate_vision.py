@@ -36,7 +36,7 @@ import numpy as np
 import pytest
 import torch
 
-from touhou_rl import vision
+from touhou_rl import spec, vision
 from touhou_rl.evaluate import EvalConfig, run_evaluation
 from touhou_rl.vmodels import (
     VisionNetConfig,
@@ -726,7 +726,134 @@ def test_hit_step_cap_is_computed_from_termination_reason(tmp_path):
 # --------------------------------------------------------------------------- #
 
 
+def test_stage0_trace_matches_executed_actions(tmp_path):
+    checkpoint = _write_v2(tmp_path / "v2.pt", depth=1)
+    factory = StubFactory(steps_to_end=3)
+    report = _run(tmp_path, factory, vision_checkpoint=checkpoint, decision_trace=True)
+    row = report["episodes"][0]
+    trace = row["stage0_action_trace"]
+    assert len(trace) == 3
+    for index, (item, actual) in enumerate(zip(trace, factory.envs[0].actions)):
+        assert item["decision"] == index
+        assert item["action"] == actual.tolist()
+        assert item["candidate_index"] == int(actual[2]) * 9 + int(actual[0])
+        assert item["frameskip"] == 2
+    assert row["stage0_action_diagnostics"]["decisions"] == 3
+    written = json.loads((tmp_path / "out" / "eval-report.json").read_text(encoding="utf-8"))
+    assert written["episodes"][0]["stage0_action_trace"] == trace
+    assert written["vision"]["stage0"]["decision_trace"] is True
+
+
 def test_eval_config_defaults(tmp_path):
     config = EvalConfig(checkpoint=Path("."), out_dir=tmp_path)
     assert config.env_factory is None  # None -> the real Th08Env
     assert config.vision_depth == 0  # follow the checkpoint
+    assert config.still_policy is False
+    assert config.random_policy is False
+
+
+# --------------------------------------------------------------------------- #
+# v3.1.0 step 1: the "still" ladder arm and a trace for every arm
+# --------------------------------------------------------------------------- #
+
+
+def test_still_arm_never_moves_and_always_fires(tmp_path):
+    factory = StubFactory(steps_to_end=4)
+    report = _run(tmp_path, factory, still_policy=True, decision_trace=True)
+
+    assert report["policy"] == "still"
+    assert report["checkpoint_extra"] == {"still_policy": True, "still_action": [0, 1, 0, 0]}
+    handed = [action.tolist() for action in factory.envs[0].actions]
+    assert handed == [[0, 1, 0, 0]] * 4
+    # move=0 idle, shoot=1 -> the button mask is exactly BTN_SHOOT.
+    assert spec.action_to_buttons(tuple(handed[0])) == spec.BTN_SHOOT
+
+    row = report["episodes"][0]
+    assert row["decision_trace"]["schema"] == "v311-decision-trace/1"
+    assert row["decision_trace"]["actions"] == [[0, 1, 0, 0]] * 4
+    diagnostics = row["action_diagnostics"]
+    assert diagnostics["decisions"] == 4
+    assert diagnostics["still_rate"] == 1.0
+    assert diagnostics["move_flip_rate"] == 0.0
+    assert diagnostics["focus_rate"] == 0.0
+
+
+def test_still_arm_is_accepted_by_the_cli_without_a_checkpoint(tmp_path, monkeypatch):
+    """``--still`` must satisfy main()'s "pick one policy" check on its own."""
+    from touhou_rl import evaluate as evaluate_module
+
+    captured = {}
+
+    def fake_run(config):
+        captured["config"] = config
+        return {"summary": {"episodes": 1}}
+
+    monkeypatch.setattr(evaluate_module, "run_evaluation", fake_run)
+    code = evaluate_module.main(
+        ["--still", "--out", str(tmp_path / "out"), "--episodes", "1", "--device", "cpu"]
+    )
+
+    assert code == 0
+    assert captured["config"].still_policy is True
+    assert captured["config"].random_policy is False
+
+
+def test_cli_still_rejects_an_empty_policy_choice(tmp_path):
+    """No --checkpoint/--random-policy/--still/--pilot/--vision-checkpoint is a usage error."""
+    import pytest
+
+    from touhou_rl import evaluate as evaluate_module
+
+    with pytest.raises(SystemExit) as excinfo:
+        evaluate_module.main(["--out", str(tmp_path / "out")])
+    assert excinfo.value.code == 2
+
+
+def test_decision_trace_is_recorded_for_the_random_arm(tmp_path):
+    factory = StubFactory(steps_to_end=3)
+    report = _run(tmp_path, factory, random_policy=True, decision_trace=True)
+
+    row = report["episodes"][0]
+    trace = row["decision_trace"]["actions"]
+    assert len(trace) == 3
+    assert trace == [action.tolist() for action in factory.envs[0].actions]
+    assert row["action_diagnostics"]["decisions"] == 3
+    written = json.loads((tmp_path / "out" / "eval-report.json").read_text(encoding="utf-8"))
+    assert written["episodes"][0]["decision_trace"]["actions"] == trace
+
+
+def test_decision_trace_is_absent_unless_requested(tmp_path):
+    report = _run(tmp_path, StubFactory(steps_to_end=2), random_policy=True)
+    assert "decision_trace" not in report["episodes"][0]
+    assert "action_diagnostics" not in report["episodes"][0]
+
+
+# --------------------------------------------------------------------------- #
+# ladder statistics: median / IQR
+# --------------------------------------------------------------------------- #
+
+
+def test_compare_evals_adds_median_and_iqr():
+    report = {
+        "frameskip": 2,
+        "episodes": [
+            {"frames_reported": frames, "deaths": 3, "stages_reached": 0, "wall_seconds": 1.0}
+            for frames in (1000, 2000, 3000, 4000)
+        ],
+    }
+    row = COMPARE.summarise(report, "synthetic")
+    assert row["frames_mean"] == 2500.0
+    assert row["frames_median"] == 2500.0
+    assert row["frames_p25"] == 1750.0
+    assert row["frames_p75"] == 3250.0
+    assert row["frames_iqr"] == 1500.0
+
+
+def test_percentile_matches_numpy_on_a_known_vector():
+    values = [10.0, 20.0, 30.0, 40.0, 50.0]
+    assert COMPARE.percentile(values, 50.0) == 30.0
+    assert COMPARE.percentile(values, 25.0) == 20.0
+    assert COMPARE.percentile(values, 0.0) == 10.0
+    assert COMPARE.percentile(values, 100.0) == 50.0
+    assert COMPARE.percentile([], 50.0) == 0.0
+    assert COMPARE.percentile([7.0], 90.0) == 7.0

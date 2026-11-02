@@ -111,6 +111,14 @@ class VisionShardWriter:
         self._bullets = np.zeros((self.shard_size, obs.N_BULLETS, obs.N_BULLET_FEATURES), dtype=np.float16)
         self._danger = np.zeros((self.shard_size, obs.DANGER_ROWS, obs.DANGER_COLS), dtype=np.uint8)
         self._action = np.zeros((self.shard_size, 4), dtype=np.uint8)
+        self._executed_action = np.zeros((self.shard_size, 4), dtype=np.uint8)
+        self._decision_meta = np.zeros((self.shard_size, 4), dtype=np.int64)
+        self._death_window = np.zeros(self.shard_size, dtype=np.uint8)
+        self._death_window_valid = np.zeros(self.shard_size, dtype=np.uint8)
+        self._has_executed_action = False
+        self._has_decision_meta = False
+        self._has_death_window = False
+        self._optional_schema: set[str] | None = None
         self._value = np.zeros((self.shard_size, 18), dtype=np.float16)
         self._meta = np.zeros((self.shard_size, len(META_FIELDS)), dtype=np.float32)
         self._has_value = False
@@ -130,28 +138,89 @@ class VisionShardWriter:
         value: np.ndarray | None = None,
         native_hw: dict[str, tuple[int, int]] | None = None,
     ) -> None:
-        if set(regions) != {region.name for region in self.regions}:
-            raise ValueError(f"region keys {sorted(regions)} != {sorted(r.name for r in self.regions)}")
+        expected_regions = {region.name for region in self.regions}
+        if set(regions) != expected_regions:
+            raise ValueError(f"region keys {sorted(regions)} != {sorted(expected_regions)}")
+        if any(not isinstance(blob, (bytes, bytearray)) for blob in regions.values()):
+            raise TypeError("all region payloads must be PNG bytes")
+        missing_meta = set(META_FIELDS) - set(meta)
+        if missing_meta:
+            raise ValueError(f"missing meta fields: {sorted(missing_meta)}")
+
+        optional = set(meta) - set(META_FIELDS)
+        allowed = {"executed_action", "episode", "decision", "frame_delta", "stage_delta",
+                   "death_window", "death_window_valid"}
+        if value is not None:
+            optional.add("value")
+        unknown = optional - allowed - {"value"}
+        if unknown:
+            raise ValueError(f"unknown sample metadata fields: {sorted(unknown)}")
+        decision_fields = {"episode", "decision", "frame_delta", "stage_delta"}
+        if optional & decision_fields and not decision_fields <= optional:
+            raise ValueError("decision metadata requires episode/decision/frame_delta/stage_delta")
+        if ("death_window" in optional) != ("death_window_valid" in optional):
+            raise ValueError("death_window and death_window_valid must be supplied together")
+        if self._optional_schema is not None and optional != self._optional_schema:
+            raise ValueError(f"sample metadata schema {sorted(optional)} != shard schema {sorted(self._optional_schema)}")
+
+        self_feat = np.asarray(observation.self_feat, dtype=np.float32)
+        bullets = np.asarray(observation.bullets, dtype=np.float16)
+        danger = np.asarray(observation.danger_map, dtype=np.uint8)
+        action_array = np.asarray(action, dtype=np.uint8).reshape(-1)
+        if self_feat.shape != (obs.N_SELF,) or bullets.shape != (obs.N_BULLETS, obs.N_BULLET_FEATURES):
+            raise ValueError("observation label shapes do not match the vision shard contract")
+        if danger.shape != (obs.DANGER_ROWS, obs.DANGER_COLS) or action_array.shape != (4,):
+            raise ValueError("danger/action label shape does not match the vision shard contract")
+        meta_array = np.asarray([meta[name] for name in META_FIELDS], dtype=np.float32)
+        executed = None
+        if "executed_action" in optional:
+            executed = np.asarray(meta["executed_action"], dtype=np.uint8).reshape(-1)
+            if executed.shape != (4,):
+                raise ValueError("executed_action must have four values")
+        value_array = None
+        if value is not None:
+            value_array = np.asarray(value, dtype=np.float16).reshape(-1)
+            if value_array.shape != (18,):
+                raise ValueError("value must have 18 candidates")
+        decision_array = None
+        if optional & decision_fields:
+            decision_array = np.asarray([meta[name] for name in
+                ("episode", "decision", "frame_delta", "stage_delta")], dtype=np.int64)
         index = self._n
+        if native_hw:
+            if set(native_hw) != expected_regions or any(min(map(int, size)) < 1 for size in native_hw.values()):
+                raise ValueError("native_hw must provide positive dimensions for every region")
+        else:
+            for blob in regions.values():
+                _png_size(blob)
+
+        if self._optional_schema is None:
+            self._optional_schema = optional
         for name, blob in regions.items():
-            if not isinstance(blob, (bytes, bytearray)):
-                raise TypeError(f"region {name}: expected PNG bytes, got {type(blob)!r}")
             self._blobs[name].append(bytes(blob))
             self.bytes += len(blob)
         if native_hw:
             self._hw.update({name: (int(hw[0]), int(hw[1])) for name, hw in native_hw.items()})
         else:
-            # Record what the blob actually contains: a declared-vs-actual mismatch
-            # would silently resize every training sample and nobody would notice.
             for name, blob in regions.items():
                 self._hw[name] = _png_size(blob)
-        self._self[index] = observation.self_feat
-        self._bullets[index] = observation.bullets
-        self._danger[index] = observation.danger_map
-        self._action[index] = np.asarray(action, dtype=np.uint8)
-        self._meta[index] = [float(meta[name]) for name in META_FIELDS]
-        if value is not None:
-            self._value[index] = np.asarray(value, dtype=np.float16).reshape(-1)[:18]
+        self._self[index] = self_feat
+        self._bullets[index] = bullets
+        self._danger[index] = danger
+        self._action[index] = action_array
+        self._meta[index] = meta_array
+        if executed is not None:
+            self._executed_action[index] = executed
+            self._has_executed_action = True
+        if decision_array is not None:
+            self._decision_meta[index] = decision_array
+            self._has_decision_meta = True
+        if "death_window" in optional:
+            self._death_window[index] = int(bool(meta["death_window"]))
+            self._death_window_valid[index] = int(bool(meta["death_window_valid"]))
+            self._has_death_window = True
+        if value_array is not None:
+            self._value[index] = value_array
             self._has_value = True
         self._n += 1
         self.total += 1
@@ -183,6 +252,13 @@ class VisionShardWriter:
             payload[f"{region.name}_offset"] = offsets
         if self._has_value:
             payload["value"] = self._value[:n]
+        if self._has_executed_action:
+            payload["executed_action"] = self._executed_action[:n]
+        if self._has_decision_meta:
+            payload["decision_meta"] = self._decision_meta[:n]
+        if self._has_death_window:
+            payload["death_window"] = self._death_window[:n]
+            payload["death_window_valid"] = self._death_window_valid[:n]
         # Plain ``savez``, not ``savez_compressed``: the payload is mostly PNG
         # blobs, which are already deflated, so compressing again costs ~4.5 ms per
         # sample (measured) and shrinks the file by well under 1%.
@@ -207,7 +283,15 @@ class VisionShardWriter:
         )
         self._blobs = {region.name: [] for region in self.regions}
         self._has_value = False
+        self._has_executed_action = False
+        self._has_decision_meta = False
+        self._has_death_window = False
         self._value[:] = 0
+        self._executed_action[:] = 0
+        self._decision_meta[:] = 0
+        self._death_window[:] = 0
+        self._death_window_valid[:] = 0
+        self._optional_schema = None
         self._n = 0
 
     def close(self) -> dict:

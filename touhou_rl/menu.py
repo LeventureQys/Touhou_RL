@@ -137,13 +137,22 @@ def _wait_screen(session: GameSession, screen: int, timeout: float = 8.0) -> Non
     raise TimeoutError(f"screen {screen} did not become ready (last={last})")
 
 
-def select_difficulty(session: GameSession, difficulty: int, timeout: float = 8.0) -> None:
-    expected = spec.SCREEN_DIFFICULTY_SELECT if difficulty != spec.EXTRA else spec.SCREEN_DIFFICULTY_SELECT_EXTRA
+def select_difficulty(
+    session: GameSession,
+    difficulty: int,
+    timeout: float = 8.0,
+    practice: bool = False,
+) -> None:
     if difficulty == spec.EXTRA:
+        expected = spec.SCREEN_DIFFICULTY_SELECT_EXTRA
         _wait_screen(session, expected, timeout)
         tap(session, "z", settle_s=0.25)
         return
-    _wait_screen(session, spec.SCREEN_DIFFICULTY_SELECT, timeout)
+    # Practice Start has its own difficulty screen (screen 8), not screen 4.
+    # Before this flag existed, ``enter_game(practice_stage=...)`` timed out on
+    # "screen 4 did not become ready" while the game was already on screen 8.
+    expected = spec.SCREEN_DIFFICULTY_SELECT_PRACTICE if practice else spec.SCREEN_DIFFICULTY_SELECT
+    _wait_screen(session, expected, timeout)
     _move_cursor(
         session,
         difficulty,
@@ -191,7 +200,7 @@ def enter_game(
     item = spec.MENU_ITEM_PRACTICE_START if practice_stage is not None else spec.MENU_ITEM_START
     goto_start_menu_item(session, item)
     tap(session, "z", settle_s=0.25)
-    select_difficulty(session, difficulty)
+    select_difficulty(session, difficulty, practice=practice_stage is not None)
     select_character(session, team, practice=practice_stage is not None)
     if practice_stage is not None:
         _wait_screen(session, spec.SCREEN_PRACTICE_STAGE_SELECT)
