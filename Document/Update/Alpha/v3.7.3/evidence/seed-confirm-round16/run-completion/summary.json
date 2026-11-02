@@ -1,0 +1,2865 @@
+{
+  "schema": "v373-seed-confirm-result/1",
+  "prereg_sha256": "3e5e9f0d3e09ddfae3647239b7c1946817334cb77327af8f40882821b9b42310",
+  "seeds": [
+    7,
+    17,
+    27
+  ],
+  "arms": [
+    "unweighted",
+    "weighted"
+  ],
+  "updates": 200,
+  "identities": "all frozen identities except tools/rl/v373_seed_confirm.py still match; the only post-preregistration source change is the documented aggregation fix plus this read-only recovery command",
+  "formula": {
+    "spec_sha256": "51711002bb92e0051f061401ca1513206bf61d744a9961896fdfe306257c5253",
+    "text_sha256": "dd57860916701edbaa41c09a49aa4f4d7fd29f1f1a911dd3c7bd996159e325a4",
+    "source_sha256": "a2c0d9710e021f9767cd4b139d8e27ce33418859f0485ccdfadfe037a06d5e2f",
+    "weights": {
+      "0": 0.6476902726965403,
+      "3": 2.247910268718437,
+      "7": 2.247910268718437,
+      "12": 4.495820537436874,
+      "16": 4.495820537436874
+    },
+    "counts": {
+      "0": 530,
+      "3": 44,
+      "7": 44,
+      "12": 11,
+      "16": 11
+    },
+    "K_present": 5
+  },
+  "confirmation_worlds": {
+    "events": 24,
+    "worlds_sha256": "6e170fae589293a50248913de09609255754cb2774daee5ac9a2ef4d39a01720",
+    "duplicate_check": {
+      "r8_development_validation_signatures": 21,
+      "r9_confirmation_signatures": 12,
+      "r10_records_signatures": 8,
+      "r10_subset_of_r8": true,
+      "new_groups": 12,
+      "new_events": 24,
+      "duplicates": 0,
+      "fields": "family,canonical start_x,coverage,gap,wall_frame,fire_interval,window,threshold,goal,origin,burst,bullet_speed,internal_gap"
+    },
+    "per_family": {
+      "F1": 8,
+      "F2": 8,
+      "F3": 8
+    }
+  },
+  "checkpoints": {
+    "unweighted-s7": {
+      "arm": "unweighted",
+      "seed": 7,
+      "initial_head_state_sha256": "66e5f85fe6b8e1866c427e77353e84e1469325e82b8e21af228e4f9f9a8f7799",
+      "final_head_state_sha256": "8a06c56e86d8f86b60d904d1bd215215c49e0484055813fe4fd4444d6f2c3926",
+      "checkpoint_sha256": "3d3838a23d057016d270858e0d0ff6986a3885194c4a4158a2564e7f65ef94d8",
+      "checkpoint_path": "train\\unweighted-s7\\research-heads.pt",
+      "updates": 200,
+      "optimization_seconds": 10.3868736000004,
+      "parameters": {
+        "active": 429200,
+        "heads_total": 494992,
+        "total": 2002154
+      },
+      "backbone_unchanged": true,
+      "train_only": "validation labels never indexed",
+      "initial_offline": {
+        "train": {
+          "unmasked": {
+            "accuracy": 0.0,
+            "moving_macro_recall": 0.0,
+            "macro_balanced_recall": 0.0,
+            "support": [
+              530,
+              44,
+              44,
+              11,
+              11
+            ],
+            "recall": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "other_predictions": 637
+          },
+          "horizontal_masked": {
+            "accuracy": 0.08125,
+            "moving_macro_recall": 0.29545454545454547,
+            "macro_balanced_recall": 0.2363636363636364,
+            "support": [
+              530,
+              44,
+              44,
+              11,
+              11
+            ],
+            "recall": [
+              0.0,
+              0.18181818181818182,
+              1.0,
+              0.0,
+              0.0
+            ],
+            "other_predictions": 0
+          }
+        },
+        "validation": {
+          "unmasked": {
+            "accuracy": 0.0,
+            "moving_macro_recall": 0.0,
+            "macro_balanced_recall": 0.0,
+            "support": [
+              532,
+              36,
+              36,
+              18,
+              18
+            ],
+            "recall": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "other_predictions": 632
+          },
+          "horizontal_masked": {
+            "accuracy": 0.0671875,
+            "moving_macro_recall": 0.2986111111111111,
+            "macro_balanced_recall": 0.23888888888888887,
+            "support": [
+              532,
+              36,
+              36,
+              18,
+              18
+            ],
+            "recall": [
+              0.0,
+              0.19444444444444445,
+              1.0,
+              0.0,
+              0.0
+            ],
+            "other_predictions": 0
+          }
+        }
+      },
+      "final_offline": {
+        "train": {
+          "unmasked": {
+            "accuracy": 0.9453125,
+            "moving_macro_recall": 0.4602272727272727,
+            "macro_balanced_recall": 0.565917667238422,
+            "support": [
+              530,
+              44,
+              44,
+              11,
+              11
+            ],
+            "recall": [
+              0.9886792452830189,
+              0.9090909090909091,
+              0.9318181818181818,
+              0.0,
+              0.0
+            ],
+            "other_predictions": 0
+          },
+          "horizontal_masked": {
+            "accuracy": 0.9453125,
+            "moving_macro_recall": 0.4602272727272727,
+            "macro_balanced_recall": 0.565917667238422,
+            "support": [
+              530,
+              44,
+              44,
+              11,
+              11
+            ],
+            "recall": [
+              0.9886792452830189,
+              0.9090909090909091,
+              0.9318181818181818,
+              0.0,
+              0.0
+            ],
+            "other_predictions": 0
+          }
+        },
+        "validation": {
+          "unmasked": {
+            "accuracy": 0.9265625,
+            "moving_macro_recall": 0.4722222222222222,
+            "macro_balanced_recall": 0.5751461988304094,
+            "support": [
+              532,
+              36,
+              36,
+              18,
+              18
+            ],
+            "recall": [
+              0.9868421052631579,
+              0.9444444444444444,
+              0.9444444444444444,
+              0.0,
+              0.0
+            ],
+            "other_predictions": 0
+          },
+          "horizontal_masked": {
+            "accuracy": 0.9265625,
+            "moving_macro_recall": 0.4722222222222222,
+            "macro_balanced_recall": 0.5751461988304094,
+            "support": [
+              532,
+              36,
+              36,
+              18,
+              18
+            ],
+            "recall": [
+              0.9868421052631579,
+              0.9444444444444444,
+              0.9444444444444444,
+              0.0,
+              0.0
+            ],
+            "other_predictions": 0
+          }
+        }
+      }
+    },
+    "weighted-s7": {
+      "arm": "weighted",
+      "seed": 7,
+      "initial_head_state_sha256": "66e5f85fe6b8e1866c427e77353e84e1469325e82b8e21af228e4f9f9a8f7799",
+      "final_head_state_sha256": "ba346b8e98413c4bb449b38097cc102edb427000aeae6cc1bcb6a1cec0a34a5e",
+      "checkpoint_sha256": "ef9b27c3d39b265bcb6b58312f5c61c241323f207e0ec9431f424c4de71342e9",
+      "checkpoint_path": "train\\weighted-s7\\research-heads.pt",
+      "updates": 200,
+      "optimization_seconds": 10.271710200002417,
+      "parameters": {
+        "active": 429200,
+        "heads_total": 494992,
+        "total": 2002154
+      },
+      "backbone_unchanged": true,
+      "train_only": "validation labels never indexed",
+      "initial_offline": {
+        "train": {
+          "unmasked": {
+            "accuracy": 0.0,
+            "moving_macro_recall": 0.0,
+            "macro_balanced_recall": 0.0,
+            "support": [
+              530,
+              44,
+              44,
+              11,
+              11
+            ],
+            "recall": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "other_predictions": 637
+          },
+          "horizontal_masked": {
+            "accuracy": 0.08125,
+            "moving_macro_recall": 0.29545454545454547,
+            "macro_balanced_recall": 0.2363636363636364,
+            "support": [
+              530,
+              44,
+              44,
+              11,
+              11
+            ],
+            "recall": [
+              0.0,
+              0.18181818181818182,
+              1.0,
+              0.0,
+              0.0
+            ],
+            "other_predictions": 0
+          }
+        },
+        "validation": {
+          "unmasked": {
+            "accuracy": 0.0,
+            "moving_macro_recall": 0.0,
+            "macro_balanced_recall": 0.0,
+            "support": [
+              532,
+              36,
+              36,
+              18,
+              18
+            ],
+            "recall": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "other_predictions": 632
+          },
+          "horizontal_masked": {
+            "accuracy": 0.0671875,
+            "moving_macro_recall": 0.2986111111111111,
+            "macro_balanced_recall": 0.23888888888888887,
+            "support": [
+              532,
+              36,
+              36,
+              18,
+              18
+            ],
+            "recall": [
+              0.0,
+              0.19444444444444445,
+              1.0,
+              0.0,
+              0.0
+            ],
+            "other_predictions": 0
+          }
+        }
+      },
+      "final_offline": {
+        "train": {
+          "unmasked": {
+            "accuracy": 0.9,
+            "moving_macro_recall": 0.4147727272727273,
+            "macro_balanced_recall": 0.5216295025728988,
+            "support": [
+              530,
+              44,
+              44,
+              11,
+              11
+            ],
+            "recall": [
+              0.9490566037735849,
+              0.6818181818181818,
+              0.9772727272727273,
+              0.0,
+              0.0
+            ],
+            "other_predictions": 0
+          },
+          "horizontal_masked": {
+            "accuracy": 0.9,
+            "moving_macro_recall": 0.4147727272727273,
+            "macro_balanced_recall": 0.5216295025728988,
+            "support": [
+              530,
+              44,
+              44,
+              11,
+              11
+            ],
+            "recall": [
+              0.9490566037735849,
+              0.6818181818181818,
+              0.9772727272727273,
+              0.0,
+              0.0
+            ],
+            "other_predictions": 0
+          }
+        },
+        "validation": {
+          "unmasked": {
+            "accuracy": 0.8828125,
+            "moving_macro_recall": 0.4444444444444444,
+            "macro_balanced_recall": 0.5439014202172097,
+            "support": [
+              532,
+              36,
+              36,
+              18,
+              18
+            ],
+            "recall": [
+              0.9417293233082706,
+              0.8055555555555556,
+              0.9722222222222222,
+              0.0,
+              0.0
+            ],
+            "other_predictions": 0
+          },
+          "horizontal_masked": {
+            "accuracy": 0.8828125,
+            "moving_macro_recall": 0.4444444444444444,
+            "macro_balanced_recall": 0.5439014202172097,
+            "support": [
+              532,
+              36,
+              36,
+              18,
+              18
+            ],
+            "recall": [
+              0.9417293233082706,
+              0.8055555555555556,
+              0.9722222222222222,
+              0.0,
+              0.0
+            ],
+            "other_predictions": 0
+          }
+        }
+      }
+    },
+    "unweighted-s17": {
+      "arm": "unweighted",
+      "seed": 17,
+      "initial_head_state_sha256": "f7d03e205f378179c8705c846361c439271939276f73b4502f5a5a80553fa742",
+      "final_head_state_sha256": "2f2d91c7f257d51d50b02804d15f24c4c75a4ba56e8d784608377b29e9dae2ac",
+      "checkpoint_sha256": "8906f78424fadf2e7330bbdf026a0eaa8fe52b93623afa85cb671947558d8045",
+      "checkpoint_path": "train\\unweighted-s17\\research-heads.pt",
+      "updates": 200,
+      "optimization_seconds": 10.269902100000763,
+      "parameters": {
+        "active": 429200,
+        "heads_total": 494992,
+        "total": 2002154
+      },
+      "backbone_unchanged": true,
+      "train_only": "validation labels never indexed",
+      "initial_offline": {
+        "train": {
+          "unmasked": {
+            "accuracy": 0.0,
+            "moving_macro_recall": 0.0,
+            "macro_balanced_recall": 0.0,
+            "support": [
+              530,
+              44,
+              44,
+              11,
+              11
+            ],
+            "recall": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "other_predictions": 637
+          },
+          "horizontal_masked": {
+            "accuracy": 0.08125,
+            "moving_macro_recall": 0.29545454545454547,
+            "macro_balanced_recall": 0.2363636363636364,
+            "support": [
+              530,
+              44,
+              44,
+              11,
+              11
+            ],
+            "recall": [
+              0.0,
+              0.18181818181818182,
+              1.0,
+              0.0,
+              0.0
+            ],
+            "other_predictions": 0
+          }
+        },
+        "validation": {
+          "unmasked": {
+            "accuracy": 0.0,
+            "moving_macro_recall": 0.0,
+            "macro_balanced_recall": 0.0,
+            "support": [
+              532,
+              36,
+              36,
+              18,
+              18
+            ],
+            "recall": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "other_predictions": 632
+          },
+          "horizontal_masked": {
+            "accuracy": 0.0671875,
+            "moving_macro_recall": 0.2986111111111111,
+            "macro_balanced_recall": 0.23888888888888887,
+            "support": [
+              532,
+              36,
+              36,
+              18,
+              18
+            ],
+            "recall": [
+              0.0,
+              0.19444444444444445,
+              1.0,
+              0.0,
+              0.0
+            ],
+            "other_predictions": 0
+          }
+        }
+      },
+      "final_offline": {
+        "train": {
+          "unmasked": {
+            "accuracy": 0.9359375,
+            "moving_macro_recall": 0.4602272727272727,
+            "macro_balanced_recall": 0.5636535162950257,
+            "support": [
+              530,
+              44,
+              44,
+              11,
+              11
+            ],
+            "recall": [
+              0.9773584905660377,
+              0.8636363636363636,
+              0.9772727272727273,
+              0.0,
+              0.0
+            ],
+            "other_predictions": 0
+          },
+          "horizontal_masked": {
+            "accuracy": 0.9359375,
+            "moving_macro_recall": 0.4602272727272727,
+            "macro_balanced_recall": 0.5636535162950257,
+            "support": [
+              530,
+              44,
+              44,
+              11,
+              11
+            ],
+            "recall": [
+              0.9773584905660377,
+              0.8636363636363636,
+              0.9772727272727273,
+              0.0,
+              0.0
+            ],
+            "other_predictions": 0
+          }
+        },
+        "validation": {
+          "unmasked": {
+            "accuracy": 0.9171875,
+            "moving_macro_recall": 0.4722222222222222,
+            "macro_balanced_recall": 0.572890559732665,
+            "support": [
+              532,
+              36,
+              36,
+              18,
+              18
+            ],
+            "recall": [
+              0.9755639097744361,
+              0.9166666666666666,
+              0.9722222222222222,
+              0.0,
+              0.0
+            ],
+            "other_predictions": 0
+          },
+          "horizontal_masked": {
+            "accuracy": 0.9171875,
+            "moving_macro_recall": 0.4722222222222222,
+            "macro_balanced_recall": 0.572890559732665,
+            "support": [
+              532,
+              36,
+              36,
+              18,
+              18
+            ],
+            "recall": [
+              0.9755639097744361,
+              0.9166666666666666,
+              0.9722222222222222,
+              0.0,
+              0.0
+            ],
+            "other_predictions": 0
+          }
+        }
+      }
+    },
+    "weighted-s17": {
+      "arm": "weighted",
+      "seed": 17,
+      "initial_head_state_sha256": "f7d03e205f378179c8705c846361c439271939276f73b4502f5a5a80553fa742",
+      "final_head_state_sha256": "58c974ca43210d7e99b90d0e53c6ee2e42620e84fb51d131979e1cc767df8080",
+      "checkpoint_sha256": "6fb00537ceb18314a33eb4366141d4a111a3c18763bd3b031fecbf62d29aa213",
+      "checkpoint_path": "train\\weighted-s17\\research-heads.pt",
+      "updates": 200,
+      "optimization_seconds": 10.622732300005737,
+      "parameters": {
+        "active": 429200,
+        "heads_total": 494992,
+        "total": 2002154
+      },
+      "backbone_unchanged": true,
+      "train_only": "validation labels never indexed",
+      "initial_offline": {
+        "train": {
+          "unmasked": {
+            "accuracy": 0.0,
+            "moving_macro_recall": 0.0,
+            "macro_balanced_recall": 0.0,
+            "support": [
+              530,
+              44,
+              44,
+              11,
+              11
+            ],
+            "recall": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "other_predictions": 637
+          },
+          "horizontal_masked": {
+            "accuracy": 0.08125,
+            "moving_macro_recall": 0.29545454545454547,
+            "macro_balanced_recall": 0.2363636363636364,
+            "support": [
+              530,
+              44,
+              44,
+              11,
+              11
+            ],
+            "recall": [
+              0.0,
+              0.18181818181818182,
+              1.0,
+              0.0,
+              0.0
+            ],
+            "other_predictions": 0
+          }
+        },
+        "validation": {
+          "unmasked": {
+            "accuracy": 0.0,
+            "moving_macro_recall": 0.0,
+            "macro_balanced_recall": 0.0,
+            "support": [
+              532,
+              36,
+              36,
+              18,
+              18
+            ],
+            "recall": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "other_predictions": 632
+          },
+          "horizontal_masked": {
+            "accuracy": 0.0671875,
+            "moving_macro_recall": 0.2986111111111111,
+            "macro_balanced_recall": 0.23888888888888887,
+            "support": [
+              532,
+              36,
+              36,
+              18,
+              18
+            ],
+            "recall": [
+              0.0,
+              0.19444444444444445,
+              1.0,
+              0.0,
+              0.0
+            ],
+            "other_predictions": 0
+          }
+        }
+      },
+      "final_offline": {
+        "train": {
+          "unmasked": {
+            "accuracy": 0.9265625,
+            "moving_macro_recall": 0.42613636363636365,
+            "macro_balanced_recall": 0.5363807890222985,
+            "support": [
+              530,
+              44,
+              44,
+              11,
+              11
+            ],
+            "recall": [
+              0.9773584905660377,
+              0.7272727272727273,
+              0.9772727272727273,
+              0.0,
+              0.0
+            ],
+            "other_predictions": 0
+          },
+          "horizontal_masked": {
+            "accuracy": 0.9265625,
+            "moving_macro_recall": 0.42613636363636365,
+            "macro_balanced_recall": 0.5363807890222985,
+            "support": [
+              530,
+              44,
+              44,
+              11,
+              11
+            ],
+            "recall": [
+              0.9773584905660377,
+              0.7272727272727273,
+              0.9772727272727273,
+              0.0,
+              0.0
+            ],
+            "other_predictions": 0
+          }
+        },
+        "validation": {
+          "unmasked": {
+            "accuracy": 0.909375,
+            "moving_macro_recall": 0.4513888888888889,
+            "macro_balanced_recall": 0.5554720133667501,
+            "support": [
+              532,
+              36,
+              36,
+              18,
+              18
+            ],
+            "recall": [
+              0.9718045112781954,
+              0.8333333333333334,
+              0.9722222222222222,
+              0.0,
+              0.0
+            ],
+            "other_predictions": 0
+          },
+          "horizontal_masked": {
+            "accuracy": 0.909375,
+            "moving_macro_recall": 0.4513888888888889,
+            "macro_balanced_recall": 0.5554720133667501,
+            "support": [
+              532,
+              36,
+              36,
+              18,
+              18
+            ],
+            "recall": [
+              0.9718045112781954,
+              0.8333333333333334,
+              0.9722222222222222,
+              0.0,
+              0.0
+            ],
+            "other_predictions": 0
+          }
+        }
+      }
+    },
+    "unweighted-s27": {
+      "arm": "unweighted",
+      "seed": 27,
+      "initial_head_state_sha256": "276573d10853f3e76278947636916862cdc4adb1ee8d1a75a48f5c6c04f87404",
+      "final_head_state_sha256": "a03685b92812220b9ad514556560ca2fd3aa222818327a76fb2d72bc1a11cefa",
+      "checkpoint_sha256": "f7214c299cd4a789f5c6dccb8747c020d82c7a61a9462fc7480b14a4608c777c",
+      "checkpoint_path": "train\\unweighted-s27\\research-heads.pt",
+      "updates": 200,
+      "optimization_seconds": 10.48299560000305,
+      "parameters": {
+        "active": 429200,
+        "heads_total": 494992,
+        "total": 2002154
+      },
+      "backbone_unchanged": true,
+      "train_only": "validation labels never indexed",
+      "initial_offline": {
+        "train": {
+          "unmasked": {
+            "accuracy": 0.0,
+            "moving_macro_recall": 0.0,
+            "macro_balanced_recall": 0.0,
+            "support": [
+              530,
+              44,
+              44,
+              11,
+              11
+            ],
+            "recall": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "other_predictions": 637
+          },
+          "horizontal_masked": {
+            "accuracy": 0.08125,
+            "moving_macro_recall": 0.29545454545454547,
+            "macro_balanced_recall": 0.2363636363636364,
+            "support": [
+              530,
+              44,
+              44,
+              11,
+              11
+            ],
+            "recall": [
+              0.0,
+              0.18181818181818182,
+              1.0,
+              0.0,
+              0.0
+            ],
+            "other_predictions": 0
+          }
+        },
+        "validation": {
+          "unmasked": {
+            "accuracy": 0.0,
+            "moving_macro_recall": 0.0,
+            "macro_balanced_recall": 0.0,
+            "support": [
+              532,
+              36,
+              36,
+              18,
+              18
+            ],
+            "recall": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "other_predictions": 632
+          },
+          "horizontal_masked": {
+            "accuracy": 0.0671875,
+            "moving_macro_recall": 0.2986111111111111,
+            "macro_balanced_recall": 0.23888888888888887,
+            "support": [
+              532,
+              36,
+              36,
+              18,
+              18
+            ],
+            "recall": [
+              0.0,
+              0.19444444444444445,
+              1.0,
+              0.0,
+              0.0
+            ],
+            "other_predictions": 0
+          }
+        }
+      },
+      "final_offline": {
+        "train": {
+          "unmasked": {
+            "accuracy": 0.9296875,
+            "moving_macro_recall": 0.38636363636363635,
+            "macro_balanced_recall": 0.507958833619211,
+            "support": [
+              530,
+              44,
+              44,
+              11,
+              11
+            ],
+            "recall": [
+              0.9943396226415094,
+              0.75,
+              0.7954545454545454,
+              0.0,
+              0.0
+            ],
+            "other_predictions": 0
+          },
+          "horizontal_masked": {
+            "accuracy": 0.9296875,
+            "moving_macro_recall": 0.38636363636363635,
+            "macro_balanced_recall": 0.507958833619211,
+            "support": [
+              530,
+              44,
+              44,
+              11,
+              11
+            ],
+            "recall": [
+              0.9943396226415094,
+              0.75,
+              0.7954545454545454,
+              0.0,
+              0.0
+            ],
+            "other_predictions": 0
+          }
+        },
+        "validation": {
+          "unmasked": {
+            "accuracy": 0.9109375,
+            "moving_macro_recall": 0.39583333333333337,
+            "macro_balanced_recall": 0.5144110275689223,
+            "support": [
+              532,
+              36,
+              36,
+              18,
+              18
+            ],
+            "recall": [
+              0.9887218045112782,
+              0.75,
+              0.8333333333333334,
+              0.0,
+              0.0
+            ],
+            "other_predictions": 0
+          },
+          "horizontal_masked": {
+            "accuracy": 0.9109375,
+            "moving_macro_recall": 0.39583333333333337,
+            "macro_balanced_recall": 0.5144110275689223,
+            "support": [
+              532,
+              36,
+              36,
+              18,
+              18
+            ],
+            "recall": [
+              0.9887218045112782,
+              0.75,
+              0.8333333333333334,
+              0.0,
+              0.0
+            ],
+            "other_predictions": 0
+          }
+        }
+      }
+    },
+    "weighted-s27": {
+      "arm": "weighted",
+      "seed": 27,
+      "initial_head_state_sha256": "276573d10853f3e76278947636916862cdc4adb1ee8d1a75a48f5c6c04f87404",
+      "final_head_state_sha256": "d0b9f9a7409cc3a49abfd47c171172e0d9e0fd147923341dad2c90042d575115",
+      "checkpoint_sha256": "4ef1db49ea9ea014fddfe6625d462c69d0675830525943116f3ef9b6b3a73b16",
+      "checkpoint_path": "train\\weighted-s27\\research-heads.pt",
+      "updates": 200,
+      "optimization_seconds": 10.717669099991326,
+      "parameters": {
+        "active": 429200,
+        "heads_total": 494992,
+        "total": 2002154
+      },
+      "backbone_unchanged": true,
+      "train_only": "validation labels never indexed",
+      "initial_offline": {
+        "train": {
+          "unmasked": {
+            "accuracy": 0.0,
+            "moving_macro_recall": 0.0,
+            "macro_balanced_recall": 0.0,
+            "support": [
+              530,
+              44,
+              44,
+              11,
+              11
+            ],
+            "recall": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "other_predictions": 637
+          },
+          "horizontal_masked": {
+            "accuracy": 0.08125,
+            "moving_macro_recall": 0.29545454545454547,
+            "macro_balanced_recall": 0.2363636363636364,
+            "support": [
+              530,
+              44,
+              44,
+              11,
+              11
+            ],
+            "recall": [
+              0.0,
+              0.18181818181818182,
+              1.0,
+              0.0,
+              0.0
+            ],
+            "other_predictions": 0
+          }
+        },
+        "validation": {
+          "unmasked": {
+            "accuracy": 0.0,
+            "moving_macro_recall": 0.0,
+            "macro_balanced_recall": 0.0,
+            "support": [
+              532,
+              36,
+              36,
+              18,
+              18
+            ],
+            "recall": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "other_predictions": 632
+          },
+          "horizontal_masked": {
+            "accuracy": 0.0671875,
+            "moving_macro_recall": 0.2986111111111111,
+            "macro_balanced_recall": 0.23888888888888887,
+            "support": [
+              532,
+              36,
+              36,
+              18,
+              18
+            ],
+            "recall": [
+              0.0,
+              0.19444444444444445,
+              1.0,
+              0.0,
+              0.0
+            ],
+            "other_predictions": 0
+          }
+        }
+      },
+      "final_offline": {
+        "train": {
+          "unmasked": {
+            "accuracy": 0.9265625,
+            "moving_macro_recall": 0.42613636363636365,
+            "macro_balanced_recall": 0.5363807890222985,
+            "support": [
+              530,
+              44,
+              44,
+              11,
+              11
+            ],
+            "recall": [
+              0.9773584905660377,
+              0.7272727272727273,
+              0.9772727272727273,
+              0.0,
+              0.0
+            ],
+            "other_predictions": 0
+          },
+          "horizontal_masked": {
+            "accuracy": 0.9265625,
+            "moving_macro_recall": 0.42613636363636365,
+            "macro_balanced_recall": 0.5363807890222985,
+            "support": [
+              530,
+              44,
+              44,
+              11,
+              11
+            ],
+            "recall": [
+              0.9773584905660377,
+              0.7272727272727273,
+              0.9772727272727273,
+              0.0,
+              0.0
+            ],
+            "other_predictions": 0
+          }
+        },
+        "validation": {
+          "unmasked": {
+            "accuracy": 0.903125,
+            "moving_macro_recall": 0.4444444444444444,
+            "macro_balanced_recall": 0.5487886382623225,
+            "support": [
+              532,
+              36,
+              36,
+              18,
+              18
+            ],
+            "recall": [
+              0.9661654135338346,
+              0.8333333333333334,
+              0.9444444444444444,
+              0.0,
+              0.0
+            ],
+            "other_predictions": 0
+          },
+          "horizontal_masked": {
+            "accuracy": 0.903125,
+            "moving_macro_recall": 0.4444444444444444,
+            "macro_balanced_recall": 0.5487886382623225,
+            "support": [
+              532,
+              36,
+              36,
+              18,
+              18
+            ],
+            "recall": [
+              0.9661654135338346,
+              0.8333333333333334,
+              0.9444444444444444,
+              0.0,
+              0.0
+            ],
+            "other_predictions": 0
+          }
+        }
+      }
+    }
+  },
+  "confirmation": {
+    "results": {
+      "unweighted-s7": {
+        "all": {
+          "events": 24,
+          "survived": 5,
+          "goal_satisfied": 18,
+          "feasible": 3,
+          "invalid_action": 0,
+          "raw_unsupported_count": 0,
+          "firsthit": {
+            "confirm-F1-00-m0": 58,
+            "confirm-F1-00-m1": 58,
+            "confirm-F1-01-m0": 46,
+            "confirm-F1-01-m1": 46,
+            "confirm-F1-02-m0": null,
+            "confirm-F1-02-m1": 54,
+            "confirm-F1-03-m0": 62,
+            "confirm-F1-03-m1": 62,
+            "confirm-F2-00-m0": null,
+            "confirm-F2-00-m1": 76,
+            "confirm-F2-01-m0": null,
+            "confirm-F2-01-m1": 70,
+            "confirm-F2-02-m0": 62,
+            "confirm-F2-02-m1": 62,
+            "confirm-F2-03-m0": 76,
+            "confirm-F2-03-m1": 72,
+            "confirm-F3-00-m0": 140,
+            "confirm-F3-00-m1": null,
+            "confirm-F3-01-m0": 96,
+            "confirm-F3-01-m1": null,
+            "confirm-F3-02-m0": 46,
+            "confirm-F3-02-m1": 46,
+            "confirm-F3-03-m0": 154,
+            "confirm-F3-03-m1": 102
+          }
+        },
+        "F1": {
+          "events": 8,
+          "survived": 1,
+          "goal_satisfied": 8,
+          "feasible": 1,
+          "invalid_action": 0,
+          "raw_unsupported_count": 0,
+          "firsthit": {
+            "confirm-F1-00-m0": 58,
+            "confirm-F1-00-m1": 58,
+            "confirm-F1-01-m0": 46,
+            "confirm-F1-01-m1": 46,
+            "confirm-F1-02-m0": null,
+            "confirm-F1-02-m1": 54,
+            "confirm-F1-03-m0": 62,
+            "confirm-F1-03-m1": 62
+          }
+        },
+        "F2": {
+          "events": 8,
+          "survived": 2,
+          "goal_satisfied": 8,
+          "feasible": 2,
+          "invalid_action": 0,
+          "raw_unsupported_count": 0,
+          "firsthit": {
+            "confirm-F2-00-m0": null,
+            "confirm-F2-00-m1": 76,
+            "confirm-F2-01-m0": null,
+            "confirm-F2-01-m1": 70,
+            "confirm-F2-02-m0": 62,
+            "confirm-F2-02-m1": 62,
+            "confirm-F2-03-m0": 76,
+            "confirm-F2-03-m1": 72
+          }
+        },
+        "F3": {
+          "events": 8,
+          "survived": 2,
+          "goal_satisfied": 2,
+          "feasible": 0,
+          "invalid_action": 0,
+          "raw_unsupported_count": 0,
+          "firsthit": {
+            "confirm-F3-00-m0": 140,
+            "confirm-F3-00-m1": null,
+            "confirm-F3-01-m0": 96,
+            "confirm-F3-01-m1": null,
+            "confirm-F3-02-m0": 46,
+            "confirm-F3-02-m1": 46,
+            "confirm-F3-03-m0": 154,
+            "confirm-F3-03-m1": 102
+          }
+        }
+      },
+      "weighted-s7": {
+        "all": {
+          "events": 24,
+          "survived": 9,
+          "goal_satisfied": 20,
+          "feasible": 9,
+          "invalid_action": 0,
+          "raw_unsupported_count": 0,
+          "firsthit": {
+            "confirm-F1-00-m0": 58,
+            "confirm-F1-00-m1": null,
+            "confirm-F1-01-m0": null,
+            "confirm-F1-01-m1": 46,
+            "confirm-F1-02-m0": null,
+            "confirm-F1-02-m1": 54,
+            "confirm-F1-03-m0": null,
+            "confirm-F1-03-m1": null,
+            "confirm-F2-00-m0": null,
+            "confirm-F2-00-m1": 96,
+            "confirm-F2-01-m0": null,
+            "confirm-F2-01-m1": 94,
+            "confirm-F2-02-m0": 94,
+            "confirm-F2-02-m1": null,
+            "confirm-F2-03-m0": 110,
+            "confirm-F2-03-m1": 106,
+            "confirm-F3-00-m0": 98,
+            "confirm-F3-00-m1": 142,
+            "confirm-F3-01-m0": 96,
+            "confirm-F3-01-m1": 152,
+            "confirm-F3-02-m0": 46,
+            "confirm-F3-02-m1": 46,
+            "confirm-F3-03-m0": 102,
+            "confirm-F3-03-m1": null
+          }
+        },
+        "F1": {
+          "events": 8,
+          "survived": 5,
+          "goal_satisfied": 8,
+          "feasible": 5,
+          "invalid_action": 0,
+          "raw_unsupported_count": 0,
+          "firsthit": {
+            "confirm-F1-00-m0": 58,
+            "confirm-F1-00-m1": null,
+            "confirm-F1-01-m0": null,
+            "confirm-F1-01-m1": 46,
+            "confirm-F1-02-m0": null,
+            "confirm-F1-02-m1": 54,
+            "confirm-F1-03-m0": null,
+            "confirm-F1-03-m1": null
+          }
+        },
+        "F2": {
+          "events": 8,
+          "survived": 3,
+          "goal_satisfied": 8,
+          "feasible": 3,
+          "invalid_action": 0,
+          "raw_unsupported_count": 0,
+          "firsthit": {
+            "confirm-F2-00-m0": null,
+            "confirm-F2-00-m1": 96,
+            "confirm-F2-01-m0": null,
+            "confirm-F2-01-m1": 94,
+            "confirm-F2-02-m0": 94,
+            "confirm-F2-02-m1": null,
+            "confirm-F2-03-m0": 110,
+            "confirm-F2-03-m1": 106
+          }
+        },
+        "F3": {
+          "events": 8,
+          "survived": 1,
+          "goal_satisfied": 4,
+          "feasible": 1,
+          "invalid_action": 0,
+          "raw_unsupported_count": 0,
+          "firsthit": {
+            "confirm-F3-00-m0": 98,
+            "confirm-F3-00-m1": 142,
+            "confirm-F3-01-m0": 96,
+            "confirm-F3-01-m1": 152,
+            "confirm-F3-02-m0": 46,
+            "confirm-F3-02-m1": 46,
+            "confirm-F3-03-m0": 102,
+            "confirm-F3-03-m1": null
+          }
+        }
+      },
+      "unweighted-s17": {
+        "all": {
+          "events": 24,
+          "survived": 6,
+          "goal_satisfied": 24,
+          "feasible": 6,
+          "invalid_action": 0,
+          "raw_unsupported_count": 0,
+          "firsthit": {
+            "confirm-F1-00-m0": 58,
+            "confirm-F1-00-m1": null,
+            "confirm-F1-01-m0": null,
+            "confirm-F1-01-m1": 46,
+            "confirm-F1-02-m0": null,
+            "confirm-F1-02-m1": 54,
+            "confirm-F1-03-m0": null,
+            "confirm-F1-03-m1": null,
+            "confirm-F2-00-m0": 60,
+            "confirm-F2-00-m1": 96,
+            "confirm-F2-01-m0": null,
+            "confirm-F2-01-m1": 94,
+            "confirm-F2-02-m0": 94,
+            "confirm-F2-02-m1": 88,
+            "confirm-F2-03-m0": 110,
+            "confirm-F2-03-m1": 106,
+            "confirm-F3-00-m0": 140,
+            "confirm-F3-00-m1": 144,
+            "confirm-F3-01-m0": 152,
+            "confirm-F3-01-m1": 152,
+            "confirm-F3-02-m0": 46,
+            "confirm-F3-02-m1": 46,
+            "confirm-F3-03-m0": 154,
+            "confirm-F3-03-m1": 158
+          }
+        },
+        "F1": {
+          "events": 8,
+          "survived": 5,
+          "goal_satisfied": 8,
+          "feasible": 5,
+          "invalid_action": 0,
+          "raw_unsupported_count": 0,
+          "firsthit": {
+            "confirm-F1-00-m0": 58,
+            "confirm-F1-00-m1": null,
+            "confirm-F1-01-m0": null,
+            "confirm-F1-01-m1": 46,
+            "confirm-F1-02-m0": null,
+            "confirm-F1-02-m1": 54,
+            "confirm-F1-03-m0": null,
+            "confirm-F1-03-m1": null
+          }
+        },
+        "F2": {
+          "events": 8,
+          "survived": 1,
+          "goal_satisfied": 8,
+          "feasible": 1,
+          "invalid_action": 0,
+          "raw_unsupported_count": 0,
+          "firsthit": {
+            "confirm-F2-00-m0": 60,
+            "confirm-F2-00-m1": 96,
+            "confirm-F2-01-m0": null,
+            "confirm-F2-01-m1": 94,
+            "confirm-F2-02-m0": 94,
+            "confirm-F2-02-m1": 88,
+            "confirm-F2-03-m0": 110,
+            "confirm-F2-03-m1": 106
+          }
+        },
+        "F3": {
+          "events": 8,
+          "survived": 0,
+          "goal_satisfied": 8,
+          "feasible": 0,
+          "invalid_action": 0,
+          "raw_unsupported_count": 0,
+          "firsthit": {
+            "confirm-F3-00-m0": 140,
+            "confirm-F3-00-m1": 144,
+            "confirm-F3-01-m0": 152,
+            "confirm-F3-01-m1": 152,
+            "confirm-F3-02-m0": 46,
+            "confirm-F3-02-m1": 46,
+            "confirm-F3-03-m0": 154,
+            "confirm-F3-03-m1": 158
+          }
+        }
+      },
+      "weighted-s17": {
+        "all": {
+          "events": 24,
+          "survived": 8,
+          "goal_satisfied": 21,
+          "feasible": 7,
+          "invalid_action": 0,
+          "raw_unsupported_count": 0,
+          "firsthit": {
+            "confirm-F1-00-m0": 58,
+            "confirm-F1-00-m1": 58,
+            "confirm-F1-01-m0": null,
+            "confirm-F1-01-m1": 46,
+            "confirm-F1-02-m0": null,
+            "confirm-F1-02-m1": 54,
+            "confirm-F1-03-m0": null,
+            "confirm-F1-03-m1": null,
+            "confirm-F2-00-m0": 76,
+            "confirm-F2-00-m1": 78,
+            "confirm-F2-01-m0": null,
+            "confirm-F2-01-m1": 72,
+            "confirm-F2-02-m0": null,
+            "confirm-F2-02-m1": null,
+            "confirm-F2-03-m0": 108,
+            "confirm-F2-03-m1": 102,
+            "confirm-F3-00-m0": 140,
+            "confirm-F3-00-m1": 140,
+            "confirm-F3-01-m0": 96,
+            "confirm-F3-01-m1": null,
+            "confirm-F3-02-m0": 46,
+            "confirm-F3-02-m1": 46,
+            "confirm-F3-03-m0": 154,
+            "confirm-F3-03-m1": 154
+          }
+        },
+        "F1": {
+          "events": 8,
+          "survived": 4,
+          "goal_satisfied": 8,
+          "feasible": 4,
+          "invalid_action": 0,
+          "raw_unsupported_count": 0,
+          "firsthit": {
+            "confirm-F1-00-m0": 58,
+            "confirm-F1-00-m1": 58,
+            "confirm-F1-01-m0": null,
+            "confirm-F1-01-m1": 46,
+            "confirm-F1-02-m0": null,
+            "confirm-F1-02-m1": 54,
+            "confirm-F1-03-m0": null,
+            "confirm-F1-03-m1": null
+          }
+        },
+        "F2": {
+          "events": 8,
+          "survived": 3,
+          "goal_satisfied": 8,
+          "feasible": 3,
+          "invalid_action": 0,
+          "raw_unsupported_count": 0,
+          "firsthit": {
+            "confirm-F2-00-m0": 76,
+            "confirm-F2-00-m1": 78,
+            "confirm-F2-01-m0": null,
+            "confirm-F2-01-m1": 72,
+            "confirm-F2-02-m0": null,
+            "confirm-F2-02-m1": null,
+            "confirm-F2-03-m0": 108,
+            "confirm-F2-03-m1": 102
+          }
+        },
+        "F3": {
+          "events": 8,
+          "survived": 1,
+          "goal_satisfied": 5,
+          "feasible": 0,
+          "invalid_action": 0,
+          "raw_unsupported_count": 0,
+          "firsthit": {
+            "confirm-F3-00-m0": 140,
+            "confirm-F3-00-m1": 140,
+            "confirm-F3-01-m0": 96,
+            "confirm-F3-01-m1": null,
+            "confirm-F3-02-m0": 46,
+            "confirm-F3-02-m1": 46,
+            "confirm-F3-03-m0": 154,
+            "confirm-F3-03-m1": 154
+          }
+        }
+      },
+      "unweighted-s27": {
+        "all": {
+          "events": 24,
+          "survived": 3,
+          "goal_satisfied": 16,
+          "feasible": 3,
+          "invalid_action": 0,
+          "raw_unsupported_count": 0,
+          "firsthit": {
+            "confirm-F1-00-m0": 58,
+            "confirm-F1-00-m1": 58,
+            "confirm-F1-01-m0": 46,
+            "confirm-F1-01-m1": 46,
+            "confirm-F1-02-m0": 54,
+            "confirm-F1-02-m1": 54,
+            "confirm-F1-03-m0": null,
+            "confirm-F1-03-m1": 62,
+            "confirm-F2-00-m0": null,
+            "confirm-F2-00-m1": 76,
+            "confirm-F2-01-m0": null,
+            "confirm-F2-01-m1": 70,
+            "confirm-F2-02-m0": 62,
+            "confirm-F2-02-m1": 62,
+            "confirm-F2-03-m0": 74,
+            "confirm-F2-03-m1": 72,
+            "confirm-F3-00-m0": 98,
+            "confirm-F3-00-m1": 98,
+            "confirm-F3-01-m0": 96,
+            "confirm-F3-01-m1": 96,
+            "confirm-F3-02-m0": 106,
+            "confirm-F3-02-m1": 46,
+            "confirm-F3-03-m0": 102,
+            "confirm-F3-03-m1": 102
+          }
+        },
+        "F1": {
+          "events": 8,
+          "survived": 1,
+          "goal_satisfied": 8,
+          "feasible": 1,
+          "invalid_action": 0,
+          "raw_unsupported_count": 0,
+          "firsthit": {
+            "confirm-F1-00-m0": 58,
+            "confirm-F1-00-m1": 58,
+            "confirm-F1-01-m0": 46,
+            "confirm-F1-01-m1": 46,
+            "confirm-F1-02-m0": 54,
+            "confirm-F1-02-m1": 54,
+            "confirm-F1-03-m0": null,
+            "confirm-F1-03-m1": 62
+          }
+        },
+        "F2": {
+          "events": 8,
+          "survived": 2,
+          "goal_satisfied": 8,
+          "feasible": 2,
+          "invalid_action": 0,
+          "raw_unsupported_count": 0,
+          "firsthit": {
+            "confirm-F2-00-m0": null,
+            "confirm-F2-00-m1": 76,
+            "confirm-F2-01-m0": null,
+            "confirm-F2-01-m1": 70,
+            "confirm-F2-02-m0": 62,
+            "confirm-F2-02-m1": 62,
+            "confirm-F2-03-m0": 74,
+            "confirm-F2-03-m1": 72
+          }
+        },
+        "F3": {
+          "events": 8,
+          "survived": 0,
+          "goal_satisfied": 0,
+          "feasible": 0,
+          "invalid_action": 0,
+          "raw_unsupported_count": 0,
+          "firsthit": {
+            "confirm-F3-00-m0": 98,
+            "confirm-F3-00-m1": 98,
+            "confirm-F3-01-m0": 96,
+            "confirm-F3-01-m1": 96,
+            "confirm-F3-02-m0": 106,
+            "confirm-F3-02-m1": 46,
+            "confirm-F3-03-m0": 102,
+            "confirm-F3-03-m1": 102
+          }
+        }
+      },
+      "weighted-s27": {
+        "all": {
+          "events": 24,
+          "survived": 8,
+          "goal_satisfied": 18,
+          "feasible": 6,
+          "invalid_action": 0,
+          "raw_unsupported_count": 0,
+          "firsthit": {
+            "confirm-F1-00-m0": 58,
+            "confirm-F1-00-m1": 58,
+            "confirm-F1-01-m0": null,
+            "confirm-F1-01-m1": 46,
+            "confirm-F1-02-m0": null,
+            "confirm-F1-02-m1": 54,
+            "confirm-F1-03-m0": null,
+            "confirm-F1-03-m1": null,
+            "confirm-F2-00-m0": 76,
+            "confirm-F2-00-m1": 78,
+            "confirm-F2-01-m0": null,
+            "confirm-F2-01-m1": 72,
+            "confirm-F2-02-m0": null,
+            "confirm-F2-02-m1": 68,
+            "confirm-F2-03-m0": 106,
+            "confirm-F2-03-m1": 78,
+            "confirm-F3-00-m0": 140,
+            "confirm-F3-00-m1": null,
+            "confirm-F3-01-m0": 96,
+            "confirm-F3-01-m1": null,
+            "confirm-F3-02-m0": 46,
+            "confirm-F3-02-m1": 46,
+            "confirm-F3-03-m0": 102,
+            "confirm-F3-03-m1": 154
+          }
+        },
+        "F1": {
+          "events": 8,
+          "survived": 4,
+          "goal_satisfied": 8,
+          "feasible": 4,
+          "invalid_action": 0,
+          "raw_unsupported_count": 0,
+          "firsthit": {
+            "confirm-F1-00-m0": 58,
+            "confirm-F1-00-m1": 58,
+            "confirm-F1-01-m0": null,
+            "confirm-F1-01-m1": 46,
+            "confirm-F1-02-m0": null,
+            "confirm-F1-02-m1": 54,
+            "confirm-F1-03-m0": null,
+            "confirm-F1-03-m1": null
+          }
+        },
+        "F2": {
+          "events": 8,
+          "survived": 2,
+          "goal_satisfied": 8,
+          "feasible": 2,
+          "invalid_action": 0,
+          "raw_unsupported_count": 0,
+          "firsthit": {
+            "confirm-F2-00-m0": 76,
+            "confirm-F2-00-m1": 78,
+            "confirm-F2-01-m0": null,
+            "confirm-F2-01-m1": 72,
+            "confirm-F2-02-m0": null,
+            "confirm-F2-02-m1": 68,
+            "confirm-F2-03-m0": 106,
+            "confirm-F2-03-m1": 78
+          }
+        },
+        "F3": {
+          "events": 8,
+          "survived": 2,
+          "goal_satisfied": 2,
+          "feasible": 0,
+          "invalid_action": 0,
+          "raw_unsupported_count": 0,
+          "firsthit": {
+            "confirm-F3-00-m0": 140,
+            "confirm-F3-00-m1": null,
+            "confirm-F3-01-m0": 96,
+            "confirm-F3-01-m1": null,
+            "confirm-F3-02-m0": 46,
+            "confirm-F3-02-m1": 46,
+            "confirm-F3-03-m0": 102,
+            "confirm-F3-03-m1": 154
+          }
+        }
+      }
+    },
+    "aggregate": {
+      "unweighted": {
+        "all": {
+          "seeds": [
+            7,
+            17,
+            27
+          ],
+          "feasible": {
+            "values": [
+              3,
+              6,
+              3
+            ],
+            "mean": 4.0,
+            "minimum": 3,
+            "maximum": 6,
+            "range": 3
+          },
+          "survived": {
+            "values": [
+              5,
+              6,
+              3
+            ],
+            "mean": 4.666666666666667,
+            "minimum": 3,
+            "maximum": 6,
+            "range": 3
+          },
+          "goal_satisfied": {
+            "values": [
+              18,
+              24,
+              16
+            ],
+            "mean": 19.333333333333332,
+            "minimum": 16,
+            "maximum": 24,
+            "range": 8
+          }
+        },
+        "F1": {
+          "seeds": [
+            7,
+            17,
+            27
+          ],
+          "feasible": {
+            "values": [
+              1,
+              5,
+              1
+            ],
+            "mean": 2.3333333333333335,
+            "minimum": 1,
+            "maximum": 5,
+            "range": 4
+          },
+          "survived": {
+            "values": [
+              1,
+              5,
+              1
+            ],
+            "mean": 2.3333333333333335,
+            "minimum": 1,
+            "maximum": 5,
+            "range": 4
+          },
+          "goal_satisfied": {
+            "values": [
+              8,
+              8,
+              8
+            ],
+            "mean": 8.0,
+            "minimum": 8,
+            "maximum": 8,
+            "range": 0
+          }
+        },
+        "F2": {
+          "seeds": [
+            7,
+            17,
+            27
+          ],
+          "feasible": {
+            "values": [
+              2,
+              1,
+              2
+            ],
+            "mean": 1.6666666666666667,
+            "minimum": 1,
+            "maximum": 2,
+            "range": 1
+          },
+          "survived": {
+            "values": [
+              2,
+              1,
+              2
+            ],
+            "mean": 1.6666666666666667,
+            "minimum": 1,
+            "maximum": 2,
+            "range": 1
+          },
+          "goal_satisfied": {
+            "values": [
+              8,
+              8,
+              8
+            ],
+            "mean": 8.0,
+            "minimum": 8,
+            "maximum": 8,
+            "range": 0
+          }
+        },
+        "F3": {
+          "seeds": [
+            7,
+            17,
+            27
+          ],
+          "feasible": {
+            "values": [
+              0,
+              0,
+              0
+            ],
+            "mean": 0.0,
+            "minimum": 0,
+            "maximum": 0,
+            "range": 0
+          },
+          "survived": {
+            "values": [
+              2,
+              0,
+              0
+            ],
+            "mean": 0.6666666666666666,
+            "minimum": 0,
+            "maximum": 2,
+            "range": 2
+          },
+          "goal_satisfied": {
+            "values": [
+              2,
+              8,
+              0
+            ],
+            "mean": 3.3333333333333335,
+            "minimum": 0,
+            "maximum": 8,
+            "range": 8
+          }
+        }
+      },
+      "weighted": {
+        "all": {
+          "seeds": [
+            7,
+            17,
+            27
+          ],
+          "feasible": {
+            "values": [
+              9,
+              7,
+              6
+            ],
+            "mean": 7.333333333333333,
+            "minimum": 6,
+            "maximum": 9,
+            "range": 3
+          },
+          "survived": {
+            "values": [
+              9,
+              8,
+              8
+            ],
+            "mean": 8.333333333333334,
+            "minimum": 8,
+            "maximum": 9,
+            "range": 1
+          },
+          "goal_satisfied": {
+            "values": [
+              20,
+              21,
+              18
+            ],
+            "mean": 19.666666666666668,
+            "minimum": 18,
+            "maximum": 21,
+            "range": 3
+          }
+        },
+        "F1": {
+          "seeds": [
+            7,
+            17,
+            27
+          ],
+          "feasible": {
+            "values": [
+              5,
+              4,
+              4
+            ],
+            "mean": 4.333333333333333,
+            "minimum": 4,
+            "maximum": 5,
+            "range": 1
+          },
+          "survived": {
+            "values": [
+              5,
+              4,
+              4
+            ],
+            "mean": 4.333333333333333,
+            "minimum": 4,
+            "maximum": 5,
+            "range": 1
+          },
+          "goal_satisfied": {
+            "values": [
+              8,
+              8,
+              8
+            ],
+            "mean": 8.0,
+            "minimum": 8,
+            "maximum": 8,
+            "range": 0
+          }
+        },
+        "F2": {
+          "seeds": [
+            7,
+            17,
+            27
+          ],
+          "feasible": {
+            "values": [
+              3,
+              3,
+              2
+            ],
+            "mean": 2.6666666666666665,
+            "minimum": 2,
+            "maximum": 3,
+            "range": 1
+          },
+          "survived": {
+            "values": [
+              3,
+              3,
+              2
+            ],
+            "mean": 2.6666666666666665,
+            "minimum": 2,
+            "maximum": 3,
+            "range": 1
+          },
+          "goal_satisfied": {
+            "values": [
+              8,
+              8,
+              8
+            ],
+            "mean": 8.0,
+            "minimum": 8,
+            "maximum": 8,
+            "range": 0
+          }
+        },
+        "F3": {
+          "seeds": [
+            7,
+            17,
+            27
+          ],
+          "feasible": {
+            "values": [
+              1,
+              0,
+              0
+            ],
+            "mean": 0.3333333333333333,
+            "minimum": 0,
+            "maximum": 1,
+            "range": 1
+          },
+          "survived": {
+            "values": [
+              1,
+              1,
+              2
+            ],
+            "mean": 1.3333333333333333,
+            "minimum": 1,
+            "maximum": 2,
+            "range": 1
+          },
+          "goal_satisfied": {
+            "values": [
+              4,
+              5,
+              2
+            ],
+            "mean": 3.6666666666666665,
+            "minimum": 2,
+            "maximum": 5,
+            "range": 3
+          }
+        }
+      }
+    },
+    "b0": {
+      "all": {
+        "events": 24,
+        "survived": 9,
+        "goal_satisfied": 20,
+        "feasible": 9,
+        "invalid_action": 0,
+        "raw_unsupported_count": 1851,
+        "firsthit": {
+          "confirm-F1-00-m0": null,
+          "confirm-F1-00-m1": null,
+          "confirm-F1-01-m0": null,
+          "confirm-F1-01-m1": null,
+          "confirm-F1-02-m0": null,
+          "confirm-F1-02-m1": null,
+          "confirm-F1-03-m0": null,
+          "confirm-F1-03-m1": null,
+          "confirm-F2-00-m0": 118,
+          "confirm-F2-00-m1": 96,
+          "confirm-F2-01-m0": 90,
+          "confirm-F2-01-m1": 94,
+          "confirm-F2-02-m0": 94,
+          "confirm-F2-02-m1": 94,
+          "confirm-F2-03-m0": 110,
+          "confirm-F2-03-m1": 106,
+          "confirm-F3-00-m0": 62,
+          "confirm-F3-00-m1": 146,
+          "confirm-F3-01-m0": 64,
+          "confirm-F3-01-m1": 158,
+          "confirm-F3-02-m0": 72,
+          "confirm-F3-02-m1": 46,
+          "confirm-F3-03-m0": 102,
+          "confirm-F3-03-m1": null
+        }
+      },
+      "F1": {
+        "events": 8,
+        "survived": 8,
+        "goal_satisfied": 8,
+        "feasible": 8,
+        "invalid_action": 0,
+        "raw_unsupported_count": 633,
+        "firsthit": {
+          "confirm-F1-00-m0": null,
+          "confirm-F1-00-m1": null,
+          "confirm-F1-01-m0": null,
+          "confirm-F1-01-m1": null,
+          "confirm-F1-02-m0": null,
+          "confirm-F1-02-m1": null,
+          "confirm-F1-03-m0": null,
+          "confirm-F1-03-m1": null
+        }
+      },
+      "F2": {
+        "events": 8,
+        "survived": 0,
+        "goal_satisfied": 8,
+        "feasible": 0,
+        "invalid_action": 0,
+        "raw_unsupported_count": 638,
+        "firsthit": {
+          "confirm-F2-00-m0": 118,
+          "confirm-F2-00-m1": 96,
+          "confirm-F2-01-m0": 90,
+          "confirm-F2-01-m1": 94,
+          "confirm-F2-02-m0": 94,
+          "confirm-F2-02-m1": 94,
+          "confirm-F2-03-m0": 110,
+          "confirm-F2-03-m1": 106
+        }
+      },
+      "F3": {
+        "events": 8,
+        "survived": 1,
+        "goal_satisfied": 4,
+        "feasible": 1,
+        "invalid_action": 0,
+        "raw_unsupported_count": 580,
+        "firsthit": {
+          "confirm-F3-00-m0": 62,
+          "confirm-F3-00-m1": 146,
+          "confirm-F3-01-m0": 64,
+          "confirm-F3-01-m1": 158,
+          "confirm-F3-02-m0": 72,
+          "confirm-F3-02-m1": 46,
+          "confirm-F3-03-m0": 102,
+          "confirm-F3-03-m1": null
+        }
+      }
+    },
+    "verification": "R11 run_event replays only the actually executed actions for environment_metrics; no solve(), no teacher policy and no teacher label was read on confirmation worlds"
+  },
+  "validation_control": {
+    "results": {
+      "unweighted-s7": {
+        "all": {
+          "events": 8,
+          "survived": 1,
+          "goal_satisfied": 7,
+          "feasible": 1,
+          "invalid_action": 0,
+          "raw_unsupported_count": 0,
+          "firsthit": {
+            "validation-F1-structure-00-m0": 40,
+            "validation-F1-structure-00-m1": 40,
+            "validation-F2-structure-00-m0": 76,
+            "validation-F2-structure-00-m1": 74,
+            "validation-F2-structure-01-m0": null,
+            "validation-F2-structure-01-m1": 52,
+            "validation-F3-structure-00-m0": 136,
+            "validation-F3-structure-00-m1": 94
+          }
+        },
+        "F1": {
+          "events": 2,
+          "survived": 0,
+          "goal_satisfied": 2,
+          "feasible": 0,
+          "invalid_action": 0,
+          "raw_unsupported_count": 0,
+          "firsthit": {
+            "validation-F1-structure-00-m0": 40,
+            "validation-F1-structure-00-m1": 40
+          }
+        },
+        "F2": {
+          "events": 4,
+          "survived": 1,
+          "goal_satisfied": 4,
+          "feasible": 1,
+          "invalid_action": 0,
+          "raw_unsupported_count": 0,
+          "firsthit": {
+            "validation-F2-structure-00-m0": 76,
+            "validation-F2-structure-00-m1": 74,
+            "validation-F2-structure-01-m0": null,
+            "validation-F2-structure-01-m1": 52
+          }
+        },
+        "F3": {
+          "events": 2,
+          "survived": 0,
+          "goal_satisfied": 1,
+          "feasible": 0,
+          "invalid_action": 0,
+          "raw_unsupported_count": 0,
+          "firsthit": {
+            "validation-F3-structure-00-m0": 136,
+            "validation-F3-structure-00-m1": 94
+          }
+        }
+      },
+      "weighted-s7": {
+        "all": {
+          "events": 8,
+          "survived": 3,
+          "goal_satisfied": 7,
+          "feasible": 3,
+          "invalid_action": 0,
+          "raw_unsupported_count": 0,
+          "firsthit": {
+            "validation-F1-structure-00-m0": null,
+            "validation-F1-structure-00-m1": null,
+            "validation-F2-structure-00-m0": 104,
+            "validation-F2-structure-00-m1": 102,
+            "validation-F2-structure-01-m0": 76,
+            "validation-F2-structure-01-m1": 102,
+            "validation-F3-structure-00-m0": 94,
+            "validation-F3-structure-00-m1": null
+          }
+        },
+        "F1": {
+          "events": 2,
+          "survived": 2,
+          "goal_satisfied": 2,
+          "feasible": 2,
+          "invalid_action": 0,
+          "raw_unsupported_count": 0,
+          "firsthit": {
+            "validation-F1-structure-00-m0": null,
+            "validation-F1-structure-00-m1": null
+          }
+        },
+        "F2": {
+          "events": 4,
+          "survived": 0,
+          "goal_satisfied": 4,
+          "feasible": 0,
+          "invalid_action": 0,
+          "raw_unsupported_count": 0,
+          "firsthit": {
+            "validation-F2-structure-00-m0": 104,
+            "validation-F2-structure-00-m1": 102,
+            "validation-F2-structure-01-m0": 76,
+            "validation-F2-structure-01-m1": 102
+          }
+        },
+        "F3": {
+          "events": 2,
+          "survived": 1,
+          "goal_satisfied": 1,
+          "feasible": 1,
+          "invalid_action": 0,
+          "raw_unsupported_count": 0,
+          "firsthit": {
+            "validation-F3-structure-00-m0": 94,
+            "validation-F3-structure-00-m1": null
+          }
+        }
+      },
+      "unweighted-s17": {
+        "all": {
+          "events": 8,
+          "survived": 3,
+          "goal_satisfied": 8,
+          "feasible": 3,
+          "invalid_action": 0,
+          "raw_unsupported_count": 0,
+          "firsthit": {
+            "validation-F1-structure-00-m0": null,
+            "validation-F1-structure-00-m1": null,
+            "validation-F2-structure-00-m0": 112,
+            "validation-F2-structure-00-m1": 136,
+            "validation-F2-structure-01-m0": 76,
+            "validation-F2-structure-01-m1": 102,
+            "validation-F3-structure-00-m0": null,
+            "validation-F3-structure-00-m1": 138
+          }
+        },
+        "F1": {
+          "events": 2,
+          "survived": 2,
+          "goal_satisfied": 2,
+          "feasible": 2,
+          "invalid_action": 0,
+          "raw_unsupported_count": 0,
+          "firsthit": {
+            "validation-F1-structure-00-m0": null,
+            "validation-F1-structure-00-m1": null
+          }
+        },
+        "F2": {
+          "events": 4,
+          "survived": 0,
+          "goal_satisfied": 4,
+          "feasible": 0,
+          "invalid_action": 0,
+          "raw_unsupported_count": 0,
+          "firsthit": {
+            "validation-F2-structure-00-m0": 112,
+            "validation-F2-structure-00-m1": 136,
+            "validation-F2-structure-01-m0": 76,
+            "validation-F2-structure-01-m1": 102
+          }
+        },
+        "F3": {
+          "events": 2,
+          "survived": 1,
+          "goal_satisfied": 2,
+          "feasible": 1,
+          "invalid_action": 0,
+          "raw_unsupported_count": 0,
+          "firsthit": {
+            "validation-F3-structure-00-m0": null,
+            "validation-F3-structure-00-m1": 138
+          }
+        }
+      },
+      "weighted-s17": {
+        "all": {
+          "events": 8,
+          "survived": 3,
+          "goal_satisfied": 7,
+          "feasible": 3,
+          "invalid_action": 0,
+          "raw_unsupported_count": 0,
+          "firsthit": {
+            "validation-F1-structure-00-m0": null,
+            "validation-F1-structure-00-m1": 40,
+            "validation-F2-structure-00-m0": 92,
+            "validation-F2-structure-00-m1": 88,
+            "validation-F2-structure-01-m0": null,
+            "validation-F2-structure-01-m1": null,
+            "validation-F3-structure-00-m0": 136,
+            "validation-F3-structure-00-m1": 94
+          }
+        },
+        "F1": {
+          "events": 2,
+          "survived": 1,
+          "goal_satisfied": 2,
+          "feasible": 1,
+          "invalid_action": 0,
+          "raw_unsupported_count": 0,
+          "firsthit": {
+            "validation-F1-structure-00-m0": null,
+            "validation-F1-structure-00-m1": 40
+          }
+        },
+        "F2": {
+          "events": 4,
+          "survived": 2,
+          "goal_satisfied": 4,
+          "feasible": 2,
+          "invalid_action": 0,
+          "raw_unsupported_count": 0,
+          "firsthit": {
+            "validation-F2-structure-00-m0": 92,
+            "validation-F2-structure-00-m1": 88,
+            "validation-F2-structure-01-m0": null,
+            "validation-F2-structure-01-m1": null
+          }
+        },
+        "F3": {
+          "events": 2,
+          "survived": 0,
+          "goal_satisfied": 1,
+          "feasible": 0,
+          "invalid_action": 0,
+          "raw_unsupported_count": 0,
+          "firsthit": {
+            "validation-F3-structure-00-m0": 136,
+            "validation-F3-structure-00-m1": 94
+          }
+        }
+      },
+      "unweighted-s27": {
+        "all": {
+          "events": 8,
+          "survived": 0,
+          "goal_satisfied": 6,
+          "feasible": 0,
+          "invalid_action": 0,
+          "raw_unsupported_count": 0,
+          "firsthit": {
+            "validation-F1-structure-00-m0": 40,
+            "validation-F1-structure-00-m1": 40,
+            "validation-F2-structure-00-m0": 76,
+            "validation-F2-structure-00-m1": 74,
+            "validation-F2-structure-01-m0": 72,
+            "validation-F2-structure-01-m1": 52,
+            "validation-F3-structure-00-m0": 94,
+            "validation-F3-structure-00-m1": 94
+          }
+        },
+        "F1": {
+          "events": 2,
+          "survived": 0,
+          "goal_satisfied": 2,
+          "feasible": 0,
+          "invalid_action": 0,
+          "raw_unsupported_count": 0,
+          "firsthit": {
+            "validation-F1-structure-00-m0": 40,
+            "validation-F1-structure-00-m1": 40
+          }
+        },
+        "F2": {
+          "events": 4,
+          "survived": 0,
+          "goal_satisfied": 4,
+          "feasible": 0,
+          "invalid_action": 0,
+          "raw_unsupported_count": 0,
+          "firsthit": {
+            "validation-F2-structure-00-m0": 76,
+            "validation-F2-structure-00-m1": 74,
+            "validation-F2-structure-01-m0": 72,
+            "validation-F2-structure-01-m1": 52
+          }
+        },
+        "F3": {
+          "events": 2,
+          "survived": 0,
+          "goal_satisfied": 0,
+          "feasible": 0,
+          "invalid_action": 0,
+          "raw_unsupported_count": 0,
+          "firsthit": {
+            "validation-F3-structure-00-m0": 94,
+            "validation-F3-structure-00-m1": 94
+          }
+        }
+      },
+      "weighted-s27": {
+        "all": {
+          "events": 8,
+          "survived": 3,
+          "goal_satisfied": 7,
+          "feasible": 3,
+          "invalid_action": 0,
+          "raw_unsupported_count": 0,
+          "firsthit": {
+            "validation-F1-structure-00-m0": null,
+            "validation-F1-structure-00-m1": 40,
+            "validation-F2-structure-00-m0": 92,
+            "validation-F2-structure-00-m1": 88,
+            "validation-F2-structure-01-m0": null,
+            "validation-F2-structure-01-m1": null,
+            "validation-F3-structure-00-m0": 136,
+            "validation-F3-structure-00-m1": 94
+          }
+        },
+        "F1": {
+          "events": 2,
+          "survived": 1,
+          "goal_satisfied": 2,
+          "feasible": 1,
+          "invalid_action": 0,
+          "raw_unsupported_count": 0,
+          "firsthit": {
+            "validation-F1-structure-00-m0": null,
+            "validation-F1-structure-00-m1": 40
+          }
+        },
+        "F2": {
+          "events": 4,
+          "survived": 2,
+          "goal_satisfied": 4,
+          "feasible": 2,
+          "invalid_action": 0,
+          "raw_unsupported_count": 0,
+          "firsthit": {
+            "validation-F2-structure-00-m0": 92,
+            "validation-F2-structure-00-m1": 88,
+            "validation-F2-structure-01-m0": null,
+            "validation-F2-structure-01-m1": null
+          }
+        },
+        "F3": {
+          "events": 2,
+          "survived": 0,
+          "goal_satisfied": 1,
+          "feasible": 0,
+          "invalid_action": 0,
+          "raw_unsupported_count": 0,
+          "firsthit": {
+            "validation-F3-structure-00-m0": 136,
+            "validation-F3-structure-00-m1": 94
+          }
+        }
+      }
+    },
+    "aggregate": {
+      "unweighted": {
+        "all": {
+          "seeds": [
+            7,
+            17,
+            27
+          ],
+          "feasible": {
+            "values": [
+              1,
+              3,
+              0
+            ],
+            "mean": 1.3333333333333333,
+            "minimum": 0,
+            "maximum": 3,
+            "range": 3
+          },
+          "survived": {
+            "values": [
+              1,
+              3,
+              0
+            ],
+            "mean": 1.3333333333333333,
+            "minimum": 0,
+            "maximum": 3,
+            "range": 3
+          },
+          "goal_satisfied": {
+            "values": [
+              7,
+              8,
+              6
+            ],
+            "mean": 7.0,
+            "minimum": 6,
+            "maximum": 8,
+            "range": 2
+          }
+        },
+        "F1": {
+          "seeds": [
+            7,
+            17,
+            27
+          ],
+          "feasible": {
+            "values": [
+              0,
+              2,
+              0
+            ],
+            "mean": 0.6666666666666666,
+            "minimum": 0,
+            "maximum": 2,
+            "range": 2
+          },
+          "survived": {
+            "values": [
+              0,
+              2,
+              0
+            ],
+            "mean": 0.6666666666666666,
+            "minimum": 0,
+            "maximum": 2,
+            "range": 2
+          },
+          "goal_satisfied": {
+            "values": [
+              2,
+              2,
+              2
+            ],
+            "mean": 2.0,
+            "minimum": 2,
+            "maximum": 2,
+            "range": 0
+          }
+        },
+        "F2": {
+          "seeds": [
+            7,
+            17,
+            27
+          ],
+          "feasible": {
+            "values": [
+              1,
+              0,
+              0
+            ],
+            "mean": 0.3333333333333333,
+            "minimum": 0,
+            "maximum": 1,
+            "range": 1
+          },
+          "survived": {
+            "values": [
+              1,
+              0,
+              0
+            ],
+            "mean": 0.3333333333333333,
+            "minimum": 0,
+            "maximum": 1,
+            "range": 1
+          },
+          "goal_satisfied": {
+            "values": [
+              4,
+              4,
+              4
+            ],
+            "mean": 4.0,
+            "minimum": 4,
+            "maximum": 4,
+            "range": 0
+          }
+        },
+        "F3": {
+          "seeds": [
+            7,
+            17,
+            27
+          ],
+          "feasible": {
+            "values": [
+              0,
+              1,
+              0
+            ],
+            "mean": 0.3333333333333333,
+            "minimum": 0,
+            "maximum": 1,
+            "range": 1
+          },
+          "survived": {
+            "values": [
+              0,
+              1,
+              0
+            ],
+            "mean": 0.3333333333333333,
+            "minimum": 0,
+            "maximum": 1,
+            "range": 1
+          },
+          "goal_satisfied": {
+            "values": [
+              1,
+              2,
+              0
+            ],
+            "mean": 1.0,
+            "minimum": 0,
+            "maximum": 2,
+            "range": 2
+          }
+        }
+      },
+      "weighted": {
+        "all": {
+          "seeds": [
+            7,
+            17,
+            27
+          ],
+          "feasible": {
+            "values": [
+              3,
+              3,
+              3
+            ],
+            "mean": 3.0,
+            "minimum": 3,
+            "maximum": 3,
+            "range": 0
+          },
+          "survived": {
+            "values": [
+              3,
+              3,
+              3
+            ],
+            "mean": 3.0,
+            "minimum": 3,
+            "maximum": 3,
+            "range": 0
+          },
+          "goal_satisfied": {
+            "values": [
+              7,
+              7,
+              7
+            ],
+            "mean": 7.0,
+            "minimum": 7,
+            "maximum": 7,
+            "range": 0
+          }
+        },
+        "F1": {
+          "seeds": [
+            7,
+            17,
+            27
+          ],
+          "feasible": {
+            "values": [
+              2,
+              1,
+              1
+            ],
+            "mean": 1.3333333333333333,
+            "minimum": 1,
+            "maximum": 2,
+            "range": 1
+          },
+          "survived": {
+            "values": [
+              2,
+              1,
+              1
+            ],
+            "mean": 1.3333333333333333,
+            "minimum": 1,
+            "maximum": 2,
+            "range": 1
+          },
+          "goal_satisfied": {
+            "values": [
+              2,
+              2,
+              2
+            ],
+            "mean": 2.0,
+            "minimum": 2,
+            "maximum": 2,
+            "range": 0
+          }
+        },
+        "F2": {
+          "seeds": [
+            7,
+            17,
+            27
+          ],
+          "feasible": {
+            "values": [
+              0,
+              2,
+              2
+            ],
+            "mean": 1.3333333333333333,
+            "minimum": 0,
+            "maximum": 2,
+            "range": 2
+          },
+          "survived": {
+            "values": [
+              0,
+              2,
+              2
+            ],
+            "mean": 1.3333333333333333,
+            "minimum": 0,
+            "maximum": 2,
+            "range": 2
+          },
+          "goal_satisfied": {
+            "values": [
+              4,
+              4,
+              4
+            ],
+            "mean": 4.0,
+            "minimum": 4,
+            "maximum": 4,
+            "range": 0
+          }
+        },
+        "F3": {
+          "seeds": [
+            7,
+            17,
+            27
+          ],
+          "feasible": {
+            "values": [
+              1,
+              0,
+              0
+            ],
+            "mean": 0.3333333333333333,
+            "minimum": 0,
+            "maximum": 1,
+            "range": 1
+          },
+          "survived": {
+            "values": [
+              1,
+              0,
+              0
+            ],
+            "mean": 0.3333333333333333,
+            "minimum": 0,
+            "maximum": 1,
+            "range": 1
+          },
+          "goal_satisfied": {
+            "values": [
+              1,
+              1,
+              1
+            ],
+            "mean": 1.0,
+            "minimum": 1,
+            "maximum": 1,
+            "range": 0
+          }
+        }
+      }
+    },
+    "note": "the old eight validation events were repeatedly exposed in R10-R15; continuity control only, not an independent test",
+    "r11_b0_external_reference": "R11 reported B0 2/8 feasible on the same eight events with cuDNN TF32 true and a different checkpoint/router protocol"
+  },
+  "encoding_seconds": null,
+  "evaluation_seconds": null,
+  "training_seconds_total": 62.75188290000369,
+  "device": "NVIDIA GeForce RTX 4070 SUPER",
+  "torch_version": "2.14.1+cu132",
+  "precision": {
+    "dtype": "float32",
+    "matmul_tf32": false,
+    "cudnn_tf32": false,
+    "source": "the training/evaluation process asserted both TF32 flags false before any step; the completion process does no numeric work"
+  },
+  "independent_test": false,
+  "formal_gate": false,
+  "deployable": false,
+  "teacher_calls": false,
+  "new_teacher_labels": false,
+  "game": false,
+  "tuning": false,
+  "retrained": false,
+  "recovery": {
+    "reason": "the single training/evaluation run wrote all six checkpoints and all 216 closed-loop events, then crashed in the final B0 aggregation",
+    "first_failure_sha256": "9aafdd453919a341d4cad93f83475892bffb96de61a0cf8edf4d2f87c4e79899",
+    "retrained": false,
+    "re_encoded": false,
+    "re_evaluated": false,
+    "run_directory_rewritten": false,
+    "changed_identities": {
+      "D:\\WorkShop\\Touhou_RL\\tools\\rl\\v373_seed_confirm.py": {
+        "preregistered_sha256": "e4b8699584c7c2f20a43f8e36c69c87bc4096a2dc85d6610d53af372bb8dec78",
+        "current_sha256": "ba1f137034ac2329face70430ac8bf579d3c8238d2a23e0ab2434e1515b2a1bf"
+      }
+    },
+    "timings": "encoding and evaluation wall times were lost with the crashed process; per-checkpoint optimization seconds and every event row are intact"
+  }
+}

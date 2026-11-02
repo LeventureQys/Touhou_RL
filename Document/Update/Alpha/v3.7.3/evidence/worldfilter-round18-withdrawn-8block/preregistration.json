@@ -1,0 +1,445 @@
+{
+  "schema": "v373-world-filter-prereg/1",
+  "identities": {
+    "D:\\WorkShop\\Touhou_RL\\tools\\rl\\v373_world_filter.py": "0064682465d899493a7f64ae8a7bdf11e781003ba2f6ae7ae59a6a7392ad872f",
+    "tests\\test_v373_world_filter.py": "6ed43f38b6a7dbbd1aef28cc2033140c8269f7158d6fd648b75e12cab7aa2253",
+    "tools\\rl\\v373_seed_confirm.py": "ba1f137034ac2329face70430ac8bf579d3c8238d2a23e0ab2434e1515b2a1bf",
+    "touhou_rl\\tactical_teacher_validation.py": "86608f2774553caa473e6d5d0e35c44fe42e12064e5ec6ebe1d3e4913bf3d92b",
+    "touhou_rl\\tactical_scenarios.py": "471f73debcbb58ee3f184948b2368c6e453a59898c7286e68b29b9a863d84906",
+    "touhou_rl\\tactical_teacher.py": "c23c9b91ba8c692265f4171dd430d08c508d5884f26370581943727680d0ad73",
+    "touhou_rl\\tactical_teacher_v2.py": "47d39e1c02c32865ed5db46befdc1ab22d7178ded86eb1333409930ffd648e95",
+    "touhou_rl\\tactical_synthetic_closed_loop.py": "b5479a075e3f07a69019924c26cf3db7f00d0e14c85b8f3fbd1fd8c980f45fed",
+    "touhou_rl\\tactical_data.py": "c0c9cd1e3a22ea887eba1e8feef61809557df145d3eecc03621b44696ddece32",
+    "Document\\Update\\Alpha\\v3.7.3\\evidence\\synthetic-closed-loop-round11\\preregistration.json": "4ae47790c2c94a014d04fd608f1141e20a30269d4c64970de06b04b093352406",
+    "Document\\Update\\Alpha\\v3.7.3\\evidence\\synthetic-learning-round10\\data\\records.json": "cb229c99ddb95e17ec201807dc3a336de0a9edf558329529f56ed1328fa2a30e",
+    "Document\\Update\\Alpha\\v3.7.3\\evidence\\teacher-revision-round9\\confirmation-manifest.json": "97872223c89f710926f1eb1a4cd88a816bc58e2a2ec828963e7466e3561b2689",
+    "Document\\Update\\Alpha\\v3.7.3\\evidence\\seed-confirm-round16\\preregistration.json": "3e5e9f0d3e09ddfae3647239b7c1946817334cb77327af8f40882821b9b42310",
+    "Document\\Update\\Alpha\\v3.7.3\\evidence\\constant-probe-round17\\summary.json": "8d37f71a658305d7940474603435d77f1d2069426957268226e6f3a3322aa4e6"
+  },
+  "purpose": "world-validity filtering and curriculum rebuild only; no training, no policy evaluation, no teacher labels, no deployable checkpoint, no game execution",
+  "criterion": {
+    "baselines": {
+      "constants": {
+        "hold": 0,
+        "right": 3,
+        "left": 7
+      },
+      "supported_candidates": [
+        0,
+        3,
+        7,
+        9,
+        12,
+        16
+      ],
+      "horizontal_mask": {
+        "0": 0,
+        "3": 2,
+        "7": -2,
+        "9": 0,
+        "12": 1,
+        "16": -1
+      },
+      "alternate": {
+        "start": "left",
+        "block_decisions": 8,
+        "block_logical_frames": 16
+      },
+      "random": {
+        "seed": 37318,
+        "support": [
+          0,
+          3,
+          7,
+          9,
+          12,
+          16
+        ],
+        "uniform": true,
+        "sequence": [
+          3,
+          0,
+          7,
+          9,
+          3,
+          9,
+          16,
+          12,
+          3,
+          7,
+          3,
+          12,
+          7,
+          7,
+          7,
+          16,
+          12,
+          3,
+          7,
+          9,
+          16,
+          16,
+          12,
+          12,
+          7,
+          0,
+          3,
+          0,
+          16,
+          7,
+          16,
+          0,
+          0,
+          3,
+          16,
+          0,
+          7,
+          16,
+          3,
+          16,
+          12,
+          7,
+          3,
+          7,
+          0,
+          3,
+          3,
+          0,
+          12,
+          16,
+          9,
+          0,
+          7,
+          12,
+          12,
+          0,
+          7,
+          9,
+          0,
+          3,
+          12,
+          0,
+          3,
+          7,
+          3,
+          16,
+          7,
+          0,
+          12,
+          3,
+          16,
+          0,
+          3,
+          9,
+          3,
+          9,
+          12,
+          9,
+          0,
+          7
+        ],
+        "note": "a fresh Random(seed) per world, so every world sees the same eighty-candidate stream"
+      },
+      "weak": "teacher_first_action",
+      "weak_definition": "TacticalTeacher().decide(world, frame 0).action repeated for the whole horizon and projected onto the supported candidate with the same mask; one privileged query, not a label"
+    },
+    "loop": "unchanged R11 semantics: mask the eighteen logits onto the six supported candidates, argmax, project candidate -> two-frame action, advance the real world, sticky collision, continue to the full horizon 160; a non-learning baseline needs no pixels",
+    "feasible": "full horizon and no collision and (F3 only) canonical x <= goal at some sampled state, identical to R11 run_event",
+    "world_valid": "all five non-learning baselines fail AND the weak teacher-first baseline fails AND the independent reference solver returns a complete action sequence that replays to feasible without early termination",
+    "world_invalid": "at least one of the six baselines is feasible (the world is too easy)",
+    "world_unknown": "all six baselines fail but no reference witness exists (bounded program search); unknown is discarded and is never reported as unsolvable",
+    "reference": "tactical_teacher_validation.solve (independent bounded program class, no teacher geometry consulted) plus an explicit non-early verify() replay of every witness",
+    "discard": "mirror pairs share one group and one split; a group is retained only if base and mirror both come out valid; duplicates of any frozen signature are discarded before evaluation",
+    "no_relaxation": "if a family cannot reach six valid groups inside its budget the actual number and the per-candidate reasons are reported; no threshold is loosened",
+    "extra_constant_diagnostic": "NOT part of the criterion: every supported candidate (0,3,7,9,12,16) is also run as a single constant and reported per world, because the requested five baselines cover only three of the six supported candidates; a retained world that a constant 12/16 still passes is reported as constant_passable and is never called constant-free"
+  },
+  "generation": {
+    "target_groups_per_family": 6,
+    "mirrors": 2,
+    "target_events": 36,
+    "budget_per_family": {
+      "F1": 200,
+      "F2": 400,
+      "F3": 200
+    },
+    "seeds": {
+      "F1": 18001,
+      "F2": 18002,
+      "F3": 18003
+    },
+    "split": "development",
+    "horizon": 160,
+    "domains": {
+      "F1": {
+        "coverage": [
+          [
+            8.0,
+            376.0
+          ],
+          [
+            8.0,
+            372.0
+          ],
+          [
+            12.0,
+            376.0
+          ],
+          [
+            16.0,
+            368.0
+          ]
+        ],
+        "internal_gap": [
+          true,
+          true,
+          true,
+          true,
+          false
+        ],
+        "gap_width": [
+          12,
+          14,
+          16,
+          20
+        ],
+        "gap_origin": [
+          72,
+          80,
+          88,
+          96,
+          104,
+          112,
+          120,
+          128,
+          136,
+          144,
+          152,
+          160,
+          168,
+          176,
+          184,
+          192,
+          200,
+          208,
+          216,
+          224,
+          232,
+          240,
+          248,
+          256,
+          264,
+          272,
+          280,
+          288,
+          296,
+          304
+        ],
+        "wall_frame": [
+          40,
+          44,
+          48,
+          52,
+          56,
+          60,
+          64,
+          68,
+          72,
+          76
+        ],
+        "start_offset": [
+          24,
+          32,
+          40,
+          48,
+          64,
+          80,
+          96
+        ]
+      },
+      "F2": {
+        "origin": [
+          [
+            192.0,
+            100.0
+          ],
+          [
+            176.0,
+            88.0
+          ],
+          [
+            208.0,
+            112.0
+          ],
+          [
+            160.0,
+            96.0
+          ],
+          [
+            224.0,
+            108.0
+          ],
+          [
+            144.0,
+            92.0
+          ]
+        ],
+        "fire_interval": [
+          12,
+          14,
+          16,
+          18,
+          20,
+          22,
+          24
+        ],
+        "bullet_speed": [
+          7.0,
+          7.5,
+          8.0,
+          8.5,
+          9.0,
+          10.0
+        ],
+        "burst": [
+          false,
+          true
+        ],
+        "start_x": [
+          160.0,
+          164.0,
+          168.0,
+          172.0,
+          176.0,
+          180.0,
+          184.0,
+          188.0,
+          192.0,
+          196.0,
+          200.0,
+          204.0,
+          208.0
+        ]
+      },
+      "F3": {
+        "window_start": [
+          40,
+          48,
+          56,
+          64,
+          72,
+          80,
+          88
+        ],
+        "window_length": [
+          16,
+          20,
+          24,
+          28,
+          32
+        ],
+        "threshold": [
+          168.0,
+          174.0,
+          180.0,
+          186.0,
+          192.0,
+          198.0
+        ],
+        "goal_offset": [
+          16.0,
+          20.0,
+          24.0,
+          28.0
+        ],
+        "crossing_ratio": [
+          0.55,
+          0.62,
+          0.68,
+          0.75,
+          0.82
+        ],
+        "fire_interval": [
+          14,
+          16,
+          18,
+          20,
+          22,
+          24,
+          26
+        ],
+        "origin": [
+          [
+            192.0,
+            100.0
+          ],
+          [
+            176.0,
+            96.0
+          ],
+          [
+            208.0,
+            104.0
+          ]
+        ]
+      }
+    },
+    "parameter_space": "ValidationWorld fields only; F1 coverage/wall_frame/internal_gap/gap/start, F2 origin/fire_interval/bullet_speed/burst/start, F3 window/threshold/goal/start (plus fire_interval/origin); unused fields stay at their ValidationWorld defaults",
+    "proposal": "seeded uniform draws per declared domain; F1 start is drawn outside the internal gap; F3 geometry is drawn so a constant drift crosses the threshold before the window opens. The filter alone decides validity; the proposal only avoids obviously dead geometry",
+    "unknown_policy": "unknown candidates stay discarded and are counted"
+  },
+  "disjointness": {
+    "r8_development_validation_signatures": 21,
+    "r9_confirmation_signatures": 12,
+    "r10_records_signatures": 8,
+    "r16_confirmation_signatures": 12,
+    "r10_subset_of_r8": true,
+    "frozen_union": 45,
+    "new_groups": 0,
+    "new_events": 0,
+    "duplicates": 0,
+    "fields": "family,canonical start_x,coverage,gap,wall_frame,fire_interval,window,threshold,goal,origin,burst,bullet_speed,internal_gap"
+  },
+  "signatures": {
+    "function": "ValidationWorld fields, R9 confirmation signature",
+    "fields": [
+      "family",
+      "canonical start_x",
+      "coverage",
+      "gap",
+      "wall_frame",
+      "fire_interval",
+      "window",
+      "threshold",
+      "goal",
+      "origin",
+      "burst",
+      "bullet_speed",
+      "internal_gap"
+    ],
+    "cross_checked_against": "tools.rl.v373_seed_confirm.signature",
+    "frozen_sets": [
+      "r8_development_validation",
+      "r9_confirmation",
+      "r10_records",
+      "r16_confirmation"
+    ]
+  },
+  "execution": {
+    "order": [
+      "tests",
+      "preregister",
+      "run"
+    ],
+    "overwrite": "directories exist_ok=False, JSON opened in x mode",
+    "reruns": "exactly one generation run; no rerun, no retune"
+  },
+  "development_only": true,
+  "test_split": false,
+  "sealed_tests_constructed": 0,
+  "training_steps": 0,
+  "teacher_labels": 0,
+  "policy_evaluations": 0,
+  "formal_gate": false,
+  "deployable": false,
+  "game": false
+}

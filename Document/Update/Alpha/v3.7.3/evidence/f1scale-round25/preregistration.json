@@ -1,0 +1,537 @@
+{
+  "schema": "v373-f1-scale-prereg/1",
+  "identities": {
+    "tools\\rl\\v373_f1_scale.py": "41628068695ae1509ab3faee8f39bc10b12b67705b3cde1a83754fb20866edd6",
+    "tests\\test_v373_f1_scale.py": "05c8516de467fdd1f3980201ab3d7ef21a3ba7377dc4f47063dbd9d11e6e5e3f",
+    "tools\\rl\\v373_world_filter.py": "ff48cfd036e4ab027add138465052765b90089d992bfebe233d6b015d4685e2a",
+    "tools\\rl\\v373_telegraph.py": "6c6dcbc1377461bf91f6da7abcd94eace408fd77a687a18195732f50868b244b",
+    "tools\\rl\\v373_valid_curriculum.py": "42c0d16ae6804da6d7ba1ccef0cfaa87e32154a7ad31329762297ccc0757dd30",
+    "tools\\rl\\v373_spatial_fuse.py": "cb8a237405d0c31d806d1e23243713e5a1d52eb6370398d4e85f96d24905fb51",
+    "tools\\rl\\v373_seed_confirm.py": "ba1f137034ac2329face70430ac8bf579d3c8238d2a23e0ab2434e1515b2a1bf",
+    "touhou_rl\\tactical_teacher_v2.py": "47d39e1c02c32865ed5db46befdc1ab22d7178ded86eb1333409930ffd648e95",
+    "touhou_rl\\tactical_teacher_validation.py": "86608f2774553caa473e6d5d0e35c44fe42e12064e5ec6ebe1d3e4913bf3d92b",
+    "touhou_rl\\tactical_teacher.py": "c23c9b91ba8c692265f4171dd430d08c508d5884f26370581943727680d0ad73",
+    "touhou_rl\\tactical_synthetic_pixels.py": "fde364c7d0da188023b60c540202c86f7d778fcde8f206d863df114bad60a09d",
+    "touhou_rl\\tactical_synthetic_closed_loop.py": "b5479a075e3f07a69019924c26cf3db7f00d0e14c85b8f3fbd1fd8c980f45fed",
+    "touhou_rl\\tactical_scenarios.py": "471f73debcbb58ee3f184948b2368c6e453a59898c7286e68b29b9a863d84906",
+    "touhou_rl\\tactical_policy.py": "1a3a2f52897c5c99a614aa6533e84bd7be38594132f58ba6a4dc8071e41395f2",
+    "touhou_rl\\tactical_data.py": "c0c9cd1e3a22ea887eba1e8feef61809557df145d3eecc03621b44696ddece32",
+    "touhou_rl\\vision.py": "854d1f61a7895fb04e364c2cfb0c90c1b9b9cf4dac181536678846a0b7e83463",
+    "touhou_rl\\vmodels.py": "c448e00d578d062004eb9e38cae0d01644703c3e487adf821b2ffccf3d7fdcb0",
+    "touhou_rl\\tactical_feature_cache.py": "53ac15bd965a5506641a8c7c8debff0953941619ffe07d8a979cd1cdc60e693c",
+    "touhou_rl\\tactical_sequence_train.py": "1a542afc1e780a5f49cf108e215a2e2f5c57a501da50bb6faf2e934d779ee397",
+    "third_party\\th08\\build\\rl\\runs\\v104-v3-E5-s7\\policy.pt": "74abde8a996c13fae832913e4e5533bc9490688bc4c0aa73560e695f065d14be",
+    "Document\\Update\\Alpha\\v3.7.3\\evidence\\worldfilter-round18\\run\\manifest.json": "9bd3a1b8d31784d6e0fd546fc701f93be611311d1743c78f159e77a4f5fe7fa7",
+    "Document\\Update\\Alpha\\v3.7.3\\evidence\\validteacher-round19\\run\\split.json": "fa35b381502adfab2ce83bea1609da0c83de1737c03647f156d1e4dc19b9199f",
+    "Document\\Update\\Alpha\\v3.7.3\\evidence\\telegraph-round21\\run\\records.json": "8c1dc82b19a74282bf599ce7dc6c866eb1f10a898211e4022ae7973565b6f18e",
+    "Document\\Update\\Alpha\\v3.7.3\\evidence\\prelaux-round24\\run\\summary.json": "48c7ef337b0830fecd9d18ef7755eb86aee3746d4e1e547e4f3284402cda754f",
+    "Document\\Update\\Alpha\\v3.7.3\\evidence\\validteacher-round19\\run\\worlds\\F1\\wf18-F1-002-m0.json": "8213526ce6b3c50a2d8c8050416f056bcdd7822155714cc4984c4a0b4a388cd2",
+    "Document\\Update\\Alpha\\v3.7.3\\evidence\\validteacher-round19\\run\\worlds\\F1\\wf18-F1-002-m1.json": "f5400864b703268cfacfccd4da18042eb5067abeef5e7a40eb40abafe3866c6d",
+    "Document\\Update\\Alpha\\v3.7.3\\evidence\\validteacher-round19\\run\\worlds\\F1\\wf18-F1-006-m0.json": "639ddca4f72183e2de6150e9ff596270d7974cd875fa5072ef012626c4e5fd40",
+    "Document\\Update\\Alpha\\v3.7.3\\evidence\\validteacher-round19\\run\\worlds\\F1\\wf18-F1-006-m1.json": "ca8eabcd6d9759f66a0511515e9bb76d535013a98f26a07a7fe82063c75a64a9",
+    "Document\\Update\\Alpha\\v3.7.3\\evidence\\validteacher-round19\\run\\worlds\\F1\\wf18-F1-009-m0.json": "e9c7a6bc003343b9c9d6d9ab2a850fe691156a274a44a6ef1ec38493f35c133b",
+    "Document\\Update\\Alpha\\v3.7.3\\evidence\\validteacher-round19\\run\\worlds\\F1\\wf18-F1-009-m1.json": "71fa9ea973c53f102952bed5acbe86d81a313bf6972820d8bd5be878822c2ce9",
+    "Document\\Update\\Alpha\\v3.7.3\\evidence\\validteacher-round19\\run\\worlds\\F1\\wf18-F1-005-m0.json": "25220f72e8ee96c0b26cdb46b79c30fd8fad00e70be90a4a4072dd0864fdbf06",
+    "Document\\Update\\Alpha\\v3.7.3\\evidence\\validteacher-round19\\run\\worlds\\F1\\wf18-F1-005-m1.json": "cd14a0c7bef41848374e2f508e347a2e381053d0dbb257595d5631859319441e",
+    "Document\\Update\\Alpha\\v3.7.3\\evidence\\validteacher-round19\\run\\worlds\\F1\\wf18-F1-007-m0.json": "bd47ee7ca56386be48c02c2a85cddb4cb56d64248b85a25615044bd2bdc9992b",
+    "Document\\Update\\Alpha\\v3.7.3\\evidence\\validteacher-round19\\run\\worlds\\F1\\wf18-F1-007-m1.json": "e1e187f826771048e2a9d1b947675a7f24678563d43f9b29e48a677dbcb5b6db",
+    "Document\\Update\\Alpha\\v3.7.3\\evidence\\validteacher-round19\\run\\worlds\\F1\\wf18-F1-010-m0.json": "5d0495671ca99e133081190413816d1c4c13f863226138568bc4bd719b6611ff",
+    "Document\\Update\\Alpha\\v3.7.3\\evidence\\validteacher-round19\\run\\worlds\\F1\\wf18-F1-010-m1.json": "6b02fe3af0643a7c4ebf7d2c0cfbcfdc049f16b0aec73018422067774fb8592c"
+  },
+  "criterion": {
+    "round": "round25",
+    "purpose": "F1-only test of the data-scale hypothesis: with the same generator, criterion, renderer, teacher and closed loop, does growing the F1 curriculum from six groups to twelve or more make the mirror group move toward the gap, and does the base group survive?",
+    "search": {
+      "family": "F1",
+      "generator": "tools.rl.v373_world_filter.draw_geometry, unchanged, F1 domain",
+      "domains": {
+        "coverage": [
+          [
+            8.0,
+            376.0
+          ],
+          [
+            8.0,
+            372.0
+          ],
+          [
+            12.0,
+            376.0
+          ],
+          [
+            16.0,
+            368.0
+          ]
+        ],
+        "internal_gap": [
+          true,
+          true,
+          true,
+          true,
+          false
+        ],
+        "gap_width": [
+          12,
+          14,
+          16,
+          20
+        ],
+        "gap_origin": [
+          72,
+          80,
+          88,
+          96,
+          104,
+          112,
+          120,
+          128,
+          136,
+          144,
+          152,
+          160,
+          168,
+          176,
+          184,
+          192,
+          200,
+          208,
+          216,
+          224,
+          232,
+          240,
+          248,
+          256,
+          264,
+          272,
+          280,
+          288,
+          296,
+          304
+        ],
+        "wall_frame": [
+          40,
+          44,
+          48,
+          52,
+          56,
+          60,
+          64,
+          68,
+          72,
+          76
+        ],
+        "start_offset": [
+          24,
+          32,
+          40,
+          48,
+          64,
+          80,
+          96
+        ]
+      },
+      "criterion": "tools.rl.v373_world_filter.evaluate_world, unchanged: constant hold/right/left, the 16-decision left-right alternation, the seeded uniform random policy and the teacher-first weak baseline must all fail, and the independent solve() must return a complete 80-action witness that replays without early termination",
+      "seed": 25001,
+      "budget": 400,
+      "target_groups": 16,
+      "mirrors": 2,
+      "split_label": "development",
+      "horizon": 160,
+      "shortfall": "if the budget runs out before the target, the actual number and every per-candidate reason are reported; no threshold is loosened, no existing world is changed and no budget is extended after the run",
+      "extras": "round18's six-constant diagnostic (candidates 0/3/7/9/12/16) is reported but is not part of the criterion, so a constant-passable world is retained and flagged"
+    },
+    "disjointness": {
+      "signature": "round9 confirmation signature (family, canonical start_x, coverage, gap, wall_frame, fire_interval, window, threshold, goal, origin, burst, bullet_speed, internal_gap)",
+      "frozen": [
+        "r8_development_validation",
+        "r9_confirmation",
+        "r10_records",
+        "r16_confirmation",
+        "r18_worlds",
+        "r19_f1_split (the same fourteen R18 groups)"
+      ],
+      "assertion": "every accepted group signature must be absent from the union and distinct from every other accepted group; a duplicate is discarded before evaluation and is never trained on"
+    },
+    "split": {
+      "unit": "one group = base + mirror, atomic; a group never crosses the split",
+      "order": "the six R18/R19 F1 groups in R19 split order, then the new groups in acceptance order",
+      "assignment": "index even -> train, odd -> held-out",
+      "forced": "the three frozen R19 F1 validation groups (wf18-F1-005/007/010) are always held out",
+      "floors": {
+        "train_groups": 12,
+        "heldout_groups": 5
+      },
+      "adjustment": "while train < 12 and held-out > 5 the last held-out group is flipped to train; if held-out < 5 the last train group is flipped back; every flip is recorded",
+      "shortfall": "if fewer than eight new groups are found, the train arm uses every group except the frozen R19 validation groups and the shortfall is recorded instead of relaxing anything",
+      "leakage": "assert the train split and both evaluation sets are disjoint; assert the large arm trains on no evaluation event; assert the small arm is exactly the six frozen groups"
+    },
+    "arms": {
+      "S": {
+        "text": "small: all six R18/R19 F1 groups (12 events), i.e. the whole old F1 data",
+        "groups": 6,
+        "events": 12,
+        "note": "the whole old F1 data, including the three frozen R19 validation groups; its r19-frozen reading is seen and is never a held-out claim"
+      },
+      "L": {
+        "text": "large: the new twelve-group train split (24 events)",
+        "groups": "the new train split (>= 12 groups)",
+        "events": "2 x groups",
+        "note": "never trains on the R19-frozen groups or the new held-out groups"
+      }
+    },
+    "training": {
+      "loss": "the frozen round20 control loss (no KL anchor, no auxiliary head)",
+      "seeds": [
+        7,
+        17,
+        27
+      ],
+      "updates": 200,
+      "optimizer": "Adam",
+      "lr": 0.001,
+      "clip": 1.0,
+      "batch": 1,
+      "precision": "FP32, autocast disabled, matmul TF32 False, cuDNN TF32 False, float32 matmul precision highest",
+      "real_cuda": true,
+      "protocol": "tools.rl.v373_valid_curriculum.infer/arm_loss/offline and tools.rl.v373_seed_confirm.fresh_policy/state_sha reused verbatim; the loop body is round20 train_all's with the arm factor replaced by the training set",
+      "initialization": "fresh seed reset per construction; the same seed must give the identical initial head in both arms and must equal the frozen R16/R20/R21 value",
+      "epochs_note": "updates are fixed at 200; the small arm therefore sees 200/12 = 16.7 epochs and the large arm 200/24 = 8.3, i.e. compute is held fixed, not epochs",
+      "selection": "final step only; no early stopping, no held-out selection, no tuning"
+    },
+    "evaluation": {
+      "sets": {
+        "r19_frozen": "the six events of the three frozen R19 F1 validation groups (cross-set contrast)",
+        "new_heldout": "the new held-out groups (>= 5 groups, mirrors atomic)"
+      },
+      "condition": "horizontal_masked",
+      "runner": "tools.rl.v373_telegraph.run_event_rendered via its closed_loop: the frozen R11 run_event with only the renderer parameter added",
+      "renderer": "tools.rl.v373_telegraph.render_state_telegraph, unchanged (lead 45, fill/edge colours, edge width 4)",
+      "b0": "the frozen baseline policy logits on the identical renders; a reference, not a capability",
+      "six_baselines": "tools.rl.v373_valid_curriculum.six_baselines (the frozen R18 policies/causal_loop/outcome); if any baseline is feasible on a held-out event the filter has failed and the learning conclusion is withheld",
+      "metrics": "per cell (network x F1 event): toward/hold/away against the gap, in_gap_at_wall, signed parking error px, feasible, survived, first hit; per event first hit; the screen-right share of every arm and group; and the direction-conditioned reading: need_left cells (the gap screen centre is left of the player at the start, i.e. the frozen screen-right prior is wrong), flip (the run goes screen-left there), need_right cells and keep",
+      "direction": "round22 cell_diagnostic/group_summary/mechanism_block reused verbatim: toward means the canonical net motion points at the gap centre from the start position; the direction-conditioned flip/keep counts are computed here because the new held-out set mixes gap sides, which the raw mirror/base grouping does not control",
+      "claim": "descriptive only; n = 3 seeds; seven new held-out groups; mirrors are not independent samples"
+    },
+    "judgement": {
+      "P1": "on the new held-out set, the large arm's flip count per seed over the need-left cells (seven cells: five base + two mirror); scale_helps iff at least two of three seeds are > 0, scale_not_the_cause iff all three are 0, partial_scale otherwise",
+      "P1_mirror": "the mirror-only subset of the need-left cells (two cells), reported separately; it is the exact analogue of round19/24's mirror group",
+      "P2": "base survives iff the large arm's keep rate over the need_right cells (seven cells) is >= 0.5 in every seed",
+      "P3": "the R19-frozen set is reported for both arms against round24 arm A; its three need-left cells are exactly the three mirror events, so its flip count is directly comparable to round24's mirror toward 3/9; it is seen for the small arm and held out for the large arm, so it carries no primary claim",
+      "geometry": "the new held-out set mixes gap sides, so a raw \"mirror toward\" rate can be satisfied by the frozen screen-right prior (B0 scores 5/7 mirror-toward and 2/7 base-toward there); the primary is therefore direction-conditioned and the raw counts are reported as a caveat",
+      "overall": "scale_helps iff P1 == scale_helps and P2 holds; mixed_scale iff P1 == scale_helps and P2 fails; scale_not_the_cause iff P1 == scale_not_the_cause; partial_scale otherwise",
+      "no_relaxation": "the verdict is written from these rules whether or not it flatters the hypothesis"
+    },
+    "claims": {
+      "can_show": "whether growing the F1 curriculum, with everything else byte-identical, moves the mirror group off the screen-right prior and keeps the base group",
+      "cannot_show": "tactical understanding, generalisation beyond these held-out geometries, or that data scale is sufficient in general; a null result only says scale alone did not do it here"
+    },
+    "failure_policy": "first failure retained; one run; no retrain, rerun, repair, overwrite, extra epoch, tuning or baseline switch"
+  },
+  "criterion_sha256": "5ad3ea35a02ab4aa86d673bb908fc9f0826b4a8719dc8ab49e5479cfa5a065d8",
+  "family": "F1",
+  "seeds": [
+    7,
+    17,
+    27
+  ],
+  "updates": 200,
+  "lr": 0.001,
+  "clip": 1.0,
+  "condition": "horizontal_masked",
+  "arms": [
+    "S",
+    "L"
+  ],
+  "arm_text": {
+    "S": "small: all six R18/R19 F1 groups (12 events), i.e. the whole old F1 data",
+    "L": "large: the new twelve-group train split (24 events)"
+  },
+  "search": {
+    "family": "F1",
+    "seed": 25001,
+    "budget": 400,
+    "target_groups": 16,
+    "group_prefix": "wf25",
+    "mirror": "each accepted group contributes base + mirror, start_x -> 384 - start_x"
+  },
+  "floors": {
+    "train_groups": 12,
+    "heldout_groups": 5
+  },
+  "shortfall_threshold": 8,
+  "sources": {
+    "manifest": {
+      "path": "Document\\Update\\Alpha\\v3.7.3\\evidence\\worldfilter-round18\\run\\manifest.json",
+      "sha256": "9bd3a1b8d31784d6e0fd546fc701f93be611311d1743c78f159e77a4f5fe7fa7",
+      "schema": "v373-world-filter-run/1"
+    },
+    "split": {
+      "path": "Document\\Update\\Alpha\\v3.7.3\\evidence\\validteacher-round19\\run\\split.json",
+      "sha256": "fa35b381502adfab2ce83bea1609da0c83de1737c03647f156d1e4dc19b9199f",
+      "schema": "v373-valid-teacher-split/1"
+    },
+    "baseline": {
+      "path": "third_party\\th08\\build\\rl\\runs\\v104-v3-E5-s7\\policy.pt",
+      "sha256": "74abde8a996c13fae832913e4e5533bc9490688bc4c0aa73560e695f065d14be"
+    },
+    "round21_records": {
+      "path": "Document\\Update\\Alpha\\v3.7.3\\evidence\\telegraph-round21\\run\\records.json",
+      "sha256": "8c1dc82b19a74282bf599ce7dc6c866eb1f10a898211e4022ae7973565b6f18e"
+    },
+    "round24": {
+      "summary_sha256": "48c7ef337b0830fecd9d18ef7755eb86aee3746d4e1e547e4f3284402cda754f",
+      "f1_validation_feasible": {
+        "A": [
+          2,
+          2,
+          2
+        ],
+        "X": [
+          3,
+          3,
+          3
+        ]
+      },
+      "direction": {
+        "base": {
+          "toward": 6,
+          "hold": 3,
+          "away": 0,
+          "in_gap": 3,
+          "cells": 9
+        },
+        "mirror": {
+          "toward": 3,
+          "hold": 0,
+          "away": 6,
+          "in_gap": 3,
+          "cells": 9
+        },
+        "screen": {
+          "right": 12,
+          "left": 3,
+          "hold": 3
+        }
+      },
+      "note": "round24 arm A on exactly the six R19-frozen F1 validation events: feasible 2/2/2, base 6/9 toward, mirror 3/9 toward, 3/3 parked, screen 12 right / 3 left / 3 hold"
+    }
+  },
+  "frozen": {
+    "census": {
+      "r8": 21,
+      "r9": 12,
+      "r10": 8,
+      "r16_confirmation": 12,
+      "r10_subset_of_r8": true,
+      "r18_worlds": 14,
+      "r19_f1_groups": 6,
+      "frozen_union": 59
+    },
+    "union": 59,
+    "r19_frozen_train": [
+      "wf18-F1-002",
+      "wf18-F1-006",
+      "wf18-F1-009"
+    ],
+    "r19_frozen_validation": [
+      "wf18-F1-005",
+      "wf18-F1-007",
+      "wf18-F1-010"
+    ],
+    "r19_frozen_signatures": {
+      "wf18-F1-002": [
+        "F1",
+        56.0,
+        [
+          8.0,
+          376.0
+        ],
+        [
+          88.0,
+          104.0
+        ],
+        76,
+        16,
+        [
+          34,
+          104
+        ],
+        180.0,
+        160.0,
+        [
+          192.0,
+          100.0
+        ],
+        false,
+        8.0,
+        true
+      ],
+      "wf18-F1-006": [
+        "F1",
+        204.0,
+        [
+          12.0,
+          376.0
+        ],
+        [
+          144.0,
+          164.0
+        ],
+        40,
+        16,
+        [
+          34,
+          104
+        ],
+        180.0,
+        160.0,
+        [
+          192.0,
+          100.0
+        ],
+        false,
+        8.0,
+        true
+      ],
+      "wf18-F1-009": [
+        "F1",
+        104.0,
+        [
+          8.0,
+          376.0
+        ],
+        [
+          152.0,
+          172.0
+        ],
+        52,
+        16,
+        [
+          34,
+          104
+        ],
+        180.0,
+        160.0,
+        [
+          192.0,
+          100.0
+        ],
+        false,
+        8.0,
+        true
+      ],
+      "wf18-F1-005": [
+        "F1",
+        216.0,
+        [
+          12.0,
+          376.0
+        ],
+        [
+          248.0,
+          264.0
+        ],
+        48,
+        16,
+        [
+          34,
+          104
+        ],
+        180.0,
+        160.0,
+        [
+          192.0,
+          100.0
+        ],
+        false,
+        8.0,
+        true
+      ],
+      "wf18-F1-007": [
+        "F1",
+        128.0,
+        [
+          8.0,
+          372.0
+        ],
+        [
+          152.0,
+          172.0
+        ],
+        60,
+        16,
+        [
+          34,
+          104
+        ],
+        180.0,
+        160.0,
+        [
+          192.0,
+          100.0
+        ],
+        false,
+        8.0,
+        true
+      ],
+      "wf18-F1-010": [
+        "F1",
+        216.0,
+        [
+          8.0,
+          376.0
+        ],
+        [
+          256.0,
+          268.0
+        ],
+        56,
+        16,
+        [
+          34,
+          104
+        ],
+        180.0,
+        160.0,
+        [
+          192.0,
+          100.0
+        ],
+        false,
+        8.0,
+        true
+      ]
+    }
+  },
+  "initialization": {
+    "per_seed": {
+      "7": "66e5f85fe6b8e1866c427e77353e84e1469325e82b8e21af228e4f9f9a8f7799",
+      "17": "f7d03e205f378179c8705c846361c439271939276f73b4502f5a5a80553fa742",
+      "27": "276573d10853f3e76278947636916862cdc4adb1ee8d1a75a48f5c6c04f87404"
+    },
+    "identical_between_arms": true,
+    "method": "r16.fresh_policy(backbone, seed) resets torch.manual_seed(seed) immediately before every construction, so the same seed gives the identical head in both arms and must reproduce the frozen R16/R20/R21 value"
+  },
+  "expected": {
+    "new_groups": 16,
+    "new_events": 32,
+    "total_groups": 22,
+    "train_groups": 12,
+    "heldout_groups": 10,
+    "new_heldout_groups": 7,
+    "r19_frozen_events": 6,
+    "new_heldout_events": 14,
+    "checkpoints": 6,
+    "closed_loop_files": 14
+  },
+  "independent_test": false,
+  "formal_gate": false,
+  "deployable": false,
+  "game": false,
+  "tuning": false,
+  "official_labels": false,
+  "research_teacher_labels": true,
+  "new_worlds": true,
+  "new_pixels": true,
+  "failure_policy": "first failure retained; one run; no retrain, rerun, repair, overwrite, extra epoch or baseline switch"
+}

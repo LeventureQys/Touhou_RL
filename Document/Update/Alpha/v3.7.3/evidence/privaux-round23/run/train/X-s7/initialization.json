@@ -1,0 +1,36 @@
+{
+  "head_state_sha256": "66e5f85fe6b8e1866c427e77353e84e1469325e82b8e21af228e4f9f9a8f7799",
+  "aux_state_sha256": "d99d2104b14db0404c3785c61aaa68ec65b9a623403bcd6807ccbf602b717042",
+  "seed": 7,
+  "arm": "X",
+  "aux_weight": 0.5,
+  "loss_arm": "A",
+  "aux": {
+    "aux": {
+      "layer": "Linear(256, 2, bias=True)",
+      "parameters": 514,
+      "outside_heads": true,
+      "never_an_input": true,
+      "note": "it never enters `features`, `history` or a pixel region; it only adds gradient to the shared GRU while training"
+    },
+    "policy_forward": "unchanged: PrivAuxPolicy overrides no method of TacticalPolicy",
+    "state_source": "forward pre-hook on heads[\"option\"], whose input is the GRU state",
+    "parent_detach": "the parent detaches `features`; that is inert here because the auxiliary head is downstream of the GRU and the backbone is frozen",
+    "parameters": {
+      "policy_heads": 429200,
+      "auxiliary": 514
+    }
+  },
+  "shared_config": "both arms are N1 with the round20 control loss and the same auxiliary head from the same RNG state; only the auxiliary loss weight differs (A 0.0, X 0.5)",
+  "feature_storage_shared": true,
+  "supervised_events": 14,
+  "aux_supervised_events": [
+    "wf18-F1-002-m0",
+    "wf18-F1-002-m1",
+    "wf18-F1-006-m0",
+    "wf18-F1-006-m1",
+    "wf18-F1-009-m0",
+    "wf18-F1-009-m1"
+  ],
+  "excluded_events": []
+}

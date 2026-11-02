@@ -1,0 +1,24 @@
+{
+  "protocol": "task-teacher-round2-independent-holdout-design-v1",
+  "status": "pending_task_contract_development_only",
+  "executed": false,
+  "formal_training_labels": false,
+  "contract_changes_authorized": false,
+  "reason": "Task.__post_init__ accepts development only; dangerous() encodes four fixed geometries. Seed/template_group cannot introduce independent danger topology. Mirror/offset are not independent templates.",
+  "development_exclusion": "All current wait_pass/immediate_exit/narrow_gap/scattered templates, seeds, mirrors, offsets and replays remain development. Renaming IDs or seed is not new geometry.",
+  "validation_design": [
+    {"template_group": "sealed-val-f4-two-alternating-gates", "structure": "Two spatially separated gate bands with non-overlapping opening intervals; route must wait in an intermediate safe pocket. Not a transform of the current single gate.", "instances_requested": 8},
+    {"template_group": "sealed-val-f5-moving-safe-pocket", "structure": "A bounded safe pocket translates then reverses during the event; target is a region in the final pocket and local displacement remains bounded. Not a fixed current narrow-gap interval.", "instances_requested": 8}
+  ],
+  "test_design": [
+    {"template_group": "sealed-test-f4-reopening-with-retreat-pocket", "structure": "Three timed gate bands with one reopening and an intermediate holding pocket; successful route requires a qualitatively distinct ordered gate schedule, not offset/mirror of validation or development.", "instances_requested": 8},
+    {"template_group": "sealed-test-f5-staggered-obstacle-islands", "structure": "Three spatially disjoint time-limited obstacle islands with alternating local evasions, including a brief safe target that later becomes dangerous. Not a current scattered pair or validation moving pocket.", "instances_requested": 8}
+  ],
+  "seal_policy": [
+    "This artifact seals intended structural groups only, not executable world instances or empirical holdout claims.",
+    "An independent custodian must implement templates under a separately authorized future contract, freeze exact parameters/seeds and source/manifests hashes before teacher tuning, and audit semantic/topology independence.",
+    "No instantiated world, solve, verify_route or teacher evaluation for proposed validation/test templates in this round.",
+    "Template groups, all mirrors/offsets and full replays stay within one split. Renaming, seed changes or affine transforms cannot establish independence.",
+    "Validation may select a frozen teacher only under a new registered protocol; test remains sealed until final one-shot confirmation. Any exposure must be logged and contaminated groups cannot remain final test."
+  ]
+}

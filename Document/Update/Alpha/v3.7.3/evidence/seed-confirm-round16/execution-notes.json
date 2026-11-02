@@ -1,0 +1,80 @@
+{
+  "schema": "v373-seed-confirm-execution/1",
+  "commands": [
+    {
+      "order": 1,
+      "command": "python -m pytest tests/test_v373_seed_confirm.py -q -p no:cacheprovider --basetemp .tmp-r16-tests-03",
+      "exit_code": 0,
+      "result": "9 passed",
+      "log": "tests-first.log"
+    },
+    {
+      "order": 2,
+      "command": "python -m tools.rl.v373_seed_confirm preregister",
+      "exit_code": 0,
+      "result": "preregistration frozen before training",
+      "sha256": "3e5e9f0d3e09ddfae3647239b7c1946817334cb77327af8f40882821b9b42310"
+    },
+    {
+      "order": 3,
+      "command": "python -m tools.rl.v373_seed_confirm run",
+      "exit_code": 1,
+      "result": "six checkpoints and 216 closed-loop events written; final aggregation TypeError; first failure retained",
+      "log": "execution-first.log"
+    },
+    {
+      "order": 4,
+      "command": "python -m pytest tests/test_v373_seed_confirm.py -q -p no:cacheprovider --basetemp .tmp-r16-tests-04",
+      "exit_code": 0,
+      "result": "9 passed",
+      "log": "tests-completion.log"
+    },
+    {
+      "order": 5,
+      "command": "python -m tools.rl.v373_seed_confirm complete",
+      "exit_code": 0,
+      "result": "read-only summary rebuild from frozen artifacts",
+      "output": "run-completion/summary.json"
+    }
+  ],
+  "tests": {
+    "passed": 9,
+    "failed": 0,
+    "before_preregistration": true,
+    "note": "one earlier pre-preregistration invocation failed a test-side AST contract that misread this round local verify() as a teacher call; the test was corrected before preregistration and no training had run"
+  },
+  "run": {
+    "checkpoints": 6,
+    "closed_loop_events": 216,
+    "training_seconds": 62.752,
+    "first_failure_sha256": "9aafdd453919a341d4cad93f83475892bffb96de61a0cf8edf4d2f87c4e79899",
+    "retained": true
+  },
+  "completion": {
+    "retrained": false,
+    "re_encoded": false,
+    "re_evaluated": false,
+    "run_directory_rewritten": false,
+    "changed_identities": {
+      "D:\\WorkShop\\Touhou_RL\\tools\\rl\\v373_seed_confirm.py": {
+        "preregistered_sha256": "e4b8699584c7c2f20a43f8e36c69c87bc4096a2dc85d6610d53af372bb8dec78",
+        "current_sha256": "ba1f137034ac2329face70430ac8bf579d3c8238d2a23e0ab2434e1515b2a1bf"
+      }
+    },
+    "unchanged_identities": 67,
+    "summary_sha256": "3f024c574d92a52723aa9d2864c4c322cc4f946c81a62a06ee0608a50ca351ca"
+  },
+  "environment": {
+    "device": "NVIDIA GeForce RTX 4070 SUPER",
+    "torch_version": "2.14.1+cu132",
+    "precision": "FP32 noAMP; matmul and cuDNN TF32 asserted false before training/encoding/evaluation/closed-loop"
+  },
+  "gates": {
+    "formal": false,
+    "deployable": false,
+    "game": false,
+    "teacher_calls": false,
+    "new_teacher_labels": false,
+    "sealed_R8_test_execution": 0
+  }
+}

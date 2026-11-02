@@ -1,0 +1,88 @@
+{
+  "split": "development",
+  "formal_training_labels": false,
+  "preregistration_sha256": "241966a1e0cdc2580e8fc14820a7aa3de7677f0fb992450a99198f827479dfb6",
+  "summary": {
+    "wait_pass": {
+      "instances": 6,
+      "reference_feasible": 6,
+      "arms": {
+        "hold": {
+          "survived": 6,
+          "goal_success": 0
+        },
+        "immediate_transit": {
+          "survived": 0,
+          "goal_success": 0
+        },
+        "wait_then_transit": {
+          "survived": 6,
+          "goal_success": 6
+        }
+      }
+    },
+    "immediate_exit": {
+      "instances": 6,
+      "reference_feasible": 6,
+      "arms": {
+        "hold": {
+          "survived": 6,
+          "goal_success": 0
+        },
+        "immediate_transit": {
+          "survived": 6,
+          "goal_success": 6
+        },
+        "wait_then_transit": {
+          "survived": 0,
+          "goal_success": 0
+        }
+      }
+    },
+    "narrow_gap": {
+      "instances": 6,
+      "reference_feasible": 6,
+      "arms": {
+        "hold": {
+          "survived": 0,
+          "goal_success": 0
+        },
+        "immediate_transit": {
+          "survived": 0,
+          "goal_success": 0
+        },
+        "local_recover": {
+          "survived": 6,
+          "goal_success": 6
+        }
+      }
+    },
+    "scattered": {
+      "instances": 6,
+      "reference_feasible": 6,
+      "arms": {
+        "hold": {
+          "survived": 0,
+          "goal_success": 0
+        },
+        "immediate_transit": {
+          "survived": 6,
+          "goal_success": 0
+        },
+        "local_recover": {
+          "survived": 6,
+          "goal_success": 6
+        }
+      }
+    }
+  },
+  "construction_checks": {
+    "reference_24_of_24": true,
+    "f4_wait_pass": true,
+    "f4_immediate_counterexample": true,
+    "f5_local_recovery": true,
+    "hold_never_goal": true,
+    "f5_large_transit_never_goal": true
+  },
+  "limitations": "fixed-y synthetic units; no B0, learned teacher, held-out test, formal noninferiority or complete P1/P2 claim"
+}

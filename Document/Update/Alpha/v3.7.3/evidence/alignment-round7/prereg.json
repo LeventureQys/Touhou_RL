@@ -1,0 +1,33 @@
+{
+  "schema": "alignment_intervals_prereg_v1",
+  "rules": {
+    "window_radius": 8,
+    "residual_budget_px": 2.0,
+    "pixel_duplicate_diameter_px": 1.0,
+    "motion_threshold_px": 0.25,
+    "turn_radius": 3,
+    "inflation_budgets_px": [
+      2.0,
+      4.0,
+      8.0
+    ],
+    "offset_selection": "development counter_lag_diagnostic score lag=0 anchor_offset; no refit",
+    "memory": "exact pre/post counters; any nonfinite or unequal duplicate position invalid; no interpolation",
+    "pixel": "each confident q separately; pairwise conflicting stable duplicate counter invalidates all",
+    "unknown": "unstable bracket, conflicting pixel duplicate, or ANY missing/conflicting memory in full +/-8 window",
+    "candidate": "all exact memory frames with Euclidean norm(q-offset-memory)<=2px, inclusive",
+    "relative_error": "candidate memory minus reference-counter memory; component and radial hull, not continuous support",
+    "future_label": "diagnostic only: complete nonempty set and maximum reference-relative displacement <= fixed inflation budget"
+  },
+  "anchor_offset": [
+    32.0,
+    16.0
+  ],
+  "development_input": "Document\\Update\\Alpha\\v3.7.3\\evidence\\pixel-bank-round6\\dev-round5-x1.json",
+  "development_sha256": "591f3dfd9e1bcd7b2b7df81b6b1b8750cd59a736b622c28647d6ed768c190e7d",
+  "source_sha256": "5d4d68ccd2f486d6d0c4f6f478def1e369bd40761527db0796b7127ca6424d26",
+  "probe_source_sha256": "42d15c62166237b94cec595a543020f3ac995653458e3929ebdb8fb602e89266",
+  "disclosure": "round6 confirmation bank aggregates already exposed; not a new independent blind confirmation; new clips required for future rule validation",
+  "phase_verified": false,
+  "real_pixel_gate_passed": false
+}

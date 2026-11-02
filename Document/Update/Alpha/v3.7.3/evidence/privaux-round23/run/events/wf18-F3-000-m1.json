@@ -1,0 +1,1717 @@
+{
+  "schema": "v373-privaux-event/1",
+  "event_id": "wf18-F3-000-m1",
+  "split": "train",
+  "seen": true,
+  "family": "F3",
+  "group": "wf18-F3-000",
+  "teacher_verified": true,
+  "asset": {
+    "pixels": {
+      "path": "assets/wf18-F3-000-m1/pixels.npz",
+      "sha256": "24b92c0846067e32d3c96cdc119c9de69593fbae168be0d3c5645e510409451e"
+    },
+    "history": {
+      "path": "assets/wf18-F3-000-m1/history.pt",
+      "sha256": "43a7012e21e82b11cfc5f653002c8cf4b3a06944b93f58c1ae6e7e89d54bab13"
+    },
+    "labels": {
+      "path": "assets/wf18-F3-000-m1/labels.pt",
+      "sha256": "43cf38e800bbf816785cbada943baad837f23d57465d0e087b8cc4d9a24d01f8"
+    },
+    "rollout": {
+      "path": "assets/wf18-F3-000-m1/rollout.json",
+      "sha256": "e6053547909b834deb29422c9524ceeb2e0be8d3c61a8a3541afb231169f8b13"
+    }
+  },
+  "teacher": {
+    "event_id": "wf18-F3-000-m1",
+    "family": "F3",
+    "group": "wf18-F3-000",
+    "split": "train",
+    "mirror": true,
+    "scenario": {
+      "event_id": "wf18-F3-000-m1",
+      "family": "F3",
+      "template_group": "wf18-F3-000",
+      "seed": 18000,
+      "start_x": 102.0,
+      "mirror": true,
+      "horizon": 160,
+      "fire_interval": 24,
+      "bullet_speed": 8.0,
+      "wall_frame": 64,
+      "internal_gap": false,
+      "model_known": true,
+      "split": "development",
+      "depletion_pressure": true,
+      "coverage": [
+        100.0,
+        284.0
+      ],
+      "gap": [
+        180.0,
+        204.0
+      ],
+      "window": [
+        56,
+        76
+      ],
+      "threshold": 198.0,
+      "goal": 174.0,
+      "origin": [
+        208.0,
+        104.0
+      ],
+      "burst": false
+    },
+    "scenario_sha256": "9b4a52373c0b03892fee89e4dc0b6e0af6fb4dac7f14b1fb3051a3caef1cae38",
+    "teacher": "TacticalTeacherV2 (unmodified)",
+    "teacher_source": {
+      "tactical_teacher_v2.py": "47d39e1c02c32865ed5db46befdc1ab22d7178ded86eb1333409930ffd648e95",
+      "tactical_teacher.py": "c23c9b91ba8c692265f4171dd430d08c508d5884f26370581943727680d0ad73",
+      "tactical_teacher_validation.py": "86608f2774553caa473e6d5d0e35c44fe42e12064e5ec6ebe1d3e4913bf3d92b",
+      "tactical_scenarios.py": "471f73debcbb58ee3f184948b2368c6e453a59898c7286e68b29b9a863d84906"
+    },
+    "renderer": "v373_telegraph.render_state_telegraph",
+    "renderer_source_sha256": "6c6dcbc1377461bf91f6da7abcd94eace408fd77a687a18195732f50868b244b",
+    "telegraph": {
+      "lead": 45,
+      "fill": [
+        44,
+        58,
+        74
+      ],
+      "edge": [
+        96,
+        148,
+        128
+      ],
+      "edge_width": 4,
+      "window": null,
+      "spans": [],
+      "gap": null
+    },
+    "render_freeze": {
+      "actions_sha256": "b834989977174e74e03123489dd5f79da1ffb8236272088fe5656aeeeabd1800",
+      "original_sha256": "06ef6ed05621b94896e73ea22ef8232d8c2e12a506ac3ccf9d62c09dbcb24ccc",
+      "telegraph_sha256": "06ef6ed05621b94896e73ea22ef8232d8c2e12a506ac3ccf9d62c09dbcb24ccc",
+      "diff_sha256": "acaa16ef603e7b4d0aa7ba7af7eed934aa9d507f6f2b9ad37996963f571513f0",
+      "changed_decision_frames": 0,
+      "changed_pixels": 0,
+      "first_changed_frame": null,
+      "last_changed_frame": null,
+      "preview": null,
+      "spans": [],
+      "gap": null,
+      "columns_sha256": "a1a4f5721c1c4610af7f71078f3a68c330536d679803b0e0507ee8dc10c5dfca"
+    },
+    "round20_containment": {
+      "actions_equal": true,
+      "labels_equal": true,
+      "history_equal": true,
+      "pixels_equal": true,
+      "changed_rows": [],
+      "expected_preview_rows": [],
+      "round20_asset_sha256": {
+        "pixels": "24b92c0846067e32d3c96cdc119c9de69593fbae168be0d3c5645e510409451e",
+        "history": "43a7012e21e82b11cfc5f653002c8cf4b3a06944b93f58c1ae6e7e89d54bab13",
+        "labels": "43cf38e800bbf816785cbada943baad837f23d57465d0e087b8cc4d9a24d01f8",
+        "rollout": "60617bf502e1c9a8c9f9c49c3d53e0a773d6e591bda8de206919152797d2de05"
+      }
+    },
+    "actions": [
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      2,
+      2,
+      2,
+      2,
+      2,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      2,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "decisions": [
+      {
+        "frame": 0,
+        "action": 2,
+        "option": "TRANSIT",
+        "trigger_reason": "GEOMETRY_PROGRESS",
+        "target_region": [
+          206.0,
+          214.0
+        ],
+        "confidence": "bounded_synthetic_rule"
+      },
+      {
+        "frame": 2,
+        "action": 2,
+        "option": "TRANSIT",
+        "trigger_reason": "GEOMETRY_PROGRESS",
+        "target_region": [
+          206.0,
+          214.0
+        ],
+        "confidence": "bounded_synthetic_rule"
+      },
+      {
+        "frame": 4,
+        "action": 2,
+        "option": "TRANSIT",
+        "trigger_reason": "GEOMETRY_PROGRESS",
+        "target_region": [
+          206.0,
+          214.0
+        ],
+        "confidence": "bounded_synthetic_rule"
+      },
+      {
+        "frame": 6,
+        "action": 2,
+        "option": "TRANSIT",
+        "trigger_reason": "GEOMETRY_PROGRESS",
+        "target_region": [
+          206.0,
+          214.0
+        ],
+        "confidence": "bounded_synthetic_rule"
+      },
+      {
+        "frame": 8,
+        "action": 2,
+        "option": "TRANSIT",
+        "trigger_reason": "GEOMETRY_PROGRESS",
+        "target_region": [
+          206.0,
+          214.0
+        ],
+        "confidence": "bounded_synthetic_rule"
+      },
+      {
+        "frame": 10,
+        "action": 2,
+        "option": "TRANSIT",
+        "trigger_reason": "GEOMETRY_PROGRESS",
+        "target_region": [
+          206.0,
+          214.0
+        ],
+        "confidence": "bounded_synthetic_rule"
+      },
+      {
+        "frame": 12,
+        "action": 2,
+        "option": "TRANSIT",
+        "trigger_reason": "GEOMETRY_PROGRESS",
+        "target_region": [
+          206.0,
+          214.0
+        ],
+        "confidence": "bounded_synthetic_rule"
+      },
+      {
+        "frame": 14,
+        "action": 2,
+        "option": "TRANSIT",
+        "trigger_reason": "GEOMETRY_PROGRESS",
+        "target_region": [
+          206.0,
+          214.0
+        ],
+        "confidence": "bounded_synthetic_rule"
+      },
+      {
+        "frame": 16,
+        "action": 1,
+        "option": "TRANSIT",
+        "trigger_reason": "GEOMETRY_PROGRESS",
+        "target_region": [
+          206.0,
+          214.0
+        ],
+        "confidence": "bounded_synthetic_rule"
+      },
+      {
+        "frame": 18,
+        "action": 0,
+        "option": "HOLD_STREAM",
+        "trigger_reason": "GEOMETRY_PROGRESS",
+        "target_region": [
+          206.0,
+          214.0
+        ],
+        "confidence": "bounded_synthetic_rule"
+      },
+      {
+        "frame": 20,
+        "action": 0,
+        "option": "HOLD_STREAM",
+        "trigger_reason": "GEOMETRY_PROGRESS",
+        "target_region": [
+          206.0,
+          214.0
+        ],
+        "confidence": "bounded_synthetic_rule"
+      },
+      {
+        "frame": 22,
+        "action": 0,
+        "option": "HOLD_STREAM",
+        "trigger_reason": "GEOMETRY_PROGRESS",
+        "target_region": [
+          206.0,
+          214.0
+        ],
+        "confidence": "bounded_synthetic_rule"
+      },
+      {
+        "frame": 24,
+        "action": 0,
+        "option": "HOLD_STREAM",
+        "trigger_reason": "GEOMETRY_PROGRESS",
+        "target_region": [
+          206.0,
+          214.0
+        ],
+        "confidence": "bounded_synthetic_rule"
+      },
+      {
+        "frame": 26,
+        "action": 0,
+        "option": "HOLD_STREAM",
+        "trigger_reason": "GEOMETRY_PROGRESS",
+        "target_region": [
+          206.0,
+          214.0
+        ],
+        "confidence": "bounded_synthetic_rule"
+      },
+      {
+        "frame": 28,
+        "action": 0,
+        "option": "HOLD_STREAM",
+        "trigger_reason": "GEOMETRY_PROGRESS",
+        "target_region": [
+          206.0,
+          214.0
+        ],
+        "confidence": "bounded_synthetic_rule"
+      },
+      {
+        "frame": 30,
+        "action": 0,
+        "option": "HOLD_STREAM",
+        "trigger_reason": "GEOMETRY_PROGRESS",
+        "target_region": [
+          206.0,
+          214.0
+        ],
+        "confidence": "bounded_synthetic_rule"
+      },
+      {
+        "frame": 32,
+        "action": 0,
+        "option": "HOLD_STREAM",
+        "trigger_reason": "GEOMETRY_PROGRESS",
+        "target_region": [
+          206.0,
+          214.0
+        ],
+        "confidence": "bounded_synthetic_rule"
+      },
+      {
+        "frame": 34,
+        "action": 0,
+        "option": "HOLD_STREAM",
+        "trigger_reason": "GEOMETRY_PROGRESS",
+        "target_region": [
+          206.0,
+          214.0
+        ],
+        "confidence": "bounded_synthetic_rule"
+      },
+      {
+        "frame": 36,
+        "action": 0,
+        "option": "HOLD_STREAM",
+        "trigger_reason": "GEOMETRY_PROGRESS",
+        "target_region": [
+          206.0,
+          214.0
+        ],
+        "confidence": "bounded_synthetic_rule"
+      },
+      {
+        "frame": 38,
+        "action": 0,
+        "option": "HOLD_STREAM",
+        "trigger_reason": "GEOMETRY_PROGRESS",
+        "target_region": [
+          206.0,
+          214.0
+        ],
+        "confidence": "bounded_synthetic_rule"
+      },
+      {
+        "frame": 40,
+        "action": 0,
+        "option": "HOLD_STREAM",
+        "trigger_reason": "GEOMETRY_PROGRESS",
+        "target_region": [
+          206.0,
+          214.0
+        ],
+        "confidence": "bounded_synthetic_rule"
+      },
+      {
+        "frame": 42,
+        "action": 0,
+        "option": "HOLD_STREAM",
+        "trigger_reason": "GEOMETRY_PROGRESS",
+        "target_region": [
+          206.0,
+          214.0
+        ],
+        "confidence": "bounded_synthetic_rule"
+      },
+      {
+        "frame": 44,
+        "action": 0,
+        "option": "HOLD_STREAM",
+        "trigger_reason": "GEOMETRY_PROGRESS",
+        "target_region": [
+          206.0,
+          214.0
+        ],
+        "confidence": "bounded_synthetic_rule"
+      },
+      {
+        "frame": 46,
+        "action": 0,
+        "option": "HOLD_STREAM",
+        "trigger_reason": "GEOMETRY_PROGRESS",
+        "target_region": [
+          206.0,
+          214.0
+        ],
+        "confidence": "bounded_synthetic_rule"
+      },
+      {
+        "frame": 48,
+        "action": 0,
+        "option": "HOLD_STREAM",
+        "trigger_reason": "GEOMETRY_PROGRESS",
+        "target_region": [
+          206.0,
+          214.0
+        ],
+        "confidence": "bounded_synthetic_rule"
+      },
+      {
+        "frame": 50,
+        "action": 0,
+        "option": "HOLD_STREAM",
+        "trigger_reason": "GEOMETRY_PROGRESS",
+        "target_region": [
+          206.0,
+          214.0
+        ],
+        "confidence": "bounded_synthetic_rule"
+      },
+      {
+        "frame": 52,
+        "action": 0,
+        "option": "HOLD_STREAM",
+        "trigger_reason": "GEOMETRY_PROGRESS",
+        "target_region": [
+          206.0,
+          214.0
+        ],
+        "confidence": "bounded_synthetic_rule"
+      },
+      {
+        "frame": 54,
+        "action": 2,
+        "option": "TRANSIT",
+        "trigger_reason": "GEOMETRY_PROGRESS",
+        "target_region": [
+          162.0,
+          170.0
+        ],
+        "confidence": "bounded_synthetic_rule"
+      },
+      {
+        "frame": 56,
+        "action": 2,
+        "option": "TRANSIT",
+        "trigger_reason": "GEOMETRY_PROGRESS",
+        "target_region": [
+          162.0,
+          170.0
+        ],
+        "confidence": "bounded_synthetic_rule"
+      },
+      {
+        "frame": 58,
+        "action": 2,
+        "option": "TRANSIT",
+        "trigger_reason": "GEOMETRY_PROGRESS",
+        "target_region": [
+          162.0,
+          170.0
+        ],
+        "confidence": "bounded_synthetic_rule"
+      },
+      {
+        "frame": 60,
+        "action": 2,
+        "option": "TRANSIT",
+        "trigger_reason": "GEOMETRY_PROGRESS",
+        "target_region": [
+          162.0,
+          170.0
+        ],
+        "confidence": "bounded_synthetic_rule"
+      },
+      {
+        "frame": 62,
+        "action": 2,
+        "option": "TRANSIT",
+        "trigger_reason": "GEOMETRY_PROGRESS",
+        "target_region": [
+          162.0,
+          170.0
+        ],
+        "confidence": "bounded_synthetic_rule"
+      },
+      {
+        "frame": 64,
+        "action": 1,
+        "option": "TRANSIT",
+        "trigger_reason": "GEOMETRY_PROGRESS",
+        "target_region": [
+          162.0,
+          170.0
+        ],
+        "confidence": "bounded_synthetic_rule"
+      },
+      {
+        "frame": 66,
+        "action": 0,
+        "option": "HOLD_STREAM",
+        "trigger_reason": "GEOMETRY_PROGRESS",
+        "target_region": [
+          162.0,
+          170.0
+        ],
+        "confidence": "bounded_synthetic_rule"
+      },
+      {
+        "frame": 68,
+        "action": 0,
+        "option": "HOLD_STREAM",
+        "trigger_reason": "GEOMETRY_PROGRESS",
+        "target_region": [
+          162.0,
+          170.0
+        ],
+        "confidence": "bounded_synthetic_rule"
+      },
+      {
+        "frame": 70,
+        "action": 0,
+        "option": "HOLD_STREAM",
+        "trigger_reason": "GEOMETRY_PROGRESS",
+        "target_region": [
+          162.0,
+          170.0
+        ],
+        "confidence": "bounded_synthetic_rule"
+      },
+      {
+        "frame": 72,
+        "action": 0,
+        "option": "HOLD_STREAM",
+        "trigger_reason": "GEOMETRY_PROGRESS",
+        "target_region": [
+          162.0,
+          170.0
+        ],
+        "confidence": "bounded_synthetic_rule"
+      },
+      {
+        "frame": 74,
+        "action": 0,
+        "option": "HOLD_STREAM",
+        "trigger_reason": "GEOMETRY_PROGRESS",
+        "target_region": [
+          162.0,
+          170.0
+        ],
+        "confidence": "bounded_synthetic_rule"
+      },
+      {
+        "frame": 76,
+        "action": 0,
+        "option": "HOLD_STREAM",
+        "trigger_reason": "GEOMETRY_PROGRESS",
+        "target_region": [
+          162.0,
+          170.0
+        ],
+        "confidence": "bounded_synthetic_rule"
+      },
+      {
+        "frame": 78,
+        "action": 0,
+        "option": "HOLD_STREAM",
+        "trigger_reason": "GEOMETRY_PROGRESS",
+        "target_region": [
+          162.0,
+          170.0
+        ],
+        "confidence": "bounded_synthetic_rule"
+      },
+      {
+        "frame": 80,
+        "action": 0,
+        "option": "HOLD_STREAM",
+        "trigger_reason": "GEOMETRY_PROGRESS",
+        "target_region": [
+          162.0,
+          170.0
+        ],
+        "confidence": "bounded_synthetic_rule"
+      },
+      {
+        "frame": 82,
+        "action": 0,
+        "option": "HOLD_STREAM",
+        "trigger_reason": "GEOMETRY_PROGRESS",
+        "target_region": [
+          162.0,
+          170.0
+        ],
+        "confidence": "bounded_synthetic_rule"
+      },
+      {
+        "frame": 84,
+        "action": 0,
+        "option": "HOLD_STREAM",
+        "trigger_reason": "GEOMETRY_PROGRESS",
+        "target_region": [
+          162.0,
+          170.0
+        ],
+        "confidence": "bounded_synthetic_rule"
+      },
+      {
+        "frame": 86,
+        "action": 0,
+        "option": "HOLD_STREAM",
+        "trigger_reason": "GEOMETRY_PROGRESS",
+        "target_region": [
+          162.0,
+          170.0
+        ],
+        "confidence": "bounded_synthetic_rule"
+      },
+      {
+        "frame": 88,
+        "action": 0,
+        "option": "HOLD_STREAM",
+        "trigger_reason": "GEOMETRY_PROGRESS",
+        "target_region": [
+          162.0,
+          170.0
+        ],
+        "confidence": "bounded_synthetic_rule"
+      },
+      {
+        "frame": 90,
+        "action": 0,
+        "option": "HOLD_STREAM",
+        "trigger_reason": "GEOMETRY_PROGRESS",
+        "target_region": [
+          162.0,
+          170.0
+        ],
+        "confidence": "bounded_synthetic_rule"
+      },
+      {
+        "frame": 92,
+        "action": 0,
+        "option": "HOLD_STREAM",
+        "trigger_reason": "GEOMETRY_PROGRESS",
+        "target_region": [
+          162.0,
+          170.0
+        ],
+        "confidence": "bounded_synthetic_rule"
+      },
+      {
+        "frame": 94,
+        "action": 0,
+        "option": "HOLD_STREAM",
+        "trigger_reason": "GEOMETRY_PROGRESS",
+        "target_region": [
+          162.0,
+          170.0
+        ],
+        "confidence": "bounded_synthetic_rule"
+      },
+      {
+        "frame": 96,
+        "action": 0,
+        "option": "HOLD_STREAM",
+        "trigger_reason": "GEOMETRY_PROGRESS",
+        "target_region": [
+          162.0,
+          170.0
+        ],
+        "confidence": "bounded_synthetic_rule"
+      },
+      {
+        "frame": 98,
+        "action": 0,
+        "option": "HOLD_STREAM",
+        "trigger_reason": "GEOMETRY_PROGRESS",
+        "target_region": [
+          162.0,
+          170.0
+        ],
+        "confidence": "bounded_synthetic_rule"
+      },
+      {
+        "frame": 100,
+        "action": 0,
+        "option": "HOLD_STREAM",
+        "trigger_reason": "GEOMETRY_PROGRESS",
+        "target_region": [
+          162.0,
+          170.0
+        ],
+        "confidence": "bounded_synthetic_rule"
+      },
+      {
+        "frame": 102,
+        "action": 0,
+        "option": "HOLD_STREAM",
+        "trigger_reason": "GEOMETRY_PROGRESS",
+        "target_region": [
+          162.0,
+          170.0
+        ],
+        "confidence": "bounded_synthetic_rule"
+      },
+      {
+        "frame": 104,
+        "action": 0,
+        "option": "HOLD_STREAM",
+        "trigger_reason": "GEOMETRY_PROGRESS",
+        "target_region": [
+          162.0,
+          170.0
+        ],
+        "confidence": "bounded_synthetic_rule"
+      },
+      {
+        "frame": 106,
+        "action": 0,
+        "option": "HOLD_STREAM",
+        "trigger_reason": "GEOMETRY_PROGRESS",
+        "target_region": [
+          162.0,
+          170.0
+        ],
+        "confidence": "bounded_synthetic_rule"
+      },
+      {
+        "frame": 108,
+        "action": 0,
+        "option": "HOLD_STREAM",
+        "trigger_reason": "GEOMETRY_PROGRESS",
+        "target_region": [
+          162.0,
+          170.0
+        ],
+        "confidence": "bounded_synthetic_rule"
+      },
+      {
+        "frame": 110,
+        "action": 0,
+        "option": "HOLD_STREAM",
+        "trigger_reason": "GEOMETRY_PROGRESS",
+        "target_region": [
+          162.0,
+          170.0
+        ],
+        "confidence": "bounded_synthetic_rule"
+      },
+      {
+        "frame": 112,
+        "action": 0,
+        "option": "HOLD_STREAM",
+        "trigger_reason": "GEOMETRY_PROGRESS",
+        "target_region": [
+          162.0,
+          170.0
+        ],
+        "confidence": "bounded_synthetic_rule"
+      },
+      {
+        "frame": 114,
+        "action": 0,
+        "option": "HOLD_STREAM",
+        "trigger_reason": "GEOMETRY_PROGRESS",
+        "target_region": [
+          162.0,
+          170.0
+        ],
+        "confidence": "bounded_synthetic_rule"
+      },
+      {
+        "frame": 116,
+        "action": 0,
+        "option": "HOLD_STREAM",
+        "trigger_reason": "GEOMETRY_PROGRESS",
+        "target_region": [
+          162.0,
+          170.0
+        ],
+        "confidence": "bounded_synthetic_rule"
+      },
+      {
+        "frame": 118,
+        "action": 0,
+        "option": "HOLD_STREAM",
+        "trigger_reason": "GEOMETRY_PROGRESS",
+        "target_region": [
+          162.0,
+          170.0
+        ],
+        "confidence": "bounded_synthetic_rule"
+      },
+      {
+        "frame": 120,
+        "action": 0,
+        "option": "HOLD_STREAM",
+        "trigger_reason": "GEOMETRY_PROGRESS",
+        "target_region": [
+          162.0,
+          170.0
+        ],
+        "confidence": "bounded_synthetic_rule"
+      },
+      {
+        "frame": 122,
+        "action": 0,
+        "option": "HOLD_STREAM",
+        "trigger_reason": "GEOMETRY_PROGRESS",
+        "target_region": [
+          162.0,
+          170.0
+        ],
+        "confidence": "bounded_synthetic_rule"
+      },
+      {
+        "frame": 124,
+        "action": 0,
+        "option": "HOLD_STREAM",
+        "trigger_reason": "GEOMETRY_PROGRESS",
+        "target_region": [
+          162.0,
+          170.0
+        ],
+        "confidence": "bounded_synthetic_rule"
+      },
+      {
+        "frame": 126,
+        "action": 0,
+        "option": "HOLD_STREAM",
+        "trigger_reason": "GEOMETRY_PROGRESS",
+        "target_region": [
+          162.0,
+          170.0
+        ],
+        "confidence": "bounded_synthetic_rule"
+      },
+      {
+        "frame": 128,
+        "action": 0,
+        "option": "HOLD_STREAM",
+        "trigger_reason": "GEOMETRY_PROGRESS",
+        "target_region": [
+          162.0,
+          170.0
+        ],
+        "confidence": "bounded_synthetic_rule"
+      },
+      {
+        "frame": 130,
+        "action": 0,
+        "option": "HOLD_STREAM",
+        "trigger_reason": "GEOMETRY_PROGRESS",
+        "target_region": [
+          162.0,
+          170.0
+        ],
+        "confidence": "bounded_synthetic_rule"
+      },
+      {
+        "frame": 132,
+        "action": 2,
+        "option": "LOCAL_RECOVER",
+        "trigger_reason": "LOCAL_COLLISION_OVERRIDE",
+        "target_region": [
+          162.0,
+          170.0
+        ],
+        "confidence": "bounded_synthetic_rule"
+      },
+      {
+        "frame": 134,
+        "action": 0,
+        "option": "HOLD_STREAM",
+        "trigger_reason": "GEOMETRY_PROGRESS",
+        "target_region": [
+          162.0,
+          170.0
+        ],
+        "confidence": "bounded_synthetic_rule"
+      },
+      {
+        "frame": 136,
+        "action": 0,
+        "option": "HOLD_STREAM",
+        "trigger_reason": "GEOMETRY_PROGRESS",
+        "target_region": [
+          162.0,
+          170.0
+        ],
+        "confidence": "bounded_synthetic_rule"
+      },
+      {
+        "frame": 138,
+        "action": 0,
+        "option": "HOLD_STREAM",
+        "trigger_reason": "GEOMETRY_PROGRESS",
+        "target_region": [
+          162.0,
+          170.0
+        ],
+        "confidence": "bounded_synthetic_rule"
+      },
+      {
+        "frame": 140,
+        "action": 0,
+        "option": "HOLD_STREAM",
+        "trigger_reason": "GEOMETRY_PROGRESS",
+        "target_region": [
+          162.0,
+          170.0
+        ],
+        "confidence": "bounded_synthetic_rule"
+      },
+      {
+        "frame": 142,
+        "action": 0,
+        "option": "HOLD_STREAM",
+        "trigger_reason": "GEOMETRY_PROGRESS",
+        "target_region": [
+          162.0,
+          170.0
+        ],
+        "confidence": "bounded_synthetic_rule"
+      },
+      {
+        "frame": 144,
+        "action": 0,
+        "option": "HOLD_STREAM",
+        "trigger_reason": "GEOMETRY_PROGRESS",
+        "target_region": [
+          162.0,
+          170.0
+        ],
+        "confidence": "bounded_synthetic_rule"
+      },
+      {
+        "frame": 146,
+        "action": 0,
+        "option": "HOLD_STREAM",
+        "trigger_reason": "GEOMETRY_PROGRESS",
+        "target_region": [
+          162.0,
+          170.0
+        ],
+        "confidence": "bounded_synthetic_rule"
+      },
+      {
+        "frame": 148,
+        "action": 0,
+        "option": "HOLD_STREAM",
+        "trigger_reason": "GEOMETRY_PROGRESS",
+        "target_region": [
+          162.0,
+          170.0
+        ],
+        "confidence": "bounded_synthetic_rule"
+      },
+      {
+        "frame": 150,
+        "action": 0,
+        "option": "HOLD_STREAM",
+        "trigger_reason": "GEOMETRY_PROGRESS",
+        "target_region": [
+          162.0,
+          170.0
+        ],
+        "confidence": "bounded_synthetic_rule"
+      },
+      {
+        "frame": 152,
+        "action": 0,
+        "option": "HOLD_STREAM",
+        "trigger_reason": "GEOMETRY_PROGRESS",
+        "target_region": [
+          162.0,
+          170.0
+        ],
+        "confidence": "bounded_synthetic_rule"
+      },
+      {
+        "frame": 154,
+        "action": 0,
+        "option": "HOLD_STREAM",
+        "trigger_reason": "GEOMETRY_PROGRESS",
+        "target_region": [
+          162.0,
+          170.0
+        ],
+        "confidence": "bounded_synthetic_rule"
+      },
+      {
+        "frame": 156,
+        "action": 0,
+        "option": "HOLD_STREAM",
+        "trigger_reason": "GEOMETRY_PROGRESS",
+        "target_region": [
+          162.0,
+          170.0
+        ],
+        "confidence": "bounded_synthetic_rule"
+      },
+      {
+        "frame": 158,
+        "action": 0,
+        "option": "HOLD_STREAM",
+        "trigger_reason": "GEOMETRY_PROGRESS",
+        "target_region": [
+          162.0,
+          170.0
+        ],
+        "confidence": "bounded_synthetic_rule"
+      }
+    ],
+    "decisions_count": 80,
+    "horizon": 160,
+    "verify_verdict": "feasible",
+    "teacher_verified": true,
+    "switches": 7,
+    "distinct_actions": [
+      0,
+      1,
+      2
+    ],
+    "action_counts": {
+      "0": 64,
+      "1": 2,
+      "2": 14
+    },
+    "hud_constant": {
+      "hud_score": true,
+      "hud_status": true
+    },
+    "depth_frames": [
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        2
+      ],
+      [
+        0,
+        2,
+        4
+      ],
+      [
+        2,
+        4,
+        6
+      ],
+      [
+        4,
+        6,
+        8
+      ],
+      [
+        6,
+        8,
+        10
+      ],
+      [
+        8,
+        10,
+        12
+      ],
+      [
+        10,
+        12,
+        14
+      ],
+      [
+        12,
+        14,
+        16
+      ],
+      [
+        14,
+        16,
+        18
+      ],
+      [
+        16,
+        18,
+        20
+      ],
+      [
+        18,
+        20,
+        22
+      ],
+      [
+        20,
+        22,
+        24
+      ],
+      [
+        22,
+        24,
+        26
+      ],
+      [
+        24,
+        26,
+        28
+      ],
+      [
+        26,
+        28,
+        30
+      ],
+      [
+        28,
+        30,
+        32
+      ],
+      [
+        30,
+        32,
+        34
+      ],
+      [
+        32,
+        34,
+        36
+      ],
+      [
+        34,
+        36,
+        38
+      ],
+      [
+        36,
+        38,
+        40
+      ],
+      [
+        38,
+        40,
+        42
+      ],
+      [
+        40,
+        42,
+        44
+      ],
+      [
+        42,
+        44,
+        46
+      ],
+      [
+        44,
+        46,
+        48
+      ],
+      [
+        46,
+        48,
+        50
+      ],
+      [
+        48,
+        50,
+        52
+      ],
+      [
+        50,
+        52,
+        54
+      ],
+      [
+        52,
+        54,
+        56
+      ],
+      [
+        54,
+        56,
+        58
+      ],
+      [
+        56,
+        58,
+        60
+      ],
+      [
+        58,
+        60,
+        62
+      ],
+      [
+        60,
+        62,
+        64
+      ],
+      [
+        62,
+        64,
+        66
+      ],
+      [
+        64,
+        66,
+        68
+      ],
+      [
+        66,
+        68,
+        70
+      ],
+      [
+        68,
+        70,
+        72
+      ],
+      [
+        70,
+        72,
+        74
+      ],
+      [
+        72,
+        74,
+        76
+      ],
+      [
+        74,
+        76,
+        78
+      ],
+      [
+        76,
+        78,
+        80
+      ],
+      [
+        78,
+        80,
+        82
+      ],
+      [
+        80,
+        82,
+        84
+      ],
+      [
+        82,
+        84,
+        86
+      ],
+      [
+        84,
+        86,
+        88
+      ],
+      [
+        86,
+        88,
+        90
+      ],
+      [
+        88,
+        90,
+        92
+      ],
+      [
+        90,
+        92,
+        94
+      ],
+      [
+        92,
+        94,
+        96
+      ],
+      [
+        94,
+        96,
+        98
+      ],
+      [
+        96,
+        98,
+        100
+      ],
+      [
+        98,
+        100,
+        102
+      ],
+      [
+        100,
+        102,
+        104
+      ],
+      [
+        102,
+        104,
+        106
+      ],
+      [
+        104,
+        106,
+        108
+      ],
+      [
+        106,
+        108,
+        110
+      ],
+      [
+        108,
+        110,
+        112
+      ],
+      [
+        110,
+        112,
+        114
+      ],
+      [
+        112,
+        114,
+        116
+      ],
+      [
+        114,
+        116,
+        118
+      ],
+      [
+        116,
+        118,
+        120
+      ],
+      [
+        118,
+        120,
+        122
+      ],
+      [
+        120,
+        122,
+        124
+      ],
+      [
+        122,
+        124,
+        126
+      ],
+      [
+        124,
+        126,
+        128
+      ],
+      [
+        126,
+        128,
+        130
+      ],
+      [
+        128,
+        130,
+        132
+      ],
+      [
+        130,
+        132,
+        134
+      ],
+      [
+        132,
+        134,
+        136
+      ],
+      [
+        134,
+        136,
+        138
+      ],
+      [
+        136,
+        138,
+        140
+      ],
+      [
+        138,
+        140,
+        142
+      ],
+      [
+        140,
+        142,
+        144
+      ],
+      [
+        142,
+        144,
+        146
+      ],
+      [
+        144,
+        146,
+        148
+      ],
+      [
+        146,
+        148,
+        150
+      ],
+      [
+        148,
+        150,
+        152
+      ],
+      [
+        150,
+        152,
+        154
+      ],
+      [
+        152,
+        154,
+        156
+      ],
+      [
+        154,
+        156,
+        158
+      ]
+    ],
+    "region_sizes": {
+      "playfield": [
+        224,
+        192
+      ],
+      "hud_score": [
+        34,
+        216
+      ],
+      "hud_status": [
+        126,
+        216
+      ]
+    },
+    "labels": {
+      "rows": 80,
+      "action_valid": 80,
+      "positive_per_valid_row": 1,
+      "semantics": "single route first action only"
+    }
+  },
+  "geometry": {
+    "family": "F3",
+    "mirror": true,
+    "group": "wf18-F3-000",
+    "start_x": 102.0,
+    "start_canonical": 282.0,
+    "wall_frame": 64,
+    "coverage": [
+      100.0,
+      284.0
+    ],
+    "internal_gap": false,
+    "gap": null,
+    "gap_screen": null,
+    "preview_window": null,
+    "last_preview_frame": null,
+    "decisions_in_preview": null
+  },
+  "auxiliary": {},
+  "gap": {
+    "B0": null,
+    "A-s7": null,
+    "A-s17": null,
+    "A-s27": null,
+    "X-s7": null,
+    "X-s17": null,
+    "X-s27": null
+  },
+  "r18_six_baselines": {
+    "hold": {
+      "feasible": false,
+      "survived": false,
+      "first_hit": 38
+    },
+    "right": {
+      "feasible": false,
+      "survived": false,
+      "first_hit": 22
+    },
+    "left": {
+      "feasible": false,
+      "survived": false,
+      "first_hit": 76
+    },
+    "alternate": {
+      "feasible": false,
+      "survived": false,
+      "first_hit": 76
+    },
+    "random": {
+      "feasible": false,
+      "survived": false,
+      "first_hit": 76
+    },
+    "teacher_first_action": {
+      "feasible": false,
+      "survived": false,
+      "first_hit": 38
+    }
+  },
+  "closed_loop": {
+    "B0": {
+      "feasible": false,
+      "survived": false,
+      "goal_satisfied": true,
+      "first_hit": 22,
+      "decisions": 80,
+      "raw_unsupported_count": 45,
+      "action_counts": {
+        "-2": 1,
+        "2": 79
+      },
+      "switches": 2,
+      "distinct_candidates": [
+        3,
+        7
+      ],
+      "single_candidate": false
+    },
+    "A-s7": {
+      "feasible": false,
+      "survived": false,
+      "goal_satisfied": false,
+      "first_hit": 62,
+      "decisions": 80,
+      "raw_unsupported_count": 0,
+      "action_counts": {
+        "0": 74,
+        "2": 6
+      },
+      "switches": 1,
+      "distinct_candidates": [
+        0,
+        3
+      ],
+      "single_candidate": false
+    },
+    "A-s17": {
+      "feasible": false,
+      "survived": false,
+      "goal_satisfied": false,
+      "first_hit": 62,
+      "decisions": 80,
+      "raw_unsupported_count": 0,
+      "action_counts": {
+        "0": 74,
+        "2": 6
+      },
+      "switches": 1,
+      "distinct_candidates": [
+        0,
+        3
+      ],
+      "single_candidate": false
+    },
+    "A-s27": {
+      "feasible": false,
+      "survived": false,
+      "goal_satisfied": false,
+      "first_hit": 62,
+      "decisions": 80,
+      "raw_unsupported_count": 0,
+      "action_counts": {
+        "0": 74,
+        "2": 6
+      },
+      "switches": 1,
+      "distinct_candidates": [
+        0,
+        3
+      ],
+      "single_candidate": false
+    },
+    "X-s7": {
+      "feasible": false,
+      "survived": false,
+      "goal_satisfied": false,
+      "first_hit": 62,
+      "decisions": 80,
+      "raw_unsupported_count": 0,
+      "action_counts": {
+        "0": 74,
+        "2": 6
+      },
+      "switches": 1,
+      "distinct_candidates": [
+        0,
+        3
+      ],
+      "single_candidate": false
+    },
+    "X-s17": {
+      "feasible": false,
+      "survived": false,
+      "goal_satisfied": false,
+      "first_hit": 62,
+      "decisions": 80,
+      "raw_unsupported_count": 0,
+      "action_counts": {
+        "0": 72,
+        "2": 8
+      },
+      "switches": 1,
+      "distinct_candidates": [
+        0,
+        3
+      ],
+      "single_candidate": false
+    },
+    "X-s27": {
+      "feasible": false,
+      "survived": false,
+      "goal_satisfied": false,
+      "first_hit": 62,
+      "decisions": 80,
+      "raw_unsupported_count": 0,
+      "action_counts": {
+        "0": 73,
+        "2": 7
+      },
+      "switches": 1,
+      "distinct_candidates": [
+        0,
+        3
+      ],
+      "single_candidate": false
+    }
+  }
+}

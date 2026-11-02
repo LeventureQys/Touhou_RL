@@ -1,0 +1,53 @@
+{
+  "schema": "v373-world-filter-correction/1",
+  "reason": "the old-set probe row omitted any_constant_feasible, so the old-set constant_passable column of the frozen run is zero",
+  "old_set_constant_passable": {
+    "r11_validation": {
+      "F1": 2,
+      "F2": 2,
+      "F3": 2,
+      "all": 6
+    },
+    "r16_confirmation": {
+      "F1": 8,
+      "F2": 6,
+      "F3": 8,
+      "all": 22
+    },
+    "combined_old": {
+      "F1": 10,
+      "F2": 8,
+      "F3": 10,
+      "all": 28
+    }
+  },
+  "new_set_constant_passable": {
+    "F1": 0,
+    "F2": 0,
+    "F3": 0,
+    "all": 0
+  },
+  "r17_cross_check": {
+    "matches": true,
+    "compared": 24
+  },
+  "changed_identities": {
+    "D:\\WorkShop\\Touhou_RL\\tools\\rl\\v373_world_filter.py": {
+      "preregistered_sha256": "0064682465d899493a7f64ae8a7bdf11e781003ba2f6ae7ae59a6a7392ad872f",
+      "current_sha256": "c09afafff032e8df9e98a7f9cab0121bba30c05301ac770e74c4aa028c1be052"
+    },
+    "tests\\test_v373_world_filter.py": {
+      "preregistered_sha256": "6ed43f38b6a7dbbd1aef28cc2033140c8269f7158d6fd648b75e12cab7aa2253",
+      "current_sha256": "7e9065ca5089eba31ab750ceffee617d31befccbbceab483d54da9b58e7fbffd"
+    }
+  },
+  "generation_rerun": false,
+  "search_rerun": false,
+  "worlds_reevaluated": false,
+  "run_artifacts_unchanged": true,
+  "run_artifacts": 39,
+  "correction_artifact_sha256": {
+    "comparison.json": "83a77788b20e3fc91d353b3ba4df649116f8bbf94f79a51ef501cea9f6a6eed2",
+    "summary.json": "359deac3e1a6749007526946a8d413a5d31ff81a764606b7f42454068693a52d"
+  }
+}

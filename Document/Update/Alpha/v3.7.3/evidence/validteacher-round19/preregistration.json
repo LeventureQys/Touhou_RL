@@ -1,0 +1,180 @@
+{
+  "schema": "v373-valid-teacher-prereg/1",
+  "identities": {
+    "tools/rl/v373_valid_teacher_eval.py": "34bdf7c8572b1626334944408f69abf7b26633175a0b54cafe955fb188a594c1",
+    "tests/test_v373_valid_teacher_eval.py": "5e513797c470e6850368b1d54430f7f6c17aac99afa9edc6c4b063876b5bf7f5",
+    "tools/rl/v373_world_filter.py": "ff48cfd036e4ab027add138465052765b90089d992bfebe233d6b015d4685e2a",
+    "touhou_rl/tactical_teacher.py": "c23c9b91ba8c692265f4171dd430d08c508d5884f26370581943727680d0ad73",
+    "touhou_rl/tactical_teacher_v2.py": "47d39e1c02c32865ed5db46befdc1ab22d7178ded86eb1333409930ffd648e95",
+    "touhou_rl/tactical_teacher_validation.py": "86608f2774553caa473e6d5d0e35c44fe42e12064e5ec6ebe1d3e4913bf3d92b",
+    "touhou_rl/tactical_scenarios.py": "471f73debcbb58ee3f184948b2368c6e453a59898c7286e68b29b9a863d84906",
+    "touhou_rl/tactical_synthetic_closed_loop.py": "b5479a075e3f07a69019924c26cf3db7f00d0e14c85b8f3fbd1fd8c980f45fed",
+    "touhou_rl/tactical_data.py": "c0c9cd1e3a22ea887eba1e8feef61809557df145d3eecc03621b44696ddece32",
+    "Document/Update/Alpha/v3.7.3/evidence/worldfilter-round18/run/manifest.json": "9bd3a1b8d31784d6e0fd546fc701f93be611311d1743c78f159e77a4f5fe7fa7",
+    "Document/Update/Alpha/v3.7.3/evidence/worldfilter-round18/run/sha256.json": "e1de7bdeaa2dfb6aa60dbfb8f9ff1317a853ea61e9eb7c53b8af401d3f379fd1",
+    "Document/Update/Alpha/v3.7.3/evidence/worldfilter-round18/preregistration.json": "9097e3d9213fd21f6081f94425e1cdb1701e9c56b3b9e2ca5216fa5c63962019",
+    "Document/Update/Alpha/v3.7.3/reports/P1-worldfilter-round18.md": "67c4c1185d381882cd0ddfdfaa63c90ad48cdb88c10d25a2e35a97594e1ff546"
+  },
+  "purpose": "teacher capability on the frozen round18 development worlds only: no training, no trained policy, no checkpoint, no teacher labels, no formal gate, no game execution",
+  "source": {
+    "manifest": "Document/Update/Alpha/v3.7.3/evidence/worldfilter-round18/run/manifest.json",
+    "manifest_sha256": "9bd3a1b8d31784d6e0fd546fc701f93be611311d1743c78f159e77a4f5fe7fa7",
+    "r18_preregistration": "Document/Update/Alpha/v3.7.3/evidence/worldfilter-round18/preregistration.json",
+    "r18_preregistration_sha256": "9097e3d9213fd21f6081f94425e1cdb1701e9c56b3b9e2ca5216fa5c63962019",
+    "r18_report": "Document/Update/Alpha/v3.7.3/reports/P1-worldfilter-round18.md",
+    "r18_schema": "v373-world-filter-run/1",
+    "r18_totals": {
+      "events": 28,
+      "groups": 14,
+      "baseline_passes": 0,
+      "weak_passes": 0,
+      "reference_witnesses": 28,
+      "all_three_constants_hit": 28,
+      "all_six_baselines_hit": 28,
+      "constant_passable": 0,
+      "constant_pass_pairs": 0,
+      "changed_steps_vs_hold_min": 4
+    }
+  },
+  "expected": {
+    "events": 28,
+    "groups": 14,
+    "per_family": {
+      "F1": {
+        "events": 12,
+        "groups": 6
+      },
+      "F2": {
+        "events": 4,
+        "groups": 2
+      },
+      "F3": {
+        "events": 12,
+        "groups": 6
+      }
+    }
+  },
+  "criterion": {
+    "worlds": {
+      "source": "Document/Update/Alpha/v3.7.3/evidence/worldfilter-round18/run/manifest.json",
+      "load": "read-only: the twenty-eight round18 worlds are loaded from the frozen manifest and never regenerated; no parameter is changed, no world is replaced, no budget is added",
+      "expected": {
+        "events": 28,
+        "groups": 14,
+        "per_family": {
+          "F1": {
+            "events": 12,
+            "groups": 6
+          },
+          "F2": {
+            "events": 4,
+            "groups": 2
+          },
+          "F3": {
+            "events": 12,
+            "groups": 6
+          }
+        }
+      }
+    },
+    "loop": "identical to round18: tactical_teacher_validation.advance, two logical frames per decision, horizon 160 = eighty decisions, sticky collision, no pixels, no rendering, no game",
+    "teachers": {
+      "teacher": "touhou_rl.tactical_teacher.TacticalTeacher, unmodified",
+      "teacher_v2": "touhou_rl.tactical_teacher_v2.TacticalTeacherV2, unmodified",
+      "driver": "the driver owns the physics: every decision is executed with the verifier own advance(); only decide() is called on the teachers. Their rollout() helpers are not used because tactical_teacher.rollout replays through tactical_scenarios.advance, whose coverage/gap/window/threshold are hard-coded defaults and therefore are not this world"
+    },
+    "metrics": {
+      "survived": "full horizon 160 and no sticky collision",
+      "goal_satisfied": "F3: canonical x <= goal at some sampled state; F1/F2: true by the round18 convention, they have no crossing goal",
+      "feasible": "survived and goal_satisfied, identical to round18 outcome()",
+      "first_hit": "first logical frame with a sticky collision, null if never",
+      "verify": "tactical_teacher_validation.verify(world, actions) on the complete eighty-decision sequence, non-early: feasible / rejected_witness / unknown",
+      "counts": "reused, not redefined: the six round18 baselines run through round18 policies()/causal_loop()/outcome() and must reproduce the stored manifest"
+    },
+    "degenerate": {
+      "definition": "an episode whose eighty decisions contain exactly one distinct action is constant; if it is also feasible the success is marked degenerate, reported separately and never counted as teacher capability",
+      "reason": "a constant teacher episode is by construction the same trajectory as the corresponding round18 constant baseline, which already fails on these worlds; the flag keeps that explicit instead of silently crediting it",
+      "capability_success": "feasible and not single_action",
+      "cross_check": "every constant episode is compared with the round18 extra_constants probe and must agree, otherwise the run aborts"
+    },
+    "action_changes": {
+      "definition": "switches = number of consecutive decision pairs with a different action over the eighty decisions; reported per world and summed/averaged per teacher per family",
+      "reported": [
+        "switches_total",
+        "switches_mean",
+        "switches_median",
+        "switches_max",
+        "switch_events"
+      ]
+    },
+    "family_verdict": {
+      "capable": "at least one capability success in the family",
+      "not_capable": "zero capability successes",
+      "both_failed": "both teachers not_capable: the family is reported as a failure and kept as a failure, next to the round18 reference witness count",
+      "no_relaxation": "no threshold is loosened, no world is swapped, no teacher is tuned, no action set is widened, no extra attempt is made, no seed is drawn"
+    },
+    "reference": "read-only: every round18 reference witness is replayed with verify() to show the family is solvable at all; this is a contrast, never a success criterion for a teacher",
+    "split": {
+      "rule": "one group = base + mirror, atomic; within each family the groups are ordered by group name (candidate index) and alternate train/validation starting with train at index 0",
+      "f2": "two groups only: index 0 train, index 1 validation",
+      "assertions": [
+        "no group crosses a split",
+        "base and mirror are always in one group and therefore in one split",
+        "every family has both splits",
+        "fourteen groups and twenty-eight events, no event in two groups",
+        "seven train and seven validation groups, fourteen and fourteen events"
+      ]
+    },
+    "flags": {
+      "synthetic_development_worlds": true,
+      "test_split": false,
+      "training_steps": 0,
+      "trained_policy": false,
+      "checkpoint": null,
+      "teacher_labels": 0,
+      "policy_evaluations": 0,
+      "formal_gate": false,
+      "deployable": false,
+      "game": false
+    },
+    "execution": {
+      "order": [
+        "tests",
+        "preregister",
+        "tests",
+        "run",
+        "tests"
+      ],
+      "overwrite": "directories are created with exist_ok=False and every JSON is opened in x mode",
+      "reruns": "exactly one evaluation run; no rerun, no retune, no repair pass"
+    }
+  },
+  "split": {
+    "rule": "alternate the family-internal group index, train at index 0",
+    "expected": {
+      "groups": {
+        "train": 7,
+        "validation": 7
+      },
+      "events": {
+        "train": 14,
+        "validation": 14
+      },
+      "f2": {
+        "train": 1,
+        "validation": 1
+      }
+    }
+  },
+  "flags": {
+    "synthetic_development_worlds": true,
+    "test_split": false,
+    "training_steps": 0,
+    "trained_policy": false,
+    "checkpoint": null,
+    "teacher_labels": 0,
+    "formal_gate": false,
+    "deployable": false,
+    "game": false
+  }
+}

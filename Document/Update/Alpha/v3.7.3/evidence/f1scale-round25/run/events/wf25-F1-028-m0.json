@@ -1,0 +1,529 @@
+{
+  "schema": "v373-f1-scale-event/1",
+  "event_id": "wf25-F1-028-m0",
+  "set": "new_heldout",
+  "family": "F1",
+  "group": "wf25-F1-028",
+  "mirror": false,
+  "scenario": {
+    "event_id": "wf25-F1-028-m0",
+    "family": "F1",
+    "template_group": "wf25-F1-028",
+    "seed": 25028,
+    "start_x": 224.0,
+    "mirror": false,
+    "horizon": 160,
+    "fire_interval": 16,
+    "bullet_speed": 8.0,
+    "wall_frame": 52,
+    "internal_gap": true,
+    "model_known": true,
+    "split": "development",
+    "depletion_pressure": false,
+    "coverage": [
+      8.0,
+      376.0
+    ],
+    "gap": [
+      168.0,
+      184.0
+    ],
+    "window": [
+      34,
+      104
+    ],
+    "threshold": 180.0,
+    "goal": 160.0,
+    "origin": [
+      192.0,
+      100.0
+    ],
+    "burst": false
+  },
+  "scenario_sha256": "510ea6077a2c4f7cefcd057e552f6d6801f801440a8c97c2d90fde157c27f3db",
+  "trained_by": [],
+  "asset": null,
+  "r18_six_baselines": {
+    "hold": {
+      "feasible": false,
+      "survived": false,
+      "first_hit": 52
+    },
+    "right": {
+      "feasible": false,
+      "survived": false,
+      "first_hit": 52
+    },
+    "left": {
+      "feasible": false,
+      "survived": false,
+      "first_hit": 52
+    },
+    "alternate": {
+      "feasible": false,
+      "survived": false,
+      "first_hit": 56
+    },
+    "random": {
+      "feasible": false,
+      "survived": false,
+      "first_hit": 52
+    },
+    "teacher_first_action": {
+      "feasible": false,
+      "survived": false,
+      "first_hit": 52
+    }
+  },
+  "closed_loop": {
+    "B0": {
+      "feasible": false,
+      "survived": false,
+      "first_hit": 52,
+      "decisions": 80,
+      "switches": 2,
+      "action_counts": {
+        "-1": 1,
+        "2": 79
+      },
+      "single_candidate": false
+    },
+    "S-s7": {
+      "feasible": false,
+      "survived": false,
+      "first_hit": 52,
+      "decisions": 80,
+      "switches": 2,
+      "action_counts": {
+        "-2": 2,
+        "0": 74,
+        "2": 4
+      },
+      "single_candidate": false
+    },
+    "S-s17": {
+      "feasible": false,
+      "survived": false,
+      "first_hit": 52,
+      "decisions": 80,
+      "switches": 2,
+      "action_counts": {
+        "-2": 2,
+        "0": 74,
+        "2": 4
+      },
+      "single_candidate": false
+    },
+    "S-s27": {
+      "feasible": false,
+      "survived": false,
+      "first_hit": 52,
+      "decisions": 80,
+      "switches": 2,
+      "action_counts": {
+        "-2": 2,
+        "0": 74,
+        "2": 4
+      },
+      "single_candidate": false
+    },
+    "L-s7": {
+      "feasible": false,
+      "survived": false,
+      "first_hit": 52,
+      "decisions": 80,
+      "switches": 2,
+      "action_counts": {
+        "-2": 2,
+        "0": 74,
+        "2": 4
+      },
+      "single_candidate": false
+    },
+    "L-s17": {
+      "feasible": false,
+      "survived": false,
+      "first_hit": 52,
+      "decisions": 80,
+      "switches": 2,
+      "action_counts": {
+        "-2": 2,
+        "0": 74,
+        "2": 4
+      },
+      "single_candidate": false
+    },
+    "L-s27": {
+      "feasible": false,
+      "survived": false,
+      "first_hit": 52,
+      "decisions": 80,
+      "switches": 2,
+      "action_counts": {
+        "-2": 2,
+        "0": 74,
+        "2": 4
+      },
+      "single_candidate": false
+    }
+  },
+  "f1_diagnostic": {
+    "B0": {
+      "event_id": "wf25-F1-028-m0",
+      "group": "wf25-F1-028",
+      "mirror": false,
+      "complete": true,
+      "wall_frame": 52,
+      "gap": [
+        168.0,
+        184.0
+      ],
+      "gap_screen": [
+        168,
+        184
+      ],
+      "coverage": [
+        8.0,
+        376.0
+      ],
+      "preview": [
+        7,
+        51
+      ],
+      "decisions_in_preview_window": 22,
+      "start_canonical": 224.0,
+      "net_canonical_move": 152.0,
+      "direction": "right",
+      "first_move_frame": 1,
+      "entered_gap": false,
+      "entered_gap_frame": null,
+      "entered_gap_decision": null,
+      "frames_in_gap_before_wall": 0,
+      "first_frame_in_gap_before_wall": null,
+      "in_gap_at_wall": false,
+      "canonical_at_wall": 376.0,
+      "distance_to_gap_at_wall": 192.0,
+      "hit_frame": 52,
+      "mechanism": "stopped_right_of_the_gap",
+      "mechanism_note": "advance semantics were rebuilt per logical frame; \"in_gap_at_wall\" is the position at wall_frame-1, the last frame before the band becomes lethal",
+      "network": "B0",
+      "split": "new_heldout",
+      "feasible": false,
+      "survived": false,
+      "decisions": 80,
+      "screen_direction": "right",
+      "screen_net_px": 152.0,
+      "signed_error_px": 192.0,
+      "arm": "B0",
+      "mirror_group": "base",
+      "need": "left",
+      "verdict": "away"
+    },
+    "S-s7": {
+      "event_id": "wf25-F1-028-m0",
+      "group": "wf25-F1-028",
+      "mirror": false,
+      "complete": true,
+      "wall_frame": 52,
+      "gap": [
+        168.0,
+        184.0
+      ],
+      "gap_screen": [
+        168,
+        184
+      ],
+      "coverage": [
+        8.0,
+        376.0
+      ],
+      "preview": [
+        7,
+        51
+      ],
+      "decisions_in_preview_window": 22,
+      "start_canonical": 224.0,
+      "net_canonical_move": 16.0,
+      "direction": "right",
+      "first_move_frame": 1,
+      "entered_gap": false,
+      "entered_gap_frame": null,
+      "entered_gap_decision": null,
+      "frames_in_gap_before_wall": 0,
+      "first_frame_in_gap_before_wall": null,
+      "in_gap_at_wall": false,
+      "canonical_at_wall": 240.0,
+      "distance_to_gap_at_wall": 56.0,
+      "hit_frame": 52,
+      "mechanism": "stopped_right_of_the_gap",
+      "mechanism_note": "advance semantics were rebuilt per logical frame; \"in_gap_at_wall\" is the position at wall_frame-1, the last frame before the band becomes lethal",
+      "network": "S-s7",
+      "split": "new_heldout",
+      "feasible": false,
+      "survived": false,
+      "decisions": 80,
+      "screen_direction": "right",
+      "screen_net_px": 16.0,
+      "signed_error_px": 56.0,
+      "arm": "S",
+      "mirror_group": "base",
+      "need": "left",
+      "verdict": "away"
+    },
+    "S-s17": {
+      "event_id": "wf25-F1-028-m0",
+      "group": "wf25-F1-028",
+      "mirror": false,
+      "complete": true,
+      "wall_frame": 52,
+      "gap": [
+        168.0,
+        184.0
+      ],
+      "gap_screen": [
+        168,
+        184
+      ],
+      "coverage": [
+        8.0,
+        376.0
+      ],
+      "preview": [
+        7,
+        51
+      ],
+      "decisions_in_preview_window": 22,
+      "start_canonical": 224.0,
+      "net_canonical_move": 16.0,
+      "direction": "right",
+      "first_move_frame": 1,
+      "entered_gap": false,
+      "entered_gap_frame": null,
+      "entered_gap_decision": null,
+      "frames_in_gap_before_wall": 0,
+      "first_frame_in_gap_before_wall": null,
+      "in_gap_at_wall": false,
+      "canonical_at_wall": 240.0,
+      "distance_to_gap_at_wall": 56.0,
+      "hit_frame": 52,
+      "mechanism": "stopped_right_of_the_gap",
+      "mechanism_note": "advance semantics were rebuilt per logical frame; \"in_gap_at_wall\" is the position at wall_frame-1, the last frame before the band becomes lethal",
+      "network": "S-s17",
+      "split": "new_heldout",
+      "feasible": false,
+      "survived": false,
+      "decisions": 80,
+      "screen_direction": "right",
+      "screen_net_px": 16.0,
+      "signed_error_px": 56.0,
+      "arm": "S",
+      "mirror_group": "base",
+      "need": "left",
+      "verdict": "away"
+    },
+    "S-s27": {
+      "event_id": "wf25-F1-028-m0",
+      "group": "wf25-F1-028",
+      "mirror": false,
+      "complete": true,
+      "wall_frame": 52,
+      "gap": [
+        168.0,
+        184.0
+      ],
+      "gap_screen": [
+        168,
+        184
+      ],
+      "coverage": [
+        8.0,
+        376.0
+      ],
+      "preview": [
+        7,
+        51
+      ],
+      "decisions_in_preview_window": 22,
+      "start_canonical": 224.0,
+      "net_canonical_move": 16.0,
+      "direction": "right",
+      "first_move_frame": 1,
+      "entered_gap": false,
+      "entered_gap_frame": null,
+      "entered_gap_decision": null,
+      "frames_in_gap_before_wall": 0,
+      "first_frame_in_gap_before_wall": null,
+      "in_gap_at_wall": false,
+      "canonical_at_wall": 240.0,
+      "distance_to_gap_at_wall": 56.0,
+      "hit_frame": 52,
+      "mechanism": "stopped_right_of_the_gap",
+      "mechanism_note": "advance semantics were rebuilt per logical frame; \"in_gap_at_wall\" is the position at wall_frame-1, the last frame before the band becomes lethal",
+      "network": "S-s27",
+      "split": "new_heldout",
+      "feasible": false,
+      "survived": false,
+      "decisions": 80,
+      "screen_direction": "right",
+      "screen_net_px": 16.0,
+      "signed_error_px": 56.0,
+      "arm": "S",
+      "mirror_group": "base",
+      "need": "left",
+      "verdict": "away"
+    },
+    "L-s7": {
+      "event_id": "wf25-F1-028-m0",
+      "group": "wf25-F1-028",
+      "mirror": false,
+      "complete": true,
+      "wall_frame": 52,
+      "gap": [
+        168.0,
+        184.0
+      ],
+      "gap_screen": [
+        168,
+        184
+      ],
+      "coverage": [
+        8.0,
+        376.0
+      ],
+      "preview": [
+        7,
+        51
+      ],
+      "decisions_in_preview_window": 22,
+      "start_canonical": 224.0,
+      "net_canonical_move": 16.0,
+      "direction": "right",
+      "first_move_frame": 1,
+      "entered_gap": false,
+      "entered_gap_frame": null,
+      "entered_gap_decision": null,
+      "frames_in_gap_before_wall": 0,
+      "first_frame_in_gap_before_wall": null,
+      "in_gap_at_wall": false,
+      "canonical_at_wall": 240.0,
+      "distance_to_gap_at_wall": 56.0,
+      "hit_frame": 52,
+      "mechanism": "stopped_right_of_the_gap",
+      "mechanism_note": "advance semantics were rebuilt per logical frame; \"in_gap_at_wall\" is the position at wall_frame-1, the last frame before the band becomes lethal",
+      "network": "L-s7",
+      "split": "new_heldout",
+      "feasible": false,
+      "survived": false,
+      "decisions": 80,
+      "screen_direction": "right",
+      "screen_net_px": 16.0,
+      "signed_error_px": 56.0,
+      "arm": "L",
+      "mirror_group": "base",
+      "need": "left",
+      "verdict": "away"
+    },
+    "L-s17": {
+      "event_id": "wf25-F1-028-m0",
+      "group": "wf25-F1-028",
+      "mirror": false,
+      "complete": true,
+      "wall_frame": 52,
+      "gap": [
+        168.0,
+        184.0
+      ],
+      "gap_screen": [
+        168,
+        184
+      ],
+      "coverage": [
+        8.0,
+        376.0
+      ],
+      "preview": [
+        7,
+        51
+      ],
+      "decisions_in_preview_window": 22,
+      "start_canonical": 224.0,
+      "net_canonical_move": 16.0,
+      "direction": "right",
+      "first_move_frame": 1,
+      "entered_gap": false,
+      "entered_gap_frame": null,
+      "entered_gap_decision": null,
+      "frames_in_gap_before_wall": 0,
+      "first_frame_in_gap_before_wall": null,
+      "in_gap_at_wall": false,
+      "canonical_at_wall": 240.0,
+      "distance_to_gap_at_wall": 56.0,
+      "hit_frame": 52,
+      "mechanism": "stopped_right_of_the_gap",
+      "mechanism_note": "advance semantics were rebuilt per logical frame; \"in_gap_at_wall\" is the position at wall_frame-1, the last frame before the band becomes lethal",
+      "network": "L-s17",
+      "split": "new_heldout",
+      "feasible": false,
+      "survived": false,
+      "decisions": 80,
+      "screen_direction": "right",
+      "screen_net_px": 16.0,
+      "signed_error_px": 56.0,
+      "arm": "L",
+      "mirror_group": "base",
+      "need": "left",
+      "verdict": "away"
+    },
+    "L-s27": {
+      "event_id": "wf25-F1-028-m0",
+      "group": "wf25-F1-028",
+      "mirror": false,
+      "complete": true,
+      "wall_frame": 52,
+      "gap": [
+        168.0,
+        184.0
+      ],
+      "gap_screen": [
+        168,
+        184
+      ],
+      "coverage": [
+        8.0,
+        376.0
+      ],
+      "preview": [
+        7,
+        51
+      ],
+      "decisions_in_preview_window": 22,
+      "start_canonical": 224.0,
+      "net_canonical_move": 16.0,
+      "direction": "right",
+      "first_move_frame": 1,
+      "entered_gap": false,
+      "entered_gap_frame": null,
+      "entered_gap_decision": null,
+      "frames_in_gap_before_wall": 0,
+      "first_frame_in_gap_before_wall": null,
+      "in_gap_at_wall": false,
+      "canonical_at_wall": 240.0,
+      "distance_to_gap_at_wall": 56.0,
+      "hit_frame": 52,
+      "mechanism": "stopped_right_of_the_gap",
+      "mechanism_note": "advance semantics were rebuilt per logical frame; \"in_gap_at_wall\" is the position at wall_frame-1, the last frame before the band becomes lethal",
+      "network": "L-s27",
+      "split": "new_heldout",
+      "feasible": false,
+      "survived": false,
+      "decisions": 80,
+      "screen_direction": "right",
+      "screen_net_px": 16.0,
+      "signed_error_px": 56.0,
+      "arm": "L",
+      "mirror_group": "base",
+      "need": "left",
+      "verdict": "away"
+    }
+  }
+}

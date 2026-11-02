@@ -1,0 +1,12 @@
+{
+  "schema": "v373-test-evidence/1",
+  "date": "2026-11-01",
+  "workdir": "D:\\WorkShop\\Touhou_RL",
+  "runs": [
+    {"command": "python -m pytest touhou_rl/tests/test_experiment_clock.py touhou_rl/tests/test_experiment_harness.py touhou_rl/tests/test_experiment_stage_a.py -q -p no:cacheprovider --basetemp .tmp/v373-p0-20261101", "exit_code": 0, "passed": 48, "seconds": 17.16, "scope": "fake execution pipeline only"},
+    {"command": "python -m pytest touhou_rl/tests -q -p no:cacheprovider --basetemp .tmp/v373-regression-20261101", "exit_code": 0, "passed": 1330, "xfailed": 1, "subtests_passed": 4, "seconds": 92.14, "scope": "snapshot before final R1/R2 scene changes"},
+    {"command": "python -m pytest touhou_rl/tests/test_tactical_scenarios.py touhou_rl/tests/test_tactical_teacher.py touhou_rl/tests/test_tactical_policy.py touhou_rl/tests/test_tactical_runner.py touhou_rl/tests/test_tactical_train.py -q -p no:cacheprovider --basetemp .tmp/v373-final-20261101", "exit_code": 0, "passed": 36, "seconds": 1.70, "scope": "new tactical integration during R2 development; final R2 test recorded separately"}
+  ],
+  "live_game_verified": false,
+  "capability_gate_passed": false
+}

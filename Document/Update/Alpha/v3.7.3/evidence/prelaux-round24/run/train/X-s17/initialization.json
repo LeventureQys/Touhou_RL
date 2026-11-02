@@ -1,0 +1,46 @@
+{
+  "head_state_sha256": "f7d03e205f378179c8705c846361c439271939276f73b4502f5a5a80553fa742",
+  "aux_state_sha256": "b89fe88dec535a60d1847c81eea08d5f5bfe6f5312440facc81bf728b2c3a6e2",
+  "seed": 17,
+  "arm": "X",
+  "aux_weight": 0.5,
+  "loss_arm": "A",
+  "aux": {
+    "aux": {
+      "layer": "Linear(256, 2, bias=True)",
+      "parameters": 514,
+      "outside_heads": true,
+      "never_an_input": true,
+      "note": "it never enters `features`, `history` or a pixel region; it only adds gradient to the shared GRU while training"
+    },
+    "policy_forward": "unchanged: PrivAuxPolicy overrides no method of TacticalPolicy",
+    "state_source": "forward pre-hook on heads[\"option\"], whose input is the GRU state",
+    "parent_detach": "the parent detaches `features`; that is inert here because the auxiliary head is downstream of the GRU and the backbone is frozen",
+    "parameters": {
+      "policy_heads": 429200,
+      "auxiliary": 514
+    }
+  },
+  "label": {
+    "task": "from the GRU state predict whether the safe gap lies left or right OF THE PLAYER, i.e. which sign of action closes the distance to the slot: label = sign(gap screen centre - player screen x), gap from round21.telegraph_gap(s) (privileged world parameter), player x from the frozen teacher trajectory (train) or the checkpoint's own trajectory (scoring); the label is read at the first row of the telegraph window",
+    "rule": "first_preview_row",
+    "labels": [
+      "left",
+      "right"
+    ],
+    "reference": "player x",
+    "round23_reference": 192.0
+  },
+  "shared_config": "both arms are N1 with the round20 control loss and the same auxiliary head from the same RNG state; only the auxiliary loss weight differs (A 0.0, X 0.5)",
+  "feature_storage_shared": true,
+  "supervised_events": 14,
+  "aux_supervised_events": [
+    "wf18-F1-002-m0",
+    "wf18-F1-002-m1",
+    "wf18-F1-006-m0",
+    "wf18-F1-006-m1",
+    "wf18-F1-009-m0",
+    "wf18-F1-009-m1"
+  ],
+  "excluded_events": []
+}

@@ -1,0 +1,16 @@
+{
+  "date": "2026-11-01",
+  "working_directory": "D:\\WorkShop\\Touhou_RL",
+  "commands": [
+    {"command": "python -m pytest tests/test_tactical_task_teacher.py -q -p no:cacheprovider --basetemp .tmp/task-teacher-round2-20261101-a", "exit_code": 0, "result": "36 passed in 0.14s", "timing": "before preregistration; includes parametrized closed-loop tests on all 24 development tasks"},
+    {"command": "python -m touhou_rl.tactical_task_teacher --output Document/Update/Alpha/v3.7.3/evidence/task-teacher-round2", "exit_code": 0, "result": "24/24 teacher goals, 24/24 independent feasible references; 24 JSON and 24 SVG", "timing": "after preregistration and holdout design were saved"},
+    {"command": "python -m pytest tests/test_tactical_tasks.py tests/test_tactical_task_teacher.py touhou_rl/tests/test_tactical_scenarios.py touhou_rl/tests/test_tactical_teacher.py -q -p no:cacheprovider --basetemp .tmp/task-teacher-round2-20261101-b", "exit_code": 0, "result": "77 passed in 0.47s", "timing": "after development evaluation"}
+  ],
+  "preregistration_sha256": "d72ae1ca828b886bc36dd9b1be86c7f5d2dcb11fc50c896cb01556fefd198578",
+  "holdout_design_sha256": "881c4a1cb80bb558a1f5dc2becac2ba064b6be2b114cf6e4beb1970e3a1a3d66",
+  "preregistration_addendum": "The preregistration correctly precedes the evaluation CLI, but its wording about prior tests understated exposure: the prior 36-test run already exercised all 24 development rollouts, plus a one-instance deliberately failing evaluator. Therefore this is a development replication under a frozen protocol, NOT outcome-blind preregistration or independent confirmation. Original preregistration is preserved unmodified and its hash remains valid.",
+  "formal_training_labels": false,
+  "game_input": false,
+  "existing_modules_modified_by_this_task": [],
+  "background_jobs": []
+}

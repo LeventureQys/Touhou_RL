@@ -1,0 +1,687 @@
+{
+  "schema": "v373-b0-behaviour/1",
+  "baseline_sha256": "74abde8a996c13fae832913e4e5533bc9490688bc4c0aa73560e695f065d14be",
+  "checkpoint": "Document\\Update\\Alpha\\v3.7.3\\evidence\\seed-confirm-round16\\run\\train\\weighted-s7\\research-heads.pt",
+  "checkpoint_sha256": "ef9b27c3d39b265bcb6b58312f5c61c241323f207e0ec9431f424c4de71342e9",
+  "arm": "N1",
+  "condition": "horizontal_masked, causal depth3, actual-history, sticky hit to horizon",
+  "note": "B0 path uses only frozen baseline policy logits. With --checkpoint/--arm N1 the research heads are loaded read-only.",
+  "summary": {
+    "F1": {
+      "events": 8,
+      "feasible": 5,
+      "survived": 5,
+      "action_share": {
+        "hold": 0.7016,
+        "right": 0.2484,
+        "left": 0.05
+      },
+      "first_actions": {
+        "right": 8
+      },
+      "median_switches": 13
+    },
+    "F2": {
+      "events": 8,
+      "feasible": 3,
+      "survived": 3,
+      "action_share": {
+        "hold": 0.6891,
+        "right": 0.2781,
+        "left": 0.0328
+      },
+      "first_actions": {
+        "right": 8
+      },
+      "median_switches": 1
+    },
+    "F3": {
+      "events": 8,
+      "feasible": 1,
+      "survived": 1,
+      "action_share": {
+        "hold": 0.6109,
+        "right": 0.2422,
+        "left": 0.1469
+      },
+      "first_actions": {
+        "left": 4,
+        "right": 4
+      },
+      "median_switches": 4
+    },
+    "all": {
+      "events": 24,
+      "feasible": 9,
+      "survived": 9,
+      "action_share": {
+        "hold": 0.6672,
+        "right": 0.2562,
+        "left": 0.0766
+      },
+      "first_actions": {
+        "right": 20,
+        "left": 4
+      },
+      "median_switches": 3
+    }
+  },
+  "events": [
+    {
+      "event_id": "confirm-F1-00-m0",
+      "family": "F1",
+      "mirror": false,
+      "feasible": false,
+      "survived": false,
+      "goal_satisfied": true,
+      "first_hit": 58,
+      "first_action": 3,
+      "action_counts": {
+        "hold": 58,
+        "right": 13,
+        "left": 9
+      },
+      "switches": 19,
+      "x_trace": [
+        214.0,
+        222.0,
+        230.0,
+        238.0,
+        230.0,
+        238.0,
+        230.0,
+        238.0
+      ]
+    },
+    {
+      "event_id": "confirm-F1-00-m1",
+      "family": "F1",
+      "mirror": true,
+      "feasible": true,
+      "survived": true,
+      "goal_satisfied": true,
+      "first_hit": null,
+      "first_action": 3,
+      "action_counts": {
+        "hold": 55,
+        "right": 25
+      },
+      "switches": 1,
+      "x_trace": [
+        186.0,
+        194.0,
+        202.0,
+        210.0,
+        218.0,
+        226.0,
+        234.0,
+        242.0
+      ]
+    },
+    {
+      "event_id": "confirm-F1-01-m0",
+      "family": "F1",
+      "mirror": false,
+      "feasible": true,
+      "survived": true,
+      "goal_satisfied": true,
+      "first_hit": null,
+      "first_action": 3,
+      "action_counts": {
+        "hold": 51,
+        "right": 29
+      },
+      "switches": 1,
+      "x_trace": [
+        186.0,
+        194.0,
+        202.0,
+        210.0,
+        218.0,
+        226.0,
+        234.0,
+        242.0
+      ]
+    },
+    {
+      "event_id": "confirm-F1-01-m1",
+      "family": "F1",
+      "mirror": true,
+      "feasible": false,
+      "survived": false,
+      "goal_satisfied": true,
+      "first_hit": 46,
+      "first_action": 3,
+      "action_counts": {
+        "hold": 58,
+        "right": 13,
+        "left": 9
+      },
+      "switches": 19,
+      "x_trace": [
+        214.0,
+        222.0,
+        230.0,
+        238.0,
+        230.0,
+        238.0,
+        230.0,
+        238.0
+      ]
+    },
+    {
+      "event_id": "confirm-F1-02-m0",
+      "family": "F1",
+      "mirror": false,
+      "feasible": true,
+      "survived": true,
+      "goal_satisfied": true,
+      "first_hit": null,
+      "first_action": 3,
+      "action_counts": {
+        "hold": 55,
+        "right": 25
+      },
+      "switches": 1,
+      "x_trace": [
+        226.0,
+        234.0,
+        242.0,
+        250.0,
+        258.0,
+        266.0,
+        274.0,
+        282.0
+      ]
+    },
+    {
+      "event_id": "confirm-F1-02-m1",
+      "family": "F1",
+      "mirror": true,
+      "feasible": false,
+      "survived": false,
+      "goal_satisfied": true,
+      "first_hit": 54,
+      "first_action": 3,
+      "action_counts": {
+        "hold": 59,
+        "right": 15,
+        "left": 6
+      },
+      "switches": 13,
+      "x_trace": [
+        174.0,
+        182.0,
+        190.0,
+        198.0,
+        206.0,
+        214.0,
+        222.0,
+        230.0
+      ]
+    },
+    {
+      "event_id": "confirm-F1-03-m0",
+      "family": "F1",
+      "mirror": false,
+      "feasible": true,
+      "survived": true,
+      "goal_satisfied": true,
+      "first_hit": null,
+      "first_action": 3,
+      "action_counts": {
+        "hold": 58,
+        "right": 14,
+        "left": 8
+      },
+      "switches": 17,
+      "x_trace": [
+        198.0,
+        206.0,
+        214.0,
+        222.0,
+        230.0,
+        238.0,
+        230.0,
+        238.0
+      ]
+    },
+    {
+      "event_id": "confirm-F1-03-m1",
+      "family": "F1",
+      "mirror": true,
+      "feasible": true,
+      "survived": true,
+      "goal_satisfied": true,
+      "first_hit": null,
+      "first_action": 3,
+      "action_counts": {
+        "hold": 55,
+        "right": 25
+      },
+      "switches": 1,
+      "x_trace": [
+        202.0,
+        210.0,
+        218.0,
+        226.0,
+        234.0,
+        242.0,
+        250.0,
+        258.0
+      ]
+    },
+    {
+      "event_id": "confirm-F2-00-m0",
+      "family": "F2",
+      "mirror": false,
+      "feasible": true,
+      "survived": true,
+      "goal_satisfied": true,
+      "first_hit": null,
+      "first_action": 3,
+      "action_counts": {
+        "hold": 57,
+        "right": 16,
+        "left": 7
+      },
+      "switches": 13,
+      "x_trace": [
+        174.0,
+        182.0,
+        190.0,
+        198.0,
+        206.0,
+        214.0,
+        222.0,
+        230.0
+      ]
+    },
+    {
+      "event_id": "confirm-F2-00-m1",
+      "family": "F2",
+      "mirror": true,
+      "feasible": false,
+      "survived": false,
+      "goal_satisfied": true,
+      "first_hit": 96,
+      "first_action": 3,
+      "action_counts": {
+        "hold": 56,
+        "right": 24
+      },
+      "switches": 1,
+      "x_trace": [
+        226.0,
+        234.0,
+        242.0,
+        250.0,
+        258.0,
+        266.0,
+        274.0,
+        282.0
+      ]
+    },
+    {
+      "event_id": "confirm-F2-01-m0",
+      "family": "F2",
+      "mirror": false,
+      "feasible": true,
+      "survived": true,
+      "goal_satisfied": true,
+      "first_hit": null,
+      "first_action": 3,
+      "action_counts": {
+        "hold": 56,
+        "right": 12,
+        "left": 12
+      },
+      "switches": 12,
+      "x_trace": [
+        222.0,
+        230.0,
+        238.0,
+        246.0,
+        254.0,
+        246.0,
+        254.0,
+        246.0
+      ]
+    },
+    {
+      "event_id": "confirm-F2-01-m1",
+      "family": "F2",
+      "mirror": true,
+      "feasible": false,
+      "survived": false,
+      "goal_satisfied": true,
+      "first_hit": 94,
+      "first_action": 3,
+      "action_counts": {
+        "hold": 54,
+        "right": 26
+      },
+      "switches": 1,
+      "x_trace": [
+        178.0,
+        186.0,
+        194.0,
+        202.0,
+        210.0,
+        218.0,
+        226.0,
+        234.0
+      ]
+    },
+    {
+      "event_id": "confirm-F2-02-m0",
+      "family": "F2",
+      "mirror": false,
+      "feasible": false,
+      "survived": false,
+      "goal_satisfied": true,
+      "first_hit": 94,
+      "first_action": 3,
+      "action_counts": {
+        "hold": 55,
+        "right": 25
+      },
+      "switches": 1,
+      "x_trace": [
+        194.0,
+        202.0,
+        210.0,
+        218.0,
+        226.0,
+        234.0,
+        242.0,
+        250.0
+      ]
+    },
+    {
+      "event_id": "confirm-F2-02-m1",
+      "family": "F2",
+      "mirror": true,
+      "feasible": true,
+      "survived": true,
+      "goal_satisfied": true,
+      "first_hit": null,
+      "first_action": 3,
+      "action_counts": {
+        "hold": 55,
+        "right": 23,
+        "left": 2
+      },
+      "switches": 5,
+      "x_trace": [
+        206.0,
+        214.0,
+        222.0,
+        230.0,
+        238.0,
+        246.0,
+        254.0,
+        262.0
+      ]
+    },
+    {
+      "event_id": "confirm-F2-03-m0",
+      "family": "F2",
+      "mirror": false,
+      "feasible": false,
+      "survived": false,
+      "goal_satisfied": true,
+      "first_hit": 110,
+      "first_action": 3,
+      "action_counts": {
+        "hold": 54,
+        "right": 26
+      },
+      "switches": 1,
+      "x_trace": [
+        212.0,
+        220.0,
+        228.0,
+        236.0,
+        244.0,
+        252.0,
+        260.0,
+        268.0
+      ]
+    },
+    {
+      "event_id": "confirm-F2-03-m1",
+      "family": "F2",
+      "mirror": true,
+      "feasible": false,
+      "survived": false,
+      "goal_satisfied": true,
+      "first_hit": 106,
+      "first_action": 3,
+      "action_counts": {
+        "hold": 54,
+        "right": 26
+      },
+      "switches": 1,
+      "x_trace": [
+        188.0,
+        196.0,
+        204.0,
+        212.0,
+        220.0,
+        228.0,
+        236.0,
+        244.0
+      ]
+    },
+    {
+      "event_id": "confirm-F3-00-m0",
+      "family": "F3",
+      "mirror": false,
+      "feasible": false,
+      "survived": false,
+      "goal_satisfied": false,
+      "first_hit": 98,
+      "first_action": 7,
+      "action_counts": {
+        "hold": 51,
+        "right": 5,
+        "left": 24
+      },
+      "switches": 6,
+      "x_trace": [
+        334.0,
+        326.0,
+        318.0,
+        310.0,
+        302.0,
+        294.0,
+        286.0,
+        278.0
+      ]
+    },
+    {
+      "event_id": "confirm-F3-00-m1",
+      "family": "F3",
+      "mirror": true,
+      "feasible": false,
+      "survived": false,
+      "goal_satisfied": true,
+      "first_hit": 142,
+      "first_action": 3,
+      "action_counts": {
+        "hold": 48,
+        "right": 31,
+        "left": 1
+      },
+      "switches": 3,
+      "x_trace": [
+        50.0,
+        58.0,
+        66.0,
+        74.0,
+        82.0,
+        90.0,
+        98.0,
+        106.0
+      ]
+    },
+    {
+      "event_id": "confirm-F3-01-m0",
+      "family": "F3",
+      "mirror": false,
+      "feasible": false,
+      "survived": false,
+      "goal_satisfied": false,
+      "first_hit": 96,
+      "first_action": 7,
+      "action_counts": {
+        "hold": 51,
+        "right": 11,
+        "left": 18
+      },
+      "switches": 2,
+      "x_trace": [
+        322.0,
+        314.0,
+        306.0,
+        298.0,
+        290.0,
+        282.0,
+        274.0,
+        266.0
+      ]
+    },
+    {
+      "event_id": "confirm-F3-01-m1",
+      "family": "F3",
+      "mirror": true,
+      "feasible": false,
+      "survived": false,
+      "goal_satisfied": true,
+      "first_hit": 152,
+      "first_action": 3,
+      "action_counts": {
+        "hold": 51,
+        "right": 26,
+        "left": 3
+      },
+      "switches": 7,
+      "x_trace": [
+        62.0,
+        70.0,
+        78.0,
+        86.0,
+        94.0,
+        102.0,
+        110.0,
+        118.0
+      ]
+    },
+    {
+      "event_id": "confirm-F3-02-m0",
+      "family": "F3",
+      "mirror": false,
+      "feasible": false,
+      "survived": false,
+      "goal_satisfied": false,
+      "first_hit": 46,
+      "first_action": 7,
+      "action_counts": {
+        "hold": 44,
+        "right": 10,
+        "left": 26
+      },
+      "switches": 4,
+      "x_trace": [
+        340.0,
+        332.0,
+        324.0,
+        316.0,
+        308.0,
+        300.0,
+        292.0,
+        284.0
+      ]
+    },
+    {
+      "event_id": "confirm-F3-02-m1",
+      "family": "F3",
+      "mirror": true,
+      "feasible": false,
+      "survived": false,
+      "goal_satisfied": true,
+      "first_hit": 46,
+      "first_action": 3,
+      "action_counts": {
+        "hold": 44,
+        "right": 35,
+        "left": 1
+      },
+      "switches": 3,
+      "x_trace": [
+        44.0,
+        52.0,
+        60.0,
+        68.0,
+        76.0,
+        84.0,
+        92.0,
+        100.0
+      ]
+    },
+    {
+      "event_id": "confirm-F3-03-m0",
+      "family": "F3",
+      "mirror": false,
+      "feasible": false,
+      "survived": false,
+      "goal_satisfied": false,
+      "first_hit": 102,
+      "first_action": 7,
+      "action_counts": {
+        "hold": 52,
+        "right": 7,
+        "left": 21
+      },
+      "switches": 14,
+      "x_trace": [
+        326.0,
+        318.0,
+        310.0,
+        302.0,
+        294.0,
+        286.0,
+        278.0,
+        270.0
+      ]
+    },
+    {
+      "event_id": "confirm-F3-03-m1",
+      "family": "F3",
+      "mirror": true,
+      "feasible": true,
+      "survived": true,
+      "goal_satisfied": true,
+      "first_hit": null,
+      "first_action": 3,
+      "action_counts": {
+        "hold": 50,
+        "right": 30
+      },
+      "switches": 1,
+      "x_trace": [
+        58.0,
+        66.0,
+        74.0,
+        82.0,
+        90.0,
+        98.0,
+        106.0,
+        114.0
+      ]
+    }
+  ],
+  "training_steps": 0,
+  "formal_gate": false
+}

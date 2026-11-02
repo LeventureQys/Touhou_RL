@@ -1,0 +1,2716 @@
+{
+  "schema": "v373-f1-scale-split/1",
+  "counts": {
+    "total_groups": 22,
+    "train_groups": 12,
+    "heldout_groups": 10,
+    "new_groups": 16,
+    "new_heldout_groups": 7,
+    "train_events": 24,
+    "heldout_events": 20,
+    "new_heldout_events": 14
+  },
+  "floors": {
+    "train_groups": true,
+    "heldout_groups": true,
+    "forced_heldout": true,
+    "new_heldout_groups": 7,
+    "new_heldout_floor": true,
+    "new_groups_floor": true,
+    "disjoint": true,
+    "covers_all": true
+  },
+  "forced_heldout": [
+    "wf18-F1-005",
+    "wf18-F1-007",
+    "wf18-F1-010"
+  ],
+  "new_heldout": [
+    "wf25-F1-003",
+    "wf25-F1-008",
+    "wf25-F1-015",
+    "wf25-F1-020",
+    "wf25-F1-028",
+    "wf25-F1-040",
+    "wf25-F1-046"
+  ],
+  "flips": [
+    {
+      "group": "wf25-F1-049",
+      "change": "heldout_to_train",
+      "reason": "train floor 12"
+    }
+  ],
+  "shortfall": null,
+  "rule": "groups are ordered R18/R19 F1 order then acceptance order; index even -> train, odd -> held-out; the frozen R19 validation groups are forced held-out; while train < 12 and held-out > 5 the last held-out group is flipped to train (and, if held-out < 5, the last train group is flipped back).  Mirrors are atomic: a group never crosses the split",
+  "groups": [
+    {
+      "group": "wf18-F1-002",
+      "family": "F1",
+      "source": "r18",
+      "index": 0,
+      "split": "train",
+      "signature": [
+        "F1",
+        56.0,
+        [
+          8.0,
+          376.0
+        ],
+        [
+          88.0,
+          104.0
+        ],
+        76,
+        16,
+        [
+          34,
+          104
+        ],
+        180.0,
+        160.0,
+        [
+          192.0,
+          100.0
+        ],
+        false,
+        8.0,
+        true
+      ],
+      "events": [
+        {
+          "event_id": "wf18-F1-002-m0",
+          "mirror": false,
+          "start_x": 56.0,
+          "scenario_sha256": "fcea6cdaac0d2d5aa207544b855c4d846f561c01836552185e3bb5093ca07bfe",
+          "scenario": {
+            "event_id": "wf18-F1-002-m0",
+            "family": "F1",
+            "template_group": "wf18-F1-002",
+            "seed": 18002,
+            "start_x": 56.0,
+            "mirror": false,
+            "horizon": 160,
+            "fire_interval": 16,
+            "bullet_speed": 8.0,
+            "wall_frame": 76,
+            "internal_gap": true,
+            "model_known": true,
+            "split": "development",
+            "depletion_pressure": false,
+            "coverage": [
+              8.0,
+              376.0
+            ],
+            "gap": [
+              88.0,
+              104.0
+            ],
+            "window": [
+              34,
+              104
+            ],
+            "threshold": 180.0,
+            "goal": 160.0,
+            "origin": [
+              192.0,
+              100.0
+            ],
+            "burst": false
+          }
+        },
+        {
+          "event_id": "wf18-F1-002-m1",
+          "mirror": true,
+          "start_x": 328.0,
+          "scenario_sha256": "c4cb9837f3c872cec276f371aa3831f07ace0683e6a576e1de4fd19b12b253df",
+          "scenario": {
+            "event_id": "wf18-F1-002-m1",
+            "family": "F1",
+            "template_group": "wf18-F1-002",
+            "seed": 18002,
+            "start_x": 328.0,
+            "mirror": true,
+            "horizon": 160,
+            "fire_interval": 16,
+            "bullet_speed": 8.0,
+            "wall_frame": 76,
+            "internal_gap": true,
+            "model_known": true,
+            "split": "development",
+            "depletion_pressure": false,
+            "coverage": [
+              8.0,
+              376.0
+            ],
+            "gap": [
+              88.0,
+              104.0
+            ],
+            "window": [
+              34,
+              104
+            ],
+            "threshold": 180.0,
+            "goal": 160.0,
+            "origin": [
+              192.0,
+              100.0
+            ],
+            "burst": false
+          }
+        }
+      ]
+    },
+    {
+      "group": "wf18-F1-005",
+      "family": "F1",
+      "source": "r18",
+      "index": 1,
+      "split": "heldout",
+      "signature": [
+        "F1",
+        216.0,
+        [
+          12.0,
+          376.0
+        ],
+        [
+          248.0,
+          264.0
+        ],
+        48,
+        16,
+        [
+          34,
+          104
+        ],
+        180.0,
+        160.0,
+        [
+          192.0,
+          100.0
+        ],
+        false,
+        8.0,
+        true
+      ],
+      "events": [
+        {
+          "event_id": "wf18-F1-005-m0",
+          "mirror": false,
+          "start_x": 216.0,
+          "scenario_sha256": "945161603bb7f87aa32eb8abaf05fda158ae9d94c3e8f68d3c55261f5d41a761",
+          "scenario": {
+            "event_id": "wf18-F1-005-m0",
+            "family": "F1",
+            "template_group": "wf18-F1-005",
+            "seed": 18005,
+            "start_x": 216.0,
+            "mirror": false,
+            "horizon": 160,
+            "fire_interval": 16,
+            "bullet_speed": 8.0,
+            "wall_frame": 48,
+            "internal_gap": true,
+            "model_known": true,
+            "split": "development",
+            "depletion_pressure": false,
+            "coverage": [
+              12.0,
+              376.0
+            ],
+            "gap": [
+              248.0,
+              264.0
+            ],
+            "window": [
+              34,
+              104
+            ],
+            "threshold": 180.0,
+            "goal": 160.0,
+            "origin": [
+              192.0,
+              100.0
+            ],
+            "burst": false
+          }
+        },
+        {
+          "event_id": "wf18-F1-005-m1",
+          "mirror": true,
+          "start_x": 168.0,
+          "scenario_sha256": "157b97138138fcdb381308fdf4c7ee88fb526fc30ff1edae38611b9e9f8f87cc",
+          "scenario": {
+            "event_id": "wf18-F1-005-m1",
+            "family": "F1",
+            "template_group": "wf18-F1-005",
+            "seed": 18005,
+            "start_x": 168.0,
+            "mirror": true,
+            "horizon": 160,
+            "fire_interval": 16,
+            "bullet_speed": 8.0,
+            "wall_frame": 48,
+            "internal_gap": true,
+            "model_known": true,
+            "split": "development",
+            "depletion_pressure": false,
+            "coverage": [
+              12.0,
+              376.0
+            ],
+            "gap": [
+              248.0,
+              264.0
+            ],
+            "window": [
+              34,
+              104
+            ],
+            "threshold": 180.0,
+            "goal": 160.0,
+            "origin": [
+              192.0,
+              100.0
+            ],
+            "burst": false
+          }
+        }
+      ]
+    },
+    {
+      "group": "wf18-F1-006",
+      "family": "F1",
+      "source": "r18",
+      "index": 2,
+      "split": "train",
+      "signature": [
+        "F1",
+        204.0,
+        [
+          12.0,
+          376.0
+        ],
+        [
+          144.0,
+          164.0
+        ],
+        40,
+        16,
+        [
+          34,
+          104
+        ],
+        180.0,
+        160.0,
+        [
+          192.0,
+          100.0
+        ],
+        false,
+        8.0,
+        true
+      ],
+      "events": [
+        {
+          "event_id": "wf18-F1-006-m0",
+          "mirror": false,
+          "start_x": 204.0,
+          "scenario_sha256": "2b9f09c11627ab190a7be5283f69c7ebe5341c81cee7650a69dedb735d73410d",
+          "scenario": {
+            "event_id": "wf18-F1-006-m0",
+            "family": "F1",
+            "template_group": "wf18-F1-006",
+            "seed": 18006,
+            "start_x": 204.0,
+            "mirror": false,
+            "horizon": 160,
+            "fire_interval": 16,
+            "bullet_speed": 8.0,
+            "wall_frame": 40,
+            "internal_gap": true,
+            "model_known": true,
+            "split": "development",
+            "depletion_pressure": false,
+            "coverage": [
+              12.0,
+              376.0
+            ],
+            "gap": [
+              144.0,
+              164.0
+            ],
+            "window": [
+              34,
+              104
+            ],
+            "threshold": 180.0,
+            "goal": 160.0,
+            "origin": [
+              192.0,
+              100.0
+            ],
+            "burst": false
+          }
+        },
+        {
+          "event_id": "wf18-F1-006-m1",
+          "mirror": true,
+          "start_x": 180.0,
+          "scenario_sha256": "bb110a37c470a441b9b41b1485fbc793969059a956a90599f538512d78748208",
+          "scenario": {
+            "event_id": "wf18-F1-006-m1",
+            "family": "F1",
+            "template_group": "wf18-F1-006",
+            "seed": 18006,
+            "start_x": 180.0,
+            "mirror": true,
+            "horizon": 160,
+            "fire_interval": 16,
+            "bullet_speed": 8.0,
+            "wall_frame": 40,
+            "internal_gap": true,
+            "model_known": true,
+            "split": "development",
+            "depletion_pressure": false,
+            "coverage": [
+              12.0,
+              376.0
+            ],
+            "gap": [
+              144.0,
+              164.0
+            ],
+            "window": [
+              34,
+              104
+            ],
+            "threshold": 180.0,
+            "goal": 160.0,
+            "origin": [
+              192.0,
+              100.0
+            ],
+            "burst": false
+          }
+        }
+      ]
+    },
+    {
+      "group": "wf18-F1-007",
+      "family": "F1",
+      "source": "r18",
+      "index": 3,
+      "split": "heldout",
+      "signature": [
+        "F1",
+        128.0,
+        [
+          8.0,
+          372.0
+        ],
+        [
+          152.0,
+          172.0
+        ],
+        60,
+        16,
+        [
+          34,
+          104
+        ],
+        180.0,
+        160.0,
+        [
+          192.0,
+          100.0
+        ],
+        false,
+        8.0,
+        true
+      ],
+      "events": [
+        {
+          "event_id": "wf18-F1-007-m0",
+          "mirror": false,
+          "start_x": 128.0,
+          "scenario_sha256": "df0d770dd442ef170fbb88bd8c7e1d2330b155860ee2e0d06d225d209962810d",
+          "scenario": {
+            "event_id": "wf18-F1-007-m0",
+            "family": "F1",
+            "template_group": "wf18-F1-007",
+            "seed": 18007,
+            "start_x": 128.0,
+            "mirror": false,
+            "horizon": 160,
+            "fire_interval": 16,
+            "bullet_speed": 8.0,
+            "wall_frame": 60,
+            "internal_gap": true,
+            "model_known": true,
+            "split": "development",
+            "depletion_pressure": false,
+            "coverage": [
+              8.0,
+              372.0
+            ],
+            "gap": [
+              152.0,
+              172.0
+            ],
+            "window": [
+              34,
+              104
+            ],
+            "threshold": 180.0,
+            "goal": 160.0,
+            "origin": [
+              192.0,
+              100.0
+            ],
+            "burst": false
+          }
+        },
+        {
+          "event_id": "wf18-F1-007-m1",
+          "mirror": true,
+          "start_x": 256.0,
+          "scenario_sha256": "afdc2c2f435d49303d14d67178ea137be746f6af392c1daf45c0d745a53d51d6",
+          "scenario": {
+            "event_id": "wf18-F1-007-m1",
+            "family": "F1",
+            "template_group": "wf18-F1-007",
+            "seed": 18007,
+            "start_x": 256.0,
+            "mirror": true,
+            "horizon": 160,
+            "fire_interval": 16,
+            "bullet_speed": 8.0,
+            "wall_frame": 60,
+            "internal_gap": true,
+            "model_known": true,
+            "split": "development",
+            "depletion_pressure": false,
+            "coverage": [
+              8.0,
+              372.0
+            ],
+            "gap": [
+              152.0,
+              172.0
+            ],
+            "window": [
+              34,
+              104
+            ],
+            "threshold": 180.0,
+            "goal": 160.0,
+            "origin": [
+              192.0,
+              100.0
+            ],
+            "burst": false
+          }
+        }
+      ]
+    },
+    {
+      "group": "wf18-F1-009",
+      "family": "F1",
+      "source": "r18",
+      "index": 4,
+      "split": "train",
+      "signature": [
+        "F1",
+        104.0,
+        [
+          8.0,
+          376.0
+        ],
+        [
+          152.0,
+          172.0
+        ],
+        52,
+        16,
+        [
+          34,
+          104
+        ],
+        180.0,
+        160.0,
+        [
+          192.0,
+          100.0
+        ],
+        false,
+        8.0,
+        true
+      ],
+      "events": [
+        {
+          "event_id": "wf18-F1-009-m0",
+          "mirror": false,
+          "start_x": 104.0,
+          "scenario_sha256": "5cbb4caea65946987a6308d297abc01cf36e74fd278bb92a5a592dd45cfe512b",
+          "scenario": {
+            "event_id": "wf18-F1-009-m0",
+            "family": "F1",
+            "template_group": "wf18-F1-009",
+            "seed": 18009,
+            "start_x": 104.0,
+            "mirror": false,
+            "horizon": 160,
+            "fire_interval": 16,
+            "bullet_speed": 8.0,
+            "wall_frame": 52,
+            "internal_gap": true,
+            "model_known": true,
+            "split": "development",
+            "depletion_pressure": false,
+            "coverage": [
+              8.0,
+              376.0
+            ],
+            "gap": [
+              152.0,
+              172.0
+            ],
+            "window": [
+              34,
+              104
+            ],
+            "threshold": 180.0,
+            "goal": 160.0,
+            "origin": [
+              192.0,
+              100.0
+            ],
+            "burst": false
+          }
+        },
+        {
+          "event_id": "wf18-F1-009-m1",
+          "mirror": true,
+          "start_x": 280.0,
+          "scenario_sha256": "5e4a0a42c368a135c7184618a751275792f9d8646dde3cd4d8acb333374d41d4",
+          "scenario": {
+            "event_id": "wf18-F1-009-m1",
+            "family": "F1",
+            "template_group": "wf18-F1-009",
+            "seed": 18009,
+            "start_x": 280.0,
+            "mirror": true,
+            "horizon": 160,
+            "fire_interval": 16,
+            "bullet_speed": 8.0,
+            "wall_frame": 52,
+            "internal_gap": true,
+            "model_known": true,
+            "split": "development",
+            "depletion_pressure": false,
+            "coverage": [
+              8.0,
+              376.0
+            ],
+            "gap": [
+              152.0,
+              172.0
+            ],
+            "window": [
+              34,
+              104
+            ],
+            "threshold": 180.0,
+            "goal": 160.0,
+            "origin": [
+              192.0,
+              100.0
+            ],
+            "burst": false
+          }
+        }
+      ]
+    },
+    {
+      "group": "wf18-F1-010",
+      "family": "F1",
+      "source": "r18",
+      "index": 5,
+      "split": "heldout",
+      "signature": [
+        "F1",
+        216.0,
+        [
+          8.0,
+          376.0
+        ],
+        [
+          256.0,
+          268.0
+        ],
+        56,
+        16,
+        [
+          34,
+          104
+        ],
+        180.0,
+        160.0,
+        [
+          192.0,
+          100.0
+        ],
+        false,
+        8.0,
+        true
+      ],
+      "events": [
+        {
+          "event_id": "wf18-F1-010-m0",
+          "mirror": false,
+          "start_x": 216.0,
+          "scenario_sha256": "6f3ebe9430a7df7f9db08c34afc630ca992babff7424b7230485eaf224865663",
+          "scenario": {
+            "event_id": "wf18-F1-010-m0",
+            "family": "F1",
+            "template_group": "wf18-F1-010",
+            "seed": 18010,
+            "start_x": 216.0,
+            "mirror": false,
+            "horizon": 160,
+            "fire_interval": 16,
+            "bullet_speed": 8.0,
+            "wall_frame": 56,
+            "internal_gap": true,
+            "model_known": true,
+            "split": "development",
+            "depletion_pressure": false,
+            "coverage": [
+              8.0,
+              376.0
+            ],
+            "gap": [
+              256.0,
+              268.0
+            ],
+            "window": [
+              34,
+              104
+            ],
+            "threshold": 180.0,
+            "goal": 160.0,
+            "origin": [
+              192.0,
+              100.0
+            ],
+            "burst": false
+          }
+        },
+        {
+          "event_id": "wf18-F1-010-m1",
+          "mirror": true,
+          "start_x": 168.0,
+          "scenario_sha256": "29df2e746becdc9958d32076421c27a0e0d13af9547a9b4337bfd24131109cbd",
+          "scenario": {
+            "event_id": "wf18-F1-010-m1",
+            "family": "F1",
+            "template_group": "wf18-F1-010",
+            "seed": 18010,
+            "start_x": 168.0,
+            "mirror": true,
+            "horizon": 160,
+            "fire_interval": 16,
+            "bullet_speed": 8.0,
+            "wall_frame": 56,
+            "internal_gap": true,
+            "model_known": true,
+            "split": "development",
+            "depletion_pressure": false,
+            "coverage": [
+              8.0,
+              376.0
+            ],
+            "gap": [
+              256.0,
+              268.0
+            ],
+            "window": [
+              34,
+              104
+            ],
+            "threshold": 180.0,
+            "goal": 160.0,
+            "origin": [
+              192.0,
+              100.0
+            ],
+            "burst": false
+          }
+        }
+      ]
+    },
+    {
+      "group": "wf25-F1-001",
+      "family": "F1",
+      "source": "wf25",
+      "index": 6,
+      "split": "train",
+      "signature": [
+        "F1",
+        168.0,
+        [
+          8.0,
+          376.0
+        ],
+        [
+          200.0,
+          220.0
+        ],
+        44,
+        16,
+        [
+          34,
+          104
+        ],
+        180.0,
+        160.0,
+        [
+          192.0,
+          100.0
+        ],
+        false,
+        8.0,
+        true
+      ],
+      "events": [
+        {
+          "event_id": "wf25-F1-001-m0",
+          "mirror": false,
+          "start_x": 168.0,
+          "scenario_sha256": "9fd879cdad9f5bb3d267e004941ce083f70bd3affb7c37d8a9ba71d5958e023d",
+          "scenario": {
+            "event_id": "wf25-F1-001-m0",
+            "family": "F1",
+            "template_group": "wf25-F1-001",
+            "seed": 25001,
+            "start_x": 168.0,
+            "mirror": false,
+            "horizon": 160,
+            "fire_interval": 16,
+            "bullet_speed": 8.0,
+            "wall_frame": 44,
+            "internal_gap": true,
+            "model_known": true,
+            "split": "development",
+            "depletion_pressure": false,
+            "coverage": [
+              8.0,
+              376.0
+            ],
+            "gap": [
+              200.0,
+              220.0
+            ],
+            "window": [
+              34,
+              104
+            ],
+            "threshold": 180.0,
+            "goal": 160.0,
+            "origin": [
+              192.0,
+              100.0
+            ],
+            "burst": false
+          }
+        },
+        {
+          "event_id": "wf25-F1-001-m1",
+          "mirror": true,
+          "start_x": 216.0,
+          "scenario_sha256": "1dd23bf80303ce8abb55d755bbc80f94d909b934b4630fe4e4b32b8324714bc0",
+          "scenario": {
+            "event_id": "wf25-F1-001-m1",
+            "family": "F1",
+            "template_group": "wf25-F1-001",
+            "seed": 25001,
+            "start_x": 216.0,
+            "mirror": true,
+            "horizon": 160,
+            "fire_interval": 16,
+            "bullet_speed": 8.0,
+            "wall_frame": 44,
+            "internal_gap": true,
+            "model_known": true,
+            "split": "development",
+            "depletion_pressure": false,
+            "coverage": [
+              8.0,
+              376.0
+            ],
+            "gap": [
+              200.0,
+              220.0
+            ],
+            "window": [
+              34,
+              104
+            ],
+            "threshold": 180.0,
+            "goal": 160.0,
+            "origin": [
+              192.0,
+              100.0
+            ],
+            "burst": false
+          }
+        }
+      ]
+    },
+    {
+      "group": "wf25-F1-003",
+      "family": "F1",
+      "source": "wf25",
+      "index": 7,
+      "split": "heldout",
+      "signature": [
+        "F1",
+        182.0,
+        [
+          8.0,
+          372.0
+        ],
+        [
+          128.0,
+          142.0
+        ],
+        44,
+        16,
+        [
+          34,
+          104
+        ],
+        180.0,
+        160.0,
+        [
+          192.0,
+          100.0
+        ],
+        false,
+        8.0,
+        true
+      ],
+      "events": [
+        {
+          "event_id": "wf25-F1-003-m0",
+          "mirror": false,
+          "start_x": 182.0,
+          "scenario_sha256": "ccde60b5e5a7a251788d6ac83b2e5543e01a8194389b4848800cfc955aa9503a",
+          "scenario": {
+            "event_id": "wf25-F1-003-m0",
+            "family": "F1",
+            "template_group": "wf25-F1-003",
+            "seed": 25003,
+            "start_x": 182.0,
+            "mirror": false,
+            "horizon": 160,
+            "fire_interval": 16,
+            "bullet_speed": 8.0,
+            "wall_frame": 44,
+            "internal_gap": true,
+            "model_known": true,
+            "split": "development",
+            "depletion_pressure": false,
+            "coverage": [
+              8.0,
+              372.0
+            ],
+            "gap": [
+              128.0,
+              142.0
+            ],
+            "window": [
+              34,
+              104
+            ],
+            "threshold": 180.0,
+            "goal": 160.0,
+            "origin": [
+              192.0,
+              100.0
+            ],
+            "burst": false
+          }
+        },
+        {
+          "event_id": "wf25-F1-003-m1",
+          "mirror": true,
+          "start_x": 202.0,
+          "scenario_sha256": "f7f7846f87e65586dd336bffebaa7e85018bbd38dab05b3b1ec1a2b4da2d8b9c",
+          "scenario": {
+            "event_id": "wf25-F1-003-m1",
+            "family": "F1",
+            "template_group": "wf25-F1-003",
+            "seed": 25003,
+            "start_x": 202.0,
+            "mirror": true,
+            "horizon": 160,
+            "fire_interval": 16,
+            "bullet_speed": 8.0,
+            "wall_frame": 44,
+            "internal_gap": true,
+            "model_known": true,
+            "split": "development",
+            "depletion_pressure": false,
+            "coverage": [
+              8.0,
+              372.0
+            ],
+            "gap": [
+              128.0,
+              142.0
+            ],
+            "window": [
+              34,
+              104
+            ],
+            "threshold": 180.0,
+            "goal": 160.0,
+            "origin": [
+              192.0,
+              100.0
+            ],
+            "burst": false
+          }
+        }
+      ]
+    },
+    {
+      "group": "wf25-F1-007",
+      "family": "F1",
+      "source": "wf25",
+      "index": 8,
+      "split": "train",
+      "signature": [
+        "F1",
+        308.0,
+        [
+          12.0,
+          376.0
+        ],
+        [
+          256.0,
+          268.0
+        ],
+        56,
+        16,
+        [
+          34,
+          104
+        ],
+        180.0,
+        160.0,
+        [
+          192.0,
+          100.0
+        ],
+        false,
+        8.0,
+        true
+      ],
+      "events": [
+        {
+          "event_id": "wf25-F1-007-m0",
+          "mirror": false,
+          "start_x": 308.0,
+          "scenario_sha256": "57bdcc7313dccdfc5e6b9f7dfa16f25c97803d1773956778481e4e43c9f2a82a",
+          "scenario": {
+            "event_id": "wf25-F1-007-m0",
+            "family": "F1",
+            "template_group": "wf25-F1-007",
+            "seed": 25007,
+            "start_x": 308.0,
+            "mirror": false,
+            "horizon": 160,
+            "fire_interval": 16,
+            "bullet_speed": 8.0,
+            "wall_frame": 56,
+            "internal_gap": true,
+            "model_known": true,
+            "split": "development",
+            "depletion_pressure": false,
+            "coverage": [
+              12.0,
+              376.0
+            ],
+            "gap": [
+              256.0,
+              268.0
+            ],
+            "window": [
+              34,
+              104
+            ],
+            "threshold": 180.0,
+            "goal": 160.0,
+            "origin": [
+              192.0,
+              100.0
+            ],
+            "burst": false
+          }
+        },
+        {
+          "event_id": "wf25-F1-007-m1",
+          "mirror": true,
+          "start_x": 76.0,
+          "scenario_sha256": "05bdc39369021456bb4bf13fce5bd8b5c4df0b393b3a870df09240910f88c3df",
+          "scenario": {
+            "event_id": "wf25-F1-007-m1",
+            "family": "F1",
+            "template_group": "wf25-F1-007",
+            "seed": 25007,
+            "start_x": 76.0,
+            "mirror": true,
+            "horizon": 160,
+            "fire_interval": 16,
+            "bullet_speed": 8.0,
+            "wall_frame": 56,
+            "internal_gap": true,
+            "model_known": true,
+            "split": "development",
+            "depletion_pressure": false,
+            "coverage": [
+              12.0,
+              376.0
+            ],
+            "gap": [
+              256.0,
+              268.0
+            ],
+            "window": [
+              34,
+              104
+            ],
+            "threshold": 180.0,
+            "goal": 160.0,
+            "origin": [
+              192.0,
+              100.0
+            ],
+            "burst": false
+          }
+        }
+      ]
+    },
+    {
+      "group": "wf25-F1-008",
+      "family": "F1",
+      "source": "wf25",
+      "index": 9,
+      "split": "heldout",
+      "signature": [
+        "F1",
+        24.0,
+        [
+          8.0,
+          376.0
+        ],
+        [
+          120.0,
+          140.0
+        ],
+        60,
+        16,
+        [
+          34,
+          104
+        ],
+        180.0,
+        160.0,
+        [
+          192.0,
+          100.0
+        ],
+        false,
+        8.0,
+        true
+      ],
+      "events": [
+        {
+          "event_id": "wf25-F1-008-m0",
+          "mirror": false,
+          "start_x": 24.0,
+          "scenario_sha256": "891dac4301e9d484100b1a261135f00caf661c780d6c5510a91a07b608a5ebb4",
+          "scenario": {
+            "event_id": "wf25-F1-008-m0",
+            "family": "F1",
+            "template_group": "wf25-F1-008",
+            "seed": 25008,
+            "start_x": 24.0,
+            "mirror": false,
+            "horizon": 160,
+            "fire_interval": 16,
+            "bullet_speed": 8.0,
+            "wall_frame": 60,
+            "internal_gap": true,
+            "model_known": true,
+            "split": "development",
+            "depletion_pressure": false,
+            "coverage": [
+              8.0,
+              376.0
+            ],
+            "gap": [
+              120.0,
+              140.0
+            ],
+            "window": [
+              34,
+              104
+            ],
+            "threshold": 180.0,
+            "goal": 160.0,
+            "origin": [
+              192.0,
+              100.0
+            ],
+            "burst": false
+          }
+        },
+        {
+          "event_id": "wf25-F1-008-m1",
+          "mirror": true,
+          "start_x": 360.0,
+          "scenario_sha256": "34661d1f80773fdc5e89b12800c8be18af1462e98bd41ee70f2188263e5c97e6",
+          "scenario": {
+            "event_id": "wf25-F1-008-m1",
+            "family": "F1",
+            "template_group": "wf25-F1-008",
+            "seed": 25008,
+            "start_x": 360.0,
+            "mirror": true,
+            "horizon": 160,
+            "fire_interval": 16,
+            "bullet_speed": 8.0,
+            "wall_frame": 60,
+            "internal_gap": true,
+            "model_known": true,
+            "split": "development",
+            "depletion_pressure": false,
+            "coverage": [
+              8.0,
+              376.0
+            ],
+            "gap": [
+              120.0,
+              140.0
+            ],
+            "window": [
+              34,
+              104
+            ],
+            "threshold": 180.0,
+            "goal": 160.0,
+            "origin": [
+              192.0,
+              100.0
+            ],
+            "burst": false
+          }
+        }
+      ]
+    },
+    {
+      "group": "wf25-F1-012",
+      "family": "F1",
+      "source": "wf25",
+      "index": 10,
+      "split": "train",
+      "signature": [
+        "F1",
+        80.0,
+        [
+          8.0,
+          372.0
+        ],
+        [
+          120.0,
+          136.0
+        ],
+        72,
+        16,
+        [
+          34,
+          104
+        ],
+        180.0,
+        160.0,
+        [
+          192.0,
+          100.0
+        ],
+        false,
+        8.0,
+        true
+      ],
+      "events": [
+        {
+          "event_id": "wf25-F1-012-m0",
+          "mirror": false,
+          "start_x": 80.0,
+          "scenario_sha256": "bccbd7dc800bfa8515fadbccf4add7e4cc8286460e441fcbb5b7cea8422021fa",
+          "scenario": {
+            "event_id": "wf25-F1-012-m0",
+            "family": "F1",
+            "template_group": "wf25-F1-012",
+            "seed": 25012,
+            "start_x": 80.0,
+            "mirror": false,
+            "horizon": 160,
+            "fire_interval": 16,
+            "bullet_speed": 8.0,
+            "wall_frame": 72,
+            "internal_gap": true,
+            "model_known": true,
+            "split": "development",
+            "depletion_pressure": false,
+            "coverage": [
+              8.0,
+              372.0
+            ],
+            "gap": [
+              120.0,
+              136.0
+            ],
+            "window": [
+              34,
+              104
+            ],
+            "threshold": 180.0,
+            "goal": 160.0,
+            "origin": [
+              192.0,
+              100.0
+            ],
+            "burst": false
+          }
+        },
+        {
+          "event_id": "wf25-F1-012-m1",
+          "mirror": true,
+          "start_x": 304.0,
+          "scenario_sha256": "3671164e10bc4b482ceabc238abbe5b2b193ba4e79085940dfa74b27553e9172",
+          "scenario": {
+            "event_id": "wf25-F1-012-m1",
+            "family": "F1",
+            "template_group": "wf25-F1-012",
+            "seed": 25012,
+            "start_x": 304.0,
+            "mirror": true,
+            "horizon": 160,
+            "fire_interval": 16,
+            "bullet_speed": 8.0,
+            "wall_frame": 72,
+            "internal_gap": true,
+            "model_known": true,
+            "split": "development",
+            "depletion_pressure": false,
+            "coverage": [
+              8.0,
+              372.0
+            ],
+            "gap": [
+              120.0,
+              136.0
+            ],
+            "window": [
+              34,
+              104
+            ],
+            "threshold": 180.0,
+            "goal": 160.0,
+            "origin": [
+              192.0,
+              100.0
+            ],
+            "burst": false
+          }
+        }
+      ]
+    },
+    {
+      "group": "wf25-F1-015",
+      "family": "F1",
+      "source": "wf25",
+      "index": 11,
+      "split": "heldout",
+      "signature": [
+        "F1",
+        152.0,
+        [
+          8.0,
+          372.0
+        ],
+        [
+          176.0,
+          196.0
+        ],
+        52,
+        16,
+        [
+          34,
+          104
+        ],
+        180.0,
+        160.0,
+        [
+          192.0,
+          100.0
+        ],
+        false,
+        8.0,
+        true
+      ],
+      "events": [
+        {
+          "event_id": "wf25-F1-015-m0",
+          "mirror": false,
+          "start_x": 152.0,
+          "scenario_sha256": "aaad7da107383e66ee56421943a11e1ac34ebc00293fa2b5d4c5f88f121c4347",
+          "scenario": {
+            "event_id": "wf25-F1-015-m0",
+            "family": "F1",
+            "template_group": "wf25-F1-015",
+            "seed": 25015,
+            "start_x": 152.0,
+            "mirror": false,
+            "horizon": 160,
+            "fire_interval": 16,
+            "bullet_speed": 8.0,
+            "wall_frame": 52,
+            "internal_gap": true,
+            "model_known": true,
+            "split": "development",
+            "depletion_pressure": false,
+            "coverage": [
+              8.0,
+              372.0
+            ],
+            "gap": [
+              176.0,
+              196.0
+            ],
+            "window": [
+              34,
+              104
+            ],
+            "threshold": 180.0,
+            "goal": 160.0,
+            "origin": [
+              192.0,
+              100.0
+            ],
+            "burst": false
+          }
+        },
+        {
+          "event_id": "wf25-F1-015-m1",
+          "mirror": true,
+          "start_x": 232.0,
+          "scenario_sha256": "0cab3d5651eff7b63e3bfd855f0a60b5d5ef1d44158d592359f2809b19d74604",
+          "scenario": {
+            "event_id": "wf25-F1-015-m1",
+            "family": "F1",
+            "template_group": "wf25-F1-015",
+            "seed": 25015,
+            "start_x": 232.0,
+            "mirror": true,
+            "horizon": 160,
+            "fire_interval": 16,
+            "bullet_speed": 8.0,
+            "wall_frame": 52,
+            "internal_gap": true,
+            "model_known": true,
+            "split": "development",
+            "depletion_pressure": false,
+            "coverage": [
+              8.0,
+              372.0
+            ],
+            "gap": [
+              176.0,
+              196.0
+            ],
+            "window": [
+              34,
+              104
+            ],
+            "threshold": 180.0,
+            "goal": 160.0,
+            "origin": [
+              192.0,
+              100.0
+            ],
+            "burst": false
+          }
+        }
+      ]
+    },
+    {
+      "group": "wf25-F1-019",
+      "family": "F1",
+      "source": "wf25",
+      "index": 12,
+      "split": "train",
+      "signature": [
+        "F1",
+        366.0,
+        [
+          12.0,
+          376.0
+        ],
+        [
+          304.0,
+          318.0
+        ],
+        76,
+        16,
+        [
+          34,
+          104
+        ],
+        180.0,
+        160.0,
+        [
+          192.0,
+          100.0
+        ],
+        false,
+        8.0,
+        true
+      ],
+      "events": [
+        {
+          "event_id": "wf25-F1-019-m0",
+          "mirror": false,
+          "start_x": 366.0,
+          "scenario_sha256": "7e0707848c822ffaa1fb93266781ccef46fcd27943afd097827f0fee0d399458",
+          "scenario": {
+            "event_id": "wf25-F1-019-m0",
+            "family": "F1",
+            "template_group": "wf25-F1-019",
+            "seed": 25019,
+            "start_x": 366.0,
+            "mirror": false,
+            "horizon": 160,
+            "fire_interval": 16,
+            "bullet_speed": 8.0,
+            "wall_frame": 76,
+            "internal_gap": true,
+            "model_known": true,
+            "split": "development",
+            "depletion_pressure": false,
+            "coverage": [
+              12.0,
+              376.0
+            ],
+            "gap": [
+              304.0,
+              318.0
+            ],
+            "window": [
+              34,
+              104
+            ],
+            "threshold": 180.0,
+            "goal": 160.0,
+            "origin": [
+              192.0,
+              100.0
+            ],
+            "burst": false
+          }
+        },
+        {
+          "event_id": "wf25-F1-019-m1",
+          "mirror": true,
+          "start_x": 18.0,
+          "scenario_sha256": "a2852c4e373c1746157dcaa6855e6133ed01a328455b00e228e77eadb98428ee",
+          "scenario": {
+            "event_id": "wf25-F1-019-m1",
+            "family": "F1",
+            "template_group": "wf25-F1-019",
+            "seed": 25019,
+            "start_x": 18.0,
+            "mirror": true,
+            "horizon": 160,
+            "fire_interval": 16,
+            "bullet_speed": 8.0,
+            "wall_frame": 76,
+            "internal_gap": true,
+            "model_known": true,
+            "split": "development",
+            "depletion_pressure": false,
+            "coverage": [
+              12.0,
+              376.0
+            ],
+            "gap": [
+              304.0,
+              318.0
+            ],
+            "window": [
+              34,
+              104
+            ],
+            "threshold": 180.0,
+            "goal": 160.0,
+            "origin": [
+              192.0,
+              100.0
+            ],
+            "burst": false
+          }
+        }
+      ]
+    },
+    {
+      "group": "wf25-F1-020",
+      "family": "F1",
+      "source": "wf25",
+      "index": 13,
+      "split": "heldout",
+      "signature": [
+        "F1",
+        336.0,
+        [
+          8.0,
+          376.0
+        ],
+        [
+          272.0,
+          288.0
+        ],
+        64,
+        16,
+        [
+          34,
+          104
+        ],
+        180.0,
+        160.0,
+        [
+          192.0,
+          100.0
+        ],
+        false,
+        8.0,
+        true
+      ],
+      "events": [
+        {
+          "event_id": "wf25-F1-020-m0",
+          "mirror": false,
+          "start_x": 336.0,
+          "scenario_sha256": "64e683c5de1a40fa823f7aba0a759cfe46f9f35f72b860c96cec04383aefeccd",
+          "scenario": {
+            "event_id": "wf25-F1-020-m0",
+            "family": "F1",
+            "template_group": "wf25-F1-020",
+            "seed": 25020,
+            "start_x": 336.0,
+            "mirror": false,
+            "horizon": 160,
+            "fire_interval": 16,
+            "bullet_speed": 8.0,
+            "wall_frame": 64,
+            "internal_gap": true,
+            "model_known": true,
+            "split": "development",
+            "depletion_pressure": false,
+            "coverage": [
+              8.0,
+              376.0
+            ],
+            "gap": [
+              272.0,
+              288.0
+            ],
+            "window": [
+              34,
+              104
+            ],
+            "threshold": 180.0,
+            "goal": 160.0,
+            "origin": [
+              192.0,
+              100.0
+            ],
+            "burst": false
+          }
+        },
+        {
+          "event_id": "wf25-F1-020-m1",
+          "mirror": true,
+          "start_x": 48.0,
+          "scenario_sha256": "53f1bddc1ab3f34c214e82fd9032580eb1ad9734778c1c231d519117ed28fa55",
+          "scenario": {
+            "event_id": "wf25-F1-020-m1",
+            "family": "F1",
+            "template_group": "wf25-F1-020",
+            "seed": 25020,
+            "start_x": 48.0,
+            "mirror": true,
+            "horizon": 160,
+            "fire_interval": 16,
+            "bullet_speed": 8.0,
+            "wall_frame": 64,
+            "internal_gap": true,
+            "model_known": true,
+            "split": "development",
+            "depletion_pressure": false,
+            "coverage": [
+              8.0,
+              376.0
+            ],
+            "gap": [
+              272.0,
+              288.0
+            ],
+            "window": [
+              34,
+              104
+            ],
+            "threshold": 180.0,
+            "goal": 160.0,
+            "origin": [
+              192.0,
+              100.0
+            ],
+            "burst": false
+          }
+        }
+      ]
+    },
+    {
+      "group": "wf25-F1-023",
+      "family": "F1",
+      "source": "wf25",
+      "index": 14,
+      "split": "train",
+      "signature": [
+        "F1",
+        112.0,
+        [
+          8.0,
+          372.0
+        ],
+        [
+          144.0,
+          164.0
+        ],
+        44,
+        16,
+        [
+          34,
+          104
+        ],
+        180.0,
+        160.0,
+        [
+          192.0,
+          100.0
+        ],
+        false,
+        8.0,
+        true
+      ],
+      "events": [
+        {
+          "event_id": "wf25-F1-023-m0",
+          "mirror": false,
+          "start_x": 112.0,
+          "scenario_sha256": "23669298879a996b6548e5802b370651c31d6f28a685b93e13d6725ccd75b53e",
+          "scenario": {
+            "event_id": "wf25-F1-023-m0",
+            "family": "F1",
+            "template_group": "wf25-F1-023",
+            "seed": 25023,
+            "start_x": 112.0,
+            "mirror": false,
+            "horizon": 160,
+            "fire_interval": 16,
+            "bullet_speed": 8.0,
+            "wall_frame": 44,
+            "internal_gap": true,
+            "model_known": true,
+            "split": "development",
+            "depletion_pressure": false,
+            "coverage": [
+              8.0,
+              372.0
+            ],
+            "gap": [
+              144.0,
+              164.0
+            ],
+            "window": [
+              34,
+              104
+            ],
+            "threshold": 180.0,
+            "goal": 160.0,
+            "origin": [
+              192.0,
+              100.0
+            ],
+            "burst": false
+          }
+        },
+        {
+          "event_id": "wf25-F1-023-m1",
+          "mirror": true,
+          "start_x": 272.0,
+          "scenario_sha256": "2a97599ca93207d6e047a00749aff2b60ce920a843c3d491d4abb3b6e55ce17d",
+          "scenario": {
+            "event_id": "wf25-F1-023-m1",
+            "family": "F1",
+            "template_group": "wf25-F1-023",
+            "seed": 25023,
+            "start_x": 272.0,
+            "mirror": true,
+            "horizon": 160,
+            "fire_interval": 16,
+            "bullet_speed": 8.0,
+            "wall_frame": 44,
+            "internal_gap": true,
+            "model_known": true,
+            "split": "development",
+            "depletion_pressure": false,
+            "coverage": [
+              8.0,
+              372.0
+            ],
+            "gap": [
+              144.0,
+              164.0
+            ],
+            "window": [
+              34,
+              104
+            ],
+            "threshold": 180.0,
+            "goal": 160.0,
+            "origin": [
+              192.0,
+              100.0
+            ],
+            "burst": false
+          }
+        }
+      ]
+    },
+    {
+      "group": "wf25-F1-028",
+      "family": "F1",
+      "source": "wf25",
+      "index": 15,
+      "split": "heldout",
+      "signature": [
+        "F1",
+        224.0,
+        [
+          8.0,
+          376.0
+        ],
+        [
+          168.0,
+          184.0
+        ],
+        52,
+        16,
+        [
+          34,
+          104
+        ],
+        180.0,
+        160.0,
+        [
+          192.0,
+          100.0
+        ],
+        false,
+        8.0,
+        true
+      ],
+      "events": [
+        {
+          "event_id": "wf25-F1-028-m0",
+          "mirror": false,
+          "start_x": 224.0,
+          "scenario_sha256": "510ea6077a2c4f7cefcd057e552f6d6801f801440a8c97c2d90fde157c27f3db",
+          "scenario": {
+            "event_id": "wf25-F1-028-m0",
+            "family": "F1",
+            "template_group": "wf25-F1-028",
+            "seed": 25028,
+            "start_x": 224.0,
+            "mirror": false,
+            "horizon": 160,
+            "fire_interval": 16,
+            "bullet_speed": 8.0,
+            "wall_frame": 52,
+            "internal_gap": true,
+            "model_known": true,
+            "split": "development",
+            "depletion_pressure": false,
+            "coverage": [
+              8.0,
+              376.0
+            ],
+            "gap": [
+              168.0,
+              184.0
+            ],
+            "window": [
+              34,
+              104
+            ],
+            "threshold": 180.0,
+            "goal": 160.0,
+            "origin": [
+              192.0,
+              100.0
+            ],
+            "burst": false
+          }
+        },
+        {
+          "event_id": "wf25-F1-028-m1",
+          "mirror": true,
+          "start_x": 160.0,
+          "scenario_sha256": "36b9583904df019a384d479a6f5a24d16f88a9310aef15e29e37c07475738130",
+          "scenario": {
+            "event_id": "wf25-F1-028-m1",
+            "family": "F1",
+            "template_group": "wf25-F1-028",
+            "seed": 25028,
+            "start_x": 160.0,
+            "mirror": true,
+            "horizon": 160,
+            "fire_interval": 16,
+            "bullet_speed": 8.0,
+            "wall_frame": 52,
+            "internal_gap": true,
+            "model_known": true,
+            "split": "development",
+            "depletion_pressure": false,
+            "coverage": [
+              8.0,
+              376.0
+            ],
+            "gap": [
+              168.0,
+              184.0
+            ],
+            "window": [
+              34,
+              104
+            ],
+            "threshold": 180.0,
+            "goal": 160.0,
+            "origin": [
+              192.0,
+              100.0
+            ],
+            "burst": false
+          }
+        }
+      ]
+    },
+    {
+      "group": "wf25-F1-033",
+      "family": "F1",
+      "source": "wf25",
+      "index": 16,
+      "split": "train",
+      "signature": [
+        "F1",
+        372.0,
+        [
+          12.0,
+          376.0
+        ],
+        [
+          272.0,
+          292.0
+        ],
+        56,
+        16,
+        [
+          34,
+          104
+        ],
+        180.0,
+        160.0,
+        [
+          192.0,
+          100.0
+        ],
+        false,
+        8.0,
+        true
+      ],
+      "events": [
+        {
+          "event_id": "wf25-F1-033-m0",
+          "mirror": false,
+          "start_x": 372.0,
+          "scenario_sha256": "c02c95f7e0a82af81444b2a526bd974b954ab4240a48fdd7008623e3fd1e744f",
+          "scenario": {
+            "event_id": "wf25-F1-033-m0",
+            "family": "F1",
+            "template_group": "wf25-F1-033",
+            "seed": 25033,
+            "start_x": 372.0,
+            "mirror": false,
+            "horizon": 160,
+            "fire_interval": 16,
+            "bullet_speed": 8.0,
+            "wall_frame": 56,
+            "internal_gap": true,
+            "model_known": true,
+            "split": "development",
+            "depletion_pressure": false,
+            "coverage": [
+              12.0,
+              376.0
+            ],
+            "gap": [
+              272.0,
+              292.0
+            ],
+            "window": [
+              34,
+              104
+            ],
+            "threshold": 180.0,
+            "goal": 160.0,
+            "origin": [
+              192.0,
+              100.0
+            ],
+            "burst": false
+          }
+        },
+        {
+          "event_id": "wf25-F1-033-m1",
+          "mirror": true,
+          "start_x": 12.0,
+          "scenario_sha256": "c8ca2c33a5e2c17f843c6abd5055af82179c95a40f342204d730ee6998ad82df",
+          "scenario": {
+            "event_id": "wf25-F1-033-m1",
+            "family": "F1",
+            "template_group": "wf25-F1-033",
+            "seed": 25033,
+            "start_x": 12.0,
+            "mirror": true,
+            "horizon": 160,
+            "fire_interval": 16,
+            "bullet_speed": 8.0,
+            "wall_frame": 56,
+            "internal_gap": true,
+            "model_known": true,
+            "split": "development",
+            "depletion_pressure": false,
+            "coverage": [
+              12.0,
+              376.0
+            ],
+            "gap": [
+              272.0,
+              292.0
+            ],
+            "window": [
+              34,
+              104
+            ],
+            "threshold": 180.0,
+            "goal": 160.0,
+            "origin": [
+              192.0,
+              100.0
+            ],
+            "burst": false
+          }
+        }
+      ]
+    },
+    {
+      "group": "wf25-F1-040",
+      "family": "F1",
+      "source": "wf25",
+      "index": 17,
+      "split": "heldout",
+      "signature": [
+        "F1",
+        356.0,
+        [
+          12.0,
+          376.0
+        ],
+        [
+          248.0,
+          260.0
+        ],
+        60,
+        16,
+        [
+          34,
+          104
+        ],
+        180.0,
+        160.0,
+        [
+          192.0,
+          100.0
+        ],
+        false,
+        8.0,
+        true
+      ],
+      "events": [
+        {
+          "event_id": "wf25-F1-040-m0",
+          "mirror": false,
+          "start_x": 356.0,
+          "scenario_sha256": "44536504dd55ebd2b14846d344ea1362d46f5a889afb9130565933da44258c2f",
+          "scenario": {
+            "event_id": "wf25-F1-040-m0",
+            "family": "F1",
+            "template_group": "wf25-F1-040",
+            "seed": 25040,
+            "start_x": 356.0,
+            "mirror": false,
+            "horizon": 160,
+            "fire_interval": 16,
+            "bullet_speed": 8.0,
+            "wall_frame": 60,
+            "internal_gap": true,
+            "model_known": true,
+            "split": "development",
+            "depletion_pressure": false,
+            "coverage": [
+              12.0,
+              376.0
+            ],
+            "gap": [
+              248.0,
+              260.0
+            ],
+            "window": [
+              34,
+              104
+            ],
+            "threshold": 180.0,
+            "goal": 160.0,
+            "origin": [
+              192.0,
+              100.0
+            ],
+            "burst": false
+          }
+        },
+        {
+          "event_id": "wf25-F1-040-m1",
+          "mirror": true,
+          "start_x": 28.0,
+          "scenario_sha256": "cc8793ccd68bf82895238e9899cf852a4379e297fe3a107b19e698ec5b1f77a6",
+          "scenario": {
+            "event_id": "wf25-F1-040-m1",
+            "family": "F1",
+            "template_group": "wf25-F1-040",
+            "seed": 25040,
+            "start_x": 28.0,
+            "mirror": true,
+            "horizon": 160,
+            "fire_interval": 16,
+            "bullet_speed": 8.0,
+            "wall_frame": 60,
+            "internal_gap": true,
+            "model_known": true,
+            "split": "development",
+            "depletion_pressure": false,
+            "coverage": [
+              12.0,
+              376.0
+            ],
+            "gap": [
+              248.0,
+              260.0
+            ],
+            "window": [
+              34,
+              104
+            ],
+            "threshold": 180.0,
+            "goal": 160.0,
+            "origin": [
+              192.0,
+              100.0
+            ],
+            "burst": false
+          }
+        }
+      ]
+    },
+    {
+      "group": "wf25-F1-042",
+      "family": "F1",
+      "source": "wf25",
+      "index": 18,
+      "split": "train",
+      "signature": [
+        "F1",
+        248.0,
+        [
+          8.0,
+          376.0
+        ],
+        [
+          296.0,
+          310.0
+        ],
+        44,
+        16,
+        [
+          34,
+          104
+        ],
+        180.0,
+        160.0,
+        [
+          192.0,
+          100.0
+        ],
+        false,
+        8.0,
+        true
+      ],
+      "events": [
+        {
+          "event_id": "wf25-F1-042-m0",
+          "mirror": false,
+          "start_x": 248.0,
+          "scenario_sha256": "ad59d61dbcb9e0d2491b905fba005e36f4d9a4c0d5558444f4f037769d8a904b",
+          "scenario": {
+            "event_id": "wf25-F1-042-m0",
+            "family": "F1",
+            "template_group": "wf25-F1-042",
+            "seed": 25042,
+            "start_x": 248.0,
+            "mirror": false,
+            "horizon": 160,
+            "fire_interval": 16,
+            "bullet_speed": 8.0,
+            "wall_frame": 44,
+            "internal_gap": true,
+            "model_known": true,
+            "split": "development",
+            "depletion_pressure": false,
+            "coverage": [
+              8.0,
+              376.0
+            ],
+            "gap": [
+              296.0,
+              310.0
+            ],
+            "window": [
+              34,
+              104
+            ],
+            "threshold": 180.0,
+            "goal": 160.0,
+            "origin": [
+              192.0,
+              100.0
+            ],
+            "burst": false
+          }
+        },
+        {
+          "event_id": "wf25-F1-042-m1",
+          "mirror": true,
+          "start_x": 136.0,
+          "scenario_sha256": "996455e5bf37d07776bed5176b69460f3d0106c2bd196176ba5919eaadc62a42",
+          "scenario": {
+            "event_id": "wf25-F1-042-m1",
+            "family": "F1",
+            "template_group": "wf25-F1-042",
+            "seed": 25042,
+            "start_x": 136.0,
+            "mirror": true,
+            "horizon": 160,
+            "fire_interval": 16,
+            "bullet_speed": 8.0,
+            "wall_frame": 44,
+            "internal_gap": true,
+            "model_known": true,
+            "split": "development",
+            "depletion_pressure": false,
+            "coverage": [
+              8.0,
+              376.0
+            ],
+            "gap": [
+              296.0,
+              310.0
+            ],
+            "window": [
+              34,
+              104
+            ],
+            "threshold": 180.0,
+            "goal": 160.0,
+            "origin": [
+              192.0,
+              100.0
+            ],
+            "burst": false
+          }
+        }
+      ]
+    },
+    {
+      "group": "wf25-F1-046",
+      "family": "F1",
+      "source": "wf25",
+      "index": 19,
+      "split": "heldout",
+      "signature": [
+        "F1",
+        206.0,
+        [
+          12.0,
+          376.0
+        ],
+        [
+          152.0,
+          166.0
+        ],
+        48,
+        16,
+        [
+          34,
+          104
+        ],
+        180.0,
+        160.0,
+        [
+          192.0,
+          100.0
+        ],
+        false,
+        8.0,
+        true
+      ],
+      "events": [
+        {
+          "event_id": "wf25-F1-046-m0",
+          "mirror": false,
+          "start_x": 206.0,
+          "scenario_sha256": "b068d42d1f381b7e8c8a1fa20cf7a0ceaa9709886a6d2b113c1ada269038beb8",
+          "scenario": {
+            "event_id": "wf25-F1-046-m0",
+            "family": "F1",
+            "template_group": "wf25-F1-046",
+            "seed": 25046,
+            "start_x": 206.0,
+            "mirror": false,
+            "horizon": 160,
+            "fire_interval": 16,
+            "bullet_speed": 8.0,
+            "wall_frame": 48,
+            "internal_gap": true,
+            "model_known": true,
+            "split": "development",
+            "depletion_pressure": false,
+            "coverage": [
+              12.0,
+              376.0
+            ],
+            "gap": [
+              152.0,
+              166.0
+            ],
+            "window": [
+              34,
+              104
+            ],
+            "threshold": 180.0,
+            "goal": 160.0,
+            "origin": [
+              192.0,
+              100.0
+            ],
+            "burst": false
+          }
+        },
+        {
+          "event_id": "wf25-F1-046-m1",
+          "mirror": true,
+          "start_x": 178.0,
+          "scenario_sha256": "437f80548e11767ceeba925bab62f68ee651631709f48e331b969aad85a031c2",
+          "scenario": {
+            "event_id": "wf25-F1-046-m1",
+            "family": "F1",
+            "template_group": "wf25-F1-046",
+            "seed": 25046,
+            "start_x": 178.0,
+            "mirror": true,
+            "horizon": 160,
+            "fire_interval": 16,
+            "bullet_speed": 8.0,
+            "wall_frame": 48,
+            "internal_gap": true,
+            "model_known": true,
+            "split": "development",
+            "depletion_pressure": false,
+            "coverage": [
+              12.0,
+              376.0
+            ],
+            "gap": [
+              152.0,
+              166.0
+            ],
+            "window": [
+              34,
+              104
+            ],
+            "threshold": 180.0,
+            "goal": 160.0,
+            "origin": [
+              192.0,
+              100.0
+            ],
+            "burst": false
+          }
+        }
+      ]
+    },
+    {
+      "group": "wf25-F1-048",
+      "family": "F1",
+      "source": "wf25",
+      "index": 20,
+      "split": "train",
+      "signature": [
+        "F1",
+        212.0,
+        [
+          8.0,
+          376.0
+        ],
+        [
+          144.0,
+          164.0
+        ],
+        44,
+        16,
+        [
+          34,
+          104
+        ],
+        180.0,
+        160.0,
+        [
+          192.0,
+          100.0
+        ],
+        false,
+        8.0,
+        true
+      ],
+      "events": [
+        {
+          "event_id": "wf25-F1-048-m0",
+          "mirror": false,
+          "start_x": 212.0,
+          "scenario_sha256": "ccb9272a3b336aa827f9ba48f5b6b180415fd4a3e402c0d15629dd5672e7dd72",
+          "scenario": {
+            "event_id": "wf25-F1-048-m0",
+            "family": "F1",
+            "template_group": "wf25-F1-048",
+            "seed": 25048,
+            "start_x": 212.0,
+            "mirror": false,
+            "horizon": 160,
+            "fire_interval": 16,
+            "bullet_speed": 8.0,
+            "wall_frame": 44,
+            "internal_gap": true,
+            "model_known": true,
+            "split": "development",
+            "depletion_pressure": false,
+            "coverage": [
+              8.0,
+              376.0
+            ],
+            "gap": [
+              144.0,
+              164.0
+            ],
+            "window": [
+              34,
+              104
+            ],
+            "threshold": 180.0,
+            "goal": 160.0,
+            "origin": [
+              192.0,
+              100.0
+            ],
+            "burst": false
+          }
+        },
+        {
+          "event_id": "wf25-F1-048-m1",
+          "mirror": true,
+          "start_x": 172.0,
+          "scenario_sha256": "5fc0baa6f6a657ac0c37949a6c3972bce673788b5e33043b31b688a7047dd249",
+          "scenario": {
+            "event_id": "wf25-F1-048-m1",
+            "family": "F1",
+            "template_group": "wf25-F1-048",
+            "seed": 25048,
+            "start_x": 172.0,
+            "mirror": true,
+            "horizon": 160,
+            "fire_interval": 16,
+            "bullet_speed": 8.0,
+            "wall_frame": 44,
+            "internal_gap": true,
+            "model_known": true,
+            "split": "development",
+            "depletion_pressure": false,
+            "coverage": [
+              8.0,
+              376.0
+            ],
+            "gap": [
+              144.0,
+              164.0
+            ],
+            "window": [
+              34,
+              104
+            ],
+            "threshold": 180.0,
+            "goal": 160.0,
+            "origin": [
+              192.0,
+              100.0
+            ],
+            "burst": false
+          }
+        }
+      ]
+    },
+    {
+      "group": "wf25-F1-049",
+      "family": "F1",
+      "source": "wf25",
+      "index": 21,
+      "split": "train",
+      "signature": [
+        "F1",
+        326.0,
+        [
+          8.0,
+          376.0
+        ],
+        [
+          272.0,
+          286.0
+        ],
+        56,
+        16,
+        [
+          34,
+          104
+        ],
+        180.0,
+        160.0,
+        [
+          192.0,
+          100.0
+        ],
+        false,
+        8.0,
+        true
+      ],
+      "events": [
+        {
+          "event_id": "wf25-F1-049-m0",
+          "mirror": false,
+          "start_x": 326.0,
+          "scenario_sha256": "d2d6f93da43e06fe305dae6afe9bff3e58aa1d82c74d332ee9123214c7aa1608",
+          "scenario": {
+            "event_id": "wf25-F1-049-m0",
+            "family": "F1",
+            "template_group": "wf25-F1-049",
+            "seed": 25049,
+            "start_x": 326.0,
+            "mirror": false,
+            "horizon": 160,
+            "fire_interval": 16,
+            "bullet_speed": 8.0,
+            "wall_frame": 56,
+            "internal_gap": true,
+            "model_known": true,
+            "split": "development",
+            "depletion_pressure": false,
+            "coverage": [
+              8.0,
+              376.0
+            ],
+            "gap": [
+              272.0,
+              286.0
+            ],
+            "window": [
+              34,
+              104
+            ],
+            "threshold": 180.0,
+            "goal": 160.0,
+            "origin": [
+              192.0,
+              100.0
+            ],
+            "burst": false
+          }
+        },
+        {
+          "event_id": "wf25-F1-049-m1",
+          "mirror": true,
+          "start_x": 58.0,
+          "scenario_sha256": "58522200fe92db76d7c0300054e96c65209b20b58d888c262bdf1163ac0a8fa7",
+          "scenario": {
+            "event_id": "wf25-F1-049-m1",
+            "family": "F1",
+            "template_group": "wf25-F1-049",
+            "seed": 25049,
+            "start_x": 58.0,
+            "mirror": true,
+            "horizon": 160,
+            "fire_interval": 16,
+            "bullet_speed": 8.0,
+            "wall_frame": 56,
+            "internal_gap": true,
+            "model_known": true,
+            "split": "development",
+            "depletion_pressure": false,
+            "coverage": [
+              8.0,
+              376.0
+            ],
+            "gap": [
+              272.0,
+              286.0
+            ],
+            "window": [
+              34,
+              104
+            ],
+            "threshold": 180.0,
+            "goal": 160.0,
+            "origin": [
+              192.0,
+              100.0
+            ],
+            "burst": false
+          }
+        }
+      ]
+    }
+  ],
+  "train_events": [
+    "wf18-F1-002-m0",
+    "wf18-F1-002-m1",
+    "wf18-F1-006-m0",
+    "wf18-F1-006-m1",
+    "wf18-F1-009-m0",
+    "wf18-F1-009-m1",
+    "wf25-F1-001-m0",
+    "wf25-F1-001-m1",
+    "wf25-F1-007-m0",
+    "wf25-F1-007-m1",
+    "wf25-F1-012-m0",
+    "wf25-F1-012-m1",
+    "wf25-F1-019-m0",
+    "wf25-F1-019-m1",
+    "wf25-F1-023-m0",
+    "wf25-F1-023-m1",
+    "wf25-F1-033-m0",
+    "wf25-F1-033-m1",
+    "wf25-F1-042-m0",
+    "wf25-F1-042-m1",
+    "wf25-F1-048-m0",
+    "wf25-F1-048-m1",
+    "wf25-F1-049-m0",
+    "wf25-F1-049-m1"
+  ],
+  "heldout_events": [
+    "wf18-F1-005-m0",
+    "wf18-F1-005-m1",
+    "wf18-F1-007-m0",
+    "wf18-F1-007-m1",
+    "wf18-F1-010-m0",
+    "wf18-F1-010-m1",
+    "wf25-F1-003-m0",
+    "wf25-F1-003-m1",
+    "wf25-F1-008-m0",
+    "wf25-F1-008-m1",
+    "wf25-F1-015-m0",
+    "wf25-F1-015-m1",
+    "wf25-F1-020-m0",
+    "wf25-F1-020-m1",
+    "wf25-F1-028-m0",
+    "wf25-F1-028-m1",
+    "wf25-F1-040-m0",
+    "wf25-F1-040-m1",
+    "wf25-F1-046-m0",
+    "wf25-F1-046-m1"
+  ],
+  "new_heldout_events": [
+    "wf25-F1-003-m0",
+    "wf25-F1-003-m1",
+    "wf25-F1-008-m0",
+    "wf25-F1-008-m1",
+    "wf25-F1-015-m0",
+    "wf25-F1-015-m1",
+    "wf25-F1-020-m0",
+    "wf25-F1-020-m1",
+    "wf25-F1-028-m0",
+    "wf25-F1-028-m1",
+    "wf25-F1-040-m0",
+    "wf25-F1-040-m1",
+    "wf25-F1-046-m0",
+    "wf25-F1-046-m1"
+  ],
+  "r19_frozen_events": [
+    "wf18-F1-005-m0",
+    "wf18-F1-005-m1",
+    "wf18-F1-007-m0",
+    "wf18-F1-007-m1",
+    "wf18-F1-010-m0",
+    "wf18-F1-010-m1"
+  ]
+}

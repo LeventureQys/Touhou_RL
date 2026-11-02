@@ -1,0 +1,187 @@
+{
+  "schema": "v373-environment/1",
+  "python": "3.12.10 (tags/v3.12.10:0cc8128, Apr  8 2025, 12:21:36) [MSC v.1943 64 bit (AMD64)]",
+  "executable": "C:\\Users\\a5935\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+  "platform": "Windows-11-10.0.26300-SP0",
+  "torch": "2.14.1+cu132",
+  "cuda_runtime": "13.2",
+  "cudnn": 92400,
+  "cuda_available": true,
+  "baseline": {
+    "path": "third_party\\th08\\build\\rl\\runs\\v104-v3-E5-s7\\policy.pt",
+    "sha256": "74abde8a996c13fae832913e4e5533bc9490688bc4c0aa73560e695f065d14be",
+    "arch": "v3-st",
+    "config": {
+      "depth": 3,
+      "playfield_hw": [
+        224,
+        192
+      ],
+      "hud_score_hw": [
+        34,
+        216
+      ],
+      "hud_status_hw": [
+        126,
+        216
+      ],
+      "local_enabled": true,
+      "roi_native_hw": [
+        128,
+        128
+      ],
+      "local_grid_hw": [
+        16,
+        16
+      ],
+      "align_corners": false,
+      "center_detach": true,
+      "heatmap_gauss_sigma": 2.0,
+      "candidate_order_version": "focus9-move-v1",
+      "history_contract": "causal-segment-v1",
+      "score_semantics": "preference_logits",
+      "pf_width": 32,
+      "hud_width": 16,
+      "trunk_hidden": 256
+    },
+    "parameters": 1507162,
+    "checkpoint_metadata_keys": [
+      "arch",
+      "contract_version",
+      "danger_head_variant",
+      "depth",
+      "epoch",
+      "heatmap_sigma",
+      "history_contract",
+      "local_enabled",
+      "loss_config",
+      "manifest_sha",
+      "policy_objective",
+      "region_sizes",
+      "selection_contract",
+      "selection_key",
+      "source_state_sha",
+      "source_state_sha256",
+      "stage",
+      "teacher_fingerprint",
+      "train_fraction",
+      "val_index_sha256"
+    ]
+  },
+  "git": {
+    "exit_code": 0,
+    "output": "Document\\Update\\Alpha\\v3.7.3\\evidence\\audit-git.txt"
+  },
+  "nvidia_smi": {
+    "exit_code": 0,
+    "output": "Document\\Update\\Alpha\\v3.7.3\\evidence\\audit-nvidia-smi.txt"
+  },
+  "live_calibration": "not_run",
+  "pixel_alignment": "not_verified",
+  "gpu": {
+    "name": "NVIDIA GeForce RTX 4070 SUPER",
+    "total_memory_bytes": 12878086144,
+    "capability": [
+      8,
+      9
+    ]
+  },
+  "benchmark": {
+    "kind": "synthetic_tensor_real_backbone_forward_not_game_latency",
+    "warmup": 5,
+    "measured_iterations": 10,
+    "cpu_threads": 4,
+    "rows": [
+      {
+        "batch": 1,
+        "precision": "float32",
+        "median_ms": 2.819599991198629,
+        "p95_ms": 3.3485999883851036,
+        "images_per_second": 344.7110980122572,
+        "peak_allocated_bytes": 23245312,
+        "finite": true
+      },
+      {
+        "batch": 1,
+        "precision": "float16",
+        "median_ms": 3.7389999924926087,
+        "p95_ms": 4.119899997022003,
+        "images_per_second": 273.2113538586455,
+        "peak_allocated_bytes": 23370752,
+        "finite": true
+      },
+      {
+        "batch": 4,
+        "precision": "float32",
+        "median_ms": 2.5771999935386702,
+        "p95_ms": 4.910900010145269,
+        "images_per_second": 1374.749968041371,
+        "peak_allocated_bytes": 51373056,
+        "finite": true
+      },
+      {
+        "batch": 4,
+        "precision": "float16",
+        "median_ms": 3.5133999917889014,
+        "p95_ms": 4.028600000310689,
+        "images_per_second": 1138.6182291768184,
+        "peak_allocated_bytes": 50853376,
+        "finite": true
+      },
+      {
+        "batch": 8,
+        "precision": "float32",
+        "median_ms": 2.8451999969547614,
+        "p95_ms": 3.351999999722466,
+        "images_per_second": 2720.9311041704555,
+        "peak_allocated_bytes": 91887104,
+        "finite": true
+      },
+      {
+        "batch": 8,
+        "precision": "float16",
+        "median_ms": 3.828000000794418,
+        "p95_ms": 7.551600006991066,
+        "images_per_second": 1750.562367070733,
+        "peak_allocated_bytes": 83917312,
+        "finite": true
+      },
+      {
+        "batch": 16,
+        "precision": "float32",
+        "median_ms": 3.5367000091355294,
+        "p95_ms": 4.114700001082383,
+        "images_per_second": 4353.433496320068,
+        "peak_allocated_bytes": 157916160,
+        "finite": true
+      },
+      {
+        "batch": 16,
+        "precision": "float16",
+        "median_ms": 3.7813000089954585,
+        "p95_ms": 4.512799991061911,
+        "images_per_second": 4185.348141454375,
+        "peak_allocated_bytes": 151395840,
+        "finite": true
+      },
+      {
+        "batch": 32,
+        "precision": "float32",
+        "median_ms": 7.48730001214426,
+        "p95_ms": 7.887299987487495,
+        "images_per_second": 4353.575645779671,
+        "peak_allocated_bytes": 301950464,
+        "finite": true
+      },
+      {
+        "batch": 32,
+        "precision": "float16",
+        "median_ms": 5.831000002217479,
+        "p95_ms": 6.922800006577745,
+        "images_per_second": 5335.74330858011,
+        "peak_allocated_bytes": 285763584,
+        "finite": true
+      }
+    ]
+  }
+}

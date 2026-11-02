@@ -1,0 +1,1090 @@
+{
+  "schema": "v373-valid-teacher-split/1",
+  "source": {
+    "manifest": "Document/Update/Alpha/v3.7.3/evidence/worldfilter-round18/run/manifest.json",
+    "manifest_sha256": "9bd3a1b8d31784d6e0fd546fc701f93be611311d1743c78f159e77a4f5fe7fa7",
+    "events": 28,
+    "groups": 14
+  },
+  "rule": "one group = base + mirror, atomic; within each family the groups are ordered by group name (candidate index) and alternate train/validation starting with train at index 0; the two F2 groups therefore give one train and one validation group",
+  "signature_fields": [
+    "family",
+    "canonical start_x",
+    "coverage",
+    "gap",
+    "wall_frame",
+    "fire_interval",
+    "window",
+    "threshold",
+    "goal",
+    "origin",
+    "burst",
+    "bullet_speed",
+    "internal_gap"
+  ],
+  "counts": {
+    "groups": {
+      "train": 7,
+      "validation": 7
+    },
+    "events": {
+      "train": 14,
+      "validation": 14
+    },
+    "by_family": {
+      "F1": {
+        "train": 3,
+        "validation": 3
+      },
+      "F2": {
+        "train": 1,
+        "validation": 1
+      },
+      "F3": {
+        "train": 3,
+        "validation": 3
+      }
+    }
+  },
+  "assertions": {
+    "groups": 14,
+    "events": 28,
+    "groups_per_split": {
+      "train": 7,
+      "validation": 7
+    },
+    "events_per_split": {
+      "train": 14,
+      "validation": 14
+    },
+    "family_group_counts": {
+      "F1": {
+        "train": 3,
+        "validation": 3
+      },
+      "F2": {
+        "train": 1,
+        "validation": 1
+      },
+      "F3": {
+        "train": 3,
+        "validation": 3
+      }
+    },
+    "no_group_crosses_split": true,
+    "mirror_and_base_in_one_group_and_split": true,
+    "every_family_has_both_splits": true,
+    "f2_shape": "two groups: index 0 train, index 1 validation",
+    "test_split": false
+  },
+  "groups": [
+    {
+      "group": "wf18-F1-002",
+      "family": "F1",
+      "index_in_family": 0,
+      "split": "train",
+      "signature": [
+        "F1",
+        56.0,
+        [
+          8.0,
+          376.0
+        ],
+        [
+          88.0,
+          104.0
+        ],
+        76,
+        16,
+        [
+          34,
+          104
+        ],
+        180.0,
+        160.0,
+        [
+          192.0,
+          100.0
+        ],
+        false,
+        8.0,
+        true
+      ],
+      "params": {
+        "family": "F1",
+        "canonical start_x": 56.0,
+        "coverage": [
+          8.0,
+          376.0
+        ],
+        "gap": [
+          88.0,
+          104.0
+        ],
+        "wall_frame": 76,
+        "fire_interval": 16,
+        "window": [
+          34,
+          104
+        ],
+        "threshold": 180.0,
+        "goal": 160.0,
+        "origin": [
+          192.0,
+          100.0
+        ],
+        "burst": false,
+        "bullet_speed": 8.0,
+        "internal_gap": true
+      },
+      "events": [
+        {
+          "event_id": "wf18-F1-002-m0",
+          "mirror": false,
+          "start_x": 56.0
+        },
+        {
+          "event_id": "wf18-F1-002-m1",
+          "mirror": true,
+          "start_x": 328.0
+        }
+      ]
+    },
+    {
+      "group": "wf18-F1-005",
+      "family": "F1",
+      "index_in_family": 1,
+      "split": "validation",
+      "signature": [
+        "F1",
+        216.0,
+        [
+          12.0,
+          376.0
+        ],
+        [
+          248.0,
+          264.0
+        ],
+        48,
+        16,
+        [
+          34,
+          104
+        ],
+        180.0,
+        160.0,
+        [
+          192.0,
+          100.0
+        ],
+        false,
+        8.0,
+        true
+      ],
+      "params": {
+        "family": "F1",
+        "canonical start_x": 216.0,
+        "coverage": [
+          12.0,
+          376.0
+        ],
+        "gap": [
+          248.0,
+          264.0
+        ],
+        "wall_frame": 48,
+        "fire_interval": 16,
+        "window": [
+          34,
+          104
+        ],
+        "threshold": 180.0,
+        "goal": 160.0,
+        "origin": [
+          192.0,
+          100.0
+        ],
+        "burst": false,
+        "bullet_speed": 8.0,
+        "internal_gap": true
+      },
+      "events": [
+        {
+          "event_id": "wf18-F1-005-m0",
+          "mirror": false,
+          "start_x": 216.0
+        },
+        {
+          "event_id": "wf18-F1-005-m1",
+          "mirror": true,
+          "start_x": 168.0
+        }
+      ]
+    },
+    {
+      "group": "wf18-F1-006",
+      "family": "F1",
+      "index_in_family": 2,
+      "split": "train",
+      "signature": [
+        "F1",
+        204.0,
+        [
+          12.0,
+          376.0
+        ],
+        [
+          144.0,
+          164.0
+        ],
+        40,
+        16,
+        [
+          34,
+          104
+        ],
+        180.0,
+        160.0,
+        [
+          192.0,
+          100.0
+        ],
+        false,
+        8.0,
+        true
+      ],
+      "params": {
+        "family": "F1",
+        "canonical start_x": 204.0,
+        "coverage": [
+          12.0,
+          376.0
+        ],
+        "gap": [
+          144.0,
+          164.0
+        ],
+        "wall_frame": 40,
+        "fire_interval": 16,
+        "window": [
+          34,
+          104
+        ],
+        "threshold": 180.0,
+        "goal": 160.0,
+        "origin": [
+          192.0,
+          100.0
+        ],
+        "burst": false,
+        "bullet_speed": 8.0,
+        "internal_gap": true
+      },
+      "events": [
+        {
+          "event_id": "wf18-F1-006-m0",
+          "mirror": false,
+          "start_x": 204.0
+        },
+        {
+          "event_id": "wf18-F1-006-m1",
+          "mirror": true,
+          "start_x": 180.0
+        }
+      ]
+    },
+    {
+      "group": "wf18-F1-007",
+      "family": "F1",
+      "index_in_family": 3,
+      "split": "validation",
+      "signature": [
+        "F1",
+        128.0,
+        [
+          8.0,
+          372.0
+        ],
+        [
+          152.0,
+          172.0
+        ],
+        60,
+        16,
+        [
+          34,
+          104
+        ],
+        180.0,
+        160.0,
+        [
+          192.0,
+          100.0
+        ],
+        false,
+        8.0,
+        true
+      ],
+      "params": {
+        "family": "F1",
+        "canonical start_x": 128.0,
+        "coverage": [
+          8.0,
+          372.0
+        ],
+        "gap": [
+          152.0,
+          172.0
+        ],
+        "wall_frame": 60,
+        "fire_interval": 16,
+        "window": [
+          34,
+          104
+        ],
+        "threshold": 180.0,
+        "goal": 160.0,
+        "origin": [
+          192.0,
+          100.0
+        ],
+        "burst": false,
+        "bullet_speed": 8.0,
+        "internal_gap": true
+      },
+      "events": [
+        {
+          "event_id": "wf18-F1-007-m0",
+          "mirror": false,
+          "start_x": 128.0
+        },
+        {
+          "event_id": "wf18-F1-007-m1",
+          "mirror": true,
+          "start_x": 256.0
+        }
+      ]
+    },
+    {
+      "group": "wf18-F1-009",
+      "family": "F1",
+      "index_in_family": 4,
+      "split": "train",
+      "signature": [
+        "F1",
+        104.0,
+        [
+          8.0,
+          376.0
+        ],
+        [
+          152.0,
+          172.0
+        ],
+        52,
+        16,
+        [
+          34,
+          104
+        ],
+        180.0,
+        160.0,
+        [
+          192.0,
+          100.0
+        ],
+        false,
+        8.0,
+        true
+      ],
+      "params": {
+        "family": "F1",
+        "canonical start_x": 104.0,
+        "coverage": [
+          8.0,
+          376.0
+        ],
+        "gap": [
+          152.0,
+          172.0
+        ],
+        "wall_frame": 52,
+        "fire_interval": 16,
+        "window": [
+          34,
+          104
+        ],
+        "threshold": 180.0,
+        "goal": 160.0,
+        "origin": [
+          192.0,
+          100.0
+        ],
+        "burst": false,
+        "bullet_speed": 8.0,
+        "internal_gap": true
+      },
+      "events": [
+        {
+          "event_id": "wf18-F1-009-m0",
+          "mirror": false,
+          "start_x": 104.0
+        },
+        {
+          "event_id": "wf18-F1-009-m1",
+          "mirror": true,
+          "start_x": 280.0
+        }
+      ]
+    },
+    {
+      "group": "wf18-F1-010",
+      "family": "F1",
+      "index_in_family": 5,
+      "split": "validation",
+      "signature": [
+        "F1",
+        216.0,
+        [
+          8.0,
+          376.0
+        ],
+        [
+          256.0,
+          268.0
+        ],
+        56,
+        16,
+        [
+          34,
+          104
+        ],
+        180.0,
+        160.0,
+        [
+          192.0,
+          100.0
+        ],
+        false,
+        8.0,
+        true
+      ],
+      "params": {
+        "family": "F1",
+        "canonical start_x": 216.0,
+        "coverage": [
+          8.0,
+          376.0
+        ],
+        "gap": [
+          256.0,
+          268.0
+        ],
+        "wall_frame": 56,
+        "fire_interval": 16,
+        "window": [
+          34,
+          104
+        ],
+        "threshold": 180.0,
+        "goal": 160.0,
+        "origin": [
+          192.0,
+          100.0
+        ],
+        "burst": false,
+        "bullet_speed": 8.0,
+        "internal_gap": true
+      },
+      "events": [
+        {
+          "event_id": "wf18-F1-010-m0",
+          "mirror": false,
+          "start_x": 216.0
+        },
+        {
+          "event_id": "wf18-F1-010-m1",
+          "mirror": true,
+          "start_x": 168.0
+        }
+      ]
+    },
+    {
+      "group": "wf18-F2-119",
+      "family": "F2",
+      "index_in_family": 0,
+      "split": "train",
+      "signature": [
+        "F2",
+        204.0,
+        [
+          100.0,
+          284.0
+        ],
+        [
+          180.0,
+          204.0
+        ],
+        64,
+        12,
+        [
+          34,
+          104
+        ],
+        180.0,
+        160.0,
+        [
+          224.0,
+          108.0
+        ],
+        false,
+        7.5,
+        false
+      ],
+      "params": {
+        "family": "F2",
+        "canonical start_x": 204.0,
+        "coverage": [
+          100.0,
+          284.0
+        ],
+        "gap": [
+          180.0,
+          204.0
+        ],
+        "wall_frame": 64,
+        "fire_interval": 12,
+        "window": [
+          34,
+          104
+        ],
+        "threshold": 180.0,
+        "goal": 160.0,
+        "origin": [
+          224.0,
+          108.0
+        ],
+        "burst": false,
+        "bullet_speed": 7.5,
+        "internal_gap": false
+      },
+      "events": [
+        {
+          "event_id": "wf18-F2-119-m0",
+          "mirror": false,
+          "start_x": 204.0
+        },
+        {
+          "event_id": "wf18-F2-119-m1",
+          "mirror": true,
+          "start_x": 180.0
+        }
+      ]
+    },
+    {
+      "group": "wf18-F2-399",
+      "family": "F2",
+      "index_in_family": 1,
+      "split": "validation",
+      "signature": [
+        "F2",
+        208.0,
+        [
+          100.0,
+          284.0
+        ],
+        [
+          180.0,
+          204.0
+        ],
+        64,
+        12,
+        [
+          34,
+          104
+        ],
+        180.0,
+        160.0,
+        [
+          224.0,
+          108.0
+        ],
+        false,
+        7.5,
+        false
+      ],
+      "params": {
+        "family": "F2",
+        "canonical start_x": 208.0,
+        "coverage": [
+          100.0,
+          284.0
+        ],
+        "gap": [
+          180.0,
+          204.0
+        ],
+        "wall_frame": 64,
+        "fire_interval": 12,
+        "window": [
+          34,
+          104
+        ],
+        "threshold": 180.0,
+        "goal": 160.0,
+        "origin": [
+          224.0,
+          108.0
+        ],
+        "burst": false,
+        "bullet_speed": 7.5,
+        "internal_gap": false
+      },
+      "events": [
+        {
+          "event_id": "wf18-F2-399-m0",
+          "mirror": false,
+          "start_x": 208.0
+        },
+        {
+          "event_id": "wf18-F2-399-m1",
+          "mirror": true,
+          "start_x": 176.0
+        }
+      ]
+    },
+    {
+      "group": "wf18-F3-000",
+      "family": "F3",
+      "index_in_family": 0,
+      "split": "train",
+      "signature": [
+        "F3",
+        282.0,
+        [
+          100.0,
+          284.0
+        ],
+        [
+          180.0,
+          204.0
+        ],
+        64,
+        24,
+        [
+          56,
+          76
+        ],
+        198.0,
+        174.0,
+        [
+          208.0,
+          104.0
+        ],
+        false,
+        8.0,
+        false
+      ],
+      "params": {
+        "family": "F3",
+        "canonical start_x": 282.0,
+        "coverage": [
+          100.0,
+          284.0
+        ],
+        "gap": [
+          180.0,
+          204.0
+        ],
+        "wall_frame": 64,
+        "fire_interval": 24,
+        "window": [
+          56,
+          76
+        ],
+        "threshold": 198.0,
+        "goal": 174.0,
+        "origin": [
+          208.0,
+          104.0
+        ],
+        "burst": false,
+        "bullet_speed": 8.0,
+        "internal_gap": false
+      },
+      "events": [
+        {
+          "event_id": "wf18-F3-000-m0",
+          "mirror": false,
+          "start_x": 282.0
+        },
+        {
+          "event_id": "wf18-F3-000-m1",
+          "mirror": true,
+          "start_x": 102.0
+        }
+      ]
+    },
+    {
+      "group": "wf18-F3-001",
+      "family": "F3",
+      "index_in_family": 1,
+      "split": "validation",
+      "signature": [
+        "F3",
+        220.8,
+        [
+          100.0,
+          284.0
+        ],
+        [
+          180.0,
+          204.0
+        ],
+        64,
+        14,
+        [
+          48,
+          80
+        ],
+        168.0,
+        144.0,
+        [
+          176.0,
+          96.0
+        ],
+        false,
+        8.0,
+        false
+      ],
+      "params": {
+        "family": "F3",
+        "canonical start_x": 220.8,
+        "coverage": [
+          100.0,
+          284.0
+        ],
+        "gap": [
+          180.0,
+          204.0
+        ],
+        "wall_frame": 64,
+        "fire_interval": 14,
+        "window": [
+          48,
+          80
+        ],
+        "threshold": 168.0,
+        "goal": 144.0,
+        "origin": [
+          176.0,
+          96.0
+        ],
+        "burst": false,
+        "bullet_speed": 8.0,
+        "internal_gap": false
+      },
+      "events": [
+        {
+          "event_id": "wf18-F3-001-m0",
+          "mirror": false,
+          "start_x": 220.8
+        },
+        {
+          "event_id": "wf18-F3-001-m1",
+          "mirror": true,
+          "start_x": 163.2
+        }
+      ]
+    },
+    {
+      "group": "wf18-F3-002",
+      "family": "F3",
+      "index_in_family": 2,
+      "split": "train",
+      "signature": [
+        "F3",
+        235.6,
+        [
+          100.0,
+          284.0
+        ],
+        [
+          180.0,
+          204.0
+        ],
+        64,
+        24,
+        [
+          40,
+          60
+        ],
+        186.0,
+        158.0,
+        [
+          176.0,
+          96.0
+        ],
+        false,
+        8.0,
+        false
+      ],
+      "params": {
+        "family": "F3",
+        "canonical start_x": 235.6,
+        "coverage": [
+          100.0,
+          284.0
+        ],
+        "gap": [
+          180.0,
+          204.0
+        ],
+        "wall_frame": 64,
+        "fire_interval": 24,
+        "window": [
+          40,
+          60
+        ],
+        "threshold": 186.0,
+        "goal": 158.0,
+        "origin": [
+          176.0,
+          96.0
+        ],
+        "burst": false,
+        "bullet_speed": 8.0,
+        "internal_gap": false
+      },
+      "events": [
+        {
+          "event_id": "wf18-F3-002-m0",
+          "mirror": false,
+          "start_x": 235.6
+        },
+        {
+          "event_id": "wf18-F3-002-m1",
+          "mirror": true,
+          "start_x": 148.4
+        }
+      ]
+    },
+    {
+      "group": "wf18-F3-003",
+      "family": "F3",
+      "index_in_family": 3,
+      "split": "validation",
+      "signature": [
+        "F3",
+        317.2,
+        [
+          100.0,
+          284.0
+        ],
+        [
+          180.0,
+          204.0
+        ],
+        64,
+        22,
+        [
+          80,
+          108
+        ],
+        186.0,
+        162.0,
+        [
+          192.0,
+          100.0
+        ],
+        false,
+        8.0,
+        false
+      ],
+      "params": {
+        "family": "F3",
+        "canonical start_x": 317.2,
+        "coverage": [
+          100.0,
+          284.0
+        ],
+        "gap": [
+          180.0,
+          204.0
+        ],
+        "wall_frame": 64,
+        "fire_interval": 22,
+        "window": [
+          80,
+          108
+        ],
+        "threshold": 186.0,
+        "goal": 162.0,
+        "origin": [
+          192.0,
+          100.0
+        ],
+        "burst": false,
+        "bullet_speed": 8.0,
+        "internal_gap": false
+      },
+      "events": [
+        {
+          "event_id": "wf18-F3-003-m0",
+          "mirror": false,
+          "start_x": 317.2
+        },
+        {
+          "event_id": "wf18-F3-003-m1",
+          "mirror": true,
+          "start_x": 66.80000000000001
+        }
+      ]
+    },
+    {
+      "group": "wf18-F3-004",
+      "family": "F3",
+      "index_in_family": 4,
+      "split": "train",
+      "signature": [
+        "F3",
+        276.72,
+        [
+          100.0,
+          284.0
+        ],
+        [
+          180.0,
+          204.0
+        ],
+        64,
+        18,
+        [
+          48,
+          76
+        ],
+        198.0,
+        178.0,
+        [
+          192.0,
+          100.0
+        ],
+        false,
+        8.0,
+        false
+      ],
+      "params": {
+        "family": "F3",
+        "canonical start_x": 276.72,
+        "coverage": [
+          100.0,
+          284.0
+        ],
+        "gap": [
+          180.0,
+          204.0
+        ],
+        "wall_frame": 64,
+        "fire_interval": 18,
+        "window": [
+          48,
+          76
+        ],
+        "threshold": 198.0,
+        "goal": 178.0,
+        "origin": [
+          192.0,
+          100.0
+        ],
+        "burst": false,
+        "bullet_speed": 8.0,
+        "internal_gap": false
+      },
+      "events": [
+        {
+          "event_id": "wf18-F3-004-m0",
+          "mirror": false,
+          "start_x": 276.72
+        },
+        {
+          "event_id": "wf18-F3-004-m1",
+          "mirror": true,
+          "start_x": 107.27999999999997
+        }
+      ]
+    },
+    {
+      "group": "wf18-F3-005",
+      "family": "F3",
+      "index_in_family": 5,
+      "split": "validation",
+      "signature": [
+        "F3",
+        274.16,
+        [
+          100.0,
+          284.0
+        ],
+        [
+          180.0,
+          204.0
+        ],
+        64,
+        20,
+        [
+          56,
+          84
+        ],
+        198.0,
+        174.0,
+        [
+          208.0,
+          104.0
+        ],
+        false,
+        8.0,
+        false
+      ],
+      "params": {
+        "family": "F3",
+        "canonical start_x": 274.16,
+        "coverage": [
+          100.0,
+          284.0
+        ],
+        "gap": [
+          180.0,
+          204.0
+        ],
+        "wall_frame": 64,
+        "fire_interval": 20,
+        "window": [
+          56,
+          84
+        ],
+        "threshold": 198.0,
+        "goal": 174.0,
+        "origin": [
+          208.0,
+          104.0
+        ],
+        "burst": false,
+        "bullet_speed": 8.0,
+        "internal_gap": false
+      },
+      "events": [
+        {
+          "event_id": "wf18-F3-005-m0",
+          "mirror": false,
+          "start_x": 274.16
+        },
+        {
+          "event_id": "wf18-F3-005-m1",
+          "mirror": true,
+          "start_x": 109.83999999999997
+        }
+      ]
+    }
+  ]
+}

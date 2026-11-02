@@ -1,0 +1,642 @@
+{
+  "schema": "v373-f1-scale-event/1",
+  "event_id": "wf18-F1-007-m1",
+  "family": "F1",
+  "group": "wf18-F1-007",
+  "split": "development",
+  "mirror": true,
+  "scenario": {
+    "event_id": "wf18-F1-007-m1",
+    "family": "F1",
+    "template_group": "wf18-F1-007",
+    "seed": 18007,
+    "start_x": 256.0,
+    "mirror": true,
+    "horizon": 160,
+    "fire_interval": 16,
+    "bullet_speed": 8.0,
+    "wall_frame": 60,
+    "internal_gap": true,
+    "model_known": true,
+    "split": "development",
+    "depletion_pressure": false,
+    "coverage": [
+      8.0,
+      372.0
+    ],
+    "gap": [
+      152.0,
+      172.0
+    ],
+    "window": [
+      34,
+      104
+    ],
+    "threshold": 180.0,
+    "goal": 160.0,
+    "origin": [
+      192.0,
+      100.0
+    ],
+    "burst": false
+  },
+  "scenario_sha256": "afdc2c2f435d49303d14d67178ea137be746f6af392c1daf45c0d745a53d51d6",
+  "teacher": "TacticalTeacherV2 (unmodified)",
+  "teacher_source": {
+    "tactical_teacher_v2.py": "47d39e1c02c32865ed5db46befdc1ab22d7178ded86eb1333409930ffd648e95",
+    "tactical_teacher.py": "c23c9b91ba8c692265f4171dd430d08c508d5884f26370581943727680d0ad73",
+    "tactical_teacher_validation.py": "86608f2774553caa473e6d5d0e35c44fe42e12064e5ec6ebe1d3e4913bf3d92b",
+    "tactical_scenarios.py": "471f73debcbb58ee3f184948b2368c6e453a59898c7286e68b29b9a863d84906"
+  },
+  "renderer": "tools.rl.v373_telegraph.render_state_telegraph (unchanged)",
+  "renderer_source_sha256": "6c6dcbc1377461bf91f6da7abcd94eace408fd77a687a18195732f50868b244b",
+  "telegraph": {
+    "lead": 45,
+    "fill": [
+      44,
+      58,
+      74
+    ],
+    "edge": [
+      96,
+      148,
+      128
+    ],
+    "edge_width": 4,
+    "window": [
+      15,
+      60
+    ],
+    "spans": [
+      [
+        232,
+        376
+      ],
+      [
+        12,
+        212
+      ]
+    ],
+    "gap": [
+      212,
+      232
+    ]
+  },
+  "render_freeze": {
+    "actions_sha256": "78fb5d910018025e9f57b2c8fffe8f1a8d70c5173e0242ec2428c276e1a4fea7",
+    "original_sha256": "60b58489b2c337f68c9ce19e3d6ff092d4893179c8c4a4bc5902f32329509276",
+    "telegraph_sha256": "f00ca4bc8587b0e69375242752cfc6bcdd960bcf3cc0ff570751b6ca8be16042",
+    "diff_sha256": "3b9a99039bc719be78f2de214cbabad44eb83bb0f00e27340dac2c8f89930d9e",
+    "changed_decision_frames": 22,
+    "changed_pixels": 3410044,
+    "first_changed_frame": 16,
+    "last_changed_frame": 58,
+    "preview": [
+      15,
+      60
+    ],
+    "spans": [
+      [
+        232,
+        376
+      ],
+      [
+        12,
+        212
+      ]
+    ],
+    "gap": [
+      212,
+      232
+    ],
+    "columns_sha256": "0d88f61b3766ddc1ac11c225cf5589202ae3522c2f9141141570dc2989823891"
+  },
+  "telegraph_confinement": {
+    "expected_decision_frames": 22,
+    "confined": true,
+    "note": "the preview must change exactly the decision rows whose stacked frames contain a frame of [wall_frame-45, wall_frame); checked by count, first and last frame"
+  },
+  "containment": {
+    "round19_teacher_actions_equal": true,
+    "round21_asset_bytes_equal": null,
+    "round21_assets": false
+  },
+  "actions": [
+    -2,
+    -2,
+    -2,
+    -1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "actions_sha256": "78fb5d910018025e9f57b2c8fffe8f1a8d70c5173e0242ec2428c276e1a4fea7",
+  "switches": 2,
+  "distinct_actions": [
+    -2,
+    -1,
+    0
+  ],
+  "action_counts": {
+    "-2": 3,
+    "-1": 1,
+    "0": 76
+  },
+  "decisions": 80,
+  "horizon": 160,
+  "verify_verdict": "feasible",
+  "teacher_verified": true,
+  "hud_constant": {
+    "hud_score": true,
+    "hud_status": true
+  },
+  "depth_frames": [
+    [
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      2
+    ],
+    [
+      0,
+      2,
+      4
+    ],
+    [
+      2,
+      4,
+      6
+    ],
+    [
+      4,
+      6,
+      8
+    ],
+    [
+      6,
+      8,
+      10
+    ],
+    [
+      8,
+      10,
+      12
+    ],
+    [
+      10,
+      12,
+      14
+    ],
+    [
+      12,
+      14,
+      16
+    ],
+    [
+      14,
+      16,
+      18
+    ],
+    [
+      16,
+      18,
+      20
+    ],
+    [
+      18,
+      20,
+      22
+    ],
+    [
+      20,
+      22,
+      24
+    ],
+    [
+      22,
+      24,
+      26
+    ],
+    [
+      24,
+      26,
+      28
+    ],
+    [
+      26,
+      28,
+      30
+    ],
+    [
+      28,
+      30,
+      32
+    ],
+    [
+      30,
+      32,
+      34
+    ],
+    [
+      32,
+      34,
+      36
+    ],
+    [
+      34,
+      36,
+      38
+    ],
+    [
+      36,
+      38,
+      40
+    ],
+    [
+      38,
+      40,
+      42
+    ],
+    [
+      40,
+      42,
+      44
+    ],
+    [
+      42,
+      44,
+      46
+    ],
+    [
+      44,
+      46,
+      48
+    ],
+    [
+      46,
+      48,
+      50
+    ],
+    [
+      48,
+      50,
+      52
+    ],
+    [
+      50,
+      52,
+      54
+    ],
+    [
+      52,
+      54,
+      56
+    ],
+    [
+      54,
+      56,
+      58
+    ],
+    [
+      56,
+      58,
+      60
+    ],
+    [
+      58,
+      60,
+      62
+    ],
+    [
+      60,
+      62,
+      64
+    ],
+    [
+      62,
+      64,
+      66
+    ],
+    [
+      64,
+      66,
+      68
+    ],
+    [
+      66,
+      68,
+      70
+    ],
+    [
+      68,
+      70,
+      72
+    ],
+    [
+      70,
+      72,
+      74
+    ],
+    [
+      72,
+      74,
+      76
+    ],
+    [
+      74,
+      76,
+      78
+    ],
+    [
+      76,
+      78,
+      80
+    ],
+    [
+      78,
+      80,
+      82
+    ],
+    [
+      80,
+      82,
+      84
+    ],
+    [
+      82,
+      84,
+      86
+    ],
+    [
+      84,
+      86,
+      88
+    ],
+    [
+      86,
+      88,
+      90
+    ],
+    [
+      88,
+      90,
+      92
+    ],
+    [
+      90,
+      92,
+      94
+    ],
+    [
+      92,
+      94,
+      96
+    ],
+    [
+      94,
+      96,
+      98
+    ],
+    [
+      96,
+      98,
+      100
+    ],
+    [
+      98,
+      100,
+      102
+    ],
+    [
+      100,
+      102,
+      104
+    ],
+    [
+      102,
+      104,
+      106
+    ],
+    [
+      104,
+      106,
+      108
+    ],
+    [
+      106,
+      108,
+      110
+    ],
+    [
+      108,
+      110,
+      112
+    ],
+    [
+      110,
+      112,
+      114
+    ],
+    [
+      112,
+      114,
+      116
+    ],
+    [
+      114,
+      116,
+      118
+    ],
+    [
+      116,
+      118,
+      120
+    ],
+    [
+      118,
+      120,
+      122
+    ],
+    [
+      120,
+      122,
+      124
+    ],
+    [
+      122,
+      124,
+      126
+    ],
+    [
+      124,
+      126,
+      128
+    ],
+    [
+      126,
+      128,
+      130
+    ],
+    [
+      128,
+      130,
+      132
+    ],
+    [
+      130,
+      132,
+      134
+    ],
+    [
+      132,
+      134,
+      136
+    ],
+    [
+      134,
+      136,
+      138
+    ],
+    [
+      136,
+      138,
+      140
+    ],
+    [
+      138,
+      140,
+      142
+    ],
+    [
+      140,
+      142,
+      144
+    ],
+    [
+      142,
+      144,
+      146
+    ],
+    [
+      144,
+      146,
+      148
+    ],
+    [
+      146,
+      148,
+      150
+    ],
+    [
+      148,
+      150,
+      152
+    ],
+    [
+      150,
+      152,
+      154
+    ],
+    [
+      152,
+      154,
+      156
+    ],
+    [
+      154,
+      156,
+      158
+    ]
+  ],
+  "region_sizes": {
+    "playfield": [
+      224,
+      192
+    ],
+    "hud_score": [
+      34,
+      216
+    ],
+    "hud_status": [
+      126,
+      216
+    ]
+  }
+}

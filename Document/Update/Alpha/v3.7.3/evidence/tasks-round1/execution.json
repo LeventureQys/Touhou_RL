@@ -1,0 +1,11 @@
+{
+  "date": "2026-11-01",
+  "working_directory": "D:\\WorkShop\\Touhou_RL",
+  "commands": [
+    {"command": "python -m pytest tests/test_tactical_tasks.py -q -p no:cacheprovider --basetemp .tmp/tasks-round1-20261101-a", "exit_code": 0, "result": "30 passed in 0.29s"},
+    {"command": "python -m touhou_rl.tactical_tasks --output Document/Update/Alpha/v3.7.3/evidence/tasks-round1", "exit_code": 0, "result": "24 development instances; reference 24/24 feasible; six preregistered construction checks true"},
+    {"command": "python -m pytest tests/test_tactical_tasks.py touhou_rl/tests/test_tactical_scenarios.py touhou_rl/tests/test_tactical_teacher.py -q -p no:cacheprovider --basetemp .tmp/tasks-round1-20261101-b", "exit_code": 0, "result": "41 passed in 0.37s"}
+  ],
+  "scope": "development only; no game control or formal training labels",
+  "note": "Both basetemp directories were fresh; cacheprovider disabled because existing .pytest_cache has Windows read denial. No permission repair attempted."
+}

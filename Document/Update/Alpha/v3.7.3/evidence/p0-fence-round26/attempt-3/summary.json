@@ -1,0 +1,334 @@
+{
+  "schema": "v373-p0-fence-round26/1",
+  "startedAt": "2026-11-02T08:56:11",
+  "preregistration": "Document/Update/Alpha/v3.7.3/preregistration/p0-fence-round26.md",
+  "build": {
+    "image": "third_party/th08/build_fence/th08.exe",
+    "canonical": false,
+    "note": "research-only fence variant; every global is +0x3000 relative to the canonical image, see third_party/th08/docs/FRAME_FENCE.md",
+    "exeBytes": 905728,
+    "addressTableBytes": 1787,
+    "mapBytes": 1394984,
+    "exeSha256": "BC1894FED48BEAC739F628836629B8B1B1C1B63DBE0097239C2762CB4C8D8565",
+    "textSha256": "34A8070B4854672C92A66C95472F9DF7FB3B83C0AFEB6FBD15BBAED45A8593C7",
+    "addressTableSha256": "79237A295567EDF0BAD6C557BCC1AAF8A7D1DB369D2C54429FBC1B779B85634A",
+    "mapSha256": "CE7B6672F9488909A5F700E6A52900C65358A4201B0DE5E62EE904F8A752BB54"
+  },
+  "environment": {
+    "platform": "Windows-11-10.0.26300-SP0",
+    "python": "3.12.10",
+    "machine": "AMD64",
+    "processor": "Intel64 Family 6 Model 183 Stepping 1, GenuineIntel",
+    "gpu": [
+      "NVIDIA GeForce RTX 4070 SUPER, 617.42"
+    ],
+    "gitHead": "fb1d42632dbbf6cf46a03430b835682edf22b79d",
+    "gitDirtyFiles": 291
+  },
+  "sessions": {
+    "demo": {
+      "mode": "demo",
+      "phases": {
+        "M1_clock": {
+          "frames": 239,
+          "missing": 1,
+          "budgetExpired": 0,
+          "qpcFrequency": 10000000,
+          "presentHz": 60.01660190337357,
+          "ticketGaps": {
+            "n": 238,
+            "allOne": true,
+            "counts": {
+              "1": 238
+            },
+            "max": 1
+          },
+          "logicGaps": {
+            "n": 238,
+            "allOne": true,
+            "counts": {
+              "1": 238
+            },
+            "max": 1
+          },
+          "holdUs": {
+            "median": 19,
+            "max": 37
+          },
+          "holdBudgetSkips": 0,
+          "distinctTickets": 239,
+          "playerStates": {
+            "0": 239
+          }
+        },
+        "M5_samples": {
+          "requested": 60,
+          "accepted": 60,
+          "discarded": 0,
+          "samplerRetries": 0,
+          "checkCounts": {
+            "active_bullets": {
+              "passed": 60,
+              "total": 60
+            },
+            "bullet_digest": {
+              "passed": 60,
+              "total": 60
+            },
+            "enemy_digest": {
+              "passed": 60,
+              "total": 60
+            },
+            "focus_mode": {
+              "passed": 60,
+              "total": 60
+            },
+            "gameplay_frame": {
+              "passed": 60,
+              "total": 60
+            },
+            "hold_stable": {
+              "passed": 60,
+              "total": 60
+            },
+            "input_mask": {
+              "passed": 60,
+              "total": 60
+            },
+            "pixels_frozen": {
+              "passed": 60,
+              "total": 60
+            },
+            "pixels_match_backbuffer": {
+              "passed": 60,
+              "total": 60
+            },
+            "player_position": {
+              "passed": 60,
+              "total": 60
+            },
+            "player_state": {
+              "passed": 60,
+              "total": 60
+            },
+            "player_velocity": {
+              "passed": 60,
+              "total": 60
+            },
+            "stage_frames": {
+              "passed": 60,
+              "total": 60
+            }
+          },
+          "allChecksPassed": 60,
+          "distinctTickets": 60,
+          "distinctImages": 60
+        },
+        "M6_legacy": {
+          "reads": 60,
+          "ticketChanged": 2,
+          "bulletDigestMismatch": 0,
+          "enemyDigestMismatch": 0,
+          "playerMismatch": 0,
+          "frameMismatch": 0
+        }
+      },
+      "inputBackend": "PostMessageKeyboard",
+      "clientSize": [
+        640,
+        480
+      ],
+      "demoState": {
+        "stage": 5,
+        "isDemo": true,
+        "isReplay": true,
+        "activeBullets": 0,
+        "playerState": 0
+      },
+      "fenceFinal": {
+        "ticket": 2379,
+        "holdCount": 359,
+        "holdBudgetSkips": 60
+      },
+      "status": "completed"
+    },
+    "practice": {
+      "mode": "practice",
+      "status": "crashed",
+      "error": "NameError: name 'gap_summaries' is not defined",
+      "phases": {}
+    }
+  },
+  "verdict": {
+    "gates": {
+      "G1_ticket_step": {
+        "passed": false,
+        "detail": {
+          "demo": {
+            "n": 238,
+            "allOne": true,
+            "counts": {
+              "1": 238
+            },
+            "max": 1
+          },
+          "practice": null
+        }
+      },
+      "G2_logic_step": {
+        "passed": false,
+        "detail": {
+          "demo": {
+            "n": 238,
+            "allOne": true,
+            "counts": {
+              "1": 238
+            },
+            "max": 1
+          },
+          "practice": null
+        }
+      },
+      "G3_present_rate": {
+        "passed": true,
+        "detail": {
+          "presentHz": 60.01660190337357
+        }
+      },
+      "G4_lag_in_strict": {
+        "passed": false,
+        "detail": {
+          "C1": {
+            "match": null,
+            "of": null
+          },
+          "C2": {
+            "match": null,
+            "of": null
+          }
+        }
+      },
+      "G5_lag_in_flex": {
+        "passed": false,
+        "detail": {
+          "C3": {
+            "match": null,
+            "of": null
+          },
+          "C4": {
+            "match": null,
+            "of": null
+          }
+        }
+      },
+      "G6_motion_lag": {
+        "passed": false,
+        "detail": {}
+      },
+      "G7_dynamics": {
+        "passed": false,
+        "detail": {}
+      },
+      "G8_boundaries": {
+        "passed": false,
+        "detail": {},
+        "saturatedDirections": []
+      },
+      "G9_reversal_carry": {
+        "passed": false,
+        "detail": {
+          "trials": 0,
+          "exactlyOneFrameOneStep": 0,
+          "carryFrames": [],
+          "carryPx": []
+        }
+      },
+      "G10_pixel_state": {
+        "passed": true,
+        "detail": {
+          "accepted": 60,
+          "discarded": 0,
+          "allChecksPassed": 60,
+          "pixelsMatchBackbuffer": {
+            "passed": 60,
+            "total": 60
+          },
+          "checkCounts": {
+            "active_bullets": {
+              "passed": 60,
+              "total": 60
+            },
+            "bullet_digest": {
+              "passed": 60,
+              "total": 60
+            },
+            "enemy_digest": {
+              "passed": 60,
+              "total": 60
+            },
+            "focus_mode": {
+              "passed": 60,
+              "total": 60
+            },
+            "gameplay_frame": {
+              "passed": 60,
+              "total": 60
+            },
+            "hold_stable": {
+              "passed": 60,
+              "total": 60
+            },
+            "input_mask": {
+              "passed": 60,
+              "total": 60
+            },
+            "pixels_frozen": {
+              "passed": 60,
+              "total": 60
+            },
+            "pixels_match_backbuffer": {
+              "passed": 60,
+              "total": 60
+            },
+            "player_position": {
+              "passed": 60,
+              "total": 60
+            },
+            "player_state": {
+              "passed": 60,
+              "total": 60
+            },
+            "player_velocity": {
+              "passed": 60,
+              "total": 60
+            },
+            "stage_frames": {
+              "passed": 60,
+              "total": 60
+            }
+          }
+        }
+      },
+      "G11_legacy_still_unknown": {
+        "passed": null,
+        "detail": {
+          "reads": 60,
+          "ticketChanged": 2,
+          "bulletDigestMismatch": 0,
+          "enemyDigestMismatch": 0,
+          "measured": true
+        }
+      }
+    },
+    "p0UnfreezePassed": false,
+    "interruptions": {
+      "count": 0,
+      "log": []
+    },
+    "decisions": {
+      "exactLabelsAllowed": false,
+      "scope": "fence build only; canonical image stays alignment_unknown"
+    }
+  },
+  "finishedAt": "2026-11-02T08:58:03"
+}

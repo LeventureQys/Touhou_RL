@@ -1,0 +1,77 @@
+{
+  "schema": "v373-kl-anchor-execution-notes/1",
+  "execution_order": [
+    "pytest tests/test_v373_kl_anchor.py (before preregistration)",
+    "python -m tools.rl.v373_kl_anchor preregister",
+    "python -m tools.rl.v373_kl_anchor run --device cuda",
+    "pytest tests/test_v373_kl_anchor.py (after the run)"
+  ],
+  "commands": [
+    {
+      "command": "python -m pytest tests/test_v373_kl_anchor.py -q -p no:cacheprovider --basetemp .tmp-r17-tests-04",
+      "exit_code": 0,
+      "log": "tests-first.log",
+      "log_encoding": "utf-16",
+      "last_line": "15 passed in 3.56s",
+      "phase": "before preregistration"
+    },
+    {
+      "command": "python -m tools.rl.v373_kl_anchor preregister",
+      "exit_code": 0,
+      "log": null,
+      "phase": "preregistration freeze"
+    },
+    {
+      "command": "python -m tools.rl.v373_kl_anchor run --device cuda",
+      "exit_code": 0,
+      "log": "execution.log",
+      "log_encoding": "utf-16",
+      "last_line": "exit=0",
+      "phase": "single training+evaluation run"
+    },
+    {
+      "command": "python -m pytest tests/test_v373_kl_anchor.py -q -p no:cacheprovider --basetemp .tmp-r17-tests-05",
+      "exit_code": 0,
+      "log": "tests-completion.log",
+      "log_encoding": "utf-16",
+      "last_line": "15 passed in 3.54s",
+      "phase": "after the run, source unchanged"
+    }
+  ],
+  "logs": "written verbatim by Windows PowerShell 5.1 Tee-Object, which stores UTF-16LE; read them with -Encoding Unicode. The bytes were not converted or edited after capture.",
+  "prereg_sha256": "202f367fb2a654826fbc897803b45e72197fc5b181029153d350992d794d9311",
+  "summary_sha256": "62281acb99c6a224a94ae79e1626af810607651a36fa461c1d7dc864534a3f1d",
+  "run_sha256_index": "run/sha256.json",
+  "execution_log_sha256": "36ffc82ea3a3e4798a9788de0030f00074f8f1d94418c028af37ed8905d40f7c",
+  "source_sha256": {
+    "tools\\rl\\v373_kl_anchor.py": "8aaedfda025708e980b618068658fbce4b97963d88fdecb22786d0a8473e2e68",
+    "tests\\test_v373_kl_anchor.py": "176574ef9016a5fbb2d4dd3066a08728e9f20826266885f62fe745371b709996"
+  },
+  "identities_verified": 71,
+  "identities_changed": [],
+  "environment": {
+    "python": "3.12.10",
+    "platform": "Windows-11-10.0.26300-SP0",
+    "torch": "2.14.1+cu132",
+    "cuda": "13.2",
+    "device": "NVIDIA GeForce RTX 4070 SUPER",
+    "matmul_tf32": false,
+    "cudnn_tf32": true,
+    "matmul_precision": "highest",
+    "dtype": "float32"
+  },
+  "timings": {
+    "encoding_seconds": 2.7897153999947477,
+    "evaluation_seconds": 161.2640529999917,
+    "training_seconds_total": 62.87418000001344
+  },
+  "retraining": {
+    "retrained": false,
+    "extra_epochs": 0,
+    "weight_tuning": 0,
+    "baseline_switch": false,
+    "first_failure": null,
+    "note": "the single run exited 0, so no failure artifact and no read-only rebuild were needed; run/ was never rewritten"
+  },
+  "notes": "both pytest runs are the same 15 CPU contracts and both exited 0; the module and test file SHAs are unchanged between the preregistration and this note, so all 71 frozen identities still match"
+}

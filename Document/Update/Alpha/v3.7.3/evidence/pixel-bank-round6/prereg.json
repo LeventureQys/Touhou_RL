@@ -1,0 +1,19 @@
+{
+  "schema": "pixel_bank_prereg_v1",
+  "development_only": "capture-round5",
+  "confirmation": "new capture-round6; reuse frozen bank; no tuning",
+  "selection": "exact offsets 0,10,28,39,48,57 from first counter; first index only; no retry",
+  "anchor_input_intent": [
+    "stationary",
+    "right",
+    "left+up",
+    "down",
+    "right",
+    "stationary"
+  ],
+  "unknown_rules": "low conf, raw-gradient disagreement, fewer than two supports, any confident cross-bank disagreement",
+  "phase_status": "unknown",
+  "real_pixel_gate_passed": false,
+  "coverage": ">=12 dynamic common counters AND >=3 turns covered within +/-3 counters",
+  "warning": "Privileged first-template extraction uses memory. Not deployment vision, not independent sprite identity, and not formal screenshot synchronization proof."
+}

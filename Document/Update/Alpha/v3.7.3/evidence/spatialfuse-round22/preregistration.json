@@ -1,0 +1,2090 @@
+{
+  "schema": "v373-spatial-fuse-prereg/1",
+  "identities": {
+    "D:\\WorkShop\\Touhou_RL\\tools\\rl\\v373_spatial_fuse.py": "cb8a237405d0c31d806d1e23243713e5a1d52eb6370398d4e85f96d24905fb51",
+    "tests\\test_v373_spatial_fuse.py": "e9a1f85a638b468a63b9acd41808beb4a9d6d324dfb04abfc57f519bfbd29a08",
+    "tools\\rl\\v373_telegraph.py": "6c6dcbc1377461bf91f6da7abcd94eace408fd77a687a18195732f50868b244b",
+    "tests\\test_v373_telegraph.py": "3b6a4f0604d92686a1d204c883d0da8dfd7227718d49e5e4cc691902d712aa5e",
+    "tools\\rl\\v373_valid_curriculum.py": "42c0d16ae6804da6d7ba1ccef0cfaa87e32154a7ad31329762297ccc0757dd30",
+    "tests\\test_v373_valid_curriculum.py": "f342a713ef164981dda39f52d43b448d18b934bde938b24f963209e4697b20ff",
+    "tools\\rl\\v373_seed_confirm.py": "ba1f137034ac2329face70430ac8bf579d3c8238d2a23e0ab2434e1515b2a1bf",
+    "tools\\rl\\v373_world_filter.py": "ff48cfd036e4ab027add138465052765b90089d992bfebe233d6b015d4685e2a",
+    "touhou_rl\\tactical_policy.py": "1a3a2f52897c5c99a614aa6533e84bd7be38594132f58ba6a4dc8071e41395f2",
+    "touhou_rl\\macro_policy.py": "9cb313b23464c657a310384165b90601fdfc2db0c2aa405f20afe0ae5e3bde45",
+    "touhou_rl\\vmodels3.py": "d92da5b9fddcbad975f8620811aafd3190d8511828cc272d6088db8854442aa8",
+    "touhou_rl\\vmodels.py": "c448e00d578d062004eb9e38cae0d01644703c3e487adf821b2ffccf3d7fdcb0",
+    "touhou_rl\\vision.py": "854d1f61a7895fb04e364c2cfb0c90c1b9b9cf4dac181536678846a0b7e83463",
+    "touhou_rl\\tactical_synthetic_pixels.py": "fde364c7d0da188023b60c540202c86f7d778fcde8f206d863df114bad60a09d",
+    "touhou_rl\\tactical_teacher_validation.py": "86608f2774553caa473e6d5d0e35c44fe42e12064e5ec6ebe1d3e4913bf3d92b",
+    "touhou_rl\\tactical_teacher.py": "c23c9b91ba8c692265f4171dd430d08c508d5884f26370581943727680d0ad73",
+    "touhou_rl\\tactical_teacher_v2.py": "47d39e1c02c32865ed5db46befdc1ab22d7178ded86eb1333409930ffd648e95",
+    "touhou_rl\\tactical_synthetic_closed_loop.py": "b5479a075e3f07a69019924c26cf3db7f00d0e14c85b8f3fbd1fd8c980f45fed",
+    "touhou_rl\\tactical_scenarios.py": "471f73debcbb58ee3f184948b2368c6e453a59898c7286e68b29b9a863d84906",
+    "touhou_rl\\tactical_data.py": "c0c9cd1e3a22ea887eba1e8feef61809557df145d3eecc03621b44696ddece32",
+    "touhou_rl\\tactical_sequence_train.py": "1a542afc1e780a5f49cf108e215a2e2f5c57a501da50bb6faf2e934d779ee397",
+    "touhou_rl\\tactical_feature_cache.py": "53ac15bd965a5506641a8c7c8debff0953941619ffe07d8a979cd1cdc60e693c",
+    "third_party\\th08\\build\\rl\\runs\\v104-v3-E5-s7\\policy.pt": "74abde8a996c13fae832913e4e5533bc9490688bc4c0aa73560e695f065d14be",
+    "Document\\Update\\Alpha\\v3.7.3\\evidence\\worldfilter-round18\\run\\manifest.json": "9bd3a1b8d31784d6e0fd546fc701f93be611311d1743c78f159e77a4f5fe7fa7",
+    "Document\\Update\\Alpha\\v3.7.3\\evidence\\validteacher-round19\\run\\split.json": "fa35b381502adfab2ce83bea1609da0c83de1737c03647f156d1e4dc19b9199f",
+    "Document\\Update\\Alpha\\v3.7.3\\evidence\\telegraph-round21\\preregistration.json": "09d440d5a3053ade919279f295391ab19fa5962231496cd0a774b32a0c92556d",
+    "Document\\Update\\Alpha\\v3.7.3\\evidence\\telegraph-round21\\run\\records.json": "8c1dc82b19a74282bf599ce7dc6c866eb1f10a898211e4022ae7973565b6f18e",
+    "Document\\Update\\Alpha\\v3.7.3\\evidence\\telegraph-round21\\run\\summary.json": "03b6ecfd872f1e96921d2508aa25cc129c407cf0f8f5dbd57a9df0da15429202",
+    "Document\\Update\\Alpha\\v3.7.3\\evidence\\telegraph-round21\\run\\checkpoints.json": "13cca34db3870291aac1a74e00027d2a186315dc8383ff003ecab2277fbb65b0",
+    "Document\\Update\\Alpha\\v3.7.3\\evidence\\telegraph-round21\\run\\f1-gap.json": "d0b88fd7b3c37d9c5b12b545d39952067715e5daedac967222359f38287d1393",
+    "Document\\Update\\Alpha\\v3.7.3\\evidence\\telegraph-round21\\run\\baselines.json": "d9ba25a4aeb9cfba712342f9a8220fe213e0d09bdaa2fdc2e9539b92d3dad186",
+    "Document\\Update\\Alpha\\v3.7.3\\reports\\P4-telegraph-round21.md": "9173101b8b8e6db4b3731556b62ca6d0ee23b6ef6ab5d641a0a04c463f3ccfe3",
+    "Document\\Update\\Alpha\\v3.7.3\\reports\\P1-f1-visibility-round20.md": "93f1b1edca5a58152225447a4caf814fa75483d913d2646eeca4189f009ae177"
+  },
+  "criterion": {
+    "round": "round22",
+    "purpose": "one pre-registered structural intervention on top of round21: give the unchanged N1 head a pooled spatial view of the frozen backbone F8 map, so the screen position of the F1 gap is linearly reachable from the head input, and read the result out mechanistically",
+    "intervention": {
+      "change": "a new fusion layer between the frozen trunk features and the unchanged N1 head",
+      "spatial_vector": {
+        "source": "F8 [B,96,28,24] from the frozen backbone; F4 [B,64,56,48] is taken from the same call and shape-locked but not used",
+        "pooled_7x6": 42,
+        "columns_W": 24,
+        "rows_H": 28,
+        "total": 94,
+        "definition": "concat(adaptive_avg_pool2d(f8, (7,6)).mean(channel).flatten, f8.mean(channel, row), f8.mean(channel, column))"
+      },
+      "projection": {
+        "layer": "Linear(94, 256, bias=True)",
+        "parameters": 24320,
+        "init": "weight and bias exactly zero (nn.init.zeros_), so the delta is 0 at step 0"
+      },
+      "fusion": "fused = features + projection(spatial); arm A bypasses the layer and freezes it at zero",
+      "head": "TacticalPolicy.forward_features with exactly one line changed: the incoming `features` is not detached (the parent detaches it, which would leave the fusion layer with zero gradient for all 200 updates, making arm S vacuous); a unit test asserts the two forwards are bitwise identical on identical inputs and that the body is the parent body with that one line changed",
+      "base_logits": "still backbone.policy_head(original features), never recomputed from the fused vector, so the residual head keeps its round20/21 meaning",
+      "not_changed": "worlds, world parameters, R19 split, round21 renderer and pixels, teacher actions, labels, pixel packing, encoder, loss weights, optimizer, learning rate, clip, sequence, batch, update count, seed set, closed-loop runner, condition, masking",
+      "parameter_increment": "S adds exactly 24320 active parameters (94*256+256); A adds 0 and keeps round21's 429200"
+    },
+    "data": {
+      "source": "round21 run/records.json assets, reopened read-only and SHA-bound per event; nothing re-rendered, no teacher called, no new label created",
+      "train": {
+        "events": 14,
+        "groups": 7,
+        "groups_per_family": {
+          "F1": 3,
+          "F2": 1,
+          "F3": 3
+        },
+        "use": "the only events encoded or trained on"
+      },
+      "validation": {
+        "events": 14,
+        "groups": 7,
+        "groups_per_family": {
+          "F1": 3,
+          "F2": 1,
+          "F3": 3
+        },
+        "use": "read-only: never trained, never labelled, never encoded into the training set; closed loop and input probes only"
+      },
+      "bindings": "pixels.npz, history.pt, labels.pt and rollout.json must equal round21's frozen SHA table for all 14 train events, otherwise the run aborts"
+    },
+    "training": {
+      "arms": {
+        "A": "fusion bypassed and frozen at zero: round21 arm A",
+        "S": "fusion live from a zero initialisation"
+      },
+      "loss_arm": "A",
+      "anchor_weight": 0.0,
+      "seeds": [
+        7,
+        17,
+        27
+      ],
+      "updates": 200,
+      "optimizer": "Adam",
+      "lr": 0.001,
+      "clip": 1.0,
+      "sequence": 80,
+      "batch": 1,
+      "precision": "FP32 without AMP, autocast disabled, matmul TF32 False, cuDNN TF32 False, float32 matmul precision highest",
+      "loop": "round20 train_all with two additions only: the fused feature and the saved fusion state",
+      "initialization": "fresh seed reset per construction; the initial head SHA must equal the frozen R16/R20/R21 table for the seed and the two arms must agree bitwise; the fusion layer must start at exactly zero in both arms",
+      "equivalence": "because the fusion starts at exactly zero and arm A is bypassed, step 0 of arm S is bitwise arm A; a unit test asserts identical policy logits and identical masked actions on real data rows",
+      "control_reproduction": "arm A must reproduce round21's A checkpoint and its closed-loop rows bitwise; if it does not, that is reported as `control_not_reproduced` and the S-vs-A comparison is withheld",
+      "selection": "final step only: no early stopping, no validation-based selection, no tuning"
+    },
+    "evaluation": {
+      "order": "all six checkpoints written and SHA-frozen first; then the six R18 baselines, then B0, then the six checkpoints, validation before train",
+      "executor": "round21.run_event_rendered / round21.closed_loop reused verbatim, so the evaluation code is round21 code and not a copy",
+      "condition": "horizontal_masked",
+      "renderer": "v373_telegraph.render_state_telegraph",
+      "b0": "the frozen baseline policy logits on the identical telegraph renders; a reference, not a capability",
+      "six_baselines": "round20.six_baselines re-executed on the same worlds; the 168 rows must equal round21's",
+      "holdout_rule": "if ANY of the six R18 baselines is feasible on ANY validation event the R18 filter has failed on the holdout side: report it verbatim and withhold the learning conclusion",
+      "definitions": {
+        "direction": "rebuild the logical-frame x trace from the executed actions with `advance` semantics (round21.gap_trace), take the canonical displacement start -> wall_frame-1: that is `direction`; `screen_direction` is the same displacement in raw x",
+        "toward": "the canonical direction points from the start's canonical x at the gap's canonical centre, so `toward` is \"moved toward the slot\" regardless of the mirror; `away` is the opposite and `hold` is zero net motion",
+        "parked": "`signed_error_px` is measured at wall_frame-1 in canonical px: 0 inside [gap0, gap1], negative short of the left edge, positive past the right edge",
+        "mirror_flip_rate": "the fraction of mirror-group cells whose canonical motion is toward the gap; because the same screen-right prior is right in the base group and wrong in the mirror group, this is the direction flip this round is about",
+        "identical_cells": "for every seed, the number of the 14 validation events on which the two arms have the same first-hit frame (a stricter \"unchanged\" than the F1 count alone)"
+      },
+      "primary_metrics": [
+        "F1 holdout, per group (base / mirror) and per arm: cells that move toward the gap, hold, or move away, plus the mirror toward rate (the direction flip rate this round is about)",
+        "F1 holdout, per cell: whether the decision-time x is inside the gap at wall_frame-1 and the signed parking error in px (negative = short of the left edge, positive = past the right edge)",
+        "per family F1/F2/F3 and pooled: feasible and survived per network, every event first hit, totals, and for each seed the number of validation events whose first hit is identical between the arms",
+        "discriminating evidence for \"base prior\" vs \"spatial information unavailable\": the stored prediction distribution per mirror group, an input-mirror flip probe on every head, a linear decodability probe of the 94-d vector and of the 256-d trunk features, the frozen B0 bias, a decomposition of the learned delta into a constant re-bias and a screen-dependent part, and a within-checkpoint delta-on/delta-off ablation that changes no parameter"
+      ],
+      "probe_caveats": {
+        "flip": "the probe mirrors the whole playfield, so the player sprite is mirrored too; a flipped preference therefore cannot be attributed to the gap alone. It is reported with its moving-step denominator, and the distilled heads hold on almost every telegraph-window decision, so its power is small by construction",
+        "decodability": "the probe fits on F1 train pixels only and leaves one geometry group out; its conclusion is reported together with a seven-order lambda sweep so that it does not rest on one shrinkage value, and p >> n means a small lambda is an interpolator",
+        "ablation": "the S head was trained with the delta, so \"delta off\" is a counterfactual, not arm A"
+      },
+      "reporting": "per family, never only aggregated; n=3 seeds; F2 validation has one group; mirrors are not independent samples; every F1 cell is listed",
+      "degeneracy": "single_candidate and switches<=1 are counted, listed and reported, never dropped"
+    },
+    "verdict_rules": {
+      "equivalence": "arm A must reproduce round21's A checkpoint SHA and every closed-loop row bitwise; if it does not, the round reports `control_not_reproduced` and withholds the S-vs-A conclusion",
+      "improvement": "F1 validation feasible per seed, S minus A: any seed strictly greater = improved, all equal = unchanged, any seed lower = worse",
+      "mechanism": "the mirror toward rate and the parking errors are reported as counts and px, never as a significance claim; a failure to move them is reported as a failure",
+      "honesty": "if the mirror direction does not improve, the round must state which of the two readings the evidence supports (base prior vs vector too coarse) instead of leaving it open"
+    },
+    "claims": {
+      "significance": "none: 3 seeds, 7 validation groups, at most 14 independent geometries; descriptive only",
+      "gate": "no formal gate opened, no deployable checkpoint produced, no game executed",
+      "can_show": "whether a 94-d pooled spatial view of the same frozen backbone is enough for the same N1 head to stop being dominated by the screen-right prior, and if not, whether the reason is the prior or the vector",
+      "cannot_show": "tactical understanding, learnability beyond these 7 held-out geometries, or that any policy reads a telegraph the way a player would"
+    },
+    "failure_policy": "first failure retained; one run; no retrain, rerun, repair of numbers, extra epoch, tuning or baseline switch"
+  },
+  "criterion_sha256": "8ff1f14b6c071cbe63b2eae9d153596ab1ba667d6779bea5dc72f3d487681297",
+  "arms": [
+    "A",
+    "S"
+  ],
+  "seeds": [
+    7,
+    17,
+    27
+  ],
+  "updates": 200,
+  "lr": 0.001,
+  "clip": 1.0,
+  "sequence": 80,
+  "batch": 1,
+  "loss_arm": "A",
+  "anchor_weight": 0.0,
+  "sources": {
+    "manifest": {
+      "path": "Document\\Update\\Alpha\\v3.7.3\\evidence\\worldfilter-round18\\run\\manifest.json",
+      "sha256": "9bd3a1b8d31784d6e0fd546fc701f93be611311d1743c78f159e77a4f5fe7fa7",
+      "schema": "v373-world-filter-run/1"
+    },
+    "split": {
+      "path": "Document\\Update\\Alpha\\v3.7.3\\evidence\\validteacher-round19\\run\\split.json",
+      "sha256": "fa35b381502adfab2ce83bea1609da0c83de1737c03647f156d1e4dc19b9199f",
+      "schema": "v373-valid-teacher-split/1"
+    },
+    "baseline": {
+      "path": "third_party\\th08\\build\\rl\\runs\\v104-v3-E5-s7\\policy.pt",
+      "sha256": "74abde8a996c13fae832913e4e5533bc9490688bc4c0aa73560e695f065d14be"
+    },
+    "round21": {
+      "preregistration": "09d440d5a3053ade919279f295391ab19fa5962231496cd0a774b32a0c92556d",
+      "records": "8c1dc82b19a74282bf599ce7dc6c866eb1f10a898211e4022ae7973565b6f18e",
+      "summary": "03b6ecfd872f1e96921d2508aa25cc129c407cf0f8f5dbd57a9df0da15429202",
+      "checkpoints": "13cca34db3870291aac1a74e00027d2a186315dc8383ff003ecab2277fbb65b0",
+      "f1_gap": "d0b88fd7b3c37d9c5b12b545d39952067715e5daedac967222359f38287d1393",
+      "baselines": "d9ba25a4aeb9cfba712342f9a8220fe213e0d09bdaa2fdc2e9539b92d3dad186"
+    }
+  },
+  "worlds": {
+    "manifest": "9bd3a1b8d31784d6e0fd546fc701f93be611311d1743c78f159e77a4f5fe7fa7",
+    "split": "fa35b381502adfab2ce83bea1609da0c83de1737c03647f156d1e4dc19b9199f",
+    "train_worlds_digest": "abb70913aabc96108eee4a342499cfd7094960947f4d8591cc64e2e3ba34b566",
+    "validation_worlds_digest": "5c7d0b110b11369fbe41a125616952abc6b0a177f3186287d368a3f8961d0272",
+    "all_worlds_digest": "b47dd5f4b7001e4856f6872302cceca5efe55a56f0057d55130aa23ddec018f3",
+    "train_events": [
+      "wf18-F1-002-m0",
+      "wf18-F1-002-m1",
+      "wf18-F1-006-m0",
+      "wf18-F1-006-m1",
+      "wf18-F1-009-m0",
+      "wf18-F1-009-m1",
+      "wf18-F2-119-m0",
+      "wf18-F2-119-m1",
+      "wf18-F3-000-m0",
+      "wf18-F3-000-m1",
+      "wf18-F3-002-m0",
+      "wf18-F3-002-m1",
+      "wf18-F3-004-m0",
+      "wf18-F3-004-m1"
+    ],
+    "validation_events": [
+      "wf18-F1-005-m0",
+      "wf18-F1-005-m1",
+      "wf18-F1-007-m0",
+      "wf18-F1-007-m1",
+      "wf18-F1-010-m0",
+      "wf18-F1-010-m1",
+      "wf18-F2-399-m0",
+      "wf18-F2-399-m1",
+      "wf18-F3-001-m0",
+      "wf18-F3-001-m1",
+      "wf18-F3-003-m0",
+      "wf18-F3-003-m1",
+      "wf18-F3-005-m0",
+      "wf18-F3-005-m1"
+    ],
+    "train_scenario_sha256": {
+      "wf18-F1-002-m0": "fcea6cdaac0d2d5aa207544b855c4d846f561c01836552185e3bb5093ca07bfe",
+      "wf18-F1-002-m1": "c4cb9837f3c872cec276f371aa3831f07ace0683e6a576e1de4fd19b12b253df",
+      "wf18-F1-006-m0": "2b9f09c11627ab190a7be5283f69c7ebe5341c81cee7650a69dedb735d73410d",
+      "wf18-F1-006-m1": "bb110a37c470a441b9b41b1485fbc793969059a956a90599f538512d78748208",
+      "wf18-F1-009-m0": "5cbb4caea65946987a6308d297abc01cf36e74fd278bb92a5a592dd45cfe512b",
+      "wf18-F1-009-m1": "5e4a0a42c368a135c7184618a751275792f9d8646dde3cd4d8acb333374d41d4",
+      "wf18-F2-119-m0": "05a8a35ed4d3b35a5e8682ff27d1266b12cf23e1b456a3057ab421cadd375dc2",
+      "wf18-F2-119-m1": "73e5fd04ba3214fede093c413b244e243b0593b02c2963aaf4365350babea49c",
+      "wf18-F3-000-m0": "361f52fe6a3312f994393f5e59733e9c3c96f0452c521a83846a74c4b8e8b0ec",
+      "wf18-F3-000-m1": "9b4a52373c0b03892fee89e4dc0b6e0af6fb4dac7f14b1fb3051a3caef1cae38",
+      "wf18-F3-002-m0": "ccda5269af0d26f48ef4a342383874d696bbc37c3110a674b3390a8a5d40b2ed",
+      "wf18-F3-002-m1": "3fa7fd6850aee07c56480a08acff2601299c015017a09d6da74f7f1dc499e666",
+      "wf18-F3-004-m0": "151c1dd7e05d3a8199c87a2d0670b1b11b636cd6cf6b1ae26e01e1166d614936",
+      "wf18-F3-004-m1": "a5ffc1d8a95697c92651bb254553f7b2ba6196b13cc96ced6d62128695ec812a"
+    },
+    "validation_scenario_sha256": {
+      "wf18-F1-005-m0": "945161603bb7f87aa32eb8abaf05fda158ae9d94c3e8f68d3c55261f5d41a761",
+      "wf18-F1-005-m1": "157b97138138fcdb381308fdf4c7ee88fb526fc30ff1edae38611b9e9f8f87cc",
+      "wf18-F1-007-m0": "df0d770dd442ef170fbb88bd8c7e1d2330b155860ee2e0d06d225d209962810d",
+      "wf18-F1-007-m1": "afdc2c2f435d49303d14d67178ea137be746f6af392c1daf45c0d745a53d51d6",
+      "wf18-F1-010-m0": "6f3ebe9430a7df7f9db08c34afc630ca992babff7424b7230485eaf224865663",
+      "wf18-F1-010-m1": "29df2e746becdc9958d32076421c27a0e0d13af9547a9b4337bfd24131109cbd",
+      "wf18-F2-399-m0": "850dc2f1417c4580ed7615a89d45359a729f9928ac511bdf37d06274b98c08ae",
+      "wf18-F2-399-m1": "0b202e370815c4c0c994f047e43daa76bc8e3457d245d70d8303b8f906dedf8a",
+      "wf18-F3-001-m0": "8b1dc7102d5d4a65ad659e79ff17d5fdac3fbceb489f238440c963b6f619112a",
+      "wf18-F3-001-m1": "ccdf2a998459e4bb01ff6976726bf34beb338ea181f905e01c91963ad303590b",
+      "wf18-F3-003-m0": "50e7963ab08ae98a0ad288ed7b9ddf1ae659294a1706542abd347bc68f650afb",
+      "wf18-F3-003-m1": "bcd189134faa7f919c716ded0ef30b8f1286ddc2212bec0419542542ae4f39c7",
+      "wf18-F3-005-m0": "b364132bf06d366ace88ad4524c2a5f9345992c835a7f4d4f23b01de8cc3a67e",
+      "wf18-F3-005-m1": "5266bea137cef18d280053957fd9b925a40454afa6f9bf6b2bc84e46cb4f4230"
+    }
+  },
+  "split": {
+    "rule": "one group = base + mirror, atomic; within each family the groups are ordered by group name (candidate index) and alternate train/validation starting with train at index 0; the two F2 groups therefore give one train and one validation group",
+    "counts": {
+      "groups": {
+        "train": 7,
+        "validation": 7
+      },
+      "events": {
+        "train": 14,
+        "validation": 14
+      },
+      "by_family": {
+        "F1": {
+          "train": 3,
+          "validation": 3
+        },
+        "F2": {
+          "train": 1,
+          "validation": 1
+        },
+        "F3": {
+          "train": 3,
+          "validation": 3
+        }
+      }
+    },
+    "assertions": {
+      "groups": {
+        "train": 7,
+        "validation": 7
+      },
+      "events": {
+        "train": 14,
+        "validation": 14
+      },
+      "by_family": {
+        "F1": {
+          "train": 3,
+          "validation": 3
+        },
+        "F2": {
+          "train": 1,
+          "validation": 1
+        },
+        "F3": {
+          "train": 3,
+          "validation": 3
+        }
+      },
+      "group_splits": {
+        "wf18-F1-002": "train",
+        "wf18-F1-005": "validation",
+        "wf18-F1-006": "train",
+        "wf18-F1-007": "validation",
+        "wf18-F1-009": "train",
+        "wf18-F1-010": "validation",
+        "wf18-F2-119": "train",
+        "wf18-F2-399": "validation",
+        "wf18-F3-000": "train",
+        "wf18-F3-001": "validation",
+        "wf18-F3-002": "train",
+        "wf18-F3-003": "validation",
+        "wf18-F3-004": "train",
+        "wf18-F3-005": "validation"
+      },
+      "every_event_once": true,
+      "no_group_crosses_split": true,
+      "mirror_and_base_in_one_group": true,
+      "every_family_has_both_splits": true,
+      "train_events": [
+        "wf18-F1-002-m0",
+        "wf18-F1-002-m1",
+        "wf18-F1-006-m0",
+        "wf18-F1-006-m1",
+        "wf18-F1-009-m0",
+        "wf18-F1-009-m1",
+        "wf18-F2-119-m0",
+        "wf18-F2-119-m1",
+        "wf18-F3-000-m0",
+        "wf18-F3-000-m1",
+        "wf18-F3-002-m0",
+        "wf18-F3-002-m1",
+        "wf18-F3-004-m0",
+        "wf18-F3-004-m1"
+      ],
+      "validation_events": [
+        "wf18-F1-005-m0",
+        "wf18-F1-005-m1",
+        "wf18-F1-007-m0",
+        "wf18-F1-007-m1",
+        "wf18-F1-010-m0",
+        "wf18-F1-010-m1",
+        "wf18-F2-399-m0",
+        "wf18-F2-399-m1",
+        "wf18-F3-001-m0",
+        "wf18-F3-001-m1",
+        "wf18-F3-003-m0",
+        "wf18-F3-003-m1",
+        "wf18-F3-005-m0",
+        "wf18-F3-005-m1"
+      ],
+      "family_order": [
+        {
+          "family": "F1",
+          "order": [
+            "wf18-F1-002",
+            "wf18-F1-005",
+            "wf18-F1-006",
+            "wf18-F1-007",
+            "wf18-F1-009",
+            "wf18-F1-010"
+          ],
+          "splits": [
+            "train",
+            "validation",
+            "train",
+            "validation",
+            "train",
+            "validation"
+          ]
+        },
+        {
+          "family": "F2",
+          "order": [
+            "wf18-F2-119",
+            "wf18-F2-399"
+          ],
+          "splits": [
+            "train",
+            "validation"
+          ]
+        },
+        {
+          "family": "F3",
+          "order": [
+            "wf18-F3-000",
+            "wf18-F3-001",
+            "wf18-F3-002",
+            "wf18-F3-003",
+            "wf18-F3-004",
+            "wf18-F3-005"
+          ],
+          "splits": [
+            "train",
+            "validation",
+            "train",
+            "validation",
+            "train",
+            "validation"
+          ]
+        }
+      ],
+      "duplicate_signatures": 0,
+      "signature_fields": [
+        "family",
+        "canonical start_x",
+        "coverage",
+        "gap",
+        "wall_frame",
+        "fire_interval",
+        "window",
+        "threshold",
+        "goal",
+        "origin",
+        "burst",
+        "bullet_speed",
+        "internal_gap"
+      ]
+    },
+    "groups": [
+      {
+        "group": "wf18-F1-002",
+        "family": "F1",
+        "split": "train",
+        "index_in_family": 0,
+        "signature": [
+          "F1",
+          56.0,
+          [
+            8.0,
+            376.0
+          ],
+          [
+            88.0,
+            104.0
+          ],
+          76,
+          16,
+          [
+            34,
+            104
+          ],
+          180.0,
+          160.0,
+          [
+            192.0,
+            100.0
+          ],
+          false,
+          8.0,
+          true
+        ],
+        "events": [
+          {
+            "event_id": "wf18-F1-002-m0",
+            "mirror": false,
+            "start_x": 56.0
+          },
+          {
+            "event_id": "wf18-F1-002-m1",
+            "mirror": true,
+            "start_x": 328.0
+          }
+        ]
+      },
+      {
+        "group": "wf18-F1-005",
+        "family": "F1",
+        "split": "validation",
+        "index_in_family": 1,
+        "signature": [
+          "F1",
+          216.0,
+          [
+            12.0,
+            376.0
+          ],
+          [
+            248.0,
+            264.0
+          ],
+          48,
+          16,
+          [
+            34,
+            104
+          ],
+          180.0,
+          160.0,
+          [
+            192.0,
+            100.0
+          ],
+          false,
+          8.0,
+          true
+        ],
+        "events": [
+          {
+            "event_id": "wf18-F1-005-m0",
+            "mirror": false,
+            "start_x": 216.0
+          },
+          {
+            "event_id": "wf18-F1-005-m1",
+            "mirror": true,
+            "start_x": 168.0
+          }
+        ]
+      },
+      {
+        "group": "wf18-F1-006",
+        "family": "F1",
+        "split": "train",
+        "index_in_family": 2,
+        "signature": [
+          "F1",
+          204.0,
+          [
+            12.0,
+            376.0
+          ],
+          [
+            144.0,
+            164.0
+          ],
+          40,
+          16,
+          [
+            34,
+            104
+          ],
+          180.0,
+          160.0,
+          [
+            192.0,
+            100.0
+          ],
+          false,
+          8.0,
+          true
+        ],
+        "events": [
+          {
+            "event_id": "wf18-F1-006-m0",
+            "mirror": false,
+            "start_x": 204.0
+          },
+          {
+            "event_id": "wf18-F1-006-m1",
+            "mirror": true,
+            "start_x": 180.0
+          }
+        ]
+      },
+      {
+        "group": "wf18-F1-007",
+        "family": "F1",
+        "split": "validation",
+        "index_in_family": 3,
+        "signature": [
+          "F1",
+          128.0,
+          [
+            8.0,
+            372.0
+          ],
+          [
+            152.0,
+            172.0
+          ],
+          60,
+          16,
+          [
+            34,
+            104
+          ],
+          180.0,
+          160.0,
+          [
+            192.0,
+            100.0
+          ],
+          false,
+          8.0,
+          true
+        ],
+        "events": [
+          {
+            "event_id": "wf18-F1-007-m0",
+            "mirror": false,
+            "start_x": 128.0
+          },
+          {
+            "event_id": "wf18-F1-007-m1",
+            "mirror": true,
+            "start_x": 256.0
+          }
+        ]
+      },
+      {
+        "group": "wf18-F1-009",
+        "family": "F1",
+        "split": "train",
+        "index_in_family": 4,
+        "signature": [
+          "F1",
+          104.0,
+          [
+            8.0,
+            376.0
+          ],
+          [
+            152.0,
+            172.0
+          ],
+          52,
+          16,
+          [
+            34,
+            104
+          ],
+          180.0,
+          160.0,
+          [
+            192.0,
+            100.0
+          ],
+          false,
+          8.0,
+          true
+        ],
+        "events": [
+          {
+            "event_id": "wf18-F1-009-m0",
+            "mirror": false,
+            "start_x": 104.0
+          },
+          {
+            "event_id": "wf18-F1-009-m1",
+            "mirror": true,
+            "start_x": 280.0
+          }
+        ]
+      },
+      {
+        "group": "wf18-F1-010",
+        "family": "F1",
+        "split": "validation",
+        "index_in_family": 5,
+        "signature": [
+          "F1",
+          216.0,
+          [
+            8.0,
+            376.0
+          ],
+          [
+            256.0,
+            268.0
+          ],
+          56,
+          16,
+          [
+            34,
+            104
+          ],
+          180.0,
+          160.0,
+          [
+            192.0,
+            100.0
+          ],
+          false,
+          8.0,
+          true
+        ],
+        "events": [
+          {
+            "event_id": "wf18-F1-010-m0",
+            "mirror": false,
+            "start_x": 216.0
+          },
+          {
+            "event_id": "wf18-F1-010-m1",
+            "mirror": true,
+            "start_x": 168.0
+          }
+        ]
+      },
+      {
+        "group": "wf18-F2-119",
+        "family": "F2",
+        "split": "train",
+        "index_in_family": 0,
+        "signature": [
+          "F2",
+          204.0,
+          [
+            100.0,
+            284.0
+          ],
+          [
+            180.0,
+            204.0
+          ],
+          64,
+          12,
+          [
+            34,
+            104
+          ],
+          180.0,
+          160.0,
+          [
+            224.0,
+            108.0
+          ],
+          false,
+          7.5,
+          false
+        ],
+        "events": [
+          {
+            "event_id": "wf18-F2-119-m0",
+            "mirror": false,
+            "start_x": 204.0
+          },
+          {
+            "event_id": "wf18-F2-119-m1",
+            "mirror": true,
+            "start_x": 180.0
+          }
+        ]
+      },
+      {
+        "group": "wf18-F2-399",
+        "family": "F2",
+        "split": "validation",
+        "index_in_family": 1,
+        "signature": [
+          "F2",
+          208.0,
+          [
+            100.0,
+            284.0
+          ],
+          [
+            180.0,
+            204.0
+          ],
+          64,
+          12,
+          [
+            34,
+            104
+          ],
+          180.0,
+          160.0,
+          [
+            224.0,
+            108.0
+          ],
+          false,
+          7.5,
+          false
+        ],
+        "events": [
+          {
+            "event_id": "wf18-F2-399-m0",
+            "mirror": false,
+            "start_x": 208.0
+          },
+          {
+            "event_id": "wf18-F2-399-m1",
+            "mirror": true,
+            "start_x": 176.0
+          }
+        ]
+      },
+      {
+        "group": "wf18-F3-000",
+        "family": "F3",
+        "split": "train",
+        "index_in_family": 0,
+        "signature": [
+          "F3",
+          282.0,
+          [
+            100.0,
+            284.0
+          ],
+          [
+            180.0,
+            204.0
+          ],
+          64,
+          24,
+          [
+            56,
+            76
+          ],
+          198.0,
+          174.0,
+          [
+            208.0,
+            104.0
+          ],
+          false,
+          8.0,
+          false
+        ],
+        "events": [
+          {
+            "event_id": "wf18-F3-000-m0",
+            "mirror": false,
+            "start_x": 282.0
+          },
+          {
+            "event_id": "wf18-F3-000-m1",
+            "mirror": true,
+            "start_x": 102.0
+          }
+        ]
+      },
+      {
+        "group": "wf18-F3-001",
+        "family": "F3",
+        "split": "validation",
+        "index_in_family": 1,
+        "signature": [
+          "F3",
+          220.8,
+          [
+            100.0,
+            284.0
+          ],
+          [
+            180.0,
+            204.0
+          ],
+          64,
+          14,
+          [
+            48,
+            80
+          ],
+          168.0,
+          144.0,
+          [
+            176.0,
+            96.0
+          ],
+          false,
+          8.0,
+          false
+        ],
+        "events": [
+          {
+            "event_id": "wf18-F3-001-m0",
+            "mirror": false,
+            "start_x": 220.8
+          },
+          {
+            "event_id": "wf18-F3-001-m1",
+            "mirror": true,
+            "start_x": 163.2
+          }
+        ]
+      },
+      {
+        "group": "wf18-F3-002",
+        "family": "F3",
+        "split": "train",
+        "index_in_family": 2,
+        "signature": [
+          "F3",
+          235.6,
+          [
+            100.0,
+            284.0
+          ],
+          [
+            180.0,
+            204.0
+          ],
+          64,
+          24,
+          [
+            40,
+            60
+          ],
+          186.0,
+          158.0,
+          [
+            176.0,
+            96.0
+          ],
+          false,
+          8.0,
+          false
+        ],
+        "events": [
+          {
+            "event_id": "wf18-F3-002-m0",
+            "mirror": false,
+            "start_x": 235.6
+          },
+          {
+            "event_id": "wf18-F3-002-m1",
+            "mirror": true,
+            "start_x": 148.4
+          }
+        ]
+      },
+      {
+        "group": "wf18-F3-003",
+        "family": "F3",
+        "split": "validation",
+        "index_in_family": 3,
+        "signature": [
+          "F3",
+          317.2,
+          [
+            100.0,
+            284.0
+          ],
+          [
+            180.0,
+            204.0
+          ],
+          64,
+          22,
+          [
+            80,
+            108
+          ],
+          186.0,
+          162.0,
+          [
+            192.0,
+            100.0
+          ],
+          false,
+          8.0,
+          false
+        ],
+        "events": [
+          {
+            "event_id": "wf18-F3-003-m0",
+            "mirror": false,
+            "start_x": 317.2
+          },
+          {
+            "event_id": "wf18-F3-003-m1",
+            "mirror": true,
+            "start_x": 66.80000000000001
+          }
+        ]
+      },
+      {
+        "group": "wf18-F3-004",
+        "family": "F3",
+        "split": "train",
+        "index_in_family": 4,
+        "signature": [
+          "F3",
+          276.72,
+          [
+            100.0,
+            284.0
+          ],
+          [
+            180.0,
+            204.0
+          ],
+          64,
+          18,
+          [
+            48,
+            76
+          ],
+          198.0,
+          178.0,
+          [
+            192.0,
+            100.0
+          ],
+          false,
+          8.0,
+          false
+        ],
+        "events": [
+          {
+            "event_id": "wf18-F3-004-m0",
+            "mirror": false,
+            "start_x": 276.72
+          },
+          {
+            "event_id": "wf18-F3-004-m1",
+            "mirror": true,
+            "start_x": 107.27999999999997
+          }
+        ]
+      },
+      {
+        "group": "wf18-F3-005",
+        "family": "F3",
+        "split": "validation",
+        "index_in_family": 5,
+        "signature": [
+          "F3",
+          274.16,
+          [
+            100.0,
+            284.0
+          ],
+          [
+            180.0,
+            204.0
+          ],
+          64,
+          20,
+          [
+            56,
+            84
+          ],
+          198.0,
+          174.0,
+          [
+            208.0,
+            104.0
+          ],
+          false,
+          8.0,
+          false
+        ],
+        "events": [
+          {
+            "event_id": "wf18-F3-005-m0",
+            "mirror": false,
+            "start_x": 274.16
+          },
+          {
+            "event_id": "wf18-F3-005-m1",
+            "mirror": true,
+            "start_x": 109.83999999999997
+          }
+        ]
+      }
+    ]
+  },
+  "fusion": {
+    "shapes": {
+      "f4": [
+        56,
+        48
+      ],
+      "f8": [
+        28,
+        24
+      ],
+      "playfield": [
+        224,
+        192
+      ],
+      "spatial": [
+        80,
+        94
+      ],
+      "pooled": 42,
+      "columns": 24,
+      "rows": 28,
+      "total": 94,
+      "projection": {
+        "in_features": 94,
+        "out_features": 256,
+        "parameters": 24320
+      }
+    },
+    "spatial_sha256": "83a75f73211b1964d5ff3cbb21220d09ed4b8d0e92fe181c010cd59909f58cd5",
+    "statistics": {
+      "wf18-F1-002-m0": {
+        "rows": 80,
+        "dim": 94,
+        "minimum": 0.148356,
+        "maximum": 0.282188,
+        "mean": 0.179349,
+        "std": 0.016188
+      },
+      "wf18-F1-002-m1": {
+        "rows": 80,
+        "dim": 94,
+        "minimum": 0.146593,
+        "maximum": 0.294803,
+        "mean": 0.179387,
+        "std": 0.015989
+      },
+      "wf18-F1-006-m0": {
+        "rows": 80,
+        "dim": 94,
+        "minimum": 0.141421,
+        "maximum": 0.287421,
+        "mean": 0.17944,
+        "std": 0.016436
+      },
+      "wf18-F1-006-m1": {
+        "rows": 80,
+        "dim": 94,
+        "minimum": 0.146243,
+        "maximum": 0.287822,
+        "mean": 0.179535,
+        "std": 0.016039
+      },
+      "wf18-F1-009-m0": {
+        "rows": 80,
+        "dim": 94,
+        "minimum": 0.150075,
+        "maximum": 0.287036,
+        "mean": 0.179455,
+        "std": 0.015932
+      },
+      "wf18-F1-009-m1": {
+        "rows": 80,
+        "dim": 94,
+        "minimum": 0.14713,
+        "maximum": 0.281514,
+        "mean": 0.179287,
+        "std": 0.016266
+      },
+      "wf18-F2-119-m0": {
+        "rows": 80,
+        "dim": 94,
+        "minimum": 0.147288,
+        "maximum": 0.266498,
+        "mean": 0.174938,
+        "std": 0.013241
+      },
+      "wf18-F2-119-m1": {
+        "rows": 80,
+        "dim": 94,
+        "minimum": 0.145641,
+        "maximum": 0.266498,
+        "mean": 0.174931,
+        "std": 0.013255
+      },
+      "wf18-F3-000-m0": {
+        "rows": 80,
+        "dim": 94,
+        "minimum": 0.147025,
+        "maximum": 0.313815,
+        "mean": 0.194159,
+        "std": 0.020125
+      },
+      "wf18-F3-000-m1": {
+        "rows": 80,
+        "dim": 94,
+        "minimum": 0.151471,
+        "maximum": 0.266498,
+        "mean": 0.193587,
+        "std": 0.019912
+      },
+      "wf18-F3-002-m0": {
+        "rows": 80,
+        "dim": 94,
+        "minimum": 0.144748,
+        "maximum": 0.313815,
+        "mean": 0.194742,
+        "std": 0.019927
+      },
+      "wf18-F3-002-m1": {
+        "rows": 80,
+        "dim": 94,
+        "minimum": 0.149041,
+        "maximum": 0.266498,
+        "mean": 0.194016,
+        "std": 0.020175
+      },
+      "wf18-F3-004-m0": {
+        "rows": 80,
+        "dim": 94,
+        "minimum": 0.148068,
+        "maximum": 0.313815,
+        "mean": 0.192884,
+        "std": 0.02038
+      },
+      "wf18-F3-004-m1": {
+        "rows": 80,
+        "dim": 94,
+        "minimum": 0.152252,
+        "maximum": 0.266498,
+        "mean": 0.192275,
+        "std": 0.020173
+      }
+    },
+    "feature_norm": {
+      "wf18-F1-002-m0": 2.954257,
+      "wf18-F1-002-m1": 2.956202,
+      "wf18-F1-006-m0": 3.055474,
+      "wf18-F1-006-m1": 2.920992,
+      "wf18-F1-009-m0": 3.049008,
+      "wf18-F1-009-m1": 2.942316,
+      "wf18-F2-119-m0": 3.035089,
+      "wf18-F2-119-m1": 3.158892,
+      "wf18-F3-000-m0": 2.991228,
+      "wf18-F3-000-m1": 2.933692,
+      "wf18-F3-002-m0": 3.082875,
+      "wf18-F3-002-m1": 2.841012,
+      "wf18-F3-004-m0": 3.038748,
+      "wf18-F3-004-m1": 2.920502
+    },
+    "init": "weight and bias exactly zero (nn.init.zeros_), so the delta is 0 at step 0",
+    "init_state_sha256": {
+      "A": "64a8389be07c8ae64e450d6b398aacb84b7da15c924fbd78e2d43f725979f5fc",
+      "S": "64a8389be07c8ae64e450d6b398aacb84b7da15c924fbd78e2d43f725979f5fc"
+    },
+    "definition": "F8 -> 7x6 average pool over channels (42) + channel-and-row mean per column (24) + channel-and-column mean per row (28) = 94, then Linear(94,256) initialised at exactly zero; arm A bypasses the layer and keeps it frozen at zero",
+    "private_calls": "backbone._checked_regions, backbone._playfield_input and backbone.playfield are called in the same order forward_core calls them; a unit test recomputes forward_core's tail from the extracted F4/F8 and asserts bitwise equality",
+    "resolution": {
+      "native_playfield_width": 384,
+      "model_playfield_width": 192,
+      "f8_columns": 24,
+      "native_px_per_column": 16,
+      "pooled_cell_native_px": 64,
+      "note": "the F8 column axis is the screen-x axis: 192 model columns / 24 = 8 model px per column, i.e. 16 native playfield px, so a 12-20 px gap is about one F8 column wide and the frozen vector is coarse by construction"
+    }
+  },
+  "geometry": {
+    "wf18-F1-002-m0": {
+      "family": "F1",
+      "mirror": false,
+      "group": "wf18-F1-002",
+      "start_x": 56.0,
+      "start_canonical": 56.0,
+      "wall_frame": 76,
+      "coverage": [
+        8.0,
+        376.0
+      ],
+      "internal_gap": true,
+      "gap": [
+        88.0,
+        104.0
+      ],
+      "gap_screen": [
+        88,
+        104
+      ],
+      "preview_window": [
+        31,
+        76
+      ],
+      "last_preview_frame": 75,
+      "decisions_in_preview": 22
+    },
+    "wf18-F1-002-m1": {
+      "family": "F1",
+      "mirror": true,
+      "group": "wf18-F1-002",
+      "start_x": 328.0,
+      "start_canonical": 56.0,
+      "wall_frame": 76,
+      "coverage": [
+        8.0,
+        376.0
+      ],
+      "internal_gap": true,
+      "gap": [
+        88.0,
+        104.0
+      ],
+      "gap_screen": [
+        280,
+        296
+      ],
+      "preview_window": [
+        31,
+        76
+      ],
+      "last_preview_frame": 75,
+      "decisions_in_preview": 22
+    },
+    "wf18-F1-006-m0": {
+      "family": "F1",
+      "mirror": false,
+      "group": "wf18-F1-006",
+      "start_x": 204.0,
+      "start_canonical": 204.0,
+      "wall_frame": 40,
+      "coverage": [
+        12.0,
+        376.0
+      ],
+      "internal_gap": true,
+      "gap": [
+        144.0,
+        164.0
+      ],
+      "gap_screen": [
+        144,
+        164
+      ],
+      "preview_window": [
+        0,
+        40
+      ],
+      "last_preview_frame": 39,
+      "decisions_in_preview": 20
+    },
+    "wf18-F1-006-m1": {
+      "family": "F1",
+      "mirror": true,
+      "group": "wf18-F1-006",
+      "start_x": 180.0,
+      "start_canonical": 204.0,
+      "wall_frame": 40,
+      "coverage": [
+        12.0,
+        376.0
+      ],
+      "internal_gap": true,
+      "gap": [
+        144.0,
+        164.0
+      ],
+      "gap_screen": [
+        220,
+        240
+      ],
+      "preview_window": [
+        0,
+        40
+      ],
+      "last_preview_frame": 39,
+      "decisions_in_preview": 20
+    },
+    "wf18-F1-009-m0": {
+      "family": "F1",
+      "mirror": false,
+      "group": "wf18-F1-009",
+      "start_x": 104.0,
+      "start_canonical": 104.0,
+      "wall_frame": 52,
+      "coverage": [
+        8.0,
+        376.0
+      ],
+      "internal_gap": true,
+      "gap": [
+        152.0,
+        172.0
+      ],
+      "gap_screen": [
+        152,
+        172
+      ],
+      "preview_window": [
+        7,
+        52
+      ],
+      "last_preview_frame": 51,
+      "decisions_in_preview": 22
+    },
+    "wf18-F1-009-m1": {
+      "family": "F1",
+      "mirror": true,
+      "group": "wf18-F1-009",
+      "start_x": 280.0,
+      "start_canonical": 104.0,
+      "wall_frame": 52,
+      "coverage": [
+        8.0,
+        376.0
+      ],
+      "internal_gap": true,
+      "gap": [
+        152.0,
+        172.0
+      ],
+      "gap_screen": [
+        212,
+        232
+      ],
+      "preview_window": [
+        7,
+        52
+      ],
+      "last_preview_frame": 51,
+      "decisions_in_preview": 22
+    },
+    "wf18-F2-119-m0": {
+      "family": "F2",
+      "mirror": false,
+      "group": "wf18-F2-119",
+      "start_x": 204.0,
+      "start_canonical": 204.0,
+      "wall_frame": 64,
+      "coverage": [
+        100.0,
+        284.0
+      ],
+      "internal_gap": false,
+      "gap": null,
+      "gap_screen": null,
+      "preview_window": null,
+      "last_preview_frame": null,
+      "decisions_in_preview": null
+    },
+    "wf18-F2-119-m1": {
+      "family": "F2",
+      "mirror": true,
+      "group": "wf18-F2-119",
+      "start_x": 180.0,
+      "start_canonical": 204.0,
+      "wall_frame": 64,
+      "coverage": [
+        100.0,
+        284.0
+      ],
+      "internal_gap": false,
+      "gap": null,
+      "gap_screen": null,
+      "preview_window": null,
+      "last_preview_frame": null,
+      "decisions_in_preview": null
+    },
+    "wf18-F3-000-m0": {
+      "family": "F3",
+      "mirror": false,
+      "group": "wf18-F3-000",
+      "start_x": 282.0,
+      "start_canonical": 282.0,
+      "wall_frame": 64,
+      "coverage": [
+        100.0,
+        284.0
+      ],
+      "internal_gap": false,
+      "gap": null,
+      "gap_screen": null,
+      "preview_window": null,
+      "last_preview_frame": null,
+      "decisions_in_preview": null
+    },
+    "wf18-F3-000-m1": {
+      "family": "F3",
+      "mirror": true,
+      "group": "wf18-F3-000",
+      "start_x": 102.0,
+      "start_canonical": 282.0,
+      "wall_frame": 64,
+      "coverage": [
+        100.0,
+        284.0
+      ],
+      "internal_gap": false,
+      "gap": null,
+      "gap_screen": null,
+      "preview_window": null,
+      "last_preview_frame": null,
+      "decisions_in_preview": null
+    },
+    "wf18-F3-002-m0": {
+      "family": "F3",
+      "mirror": false,
+      "group": "wf18-F3-002",
+      "start_x": 235.6,
+      "start_canonical": 235.6,
+      "wall_frame": 64,
+      "coverage": [
+        100.0,
+        284.0
+      ],
+      "internal_gap": false,
+      "gap": null,
+      "gap_screen": null,
+      "preview_window": null,
+      "last_preview_frame": null,
+      "decisions_in_preview": null
+    },
+    "wf18-F3-002-m1": {
+      "family": "F3",
+      "mirror": true,
+      "group": "wf18-F3-002",
+      "start_x": 148.4,
+      "start_canonical": 235.6,
+      "wall_frame": 64,
+      "coverage": [
+        100.0,
+        284.0
+      ],
+      "internal_gap": false,
+      "gap": null,
+      "gap_screen": null,
+      "preview_window": null,
+      "last_preview_frame": null,
+      "decisions_in_preview": null
+    },
+    "wf18-F3-004-m0": {
+      "family": "F3",
+      "mirror": false,
+      "group": "wf18-F3-004",
+      "start_x": 276.72,
+      "start_canonical": 276.72,
+      "wall_frame": 64,
+      "coverage": [
+        100.0,
+        284.0
+      ],
+      "internal_gap": false,
+      "gap": null,
+      "gap_screen": null,
+      "preview_window": null,
+      "last_preview_frame": null,
+      "decisions_in_preview": null
+    },
+    "wf18-F3-004-m1": {
+      "family": "F3",
+      "mirror": true,
+      "group": "wf18-F3-004",
+      "start_x": 107.27999999999997,
+      "start_canonical": 276.72,
+      "wall_frame": 64,
+      "coverage": [
+        100.0,
+        284.0
+      ],
+      "internal_gap": false,
+      "gap": null,
+      "gap_screen": null,
+      "preview_window": null,
+      "last_preview_frame": null,
+      "decisions_in_preview": null
+    },
+    "wf18-F1-005-m0": {
+      "family": "F1",
+      "mirror": false,
+      "group": "wf18-F1-005",
+      "start_x": 216.0,
+      "start_canonical": 216.0,
+      "wall_frame": 48,
+      "coverage": [
+        12.0,
+        376.0
+      ],
+      "internal_gap": true,
+      "gap": [
+        248.0,
+        264.0
+      ],
+      "gap_screen": [
+        248,
+        264
+      ],
+      "preview_window": [
+        3,
+        48
+      ],
+      "last_preview_frame": 47,
+      "decisions_in_preview": 22
+    },
+    "wf18-F1-005-m1": {
+      "family": "F1",
+      "mirror": true,
+      "group": "wf18-F1-005",
+      "start_x": 168.0,
+      "start_canonical": 216.0,
+      "wall_frame": 48,
+      "coverage": [
+        12.0,
+        376.0
+      ],
+      "internal_gap": true,
+      "gap": [
+        248.0,
+        264.0
+      ],
+      "gap_screen": [
+        120,
+        136
+      ],
+      "preview_window": [
+        3,
+        48
+      ],
+      "last_preview_frame": 47,
+      "decisions_in_preview": 22
+    },
+    "wf18-F1-007-m0": {
+      "family": "F1",
+      "mirror": false,
+      "group": "wf18-F1-007",
+      "start_x": 128.0,
+      "start_canonical": 128.0,
+      "wall_frame": 60,
+      "coverage": [
+        8.0,
+        372.0
+      ],
+      "internal_gap": true,
+      "gap": [
+        152.0,
+        172.0
+      ],
+      "gap_screen": [
+        152,
+        172
+      ],
+      "preview_window": [
+        15,
+        60
+      ],
+      "last_preview_frame": 59,
+      "decisions_in_preview": 22
+    },
+    "wf18-F1-007-m1": {
+      "family": "F1",
+      "mirror": true,
+      "group": "wf18-F1-007",
+      "start_x": 256.0,
+      "start_canonical": 128.0,
+      "wall_frame": 60,
+      "coverage": [
+        8.0,
+        372.0
+      ],
+      "internal_gap": true,
+      "gap": [
+        152.0,
+        172.0
+      ],
+      "gap_screen": [
+        212,
+        232
+      ],
+      "preview_window": [
+        15,
+        60
+      ],
+      "last_preview_frame": 59,
+      "decisions_in_preview": 22
+    },
+    "wf18-F1-010-m0": {
+      "family": "F1",
+      "mirror": false,
+      "group": "wf18-F1-010",
+      "start_x": 216.0,
+      "start_canonical": 216.0,
+      "wall_frame": 56,
+      "coverage": [
+        8.0,
+        376.0
+      ],
+      "internal_gap": true,
+      "gap": [
+        256.0,
+        268.0
+      ],
+      "gap_screen": [
+        256,
+        268
+      ],
+      "preview_window": [
+        11,
+        56
+      ],
+      "last_preview_frame": 55,
+      "decisions_in_preview": 22
+    },
+    "wf18-F1-010-m1": {
+      "family": "F1",
+      "mirror": true,
+      "group": "wf18-F1-010",
+      "start_x": 168.0,
+      "start_canonical": 216.0,
+      "wall_frame": 56,
+      "coverage": [
+        8.0,
+        376.0
+      ],
+      "internal_gap": true,
+      "gap": [
+        256.0,
+        268.0
+      ],
+      "gap_screen": [
+        116,
+        128
+      ],
+      "preview_window": [
+        11,
+        56
+      ],
+      "last_preview_frame": 55,
+      "decisions_in_preview": 22
+    },
+    "wf18-F2-399-m0": {
+      "family": "F2",
+      "mirror": false,
+      "group": "wf18-F2-399",
+      "start_x": 208.0,
+      "start_canonical": 208.0,
+      "wall_frame": 64,
+      "coverage": [
+        100.0,
+        284.0
+      ],
+      "internal_gap": false,
+      "gap": null,
+      "gap_screen": null,
+      "preview_window": null,
+      "last_preview_frame": null,
+      "decisions_in_preview": null
+    },
+    "wf18-F2-399-m1": {
+      "family": "F2",
+      "mirror": true,
+      "group": "wf18-F2-399",
+      "start_x": 176.0,
+      "start_canonical": 208.0,
+      "wall_frame": 64,
+      "coverage": [
+        100.0,
+        284.0
+      ],
+      "internal_gap": false,
+      "gap": null,
+      "gap_screen": null,
+      "preview_window": null,
+      "last_preview_frame": null,
+      "decisions_in_preview": null
+    },
+    "wf18-F3-001-m0": {
+      "family": "F3",
+      "mirror": false,
+      "group": "wf18-F3-001",
+      "start_x": 220.8,
+      "start_canonical": 220.8,
+      "wall_frame": 64,
+      "coverage": [
+        100.0,
+        284.0
+      ],
+      "internal_gap": false,
+      "gap": null,
+      "gap_screen": null,
+      "preview_window": null,
+      "last_preview_frame": null,
+      "decisions_in_preview": null
+    },
+    "wf18-F3-001-m1": {
+      "family": "F3",
+      "mirror": true,
+      "group": "wf18-F3-001",
+      "start_x": 163.2,
+      "start_canonical": 220.8,
+      "wall_frame": 64,
+      "coverage": [
+        100.0,
+        284.0
+      ],
+      "internal_gap": false,
+      "gap": null,
+      "gap_screen": null,
+      "preview_window": null,
+      "last_preview_frame": null,
+      "decisions_in_preview": null
+    },
+    "wf18-F3-003-m0": {
+      "family": "F3",
+      "mirror": false,
+      "group": "wf18-F3-003",
+      "start_x": 317.2,
+      "start_canonical": 317.2,
+      "wall_frame": 64,
+      "coverage": [
+        100.0,
+        284.0
+      ],
+      "internal_gap": false,
+      "gap": null,
+      "gap_screen": null,
+      "preview_window": null,
+      "last_preview_frame": null,
+      "decisions_in_preview": null
+    },
+    "wf18-F3-003-m1": {
+      "family": "F3",
+      "mirror": true,
+      "group": "wf18-F3-003",
+      "start_x": 66.80000000000001,
+      "start_canonical": 317.2,
+      "wall_frame": 64,
+      "coverage": [
+        100.0,
+        284.0
+      ],
+      "internal_gap": false,
+      "gap": null,
+      "gap_screen": null,
+      "preview_window": null,
+      "last_preview_frame": null,
+      "decisions_in_preview": null
+    },
+    "wf18-F3-005-m0": {
+      "family": "F3",
+      "mirror": false,
+      "group": "wf18-F3-005",
+      "start_x": 274.16,
+      "start_canonical": 274.16,
+      "wall_frame": 64,
+      "coverage": [
+        100.0,
+        284.0
+      ],
+      "internal_gap": false,
+      "gap": null,
+      "gap_screen": null,
+      "preview_window": null,
+      "last_preview_frame": null,
+      "decisions_in_preview": null
+    },
+    "wf18-F3-005-m1": {
+      "family": "F3",
+      "mirror": true,
+      "group": "wf18-F3-005",
+      "start_x": 109.83999999999997,
+      "start_canonical": 274.16,
+      "wall_frame": 64,
+      "coverage": [
+        100.0,
+        284.0
+      ],
+      "internal_gap": false,
+      "gap": null,
+      "gap_screen": null,
+      "preview_window": null,
+      "last_preview_frame": null,
+      "decisions_in_preview": null
+    }
+  },
+  "validation_bindings": {
+    "wf18-F1-002-m0": {
+      "pixels": "382fa0f5ac34d5fde0a23397fd88ff20d0fd4af2dfa4ef4cef269926defdfcad",
+      "history": "55e08a9529f6873fb177227285a11592bb4bb9cb7e760eeac50e0a0c3df2c37f",
+      "labels": "7a4da12b08ea5a6b665e17b2575484690f411e4a689c1c6a7791f384ea8c94be",
+      "rollout": "abf5c3c8f70f33b0537f1f65f2626cccf3fb3ec6aa75d1e4cd137985cef076fc"
+    },
+    "wf18-F1-002-m1": {
+      "pixels": "8a6fe0992b2166877a05d3763ce4685052b0113c7b239805f5746ab7090e1bc0",
+      "history": "5d2bb0615647a92304eec1942762534391e5636a185d9545d00d0241d661c263",
+      "labels": "5004157708ddc206b784438c0712353f4c55da11cf7b012fb0217d7c8e4e7ab1",
+      "rollout": "91b3857700065ecd9ebb21388367fba8083b7375382731bd563a1ee7c0f8cae0"
+    },
+    "wf18-F1-006-m0": {
+      "pixels": "ddf9afe595653ae57492f13640d5ee5889a766efb657d038a4a9b22c7fe69a39",
+      "history": "de794aeef5f97bfc97a5cf57c98da988a1c35b50e903b69d689cf1f677aebdf3",
+      "labels": "ddbdccfe3fb655e4655472ed9236e60391d7a73f339af00efdfb097bdeed976b",
+      "rollout": "2cc4426ad588014168c7eae848e56550b6fd8095bb66ed7ab78bf775b609ecdc"
+    },
+    "wf18-F1-006-m1": {
+      "pixels": "5a931dbd43bc8f638634051d2d4c6668033fd2289de3caefda1e02e344f673c7",
+      "history": "8d66c6324c8e94b2d2952bcb8bfe5e08ebd01a28c6a16f40787e8f860b8225db",
+      "labels": "9025ad4cd7a7bac283a916bee40876d1e369c64a2bcac761e1b93b0ab19474d3",
+      "rollout": "77e01f12c3525206f7635f96c9c6b702120fad7c137bb3c1299a38d752a1df35"
+    },
+    "wf18-F1-009-m0": {
+      "pixels": "4498ce9d034caad588e39b01706f00707051fbf22b22dbda4f6c1dfd7da06642",
+      "history": "28fb4aaeffffe786676ab8ff1fafb5e336f38f3d8ad96fe117b56ea42085fd22",
+      "labels": "97a09a4fbb94642b0890f30be7b7991af823075668c546fc465b67e60d2c5d2f",
+      "rollout": "6cbf8148e97d2b3ca32fdb3844a4c20f4a68d73773871c8be34ba0dda11a37a2"
+    },
+    "wf18-F1-009-m1": {
+      "pixels": "dd152713738db20b6b1ef25da536d1ae6e232a55a3baaf22aed449470c2d54aa",
+      "history": "62274a9d6ea6fb4e2669e3f22c4c37753ccc62b1945663407d281619ce9855a1",
+      "labels": "f8bda6dd8ce988f7a8813f6ab9d9188c7865096a57cc958b71c4b5cba365b6d5",
+      "rollout": "91da4157866790ee1fb3e21dd9aea2b8dad5e4021dc0ce5223e22f3d3caee517"
+    },
+    "wf18-F2-119-m0": {
+      "pixels": "804402a63636ddfdc5895921e20ae655306b051aa2e977315e9e1ad986d415aa",
+      "history": "de38ab99c72f171791b4ced6ecd5eaa9fc4aba9e910419d33ac53bb14d75d550",
+      "labels": "8803f45a49184c1fb78446ff897d1b3ab334c15a9f805232220ae6a9f41383af",
+      "rollout": "22a454d7bbb4e7a46c2a9286ca49ab6bfc2f939c01e7f1f2eaf9658673ee3a0d"
+    },
+    "wf18-F2-119-m1": {
+      "pixels": "475e8b1502b26eabefca9eb1c118abb6551cf2c4f42433a03a9115a5451b1ab7",
+      "history": "3f23fd7bc075675894df6fe4bdd404136af35b266cb148d7da7c94c34e1eda74",
+      "labels": "d8e8c7e92ecfb6b9908679edfc574feb4dc7baddef029a8d63a1be6544026dc8",
+      "rollout": "4dec49ea30772c890cf3850a8bc7709e771aef37d8bb4de1b7f9ff803fffeaa6"
+    },
+    "wf18-F3-000-m0": {
+      "pixels": "1173856cba9bcef8de8ab50dba3b468699c8ceee20ddbfa17ba0624bdfc78d17",
+      "history": "3e9ebdf46319e3c3d8a5211f6147c0d6516c6e8537f2d8ec783763772f78f7a8",
+      "labels": "f458572436a1f8684ad57a82296272f7c0a7a7b627c842bb4684f49e405a335d",
+      "rollout": "70c45537a849ab346da44e2ae7b1ed60a482575344154840914ab163dd6c1683"
+    },
+    "wf18-F3-000-m1": {
+      "pixels": "24b92c0846067e32d3c96cdc119c9de69593fbae168be0d3c5645e510409451e",
+      "history": "43a7012e21e82b11cfc5f653002c8cf4b3a06944b93f58c1ae6e7e89d54bab13",
+      "labels": "43cf38e800bbf816785cbada943baad837f23d57465d0e087b8cc4d9a24d01f8",
+      "rollout": "e6053547909b834deb29422c9524ceeb2e0be8d3c61a8a3541afb231169f8b13"
+    },
+    "wf18-F3-002-m0": {
+      "pixels": "dd1378891bc2cb932ebe754d8e1c7e6484bdb75016499dfe343ed2d7f3ec8ab8",
+      "history": "d7ff2c04d871422fcefc322f7d140212eff917534ee15b27112c75aa2786a281",
+      "labels": "a37a3e7e170c8acfdf15d8a0fca2366a20fc55aa2ea6d55ba8ab05f80b7359e7",
+      "rollout": "445f3b9fd30355bf4950dc4ec60dadd1e2504a954fcfce58e0bba476b71ccb20"
+    },
+    "wf18-F3-002-m1": {
+      "pixels": "3712cbce970ca619eacbbf5c70bf44bda76f310268a6057863da3146c809ac25",
+      "history": "ee111b463c1f7aae3abdd67c977d081880f47169182654554ba2b6d800f3141d",
+      "labels": "c0602578f7b415dc253b603f2d7b564bc1809162d3bd4208c6d9de55da2aa6b0",
+      "rollout": "2995b7153d018db26fe16064f7cd890ffc718ebe58a119130087307efa688e91"
+    },
+    "wf18-F3-004-m0": {
+      "pixels": "86d33a94d4c43a08d6ebbdb59678b47718ab9f9818ebbcf0495ee3935a612caa",
+      "history": "43b10a5ab70b2dd541d70d315fc0cf8c61ce55eee147438587b6ea1b6cab3910",
+      "labels": "170c4510dbe25b8fbfceb0987e5413ea6250a0e01c689d5578035b301a00f590",
+      "rollout": "68607ad4d3fb8a6aeccc1b631036fad6785d1740a0caec516cc97ab055c3f32d"
+    },
+    "wf18-F3-004-m1": {
+      "pixels": "6ce755c343293bfd461597d5c3fd3be9bae59fc61f8ef5b7612572e590178a00",
+      "history": "9adb3dd3fb2fa87692086e874941d771ca0d0d06fb48d610e3b3feb83eed5545",
+      "labels": "a25caefdb7605351d0497ef3931e798f9d96714be796830d713f78045fc0c370",
+      "rollout": "3dfe6954d4cb1d3f85f4215e6b280df8d3ffb8394b37ff556359051e2b4ee6eb"
+    }
+  },
+  "initialization": {
+    "per_seed": {
+      "7": "66e5f85fe6b8e1866c427e77353e84e1469325e82b8e21af228e4f9f9a8f7799",
+      "17": "f7d03e205f378179c8705c846361c439271939276f73b4502f5a5a80553fa742",
+      "27": "276573d10853f3e76278947636916862cdc4adb1ee8d1a75a48f5c6c04f87404"
+    },
+    "per_seed_per_arm": {
+      "7": {
+        "A": "66e5f85fe6b8e1866c427e77353e84e1469325e82b8e21af228e4f9f9a8f7799",
+        "S": "66e5f85fe6b8e1866c427e77353e84e1469325e82b8e21af228e4f9f9a8f7799"
+      },
+      "17": {
+        "A": "f7d03e205f378179c8705c846361c439271939276f73b4502f5a5a80553fa742",
+        "S": "f7d03e205f378179c8705c846361c439271939276f73b4502f5a5a80553fa742"
+      },
+      "27": {
+        "A": "276573d10853f3e76278947636916862cdc4adb1ee8d1a75a48f5c6c04f87404",
+        "S": "276573d10853f3e76278947636916862cdc4adb1ee8d1a75a48f5c6c04f87404"
+      }
+    },
+    "identical_between_arms": true,
+    "equals_round16_round20_round21": true,
+    "fusion_per_arm": {
+      "A": "64a8389be07c8ae64e450d6b398aacb84b7da15c924fbd78e2d43f725979f5fc",
+      "S": "64a8389be07c8ae64e450d6b398aacb84b7da15c924fbd78e2d43f725979f5fc"
+    },
+    "method": "fresh seed reset immediately before every N1 construction after the backbone load, through the frozen r16 recipe; the fusion layer is built afterwards and zero-initialised, so it cannot move the head initialisation"
+  },
+  "round21_reference": {
+    "summary_sha256": "03b6ecfd872f1e96921d2508aa25cc129c407cf0f8f5dbd57a9df0da15429202",
+    "checkpoints_sha256": "13cca34db3870291aac1a74e00027d2a186315dc8383ff003ecab2277fbb65b0",
+    "records_sha256": "8c1dc82b19a74282bf599ce7dc6c866eb1f10a898211e4022ae7973565b6f18e",
+    "f1_gap_sha256": "d0b88fd7b3c37d9c5b12b545d39952067715e5daedac967222359f38287d1393",
+    "baselines_sha256": "d9ba25a4aeb9cfba712342f9a8220fe213e0d09bdaa2fdc2e9539b92d3dad186",
+    "f1_validation_feasible": {
+      "A": [
+        2,
+        2,
+        2
+      ],
+      "B": [
+        2,
+        2,
+        2
+      ]
+    },
+    "all_validation_feasible": {
+      "A": [
+        3,
+        3,
+        3
+      ],
+      "B": [
+        2,
+        2,
+        2
+      ]
+    },
+    "control_final_head_state_sha256": {
+      "A-s7": "d52551bb43e4d49d55566548fb7a579ad9fab7161e7624abcadd600a496d4e72",
+      "A-s17": "fb9233f11bb2c556e4a689e91f2144c0b98b94ca81bce3a5319de9cd5493ea64",
+      "A-s27": "49ff13d9384fb2d6768fd3bc6453b40f28bccaa5fa915ee5bf2fc3f885cb77ac"
+    },
+    "direction": {
+      "control": {
+        "base": {
+          "toward": 6,
+          "hold": 3,
+          "away": 0
+        },
+        "mirror": {
+          "toward": 3,
+          "hold": 0,
+          "away": 6
+        }
+      },
+      "heads": {
+        "base": {
+          "toward": 15,
+          "hold": 3,
+          "away": 0
+        },
+        "mirror": {
+          "toward": 3,
+          "hold": 0,
+          "away": 15
+        }
+      },
+      "b0": {
+        "base": {
+          "toward": 3,
+          "hold": 0,
+          "away": 0
+        },
+        "mirror": {
+          "toward": 0,
+          "hold": 0,
+          "away": 3
+        }
+      }
+    },
+    "f1_deaths": "round21: every F1 death (validation 24 + train 27 + B0 12) is on wall_frame"
+  },
+  "expected": {
+    "events": 28,
+    "train_events": 14,
+    "validation_events": 14,
+    "train_events_per_family": {
+      "F1": 6,
+      "F2": 2,
+      "F3": 6
+    },
+    "validation_events_per_family": {
+      "F1": 6,
+      "F2": 2,
+      "F3": 6
+    },
+    "checkpoints": 6,
+    "closed_loop_files": 14,
+    "networks": 7,
+    "baseline_rows": 168,
+    "f1_gap_rows": 84,
+    "spatial_files": 14,
+    "event_files": 28
+  },
+  "verification": {
+    "prerequisites": [
+      "every training asset equals round21's frozen SHA",
+      "the spatial vectors recompute to the frozen digest",
+      "the initial head SHA equals the frozen table for every seed",
+      "the six R18 baselines reproduce round21's 168 rows"
+    ],
+    "control": "arm A must equal round21's A checkpoint SHA and its closed-loop rows for all 3 seeds; otherwise it is reported as `control_not_reproduced` and the S-vs-A comparison is withheld",
+    "step0": "a unit test asserts that step 0 of arm S is bitwise arm A (identical policy logits, identical masked action, delta exactly 0)"
+  },
+  "independent_test": false,
+  "formal_gate": false,
+  "deployable": false,
+  "game": false,
+  "tuning": false,
+  "new_worlds": false,
+  "new_teacher_labels": false,
+  "teacher_calls": 0,
+  "official_labels": false,
+  "research_teacher_labels": true,
+  "new_pixels": false,
+  "failure_policy": "first failure retained; one run; no retrain, rerun, repair, overwrite, extra epoch or baseline switch"
+}

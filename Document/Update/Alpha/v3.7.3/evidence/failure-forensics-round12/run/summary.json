@@ -1,0 +1,399 @@
+{
+  "schema": "v373-failure-forensics/1",
+  "preregistration_sha256": "d180cc51ce77b214f60f22f2bd1b95ef09e0772f971b4e208dd9098baf98c2a2",
+  "events": 8,
+  "replays_verified": 8,
+  "failures": 6,
+  "representative_states": 12,
+  "comparisons": 48,
+  "old_inputs_unchanged": true,
+  "training_steps": 0,
+  "official_labels_created": 0,
+  "game_started": false,
+  "formal_P5": false,
+  "T21_passed": false,
+  "development_only": true,
+  "network_scores_unchanged": true,
+  "event_summaries": [
+    {
+      "event_id": "validation-F1-structure-00-m0",
+      "replay": {
+        "verified": true,
+        "decisions": 80,
+        "first_collision_frame": null,
+        "first_collision_logical": null,
+        "final_state_sha256": "c48c8eab300450b781c62d90428b2ea58bce9b6dc133113ec7dfc2e8d4d553de",
+        "x_hit_verified_all_decision_frames": true,
+        "independent_logical_replay_verified": true
+      },
+      "first_divergence_in_window": null,
+      "disagreement_decisions": 0,
+      "pre_collision_action_stats": null,
+      "window_action_stats": null,
+      "late_reaction_descriptive": null,
+      "representatives": []
+    },
+    {
+      "event_id": "validation-F1-structure-00-m1",
+      "replay": {
+        "verified": true,
+        "decisions": 80,
+        "first_collision_frame": null,
+        "first_collision_logical": null,
+        "final_state_sha256": "aa380bc8f01ace5a27ee4234df20bea887140930e61b686959f57c8d43755cbc",
+        "x_hit_verified_all_decision_frames": true,
+        "independent_logical_replay_verified": true
+      },
+      "first_divergence_in_window": null,
+      "disagreement_decisions": 0,
+      "pre_collision_action_stats": null,
+      "window_action_stats": null,
+      "late_reaction_descriptive": null,
+      "representatives": []
+    },
+    {
+      "event_id": "validation-F2-structure-00-m0",
+      "replay": {
+        "verified": true,
+        "decisions": 80,
+        "first_collision_frame": 112,
+        "first_collision_logical": 112,
+        "final_state_sha256": "1d0c877d32dcf3a3831d49175325b825207fe3b28177a372b46ab377603330c3",
+        "x_hit_verified_all_decision_frames": true,
+        "independent_logical_replay_verified": true
+      },
+      "first_divergence_in_window": 110,
+      "disagreement_decisions": 1,
+      "pre_collision_action_stats": {
+        "decisions": 56,
+        "stays": 18,
+        "action_switches": 1,
+        "direction_reversals": 0
+      },
+      "window_action_stats": {
+        "decisions": 8,
+        "stays": 8,
+        "action_switches": 0,
+        "direction_reversals": 0
+      },
+      "late_reaction_descriptive": {
+        "first_subsequent_action_change": null,
+        "lag_frames": null,
+        "meaning": "descriptive lag only; not a safety deadline or causal avoidability claim"
+      },
+      "representatives": [
+        {
+          "frame": 96,
+          "actual_candidate_status": "feasible",
+          "witnessed_alternative_actions": [
+            -2,
+            -1,
+            1,
+            2
+          ],
+          "death_avoidable_by_witnessed_suffix": true,
+          "limitation": "existential finite synthetic suffix, not N1 capability; unknown never means infeasible",
+          "rescue_status": "feasible"
+        },
+        {
+          "frame": 110,
+          "actual_candidate_status": "unknown",
+          "witnessed_alternative_actions": [
+            -2
+          ],
+          "death_avoidable_by_witnessed_suffix": true,
+          "limitation": "existential finite synthetic suffix, not N1 capability; unknown never means infeasible",
+          "rescue_status": "feasible"
+        }
+      ]
+    },
+    {
+      "event_id": "validation-F2-structure-00-m1",
+      "replay": {
+        "verified": true,
+        "decisions": 80,
+        "first_collision_frame": 136,
+        "first_collision_logical": 136,
+        "final_state_sha256": "6a659a878b9be7945e9f0ba049e0ccfc0cae41b5aa2a4366cb90045c56c77357",
+        "x_hit_verified_all_decision_frames": true,
+        "independent_logical_replay_verified": true
+      },
+      "first_divergence_in_window": 128,
+      "disagreement_decisions": 2,
+      "pre_collision_action_stats": {
+        "decisions": 68,
+        "stays": 30,
+        "action_switches": 2,
+        "direction_reversals": 1
+      },
+      "window_action_stats": {
+        "decisions": 8,
+        "stays": 8,
+        "action_switches": 0,
+        "direction_reversals": 0
+      },
+      "late_reaction_descriptive": {
+        "first_subsequent_action_change": null,
+        "lag_frames": null,
+        "meaning": "descriptive lag only; not a safety deadline or causal avoidability claim"
+      },
+      "representatives": [
+        {
+          "frame": 120,
+          "actual_candidate_status": "feasible",
+          "witnessed_alternative_actions": [
+            -2,
+            -1,
+            1,
+            2
+          ],
+          "death_avoidable_by_witnessed_suffix": true,
+          "limitation": "existential finite synthetic suffix, not N1 capability; unknown never means infeasible",
+          "rescue_status": "feasible"
+        },
+        {
+          "frame": 134,
+          "actual_candidate_status": "unknown",
+          "witnessed_alternative_actions": [
+            -2,
+            1,
+            2
+          ],
+          "death_avoidable_by_witnessed_suffix": true,
+          "limitation": "existential finite synthetic suffix, not N1 capability; unknown never means infeasible",
+          "rescue_status": "feasible"
+        }
+      ]
+    },
+    {
+      "event_id": "validation-F2-structure-01-m0",
+      "replay": {
+        "verified": true,
+        "decisions": 80,
+        "first_collision_frame": 76,
+        "first_collision_logical": 75,
+        "final_state_sha256": "4b83a859ef7ca6a48b0a54f685b8ac3c4510f4160c243c1c19163511cffe8176",
+        "x_hit_verified_all_decision_frames": true,
+        "independent_logical_replay_verified": true
+      },
+      "first_divergence_in_window": 60,
+      "disagreement_decisions": 8,
+      "pre_collision_action_stats": {
+        "decisions": 38,
+        "stays": 0,
+        "action_switches": 0,
+        "direction_reversals": 0
+      },
+      "window_action_stats": {
+        "decisions": 8,
+        "stays": 0,
+        "action_switches": 0,
+        "direction_reversals": 0
+      },
+      "late_reaction_descriptive": {
+        "first_subsequent_action_change": null,
+        "lag_frames": null,
+        "meaning": "descriptive lag only; not a safety deadline or causal avoidability claim"
+      },
+      "representatives": [
+        {
+          "frame": 60,
+          "actual_candidate_status": "feasible",
+          "witnessed_alternative_actions": [
+            -2,
+            -1,
+            0,
+            1
+          ],
+          "death_avoidable_by_witnessed_suffix": true,
+          "limitation": "existential finite synthetic suffix, not N1 capability; unknown never means infeasible",
+          "rescue_status": "feasible"
+        },
+        {
+          "frame": 74,
+          "actual_candidate_status": "unknown",
+          "witnessed_alternative_actions": [
+            -2
+          ],
+          "death_avoidable_by_witnessed_suffix": true,
+          "limitation": "existential finite synthetic suffix, not N1 capability; unknown never means infeasible",
+          "rescue_status": "feasible"
+        }
+      ]
+    },
+    {
+      "event_id": "validation-F2-structure-01-m1",
+      "replay": {
+        "verified": true,
+        "decisions": 80,
+        "first_collision_frame": 102,
+        "first_collision_logical": 102,
+        "final_state_sha256": "b6bb4d8ae51ab5214736e966df619128362a20c7258665e373807176d9162b5a",
+        "x_hit_verified_all_decision_frames": true,
+        "independent_logical_replay_verified": true
+      },
+      "first_divergence_in_window": 90,
+      "disagreement_decisions": 2,
+      "pre_collision_action_stats": {
+        "decisions": 51,
+        "stays": 10,
+        "action_switches": 1,
+        "direction_reversals": 0
+      },
+      "window_action_stats": {
+        "decisions": 8,
+        "stays": 8,
+        "action_switches": 0,
+        "direction_reversals": 0
+      },
+      "late_reaction_descriptive": {
+        "first_subsequent_action_change": null,
+        "lag_frames": null,
+        "meaning": "descriptive lag only; not a safety deadline or causal avoidability claim"
+      },
+      "representatives": [
+        {
+          "frame": 86,
+          "actual_candidate_status": "feasible",
+          "witnessed_alternative_actions": [
+            -2,
+            -1,
+            1,
+            2
+          ],
+          "death_avoidable_by_witnessed_suffix": true,
+          "limitation": "existential finite synthetic suffix, not N1 capability; unknown never means infeasible",
+          "rescue_status": "feasible"
+        },
+        {
+          "frame": 100,
+          "actual_candidate_status": "unknown",
+          "witnessed_alternative_actions": [
+            -2
+          ],
+          "death_avoidable_by_witnessed_suffix": true,
+          "limitation": "existential finite synthetic suffix, not N1 capability; unknown never means infeasible",
+          "rescue_status": "feasible"
+        }
+      ]
+    },
+    {
+      "event_id": "validation-F3-structure-00-m0",
+      "replay": {
+        "verified": true,
+        "decisions": 80,
+        "first_collision_frame": 138,
+        "first_collision_logical": 138,
+        "final_state_sha256": "8d7951e331836d84c54c67bf61a35e0f1ebf3e6e6b2cadd23b3822229f293cb9",
+        "x_hit_verified_all_decision_frames": true,
+        "independent_logical_replay_verified": true
+      },
+      "first_divergence_in_window": 122,
+      "disagreement_decisions": 8,
+      "pre_collision_action_stats": {
+        "decisions": 69,
+        "stays": 31,
+        "action_switches": 2,
+        "direction_reversals": 1
+      },
+      "window_action_stats": {
+        "decisions": 8,
+        "stays": 8,
+        "action_switches": 0,
+        "direction_reversals": 0
+      },
+      "late_reaction_descriptive": {
+        "first_subsequent_action_change": null,
+        "lag_frames": null,
+        "meaning": "descriptive lag only; not a safety deadline or causal avoidability claim"
+      },
+      "representatives": [
+        {
+          "frame": 122,
+          "actual_candidate_status": "feasible",
+          "witnessed_alternative_actions": [
+            -2,
+            -1,
+            1,
+            2
+          ],
+          "death_avoidable_by_witnessed_suffix": true,
+          "limitation": "existential finite synthetic suffix, not N1 capability; unknown never means infeasible",
+          "rescue_status": "feasible"
+        },
+        {
+          "frame": 136,
+          "actual_candidate_status": "unknown",
+          "witnessed_alternative_actions": [
+            -2,
+            -1,
+            1,
+            2
+          ],
+          "death_avoidable_by_witnessed_suffix": true,
+          "limitation": "existential finite synthetic suffix, not N1 capability; unknown never means infeasible",
+          "rescue_status": "feasible"
+        }
+      ]
+    },
+    {
+      "event_id": "validation-F3-structure-00-m1",
+      "replay": {
+        "verified": true,
+        "decisions": 80,
+        "first_collision_frame": 138,
+        "first_collision_logical": 138,
+        "final_state_sha256": "dfdeaaf660001a89bd21e3a1fb3046b34ae11b22d22530b9da2e79df5a404c63",
+        "x_hit_verified_all_decision_frames": true,
+        "independent_logical_replay_verified": true
+      },
+      "first_divergence_in_window": 122,
+      "disagreement_decisions": 8,
+      "pre_collision_action_stats": {
+        "decisions": 69,
+        "stays": 32,
+        "action_switches": 3,
+        "direction_reversals": 2
+      },
+      "window_action_stats": {
+        "decisions": 8,
+        "stays": 8,
+        "action_switches": 0,
+        "direction_reversals": 0
+      },
+      "late_reaction_descriptive": {
+        "first_subsequent_action_change": null,
+        "lag_frames": null,
+        "meaning": "descriptive lag only; not a safety deadline or causal avoidability claim"
+      },
+      "representatives": [
+        {
+          "frame": 122,
+          "actual_candidate_status": "feasible",
+          "witnessed_alternative_actions": [
+            -2,
+            -1,
+            1,
+            2
+          ],
+          "death_avoidable_by_witnessed_suffix": true,
+          "limitation": "existential finite synthetic suffix, not N1 capability; unknown never means infeasible",
+          "rescue_status": "feasible"
+        },
+        {
+          "frame": 136,
+          "actual_candidate_status": "unknown",
+          "witnessed_alternative_actions": [
+            -2,
+            -1,
+            1,
+            2
+          ],
+          "death_avoidable_by_witnessed_suffix": true,
+          "limitation": "existential finite synthetic suffix, not N1 capability; unknown never means infeasible",
+          "rescue_status": "feasible"
+        }
+      ]
+    }
+  ]
+}

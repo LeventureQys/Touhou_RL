@@ -1,0 +1,3648 @@
+{
+  "schema": "v373-world-filter-run/1-summary",
+  "prereg_sha256": "79a94c1e27dc302ec61a9a85a1c0d36adda72969a222519aefa291aaa1694f52",
+  "totals": {
+    "events": 36,
+    "groups": 18,
+    "baseline_passes": 0,
+    "weak_passes": 0,
+    "reference_witnesses": 36,
+    "all_three_constants_hit": 36,
+    "all_six_baselines_hit": 36,
+    "constant_passable": 0,
+    "constant_pass_pairs": 0,
+    "changed_steps_vs_hold_min": 4
+  },
+  "counts": {
+    "F1": {
+      "drawn": 11,
+      "budget": 200,
+      "groups": 6,
+      "events": 12,
+      "target_events": 12,
+      "discarded": 5,
+      "discarded_invalid": 3,
+      "discarded_unknown": 2,
+      "discarded_duplicate": 0,
+      "discarded_unusable_draw": 0,
+      "reference_witnesses": 12,
+      "baseline_passes": 0,
+      "weak_passes": 0,
+      "constant_passable": 0,
+      "constant_pass_pairs": 0,
+      "weak_equivalent_to_baseline": 12,
+      "all_three_constants_hit": 12
+    },
+    "F2": {
+      "drawn": 300,
+      "budget": 400,
+      "groups": 6,
+      "events": 12,
+      "target_events": 12,
+      "discarded": 294,
+      "discarded_invalid": 289,
+      "discarded_unknown": 0,
+      "discarded_duplicate": 5,
+      "discarded_unusable_draw": 5,
+      "reference_witnesses": 12,
+      "baseline_passes": 0,
+      "weak_passes": 0,
+      "constant_passable": 0,
+      "constant_pass_pairs": 0,
+      "weak_equivalent_to_baseline": 12,
+      "all_three_constants_hit": 12
+    },
+    "F3": {
+      "drawn": 6,
+      "budget": 200,
+      "groups": 6,
+      "events": 12,
+      "target_events": 12,
+      "discarded": 0,
+      "discarded_invalid": 0,
+      "discarded_unknown": 0,
+      "discarded_duplicate": 0,
+      "discarded_unusable_draw": 0,
+      "reference_witnesses": 12,
+      "baseline_passes": 0,
+      "weak_passes": 0,
+      "constant_passable": 0,
+      "constant_pass_pairs": 0,
+      "weak_equivalent_to_baseline": 12,
+      "all_three_constants_hit": 12
+    }
+  },
+  "disjointness": {
+    "r8_development_validation_signatures": 21,
+    "r9_confirmation_signatures": 12,
+    "r10_records_signatures": 8,
+    "r16_confirmation_signatures": 12,
+    "r10_subset_of_r8": true,
+    "frozen_union": 45,
+    "new_groups": 18,
+    "new_events": 36,
+    "duplicates": 0,
+    "fields": "family,canonical start_x,coverage,gap,wall_frame,fire_interval,window,threshold,goal,origin,burst,bullet_speed,internal_gap"
+  },
+  "r17_cross_check": {
+    "matches": true,
+    "compared": 24,
+    "mismatches": []
+  },
+  "old_sets": {
+    "r11_validation": {
+      "rows": [
+        {
+          "set": "r11_validation",
+          "event_id": "validation-F1-structure-00-m0",
+          "family": "F1",
+          "verdict": "invalid",
+          "passing_baselines": [
+            "right",
+            "left",
+            "teacher_first_action"
+          ],
+          "reference": "feasible",
+          "reference_checked": 4,
+          "reference_actions": 80,
+          "baselines": {
+            "hold": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 40
+            },
+            "right": {
+              "feasible": true,
+              "survived": true,
+              "first_hit": null
+            },
+            "left": {
+              "feasible": true,
+              "survived": true,
+              "first_hit": null
+            },
+            "alternate": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 40
+            },
+            "random": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 40
+            }
+          },
+          "weak": {
+            "feasible": true,
+            "survived": true,
+            "first_hit": null,
+            "equivalent_baseline": "left"
+          }
+        },
+        {
+          "set": "r11_validation",
+          "event_id": "validation-F1-structure-00-m1",
+          "family": "F1",
+          "verdict": "invalid",
+          "passing_baselines": [
+            "right",
+            "left",
+            "teacher_first_action"
+          ],
+          "reference": "feasible",
+          "reference_checked": 4,
+          "reference_actions": 80,
+          "baselines": {
+            "hold": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 40
+            },
+            "right": {
+              "feasible": true,
+              "survived": true,
+              "first_hit": null
+            },
+            "left": {
+              "feasible": true,
+              "survived": true,
+              "first_hit": null
+            },
+            "alternate": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 40
+            },
+            "random": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 40
+            }
+          },
+          "weak": {
+            "feasible": true,
+            "survived": true,
+            "first_hit": null,
+            "equivalent_baseline": "right"
+          }
+        },
+        {
+          "set": "r11_validation",
+          "event_id": "validation-F2-structure-00-m0",
+          "family": "F2",
+          "verdict": "invalid",
+          "passing_baselines": [
+            "alternate",
+            "random"
+          ],
+          "reference": "feasible",
+          "reference_checked": 16,
+          "reference_actions": 80,
+          "baselines": {
+            "hold": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 46
+            },
+            "right": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 112
+            },
+            "left": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 92
+            },
+            "alternate": {
+              "feasible": true,
+              "survived": true,
+              "first_hit": null
+            },
+            "random": {
+              "feasible": true,
+              "survived": true,
+              "first_hit": null
+            }
+          },
+          "weak": {
+            "feasible": false,
+            "survived": false,
+            "first_hit": 46,
+            "equivalent_baseline": "hold"
+          }
+        },
+        {
+          "set": "r11_validation",
+          "event_id": "validation-F2-structure-00-m1",
+          "family": "F2",
+          "verdict": "invalid",
+          "passing_baselines": [
+            "alternate",
+            "random"
+          ],
+          "reference": "feasible",
+          "reference_checked": 16,
+          "reference_actions": 80,
+          "baselines": {
+            "hold": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 46
+            },
+            "right": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 92
+            },
+            "left": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 112
+            },
+            "alternate": {
+              "feasible": true,
+              "survived": true,
+              "first_hit": null
+            },
+            "random": {
+              "feasible": true,
+              "survived": true,
+              "first_hit": null
+            }
+          },
+          "weak": {
+            "feasible": false,
+            "survived": false,
+            "first_hit": 46,
+            "equivalent_baseline": "hold"
+          }
+        },
+        {
+          "set": "r11_validation",
+          "event_id": "validation-F2-structure-01-m0",
+          "family": "F2",
+          "verdict": "invalid",
+          "passing_baselines": [
+            "random"
+          ],
+          "reference": "feasible",
+          "reference_checked": 2,
+          "reference_actions": 80,
+          "baselines": {
+            "hold": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 28
+            },
+            "right": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 76
+            },
+            "left": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 102
+            },
+            "alternate": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 94
+            },
+            "random": {
+              "feasible": true,
+              "survived": true,
+              "first_hit": null
+            }
+          },
+          "weak": {
+            "feasible": false,
+            "survived": false,
+            "first_hit": 28,
+            "equivalent_baseline": "hold"
+          }
+        },
+        {
+          "set": "r11_validation",
+          "event_id": "validation-F2-structure-01-m1",
+          "family": "F2",
+          "verdict": "invalid",
+          "passing_baselines": [
+            "random"
+          ],
+          "reference": "feasible",
+          "reference_checked": 2,
+          "reference_actions": 80,
+          "baselines": {
+            "hold": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 28
+            },
+            "right": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 102
+            },
+            "left": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 76
+            },
+            "alternate": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 94
+            },
+            "random": {
+              "feasible": true,
+              "survived": true,
+              "first_hit": null
+            }
+          },
+          "weak": {
+            "feasible": false,
+            "survived": false,
+            "first_hit": 28,
+            "equivalent_baseline": "hold"
+          }
+        },
+        {
+          "set": "r11_validation",
+          "event_id": "validation-F3-structure-00-m0",
+          "family": "F3",
+          "verdict": "valid",
+          "passing_baselines": [],
+          "reference": "feasible",
+          "reference_checked": 5,
+          "reference_actions": 80,
+          "baselines": {
+            "hold": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 94
+            },
+            "right": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 58
+            },
+            "left": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 142
+            },
+            "alternate": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 94
+            },
+            "random": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 94
+            }
+          },
+          "weak": {
+            "feasible": false,
+            "survived": false,
+            "first_hit": 94,
+            "equivalent_baseline": "hold"
+          }
+        },
+        {
+          "set": "r11_validation",
+          "event_id": "validation-F3-structure-00-m1",
+          "family": "F3",
+          "verdict": "valid",
+          "passing_baselines": [],
+          "reference": "feasible",
+          "reference_checked": 5,
+          "reference_actions": 80,
+          "baselines": {
+            "hold": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 94
+            },
+            "right": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 142
+            },
+            "left": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 58
+            },
+            "alternate": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 94
+            },
+            "random": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 94
+            }
+          },
+          "weak": {
+            "feasible": false,
+            "survived": false,
+            "first_hit": 94,
+            "equivalent_baseline": "hold"
+          }
+        }
+      ],
+      "summary": {
+        "F1": {
+          "events": 2,
+          "hold": {
+            "feasible": 0,
+            "survived": 0,
+            "first_hit_present": 2
+          },
+          "right": {
+            "feasible": 2,
+            "survived": 2,
+            "first_hit_present": 0
+          },
+          "left": {
+            "feasible": 2,
+            "survived": 2,
+            "first_hit_present": 0
+          },
+          "alternate": {
+            "feasible": 0,
+            "survived": 0,
+            "first_hit_present": 2
+          },
+          "random": {
+            "feasible": 0,
+            "survived": 0,
+            "first_hit_present": 2
+          },
+          "teacher_first_action": {
+            "feasible": 2,
+            "survived": 2,
+            "first_hit_present": 0
+          },
+          "reference_feasible": 2,
+          "reference_unknown": 0,
+          "reference_not_evaluated": 0,
+          "baseline_passes_any": 2,
+          "filtered_out": 2,
+          "constant_passable": 0
+        },
+        "F2": {
+          "events": 4,
+          "hold": {
+            "feasible": 0,
+            "survived": 0,
+            "first_hit_present": 4
+          },
+          "right": {
+            "feasible": 0,
+            "survived": 0,
+            "first_hit_present": 4
+          },
+          "left": {
+            "feasible": 0,
+            "survived": 0,
+            "first_hit_present": 4
+          },
+          "alternate": {
+            "feasible": 2,
+            "survived": 2,
+            "first_hit_present": 2
+          },
+          "random": {
+            "feasible": 4,
+            "survived": 4,
+            "first_hit_present": 0
+          },
+          "teacher_first_action": {
+            "feasible": 0,
+            "survived": 0,
+            "first_hit_present": 4
+          },
+          "reference_feasible": 4,
+          "reference_unknown": 0,
+          "reference_not_evaluated": 0,
+          "baseline_passes_any": 4,
+          "filtered_out": 4,
+          "constant_passable": 0
+        },
+        "F3": {
+          "events": 2,
+          "hold": {
+            "feasible": 0,
+            "survived": 0,
+            "first_hit_present": 2
+          },
+          "right": {
+            "feasible": 0,
+            "survived": 0,
+            "first_hit_present": 2
+          },
+          "left": {
+            "feasible": 0,
+            "survived": 0,
+            "first_hit_present": 2
+          },
+          "alternate": {
+            "feasible": 0,
+            "survived": 0,
+            "first_hit_present": 2
+          },
+          "random": {
+            "feasible": 0,
+            "survived": 0,
+            "first_hit_present": 2
+          },
+          "teacher_first_action": {
+            "feasible": 0,
+            "survived": 0,
+            "first_hit_present": 2
+          },
+          "reference_feasible": 2,
+          "reference_unknown": 0,
+          "reference_not_evaluated": 0,
+          "baseline_passes_any": 0,
+          "filtered_out": 0,
+          "constant_passable": 0
+        },
+        "all": {
+          "events": 8,
+          "hold": {
+            "feasible": 0,
+            "survived": 0,
+            "first_hit_present": 8
+          },
+          "right": {
+            "feasible": 2,
+            "survived": 2,
+            "first_hit_present": 6
+          },
+          "left": {
+            "feasible": 2,
+            "survived": 2,
+            "first_hit_present": 6
+          },
+          "alternate": {
+            "feasible": 2,
+            "survived": 2,
+            "first_hit_present": 6
+          },
+          "random": {
+            "feasible": 4,
+            "survived": 4,
+            "first_hit_present": 4
+          },
+          "teacher_first_action": {
+            "feasible": 2,
+            "survived": 2,
+            "first_hit_present": 6
+          },
+          "reference_feasible": 8,
+          "reference_unknown": 0,
+          "reference_not_evaluated": 0,
+          "baseline_passes_any": 6,
+          "filtered_out": 6,
+          "constant_passable": 0
+        }
+      }
+    },
+    "r16_confirmation": {
+      "rows": [
+        {
+          "set": "r16_confirmation",
+          "event_id": "confirm-F1-00-m0",
+          "family": "F1",
+          "verdict": "invalid",
+          "passing_baselines": [
+            "right",
+            "left",
+            "teacher_first_action"
+          ],
+          "reference": "feasible",
+          "reference_checked": 4,
+          "reference_actions": 80,
+          "baselines": {
+            "hold": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 58
+            },
+            "right": {
+              "feasible": true,
+              "survived": true,
+              "first_hit": null
+            },
+            "left": {
+              "feasible": true,
+              "survived": true,
+              "first_hit": null
+            },
+            "alternate": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 58
+            },
+            "random": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 58
+            }
+          },
+          "weak": {
+            "feasible": true,
+            "survived": true,
+            "first_hit": null,
+            "equivalent_baseline": "left"
+          }
+        },
+        {
+          "set": "r16_confirmation",
+          "event_id": "confirm-F1-00-m1",
+          "family": "F1",
+          "verdict": "invalid",
+          "passing_baselines": [
+            "right",
+            "left",
+            "teacher_first_action"
+          ],
+          "reference": "feasible",
+          "reference_checked": 4,
+          "reference_actions": 80,
+          "baselines": {
+            "hold": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 58
+            },
+            "right": {
+              "feasible": true,
+              "survived": true,
+              "first_hit": null
+            },
+            "left": {
+              "feasible": true,
+              "survived": true,
+              "first_hit": null
+            },
+            "alternate": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 58
+            },
+            "random": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 58
+            }
+          },
+          "weak": {
+            "feasible": true,
+            "survived": true,
+            "first_hit": null,
+            "equivalent_baseline": "right"
+          }
+        },
+        {
+          "set": "r16_confirmation",
+          "event_id": "confirm-F1-01-m0",
+          "family": "F1",
+          "verdict": "invalid",
+          "passing_baselines": [
+            "right",
+            "left",
+            "teacher_first_action"
+          ],
+          "reference": "feasible",
+          "reference_checked": 3,
+          "reference_actions": 80,
+          "baselines": {
+            "hold": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 46
+            },
+            "right": {
+              "feasible": true,
+              "survived": true,
+              "first_hit": null
+            },
+            "left": {
+              "feasible": true,
+              "survived": true,
+              "first_hit": null
+            },
+            "alternate": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 46
+            },
+            "random": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 46
+            }
+          },
+          "weak": {
+            "feasible": true,
+            "survived": true,
+            "first_hit": null,
+            "equivalent_baseline": "left"
+          }
+        },
+        {
+          "set": "r16_confirmation",
+          "event_id": "confirm-F1-01-m1",
+          "family": "F1",
+          "verdict": "invalid",
+          "passing_baselines": [
+            "right",
+            "left",
+            "teacher_first_action"
+          ],
+          "reference": "feasible",
+          "reference_checked": 3,
+          "reference_actions": 80,
+          "baselines": {
+            "hold": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 46
+            },
+            "right": {
+              "feasible": true,
+              "survived": true,
+              "first_hit": null
+            },
+            "left": {
+              "feasible": true,
+              "survived": true,
+              "first_hit": null
+            },
+            "alternate": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 46
+            },
+            "random": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 46
+            }
+          },
+          "weak": {
+            "feasible": true,
+            "survived": true,
+            "first_hit": null,
+            "equivalent_baseline": "right"
+          }
+        },
+        {
+          "set": "r16_confirmation",
+          "event_id": "confirm-F1-02-m0",
+          "family": "F1",
+          "verdict": "invalid",
+          "passing_baselines": [
+            "right",
+            "left",
+            "teacher_first_action"
+          ],
+          "reference": "feasible",
+          "reference_checked": 4,
+          "reference_actions": 80,
+          "baselines": {
+            "hold": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 54
+            },
+            "right": {
+              "feasible": true,
+              "survived": true,
+              "first_hit": null
+            },
+            "left": {
+              "feasible": true,
+              "survived": true,
+              "first_hit": null
+            },
+            "alternate": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 54
+            },
+            "random": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 54
+            }
+          },
+          "weak": {
+            "feasible": true,
+            "survived": true,
+            "first_hit": null,
+            "equivalent_baseline": "left"
+          }
+        },
+        {
+          "set": "r16_confirmation",
+          "event_id": "confirm-F1-02-m1",
+          "family": "F1",
+          "verdict": "invalid",
+          "passing_baselines": [
+            "right",
+            "left",
+            "teacher_first_action"
+          ],
+          "reference": "feasible",
+          "reference_checked": 4,
+          "reference_actions": 80,
+          "baselines": {
+            "hold": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 54
+            },
+            "right": {
+              "feasible": true,
+              "survived": true,
+              "first_hit": null
+            },
+            "left": {
+              "feasible": true,
+              "survived": true,
+              "first_hit": null
+            },
+            "alternate": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 54
+            },
+            "random": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 54
+            }
+          },
+          "weak": {
+            "feasible": true,
+            "survived": true,
+            "first_hit": null,
+            "equivalent_baseline": "right"
+          }
+        },
+        {
+          "set": "r16_confirmation",
+          "event_id": "confirm-F1-03-m0",
+          "family": "F1",
+          "verdict": "invalid",
+          "passing_baselines": [
+            "right",
+            "left"
+          ],
+          "reference": "feasible",
+          "reference_checked": 3,
+          "reference_actions": 80,
+          "baselines": {
+            "hold": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 62
+            },
+            "right": {
+              "feasible": true,
+              "survived": true,
+              "first_hit": null
+            },
+            "left": {
+              "feasible": true,
+              "survived": true,
+              "first_hit": null
+            },
+            "alternate": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 62
+            },
+            "random": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 62
+            }
+          },
+          "weak": {
+            "feasible": false,
+            "survived": false,
+            "first_hit": 62,
+            "equivalent_baseline": "hold"
+          }
+        },
+        {
+          "set": "r16_confirmation",
+          "event_id": "confirm-F1-03-m1",
+          "family": "F1",
+          "verdict": "invalid",
+          "passing_baselines": [
+            "right",
+            "left"
+          ],
+          "reference": "feasible",
+          "reference_checked": 3,
+          "reference_actions": 80,
+          "baselines": {
+            "hold": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 62
+            },
+            "right": {
+              "feasible": true,
+              "survived": true,
+              "first_hit": null
+            },
+            "left": {
+              "feasible": true,
+              "survived": true,
+              "first_hit": null
+            },
+            "alternate": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 62
+            },
+            "random": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 62
+            }
+          },
+          "weak": {
+            "feasible": false,
+            "survived": false,
+            "first_hit": 62,
+            "equivalent_baseline": "hold"
+          }
+        },
+        {
+          "set": "r16_confirmation",
+          "event_id": "confirm-F2-00-m0",
+          "family": "F2",
+          "verdict": "invalid",
+          "passing_baselines": [
+            "alternate"
+          ],
+          "reference": "feasible",
+          "reference_checked": 3,
+          "reference_actions": 80,
+          "baselines": {
+            "hold": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 42
+            },
+            "right": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 118
+            },
+            "left": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 96
+            },
+            "alternate": {
+              "feasible": true,
+              "survived": true,
+              "first_hit": null
+            },
+            "random": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 110
+            }
+          },
+          "weak": {
+            "feasible": false,
+            "survived": false,
+            "first_hit": 42,
+            "equivalent_baseline": "hold"
+          }
+        },
+        {
+          "set": "r16_confirmation",
+          "event_id": "confirm-F2-00-m1",
+          "family": "F2",
+          "verdict": "invalid",
+          "passing_baselines": [
+            "alternate"
+          ],
+          "reference": "feasible",
+          "reference_checked": 3,
+          "reference_actions": 80,
+          "baselines": {
+            "hold": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 42
+            },
+            "right": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 96
+            },
+            "left": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 118
+            },
+            "alternate": {
+              "feasible": true,
+              "survived": true,
+              "first_hit": null
+            },
+            "random": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 110
+            }
+          },
+          "weak": {
+            "feasible": false,
+            "survived": false,
+            "first_hit": 42,
+            "equivalent_baseline": "hold"
+          }
+        },
+        {
+          "set": "r16_confirmation",
+          "event_id": "confirm-F2-01-m0",
+          "family": "F2",
+          "verdict": "invalid",
+          "passing_baselines": [
+            "hold",
+            "alternate",
+            "random",
+            "teacher_first_action"
+          ],
+          "reference": "feasible",
+          "reference_checked": 1,
+          "reference_actions": 80,
+          "baselines": {
+            "hold": {
+              "feasible": true,
+              "survived": true,
+              "first_hit": null
+            },
+            "right": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 90
+            },
+            "left": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 94
+            },
+            "alternate": {
+              "feasible": true,
+              "survived": true,
+              "first_hit": null
+            },
+            "random": {
+              "feasible": true,
+              "survived": true,
+              "first_hit": null
+            }
+          },
+          "weak": {
+            "feasible": true,
+            "survived": true,
+            "first_hit": null,
+            "equivalent_baseline": "hold"
+          }
+        },
+        {
+          "set": "r16_confirmation",
+          "event_id": "confirm-F2-01-m1",
+          "family": "F2",
+          "verdict": "invalid",
+          "passing_baselines": [
+            "hold",
+            "alternate",
+            "random",
+            "teacher_first_action"
+          ],
+          "reference": "feasible",
+          "reference_checked": 1,
+          "reference_actions": 80,
+          "baselines": {
+            "hold": {
+              "feasible": true,
+              "survived": true,
+              "first_hit": null
+            },
+            "right": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 94
+            },
+            "left": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 90
+            },
+            "alternate": {
+              "feasible": true,
+              "survived": true,
+              "first_hit": null
+            },
+            "random": {
+              "feasible": true,
+              "survived": true,
+              "first_hit": null
+            }
+          },
+          "weak": {
+            "feasible": true,
+            "survived": true,
+            "first_hit": null,
+            "equivalent_baseline": "hold"
+          }
+        },
+        {
+          "set": "r16_confirmation",
+          "event_id": "confirm-F2-02-m0",
+          "family": "F2",
+          "verdict": "valid",
+          "passing_baselines": [],
+          "reference": "feasible",
+          "reference_checked": 2,
+          "reference_actions": 80,
+          "baselines": {
+            "hold": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 34
+            },
+            "right": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 94
+            },
+            "left": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 94
+            },
+            "alternate": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 66
+            },
+            "random": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 116
+            }
+          },
+          "weak": {
+            "feasible": false,
+            "survived": false,
+            "first_hit": 34,
+            "equivalent_baseline": "hold"
+          }
+        },
+        {
+          "set": "r16_confirmation",
+          "event_id": "confirm-F2-02-m1",
+          "family": "F2",
+          "verdict": "valid",
+          "passing_baselines": [],
+          "reference": "feasible",
+          "reference_checked": 2,
+          "reference_actions": 80,
+          "baselines": {
+            "hold": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 34
+            },
+            "right": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 94
+            },
+            "left": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 94
+            },
+            "alternate": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 66
+            },
+            "random": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 116
+            }
+          },
+          "weak": {
+            "feasible": false,
+            "survived": false,
+            "first_hit": 34,
+            "equivalent_baseline": "hold"
+          }
+        },
+        {
+          "set": "r16_confirmation",
+          "event_id": "confirm-F2-03-m0",
+          "family": "F2",
+          "verdict": "invalid",
+          "passing_baselines": [
+            "hold",
+            "random",
+            "teacher_first_action"
+          ],
+          "reference": "feasible",
+          "reference_checked": 1,
+          "reference_actions": 80,
+          "baselines": {
+            "hold": {
+              "feasible": true,
+              "survived": true,
+              "first_hit": null
+            },
+            "right": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 110
+            },
+            "left": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 106
+            },
+            "alternate": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 134
+            },
+            "random": {
+              "feasible": true,
+              "survived": true,
+              "first_hit": null
+            }
+          },
+          "weak": {
+            "feasible": true,
+            "survived": true,
+            "first_hit": null,
+            "equivalent_baseline": "hold"
+          }
+        },
+        {
+          "set": "r16_confirmation",
+          "event_id": "confirm-F2-03-m1",
+          "family": "F2",
+          "verdict": "invalid",
+          "passing_baselines": [
+            "hold",
+            "alternate",
+            "random",
+            "teacher_first_action"
+          ],
+          "reference": "feasible",
+          "reference_checked": 1,
+          "reference_actions": 80,
+          "baselines": {
+            "hold": {
+              "feasible": true,
+              "survived": true,
+              "first_hit": null
+            },
+            "right": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 106
+            },
+            "left": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 110
+            },
+            "alternate": {
+              "feasible": true,
+              "survived": true,
+              "first_hit": null
+            },
+            "random": {
+              "feasible": true,
+              "survived": true,
+              "first_hit": null
+            }
+          },
+          "weak": {
+            "feasible": true,
+            "survived": true,
+            "first_hit": null,
+            "equivalent_baseline": "hold"
+          }
+        },
+        {
+          "set": "r16_confirmation",
+          "event_id": "confirm-F3-00-m0",
+          "family": "F3",
+          "verdict": "valid",
+          "passing_baselines": [],
+          "reference": "feasible",
+          "reference_checked": 11,
+          "reference_actions": 80,
+          "baselines": {
+            "hold": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 42
+            },
+            "right": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 62
+            },
+            "left": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 146
+            },
+            "alternate": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 98
+            },
+            "random": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 98
+            }
+          },
+          "weak": {
+            "feasible": false,
+            "survived": false,
+            "first_hit": 42,
+            "equivalent_baseline": "hold"
+          }
+        },
+        {
+          "set": "r16_confirmation",
+          "event_id": "confirm-F3-00-m1",
+          "family": "F3",
+          "verdict": "valid",
+          "passing_baselines": [],
+          "reference": "feasible",
+          "reference_checked": 11,
+          "reference_actions": 80,
+          "baselines": {
+            "hold": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 42
+            },
+            "right": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 146
+            },
+            "left": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 62
+            },
+            "alternate": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 98
+            },
+            "random": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 98
+            }
+          },
+          "weak": {
+            "feasible": false,
+            "survived": false,
+            "first_hit": 42,
+            "equivalent_baseline": "hold"
+          }
+        },
+        {
+          "set": "r16_confirmation",
+          "event_id": "confirm-F3-01-m0",
+          "family": "F3",
+          "verdict": "valid",
+          "passing_baselines": [],
+          "reference": "feasible",
+          "reference_checked": 11,
+          "reference_actions": 80,
+          "baselines": {
+            "hold": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 42
+            },
+            "right": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 64
+            },
+            "left": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 158
+            },
+            "alternate": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 96
+            },
+            "random": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 96
+            }
+          },
+          "weak": {
+            "feasible": false,
+            "survived": false,
+            "first_hit": 42,
+            "equivalent_baseline": "hold"
+          }
+        },
+        {
+          "set": "r16_confirmation",
+          "event_id": "confirm-F3-01-m1",
+          "family": "F3",
+          "verdict": "valid",
+          "passing_baselines": [],
+          "reference": "feasible",
+          "reference_checked": 11,
+          "reference_actions": 80,
+          "baselines": {
+            "hold": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 42
+            },
+            "right": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 158
+            },
+            "left": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 64
+            },
+            "alternate": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 96
+            },
+            "random": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 96
+            }
+          },
+          "weak": {
+            "feasible": false,
+            "survived": false,
+            "first_hit": 42,
+            "equivalent_baseline": "hold"
+          }
+        },
+        {
+          "set": "r16_confirmation",
+          "event_id": "confirm-F3-02-m0",
+          "family": "F3",
+          "verdict": "valid",
+          "passing_baselines": [],
+          "reference": "feasible",
+          "reference_checked": 11,
+          "reference_actions": 80,
+          "baselines": {
+            "hold": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 42
+            },
+            "right": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 72
+            },
+            "left": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 46
+            },
+            "alternate": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 106
+            },
+            "random": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 106
+            }
+          },
+          "weak": {
+            "feasible": false,
+            "survived": false,
+            "first_hit": 42,
+            "equivalent_baseline": "hold"
+          }
+        },
+        {
+          "set": "r16_confirmation",
+          "event_id": "confirm-F3-02-m1",
+          "family": "F3",
+          "verdict": "valid",
+          "passing_baselines": [],
+          "reference": "feasible",
+          "reference_checked": 11,
+          "reference_actions": 80,
+          "baselines": {
+            "hold": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 42
+            },
+            "right": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 46
+            },
+            "left": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 72
+            },
+            "alternate": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 68
+            },
+            "random": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 106
+            }
+          },
+          "weak": {
+            "feasible": false,
+            "survived": false,
+            "first_hit": 42,
+            "equivalent_baseline": "hold"
+          }
+        },
+        {
+          "set": "r16_confirmation",
+          "event_id": "confirm-F3-03-m0",
+          "family": "F3",
+          "verdict": "invalid",
+          "passing_baselines": [
+            "left"
+          ],
+          "reference": "feasible",
+          "reference_checked": 6,
+          "reference_actions": 80,
+          "baselines": {
+            "hold": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 40
+            },
+            "right": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 102
+            },
+            "left": {
+              "feasible": true,
+              "survived": true,
+              "first_hit": null
+            },
+            "alternate": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 102
+            },
+            "random": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 40
+            }
+          },
+          "weak": {
+            "feasible": false,
+            "survived": false,
+            "first_hit": 40,
+            "equivalent_baseline": "hold"
+          }
+        },
+        {
+          "set": "r16_confirmation",
+          "event_id": "confirm-F3-03-m1",
+          "family": "F3",
+          "verdict": "invalid",
+          "passing_baselines": [
+            "right"
+          ],
+          "reference": "feasible",
+          "reference_checked": 6,
+          "reference_actions": 80,
+          "baselines": {
+            "hold": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 40
+            },
+            "right": {
+              "feasible": true,
+              "survived": true,
+              "first_hit": null
+            },
+            "left": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 102
+            },
+            "alternate": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 102
+            },
+            "random": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 102
+            }
+          },
+          "weak": {
+            "feasible": false,
+            "survived": false,
+            "first_hit": 40,
+            "equivalent_baseline": "hold"
+          }
+        }
+      ],
+      "summary": {
+        "F1": {
+          "events": 8,
+          "hold": {
+            "feasible": 0,
+            "survived": 0,
+            "first_hit_present": 8
+          },
+          "right": {
+            "feasible": 8,
+            "survived": 8,
+            "first_hit_present": 0
+          },
+          "left": {
+            "feasible": 8,
+            "survived": 8,
+            "first_hit_present": 0
+          },
+          "alternate": {
+            "feasible": 0,
+            "survived": 0,
+            "first_hit_present": 8
+          },
+          "random": {
+            "feasible": 0,
+            "survived": 0,
+            "first_hit_present": 8
+          },
+          "teacher_first_action": {
+            "feasible": 6,
+            "survived": 6,
+            "first_hit_present": 2
+          },
+          "reference_feasible": 8,
+          "reference_unknown": 0,
+          "reference_not_evaluated": 0,
+          "baseline_passes_any": 8,
+          "filtered_out": 8,
+          "constant_passable": 0
+        },
+        "F2": {
+          "events": 8,
+          "hold": {
+            "feasible": 4,
+            "survived": 4,
+            "first_hit_present": 4
+          },
+          "right": {
+            "feasible": 0,
+            "survived": 0,
+            "first_hit_present": 8
+          },
+          "left": {
+            "feasible": 0,
+            "survived": 0,
+            "first_hit_present": 8
+          },
+          "alternate": {
+            "feasible": 5,
+            "survived": 5,
+            "first_hit_present": 3
+          },
+          "random": {
+            "feasible": 4,
+            "survived": 4,
+            "first_hit_present": 4
+          },
+          "teacher_first_action": {
+            "feasible": 4,
+            "survived": 4,
+            "first_hit_present": 4
+          },
+          "reference_feasible": 8,
+          "reference_unknown": 0,
+          "reference_not_evaluated": 0,
+          "baseline_passes_any": 6,
+          "filtered_out": 6,
+          "constant_passable": 0
+        },
+        "F3": {
+          "events": 8,
+          "hold": {
+            "feasible": 0,
+            "survived": 0,
+            "first_hit_present": 8
+          },
+          "right": {
+            "feasible": 1,
+            "survived": 1,
+            "first_hit_present": 7
+          },
+          "left": {
+            "feasible": 1,
+            "survived": 1,
+            "first_hit_present": 7
+          },
+          "alternate": {
+            "feasible": 0,
+            "survived": 0,
+            "first_hit_present": 8
+          },
+          "random": {
+            "feasible": 0,
+            "survived": 0,
+            "first_hit_present": 8
+          },
+          "teacher_first_action": {
+            "feasible": 0,
+            "survived": 0,
+            "first_hit_present": 8
+          },
+          "reference_feasible": 8,
+          "reference_unknown": 0,
+          "reference_not_evaluated": 0,
+          "baseline_passes_any": 2,
+          "filtered_out": 2,
+          "constant_passable": 0
+        },
+        "all": {
+          "events": 24,
+          "hold": {
+            "feasible": 4,
+            "survived": 4,
+            "first_hit_present": 20
+          },
+          "right": {
+            "feasible": 9,
+            "survived": 9,
+            "first_hit_present": 15
+          },
+          "left": {
+            "feasible": 9,
+            "survived": 9,
+            "first_hit_present": 15
+          },
+          "alternate": {
+            "feasible": 5,
+            "survived": 5,
+            "first_hit_present": 19
+          },
+          "random": {
+            "feasible": 4,
+            "survived": 4,
+            "first_hit_present": 20
+          },
+          "teacher_first_action": {
+            "feasible": 10,
+            "survived": 10,
+            "first_hit_present": 14
+          },
+          "reference_feasible": 24,
+          "reference_unknown": 0,
+          "reference_not_evaluated": 0,
+          "baseline_passes_any": 16,
+          "filtered_out": 16,
+          "constant_passable": 0
+        }
+      }
+    },
+    "combined_old": {
+      "rows": [
+        {
+          "set": "r11_validation",
+          "event_id": "validation-F1-structure-00-m0",
+          "family": "F1",
+          "verdict": "invalid",
+          "passing_baselines": [
+            "right",
+            "left",
+            "teacher_first_action"
+          ],
+          "reference": "feasible",
+          "reference_checked": 4,
+          "reference_actions": 80,
+          "baselines": {
+            "hold": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 40
+            },
+            "right": {
+              "feasible": true,
+              "survived": true,
+              "first_hit": null
+            },
+            "left": {
+              "feasible": true,
+              "survived": true,
+              "first_hit": null
+            },
+            "alternate": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 40
+            },
+            "random": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 40
+            }
+          },
+          "weak": {
+            "feasible": true,
+            "survived": true,
+            "first_hit": null,
+            "equivalent_baseline": "left"
+          }
+        },
+        {
+          "set": "r11_validation",
+          "event_id": "validation-F1-structure-00-m1",
+          "family": "F1",
+          "verdict": "invalid",
+          "passing_baselines": [
+            "right",
+            "left",
+            "teacher_first_action"
+          ],
+          "reference": "feasible",
+          "reference_checked": 4,
+          "reference_actions": 80,
+          "baselines": {
+            "hold": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 40
+            },
+            "right": {
+              "feasible": true,
+              "survived": true,
+              "first_hit": null
+            },
+            "left": {
+              "feasible": true,
+              "survived": true,
+              "first_hit": null
+            },
+            "alternate": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 40
+            },
+            "random": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 40
+            }
+          },
+          "weak": {
+            "feasible": true,
+            "survived": true,
+            "first_hit": null,
+            "equivalent_baseline": "right"
+          }
+        },
+        {
+          "set": "r11_validation",
+          "event_id": "validation-F2-structure-00-m0",
+          "family": "F2",
+          "verdict": "invalid",
+          "passing_baselines": [
+            "alternate",
+            "random"
+          ],
+          "reference": "feasible",
+          "reference_checked": 16,
+          "reference_actions": 80,
+          "baselines": {
+            "hold": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 46
+            },
+            "right": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 112
+            },
+            "left": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 92
+            },
+            "alternate": {
+              "feasible": true,
+              "survived": true,
+              "first_hit": null
+            },
+            "random": {
+              "feasible": true,
+              "survived": true,
+              "first_hit": null
+            }
+          },
+          "weak": {
+            "feasible": false,
+            "survived": false,
+            "first_hit": 46,
+            "equivalent_baseline": "hold"
+          }
+        },
+        {
+          "set": "r11_validation",
+          "event_id": "validation-F2-structure-00-m1",
+          "family": "F2",
+          "verdict": "invalid",
+          "passing_baselines": [
+            "alternate",
+            "random"
+          ],
+          "reference": "feasible",
+          "reference_checked": 16,
+          "reference_actions": 80,
+          "baselines": {
+            "hold": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 46
+            },
+            "right": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 92
+            },
+            "left": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 112
+            },
+            "alternate": {
+              "feasible": true,
+              "survived": true,
+              "first_hit": null
+            },
+            "random": {
+              "feasible": true,
+              "survived": true,
+              "first_hit": null
+            }
+          },
+          "weak": {
+            "feasible": false,
+            "survived": false,
+            "first_hit": 46,
+            "equivalent_baseline": "hold"
+          }
+        },
+        {
+          "set": "r11_validation",
+          "event_id": "validation-F2-structure-01-m0",
+          "family": "F2",
+          "verdict": "invalid",
+          "passing_baselines": [
+            "random"
+          ],
+          "reference": "feasible",
+          "reference_checked": 2,
+          "reference_actions": 80,
+          "baselines": {
+            "hold": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 28
+            },
+            "right": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 76
+            },
+            "left": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 102
+            },
+            "alternate": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 94
+            },
+            "random": {
+              "feasible": true,
+              "survived": true,
+              "first_hit": null
+            }
+          },
+          "weak": {
+            "feasible": false,
+            "survived": false,
+            "first_hit": 28,
+            "equivalent_baseline": "hold"
+          }
+        },
+        {
+          "set": "r11_validation",
+          "event_id": "validation-F2-structure-01-m1",
+          "family": "F2",
+          "verdict": "invalid",
+          "passing_baselines": [
+            "random"
+          ],
+          "reference": "feasible",
+          "reference_checked": 2,
+          "reference_actions": 80,
+          "baselines": {
+            "hold": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 28
+            },
+            "right": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 102
+            },
+            "left": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 76
+            },
+            "alternate": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 94
+            },
+            "random": {
+              "feasible": true,
+              "survived": true,
+              "first_hit": null
+            }
+          },
+          "weak": {
+            "feasible": false,
+            "survived": false,
+            "first_hit": 28,
+            "equivalent_baseline": "hold"
+          }
+        },
+        {
+          "set": "r11_validation",
+          "event_id": "validation-F3-structure-00-m0",
+          "family": "F3",
+          "verdict": "valid",
+          "passing_baselines": [],
+          "reference": "feasible",
+          "reference_checked": 5,
+          "reference_actions": 80,
+          "baselines": {
+            "hold": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 94
+            },
+            "right": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 58
+            },
+            "left": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 142
+            },
+            "alternate": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 94
+            },
+            "random": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 94
+            }
+          },
+          "weak": {
+            "feasible": false,
+            "survived": false,
+            "first_hit": 94,
+            "equivalent_baseline": "hold"
+          }
+        },
+        {
+          "set": "r11_validation",
+          "event_id": "validation-F3-structure-00-m1",
+          "family": "F3",
+          "verdict": "valid",
+          "passing_baselines": [],
+          "reference": "feasible",
+          "reference_checked": 5,
+          "reference_actions": 80,
+          "baselines": {
+            "hold": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 94
+            },
+            "right": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 142
+            },
+            "left": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 58
+            },
+            "alternate": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 94
+            },
+            "random": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 94
+            }
+          },
+          "weak": {
+            "feasible": false,
+            "survived": false,
+            "first_hit": 94,
+            "equivalent_baseline": "hold"
+          }
+        },
+        {
+          "set": "r16_confirmation",
+          "event_id": "confirm-F1-00-m0",
+          "family": "F1",
+          "verdict": "invalid",
+          "passing_baselines": [
+            "right",
+            "left",
+            "teacher_first_action"
+          ],
+          "reference": "feasible",
+          "reference_checked": 4,
+          "reference_actions": 80,
+          "baselines": {
+            "hold": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 58
+            },
+            "right": {
+              "feasible": true,
+              "survived": true,
+              "first_hit": null
+            },
+            "left": {
+              "feasible": true,
+              "survived": true,
+              "first_hit": null
+            },
+            "alternate": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 58
+            },
+            "random": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 58
+            }
+          },
+          "weak": {
+            "feasible": true,
+            "survived": true,
+            "first_hit": null,
+            "equivalent_baseline": "left"
+          }
+        },
+        {
+          "set": "r16_confirmation",
+          "event_id": "confirm-F1-00-m1",
+          "family": "F1",
+          "verdict": "invalid",
+          "passing_baselines": [
+            "right",
+            "left",
+            "teacher_first_action"
+          ],
+          "reference": "feasible",
+          "reference_checked": 4,
+          "reference_actions": 80,
+          "baselines": {
+            "hold": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 58
+            },
+            "right": {
+              "feasible": true,
+              "survived": true,
+              "first_hit": null
+            },
+            "left": {
+              "feasible": true,
+              "survived": true,
+              "first_hit": null
+            },
+            "alternate": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 58
+            },
+            "random": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 58
+            }
+          },
+          "weak": {
+            "feasible": true,
+            "survived": true,
+            "first_hit": null,
+            "equivalent_baseline": "right"
+          }
+        },
+        {
+          "set": "r16_confirmation",
+          "event_id": "confirm-F1-01-m0",
+          "family": "F1",
+          "verdict": "invalid",
+          "passing_baselines": [
+            "right",
+            "left",
+            "teacher_first_action"
+          ],
+          "reference": "feasible",
+          "reference_checked": 3,
+          "reference_actions": 80,
+          "baselines": {
+            "hold": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 46
+            },
+            "right": {
+              "feasible": true,
+              "survived": true,
+              "first_hit": null
+            },
+            "left": {
+              "feasible": true,
+              "survived": true,
+              "first_hit": null
+            },
+            "alternate": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 46
+            },
+            "random": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 46
+            }
+          },
+          "weak": {
+            "feasible": true,
+            "survived": true,
+            "first_hit": null,
+            "equivalent_baseline": "left"
+          }
+        },
+        {
+          "set": "r16_confirmation",
+          "event_id": "confirm-F1-01-m1",
+          "family": "F1",
+          "verdict": "invalid",
+          "passing_baselines": [
+            "right",
+            "left",
+            "teacher_first_action"
+          ],
+          "reference": "feasible",
+          "reference_checked": 3,
+          "reference_actions": 80,
+          "baselines": {
+            "hold": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 46
+            },
+            "right": {
+              "feasible": true,
+              "survived": true,
+              "first_hit": null
+            },
+            "left": {
+              "feasible": true,
+              "survived": true,
+              "first_hit": null
+            },
+            "alternate": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 46
+            },
+            "random": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 46
+            }
+          },
+          "weak": {
+            "feasible": true,
+            "survived": true,
+            "first_hit": null,
+            "equivalent_baseline": "right"
+          }
+        },
+        {
+          "set": "r16_confirmation",
+          "event_id": "confirm-F1-02-m0",
+          "family": "F1",
+          "verdict": "invalid",
+          "passing_baselines": [
+            "right",
+            "left",
+            "teacher_first_action"
+          ],
+          "reference": "feasible",
+          "reference_checked": 4,
+          "reference_actions": 80,
+          "baselines": {
+            "hold": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 54
+            },
+            "right": {
+              "feasible": true,
+              "survived": true,
+              "first_hit": null
+            },
+            "left": {
+              "feasible": true,
+              "survived": true,
+              "first_hit": null
+            },
+            "alternate": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 54
+            },
+            "random": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 54
+            }
+          },
+          "weak": {
+            "feasible": true,
+            "survived": true,
+            "first_hit": null,
+            "equivalent_baseline": "left"
+          }
+        },
+        {
+          "set": "r16_confirmation",
+          "event_id": "confirm-F1-02-m1",
+          "family": "F1",
+          "verdict": "invalid",
+          "passing_baselines": [
+            "right",
+            "left",
+            "teacher_first_action"
+          ],
+          "reference": "feasible",
+          "reference_checked": 4,
+          "reference_actions": 80,
+          "baselines": {
+            "hold": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 54
+            },
+            "right": {
+              "feasible": true,
+              "survived": true,
+              "first_hit": null
+            },
+            "left": {
+              "feasible": true,
+              "survived": true,
+              "first_hit": null
+            },
+            "alternate": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 54
+            },
+            "random": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 54
+            }
+          },
+          "weak": {
+            "feasible": true,
+            "survived": true,
+            "first_hit": null,
+            "equivalent_baseline": "right"
+          }
+        },
+        {
+          "set": "r16_confirmation",
+          "event_id": "confirm-F1-03-m0",
+          "family": "F1",
+          "verdict": "invalid",
+          "passing_baselines": [
+            "right",
+            "left"
+          ],
+          "reference": "feasible",
+          "reference_checked": 3,
+          "reference_actions": 80,
+          "baselines": {
+            "hold": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 62
+            },
+            "right": {
+              "feasible": true,
+              "survived": true,
+              "first_hit": null
+            },
+            "left": {
+              "feasible": true,
+              "survived": true,
+              "first_hit": null
+            },
+            "alternate": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 62
+            },
+            "random": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 62
+            }
+          },
+          "weak": {
+            "feasible": false,
+            "survived": false,
+            "first_hit": 62,
+            "equivalent_baseline": "hold"
+          }
+        },
+        {
+          "set": "r16_confirmation",
+          "event_id": "confirm-F1-03-m1",
+          "family": "F1",
+          "verdict": "invalid",
+          "passing_baselines": [
+            "right",
+            "left"
+          ],
+          "reference": "feasible",
+          "reference_checked": 3,
+          "reference_actions": 80,
+          "baselines": {
+            "hold": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 62
+            },
+            "right": {
+              "feasible": true,
+              "survived": true,
+              "first_hit": null
+            },
+            "left": {
+              "feasible": true,
+              "survived": true,
+              "first_hit": null
+            },
+            "alternate": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 62
+            },
+            "random": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 62
+            }
+          },
+          "weak": {
+            "feasible": false,
+            "survived": false,
+            "first_hit": 62,
+            "equivalent_baseline": "hold"
+          }
+        },
+        {
+          "set": "r16_confirmation",
+          "event_id": "confirm-F2-00-m0",
+          "family": "F2",
+          "verdict": "invalid",
+          "passing_baselines": [
+            "alternate"
+          ],
+          "reference": "feasible",
+          "reference_checked": 3,
+          "reference_actions": 80,
+          "baselines": {
+            "hold": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 42
+            },
+            "right": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 118
+            },
+            "left": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 96
+            },
+            "alternate": {
+              "feasible": true,
+              "survived": true,
+              "first_hit": null
+            },
+            "random": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 110
+            }
+          },
+          "weak": {
+            "feasible": false,
+            "survived": false,
+            "first_hit": 42,
+            "equivalent_baseline": "hold"
+          }
+        },
+        {
+          "set": "r16_confirmation",
+          "event_id": "confirm-F2-00-m1",
+          "family": "F2",
+          "verdict": "invalid",
+          "passing_baselines": [
+            "alternate"
+          ],
+          "reference": "feasible",
+          "reference_checked": 3,
+          "reference_actions": 80,
+          "baselines": {
+            "hold": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 42
+            },
+            "right": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 96
+            },
+            "left": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 118
+            },
+            "alternate": {
+              "feasible": true,
+              "survived": true,
+              "first_hit": null
+            },
+            "random": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 110
+            }
+          },
+          "weak": {
+            "feasible": false,
+            "survived": false,
+            "first_hit": 42,
+            "equivalent_baseline": "hold"
+          }
+        },
+        {
+          "set": "r16_confirmation",
+          "event_id": "confirm-F2-01-m0",
+          "family": "F2",
+          "verdict": "invalid",
+          "passing_baselines": [
+            "hold",
+            "alternate",
+            "random",
+            "teacher_first_action"
+          ],
+          "reference": "feasible",
+          "reference_checked": 1,
+          "reference_actions": 80,
+          "baselines": {
+            "hold": {
+              "feasible": true,
+              "survived": true,
+              "first_hit": null
+            },
+            "right": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 90
+            },
+            "left": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 94
+            },
+            "alternate": {
+              "feasible": true,
+              "survived": true,
+              "first_hit": null
+            },
+            "random": {
+              "feasible": true,
+              "survived": true,
+              "first_hit": null
+            }
+          },
+          "weak": {
+            "feasible": true,
+            "survived": true,
+            "first_hit": null,
+            "equivalent_baseline": "hold"
+          }
+        },
+        {
+          "set": "r16_confirmation",
+          "event_id": "confirm-F2-01-m1",
+          "family": "F2",
+          "verdict": "invalid",
+          "passing_baselines": [
+            "hold",
+            "alternate",
+            "random",
+            "teacher_first_action"
+          ],
+          "reference": "feasible",
+          "reference_checked": 1,
+          "reference_actions": 80,
+          "baselines": {
+            "hold": {
+              "feasible": true,
+              "survived": true,
+              "first_hit": null
+            },
+            "right": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 94
+            },
+            "left": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 90
+            },
+            "alternate": {
+              "feasible": true,
+              "survived": true,
+              "first_hit": null
+            },
+            "random": {
+              "feasible": true,
+              "survived": true,
+              "first_hit": null
+            }
+          },
+          "weak": {
+            "feasible": true,
+            "survived": true,
+            "first_hit": null,
+            "equivalent_baseline": "hold"
+          }
+        },
+        {
+          "set": "r16_confirmation",
+          "event_id": "confirm-F2-02-m0",
+          "family": "F2",
+          "verdict": "valid",
+          "passing_baselines": [],
+          "reference": "feasible",
+          "reference_checked": 2,
+          "reference_actions": 80,
+          "baselines": {
+            "hold": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 34
+            },
+            "right": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 94
+            },
+            "left": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 94
+            },
+            "alternate": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 66
+            },
+            "random": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 116
+            }
+          },
+          "weak": {
+            "feasible": false,
+            "survived": false,
+            "first_hit": 34,
+            "equivalent_baseline": "hold"
+          }
+        },
+        {
+          "set": "r16_confirmation",
+          "event_id": "confirm-F2-02-m1",
+          "family": "F2",
+          "verdict": "valid",
+          "passing_baselines": [],
+          "reference": "feasible",
+          "reference_checked": 2,
+          "reference_actions": 80,
+          "baselines": {
+            "hold": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 34
+            },
+            "right": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 94
+            },
+            "left": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 94
+            },
+            "alternate": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 66
+            },
+            "random": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 116
+            }
+          },
+          "weak": {
+            "feasible": false,
+            "survived": false,
+            "first_hit": 34,
+            "equivalent_baseline": "hold"
+          }
+        },
+        {
+          "set": "r16_confirmation",
+          "event_id": "confirm-F2-03-m0",
+          "family": "F2",
+          "verdict": "invalid",
+          "passing_baselines": [
+            "hold",
+            "random",
+            "teacher_first_action"
+          ],
+          "reference": "feasible",
+          "reference_checked": 1,
+          "reference_actions": 80,
+          "baselines": {
+            "hold": {
+              "feasible": true,
+              "survived": true,
+              "first_hit": null
+            },
+            "right": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 110
+            },
+            "left": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 106
+            },
+            "alternate": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 134
+            },
+            "random": {
+              "feasible": true,
+              "survived": true,
+              "first_hit": null
+            }
+          },
+          "weak": {
+            "feasible": true,
+            "survived": true,
+            "first_hit": null,
+            "equivalent_baseline": "hold"
+          }
+        },
+        {
+          "set": "r16_confirmation",
+          "event_id": "confirm-F2-03-m1",
+          "family": "F2",
+          "verdict": "invalid",
+          "passing_baselines": [
+            "hold",
+            "alternate",
+            "random",
+            "teacher_first_action"
+          ],
+          "reference": "feasible",
+          "reference_checked": 1,
+          "reference_actions": 80,
+          "baselines": {
+            "hold": {
+              "feasible": true,
+              "survived": true,
+              "first_hit": null
+            },
+            "right": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 106
+            },
+            "left": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 110
+            },
+            "alternate": {
+              "feasible": true,
+              "survived": true,
+              "first_hit": null
+            },
+            "random": {
+              "feasible": true,
+              "survived": true,
+              "first_hit": null
+            }
+          },
+          "weak": {
+            "feasible": true,
+            "survived": true,
+            "first_hit": null,
+            "equivalent_baseline": "hold"
+          }
+        },
+        {
+          "set": "r16_confirmation",
+          "event_id": "confirm-F3-00-m0",
+          "family": "F3",
+          "verdict": "valid",
+          "passing_baselines": [],
+          "reference": "feasible",
+          "reference_checked": 11,
+          "reference_actions": 80,
+          "baselines": {
+            "hold": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 42
+            },
+            "right": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 62
+            },
+            "left": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 146
+            },
+            "alternate": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 98
+            },
+            "random": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 98
+            }
+          },
+          "weak": {
+            "feasible": false,
+            "survived": false,
+            "first_hit": 42,
+            "equivalent_baseline": "hold"
+          }
+        },
+        {
+          "set": "r16_confirmation",
+          "event_id": "confirm-F3-00-m1",
+          "family": "F3",
+          "verdict": "valid",
+          "passing_baselines": [],
+          "reference": "feasible",
+          "reference_checked": 11,
+          "reference_actions": 80,
+          "baselines": {
+            "hold": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 42
+            },
+            "right": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 146
+            },
+            "left": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 62
+            },
+            "alternate": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 98
+            },
+            "random": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 98
+            }
+          },
+          "weak": {
+            "feasible": false,
+            "survived": false,
+            "first_hit": 42,
+            "equivalent_baseline": "hold"
+          }
+        },
+        {
+          "set": "r16_confirmation",
+          "event_id": "confirm-F3-01-m0",
+          "family": "F3",
+          "verdict": "valid",
+          "passing_baselines": [],
+          "reference": "feasible",
+          "reference_checked": 11,
+          "reference_actions": 80,
+          "baselines": {
+            "hold": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 42
+            },
+            "right": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 64
+            },
+            "left": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 158
+            },
+            "alternate": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 96
+            },
+            "random": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 96
+            }
+          },
+          "weak": {
+            "feasible": false,
+            "survived": false,
+            "first_hit": 42,
+            "equivalent_baseline": "hold"
+          }
+        },
+        {
+          "set": "r16_confirmation",
+          "event_id": "confirm-F3-01-m1",
+          "family": "F3",
+          "verdict": "valid",
+          "passing_baselines": [],
+          "reference": "feasible",
+          "reference_checked": 11,
+          "reference_actions": 80,
+          "baselines": {
+            "hold": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 42
+            },
+            "right": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 158
+            },
+            "left": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 64
+            },
+            "alternate": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 96
+            },
+            "random": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 96
+            }
+          },
+          "weak": {
+            "feasible": false,
+            "survived": false,
+            "first_hit": 42,
+            "equivalent_baseline": "hold"
+          }
+        },
+        {
+          "set": "r16_confirmation",
+          "event_id": "confirm-F3-02-m0",
+          "family": "F3",
+          "verdict": "valid",
+          "passing_baselines": [],
+          "reference": "feasible",
+          "reference_checked": 11,
+          "reference_actions": 80,
+          "baselines": {
+            "hold": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 42
+            },
+            "right": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 72
+            },
+            "left": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 46
+            },
+            "alternate": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 106
+            },
+            "random": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 106
+            }
+          },
+          "weak": {
+            "feasible": false,
+            "survived": false,
+            "first_hit": 42,
+            "equivalent_baseline": "hold"
+          }
+        },
+        {
+          "set": "r16_confirmation",
+          "event_id": "confirm-F3-02-m1",
+          "family": "F3",
+          "verdict": "valid",
+          "passing_baselines": [],
+          "reference": "feasible",
+          "reference_checked": 11,
+          "reference_actions": 80,
+          "baselines": {
+            "hold": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 42
+            },
+            "right": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 46
+            },
+            "left": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 72
+            },
+            "alternate": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 68
+            },
+            "random": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 106
+            }
+          },
+          "weak": {
+            "feasible": false,
+            "survived": false,
+            "first_hit": 42,
+            "equivalent_baseline": "hold"
+          }
+        },
+        {
+          "set": "r16_confirmation",
+          "event_id": "confirm-F3-03-m0",
+          "family": "F3",
+          "verdict": "invalid",
+          "passing_baselines": [
+            "left"
+          ],
+          "reference": "feasible",
+          "reference_checked": 6,
+          "reference_actions": 80,
+          "baselines": {
+            "hold": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 40
+            },
+            "right": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 102
+            },
+            "left": {
+              "feasible": true,
+              "survived": true,
+              "first_hit": null
+            },
+            "alternate": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 102
+            },
+            "random": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 40
+            }
+          },
+          "weak": {
+            "feasible": false,
+            "survived": false,
+            "first_hit": 40,
+            "equivalent_baseline": "hold"
+          }
+        },
+        {
+          "set": "r16_confirmation",
+          "event_id": "confirm-F3-03-m1",
+          "family": "F3",
+          "verdict": "invalid",
+          "passing_baselines": [
+            "right"
+          ],
+          "reference": "feasible",
+          "reference_checked": 6,
+          "reference_actions": 80,
+          "baselines": {
+            "hold": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 40
+            },
+            "right": {
+              "feasible": true,
+              "survived": true,
+              "first_hit": null
+            },
+            "left": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 102
+            },
+            "alternate": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 102
+            },
+            "random": {
+              "feasible": false,
+              "survived": false,
+              "first_hit": 102
+            }
+          },
+          "weak": {
+            "feasible": false,
+            "survived": false,
+            "first_hit": 40,
+            "equivalent_baseline": "hold"
+          }
+        }
+      ],
+      "summary": {
+        "F1": {
+          "events": 10,
+          "hold": {
+            "feasible": 0,
+            "survived": 0,
+            "first_hit_present": 10
+          },
+          "right": {
+            "feasible": 10,
+            "survived": 10,
+            "first_hit_present": 0
+          },
+          "left": {
+            "feasible": 10,
+            "survived": 10,
+            "first_hit_present": 0
+          },
+          "alternate": {
+            "feasible": 0,
+            "survived": 0,
+            "first_hit_present": 10
+          },
+          "random": {
+            "feasible": 0,
+            "survived": 0,
+            "first_hit_present": 10
+          },
+          "teacher_first_action": {
+            "feasible": 8,
+            "survived": 8,
+            "first_hit_present": 2
+          },
+          "reference_feasible": 10,
+          "reference_unknown": 0,
+          "reference_not_evaluated": 0,
+          "baseline_passes_any": 10,
+          "filtered_out": 10,
+          "constant_passable": 0
+        },
+        "F2": {
+          "events": 12,
+          "hold": {
+            "feasible": 4,
+            "survived": 4,
+            "first_hit_present": 8
+          },
+          "right": {
+            "feasible": 0,
+            "survived": 0,
+            "first_hit_present": 12
+          },
+          "left": {
+            "feasible": 0,
+            "survived": 0,
+            "first_hit_present": 12
+          },
+          "alternate": {
+            "feasible": 7,
+            "survived": 7,
+            "first_hit_present": 5
+          },
+          "random": {
+            "feasible": 8,
+            "survived": 8,
+            "first_hit_present": 4
+          },
+          "teacher_first_action": {
+            "feasible": 4,
+            "survived": 4,
+            "first_hit_present": 8
+          },
+          "reference_feasible": 12,
+          "reference_unknown": 0,
+          "reference_not_evaluated": 0,
+          "baseline_passes_any": 10,
+          "filtered_out": 10,
+          "constant_passable": 0
+        },
+        "F3": {
+          "events": 10,
+          "hold": {
+            "feasible": 0,
+            "survived": 0,
+            "first_hit_present": 10
+          },
+          "right": {
+            "feasible": 1,
+            "survived": 1,
+            "first_hit_present": 9
+          },
+          "left": {
+            "feasible": 1,
+            "survived": 1,
+            "first_hit_present": 9
+          },
+          "alternate": {
+            "feasible": 0,
+            "survived": 0,
+            "first_hit_present": 10
+          },
+          "random": {
+            "feasible": 0,
+            "survived": 0,
+            "first_hit_present": 10
+          },
+          "teacher_first_action": {
+            "feasible": 0,
+            "survived": 0,
+            "first_hit_present": 10
+          },
+          "reference_feasible": 10,
+          "reference_unknown": 0,
+          "reference_not_evaluated": 0,
+          "baseline_passes_any": 2,
+          "filtered_out": 2,
+          "constant_passable": 0
+        },
+        "all": {
+          "events": 32,
+          "hold": {
+            "feasible": 4,
+            "survived": 4,
+            "first_hit_present": 28
+          },
+          "right": {
+            "feasible": 11,
+            "survived": 11,
+            "first_hit_present": 21
+          },
+          "left": {
+            "feasible": 11,
+            "survived": 11,
+            "first_hit_present": 21
+          },
+          "alternate": {
+            "feasible": 7,
+            "survived": 7,
+            "first_hit_present": 25
+          },
+          "random": {
+            "feasible": 8,
+            "survived": 8,
+            "first_hit_present": 24
+          },
+          "teacher_first_action": {
+            "feasible": 12,
+            "survived": 12,
+            "first_hit_present": 20
+          },
+          "reference_feasible": 32,
+          "reference_unknown": 0,
+          "reference_not_evaluated": 0,
+          "baseline_passes_any": 22,
+          "filtered_out": 22,
+          "constant_passable": 0
+        }
+      }
+    }
+  },
+  "new_worlds": {
+    "F1": {
+      "events": 12,
+      "hold": {
+        "feasible": 0,
+        "survived": 0,
+        "first_hit_present": 12
+      },
+      "right": {
+        "feasible": 0,
+        "survived": 0,
+        "first_hit_present": 12
+      },
+      "left": {
+        "feasible": 0,
+        "survived": 0,
+        "first_hit_present": 12
+      },
+      "alternate": {
+        "feasible": 0,
+        "survived": 0,
+        "first_hit_present": 12
+      },
+      "random": {
+        "feasible": 0,
+        "survived": 0,
+        "first_hit_present": 12
+      },
+      "teacher_first_action": {
+        "feasible": 0,
+        "survived": 0,
+        "first_hit_present": 12
+      },
+      "reference_feasible": 12,
+      "reference_unknown": 0,
+      "reference_not_evaluated": 0,
+      "baseline_passes_any": 0,
+      "filtered_out": 0,
+      "constant_passable": 0
+    },
+    "F2": {
+      "events": 12,
+      "hold": {
+        "feasible": 0,
+        "survived": 0,
+        "first_hit_present": 12
+      },
+      "right": {
+        "feasible": 0,
+        "survived": 0,
+        "first_hit_present": 12
+      },
+      "left": {
+        "feasible": 0,
+        "survived": 0,
+        "first_hit_present": 12
+      },
+      "alternate": {
+        "feasible": 0,
+        "survived": 0,
+        "first_hit_present": 12
+      },
+      "random": {
+        "feasible": 0,
+        "survived": 0,
+        "first_hit_present": 12
+      },
+      "teacher_first_action": {
+        "feasible": 0,
+        "survived": 0,
+        "first_hit_present": 12
+      },
+      "reference_feasible": 12,
+      "reference_unknown": 0,
+      "reference_not_evaluated": 0,
+      "baseline_passes_any": 0,
+      "filtered_out": 0,
+      "constant_passable": 0
+    },
+    "F3": {
+      "events": 12,
+      "hold": {
+        "feasible": 0,
+        "survived": 0,
+        "first_hit_present": 12
+      },
+      "right": {
+        "feasible": 0,
+        "survived": 0,
+        "first_hit_present": 12
+      },
+      "left": {
+        "feasible": 0,
+        "survived": 0,
+        "first_hit_present": 12
+      },
+      "alternate": {
+        "feasible": 0,
+        "survived": 0,
+        "first_hit_present": 12
+      },
+      "random": {
+        "feasible": 0,
+        "survived": 0,
+        "first_hit_present": 12
+      },
+      "teacher_first_action": {
+        "feasible": 0,
+        "survived": 0,
+        "first_hit_present": 12
+      },
+      "reference_feasible": 12,
+      "reference_unknown": 0,
+      "reference_not_evaluated": 0,
+      "baseline_passes_any": 0,
+      "filtered_out": 0,
+      "constant_passable": 0
+    },
+    "all": {
+      "events": 36,
+      "hold": {
+        "feasible": 0,
+        "survived": 0,
+        "first_hit_present": 36
+      },
+      "right": {
+        "feasible": 0,
+        "survived": 0,
+        "first_hit_present": 36
+      },
+      "left": {
+        "feasible": 0,
+        "survived": 0,
+        "first_hit_present": 36
+      },
+      "alternate": {
+        "feasible": 0,
+        "survived": 0,
+        "first_hit_present": 36
+      },
+      "random": {
+        "feasible": 0,
+        "survived": 0,
+        "first_hit_present": 36
+      },
+      "teacher_first_action": {
+        "feasible": 0,
+        "survived": 0,
+        "first_hit_present": 36
+      },
+      "reference_feasible": 36,
+      "reference_unknown": 0,
+      "reference_not_evaluated": 0,
+      "baseline_passes_any": 0,
+      "filtered_out": 0,
+      "constant_passable": 0
+    }
+  },
+  "identities_unchanged": true,
+  "development_only": true,
+  "test_split": false,
+  "training_steps": 0,
+  "teacher_labels": 0,
+  "formal_gate": false,
+  "deployable": false,
+  "game": false
+}
