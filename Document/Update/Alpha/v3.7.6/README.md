@@ -19,8 +19,8 @@
 | A/WP0 | in_progress | 已补 [有限历史分类](<历史结果分类.md>)，未遍历全部run；新baseline待齐，G0未通过 |
 | B/WP3 | in_progress | 报告与F2标签契约已有实现；原六CLI、完整proposal/receipt/trace及P4–P7指标未因此完成 |
 | C/WP1 | 历史G1/G2保留；新采集已产出候选 | 旧G1四工件漂移，新代码需新engineering证据；新三来源须deep审与review |
-| D/WP2 | in_progress；可观测性验收blocked | **D1+B3联合冻结**，不再循环等待；画面review另交接，合格事件plan待齐 |
-| BC新增分支 | 真实准入blocked | build → audit → check-gate → cache → 一更新；只有前置齐备才执行 |
+| D/WP2 | in_progress；画面复核为 AI 署名并已逐行穷举，**外部复核缺** | 事件 plan 已冻结（plan r4）；缺外部执行者的独立只读复核 |
+| BC新增分支 | **已训练，结果 fail（无技能证据）** | build/audit/check-gate/cache/一次更新/冻结预算训练/冻结指标评估全部执行并留证；下一步是重新预注册选窗规则与打败 hold-last 的表述框架，不是加预算 |
 | 原E/U05/G4 | not_run | gap目标对当前F2不适用；另行重设计，BC不代验原8事件/四臂/三seed |
 | 原F/U06/G5 | not_started | 原事务/闭环尚无本轮完整验收 |
 | 原G/U07/G6/G7 | 未完成，真机控制blocked | 需协议/统计/授权，补采不是确认实验 |
