@@ -1,0 +1,43 @@
+{
+  "source_id": "f2-test-st2",
+  "capture": "third_party/th08/build/rl/exact/v376-f2-test-st2-20261105-r1",
+  "stage": 1,
+  "samples": 3000,
+  "window_rows": 96,
+  "windows": [
+    {
+      "source_id": "f2-test-st2",
+      "start_sample": 1936,
+      "stage_frames": [
+        3876,
+        4066
+      ],
+      "aimed_pair_rows": 86,
+      "live_rows": 96,
+      "rows": 96
+    },
+    {
+      "source_id": "f2-test-st2",
+      "start_sample": 2065,
+      "stage_frames": [
+        4134,
+        4324
+      ],
+      "aimed_pair_rows": 72,
+      "live_rows": 96,
+      "rows": 96
+    },
+    {
+      "source_id": "f2-test-st2",
+      "start_sample": 1729,
+      "stage_frames": [
+        3462,
+        3652
+      ],
+      "aimed_pair_rows": 58,
+      "live_rows": 96,
+      "rows": 96
+    }
+  ],
+  "rule": "window score = (rows where a strict aimed pair exists, rows with a live bullet, -start); greedy non-overlapping top-k; computed from the privileged bullet pool before any pixel work"
+}

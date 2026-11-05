@@ -1,0 +1,63 @@
+{
+  "schema": "v376-f2-eval-protocol/1",
+  "frozen": true,
+  "preregistered_at": "2026-11-05T21:05:00+08:00",
+  "written_before": "any training run on this dataset; the numbers below were fixed while only the dataset census (row/action counts) was known",
+  "objective": "f2_behavior_cloning",
+  "original_G4": false,
+  "binds": {
+    "preregistration": {"path": "Document/Update/Alpha/v3.7.6/configs/f2-preregistration-v3.json", "sha256": "79adb39b95ba2d6b50c01b3a5b39a4884ccaa15dfeba2ddde3e08462b861714d"},
+    "plan": {"path": "v376-f2-bc-plan-20261105-r4.json", "sha256": "5e64f223e8d1e01d4e58753aaa2a6260c1dd373b588e4f5ac6f1d9e78b13f93e"},
+    "manifest": {"path": "third_party/th08/build/rl/f2/v376-f2-bc-dataset-20261105-r4/manifest.json", "sha256": "bf60b8d11eef2d98361ed6ea988b8c335d2fd3fb6bb408bc97dc642d353473f6"},
+    "cache_index": {"path": "third_party/th08/build/rl/f2/v376-f2-bc-cache-20261105-r4/index.json", "sha256": "df2985bd9e73268434d812f65a0c42bf02a39576775a6dca47b2e726e1306608"},
+    "baseline": {"path": "third_party/th08/build/rl/runs/v104-v3-E5-s7/policy.pt", "sha256": "74abde8a996c13fae832913e4e5533bc9490688bc4c0aa73560e695f065d14be"}
+  },
+  "training": {
+    "arm": "N1",
+    "seed": 7,
+    "epochs": 30,
+    "max_updates": 1000,
+    "learning_rate": 0.001,
+    "burnin": 16,
+    "sequence": 32,
+    "device": "cuda",
+    "selection": "the trainer keeps the epoch with the lowest mean validation loss over supervised validation windows",
+    "no_tuning": "no learning rate, arm or epoch count is chosen after looking at validation or test accuracy; the config above is executed once"
+  },
+  "evaluation": {
+    "population": "supervised rows inside the scored burnin16/sequence32 windows of the named split",
+    "metrics": [
+      "overall accuracy over supervised rows",
+      "class-balanced accuracy (mean per-class recall over the classes present)",
+      "action-change accuracy (rows whose action differs from the previous row's actual action)",
+      "per-event macro accuracy",
+      "hold-last baseline (predict the previous row's actual action)",
+      "majority-class baseline (most frequent action in the train split)",
+      "uniform-random baseline (1/18)"
+    ],
+    "diagnostics": [
+      "playfield-zeroed ablation accuracy (a policy reading the HUD instead of the bullets does not drop)",
+      "supervision census per event: rows, annotated, supervised, action histogram, action changes"
+    ],
+    "claim_limitation": "A few hundred supervised rows from three replays of one stage measure a signal and a pipeline, not gameplay skill, generalization or a deployable policy.",
+    "reporting_order": "validation is reported first; the train/validation decision is frozen in the run report before any test number exists"
+  },
+  "test_policy": {
+    "isolation": "the test split is excluded from the feature cache (report shows test_tensor_loaded=false, test_cache_created=false); the trainer never loads it",
+    "single_read": "test is evaluated at most once, by a separate invocation that writes a new file and refuses to overwrite",
+    "preconditions": [
+      "validation metrics exist for the selected checkpoint",
+      "the run report shows test_used=false and backbone_unchanged=true",
+      "no threshold, sample or protocol change has been made after the validation numbers"
+    ],
+    "if_preconditions_fail": "the test split is reported as not evaluated, not as passed"
+  },
+  "stop_conditions": [
+    "any exact audit, identity, alignment or pixel-binding failure",
+    "fewer than three independent replay source groups",
+    "input/label/source leakage",
+    "NaN or non-finite loss, updates=0, or a changed backbone",
+    "validation without supervision (selection impossible)",
+    "test consulted before this file was frozen"
+  ]
+}

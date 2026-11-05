@@ -1,0 +1,25 @@
+{
+  "schema": "v376-f2-bc-preregistration/1",
+  "objective": "replay_demonstration_behavior_cloning",
+  "status": "frozen_capture_candidates_pending_visual_review",
+  "family": "F2",
+  "mechanism": "aimed_stream",
+  "domain": "real",
+  "original_G4": false,
+  "relations": {"gap_center": "not_applicable", "relative_dx": "not_applicable", "deadline": "not_applicable", "route": "not_applicable"},
+  "sources": [
+    {"role": "train", "replay": "third_party/th08/tests/fixtures/replays/th08-1.00d/accepted/th8_ud2ce5.rpy", "sha256": "004f58e1b95655664087d6613780f3e6e16e25d0c55e5c17b2e2291d5446ae6b"},
+    {"role": "validation", "replay": "third_party/th08/tests/fixtures/replays/th08-1.00d/accepted/th8_ud2ccf.rpy", "sha256": "331095af8dc920ed1d8bfb8abedafeb46493c0fa2af9eae1509575ce8d4ca056"},
+    {"role": "test", "replay": "th08_replay/Th8_ud2558.rpy", "sha256": "ff93b2eb719b7cc790a6fe319ad398f5b960592373281d90f4a42ea236740b53"}
+  ],
+  "source_selection": "First two existing accepted Lunatic Border Team full replays and first lexicographic project replay matching difficulty and shot; frozen before new capture or learning results.",
+  "split_unit": "full_replay_sha256",
+  "derived_and_template_groups_follow_source": true,
+  "capture": {"requested_frames_per_source": 3000, "stage": -1, "max_discarded": 0, "frame_proof": "exact", "trial": true, "save_full_active_bullet_audit": true},
+  "events": {"minimum_rows": 48, "review_required": true, "repeated_visible_aimed_emissions": 2, "selection": "Review all captured candidate windows in source order; admit only causally visible repeated aimed streams, not movement-only proxy. No claim of minimum accepted count before review."},
+  "pixels": {"history_depth": 3, "past_only": true, "duplicate_pixels_across_splits": "reject", "input_label_assets_separate": true},
+  "actions": {"source": "decoded_replay_stage_frames", "unsupported": "unknown_no_gradient", "input_readback_is_label": false, "claim": "demonstrated_action_not_optimal_or_safe"},
+  "training": {"baseline": "third_party/th08/build/rl/runs/v104-v3-E5-s7/policy.pt", "freeze_backbone": true, "arm": "N1", "seed": 7, "first_run_max_updates": 1, "first_run_epochs": 1, "long_training": "not_authorized", "test_used_for_selection": false},
+  "stopping": ["any_exact_failure", "missing_visual_review", "less_than_three_independent_source_groups", "input_label_or_source_leakage", "unverified_replay_alignment"],
+  "acceptance_scope": "Training admission and one-update integration only; no gameplay improvement or original relation-target G4 claim."
+}

@@ -1,0 +1,27 @@
+{
+  "schema": "v376-f2-bc-preregistration/2",
+  "objective": "replay_demonstration_behavior_cloning",
+  "status": "stage2_recaptured_reviews_authored_pending_independent_recheck",
+  "family": "F2",
+  "mechanism": "aimed_stream",
+  "domain": "real",
+  "original_G4": false,
+  "supersedes": {"config": "f2-bc-v1.json", "reason": "the Stage 1 segments of the same three replays contain rings/fans/lasers but no confirmable aimed stream (see reports/wpb-pre-screen-20261105/review.md)"},
+  "relations": {"gap_center": "not_applicable", "relative_dx": "not_applicable", "deadline": "not_applicable", "route": "not_applicable"},
+  "sources": [
+    {"role": "train", "replay": "third_party/th08/tests/fixtures/replays/th08-1.00d/accepted/th8_ud2ce5.rpy", "sha256": "004f58e1b95655664087d6613780f3e6e16e25d0c55e5c17b2e2291d5446ae6b", "stage": 1, "capture": "third_party/th08/build/rl/exact/v376-f2-train-st2-20261105-r1"},
+    {"role": "validation", "replay": "third_party/th08/tests/fixtures/replays/th08-1.00d/accepted/th8_ud2ccf.rpy", "sha256": "331095af8dc920ed1d8bfb8abedafeb46493c0fa2af9eae1509575ce8d4ca056", "stage": 1, "capture": "third_party/th08/build/rl/exact/v376-f2-validation-st2-20261105-r1"},
+    {"role": "test", "replay": "th08_replay/Th8_ud2558.rpy", "sha256": "ff93b2eb719b7cc790a6fe319ad398f5b960592373281d90f4a42ea236740b53", "stage": 1, "capture": "third_party/th08/build/rl/exact/v376-f2-test-st2-20261105-r1"}
+  ],
+  "source_selection": "Same three replay identities as f2-bc-v1.json (split unit unchanged), re-captured at decoder stage 1 (TH08 Stage 2) because Stage 1 has no confirmable aimed stream. Stage and capture were chosen before any review result.",
+  "split_unit": "full_replay_sha256",
+  "derived_and_template_groups_follow_source": true,
+  "capture": {"requested_frames_per_source": 3000, "stage": 1, "max_discarded": 0, "frame_proof": "exact", "trial": true, "save_full_active_bullet_audit": true, "config": "f2-exact-capture-v1.json", "config_sha256": "dbbc45018efa39a7868a39364a8b7d769d75b8267be2dea8d16cc52ba2b7b35a"},
+  "events": {"minimum_rows": 48, "review_required": true, "repeated_visible_aimed_emissions": 2, "selection": "One 48-row window per source, chosen among the pre-screened windows by whether two distinct aimed emissions from one origin cluster could be measured in the original PNGs."},
+  "review": {"author": "v376-wp-b-agent-visual-20261105", "kind": "ai_agent_visual", "method": "independent_pixel_annotation", "pixel_measurement": "brightness-weighted centroid inside a 15x15 window around the memory-predicted point, from the original PNG bytes", "measured_deviation_px": {"train": 2.984, "validation": 3.488, "test": 1.924}, "declared_position_tolerance_px": {"train": 3.98, "validation": 4.49, "test": 2.92}, "independent_recheck": "pending (WP-F, not the author)"},
+  "pixels": {"history_depth": 3, "past_only": true, "duplicate_pixels_across_splits": "reject", "input_label_assets_separate": true},
+  "actions": {"source": "decoded_replay_logic_frames", "unsupported": "unknown_no_gradient", "input_readback_is_label": false, "claim": "demonstrated_action_not_optimal_or_safe", "clock": "replay logic frame (record_index = logicFrame); stageFrames is only the image key"},
+  "training": {"baseline": "third_party/th08/build/rl/runs/v104-v3-E5-s7/policy.pt", "baseline_sha256": "74abde8a996c13fae832913e4e5533bc9490688bc4c0aa73560e695f065d14be", "freeze_backbone": true, "arm": "N1", "seed": 7, "first_run_max_updates": 1, "first_run_epochs": 1, "long_training": "not_authorized", "test_used_for_selection": false},
+  "stopping": ["any_exact_failure", "missing_visual_review", "less_than_three_independent_source_groups", "input_label_or_source_leakage", "unverified_replay_alignment"],
+  "acceptance_scope": "Training admission and one-update integration only; 12 annotated rows are an integration sample, not a statistical basis. No gameplay improvement or original relation-target G4 claim."
+}

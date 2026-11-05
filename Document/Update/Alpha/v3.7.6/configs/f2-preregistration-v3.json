@@ -1,0 +1,100 @@
+{
+  "schema": "v376-f2-preregistration/3",
+  "frozen": true,
+  "preregistered_at": "2026-11-05T20:10:00+08:00",
+  "objective": "f2_behavior_cloning",
+  "original_G4": false,
+  "supersedes": {
+    "config": "f2-bc-v2.json",
+    "reason": "v2 selected rows by whether two aimed emissions could be measured in pixels (WP-F finding F-5: selection bias) and judged aim with a cross-track speed bound comparable to the bullet speed (F-1). v3 replaces both: the row set is every sample of frozen windows, and aim is a miss distance against the player hitbox."
+  },
+  "family": "F2",
+  "mechanism": "aimed_stream",
+  "domain": "real",
+  "sources": [
+    {"role": "train", "replay": "third_party/th08/tests/fixtures/replays/th08-1.00d/accepted/th8_ud2ce5.rpy", "sha256": "004f58e1b95655664087d6613780f3e6e16e25d0c55e5c17b2e2291d5446ae6b", "stage": 1, "capture": "third_party/th08/build/rl/exact/v376-f2-train-st2-20261105-r1"},
+    {"role": "validation", "replay": "third_party/th08/tests/fixtures/replays/th08-1.00d/accepted/th8_ud2ccf.rpy", "sha256": "331095af8dc920ed1d8bfb8abedafeb46493c0fa2af9eae1509575ce8d4ca056", "stage": 1, "capture": "third_party/th08/build/rl/exact/v376-f2-validation-st2-20261105-r1"},
+    {"role": "test", "replay": "th08_replay/Th8_ud2558.rpy", "sha256": "ff93b2eb719b7cc790a6fe319ad398f5b960592373281d90f4a42ea236740b53", "stage": 1, "capture": "third_party/th08/build/rl/exact/v376-f2-test-st2-20261105-r1"}
+  ],
+  "split_unit": "full_replay_sha256",
+  "contract": {
+    "aim_claim": "perpendicular distance from the annotated player centre to the privileged bullet path, in image pixels",
+    "aim_miss_px": 1.5,
+    "aim_miss_px_rationale": "TH08's player hitbox is about 3 px across (~1.5 px radius), so a straight path inside 1.5 px of the player centre passes through the target. Fixed by the target size, not by the measured yield.",
+    "aim_lookback_frames": 2,
+    "aim_lookback_frames_rationale": "The capture samples the stage clock every 2 frames, so a bullet first seen at frame f was fired at f or f-2. Searching further back manufactures aimed shots out of stray bullets (WP-F F-1).",
+    "emission_recency_frames": 64,
+    "emission_recency_frames_rationale": "At the observed 1.2-2.8 px/frame bullet speeds a bullet fired 64 stage frames ago is 77-180 px from the muzzle and still crossing a 384 px playfield, so the cited emissions belong to the stream being flown, not to a spent volley.",
+    "aim_cross_px_per_frame": 2.5,
+    "aim_cross_px_per_frame_role": "velocity agreement between the pixel-measured motion and the privileged teacher motion; it is a consistency check, never the aim proof",
+    "position_px": "max measured deviation over the event + 1.0, declared per review after measurement",
+    "emissions_per_row": 2,
+    "emission_rule": "two aimed emissions with distinct emission frames from one origin cluster (<= 30 px apart) must be visible for the row",
+    "player_px": "contract-bound to same-hold memory (f2_dataset requires exact equality); only bullet coordinates are independently measured",
+    "unknown": "replay actions outside the 18-way candidate set stay unknown with zero gradient and are never converted to hold"
+  },
+  "selection": {
+    "window_rows": 96,
+    "windows_per_source": 3,
+    "window_score": "count of samples where a contract-qualifying aimed pair exists, then count of samples with a live bullet, then earliest start",
+    "window_rule": "greedy top-k non-overlapping windows computed from the privileged bullet pool before any pixel work",
+    "row_rule": "every sample of every selected window is attempted in capture order; a row that cannot carry a contract-valid annotation becomes explicit context_only with its reason, and the yield is reported; no row is ever replaced by a more convenient row",
+    "fallback": "if a selected window keeps fewer than 48 usable rows the next-ranked non-overlapping window replaces it and the substitution is recorded"
+  },
+  "events": {"minimum_rows": 48, "review_required": true, "repeated_visible_aimed_emissions": 2},
+  "review": {
+    "author": "v376-wp-c-agent-visual-20261105",
+    "kind": "ai_agent_visual",
+    "method": "independent_pixel_annotation",
+    "pixel_measurement": "brightness-weighted centroid inside a 15x15 window around the memory-predicted point, from the original PNG bytes",
+    "independent_recheck": "separate implementation; still an AI agent, not a human reviewer"
+  },
+  "pixels": {"history_depth": 3, "past_only": true, "duplicate_pixels_across_splits": "reject", "input_label_assets_separate": true},
+  "actions": {"source": "decoded_replay_logic_frames", "unsupported": "unknown_no_gradient", "input_readback_is_label": false, "claim": "demonstrated_action_not_optimal_or_safe", "clock": "replay logic frame; stageFrames is only the image key"},
+  "training": {
+    "baseline": "third_party/th08/build/rl/runs/v104-v3-E5-s7/policy.pt",
+    "baseline_sha256": "74abde8a996c13fae832913e4e5533bc9490688bc4c0aa73560e695f065d14be",
+    "freeze_backbone": true,
+    "arm": "N1",
+    "seed": 7,
+    "epochs": 30,
+    "max_updates": 1000,
+    "learning_rate": 0.001,
+    "burnin": 16,
+    "sequence": 32,
+    "batch_size": 16,
+    "device": "cuda",
+    "selection": "best mean validation loss over supervised validation windows; test never consulted",
+    "test_used_for_selection": false
+  },
+  "evaluation": {
+    "population": "supervised rows inside the scored burnin16/sequence32 windows of the named split",
+    "metrics": [
+      "overall accuracy over supervised rows",
+      "class-balanced accuracy (mean per-class recall over classes present)",
+      "action-change accuracy (rows whose action differs from the previous row's actual action)",
+      "per-event macro average accuracy",
+      "hold-last baseline (predict the previous row's actual action)",
+      "majority-class baseline (most frequent action in train)",
+      "uniform-random baseline (1/18)",
+      "pixel ablation: re-evaluate with the playfield region zeroed, to expose a shortcut that ignores the picture",
+      "supervision census: supervised rows, actions, action changes, per event"
+    ],
+    "reporting": "validation metrics are reported for every epoch's selected checkpoint; test metrics are produced once by a separately invoked sealed evaluation",
+    "claim_limitation": "with a few hundred supervised rows over three replays of one stage this is a signal/plumbing measurement, not an estimate of gameplay skill or generalization"
+  },
+  "stopping": [
+    "any exact audit, identity, alignment or pixel-binding failure",
+    "fewer than three independent replay source groups",
+    "input/label/source leakage",
+    "NaN or non-finite loss, updates=0, or a changed backbone",
+    "validation has no supervision so selection is impossible",
+    "test consulted before the protocol is frozen"
+  ],
+  "authorisation": {
+    "capture": "granted (three replays, research variant)",
+    "training": "granted by the user for this round after the WP-F findings are fixed: one-update integration, then the frozen-budget run above",
+    "deployment": "not granted; default model, canonical image and deployment entry stay unchanged",
+    "release": "not granted"
+  }
+}

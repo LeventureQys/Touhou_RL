@@ -1,0 +1,219 @@
+{
+  "schema": "v376-f2-bc-plan/1",
+  "frozen": true,
+  "preregistered_at": "2026-11-05T20:10:00+08:00",
+  "note": "Row set fixed by the frozen window rule; aim is a hitbox miss distance; every row of every window was attempted.",
+  "preregistration": {
+    "path": "Document/Update/Alpha/v3.7.6/configs/f2-preregistration-v3.json",
+    "sha256": "79adb39b95ba2d6b50c01b3a5b39a4884ccaa15dfeba2ddde3e08462b861714d"
+  },
+  "config": {
+    "depth": 3,
+    "region_sizes": {
+      "playfield": [
+        224,
+        192
+      ],
+      "hud_score": [
+        34,
+        216
+      ],
+      "hud_status": [
+        126,
+        216
+      ]
+    },
+    "history_offsets": [
+      -4,
+      -2,
+      0
+    ],
+    "min_event_rows": 48,
+    "objective": "f2_behavior_cloning",
+    "original_G4": false,
+    "split_unit": "replay_and_association_groups",
+    "coordinate_targets": false
+  },
+  "config_sha256": "6bfd5f2ee6ad43f94d02c807dd525649171c5b7873754087f22feff698e43533",
+  "sources": [
+    {
+      "id": "f2-train-st2",
+      "replay": {
+        "path": "third_party/th08/tests/fixtures/replays/th08-1.00d/accepted/th8_ud2ce5.rpy",
+        "sha256": "004f58e1b95655664087d6613780f3e6e16e25d0c55e5c17b2e2291d5446ae6b"
+      },
+      "exact_manifest": {
+        "path": "third_party/th08/build/rl/exact/v376-f2-train-st2-20261105-r1/frame-proof.json",
+        "sha256": "352328a0f7a60da0dc0aecd076b608d4335379c940b5ee2722bf84566ad8c4c5"
+      },
+      "collect_config": {
+        "path": "third_party/th08/build/rl/exact/v376-f2-train-st2-20261105-r1/collect-report.json",
+        "sha256": "72a741fdaac8319ed17c6225fe13ea412c9e8c069ca9200a549e7c535575ce14"
+      },
+      "teacher_artifact": {
+        "path": "third_party/th08/build/rl/exact/v376-f2-train-st2-20261105-r1/audit-state.jsonl",
+        "sha256": "d0e4fd54e132f2699a9f4dc7438d0e1d3d1edb7a0edbe63a9231e5c9af52df76"
+      },
+      "collection_config_sha256": "dbbc45018efa39a7868a39364a8b7d769d75b8267be2dea8d16cc52ba2b7b35a"
+    },
+    {
+      "id": "f2-validation-st2",
+      "replay": {
+        "path": "third_party/th08/tests/fixtures/replays/th08-1.00d/accepted/th8_ud2ccf.rpy",
+        "sha256": "331095af8dc920ed1d8bfb8abedafeb46493c0fa2af9eae1509575ce8d4ca056"
+      },
+      "exact_manifest": {
+        "path": "third_party/th08/build/rl/exact/v376-f2-validation-st2-20261105-r1/frame-proof.json",
+        "sha256": "66e3202fb3379980b8b5ab878d32fcca0963c03bfe9b321e9130dd7250c6e2e6"
+      },
+      "collect_config": {
+        "path": "third_party/th08/build/rl/exact/v376-f2-validation-st2-20261105-r1/collect-report.json",
+        "sha256": "80cb888a1b5df0f493ecc0a0a8df414098e9fd7e200a4a88904e8e96f74195bb"
+      },
+      "teacher_artifact": {
+        "path": "third_party/th08/build/rl/exact/v376-f2-validation-st2-20261105-r1/audit-state.jsonl",
+        "sha256": "26dc15cf1da7087fa71e00b3d72f43b7b7b25ddd5d5cf939d614e324209e3558"
+      },
+      "collection_config_sha256": "dbbc45018efa39a7868a39364a8b7d769d75b8267be2dea8d16cc52ba2b7b35a"
+    },
+    {
+      "id": "f2-test-st2",
+      "replay": {
+        "path": "th08_replay/Th8_ud2558.rpy",
+        "sha256": "ff93b2eb719b7cc790a6fe319ad398f5b960592373281d90f4a42ea236740b53"
+      },
+      "exact_manifest": {
+        "path": "third_party/th08/build/rl/exact/v376-f2-test-st2-20261105-r1/frame-proof.json",
+        "sha256": "6128c874b485f00ac650cc39303d2aab2e177654b473bf6682d32ae33a4b76e0"
+      },
+      "collect_config": {
+        "path": "third_party/th08/build/rl/exact/v376-f2-test-st2-20261105-r1/collect-report.json",
+        "sha256": "d91fab3eb4a8816bd18c3a304d8a4cf4a4458d76ebb9ad55450a6a886ff701be"
+      },
+      "teacher_artifact": {
+        "path": "third_party/th08/build/rl/exact/v376-f2-test-st2-20261105-r1/audit-state.jsonl",
+        "sha256": "bcd45b85e77dca14a06ee18426f8a0122d8d0d8d736caf07e5d5560446d1a428"
+      },
+      "collection_config_sha256": "dbbc45018efa39a7868a39364a8b7d769d75b8267be2dea8d16cc52ba2b7b35a"
+    }
+  ],
+  "events": [
+    {
+      "event_id": "f2-train-st2-e1",
+      "source_id": "f2-train-st2",
+      "stage": 1,
+      "split": "train",
+      "template_group": "st2-volley-train-e1",
+      "episode_id": "th8_ud2ce5-stage2-e1",
+      "derived_group": "none-train-st2-e1",
+      "review": {
+        "path": "Document/Update/Alpha/v3.7.6/evidence/f2-review-20261105-r5/train-st2/e1-review.json",
+        "sha256": "aa775fbb2389565b0fea38b52675da6469290f6ebe56eb4edd6763a7ed7eab6d"
+      }
+    },
+    {
+      "event_id": "f2-train-st2-e2",
+      "source_id": "f2-train-st2",
+      "stage": 1,
+      "split": "train",
+      "template_group": "st2-volley-train-e2",
+      "episode_id": "th8_ud2ce5-stage2-e2",
+      "derived_group": "none-train-st2-e2",
+      "review": {
+        "path": "Document/Update/Alpha/v3.7.6/evidence/f2-review-20261105-r5/train-st2/e2-review.json",
+        "sha256": "c94b28735a1d167535442eec2f08f507261b6e7eb70db26ec71a745383a553ad"
+      }
+    },
+    {
+      "event_id": "f2-train-st2-e3",
+      "source_id": "f2-train-st2",
+      "stage": 1,
+      "split": "train",
+      "template_group": "st2-volley-train-e3",
+      "episode_id": "th8_ud2ce5-stage2-e3",
+      "derived_group": "none-train-st2-e3",
+      "review": {
+        "path": "Document/Update/Alpha/v3.7.6/evidence/f2-review-20261105-r5/train-st2/e3-review.json",
+        "sha256": "d7b024797030e313efe87138054951365b9fce7fea45d75b6c130128a6b92d9f"
+      }
+    },
+    {
+      "event_id": "f2-validation-st2-e1",
+      "source_id": "f2-validation-st2",
+      "stage": 1,
+      "split": "validation",
+      "template_group": "st2-volley-validation-e1",
+      "episode_id": "th8_ud2ccf-stage2-e1",
+      "derived_group": "none-validation-st2-e1",
+      "review": {
+        "path": "Document/Update/Alpha/v3.7.6/evidence/f2-review-20261105-r5/validation-st2/e1-review.json",
+        "sha256": "14f2ac8b57788b358441d1d823e53de94f0e90a896bf5f0911b316665eb676fa"
+      }
+    },
+    {
+      "event_id": "f2-validation-st2-e2",
+      "source_id": "f2-validation-st2",
+      "stage": 1,
+      "split": "validation",
+      "template_group": "st2-volley-validation-e2",
+      "episode_id": "th8_ud2ccf-stage2-e2",
+      "derived_group": "none-validation-st2-e2",
+      "review": {
+        "path": "Document/Update/Alpha/v3.7.6/evidence/f2-review-20261105-r5/validation-st2/e2-review.json",
+        "sha256": "13bae108fe7acf7c6597561992f002f71bf5ee2e6e1aed4823cd6a373d00d087"
+      }
+    },
+    {
+      "event_id": "f2-validation-st2-e3",
+      "source_id": "f2-validation-st2",
+      "stage": 1,
+      "split": "validation",
+      "template_group": "st2-volley-validation-e3",
+      "episode_id": "th8_ud2ccf-stage2-e3",
+      "derived_group": "none-validation-st2-e3",
+      "review": {
+        "path": "Document/Update/Alpha/v3.7.6/evidence/f2-review-20261105-r5/validation-st2/e3-review.json",
+        "sha256": "673ea3cdfbf46214e1012c4522a78dafec3dfcd898f200a0e6d1cfc6465c1782"
+      }
+    },
+    {
+      "event_id": "f2-test-st2-e1",
+      "source_id": "f2-test-st2",
+      "stage": 1,
+      "split": "test",
+      "template_group": "st2-volley-test-e1",
+      "episode_id": "Th8_ud2558-stage2-e1",
+      "derived_group": "none-test-st2-e1",
+      "review": {
+        "path": "Document/Update/Alpha/v3.7.6/evidence/f2-review-20261105-r5/test-st2/e1-review.json",
+        "sha256": "80129d88bf96f7d94cd60b15927531f0b0a8e21620e94da3086c513cc6297a8e"
+      }
+    },
+    {
+      "event_id": "f2-test-st2-e2",
+      "source_id": "f2-test-st2",
+      "stage": 1,
+      "split": "test",
+      "template_group": "st2-volley-test-e2",
+      "episode_id": "Th8_ud2558-stage2-e2",
+      "derived_group": "none-test-st2-e2",
+      "review": {
+        "path": "Document/Update/Alpha/v3.7.6/evidence/f2-review-20261105-r5/test-st2/e2-review.json",
+        "sha256": "ba1093e1e5e86ff209dc69ee0e39d03c8b35a7ce1b626170df61e77362ecbf7c"
+      }
+    },
+    {
+      "event_id": "f2-test-st2-e3",
+      "source_id": "f2-test-st2",
+      "stage": 1,
+      "split": "test",
+      "template_group": "st2-volley-test-e3",
+      "episode_id": "Th8_ud2558-stage2-e3",
+      "derived_group": "none-test-st2-e3",
+      "review": {
+        "path": "Document/Update/Alpha/v3.7.6/evidence/f2-review-20261105-r5/test-st2/e3-review.json",
+        "sha256": "4f254e73077b03ceff7b00c1ef0e6aa5ceaae1b3366da94ac58c8b240e4c64ff"
+      }
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "schema": "v375-exact-capture/1",
+  "status": "active",
+  "game_required": true,
+  "frame_proof": "exact",
+  "canonical_allowed": false,
+  "required_checks": 13,
+  "build_type": "fence",
+  "requested_frames": 3000,
+  "max_discarded": 0,
+  "accept_current": true,
+  "trial": true,
+  "tag": "exact",
+  "shard_size": 2048,
+  "build": {
+    "exe": "third_party/th08/build_fence/th08.exe",
+    "map": "third_party/th08/build_fence/th08.map",
+    "address_table": "third_party/th08/build_fence/frame-fence-addresses.json"
+  },
+  "preflight": {
+    "precheck_frames": 10,
+    "fence_open_timeout_s": 20.0,
+    "bootstrap_timeout_s": 5.0,
+    "sample_timeout_s": 3.0,
+    "gameplay_timeout_s": 60.0
+  },
+  "hold": {
+    "hold_every": 2,
+    "hold_min_us": 0,
+    "hold_max_us": 90000,
+    "accept_current": true
+  }
+}
