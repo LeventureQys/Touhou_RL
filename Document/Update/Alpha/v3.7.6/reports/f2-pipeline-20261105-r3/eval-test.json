@@ -1,0 +1,160 @@
+{
+  "schema": "v376-f2-eval-report/1",
+  "split": "test",
+  "objective": "f2_behavior_cloning",
+  "original_G4": false,
+  "protocol": {
+    "path": "Document\\Update\\Alpha\\v3.7.6\\configs\\f2-eval-protocol-v1.json",
+    "sha256": "9cc648eda4063c73d6f074e96a7d576f400fb328931df6beae0728f2d7b96524",
+    "frozen": true
+  },
+  "validation_report_sha256": "a0b42dfde4797440abb1925b59ba5b96cb36ddf516f8a40288f65c21618c4316",
+  "single_read": true,
+  "order": "produced after the frozen protocol and the validation report",
+  "manifest_sha256": "bf60b8d11eef2d98361ed6ea988b8c335d2fd3fb6bb408bc97dc642d353473f6",
+  "baseline_sha256": "74abde8a996c13fae832913e4e5533bc9490688bc4c0aa73560e695f065d14be",
+  "run_report_sha256": "57b1956fec1b46e84962fab53cd20b4ef16ecb9f08398da9c5368c7b470c11b3",
+  "heads_sha256": "091f12a0e95487c66251ddfbfaef4ecd629eb363dc032be01ee18c87613c5081",
+  "config": {
+    "arm": "N1",
+    "seed": 7,
+    "epochs": 30,
+    "max_updates": 1000,
+    "learning_rate": 0.001,
+    "burnin": 16,
+    "sequence": 32,
+    "device": "cuda"
+  },
+  "summary": {
+    "supervised_rows": 68,
+    "accuracy": 0.014705882407724857,
+    "class_balanced_accuracy": 0.011363636363636364,
+    "classes_present": 11,
+    "action_changes": 9,
+    "action_change_accuracy": 0.0,
+    "hold_last_defined_rows": 68,
+    "hold_last_accuracy": 0.8676470518112183,
+    "hold_last_accuracy_all_rows": 0.8676470588235294,
+    "hold_last_note": "an undefined previous action (unknown history) counts as wrong in the all-rows column",
+    "uniform_random_accuracy": 0.05555555555555555,
+    "predicted_histogram": {
+      "1": 13,
+      "2": 10,
+      "3": 10,
+      "4": 1,
+      "5": 12,
+      "6": 10,
+      "8": 2,
+      "14": 10
+    },
+    "true_histogram": {
+      "3": 3,
+      "4": 4,
+      "5": 8,
+      "6": 1,
+      "7": 2,
+      "9": 23,
+      "12": 7,
+      "13": 5,
+      "14": 2,
+      "15": 3,
+      "16": 10
+    },
+    "majority_class": 8,
+    "majority_class_accuracy": 0.0,
+    "per_event_macro_accuracy": 0.012820513298114141
+  },
+  "per_event": {
+    "f2-test-st2-e1": {
+      "supervised_rows": 27,
+      "accuracy": 0.0,
+      "class_balanced_accuracy": 0.0,
+      "classes_present": 2,
+      "action_changes": 1,
+      "action_change_accuracy": 0.0,
+      "hold_last_defined_rows": 27,
+      "hold_last_accuracy": 0.9629629850387573,
+      "hold_last_accuracy_all_rows": 0.9629629629629629,
+      "hold_last_note": "an undefined previous action (unknown history) counts as wrong in the all-rows column",
+      "uniform_random_accuracy": 0.05555555555555555,
+      "predicted_histogram": {
+        "1": 7,
+        "2": 6,
+        "3": 4,
+        "5": 5,
+        "8": 1,
+        "14": 4
+      },
+      "true_histogram": {
+        "9": 23,
+        "12": 4
+      },
+      "majority_class": 8,
+      "majority_class_accuracy": 0.0
+    },
+    "f2-test-st2-e2": {
+      "supervised_rows": 26,
+      "accuracy": 0.03846153989434242,
+      "class_balanced_accuracy": 0.015625,
+      "classes_present": 8,
+      "action_changes": 5,
+      "action_change_accuracy": 0.0,
+      "hold_last_defined_rows": 26,
+      "hold_last_accuracy": 0.807692289352417,
+      "hold_last_accuracy_all_rows": 0.8076923076923077,
+      "hold_last_note": "an undefined previous action (unknown history) counts as wrong in the all-rows column",
+      "uniform_random_accuracy": 0.05555555555555555,
+      "predicted_histogram": {
+        "1": 5,
+        "2": 4,
+        "3": 4,
+        "5": 5,
+        "6": 8
+      },
+      "true_histogram": {
+        "3": 3,
+        "4": 3,
+        "5": 8,
+        "6": 1,
+        "12": 3,
+        "13": 5,
+        "14": 1,
+        "15": 2
+      },
+      "majority_class": 8,
+      "majority_class_accuracy": 0.0
+    },
+    "f2-test-st2-e3": {
+      "supervised_rows": 15,
+      "accuracy": 0.0,
+      "class_balanced_accuracy": 0.0,
+      "classes_present": 5,
+      "action_changes": 3,
+      "action_change_accuracy": 0.0,
+      "hold_last_defined_rows": 15,
+      "hold_last_accuracy": 0.800000011920929,
+      "hold_last_accuracy_all_rows": 0.8,
+      "hold_last_note": "an undefined previous action (unknown history) counts as wrong in the all-rows column",
+      "uniform_random_accuracy": 0.05555555555555555,
+      "predicted_histogram": {
+        "1": 1,
+        "3": 2,
+        "4": 1,
+        "5": 2,
+        "6": 2,
+        "8": 1,
+        "14": 6
+      },
+      "true_histogram": {
+        "4": 1,
+        "7": 2,
+        "14": 1,
+        "15": 1,
+        "16": 10
+      },
+      "majority_class": 8,
+      "majority_class_accuracy": 0.0
+    }
+  },
+  "limitation": "A few hundred supervised rows from three replays of one stage measure a signal and a pipeline, not gameplay skill, generalization or a deployable policy."
+}

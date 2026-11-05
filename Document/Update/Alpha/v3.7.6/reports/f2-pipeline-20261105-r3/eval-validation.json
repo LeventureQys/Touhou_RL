@@ -1,0 +1,178 @@
+{
+  "schema": "v376-f2-eval-report/1",
+  "split": "validation",
+  "objective": "f2_behavior_cloning",
+  "original_G4": false,
+  "protocol": {
+    "path": "Document\\Update\\Alpha\\v3.7.6\\configs\\f2-eval-protocol-v1.json",
+    "sha256": "9cc648eda4063c73d6f074e96a7d576f400fb328931df6beae0728f2d7b96524",
+    "frozen": true
+  },
+  "manifest_sha256": "bf60b8d11eef2d98361ed6ea988b8c335d2fd3fb6bb408bc97dc642d353473f6",
+  "cache_index_sha256": "df2985bd9e73268434d812f65a0c42bf02a39576775a6dca47b2e726e1306608",
+  "baseline_sha256": "74abde8a996c13fae832913e4e5533bc9490688bc4c0aa73560e695f065d14be",
+  "run_report_sha256": "57b1956fec1b46e84962fab53cd20b4ef16ecb9f08398da9c5368c7b470c11b3",
+  "heads_sha256": "091f12a0e95487c66251ddfbfaef4ecd629eb363dc032be01ee18c87613c5081",
+  "config": {
+    "arm": "N1",
+    "seed": 7,
+    "epochs": 30,
+    "max_updates": 1000,
+    "learning_rate": 0.001,
+    "burnin": 16,
+    "sequence": 32,
+    "device": "cuda"
+  },
+  "summary": {
+    "supervised_rows": 121,
+    "accuracy": 0.04958677664399147,
+    "class_balanced_accuracy": 0.041895605623722076,
+    "classes_present": 8,
+    "action_changes": 3,
+    "action_change_accuracy": 0.3333333432674408,
+    "hold_last_defined_rows": 121,
+    "hold_last_accuracy": 0.9752066135406494,
+    "hold_last_accuracy_all_rows": 0.9752066115702479,
+    "hold_last_note": "an undefined previous action (unknown history) counts as wrong in the all-rows column",
+    "uniform_random_accuracy": 0.05555555555555555,
+    "predicted_histogram": {
+      "0": 1,
+      "1": 31,
+      "2": 24,
+      "3": 18,
+      "5": 16,
+      "6": 24,
+      "8": 5,
+      "14": 2
+    },
+    "true_histogram": {
+      "0": 32,
+      "1": 26,
+      "4": 19,
+      "5": 7,
+      "8": 15,
+      "9": 13,
+      "11": 4,
+      "12": 5
+    },
+    "majority_class": 8,
+    "majority_class_accuracy": 0.12396693974733353,
+    "per_event_macro_accuracy": 0.04219922920068105,
+    "train_supervised_rows": 54
+  },
+  "per_event": {
+    "f2-validation-st2-e1": {
+      "supervised_rows": 37,
+      "accuracy": 0.0,
+      "class_balanced_accuracy": 0.0,
+      "classes_present": 4,
+      "action_changes": 1,
+      "action_change_accuracy": 0.0,
+      "hold_last_defined_rows": 37,
+      "hold_last_accuracy": 0.9729729890823364,
+      "hold_last_accuracy_all_rows": 0.972972972972973,
+      "hold_last_note": "an undefined previous action (unknown history) counts as wrong in the all-rows column",
+      "uniform_random_accuracy": 0.05555555555555555,
+      "predicted_histogram": {
+        "0": 1,
+        "1": 12,
+        "2": 16,
+        "3": 4,
+        "5": 2,
+        "8": 2
+      },
+      "true_histogram": {
+        "8": 15,
+        "9": 13,
+        "11": 4,
+        "12": 5
+      },
+      "majority_class": 8,
+      "majority_class_accuracy": 0.4054054021835327
+    },
+    "f2-validation-st2-e2": {
+      "supervised_rows": 53,
+      "accuracy": 0.09433962404727936,
+      "class_balanced_accuracy": 0.09615384787321091,
+      "classes_present": 2,
+      "action_changes": 2,
+      "action_change_accuracy": 0.5,
+      "hold_last_defined_rows": 53,
+      "hold_last_accuracy": 0.9622641801834106,
+      "hold_last_accuracy_all_rows": 0.9622641509433962,
+      "hold_last_note": "an undefined previous action (unknown history) counts as wrong in the all-rows column",
+      "uniform_random_accuracy": 0.05555555555555555,
+      "predicted_histogram": {
+        "1": 17,
+        "2": 6,
+        "3": 8,
+        "5": 4,
+        "6": 15,
+        "8": 3
+      },
+      "true_histogram": {
+        "0": 27,
+        "1": 26
+      },
+      "majority_class": 8,
+      "majority_class_accuracy": 0.0
+    },
+    "f2-validation-st2-e3": {
+      "supervised_rows": 31,
+      "accuracy": 0.032258063554763794,
+      "class_balanced_accuracy": 0.047619049747784935,
+      "classes_present": 3,
+      "action_changes": 0,
+      "action_change_accuracy": null,
+      "hold_last_defined_rows": 31,
+      "hold_last_accuracy": 1.0,
+      "hold_last_accuracy_all_rows": 1.0,
+      "hold_last_note": "an undefined previous action (unknown history) counts as wrong in the all-rows column",
+      "uniform_random_accuracy": 0.05555555555555555,
+      "predicted_histogram": {
+        "1": 2,
+        "2": 2,
+        "3": 6,
+        "5": 10,
+        "6": 9,
+        "14": 2
+      },
+      "true_histogram": {
+        "0": 5,
+        "4": 19,
+        "5": 7
+      },
+      "majority_class": 8,
+      "majority_class_accuracy": 0.0
+    }
+  },
+  "limitation": "A few hundred supervised rows from three replays of one stage measure a signal and a pipeline, not gameplay skill, generalization or a deployable policy.",
+  "test_sealed": true,
+  "playfield_zeroed": {
+    "supervised_rows": 121,
+    "accuracy": 0.057851240038871765,
+    "class_balanced_accuracy": 0.125,
+    "classes_present": 8,
+    "action_changes": 3,
+    "action_change_accuracy": 0.0,
+    "hold_last_defined_rows": 121,
+    "hold_last_accuracy": 0.9752066135406494,
+    "hold_last_accuracy_all_rows": 0.9752066115702479,
+    "hold_last_note": "an undefined previous action (unknown history) counts as wrong in the all-rows column",
+    "uniform_random_accuracy": 0.05555555555555555,
+    "predicted_histogram": {
+      "3": 39,
+      "5": 82
+    },
+    "true_histogram": {
+      "0": 32,
+      "1": 26,
+      "4": 19,
+      "5": 7,
+      "8": 15,
+      "9": 13,
+      "11": 4,
+      "12": 5
+    }
+  }
+}

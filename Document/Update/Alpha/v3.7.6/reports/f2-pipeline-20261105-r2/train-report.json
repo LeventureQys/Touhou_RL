@@ -1,0 +1,64 @@
+{
+  "schema": "v373-sequence-research-run/1",
+  "config": {
+    "arm": "N1",
+    "seed": 7,
+    "epochs": 1,
+    "max_updates": 1,
+    "learning_rate": 0.001,
+    "burnin": 16,
+    "sequence": 32,
+    "device": "cuda"
+  },
+  "objective": "f2_behavior_cloning",
+  "original_G4": false,
+  "dataset_schema": "v376-f2-bc-events/1",
+  "compute_protocol": {
+    "device": "cuda:0",
+    "device_name": "NVIDIA GeForce RTX 4070 SUPER",
+    "batch_size": 16,
+    "precision": "float32",
+    "autocast": false,
+    "tf32": false,
+    "feature_source": "frozen-backbone.forward_core/real_pixels",
+    "source_sha256": {
+      "tactical_feature_cache.py": "2cd64b8310e0bc38e13493ef24e052d466b6e5ed2f3c10a20ad19dd16de9aa5c",
+      "tactical_sequence_train.py": "86cfbe6432aff9f1beb464f125096def1148f61bc4b3872a17d7624b6c2cdda9",
+      "tactical_train.py": "8b40644fe2601178c0b7b6602f760b65b2e3b57a42b5f13a0ec082fd3195123c",
+      "tactical_data.py": "b8e18b15ab4bf5a0aa5b43a3f48c71e204cd6227ff3cc41c3246bc23ea153fdd",
+      "f2_labels.py": "d6064c8561c4cff6cd2965af5a05f577f3c547506cb0aac046f977393bea1584",
+      "f2_dataset.py": "134e18e0f8453e03be21c80dbf28fb6ea5938f2107eb8334a7d3c736fdcc87f0",
+      "vmodels.py": "c448e00d578d062004eb9e38cae0d01644703c3e487adf821b2ffccf3d7fdcb0",
+      "vmodels3.py": "d92da5b9fddcbad975f8620811aafd3190d8511828cc272d6088db8854442aa8"
+    },
+    "torch_version": "2.14.1+cu132"
+  },
+  "cache_report_sha256": "2963a5bf2917e9450757ddee96a1303e969c0e11d92c7f38a72f67d53d417338",
+  "baseline_sha256": "74abde8a996c13fae832913e4e5533bc9490688bc4c0aa73560e695f065d14be",
+  "manifest_sha256": "856f90da373f6f9001e592e711df0eb60847cd6b15a2011468b0912542754f5e",
+  "cache_index_sha256": "a9af83d4a18e08193f4ea3f26ab50dd4c2c166f05db9963d6eb1c05662ced4b1",
+  "sources": [
+    {
+      "event_id": "f2-train-st2-e1",
+      "split": "train",
+      "rows": 48,
+      "pixels_sha256": "5ec4d5881d7d83d42b06116914f5f92f7d0749968aeece42b5af62fcec2a4e05",
+      "cache_sha256": "f8aaaf1d2fb3636f1f9a0eaff768e7fa9b18bf53bee6fe5b4606d6986ec35256",
+      "source": "frozen-backbone.forward_core/real_pixels"
+    },
+    {
+      "event_id": "f2-validation-st2-e1",
+      "split": "validation",
+      "rows": 48,
+      "pixels_sha256": "0ce38cae3b87b01452ca51f0eaa9327a22f25f0d55930675dfafe55b4c24a1cc",
+      "cache_sha256": "a5dbb72306d1b1cc142b6c59bea47a284691d4ee43b30d88c07734f9dde6827d",
+      "source": "frozen-backbone.forward_core/real_pixels"
+    }
+  ],
+  "updates": 1,
+  "validation_loss": 3.2338881492614746,
+  "deployable": false,
+  "test_used": false,
+  "backbone_unchanged": true,
+  "limitations": "Interface MVP; independent pixel/teacher certification still required. Not a deployed candidate."
+}

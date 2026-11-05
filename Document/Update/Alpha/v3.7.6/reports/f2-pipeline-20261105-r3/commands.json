@@ -1,0 +1,71 @@
+[
+  {
+    "step": "window selection (privileged geometry, before any pixel work)",
+    "argv": "python -B tools/rl/v376_wpc_review.py select --capture <capture> --source-id <id> --stage 1 --rows 96 --count 3 --out <selection.json>",
+    "exit_code": 0,
+    "evidence": "Document/Update/Alpha/v3.7.6/evidence/f2-review-20261105-r5/<split>-st2/selection.json"
+  },
+  {
+    "step": "exhaustive per-row annotation, 9 windows",
+    "argv": "python -B tools/rl/v376_wpc_review.py annotate --capture <capture> --source-id <id> --event-id <event> --stage 1 --start <sample> --rows 96 --out <review.json>",
+    "exit_code": 0,
+    "evidence": "Document/Update/Alpha/v3.7.6/evidence/f2-review-20261105-r6/<split>-st2/e{n}-review.json"
+  },
+  {
+    "step": "freeze plan r4",
+    "argv": "python -B tools/rl/v376_wpe_plan.py --preregistration Document/Update/Alpha/v3.7.6/configs/f2-preregistration-v3.json --review-root Document/Update/Alpha/v3.7.6/evidence/f2-review-20261105-r6 --out v376-f2-bc-plan-20261105-r4.json",
+    "exit_code": 0
+  },
+  {
+    "step": "dataset build (r5 review set failed here: missing history frames; r6 + structural rule succeeded)",
+    "argv": "python -B -m touhou_rl.f2_dataset build v376-f2-bc-plan-20261105-r4.json third_party/th08/build/rl/f2/v376-f2-bc-dataset-20261105-r4",
+    "exit_code": 0
+  },
+  {
+    "step": "dataset deep audit",
+    "argv": "python -B -m touhou_rl.f2_dataset audit <dataset>/manifest.json",
+    "exit_code": 0,
+    "evidence": "dataset-audit.json"
+  },
+  {
+    "step": "training gate",
+    "argv": "python -B -m touhou_rl.tactical_train check-gate --manifest <dataset>/manifest.json",
+    "exit_code": 0,
+    "evidence": "check-gate.txt"
+  },
+  {
+    "step": "feature cache (test never loaded)",
+    "argv": "python -B -m touhou_rl.tactical_feature_cache --manifest <dataset>/manifest.json --baseline third_party/th08/build/rl/runs/v104-v3-E5-s7/policy.pt --out <cache> --device cuda --batch-size 16",
+    "exit_code": 0
+  },
+  {
+    "step": "one-update integration",
+    "argv": "python -B -m touhou_rl.tactical_sequence_train --manifest <dataset>/manifest.json --cache-index <cache>/index.json --baseline <baseline> --out <run> --arm N1 --seed 7 --epochs 1 --max-updates 1 --device cuda",
+    "exit_code": 0,
+    "evidence": "third_party/th08/build/rl/f2/v376-f2-bc-train-20261105-r4-oneupdate/report.json"
+  },
+  {
+    "step": "frozen-budget training",
+    "argv": "python -B -m touhou_rl.tactical_sequence_train --manifest <dataset>/manifest.json --cache-index <cache>/index.json --baseline <baseline> --out <run> --arm N1 --seed 7 --epochs 30 --max-updates 1000 --device cuda",
+    "exit_code": 0,
+    "evidence": "third_party/th08/build/rl/f2/v376-f2-bc-train-20261105-r4/report.json"
+  },
+  {
+    "step": "frozen-protocol evaluation (validation)",
+    "argv": "python -B tools/rl/v376_eval.py --manifest <dataset>/manifest.json --cache-index <cache>/index.json --baseline <baseline> --run <run> --protocol Document/Update/Alpha/v3.7.6/configs/f2-eval-protocol-v1.json --out eval-validation.json",
+    "exit_code": 0,
+    "evidence": "eval-validation.json"
+  },
+  {
+    "step": "single sealed test read",
+    "argv": "python -B tools/rl/v376_eval.py ... --sealed-test --validation-report eval-validation.json --out eval-test.json",
+    "exit_code": 0,
+    "evidence": "eval-test.json"
+  },
+  {
+    "step": "independent double-entry audit",
+    "argv": "python -B tools/rl/v376_wpd_audit.py --dataset <dataset> --plan v376-f2-bc-plan-20261105-r4.json --cache <cache> --run <run> --out <audit.json>",
+    "exit_code": 0,
+    "evidence": "Document/Update/Alpha/v3.7.6/reports/wp-f-independent-audit-20261105/audit.json"
+  }
+]

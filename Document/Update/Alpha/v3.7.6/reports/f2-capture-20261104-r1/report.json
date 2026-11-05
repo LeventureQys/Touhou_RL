@@ -1,0 +1,286 @@
+{
+  "artifacts": [
+    {
+      "path": "third_party/th08/build/rl/exact/v376-f2-train-20261104-r1/frame-proof.json",
+      "sha256": "7f26193ca1329948beb5c6026f23f795268ea3de41e2f5ac2eeb96a9e71e9e6f"
+    },
+    {
+      "path": "third_party/th08/build/rl/exact/v376-f2-train-20261104-r1/proofs.jsonl",
+      "sha256": "bb9752205ddef0bb659d0399e71b09459db3df09d30d918b813406d483a9856b"
+    },
+    {
+      "path": "third_party/th08/build/rl/exact/v376-f2-train-20261104-r1/audit-state.jsonl",
+      "sha256": "4ac2a51f01f833fa8d3c21c84f229f5c331289f3e68b6a80d660c5c8cf0d78ee"
+    },
+    {
+      "path": "third_party/th08/build/rl/exact/v376-f2-train-20261104-r1/collect-report.json",
+      "sha256": "f052f3b8d7f0e37854ec1958a1e46f95c9163fae2a1e17bf96844feab18885ac"
+    },
+    {
+      "path": "third_party/th08/build/rl/exact/v376-f2-validation-20261104-r1/frame-proof.json",
+      "sha256": "d769b784ca286ba433abc471537a47a86efbe042b5fa7fda0571f5db00ea6bd3"
+    },
+    {
+      "path": "third_party/th08/build/rl/exact/v376-f2-validation-20261104-r1/proofs.jsonl",
+      "sha256": "b5cdbfec19f88c57df8508947ac6597e4cd2c8e97bd8cb8cbd3d2f6736eb7309"
+    },
+    {
+      "path": "third_party/th08/build/rl/exact/v376-f2-validation-20261104-r1/audit-state.jsonl",
+      "sha256": "5cad7a96a04deff7ac0c2740ea4a77cce5d542d01591c233069ba046491730ac"
+    },
+    {
+      "path": "third_party/th08/build/rl/exact/v376-f2-validation-20261104-r1/collect-report.json",
+      "sha256": "26f151d86ae469dd146e36364aaa60ed5c8cdd03a5982c748910bb12e7c39c0c"
+    },
+    {
+      "path": "third_party/th08/build/rl/exact/v376-f2-test-20261104-r1/frame-proof.json",
+      "sha256": "4e762bcbb409159438ab95b6eec1b289156bfb58c903925afe5a7e3fdc39bed4"
+    },
+    {
+      "path": "third_party/th08/build/rl/exact/v376-f2-test-20261104-r1/proofs.jsonl",
+      "sha256": "d39d09ac52c70bc9730a0fc3d142c397eb17ed6efcb314d7d68b75d65d092cec"
+    },
+    {
+      "path": "third_party/th08/build/rl/exact/v376-f2-test-20261104-r1/audit-state.jsonl",
+      "sha256": "3c2289c4fc5f6baccf60abb9ecf3ed9df94f826ac420076c57b29afacd7350a3"
+    },
+    {
+      "path": "third_party/th08/build/rl/exact/v376-f2-test-20261104-r1/collect-report.json",
+      "sha256": "adfadb990ead1825c1f3a6c2bae6ad529889554bf5b3d5528929cc99ddd165e1"
+    }
+  ],
+  "commands": [
+    {
+      "argv": [
+        "python",
+        "-B",
+        "-m",
+        "touhou_rl.pipeline",
+        "collect",
+        "--modality",
+        "privileged",
+        "--source",
+        "replay",
+        "--replay",
+        "third_party/th08/tests/fixtures/replays/th08-1.00d/accepted/th8_ud2ce5.rpy",
+        "--out",
+        "third_party/th08/build/rl/exact/v376-f2-train-20261104-r1",
+        "--stage",
+        "-1",
+        "--max-seconds",
+        "900",
+        "--frame-proof",
+        "exact",
+        "--exact-config",
+        "Document/Update/Alpha/v3.7.6/configs/f2-exact-capture-v1.json"
+      ],
+      "exit_code": 0,
+      "log_path": "Document/Update/Alpha/v3.7.6/evidence/f2-capture-20261104-r1/train.log"
+    },
+    {
+      "argv": [
+        "python",
+        "-B",
+        "-m",
+        "touhou_rl.pipeline",
+        "collect",
+        "--modality",
+        "privileged",
+        "--source",
+        "replay",
+        "--replay",
+        "third_party/th08/tests/fixtures/replays/th08-1.00d/accepted/th8_ud2ccf.rpy",
+        "--out",
+        "third_party/th08/build/rl/exact/v376-f2-validation-20261104-r1",
+        "--stage",
+        "-1",
+        "--max-seconds",
+        "900",
+        "--frame-proof",
+        "exact",
+        "--exact-config",
+        "Document/Update/Alpha/v3.7.6/configs/f2-exact-capture-v1.json"
+      ],
+      "exit_code": 0,
+      "log_path": "Document/Update/Alpha/v3.7.6/evidence/f2-capture-20261104-r1/validation.log"
+    },
+    {
+      "argv": [
+        "python",
+        "-B",
+        "-m",
+        "touhou_rl.pipeline",
+        "collect",
+        "--modality",
+        "privileged",
+        "--source",
+        "replay",
+        "--replay",
+        "th08_replay/Th8_ud2558.rpy",
+        "--out",
+        "third_party/th08/build/rl/exact/v376-f2-test-20261104-r1",
+        "--stage",
+        "-1",
+        "--max-seconds",
+        "900",
+        "--frame-proof",
+        "exact",
+        "--exact-config",
+        "Document/Update/Alpha/v3.7.6/configs/f2-exact-capture-v1.json"
+      ],
+      "exit_code": 0,
+      "log_path": "Document/Update/Alpha/v3.7.6/evidence/f2-capture-20261104-r1/test.log"
+    }
+  ],
+  "domain": "real",
+  "evidence_kind": "real_capture",
+  "execution_status": "finished",
+  "gate_id": "G2",
+  "gate_status": "passed",
+  "identity": {
+    "config_sha256": "2269378e5571a5062317e010f637865635d8ddcf8058eb741be16d9a46db0fef",
+    "dirty_diff_sha256": "054ba710eb713ae66f445b645865680228edab4cd75b5321a0511aec526ff76d",
+    "git_head": "a45589a0e9ebd6821e840c3750071ce0eabe678c"
+  },
+  "limitations": [
+    "Capture only: three independent replay bytes, not yet reviewed F2 events.",
+    "No human visual review has been signed; no G3 or original G4 acceptance.",
+    "Some stage frame counters pause despite advancing logic clock: all ambiguous stage-frame groups must be excluded from replay-action labels.",
+    "dirty_diff_sha256 is the explicitly enumerated source snapshot digest in baseline.json, not a clean commit.",
+    "Runs named 20261104 follow session date; machine local capture timestamps are 2026-11-05 and remain verbatim."
+  ],
+  "metrics": {
+    "test": {
+      "audit": {
+        "artifacts": 3000,
+        "checkCount": 13,
+        "checkNames": [
+          "hold_stable",
+          "player_position",
+          "player_velocity",
+          "player_state",
+          "focus_mode",
+          "gameplay_frame",
+          "stage_frames",
+          "input_mask",
+          "active_bullets",
+          "bullet_digest",
+          "enemy_digest",
+          "pixels_frozen",
+          "pixels_match_backbuffer"
+        ],
+        "deep": true,
+        "discarded": 0,
+        "exactValidFrames": 3000,
+        "frameProof": "exact",
+        "frames": 3000,
+        "schema": "v375-frame-proof/1",
+        "shards": 2,
+        "status": "complete",
+        "trialMode": true
+      },
+      "audit_state": {
+        "bytes": 58014568,
+        "path": "audit-state.jsonl",
+        "rows": 3000,
+        "schema": "th08-exact-audit-state/1",
+        "sha256": "3c2289c4fc5f6baccf60abb9ecf3ed9df94f826ac420076c57b29afacd7350a3",
+        "source": "same-hold memory state; not independent visual evidence",
+        "studentInput": false
+      },
+      "capture_seconds": 124.9,
+      "replay_sha256": "ff93b2eb719b7cc790a6fe319ad398f5b960592373281d90f4a42ea236740b53"
+    },
+    "train": {
+      "audit": {
+        "artifacts": 3000,
+        "checkCount": 13,
+        "checkNames": [
+          "hold_stable",
+          "player_position",
+          "player_velocity",
+          "player_state",
+          "focus_mode",
+          "gameplay_frame",
+          "stage_frames",
+          "input_mask",
+          "active_bullets",
+          "bullet_digest",
+          "enemy_digest",
+          "pixels_frozen",
+          "pixels_match_backbuffer"
+        ],
+        "deep": true,
+        "discarded": 0,
+        "exactValidFrames": 3000,
+        "frameProof": "exact",
+        "frames": 3000,
+        "schema": "v375-frame-proof/1",
+        "shards": 2,
+        "status": "complete",
+        "trialMode": true
+      },
+      "audit_state": {
+        "bytes": 45283735,
+        "path": "audit-state.jsonl",
+        "rows": 3000,
+        "schema": "th08-exact-audit-state/1",
+        "sha256": "4ac2a51f01f833fa8d3c21c84f229f5c331289f3e68b6a80d660c5c8cf0d78ee",
+        "source": "same-hold memory state; not independent visual evidence",
+        "studentInput": false
+      },
+      "capture_seconds": 124.9,
+      "replay_sha256": "004f58e1b95655664087d6613780f3e6e16e25d0c55e5c17b2e2291d5446ae6b"
+    },
+    "validation": {
+      "audit": {
+        "artifacts": 3000,
+        "checkCount": 13,
+        "checkNames": [
+          "hold_stable",
+          "player_position",
+          "player_velocity",
+          "player_state",
+          "focus_mode",
+          "gameplay_frame",
+          "stage_frames",
+          "input_mask",
+          "active_bullets",
+          "bullet_digest",
+          "enemy_digest",
+          "pixels_frozen",
+          "pixels_match_backbuffer"
+        ],
+        "deep": true,
+        "discarded": 0,
+        "exactValidFrames": 3000,
+        "frameProof": "exact",
+        "frames": 3000,
+        "schema": "v375-frame-proof/1",
+        "shards": 2,
+        "status": "complete",
+        "trialMode": true
+      },
+      "audit_state": {
+        "bytes": 49096356,
+        "path": "audit-state.jsonl",
+        "rows": 3000,
+        "schema": "th08-exact-audit-state/1",
+        "sha256": "5cad7a96a04deff7ac0c2740ea4a77cce5d542d01591c233069ba046491730ac",
+        "source": "same-hold memory state; not independent visual evidence",
+        "studentInput": false
+      },
+      "capture_seconds": 124.6,
+      "replay_sha256": "331095af8dc920ed1d8bfb8abedafeb46493c0fa2af9eae1509575ce8d4ca056"
+    }
+  },
+  "next_action": "Complete independent visual event annotation, freeze the plan and pass F2 dataset audit before real BC training.",
+  "reason_code": null,
+  "run_id": "f2-capture-20261104-r1",
+  "schema": "v375-task-report/1",
+  "task_ids": [
+    "U02-03",
+    "U02-04"
+  ],
+  "work_package": "WP1"
+}

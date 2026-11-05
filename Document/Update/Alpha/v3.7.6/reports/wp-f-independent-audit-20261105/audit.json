@@ -1,0 +1,372 @@
+{
+  "schema": "v376-f2-independent-audit/1",
+  "reviewer": {
+    "id": "v376-wpd-double-entry-audit-20261105",
+    "kind": "ai_agent_readonly",
+    "independence": "separate implementation from the dataset builder; same developer, not a human"
+  },
+  "dataset": "D:\\WorkShop\\Touhou_RL\\third_party\\th08\\build\\rl\\f2\\v376-f2-bc-dataset-20261105-r4",
+  "manifest_sha256": "bf60b8d11eef2d98361ed6ea988b8c335d2fd3fb6bb408bc97dc642d353473f6",
+  "plan_sha256": "5e64f223e8d1e01d4e58753aaa2a6260c1dd373b588e4f5ac6f1d9e78b13f93e",
+  "checks": [
+    {
+      "name": "manifest binds the frozen plan",
+      "passed": true,
+      "detail": {
+        "manifest_plan_sha": "5e64f223e8d1e01d4e58753aaa2a6260c1dd373b588e4f5ac6f1d9e78b13f93e",
+        "actual": "5e64f223e8d1e01d4e58753aaa2a6260c1dd373b588e4f5ac6f1d9e78b13f93e"
+      },
+      "blocking": true
+    },
+    {
+      "name": "objective is F2 behaviour cloning, not original G4",
+      "passed": true,
+      "detail": {
+        "objective": "f2_behavior_cloning",
+        "original_G4": false
+      },
+      "blocking": true
+    },
+    {
+      "name": "config digest matches the preregistered config",
+      "passed": true,
+      "detail": {
+        "plan_config_sha256": "6bfd5f2ee6ad43f94d02c807dd525649171c5b7873754087f22feff698e43533",
+        "manifest_config_sha256": "6bfd5f2ee6ad43f94d02c807dd525649171c5b7873754087f22feff698e43533"
+      },
+      "blocking": true
+    },
+    {
+      "name": "all three splits present",
+      "passed": true,
+      "detail": {
+        "splits": [
+          "test",
+          "train",
+          "validation"
+        ]
+      },
+      "blocking": true
+    },
+    {
+      "name": "logic clock: decoded record equals the input the game consumed",
+      "passed": true,
+      "detail": {
+        "rows": 856,
+        "hits": 856
+      },
+      "blocking": true
+    },
+    {
+      "name": "labels are the replayed demonstration action",
+      "passed": true,
+      "detail": {
+        "rows": 856,
+        "supervised": 340,
+        "matches": 340
+      },
+      "blocking": true
+    },
+    {
+      "name": "unknown rows carry no action and a reason",
+      "passed": true,
+      "detail": {
+        "rows": 516,
+        "ok": 516
+      },
+      "blocking": true
+    },
+    {
+      "name": "aim miss distance inside the declared hitbox tolerance",
+      "passed": true,
+      "detail": {
+        "emissions": 854,
+        "measurable": 854,
+        "max": 1.396,
+        "median": 0.0
+      },
+      "blocking": true
+    },
+    {
+      "name": "declared miss matches the recomputed miss",
+      "passed": true,
+      "detail": {
+        "max_gap": 0.00065
+      },
+      "blocking": true
+    },
+    {
+      "name": "cited image bytes match the declared SHA",
+      "passed": true,
+      "detail": {
+        "frames_checked": 168,
+        "mismatches": 0
+      },
+      "blocking": true
+    },
+    {
+      "name": "declared pixel positions agree with an independent estimator",
+      "passed": true,
+      "detail": {
+        "samples": 2300,
+        "declared_tolerance_px": [
+          2.6,
+          4.46,
+          5.12,
+          5.21,
+          5.36,
+          5.58,
+          5.89,
+          5.93
+        ],
+        "max": 3.817,
+        "p90": 1.699,
+        "median": 0.499,
+        "estimator": "brightest-block centroid seeded at the raw memory position, radius 7",
+        "seed_to_memory_px": {
+          "max": 4.848,
+          "median": 1.195
+        },
+        "unmeasured": 0
+      },
+      "blocking": true
+    },
+    {
+      "name": "no test event is in the feature cache",
+      "passed": true,
+      "detail": {
+        "test_events": [
+          "f2-test-st2-e1",
+          "f2-test-st2-e2",
+          "f2-test-st2-e3"
+        ],
+        "cached": [
+          "f2-train-st2-e1",
+          "f2-train-st2-e2",
+          "f2-train-st2-e3",
+          "f2-validation-st2-e1",
+          "f2-validation-st2-e2",
+          "f2-validation-st2-e3"
+        ]
+      },
+      "blocking": true
+    },
+    {
+      "name": "cache audit state",
+      "passed": true,
+      "detail": {
+        "test_tensor_loaded": false,
+        "test_cache_created": false
+      },
+      "blocking": true
+    },
+    {
+      "name": "training report did not use test",
+      "passed": true,
+      "detail": {
+        "test_used": false,
+        "backbone_unchanged": true
+      },
+      "blocking": true
+    }
+  ],
+  "failures": [],
+  "census": {
+    "train": {
+      "events": 3,
+      "rows": 288,
+      "annotated": 104,
+      "supervised": 104,
+      "actions": {
+        "0": 12,
+        "7": 16,
+        "8": 17,
+        "1": 7,
+        "14": 15,
+        "9": 4,
+        "6": 8,
+        "15": 5,
+        "2": 6,
+        "3": 5,
+        "4": 1,
+        "5": 8
+      },
+      "action_changes": 20,
+      "events_detail": [
+        {
+          "event_id": "f2-train-st2-e1",
+          "rows": 96,
+          "annotated": 50,
+          "supervised": 50,
+          "actions": {
+            "0": 10,
+            "7": 4,
+            "8": 16,
+            "1": 5,
+            "14": 11,
+            "9": 4
+          },
+          "action_changes": 9
+        },
+        {
+          "event_id": "f2-train-st2-e2",
+          "rows": 96,
+          "annotated": 25,
+          "supervised": 25,
+          "actions": {
+            "6": 5,
+            "15": 1,
+            "14": 4,
+            "0": 2,
+            "7": 12,
+            "8": 1
+          },
+          "action_changes": 5
+        },
+        {
+          "event_id": "f2-train-st2-e3",
+          "rows": 96,
+          "annotated": 29,
+          "supervised": 29,
+          "actions": {
+            "1": 2,
+            "2": 6,
+            "3": 5,
+            "4": 1,
+            "5": 8,
+            "6": 3,
+            "15": 4
+          },
+          "action_changes": 6
+        }
+      ]
+    },
+    "validation": {
+      "events": 3,
+      "rows": 280,
+      "annotated": 134,
+      "supervised": 134,
+      "actions": {
+        "9": 13,
+        "11": 4,
+        "12": 5,
+        "8": 19,
+        "1": 33,
+        "0": 34,
+        "5": 7,
+        "4": 19
+      },
+      "action_changes": 12,
+      "events_detail": [
+        {
+          "event_id": "f2-validation-st2-e1",
+          "rows": 92,
+          "annotated": 49,
+          "supervised": 49,
+          "actions": {
+            "9": 13,
+            "11": 4,
+            "12": 5,
+            "8": 19,
+            "1": 6,
+            "0": 2
+          },
+          "action_changes": 6
+        },
+        {
+          "event_id": "f2-validation-st2-e2",
+          "rows": 94,
+          "annotated": 54,
+          "supervised": 54,
+          "actions": {
+            "0": 27,
+            "1": 27
+          },
+          "action_changes": 3
+        },
+        {
+          "event_id": "f2-validation-st2-e3",
+          "rows": 94,
+          "annotated": 31,
+          "supervised": 31,
+          "actions": {
+            "5": 7,
+            "4": 19,
+            "0": 5
+          },
+          "action_changes": 3
+        }
+      ]
+    },
+    "test": {
+      "events": 3,
+      "rows": 288,
+      "annotated": 189,
+      "supervised": 102,
+      "actions": {
+        "9": 27,
+        "12": 8,
+        "10": 1,
+        "1": 1,
+        "15": 3,
+        "14": 2,
+        "5": 8,
+        "3": 3,
+        "4": 4,
+        "13": 5,
+        "6": 1,
+        "7": 29,
+        "16": 10
+      },
+      "action_changes": 17,
+      "events_detail": [
+        {
+          "event_id": "f2-test-st2-e1",
+          "rows": 96,
+          "annotated": 81,
+          "supervised": 34,
+          "actions": {
+            "9": 27,
+            "12": 5,
+            "10": 1,
+            "1": 1
+          },
+          "action_changes": 4
+        },
+        {
+          "event_id": "f2-test-st2-e2",
+          "rows": 96,
+          "annotated": 60,
+          "supervised": 42,
+          "actions": {
+            "15": 2,
+            "14": 1,
+            "5": 8,
+            "12": 3,
+            "3": 3,
+            "4": 3,
+            "13": 5,
+            "6": 1,
+            "7": 16
+          },
+          "action_changes": 9
+        },
+        {
+          "event_id": "f2-test-st2-e3",
+          "rows": 96,
+          "annotated": 48,
+          "supervised": 26,
+          "actions": {
+            "7": 13,
+            "16": 10,
+            "15": 1,
+            "14": 1,
+            "4": 1
+          },
+          "action_changes": 4
+        }
+      ]
+    }
+  },
+  "passed": true
+}

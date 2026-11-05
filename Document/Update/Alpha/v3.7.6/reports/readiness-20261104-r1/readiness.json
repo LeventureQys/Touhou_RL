@@ -1,0 +1,110 @@
+{
+  "schema": "v376-tactical-readiness/1",
+  "raw": "D:\\WorkShop\\Touhou_RL\\third_party\\th08\\build\\rl\\exact\\wp1-g2-trial-20261105-120526",
+  "read_only": true,
+  "capture_ready": true,
+  "real_training_ready": false,
+  "exact_audit": {
+    "status": "passed",
+    "deep": true,
+    "summary": {
+      "schema": "v375-frame-proof/1",
+      "frameProof": "exact",
+      "status": "complete",
+      "frames": 3000,
+      "exactValidFrames": 3000,
+      "discarded": 0,
+      "checkNames": [
+        "hold_stable",
+        "player_position",
+        "player_velocity",
+        "player_state",
+        "focus_mode",
+        "gameplay_frame",
+        "stage_frames",
+        "input_mask",
+        "active_bullets",
+        "bullet_digest",
+        "enemy_digest",
+        "pixels_frozen",
+        "pixels_match_backbuffer"
+      ],
+      "checkCount": 13,
+      "shards": 2,
+      "artifacts": 3000,
+      "trialMode": true,
+      "deep": true
+    }
+  },
+  "logic_frames": {
+    "observed_rows": 3000,
+    "first": 5,
+    "last": 6043,
+    "interval_count": 2999,
+    "interval_histogram": {
+      "2": 2987,
+      "4": 4,
+      "6": 8
+    },
+    "min_interval": 2,
+    "max_interval": 6,
+    "duplicate_intervals": 0,
+    "backwards_intervals": 0,
+    "coverage_status": "audited"
+  },
+  "stage_histogram": {
+    "0": 3000
+  },
+  "source_groups": {
+    "count": 1,
+    "unit": "capture/replay",
+    "basis": "single_raw_directory",
+    "independence_validation": "not_run",
+    "windows_are_episodes": false
+  },
+  "labels": {
+    "present": false,
+    "manifests": [],
+    "status": "not_run",
+    "passed": null,
+    "trusted_schema": false,
+    "reason": "Real label/event schema acceptance is not implemented; input status/passed claims are not evidence."
+  },
+  "events": {
+    "present": false,
+    "manifests": [],
+    "status": "not_run",
+    "passed": null,
+    "trusted_schema": false,
+    "reason": "Real label/event schema acceptance is not implemented; input status/passed claims are not evidence."
+  },
+  "blockers": [
+    {
+      "code": "labels_missing",
+      "message": "No labels manifest found."
+    },
+    {
+      "code": "labels_acceptance_not_implemented",
+      "message": "Real label/event schema acceptance is not implemented; input status/passed claims are not evidence."
+    },
+    {
+      "code": "events_missing",
+      "message": "No events manifest found."
+    },
+    {
+      "code": "events_acceptance_not_implemented",
+      "message": "Real label/event schema acceptance is not implemented; input status/passed claims are not evidence."
+    },
+    {
+      "code": "independent_groups_insufficient",
+      "observed": 1,
+      "minimum_required": 2,
+      "message": "One supplied raw directory is at most one capture/replay group; windows, shards, stages and input group claims do not establish independent episodes."
+    }
+  ],
+  "limitations": [
+    "Real label/event acceptance is not implemented; real_training_ready is always false.",
+    "Structural exact audit is not deep byte/build verification unless deep=true.",
+    "This inventory does not change any existing training gate."
+  ]
+}

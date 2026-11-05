@@ -1,0 +1,1882 @@
+warning: in the working copy of 'Document/Update/Alpha/v3.7.5/configs/exact-capture-v1.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'Document/Update/Alpha/v3.7.5/configs/scope-v1.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'touhou_rl/capture_dataset.py', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'touhou_rl/dataset.py', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'touhou_rl/frame_proof.py', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'touhou_rl/framefence.py', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'touhou_rl/pipeline/cli.py', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'touhou_rl/pipeline/collect/__init__.py', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'touhou_rl/pipeline/manifest.py', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'touhou_rl/pipeline/process/__init__.py', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'touhou_rl/tactical_data.py', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'touhou_rl/tactical_train.py', LF will be replaced by CRLF the next time Git touches it
+diff --git a/Document/Update/Alpha/v3.7.5/README.md b/Document/Update/Alpha/v3.7.5/README.md
+index 23b350f..7223c5f 100644
+--- a/Document/Update/Alpha/v3.7.5/README.md
++++ b/Document/Update/Alpha/v3.7.5/README.md
+@@ -2,10 +2,24 @@
+ 
+ - 版本：v3.7.5
+ - 日期：2026-11-05
+-- 状态：计划版，尚未执行，不代表任何能力门通过
++- 状态：执行中（WP1 离线代码门 G1/engineering 与真实 3000 帧试采 G2/real 均已通过；后续 WP2–WP7 未开始。本计划本身不代表任何能力门通过）
+ - 上一版本：v3.7.4 同帧证明
+ - 计划来源：v3.7.3 升级执行计划
+ 
++## 0.1 当前执行状态（2026-11-05）
++
++> 执行路线、任务状态与后续计划已移交 [v3.7.6 执行版本](../v3.7.6/README.md)；本表保留为 v3.7.5 的收口记录。
++
++| 项目 | 现状 | 入口 |
++|---|---|---|
++| 环境与真机路线 | 游戏源码/两套构建/完整资源**本机可运行**；一条命令复检；G2 路线与停止规则已固定 | [ENVIRONMENT.md](<../../../../ENVIRONMENT.md>)、`python tools/rl/th08_environment.py` |
++| WP1 exact 采集与数据链路 | **G1/engineering passed**：schema、预检、同 hold 采样、fail-closed 写盘、process/inspect/train 门；新增 90+ 个测试；全量回归 2318 passed | [报告](<reports/wp1-v375-20261105/report.json>)、[摘要](<reports/wp1-v375-20261105/summary.md>)、[设计说明](<开发文档/08-WP1-exact数据链路实现说明.md>) |
++| G2 3000 帧真实试采 | **passed（real）**：预检 10/10 + 试采 3000/3000、`discarded=0`、13 项全过、24.29 帧/s、deep 审计与训练门 exit 0 | [G2 报告](<reports/wp1-g2-v375-20261105/report.json>)、[摘要](<reports/wp1-g2-v375-20261105/summary.md>) |
++| WP0 状态清理 | `not_started`（任务映射/状态登记表/baseline 报告缺；`scope-v1.json` 的 `real_game_available` 需按现场预检改为 `true`） | [01-统一契约与验收协议](<开发文档/01-统一契约与验收协议.md>) |
++| WP2–WP7 | 未开始 | 各任务书 |
++
++> 注意：`configs/scope-v1.json` 写的是 `"real_game_available": false`，与现场预检不符；按 01 §7 "以现场预检为准"，该字段应由 WP0 更正为 `true`。本版本 README 不自行修改其它工作包的配置文件。
++
+ ## 0. 版本目的
+ 
+ 本版本不是继续增加网络结构，也不是重新包装历史实验结果，而是把 Alpha 阶段所有未完成目标集中登记、重新排序、逐项清理。
+@@ -43,8 +57,8 @@ Alpha 的最小可交付范围暂定为：
+ |---|---|---|
+ | 真机访问基础设施 | 只读内存、抓帧、输入发送、回放和 pipeline 已有 | 保留，增加一致性审计 |
+ | 帧栅栏同帧证明 | build_fence 变体 240/240 帧通过 13 项检查 | 标为“变体条件通过”，不扩展为 canonical 证明 |
+-| 正式采集接入 | frame_fence_capture.py 可独立采集，但 capture_dataset.py 尚未接入 | 本版本完成 |
+-| exact manifest | frame_proof.py 和单测已有，正式清单和 3000 帧试采集没有 | 本版本完成离线实现；真机试采集等待游戏 |
++| 正式采集接入 | frame_fence_capture.py 可独立采集，但 capture_dataset.py 尚未接入 | 本版本完成（G1 已收口） |
++| exact manifest | frame_proof.py 和单测已有，正式清单和 3000 帧试采集没有 | 本版本完成离线实现；真机 3000 帧试采集 `not_run`，待授权（游戏已确认可运行） |
+ | 有效课程 | 28 个有效世界；F2 仅 4 例合法，F1/F3 不能直接作为真实标签 | 收窄到 F2 或先扩充 F2/F5 |
+ | 教师 | V2 几何教师在 28/28 世界可运行，但部分成功依赖已知 gap | 增加可观测性和特权泄漏审计 |
+ | 学习 | 只有工程冒烟、合成诊断和旧负结果；真实像素战术训练未开始 | 先修目标，再做冻结骨干诊断训练 |
+@@ -179,6 +193,8 @@ C0 范围/状态清理
+ 
+ ## 5. 无游戏机器的执行边界
+ 
++> **2026-11-05 更正（不改写本节历史结论）**：本机现场预检发现游戏源码、两套构建与完整资源都在且可运行（见 [ENVIRONMENT.md](../../../../ENVIRONMENT.md)），因此"游戏缺失时 blocked/not_run"的默认前提不再成立；实际执行按 [v3.7.6 执行版本](../v3.7.6/README.md) 的路线推进。本节保留为原始计划记录。
++
+ 当前机器没有游戏时，可以完成：
+ 
+ - 文档、配置、预注册和状态清理；
+diff --git a/Document/Update/Alpha/v3.7.5/configs/exact-capture-v1.json b/Document/Update/Alpha/v3.7.5/configs/exact-capture-v1.json
+index 677db63..541a29a 100644
+--- a/Document/Update/Alpha/v3.7.5/configs/exact-capture-v1.json
++++ b/Document/Update/Alpha/v3.7.5/configs/exact-capture-v1.json
+@@ -1,12 +1,33 @@
+ {
+-  "max_discarded": 0,
+-  "requested_frames": 3000,
+-  "build_type": "fence",
+   "schema": "v375-exact-capture/1",
+-  "game_required": true,
+   "status": "planned",
++  "game_required": true,
+   "frame_proof": "exact",
+-  "accept_current": true,
++  "canonical_allowed": false,
+   "required_checks": 13,
+-  "canonical_allowed": false
++  "build_type": "fence",
++  "requested_frames": 3000,
++  "max_discarded": 0,
++  "accept_current": true,
++  "trial": true,
++  "tag": "exact",
++  "shard_size": 2048,
++  "build": {
++    "exe": "third_party/th08/build_fence/th08.exe",
++    "map": "third_party/th08/build_fence/th08.map",
++    "address_table": "third_party/th08/build_fence/frame-fence-addresses.json"
++  },
++  "preflight": {
++    "precheck_frames": 10,
++    "fence_open_timeout_s": 20.0,
++    "bootstrap_timeout_s": 5.0,
++    "sample_timeout_s": 3.0,
++    "gameplay_timeout_s": 60.0
++  },
++  "hold": {
++    "hold_every": 2,
++    "hold_min_us": 0,
++    "hold_max_us": 90000,
++    "accept_current": true
++  }
+ }
+diff --git a/Document/Update/Alpha/v3.7.5/configs/scope-v1.json b/Document/Update/Alpha/v3.7.5/configs/scope-v1.json
+index 7568382..8f0a73b 100644
+--- a/Document/Update/Alpha/v3.7.5/configs/scope-v1.json
++++ b/Document/Update/Alpha/v3.7.5/configs/scope-v1.json
+@@ -1,8 +1,8 @@
+ {
+   "schema": "v375-scope/1",
+-  "notes": "F2-only cleanup scope; expand only with a new preregistration",
++  "notes": "F2-only cleanup scope; expand only with a new preregistration. 2026-11-05 live preflight: TH08 reconstruction sources, the fence build and the full game assets are present on this machine (see ENVIRONMENT.md); real_game_available corrected from false to true, scope moved to active for v3.7.6 execution.",
+   "default_deployment": "unchanged",
+-  "status": "planned",
++  "status": "active",
+   "excluded_from_alpha": [
+     "F1",
+     "F3",
+@@ -11,5 +11,5 @@
+   "supported_families": [
+     "F2"
+   ],
+-  "real_game_available": false
++  "real_game_available": true
+ }
+diff --git a/readme.md b/readme.md
+index 9d8a837..7e18258 100644
+--- a/readme.md
++++ b/readme.md
+@@ -2,9 +2,9 @@
+ 
+ > 用像素学会玩东方 Project · Teaching an agent to play Touhou Project from pixels alone
+ 
+-**状态** Alpha / 研究阶段 · **最新记录版本** v3.7.4 · **当前清理计划** v3.7.5 · **测试** 1958 passed, 1 xfailed（2026-11-02 实测 127 s）· **环境** Windows 10/11 + Python 3.12 + PyTorch CUDA
++**状态** Alpha / 研究阶段 · **最新记录版本** v3.7.4 · **当前清理计划** v3.7.5 · **执行版本** v3.7.6 · **测试** 2356 passed, 1 xfailed（2026-11-05 实测 144 s）· **环境** Windows 10/11 + Python 3.12 + PyTorch CUDA
+ 
+-**导航** [中文](#中文) · [English](#english) · [先读：真机数据获取能力说明](<DATA-ACQUISITION.md>) · [当前版本状态](<Document/Update/Alpha/v3.7.4/README.md>) · [v3.7.5 清理计划](<Document/Update/Alpha/v3.7.5/README.md>) · [过程日志](<Document/Dialogs/>)
++**导航** [中文](#中文) · [English](#english) · [先读：真机数据获取能力说明](<DATA-ACQUISITION.md>) · [环境事实与真机路线](<ENVIRONMENT.md>) · [v3.7.6 执行版本](<Document/Update/Alpha/v3.7.6/README.md>) · [当前版本状态](<Document/Update/Alpha/v3.7.4/README.md>) · [v3.7.5 清理计划](<Document/Update/Alpha/v3.7.5/README.md>) · [过程日志](<Document/Dialogs/>)
+ 
+ > **一句话**：基础设施已经跑通并能被审计；**"会玩"还没有做到**。本文把已成立与未成立的分开写，每条都带证据路径。
+ 
+@@ -21,6 +21,13 @@
+ - **终极目标**是可迁移的基模：换一作东方，给定框选区域，它自己学规则、自己微调自己。
+ - **现在**没有任何"会玩"的可部署模型（默认模型从未被替换）。已经成型的是一条**可审计的真实游戏实验基础设施** + 一条**被反复证否后变得清晰的卡点清单**。
+ 
++### 0.5 环境事实（已核实，2026-11-05）
++
++- **游戏在仓库里、本机可运行**：TH08 逆向重建源码 49 个 `.cpp`（含帧栅栏发布端 `framefence.cpp`）、canonical 与帧栅栏两套构建、完整 `th08.dat`(46.8 MB)/`thbgm.dat`(450 MB) 都在；本机有 2048×1152 交互式桌面，`build/rl/` 下已有 **67 次**历史游戏会话。**不要再凭历史配置推断"没有游戏"**。
++- **一条命令复检**（不启动游戏）：`python tools/rl/th08_environment.py` —— 退出码 `0`=就绪、`2`=构建契约不一致、`3`=依赖缺失；加 `--json` 给脚本、`--write` 存时间戳快照。
++- **真机是否执行只看授权**：G2（3000 帧 exact 试采）已于 **2026-11-05 执行并通过**——3000/3000 有效、`discarded=0`、13 项检查全过、环境指纹完整、实测 **24.29 帧/s**、deep 审计与训练数据门均为 exit 0（[G2 报告](<Document/Update/Alpha/v3.7.5/reports/wp1-g2-v375-20261105/summary.md>)）。G3+ 仍未开始。现场事实、SHA、门状态与重采路线见 [ENVIRONMENT.md](<ENVIRONMENT.md>)。
++- **历史配置更正**：`Document/Update/Alpha/v3.7.5/configs/scope-v1.json` 的 `real_game_available: false` 与现场事实冲突，按"以现场预检为准"应改为 `true`；该文件属 WP0，未擅自修改，已登记为缺项。
++
+ ### 1. 目标与边界
+ 
+ | | 内容 |
+@@ -46,13 +53,14 @@
+ | 时空选路（撤离） | v3.7.0 | `escape` 包：逐帧 AABB、分时危险、路线搜索、意图状态机、trace | 🟡 合成 A 门 7 项通过（117/117、可避免封死 −92.3%）；真机 B-01/B-02/B-03 fail |
+ | 合成课程审计 | v3.7.1–v3.7.3 | 28 个有效世界、教师 V2 28/28、蒸馏负结果、像素信息探针、特权审计 | 🟡 卡点从"信息缺失"改写为"目标缺失" |
+ | 同帧证明 | v3.7.4 | 帧栅栏变体（ticket + hold + 摘要/后台缓冲复读）+ 采集工具 | ✅ 240/240 帧通过；canonical 镜像未改 |
++| exact 采集接入与真实试采 | v3.7.5 | `frame_proof=exact` 全链路：预检、同 hold 采样、fail-closed 写盘、proof manifest、inspect/训练门 | ✅ G1/engineering 回归 2318 passed；**G2/real**：3000/3000 有效、0 丢弃、13 项全过、24.29 帧/s（[报告](<Document/Update/Alpha/v3.7.5/reports/wp1-g2-v375-20261105/summary.md>)） |
+ 
+ **正在做（v3.7.5 清理版本）**
+ 
+ 1. 按 v3.7.5 清理计划收口所有未完成目标；
+ 2. 先完成 exact 采集接入、manifest、F2 标签预注册、契约和 CLI；
+ 3. 再执行关系型目标、P4 训练和 P5 因果闭环；
+-4. 游戏缺失时，P3 真实采集、P6 真机配对和 P7 发布保持 blocked/not_run，不使用合成或工程冒烟替代。
++4. 游戏与帧栅栏构建已确认在本机可运行（[环境事实](<ENVIRONMENT.md>)）；WP1 的 exact 代码门（G1/engineering，回归 2318 passed）与真实 3000 帧试采（G2/real，3000 有效、0 丢弃、24.29 帧/s）均已通过。接下来按顺序是 WP2 F2 标签与数据审计（G3）→ WP4 训练（G4）→ WP5 闭环（G5）；未执行的门一律写 `not_run`/`blocked`，不以合成或工程冒烟替代。
+ 
+ **之后**
+ 
+@@ -172,7 +180,10 @@
+ 不需要启动游戏即可验证绝大部分内容：
+ 
+ ```powershell
+-# 1) 全量测试（1958 passed，约 2 分钟，不需要游戏进程）
++# 0) 本机环境自检：游戏/构建/资源在不在（不启动游戏，0=就绪 / 2=契约不一致 / 3=依赖缺失）
++python tools/rl/th08_environment.py
++
++# 1) 全量测试（2356 passed，约 2 分 24 秒，不需要游戏进程）
+ python -m pytest touhou_rl/tests tests -q
+ 
+ # 2) 合成场景八门离线评估（A 门）
+@@ -211,6 +222,7 @@ python tools/probes/check_replays.py --dir th08_replay --seconds 4
+ | 问题 | 入口 |
+ | --- | --- |
+ | 到底能拿到什么数据、边界在哪 | [DATA-ACQUISITION.md](<DATA-ACQUISITION.md>) |
++| 游戏到底在不在、能不能跑、真机路线怎么走 | [ENVIRONMENT.md](<ENVIRONMENT.md>)（一条命令复检 + G2 路线） |
+ | 现在整体到哪一步、下一步做什么 | [v3.7.4 状态](<Document/Update/Alpha/v3.7.4/README.md>)、[v3.7.3 状态与下一任务卡](<Document/Update/Alpha/v3.7.3/README.md>) |
+ | 七条战术为什么全被否决 | [v3.6.0/3.6.1 总索引](<Document/Update/Alpha/v3.6.0/总索引.md>) |
+ | 撤离能力的逐门判定（含 fail） | [v3.7.0 版本结算](<Document/Update/Alpha/v3.7.0/reports/版本结算.md>) |
+@@ -246,6 +258,7 @@ This is a research project on **learning to play Touhou 8 (Imperishable Night, T
+ - **Training** may read game memory, but only as a **privileged teacher** — it produces labels, reference frames and audit evidence, and never feeds the deployed policy.
+ - **The end goal** is a transferable base model: swap in another Touhou title, give it a box, and it learns the rules and fine-tunes itself.
+ - **Today** there is no deployable "plays the game" model (the default model has never been replaced). What exists is an **auditable real-game experiment infrastructure** plus a **sharply defined list of blockers**, each one obtained by disproving an earlier hypothesis.
++- **The game is here and runnable** (verified 2026-11-05): TH08 reconstruction sources (49 C++ files incl. the fence publisher), canonical and frame-fence builds, and the complete `th08.dat`/`thbgm.dat` are in the repo; this machine has a 2048×1152 interactive desktop and 67 prior live sessions. One command re-checks it without launching anything: `python tools/rl/th08_environment.py` (exit `0` ready / `2` build-contract mismatch / `3` dependency missing). The 3000-frame real exact trial (**G2/real**) ran on 2026-11-05 and passed: 3000/3000 valid, 0 discarded, all 13 checks true, deep audit and train gate green, **24.29 frames/s** ([G2 report](<Document/Update/Alpha/v3.7.5/reports/wp1-g2-v375-20261105/summary.md>)); facts, SHAs and the re-capture route are in [ENVIRONMENT.md](<ENVIRONMENT.md>).
+ 
+ ### 1. Goal and boundaries
+ 
+@@ -273,12 +286,11 @@ This is a research project on **learning to play Touhou 8 (Imperishable Night, T
+ | Synthetic curriculum audit | v3.7.1–v3.7.3 | 28 valid worlds, teacher V2 28/28, distillation negative result, pixel-information probe, privilege audit | 🟡 Blocker redefined from "information missing" to "objective missing" |
+ | Same-frame proof | v3.7.4 | Frame-fence variant (ticket + hold + digest/back-buffer re-read) + capture tooling | ✅ 240/240 frames pass; canonical image untouched |
+ 
+-**In progress (v3.7.4 → next)**
++**In progress (v3.7.5 cleanup)**
+ 
+-1. Wire the fence into the official capture path: `capture_dataset.py` uses `FenceFrameSampler` and stamps `frame_proof=exact` plus variant/address-table hashes.
+-2. Pre-register the `frame_proof=exact` manifest fields — no P3 dataset is declared valid before that.
+-3. Change the **objective** per the pixel-information probe: regress `gap_center − player_x` directly (relational read-out), with both orientations and edge positions covered by the training distribution.
+-4. Narrow P3's legal label source to the F2 family (objects observable in the real game) — or narrow the version scope and say so explicitly.
++1. **Exact capture is wired and proven on the real game** (v3.7.5 WP1): verified frame-fence preflight (canonical image refused, address table cross-checked against the map and the loaded `spec`), `frame_proof=exact` manifests, fail-closed writing, `inspect --raw/--deep`, and a train gate that re-derives the proof instead of trusting a string. **G1/engineering** passes (2318 tests); **G2/real** passes: 3000/3000 valid frames, 0 discarded, all 13 checks true, 24.29 frames/s ([G2 report](<Document/Update/Alpha/v3.7.5/reports/wp1-g2-v375-20261105/summary.md>), environment in [ENVIRONMENT.md](<ENVIRONMENT.md>)).
++2. Change the **objective** per the pixel-information probe: regress `gap_center − player_x` directly (relational read-out), with both orientations and edge positions covered by the training distribution.
++3. Narrow P3's legal label source to the F2 family (objects observable in the real game) — or narrow the version scope and say so explicitly.
+ 
+ **Later**
+ 
+@@ -401,7 +413,10 @@ Details and limits: [DATA-ACQUISITION.md](<DATA-ACQUISITION.md>), [frame-fence r
+ Most of the project is verifiable without launching the game:
+ 
+ ```powershell
+-# 1) Full test suite (1958 passed, ~2 min, no game process needed)
++# 0) Environment self-check: is the game/build/assets actually here? (never launches the game)
++python tools/rl/th08_environment.py
++
++# 1) Full test suite (2356 passed, ~2.4 min, no game process needed)
+ python -m pytest touhou_rl/tests tests -q
+ 
+ # 2) Offline synthetic A-gates
+@@ -438,6 +453,7 @@ Requirements: Windows 10/11, Python 3.12, PyTorch (CUDA; measured on RTX 4070 SU
+ | Question | Entry point |
+ | --- | --- |
+ | What data can we actually get, and where are the limits? | [DATA-ACQUISITION.md](<DATA-ACQUISITION.md>) |
++| Is the game present/runnable, and how do we get to a real trial? | [ENVIRONMENT.md](<ENVIRONMENT.md>) (one-command check + the G2 route) |
+ | Where are we, and what is next? | [v3.7.4 status](<Document/Update/Alpha/v3.7.4/README.md>), [v3.7.3 status and next-task card](<Document/Update/Alpha/v3.7.3/README.md>) |
+ | Why were all seven tactics rejected? | [v3.6.0/3.6.1 index](<Document/Update/Alpha/v3.6.0/总索引.md>) |
+ | Gate-by-gate verdicts for escape (including failures) | [v3.7.0 settlement](<Document/Update/Alpha/v3.7.0/reports/版本结算.md>) |
+diff --git a/third_party/th08 b/third_party/th08
+--- a/third_party/th08
++++ b/third_party/th08
+@@ -1 +1 @@
+-Subproject commit 08c7f00f81e35db8206d917b14f47883930beef6
++Subproject commit 08c7f00f81e35db8206d917b14f47883930beef6-dirty
+diff --git a/touhou_rl/capture_dataset.py b/touhou_rl/capture_dataset.py
+index b0685d9..23f9acc 100644
+--- a/touhou_rl/capture_dataset.py
++++ b/touhou_rl/capture_dataset.py
+@@ -31,6 +31,7 @@ import numpy as np
+ 
+ from . import menu, obs, spec, winapi
+ from .dataset import ShardWriter
++from .frame_proof import PROOF_EXACT, PROOF_LEVELS, PROOF_UNKNOWN
+ from .session import GameSession, SessionOptions, prepare_run_dir
+ 
+ ROOT = Path(__file__).resolve().parents[1]
+@@ -58,6 +59,21 @@ def replay_first_stage(replay: Path) -> int:
+         return 0
+ 
+ 
++def resolve_stage(stage: int | None, replay: Path) -> int:
++    """Normalise the two "auto" spellings used by the pipeline.
++
++    ``pipeline.collect`` passes ``stage=None`` for "the replay's own first stage"
++    while ``capture_replay`` historically used ``stage < 0``.  Comparing ``None``
++    with ``0`` raised ``TypeError`` on the collect path, so both spellings are
++    resolved here and covered by a regression test.
++    """
++    if stage is None:
++        return replay_first_stage(Path(replay))
++    if int(stage) < 0:
++        return replay_first_stage(Path(replay))
++    return int(stage)
++
++
+ @dataclass
+ class CaptureReport:
+     replay: str
+@@ -73,6 +89,10 @@ class CaptureReport:
+     ended_reason: str = ""
+     elapsed_seconds: float = 0.0
+     final_state: dict = field(default_factory=dict)
++    # v3.7.5 WP1: the legacy GDI path can only ever be alignment_unknown; the
++    # exact path records which proof manifest it published.
++    frame_proof: str = PROOF_UNKNOWN
++    exact_manifest: dict | None = None
+ 
+     def as_dict(self) -> dict:
+         data = {
+@@ -89,6 +109,8 @@ class CaptureReport:
+             "ended_reason": self.ended_reason,
+             "elapsed_seconds": round(self.elapsed_seconds, 1),
+             "final_state": self.final_state,
++            "frame_proof": self.frame_proof,
++            "exact_manifest": self.exact_manifest,
+         }
+         return data
+ 
+@@ -101,19 +123,51 @@ def capture_replay(
+     template_dir: Path | None = None,
+     run_dir: Path | None = None,
+     shard_size: int = 2048,
+-    stage: int = 0,
++    stage: int | None = 0,
+     max_seconds: float = 3600.0,
+     start_timeout: float = 60.0,
+     overwrite: bool = False,
+     verbose: bool = True,
++    frame_proof: str = PROOF_UNKNOWN,
++    exact=None,
+ ) -> CaptureReport:
++    """Capture a replay into a dataset.
++
++    ``frame_proof="exact"`` (v3.7.5 WP1) runs the frame-fence path and needs an
++    ``ExactCaptureConfig`` in ``exact``; the default ``alignment_unknown`` keeps
++    the historical GDI path, which now also writes an explicit proof marker so no
++    downstream reader has to guess which kind of directory it has.
++    """
++    if frame_proof not in PROOF_LEVELS:
++        raise ValueError(f"frame_proof must be one of {PROOF_LEVELS}, got {frame_proof!r}")
++    if frame_proof == PROOF_EXACT:
++        if exact is None:
++            raise ValueError("frame_proof='exact' requires exact=<ExactCaptureConfig>")
++        if overwrite:
++            raise ValueError(
++                "frame_proof='exact' always writes a new directory; overwrite would mix a failed "
++                "run with a successful one"
++            )
++        return _capture_exact(
++            replay,
++            out_dir,
++            exact=exact,
++            tag=tag,
++            stage=stage,
++            start_timeout=start_timeout,
++            verbose=verbose,
++        )
++    if exact is not None:
++        raise ValueError("exact=... only applies to frame_proof='exact'; refusing to ignore it")
+     template = template_dir or (ROOT / "third_party/th08/build/play")
+     work = run_dir or (ROOT / "third_party/th08/build/rl/capture-session")
+     out_dir = Path(out_dir)
+-    if stage < 0:
+-        stage = replay_first_stage(Path(replay))
+-        if verbose:
+-            print(f"[capture] starting playback at stage index {stage}", flush=True)
++    auto_stage = stage is None
++    if isinstance(stage, int) and not isinstance(stage, bool) and stage < 0:
++        auto_stage = True
++    stage = resolve_stage(stage, Path(replay))
++    if auto_stage and verbose:
++        print(f"[capture] starting playback at stage index {stage}", flush=True)
+     if out_dir.exists() and any(out_dir.glob("*.npz")):
+         if not overwrite:
+             raise FileExistsError(
+@@ -124,12 +178,17 @@ def capture_replay(
+                 stale.unlink()
+     prepare_run_dir(work, template, windowed=True)
+     menu.install_replay(work, Path(replay))
+-    report = CaptureReport(replay=str(replay), dataset_dir=str(out_dir))
++    report = CaptureReport(replay=str(replay), dataset_dir=str(out_dir), frame_proof=PROOF_UNKNOWN)
+     writer = ShardWriter(
+         out_dir,
+         shard_size=shard_size,
+         tag=tag,
+-        provenance={"replay": str(replay), "tag": tag, "stage_start": stage},
++        provenance={
++            "replay": str(replay),
++            "tag": tag,
++            "stage_start": stage,
++            "frameProof": PROOF_UNKNOWN,
++        },
+     )
+     session = GameSession(SessionOptions(run_dir=work))
+     started = time.time()
+@@ -240,12 +299,180 @@ def capture_replay(
+         report.frames = int(summary["frames"])
+         report.foreground_fixes = foreground_fixes
+         session.close()
++        # U01-06: keep the old path, but say explicitly what it cannot prove.
++        # A reader must never have to infer "this directory has no proof, so it
++        # is probably fine".
++        try:
++            from .exact_capture import write_unknown_proof
++
++            write_unknown_proof(
++                out_dir,
++                frames=int(summary["frames"]),
++                source="capture_replay/legacy-gdi",
++                reason=(
++                    "the free-running GDI capture cannot prove the saved pixels and the memory read "
++                    "describe the same presented frame"
++                ),
++            )
++        except Exception as exc:  # report, do not fail, a completed legacy capture
++            report.ended_reason = f"{report.ended_reason} (proof marker failed: {exc!r})"
+         (out_dir / "capture-report.json").write_text(
+             json.dumps(report.as_dict(), ensure_ascii=False, indent=2), encoding="utf-8"
+         )
+     return report
+ 
+ 
++def _capture_exact(
++    replay: Path,
++    out_dir: Path,
++    *,
++    exact,
++    tag: str = "exact",
++    stage: int | None = None,
++    start_timeout: float = 60.0,
++    verbose: bool = True,
++) -> CaptureReport:
++    """Frame-fence probe of a replay; publishes ``frame-proof.json`` or nothing.
++
++    Everything from preflight to publication lives in
++    :mod:`touhou_rl.exact_capture`; this function only owns the game session, the
++    fence bring-up and the cleanup order (release the hold, release keys, close
++    the process).  No cleanup error may replace the original capture failure.
++    """
++    from . import exact_capture
++    from .framefence import FenceFrameSampler, FrameFence
++
++    exact_capture.verify_loaded_address_source()
++    identity = exact_capture.inspect_build(
++        exact.build_exe, exact.build_map, exact.address_table
++    )
++    environment = exact_capture.collect_environment(
++        extra={
++            "captureMode": "replay",
++            "trialMode": bool(exact.trial),
++            "template": str(exact.template_dir or exact_capture.FENCE_TEMPLATE),
++        }
++    )
++    if exact.replay is None:
++        exact.replay = Path(replay)
++    template = Path(exact.template_dir or exact_capture.FENCE_TEMPLATE)
++    work = Path(
++        exact.work_dir
++        or (ROOT / "third_party/th08/build/rl/exact-capture-session")
++    )
++    prepare_run_dir(work, template, windowed=True)
++    menu.install_replay(work, Path(replay))
++    report = CaptureReport(
++        replay=str(replay), dataset_dir=str(out_dir), frame_proof=PROOF_EXACT
++    )
++    session = GameSession(SessionOptions(run_dir=work))
++    fence = None
++    fence_owned = False
++    started = time.time()
++    cleaned = False
++
++    def cleanup() -> list[str]:
++        nonlocal cleaned
++        if cleaned:
++            return []
++        cleaned = True
++        errors: list[str] = []
++        if fence is not None:
++            # Only touch the section when it proved to belong to our process: a
++            # stale section belongs to some other game and must not be disabled
++            # or acknowledged.
++            if fence_owned:
++                try:
++                    fence.disable()
++                except Exception as exc:
++                    errors.append(f"fence.disable failed: {type(exc).__name__}: {exc}")
++            try:
++                fence.close()
++            except Exception as exc:
++                errors.append(f"fence.close failed: {type(exc).__name__}: {exc}")
++        try:
++            if session.keyboard is not None:
++                session.keyboard.release_all()
++        except Exception as exc:
++            errors.append(f"keyboard.release_all failed: {type(exc).__name__}: {exc}")
++        try:
++            session.close()
++        except Exception as exc:
++            errors.append(f"session.close failed: {type(exc).__name__}: {exc}")
++        return errors
++
++    try:
++        session.start()
++        fence = FrameFence.open(timeout=float(exact.fence_open_timeout_s))
++        # The section must belong to the process we started: a stale section from
++        # a previous run would let us ack another game's ticket.
++        exact_capture.verify_fence_pid(session.pid, fence.header())
++        fence_owned = True
++        # framefence.cpp publishes nothing while CTL_ENABLE is clear (it zeroes
++        # the ticket and returns), so publication is enabled *before* any ticket
++        # wait.  hold_every=0 = never hold, i.e. "publish, do not stop".
++        exact_capture.enable_fence_publication(fence, hold_max_us=int(exact.hold_max_us))
++        resolved_stage = (
++            int(exact.stage) if exact.stage is not None else resolve_stage(stage, Path(replay))
++        )
++        menu.enter_replay(session, stage=int(resolved_stage), timeout=float(start_timeout))
++        if session.keyboard is not None:
++            session.keyboard.release_all()
++        # A title-screen/menu frame is also "same frame" but is not gameplay data.
++        exact_capture.wait_for_gameplay(
++            session, timeout=float(exact.gameplay_timeout_s)
++        )
++        # Acknowledge one ordinary ticket, then switch to the hold+pixels mode.
++        exact_capture.bootstrap_fence(fence, float(exact.bootstrap_timeout_s))
++        exact_capture.arm_fence_hold(
++            fence,
++            hold_every=int(exact.hold_every),
++            hold_min_us=int(exact.hold_min_us),
++            hold_max_us=int(exact.hold_max_us),
++        )
++        sampler = FenceFrameSampler(
++            session,
++            fence,
++            with_pixels=True,
++            with_enemies=True,
++            verify_pixels=True,
++            accept_current=True,
++            fail_fast=True,
++        )
++        manifest = exact_capture.run_exact_capture(
++            exact,
++            sampler,
++            identity=identity,
++            environment=environment,
++            cleanup=cleanup,
++        )
++        report.frames = int(manifest["frames"])
++        report.ended_reason = "exact proof manifest published"
++        report.exact_manifest = {
++            key: value
++            for key, value in manifest.items()
++            if key not in {"artifacts", "environment", "build"}
++        }
++        report.final_state = {
++            "ticket": manifest["tickets"]["last"],
++            "frame": manifest["logicFrames"]["last"],
++        }
++    finally:
++        # Runs when the failure happened before run_exact_capture took ownership;
++        # it is idempotent, so the successful path does not clean up twice.
++        cleanup()
++        report.elapsed_seconds = time.time() - started
++        target = Path(out_dir)
++        if target.is_dir():
++            try:
++                (target / "capture-report.json").write_text(
++                    json.dumps(report.as_dict(), ensure_ascii=False, indent=2), encoding="utf-8"
++                )
++            except OSError:  # a diagnostics file must never mask the capture result
++                pass
++    return report
++
++
+ def main(argv: list[str] | None = None) -> int:
+     parser = argparse.ArgumentParser(description="Capture TH08 replay frames into a BC dataset")
+     parser.add_argument("--replay", required=True)
+diff --git a/touhou_rl/dataset.py b/touhou_rl/dataset.py
+index d960e99..a6db34a 100644
+--- a/touhou_rl/dataset.py
++++ b/touhou_rl/dataset.py
+@@ -20,6 +20,12 @@ key                     shape/dtype       meaning
+ 
+ ``meta.dtype == float32`` is deliberate: it keeps shards to a single numeric
+ kind per file while still allowing exact integer round-trips up to 2^24 frames.
++
++v3.7.5 WP1 adds opt-in ``extra_arrays``: named integer columns stored as real
++arrays next to ``meta`` (for example the exact-capture ``proof_index``).  They are
++declared at construction time and written into every shard of that writer; a
++per-frame value that is neither a ``META_FIELDS`` entry nor a declared extra
++array raises under ``strict_meta=True`` instead of being dropped silently.
+ """
+ 
+ from __future__ import annotations
+@@ -40,13 +46,23 @@ META_FIELDS = ("frame", "stage", "score", "graze", "lives", "bombs", "power", "d
+ 
+ @dataclass
+ class ShardWriter:
+-    """Accumulates frames in memory and writes compressed ``.npz`` shards."""
++    """Accumulates frames in memory and writes compressed ``.npz`` shards.
++
++    ``extra_arrays`` declares additional per-frame integer columns (for example
++    the exact-capture ``proof_index``).  They are real arrays in the shard, not
++    extra keys inside the fixed-width ``meta`` matrix -- writing a dictionary
++    into ``meta`` would be silently dropped, which is precisely how a proof
++    association can go missing.  ``strict_meta=True`` turns an undeclared
++    per-frame field into an error instead of a silent drop.
++    """
+ 
+     out_dir: Path
+     shard_size: int = 2048
+     tag: str = "replay"
+     provenance: dict = field(default_factory=dict)
+     allow_append: bool = False
++    extra_arrays: dict = field(default_factory=dict)
++    strict_meta: bool = False
+ 
+     def __post_init__(self) -> None:
+         self.out_dir = Path(self.out_dir)
+@@ -57,6 +73,8 @@ class ShardWriter:
+                 f"{self.out_dir} already contains {len(existing)} '{self.tag}' shards; "
+                 "capturing into it would mix runs. Remove it or pass allow_append=True."
+             )
++        if "meta" in self.extra_arrays:
++            raise ValueError("extra_arrays must not shadow the fixed 'meta' matrix")
+         self._self = np.zeros((self.shard_size, obs.N_SELF), dtype=np.float32)
+         self._bullets = np.zeros(
+             (self.shard_size, obs.N_BULLETS, obs.N_BULLET_FEATURES), dtype=np.float16
+@@ -64,6 +82,10 @@ class ShardWriter:
+         self._danger = np.zeros((self.shard_size, obs.DANGER_ROWS, obs.DANGER_COLS), dtype=np.uint8)
+         self._action = np.zeros((self.shard_size, 4), dtype=np.uint8)
+         self._meta = np.zeros((self.shard_size, len(META_FIELDS)), dtype=np.float32)
++        self._extra = {
++            name: np.zeros((self.shard_size,), dtype=np.dtype(dtype))
++            for name, dtype in dict(self.extra_arrays).items()
++        }
+         self._n = 0
+         self.total = 0
+         self.shards: list[str] = []
+@@ -74,11 +96,23 @@ class ShardWriter:
+ 
+     def add(self, observation: Observation, action: tuple[int, int, int, int], meta: dict) -> None:
+         i = self._n
++        missing = [name for name in META_FIELDS if name not in meta]
++        if missing:
++            raise KeyError(f"missing meta fields: {missing}")
++        if self.strict_meta:
++            unknown = sorted(set(meta) - set(META_FIELDS) - set(self.extra_arrays))
++            if unknown:
++                raise KeyError(f"meta fields {unknown} would be dropped; declare them in extra_arrays")
++        for name in self._extra:
++            if name not in meta:
++                raise KeyError(f"extra array {name!r} requires a per-frame value in meta")
+         self._self[i] = observation.self_feat
+         self._bullets[i] = observation.bullets
+         self._danger[i] = observation.danger_map
+         self._action[i] = np.asarray(action, dtype=np.uint8)
+         self._meta[i] = [float(meta[name]) for name in META_FIELDS]
++        for name, array in self._extra.items():
++            array[i] = meta[name]
+         self._n += 1
+         self.total += 1
+         if self._n >= self.shard_size:
+@@ -91,14 +125,15 @@ class ShardWriter:
+         name = f"{self.tag}-{self._index:05d}.npz"
+         self._index += 1
+         path = self.out_dir / name
+-        np.savez_compressed(
+-            path,
+-            self_feat=self._self[:n],
+-            bullets=self._bullets[:n],
+-            danger=self._danger[:n],
+-            action=self._action[:n],
+-            meta=self._meta[:n],
+-        )
++        payload = {
++            "self_feat": self._self[:n],
++            "bullets": self._bullets[:n],
++            "danger": self._danger[:n],
++            "action": self._action[:n],
++            "meta": self._meta[:n],
++            **{key: array[:n] for key, array in self._extra.items()},
++        }
++        np.savez_compressed(path, **payload)
+         self.shards.append(name)
+         sidecar = {
+             "shard": name,
+@@ -107,6 +142,8 @@ class ShardWriter:
+             "total_frames": int(self.total),
+             **self.provenance,
+         }
++        if self._extra:
++            sidecar["extraArrays"] = sorted(self._extra)
+         (self.out_dir / f"{name}.json").write_text(
+             json.dumps(sidecar, ensure_ascii=False, indent=2), encoding="utf-8"
+         )
+diff --git a/touhou_rl/frame_proof.py b/touhou_rl/frame_proof.py
+index 86c6e74..0d0d885 100644
+--- a/touhou_rl/frame_proof.py
++++ b/touhou_rl/frame_proof.py
+@@ -17,6 +17,8 @@ canonical list lives here so a rename cannot silently drop a check.
+ 
+ from __future__ import annotations
+ 
++import hashlib
++import json
+ from dataclasses import dataclass, field
+ from pathlib import Path
+ from typing import Iterable, Mapping
+@@ -25,6 +27,18 @@ PROOF_EXACT = "exact"
+ PROOF_UNKNOWN = "alignment_unknown"
+ PROOF_LEVELS = (PROOF_EXACT, PROOF_UNKNOWN)
+ 
++# v3.7.5 explicit schema for anything this module writes or reads back as an
++# exact-capture artifact (``proofs.jsonl`` rows and ``frame-proof.json``).  The
++# legacy fence tools wrote a manifest without a version; both are readable, but
++# only records validated against this schema may back an ``exact`` claim.
++PROOF_SCHEMA = "v375-frame-proof/1"
++PROOF_MANIFEST_NAME = "frame-proof.json"
++PROOF_ROWS_NAME = "proofs.jsonl"
++FRAMES_DIRNAME = "frames"
++FAILURE_NAME = "exact-failure.json"
++STATUS_COMPLETE = "complete"
++STATUS_FAILED = "failed"
++
+ REQUIRED_CHECKS = (
+     "hold_stable",
+     "player_position",
+@@ -44,11 +58,105 @@ CHECK_COUNT = len(REQUIRED_CHECKS)
+ 
+ BUILD_IDENTITY_KEYS = ("exeSha256", "textSha256", "addressTableSha256")
+ ENVIRONMENT_KEYS = ("platform", "gpu", "python", "gitHead")
++# The exact (v3.7.5) schema also records the display/window condition: a frame
++# captured in a state where the window could not present is not evidence of the
++# same pixels the game drew, so an "exact" dataset without it is incomplete.
++ENVIRONMENT_KEYS_EXACT = ENVIRONMENT_KEYS + ("display",)
++
++# Pixel-content contract: what ``pixel_sha256`` hashes.  Stated explicitly so a
++# PNG-file SHA and a pixel-content SHA can never be confused for one another.
++PIXEL_SHAPE = (480, 640, 3)
++PIXEL_DTYPE = "uint8"
++PIXEL_CHANNEL_ORDER = "RGB"
++
++
++def pixel_contract() -> dict:
++    """Machine-readable description of the array ``pixel_sha256`` hashes."""
++    return {
++        "shape": list(PIXEL_SHAPE),
++        "dtype": PIXEL_DTYPE,
++        "channelOrder": PIXEL_CHANNEL_ORDER,
++        "byteOrder": "C",
++    }
++
++
++def normalize_sha256(value: object, *, field: str = "sha256") -> str:
++    """Lower-case 64-hex normalisation for the v3.7.5 schema.
++
++    The legacy fence tools emitted upper-case digests (``frame_proof.sha256_file``
++    and ``frame_fence_capture.py`` do).  Reading normalises explicitly; the old
++    evidence files are never rewritten in place.
++    """
++    text = str(value or "").strip()
++    if len(text) != 64 or any(character not in "0123456789abcdefABCDEF" for character in text):
++        raise ValueError(f"{field} must be 64 hex characters, got {value!r}")
++    return text.lower()
++
++
++def identity_ref(block: Mapping[str, object]) -> str:
++    """Stable reference for a build/environment block (lower-case sha256)."""
++    payload = json.dumps(dict(block), sort_keys=True, separators=(",", ":"), ensure_ascii=True)
++    return hashlib.sha256(payload.encode("utf-8")).hexdigest()
++
++
++def pixel_sha256(image) -> str:
++    """SHA256 of the raw pixel bytes, with the array shape/dtype made explicit.
++
++    Refuses an array that does not match :func:`pixel_contract`.  This is *not*
++    the PNG file hash: re-encoding the same pixels changes the file hash and not
++    this one, and the exact schema records both.
++    """
++    import numpy as np
++
++    array = np.asarray(image)
++    if array.shape != PIXEL_SHAPE:
++        raise ValueError(f"pixels must have shape {PIXEL_SHAPE}, got {array.shape}")
++    if array.dtype != np.uint8:
++        raise ValueError(f"pixels must be {PIXEL_DTYPE}, got {array.dtype}")
++    if not array.flags["C_CONTIGUOUS"]:
++        array = np.ascontiguousarray(array)
++    return hashlib.sha256(array.tobytes(order="C")).hexdigest()
++
++
++def encode_png_bytes(image, *, compress_level: int = 1) -> bytes:
++    """Encode a pixel array as PNG bytes, after checking the pixel contract."""
++    from io import BytesIO
++
++    import numpy as np
++    from PIL import Image
++
++    pixel_sha256(image)  # rejects a wrongly shaped/dtyped array before any write
++    buffer = BytesIO()
++    Image.fromarray(np.ascontiguousarray(np.asarray(image))).save(
++        buffer, format="PNG", compress_level=int(compress_level)
++    )
++    return buffer.getvalue()
++
++
++def decode_png_pixels(path) -> "object":
++    """Decode a PNG back to the contracted RGB array (used by deep audit)."""
++    import numpy as np
++    from PIL import Image
++
++    with Image.open(Path(path)) as handle:
++        array = np.asarray(handle.convert(PIXEL_CHANNEL_ORDER), dtype=np.uint8)
++    if array.shape != PIXEL_SHAPE:
++        raise ValueError(f"{path}: decoded pixels have shape {array.shape}, expected {PIXEL_SHAPE}")
++    return np.ascontiguousarray(array)
++
++
+ 
+ 
+ @dataclass(frozen=True)
+ class FrameProofRecord:
+-    """Provenance of one captured frame."""
++    """Provenance of one captured frame.
++
++    Fields from ``sample_index`` on were added by v3.7.5 WP1.1; all have
++    defaults so records built by the older fence tools still load unchanged.
++    ``build``/``environment`` may be left empty when the record references a
++    dataset-level identity instead (``build_ref``/``environment_ref``); the
++    validator takes the dataset identity as an explicit fallback.
++    """
+ 
+     proof: str
+     logic_frame: int
+@@ -60,6 +168,15 @@ class FrameProofRecord:
+     environment: Mapping[str, object] = field(default_factory=dict)
+     hold_us: int | None = None
+     note: str = ""
++    # --- v3.7.5 exact schema -------------------------------------------
++    sample_index: int | None = None
++    hold_phase: int | None = None
++    pixel_sha256: str = ""
++    state_summary: Mapping[str, object] = field(default_factory=dict)
++    input_readback: int | None = None
++    timings_us: Mapping[str, float] = field(default_factory=dict)
++    build_ref: str = ""
++    environment_ref: str = ""
+ 
+     def as_dict(self) -> dict:
+         return {
+@@ -73,48 +190,188 @@ class FrameProofRecord:
+             "environment": dict(self.environment),
+             "holdUs": None if self.hold_us is None else int(self.hold_us),
+             "note": self.note,
++            "sampleIndex": None if self.sample_index is None else int(self.sample_index),
++            "holdPhase": None if self.hold_phase is None else int(self.hold_phase),
++            "pixelSha256": self.pixel_sha256,
++            "stateSummary": dict(self.state_summary),
++            "inputReadback": None if self.input_readback is None else int(self.input_readback),
++            "timingsUs": {
++                str(key): round(float(value), 1) for key, value in dict(self.timings_us).items()
++            },
++            "buildRef": self.build_ref,
++            "environmentRef": self.environment_ref,
+         }
+ 
+ 
++_ROW_FIELDS = frozenset(
++    {
++        "proof",
++        "logicFrame",
++        "ticket",
++        "checks",
++        "imageSha256",
++        "imagePath",
++        "build",
++        "environment",
++        "holdUs",
++        "note",
++        "sampleIndex",
++        "holdPhase",
++        "pixelSha256",
++        "stateSummary",
++        "inputReadback",
++        "timingsUs",
++        "buildRef",
++        "environmentRef",
++    }
++)
++
++
++def record_from_dict(payload: Mapping[str, object]) -> FrameProofRecord:
++    """Read one proof row back, refusing unknown fields.
++
++    An unknown field means the row is from a newer/foreign schema; silently
++    ignoring it would let an unreviewed claim ride along inside an exact dataset.
++    """
++    unknown = sorted(set(payload) - _ROW_FIELDS)
++    if unknown:
++        raise ValueError(f"unknown frame-proof fields: {unknown}")
++    ticket = payload.get("ticket")
++    hold_us = payload.get("holdUs")
++    sample_index = payload.get("sampleIndex")
++    hold_phase = payload.get("holdPhase")
++    readback = payload.get("inputReadback")
++    return FrameProofRecord(
++        proof=str(payload.get("proof", "")),
++        logic_frame=int(payload.get("logicFrame", -1)),
++        ticket=None if ticket is None else int(ticket),
++        checks={str(key): bool(value) for key, value in dict(payload.get("checks") or {}).items()},
++        image_sha256=str(payload.get("imageSha256", "")),
++        image_path=str(payload.get("imagePath", "")),
++        build={str(key): str(value) for key, value in dict(payload.get("build") or {}).items()},
++        environment=dict(payload.get("environment") or {}),
++        hold_us=None if hold_us is None else int(hold_us),
++        note=str(payload.get("note", "")),
++        sample_index=None if sample_index is None else int(sample_index),
++        hold_phase=None if hold_phase is None else int(hold_phase),
++        pixel_sha256=str(payload.get("pixelSha256", "")),
++        state_summary=dict(payload.get("stateSummary") or {}),
++        input_readback=None if readback is None else int(readback),
++        timings_us={
++            str(key): float(value) for key, value in dict(payload.get("timingsUs") or {}).items()
++        },
++        build_ref=str(payload.get("buildRef", "")),
++        environment_ref=str(payload.get("environmentRef", "")),
++    )
++
++
++
+ def unknown_record(logic_frame: int, **kwargs) -> FrameProofRecord:
+     """A frame the capture path cannot prove; the honest default."""
+     return FrameProofRecord(proof=PROOF_UNKNOWN, logic_frame=int(logic_frame), **kwargs)
+ 
+ 
+-def validate_exact(record: FrameProofRecord) -> list[str]:
+-    """Reasons why ``record`` cannot be labelled ``exact`` (empty == it can)."""
++def missing_or_failed_checks(checks: Mapping[str, bool]) -> tuple[list[str], list[str], list[str]]:
++    """``(missing, failed, extra)`` for the 13 canonical checks.
++
++    ``all(checks.values())`` is ``True`` for an *empty* mapping, so every caller
++    that makes an exact claim must use this instead of a truthiness shortcut.
++    """
++    missing = [name for name in REQUIRED_CHECKS if name not in checks]
++    failed = [name for name in REQUIRED_CHECKS if checks.get(name) is not True]
++    extra = [name for name in checks if name not in REQUIRED_CHECKS]
++    return missing, failed, extra
++
++
++def validate_exact(
++    record: FrameProofRecord,
++    *,
++    build: Mapping[str, str] | None = None,
++    environment: Mapping[str, object] | None = None,
++    environment_keys: tuple[str, ...] = ENVIRONMENT_KEYS,
++) -> list[str]:
++    """Reasons why ``record`` cannot be labelled ``exact`` (empty == it can).
++
++    ``build``/``environment`` are dataset-level fallbacks for the v3.7.5 rows
++    that reference the manifest identity instead of repeating it per row.
++    """
+     problems: list[str] = []
++    identity = dict(record.build) or dict(build or {})
++    fingerprint = dict(record.environment) or dict(environment or {})
+     if record.proof != PROOF_EXACT:
+         problems.append(f"proof is {record.proof!r}, not {PROOF_EXACT!r}")
+     if record.ticket is None or int(record.ticket) <= 0:
+         problems.append("missing ticket")
+     if not isinstance(record.logic_frame, int) or record.logic_frame < 0:
+         problems.append("invalid logicFrame")
+-    missing = [name for name in REQUIRED_CHECKS if name not in record.checks]
++    missing, failed, _extra = missing_or_failed_checks(record.checks)
+     if missing:
+         problems.append(f"missing checks: {','.join(missing)}")
+-    failed = [name for name in REQUIRED_CHECKS if record.checks.get(name) is not True]
+     if failed:
+         problems.append(f"failed checks: {','.join(failed)}")
+-    extra = [name for name in record.checks if name not in REQUIRED_CHECKS]
+-    if extra:
+-        # Extra checks are allowed, but they must not substitute for the 13.
+-        pass
+-    if len(record.image_sha256) != 64 or any(
+-        character not in "0123456789ABCDEF" for character in record.image_sha256
+-    ):
+-        problems.append("imageSha256 must be 64 upper-case hex characters")
++    try:
++        normalize_sha256(record.image_sha256, field="imageSha256")
++    except ValueError:
++        # Accept lower-case (v3.7.5) and upper-case (legacy fence tool) digests.
++        problems.append("imageSha256 must be 64 hex characters")
+     if not record.image_path:
+         problems.append("missing imagePath")
+     for key in BUILD_IDENTITY_KEYS:
+-        if not record.build.get(key):
++        if not identity.get(key):
+             problems.append(f"missing build.{key}")
+-    for key in ENVIRONMENT_KEYS:
+-        if key not in record.environment:
++    for key in environment_keys:
++        if key not in fingerprint or not fingerprint.get(key):
+             problems.append(f"missing environment.{key}")
+     return problems
+ 
+ 
++def validate_exact_row(
++    record: FrameProofRecord,
++    *,
++    build: Mapping[str, str] | None = None,
++    environment: Mapping[str, object] | None = None,
++) -> list[str]:
++    """Stricter v3.7.5 row validation used by the exact dataset audit.
++
++    Beyond :func:`validate_exact` this requires the per-frame fields the trial
++    capture contract names: sample index, hold phase, pixel-content SHA, state
++    summary, read-back input, reader timings, and identity references that match
++    the dataset-level build/environment blocks.
++    """
++    problems = validate_exact(
++        record, build=build, environment=environment, environment_keys=ENVIRONMENT_KEYS_EXACT
++    )
++    if record.sample_index is None or int(record.sample_index) < 0:
++        problems.append("missing sampleIndex")
++    if record.hold_phase is None or int(record.hold_phase) != 1:
++        problems.append("holdPhase must be 1 for a frame read inside the hold")
++    try:
++        normalize_sha256(record.pixel_sha256, field="pixelSha256")
++    except ValueError:
++        problems.append("pixelSha256 must be 64 hex characters (pixel content, not the PNG file)")
++    if not record.state_summary:
++        problems.append("missing stateSummary")
++    if record.input_readback is None:
++        problems.append("missing inputReadback")
++    if "total" not in record.timings_us:
++        problems.append("missing timingsUs.total")
++    if record.hold_us is None or int(record.hold_us) < 0:
++        problems.append("missing holdUs")
++    if build is not None:
++        expected = identity_ref(build)
++        if record.build_ref and record.build_ref != expected:
++            problems.append("buildRef does not match the dataset build identity")
++        elif not record.build_ref and not record.build:
++            problems.append("missing buildRef")
++    if environment is not None:
++        expected = identity_ref(environment)
++        if record.environment_ref and record.environment_ref != expected:
++            problems.append("environmentRef does not match the dataset environment")
++        elif not record.environment_ref and not record.environment:
++            problems.append("missing environmentRef")
++    return problems
++
++
+ def require_exact(records: Iterable[FrameProofRecord]) -> None:
+     """Raise unless every record is a valid ``exact`` record."""
+     reasons: list[str] = []
+diff --git a/touhou_rl/framefence.py b/touhou_rl/framefence.py
+index bb1134f..93c595f 100644
+--- a/touhou_rl/framefence.py
++++ b/touhou_rl/framefence.py
+@@ -392,12 +392,35 @@ class FrameSample:
+     timings_us: dict[str, float] = field(default_factory=dict)
+     pixels: np.ndarray | None = None
+     fence_pixels: np.ndarray | None = None
++    # The bullet field read *inside* the same hold.  It used to be dropped here,
++    # which forced callers to re-read it after the hold was released -- and that
++    # re-read is exactly the sampling error the fence exists to remove.
++    bullets: object | None = None
+     note: str = ""
+ 
+     @property
+     def ok(self) -> bool:
+         return all(self.checks.values())
+ 
++    @property
++    def problems(self) -> list[str]:
++        """Named reasons why this sample cannot back an ``exact`` claim."""
++        from .frame_proof import missing_or_failed_checks
++
++        missing, failed, _extra = missing_or_failed_checks(self.checks)
++        return [f"missing check {name}" for name in missing] + [
++            f"failed check {name}" for name in failed
++        ]
++
++    @property
++    def strict_ok(self) -> bool:
++        """All 13 checks present *and* strictly ``True``.
++
++        ``ok`` is not enough: an empty ``checks`` mapping is truthy under
++        ``all()``, which would turn a sampler bug into a false exact claim.
++        """
++        return not self.problems and self.ok
++
+ 
+ class FenceFrameSampler:
+     """Implements the ticket -> capture -> verify -> ack protocol.
+@@ -405,6 +428,10 @@ class FenceFrameSampler:
+     ``next()`` returns a sample only when the whole capture happened inside one
+     hold window; otherwise it retries (a hold that expires mid-read is reported
+     in ``note``).
++
++    Every failed attempt is recorded in ``failures``/``last_failure`` so a caller
++    that must stop on the first failure (``fail_fast=True``, used by the exact
++    capture path) can report *why* instead of just seeing ``None``.
+     """
+ 
+     def __init__(
+@@ -417,6 +444,7 @@ class FenceFrameSampler:
+         verify_pixels: bool = True,
+         on_hold=None,
+         accept_current: bool = False,
++        fail_fast: bool = False,
+     ):
+         self.session = session
+         self.fence = fence
+@@ -439,21 +467,40 @@ class FenceFrameSampler:
+         # this sampler waits for a *newer* ticket.  `accept_current=True` consumes
+         # the ticket that is holding right now instead, which removes that waste.
+         self.accept_current = accept_current
++        # Exact capture must stop on the first failure instead of retrying until
++        # it happens to catch a good frame: "3000 valid, 0 discarded" is only
++        # meaningful if a failed attempt is fatal and visible.
++        self.fail_fast = bool(fail_fast)
+         self.last_ticket = 0
+         self.samples = 0
+         self.retries = 0
+         self.last_hold_us = 0
+         self.on_hold_calls = 0
+         self.on_hold_errors: list[str] = []
++        self.failures: list[str] = []
++        self.last_failure: str | None = None
++        self.attempts = 0
++
++    def _record_failure(self, reason: str) -> None:
++        self.retries += 1
++        self.last_failure = reason
++        self.failures.append(reason)
++        if len(self.failures) > 256:  # bounded: a long-running failure must not grow without limit
++            del self.failures[:-256]
+ 
+     def _still_held(self, ticket: int) -> bool:
+         return self.fence.ticket == ticket and self.fence.hold_phase == 1
+ 
+-    def next(self, timeout: float = 2.0, attempts: int = 8) -> FrameSample | None:
+-        for _ in range(attempts):
++    def next(self, timeout: float = 2.0, attempts: int = 8, fail_fast: bool | None = None) -> FrameSample | None:
++        fast = self.fail_fast if fail_fast is None else bool(fail_fast)
++        tries = 1 if fast else max(1, int(attempts))
++        for _ in range(tries):
++            self.attempts += 1
+             sample = self._attempt(timeout)
+             if sample is not None:
+                 return sample
++            if fast:
++                return None
+         return None
+ 
+     def _attempt(self, timeout: float) -> FrameSample | None:
+@@ -472,13 +519,17 @@ class FenceFrameSampler:
+                     ticket = current
+                     break
+         if not ticket:
++            self._record_failure(f"no held ticket within {timeout:.3f}s")
+             return None
+ 
+         t0 = wait_started
+         t_hold = time.perf_counter()
+         telemetry = self.fence.telemetry()
+         if telemetry.ticket != ticket or telemetry.hold_phase != 1:
+-            self.retries += 1
++            self._record_failure(
++                f"telemetry does not belong to ticket {ticket} "
++                f"(telemetry ticket {telemetry.ticket}, hold_phase {telemetry.hold_phase})"
++            )
+             return None
+ 
+         if self.on_hold is not None:
+@@ -494,11 +545,11 @@ class FenceFrameSampler:
+         if self.verify_pixels:
+             blit_a = np.ascontiguousarray(self.session.grab())
+             if not self._still_held(ticket):
+-                self.retries += 1
++                self._record_failure(f"hold expired before the first pixel read (ticket {ticket})")
+                 return None
+             blit_b = np.ascontiguousarray(self.session.grab())
+             if not self._still_held(ticket):
+-                self.retries += 1
++                self._record_failure(f"hold expired before the second pixel read (ticket {ticket})")
+                 return None
+         else:
+             blit_a = blit_b = None
+@@ -516,7 +567,7 @@ class FenceFrameSampler:
+         if not self._still_held(ticket):
+             # The hold budget expired while we were reading: the sample we just
+             # took may straddle two presents, so it cannot be used.
+-            self.retries += 1
++            self._record_failure(f"hold expired after the state read (ticket {ticket})")
+             self.last_ticket = ticket
+             self.fence.ack(ticket)
+             return None
+@@ -574,6 +625,7 @@ class FenceFrameSampler:
+             },
+             pixels=blit_a,
+             fence_pixels=fence_pixels,
++            bullets=bullets,
+         )
+ 
+ 
+diff --git a/touhou_rl/pipeline/cli.py b/touhou_rl/pipeline/cli.py
+index cf22bbe..6f77b3f 100644
+--- a/touhou_rl/pipeline/cli.py
++++ b/touhou_rl/pipeline/cli.py
+@@ -1,18 +1,28 @@
+ """Command line for the three pipeline stages.
+ 
+     python -m touhou_rl.pipeline collect --modality vision --replay ... --out ...
++    python -m touhou_rl.pipeline collect --frame-proof exact --exact-config ... --out ...
+     python -m touhou_rl.pipeline process --raw ... [--out ...]
+     python -m touhou_rl.pipeline train   --manifest ... --model vision --out ...
+     python -m touhou_rl.pipeline inspect --manifest ...      # what did I actually build?
++    python -m touhou_rl.pipeline inspect --raw ... --deep    # re-hash an unprocessed capture
+ 
+ Each subcommand prints its report as JSON, so a shell pipeline can chain them and
+ a report can quote real numbers instead of remembered ones.
++
++Exit codes follow the v3.7.5 contract (``01-统一契约与验收协议.md`` §5): ``0``
++success, ``2`` invalid input/contract or a failed audit, ``3`` a missing external
++dependency (the game build), ``1`` an unclassified runtime failure.  Two existing
++behaviours changed for WP1 and are covered by regression tests: ``inspect`` now
++returns 2 when verification fails (it used to return 0 with ``verified: false``),
++and structured errors that used to escape as a traceback now return 2.
+ """
+ 
+ from __future__ import annotations
+ 
+ import argparse
+ import json
++import sys
+ from pathlib import Path
+ 
+ 
+@@ -32,6 +42,9 @@ def _collect(args: argparse.Namespace) -> dict:
+         team=args.team,
+         tag=args.tag,
+         overwrite=args.overwrite,
++        frame_proof=args.frame_proof,
++        exact_config=Path(args.exact_config) if args.exact_config else None,
++        trial=args.trial,
+         extra=(
+             {"epsilon": args.epsilon} if args.source == "teacher" and args.modality == "privileged" else
+             {
+@@ -59,6 +72,8 @@ def _process(args: argparse.Namespace) -> dict:
+         seed=args.seed,
+         val_fraction=args.val_fraction,
+         min_frames=args.min_frames,
++        require_exact=args.require_exact,
++        deep_proof=args.deep_proof,
+     )
+     return run_process(spec)
+ 
+@@ -88,6 +103,25 @@ def _train(args: argparse.Namespace) -> dict:
+ def _inspect(args: argparse.Namespace) -> dict:
+     from .manifest import DatasetManifest
+ 
++    if args.raw:
++        from ..exact_audit import audit_exact_dataset, load_proof_manifest
++
++        raw = Path(args.raw)
++        proof, proof_path = load_proof_manifest(raw)
++        payload = {
++            "raw": str(raw),
++            "proof_manifest": str(proof_path) if proof is not None else None,
++            "declared_frame_proof": (proof or {}).get("frameProof"),
++            "deep": bool(args.deep),
++        }
++        try:
++            payload["proof"] = audit_exact_dataset(raw, deep=args.deep)
++            payload["verified"] = True
++        except Exception as exc:  # report, do not raise: inspect is a diagnostic
++            payload["verified"] = False
++            payload["verification_error"] = f"{type(exc).__name__}: {exc}"
++        return payload
++
+     manifest = DatasetManifest.load(Path(args.manifest))
+     payload = manifest.summary()
+     try:
+@@ -97,6 +131,14 @@ def _inspect(args: argparse.Namespace) -> dict:
+     except Exception as exc:  # report, do not raise: inspect is a diagnostic
+         payload["verified"] = False
+         payload["verification_error"] = f"{type(exc).__name__}: {exc}"
++    if args.deep and manifest.proof:
++        from ..exact_audit import audit_exact_dataset
++
++        try:
++            payload["deep_proof"] = audit_exact_dataset(Path(manifest.root), deep=True)
++        except Exception as exc:
++            payload["verified"] = False
++            payload["deep_proof_error"] = f"{type(exc).__name__}: {exc}"
+     return payload
+ 
+ 
+@@ -125,6 +167,30 @@ def build_parser() -> argparse.ArgumentParser:
+     collect.add_argument("--practice-stage", type=int, default=-1)
+     collect.add_argument("--run-dir", default="")
+     collect.add_argument("--overwrite", action="store_true")
++    collect.add_argument(
++        "--frame-proof",
++        default="alignment_unknown",
++        choices=["alignment_unknown", "exact"],
++        help="exact = frame-fence proven frames (needs --exact-config; replay+privileged only)",
++    )
++    collect.add_argument(
++        "--exact-config",
++        default="",
++        help="v375-exact-capture/1 config describing the fence build, address table, hold and limits",
++    )
++    collect.add_argument(
++        "--trial",
++        dest="trial",
++        action="store_true",
++        default=None,
++        help="trial capture (teacher labels stay disabled in process); default: the exact config decides",
++    )
++    collect.add_argument(
++        "--no-trial",
++        dest="trial",
++        action="store_false",
++        help="force a non-trial capture even when the exact config says trial",
++    )
+     collect.set_defaults(func=_collect)
+ 
+     process = sub.add_parser("process", help="stage 2: validate, label, manifest")
+@@ -135,6 +201,16 @@ def build_parser() -> argparse.ArgumentParser:
+     process.add_argument("--seed", type=int, default=7)
+     process.add_argument("--val-fraction", type=float, default=0.1)
+     process.add_argument("--min-frames", type=int, default=64)
++    process.add_argument(
++        "--require-exact",
++        action="store_true",
++        help="refuse a dataset without a verified exact frame-proof manifest",
++    )
++    process.add_argument(
++        "--deep-proof",
++        action="store_true",
++        help="re-hash every proof artifact (PNG bytes, pixel content, build identity)",
++    )
+     process.set_defaults(func=_process)
+ 
+     train = sub.add_parser("train", help="stage 3: manifest -> checkpoint + metrics")
+@@ -155,16 +231,53 @@ def build_parser() -> argparse.ArgumentParser:
+     train.set_defaults(func=_train)
+ 
+     inspect = sub.add_parser("inspect", help="diagnostic: does the manifest still match the data?")
+-    inspect.add_argument("--manifest", required=True)
+-    inspect.add_argument("--deep", action="store_true", help="re-hash every shard")
++    inspect_target = inspect.add_mutually_exclusive_group(required=True)
++    inspect_target.add_argument("--manifest", default="")
++    inspect_target.add_argument(
++        "--raw",
++        default="",
++        help="audit an unprocessed capture directory against its frame-proof manifest",
++    )
++    inspect.add_argument("--deep", action="store_true", help="re-hash every shard and proof artifact")
+     inspect.set_defaults(func=_inspect)
+     return parser
+ 
+ 
++def _structured_error(exc: BaseException, exit_code: int) -> int:
++    payload = {
++        "error": {
++            "type": type(exc).__name__,
++            "message": str(exc),
++            "exit_code": int(exit_code),
++        }
++    }
++    print(json.dumps(payload, ensure_ascii=False, indent=2), file=sys.stderr)
++    return int(exit_code)
++
++
+ def main(argv: list[str] | None = None) -> int:
++    from .manifest import ManifestError
++
+     args = build_parser().parse_args(argv)
+-    result = args.func(args)
++    try:
++        result = args.func(args)
++    except ManifestError as exc:  # invalid data / failed audit
++        return _structured_error(exc, 2)
++    except (ValueError, FileExistsError, KeyError) as exc:  # argument/contract violation
++        return _structured_error(exc, 2)
++    except RuntimeError as exc:
++        # Preflight/capture errors carry their WP0 exit code.  Imported lazily so
++        # this module never pulls touhou_rl.spec in before the address table is
++        # configured (that would defeat the deferred-import design).
++        exit_code = getattr(exc, "exit_code", None)
++        if exit_code is None:
++            raise
++        return _structured_error(exc, int(exit_code))
+     print(json.dumps(result, ensure_ascii=False, indent=2))
++    if isinstance(result, dict) and result.get("verified") is False:
++        # WP1.5: a failed verification is a non-zero result.  Compatibility note:
++        # ``inspect`` used to return 0 with "verified": false in the payload.
++        return 2
+     return 0
+ 
+ 
+diff --git a/touhou_rl/pipeline/collect/__init__.py b/touhou_rl/pipeline/collect/__init__.py
+index 755e787..10eef89 100644
+--- a/touhou_rl/pipeline/collect/__init__.py
++++ b/touhou_rl/pipeline/collect/__init__.py
+@@ -15,6 +15,11 @@ source               modality           implementation
+ The stage writes ``collect-report.json`` next to the shards.  It deliberately does
+ **not** compute teacher values or splits - that is the process stage's job, so a
+ capture can be re-processed with a different teacher without re-running the game.
++
++v3.7.5 WP1 adds the ``frame_proof`` switch.  ``exact`` is only supported for
++``replay`` + ``privileged``: every other combination is refused *before* the game
++starts instead of silently falling back to the legacy capture path (which can
++only ever be ``alignment_unknown``).
+ """
+ 
+ from __future__ import annotations
+@@ -24,10 +29,15 @@ import time
+ from dataclasses import dataclass, field
+ from pathlib import Path
+ 
++from ... import frame_proof
++
+ ROOT = Path(__file__).resolve().parents[3]
+ 
+ MODALITIES = ("privileged", "vision")
+ SOURCES = ("replay", "teacher")
++FRAME_PROOF_CHOICES = frame_proof.PROOF_LEVELS
++# source x modality combinations that the exact path actually implements
++EXACT_SUPPORTED = {("replay", "privileged")}
+ 
+ 
+ @dataclass
+@@ -49,6 +59,11 @@ class CollectSpec:
+     overwrite: bool = False
+     verbose: bool = True
+     extra: dict = field(default_factory=dict)
++    # v3.7.5 WP1
++    frame_proof: str = frame_proof.PROOF_UNKNOWN
++    exact_config: Path | None = None
++    # None = "whatever the exact config says"; --trial/--no-trial override it
++    trial: bool | None = None
+ 
+     def validate(self) -> None:
+         if self.modality not in MODALITIES:
+@@ -63,6 +78,30 @@ class CollectSpec:
+                 raise ValueError("source=teacher modality=vision requires extra.checkpoint")
+         if self.every < 1:
+             raise ValueError("every must be >= 1")
++        if self.frame_proof not in FRAME_PROOF_CHOICES:
++            raise ValueError(f"frame_proof must be one of {FRAME_PROOF_CHOICES}")
++        if self.frame_proof == frame_proof.PROOF_EXACT:
++            if (self.source, self.modality) not in EXACT_SUPPORTED:
++                raise ValueError(
++                    f"frame_proof=exact is not supported for source={self.source} "
++                    f"modality={self.modality}; refusing instead of falling back to a capture "
++                    "path that cannot prove same-frame alignment"
++                )
++            if self.exact_config is None:
++                raise ValueError("frame_proof=exact requires exact_config (a v375-exact-capture/1 file)")
++            if self.extra:
++                raise ValueError(
++                    f"frame_proof=exact does not accept extra options: {sorted(self.extra)}"
++                )
++            if self.overwrite:
++                raise ValueError(
++                    "frame_proof=exact always writes a new directory; --overwrite is refused"
++                )
++        elif self.exact_config is not None:
++            raise ValueError(
++                "exact_config only applies to frame_proof=exact; refusing an option that would be "
++                "ignored"
++            )
+ 
+ 
+ def _difficulty_code(name: str) -> int:
+@@ -84,6 +123,10 @@ def run_collect(spec: CollectSpec) -> dict:
+     report: dict
+ 
+     if spec.modality == "privileged" and spec.source == "replay":
++        if spec.frame_proof == frame_proof.PROOF_EXACT:
++            report = _run_exact_replay(spec, out_dir)
++            return _write_report(spec, out_dir, report, started)
++
+         from ...capture_dataset import capture_replay
+ 
+         report = capture_replay(
+@@ -155,20 +198,96 @@ def run_collect(spec: CollectSpec) -> dict:
+     else:  # pragma: no cover - guarded by validate()
+         raise NotImplementedError(spec.modality)
+ 
++    return _write_report(spec, out_dir, report, started)
++
++
++def _write_report(spec: CollectSpec, out_dir: Path, report: dict, started: float) -> dict:
++    trial = spec.trial
++    if trial is None:
++        # An exact run reports the mode it actually ran in; a legacy capture is
++        # never a trial capture of the frame fence.
++        exact = report.get("exact_manifest") if isinstance(report, dict) else None
++        trial = bool(exact.get("trialMode")) if isinstance(exact, dict) else False
+     payload = {
+         "stage": "collect",
+         "modality": spec.modality,
+         "source": spec.source,
++        "frame_proof": spec.frame_proof,
+         "out_dir": str(out_dir),
+         "difficulty": spec.difficulty,
+         "team": spec.team,
++        "trial": bool(trial),
+         "extra": spec.extra,
+         "elapsed_seconds": round(time.time() - started, 1),
+         "finished": time.strftime("%Y-%m-%dT%H:%M:%S"),
+         "report": report,
+     }
++    if spec.frame_proof == frame_proof.PROOF_EXACT:
++        import hashlib
++        from ...f2_labels import evidence_sha
++
++        def digest(path):
++            return hashlib.sha256(Path(path).read_bytes()).hexdigest()
++
++        config_path = Path(spec.exact_config)
++        collection_config = json.loads(config_path.read_text(encoding="utf-8"))
++        payload["capture_identity"] = {
++            "schema": "v376-replay-capture-identity/1",
++            "source": "replay",
++            "frame_proof": "exact",
++            "replay": str(Path(spec.replay).resolve()),
++            "replay_sha256": digest(spec.replay),
++            "collection_config": collection_config,
++            "config_sha256": evidence_sha(collection_config),
++            "collection_config_file_sha256": digest(config_path),
++            "exact_manifest_sha256": digest(out_dir / frame_proof.PROOF_MANIFEST_NAME),
++            "requested_stage": spec.stage,
++            "note": "Content identity of the supplied replay/config; exact proof certifies frames, not independent visual F2 review.",
++        }
+     out_dir.mkdir(parents=True, exist_ok=True)
+     (out_dir / "collect-report.json").write_text(
+         json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8"
+     )
+     return payload
++
++
++def _run_exact_replay(spec: CollectSpec, out_dir: Path) -> dict:
++    """Exact replay capture: activate the address table, then capture.
++
++    The address table must be configured before ``touhou_rl.spec`` is imported
++    anywhere (``capture_dataset`` imports it at module import), which is why this
++    function runs the deferred-import activation *first* and only then imports
++    the capture module.
++    """
++    from ... import exact_capture
++
++    if spec.overwrite:
++        raise ValueError(
++            "frame_proof=exact always writes a new directory; --overwrite would mix a failed run "
++            "with a successful one"
++        )
++    config = exact_capture.load_exact_config(
++        Path(spec.exact_config),
++        out_dir=out_dir,
++        replay=Path(spec.replay),
++        stage=None if spec.stage < 0 else spec.stage,
++        verbose=spec.verbose,
++    )
++    config.trial = bool(spec.trial) if spec.trial is not None else bool(config.trial)
++    identity = exact_capture.inspect_build(
++        config.build_exe, config.build_map, config.address_table
++    )
++    exact_capture.activate_address_table(config.address_table, identity=identity)
++    from ...capture_dataset import capture_replay
++
++    return capture_replay(
++        Path(spec.replay),
++        out_dir,
++        tag=spec.tag,
++        stage=None if spec.stage < 0 else spec.stage,
++        max_seconds=spec.max_seconds,
++        overwrite=False,
++        verbose=spec.verbose,
++        frame_proof=frame_proof.PROOF_EXACT,
++        exact=config,
++    ).as_dict()
+diff --git a/touhou_rl/pipeline/manifest.py b/touhou_rl/pipeline/manifest.py
+index 1edf408..34f2cf0 100644
+--- a/touhou_rl/pipeline/manifest.py
++++ b/touhou_rl/pipeline/manifest.py
+@@ -91,6 +91,10 @@ class DatasetManifest:
+     splits: dict = field(default_factory=dict)
+     stats: dict = field(default_factory=dict)
+     provenance: dict = field(default_factory=dict)
++    # Proof summary copied from the collect stage (``frame-proof.json``).  Empty
++    # for manifests written before v3.7.5.  ``verify`` re-derives it from disk:
++    # a hand-written "passed" string in here carries no authority.
++    proof: dict = field(default_factory=dict)
+ 
+     # -- construction ------------------------------------------------------
+     @classmethod
+@@ -107,6 +111,7 @@ class DatasetManifest:
+         val_fraction: float,
+         stats: dict,
+         provenance: dict,
++        proof: dict | None = None,
+     ) -> "DatasetManifest":
+         total = sum(shard.frames for shard in shards)
+         _train, val = split_indices(total, seed, val_fraction)
+@@ -128,6 +133,7 @@ class DatasetManifest:
+             },
+             stats=stats,
+             provenance=provenance,
++            proof=dict(proof or {}),
+         )
+ 
+     # -- io ----------------------------------------------------------------
+@@ -160,6 +166,7 @@ class DatasetManifest:
+             splits=payload.get("splits", {}),
+             stats=payload.get("stats", {}),
+             provenance=payload.get("provenance", {}),
++            proof=payload.get("proof", {}) or {},
+         )
+ 
+     # -- validation --------------------------------------------------------
+@@ -213,6 +220,13 @@ class DatasetManifest:
+             raise ManifestError(
+                 f"{len(extra)} shard(s) on disk are not in the manifest (re-run process): {extra[:3]}"
+             )
++        # The proof claim travels with the dataset, so every consumer that calls
++        # verify() (train included) re-derives it from disk instead of trusting
++        # the recorded strings.
++        if self.proof:
++            from ..exact_audit import verify_manifest_proof
++
++            verify_manifest_proof(self, dataset_dir)
+         return train, val
+ 
+     def summary(self) -> dict:
+@@ -226,4 +240,5 @@ class DatasetManifest:
+             "frame_shape": self.frame_shape,
+             "splits": {key: value for key, value in self.splits.items() if key != "val_index_sha256"},
+             "stats": self.stats,
++            "proof": {key: value for key, value in self.proof.items() if key != "artifacts"},
+         }
+diff --git a/touhou_rl/pipeline/process/__init__.py b/touhou_rl/pipeline/process/__init__.py
+index 843a2cf..039450d 100644
+--- a/touhou_rl/pipeline/process/__init__.py
++++ b/touhou_rl/pipeline/process/__init__.py
+@@ -29,7 +29,7 @@ from pathlib import Path
+ 
+ import numpy as np
+ 
+-from ... import obs
++from ... import frame_proof, obs
+ from ..manifest import DatasetManifest, ManifestError, ShardRecord, file_digest
+ 
+ REQUIRED_PRIVILEGED = {"self_feat", "bullets", "danger", "action", "meta"}
+@@ -53,6 +53,11 @@ class ProcessSpec:
+     verbose: bool = True
+     teacher_name: str = "pilot"
+     teacher_config: dict = field(default_factory=dict)
++    # v3.7.5 WP1.5: verify the frame proof before any label is produced.  A
++    # trial capture (``trialMode``) must not carry teacher labels; there is no
++    # switch that re-enables them.
++    require_exact: bool = False
++    deep_proof: bool = False
+ 
+ 
+ def _discover(raw_dir: Path, modality: str | None) -> tuple[str, list[Path]]:
+@@ -173,8 +178,69 @@ def _aggregate(rows: list[dict], modality: str) -> tuple[list[ShardRecord], dict
+     return records, {**stats, "has_value": has_value}
+ 
+ 
++def _proof_gate(raw_dir: Path, spec: "ProcessSpec") -> tuple[dict, dict | None]:
++    """Audit the frame proof *before* labels are generated.
++
++    Returns ``(proof_summary_for_manifest, proof_manifest_or_None)``.  A dataset
++    without a proof manifest stays explicitly ``alignment_unknown``; it can never
++    become exact by processing it.
++    """
++    from ...exact_audit import audit_exact_dataset, load_proof_manifest
++
++    manifest, path = load_proof_manifest(raw_dir)
++    if manifest is None:
++        if spec.require_exact:
++            raise ManifestError(
++                f"{raw_dir} has no {frame_proof.PROOF_MANIFEST_NAME}; --require-exact datasets must "
++                "have one (legacy captures remain alignment_unknown)"
++            )
++        return (
++            {
++                "schema": frame_proof.PROOF_SCHEMA,
++                "frameProof": frame_proof.PROOF_UNKNOWN,
++                "source": "absent",
++                "exactValidFrames": 0,
++                "audited": {"deep": False, "frameProof": None},
++            },
++            None,
++        )
++    if spec.require_exact and manifest.get("frameProof") != frame_proof.PROOF_EXACT:
++        raise ManifestError(
++            f"{path} declares {manifest.get('frameProof')!r}; --require-exact needs an exact dataset"
++        )
++    summary = audit_exact_dataset(
++        raw_dir,
++        deep=bool(spec.deep_proof),
++        expect_exact=True if spec.require_exact else None,
++        require_proof=bool(spec.require_exact),
++    )
++    proof = {
++        "schema": manifest.get("schema"),
++        "frameProof": manifest.get("frameProof"),
++        "status": manifest.get("status"),
++        "frames": manifest.get("frames"),
++        "exactValidFrames": manifest.get("exactValidFrames"),
++        "discarded": manifest.get("discarded"),
++        "checkNames": list(manifest.get("checkNames") or []),
++        "checkCount": manifest.get("checkCount"),
++        "trialMode": bool(manifest.get("trialMode")),
++        "teacherLabels": manifest.get("teacherLabels"),
++        "build": dict(manifest.get("build") or {}),
++        "environment": dict(manifest.get("environment") or {}),
++        "path": frame_proof.PROOF_MANIFEST_NAME,
++        "sha256": file_digest(path),
++        "audited": {"deep": bool(spec.deep_proof), "frameProof": summary.get("frameProof")},
++    }
++    return proof, manifest
++
++
+ def run_process(spec: ProcessSpec) -> dict:
+     raw_dir = Path(spec.raw_dir)
++    # The proof gate runs first: a dataset carrying invalid_exact must be named as
++    # such instead of surfacing a downstream shard-shaped complaint, and no label
++    # may be produced from data whose proof has not re-derived.
++    proof, proof_manifest = _proof_gate(raw_dir, spec)
++    trial = bool(proof.get("trialMode"))
+     modality, paths = _discover(raw_dir, spec.modality)
+     rows: list[tuple[str, dict]] = []
+     for path in paths:
+@@ -188,7 +254,14 @@ def run_process(spec: ProcessSpec) -> dict:
+ 
+     teacher = {"name": "", "config": {}}
+     has_values = stats["has_value"]
+-    if spec.compute_teacher and not has_values:
++    if trial:
++        # A trial capture exists to validate the data link, not to train a
++        # teacher: labels are explicitly disabled and recorded as such.
++        stats["teacher_labels"] = "disabled_trial_capture"
++        teacher = {"name": "", "config": {}, "disabled_reason": "trial_capture"}
++        if spec.verbose:
++            print("[process] trial capture: teacher labels disabled", flush=True)
++    elif spec.compute_teacher and not has_values:
+         teacher = {"name": spec.teacher_name, "config": spec.teacher_config}
+         cache = raw_dir.parent / f"{raw_dir.name}-teacher-values.npz"
+         started = time.time()
+@@ -233,6 +306,7 @@ def run_process(spec: ProcessSpec) -> dict:
+         val_fraction=spec.val_fraction,
+         stats={key: value for key, value in stats.items() if key != "has_value"},
+         provenance=provenance,
++        proof=proof,
+     )
+     out_dir = Path(spec.out_dir) if spec.out_dir else raw_dir
+     out_dir.mkdir(parents=True, exist_ok=True)
+diff --git a/touhou_rl/tactical_data.py b/touhou_rl/tactical_data.py
+index dafe226..1ba5df3 100644
+--- a/touhou_rl/tactical_data.py
++++ b/touhou_rl/tactical_data.py
+@@ -66,6 +66,9 @@ def audit_event(event):
+ def audit_manifest(path):
+     path=Path(path)
+     obj=json.loads(path.read_text(encoding='utf-8'))
++    if obj.get('schema') == 'v376-f2-bc-events/1':
++        from .f2_dataset import audit_dataset
++        return audit_dataset(path)
+     errors=[]
+     if obj.get('schema')!=SCHEMA:
+         errors.append('schema mismatch')
+diff --git a/touhou_rl/tactical_feature_cache.py b/touhou_rl/tactical_feature_cache.py
+index 946e647..4a115b3 100644
+--- a/touhou_rl/tactical_feature_cache.py
++++ b/touhou_rl/tactical_feature_cache.py
+@@ -67,7 +67,7 @@ def build(manifest, baseline, out, *, device='cpu', batch_size=16):
+     obj = validate_training_gate(manifest)
+     audit = audit_manifest(manifest)
+     manifest_sha = file_sha(manifest)
+-    if not audit.get('passed') or audit.get('manifest_sha256') != manifest_sha:
++    if audit.get('passed') is not True or audit.get('manifest_sha256') != manifest_sha:
+         raise ValueError('manifest audit rejected')
+     events, assets = _events(manifest, obj)
+     baseline_sha = file_sha(baseline)
+@@ -135,6 +135,8 @@ def build(manifest, baseline, out, *, device='cpu', batch_size=16):
+                   rows_per_second=rows/elapsed, events=summaries,
+                   peak_allocated_bytes=torch.cuda.max_memory_allocated(device) if device.type == 'cuda' else None,
+                   test_tensor_loaded=False, test_cache_created=False,
++                   objective='f2_behavior_cloning' if obj['schema'] == 'v376-f2-bc-events/1' else 'legacy_structural_research',
++                   original_G4=False, dataset_schema=obj['schema'], deployable=False,
+                   real_image_source_independently_certified=False,
+                   warning='Gates and hashes do not independently certify real-image capture, freshness or teacher quality.')
+     report_path = out/'report.json'
+diff --git a/touhou_rl/tactical_sequence_train.py b/touhou_rl/tactical_sequence_train.py
+index 50367dc..4b9494a 100644
+--- a/touhou_rl/tactical_sequence_train.py
++++ b/touhou_rl/tactical_sequence_train.py
+@@ -97,7 +97,7 @@ def _fp32_mode(device):
+ 
+ def _source_hashes():
+     names = ('tactical_feature_cache.py', 'tactical_sequence_train.py', 'tactical_train.py',
+-             'tactical_data.py', 'vmodels.py', 'vmodels3.py')
++             'tactical_data.py', 'f2_labels.py', 'f2_dataset.py', 'vmodels.py', 'vmodels3.py')
+     return {name: file_sha(Path(__file__).with_name(name)) for name in names}
+ 
+ 
+@@ -157,7 +157,7 @@ def prepare(manifest, cache_index, baseline):
+     manifest, cache_index, baseline = map(Path, (manifest, cache_index, baseline))
+     obj = validate_training_gate(manifest)
+     audit = audit_manifest(manifest)
+-    if not audit.get('passed') or audit.get('manifest_sha256') != file_sha(manifest):
++    if audit.get('passed') is not True or audit.get('manifest_sha256') != file_sha(manifest):
+         raise ValueError('manifest audit rejected')
+     index = json.loads(cache_index.read_text(encoding='utf-8'))
+     sha = file_sha(baseline)
+@@ -249,6 +249,12 @@ def prepare(manifest, cache_index, baseline):
+                 raise ValueError('history must reflect acknowledged actual execution')
+             if actual is not None and (history['previous_candidate'][i].item() != actual or history['previous_hold'][i].item() != row['previous_actual_hold'] or history['frame_delta'][i].item() != row['frame']-row['previous_effective_frame']):
+                 raise ValueError('cached actual history mismatch')
++            if obj['schema'] == 'v376-f2-bc-events/1':
++                if actual is None and any(not torch.equal(history[k][i], sample[0, i]) for k, sample in required.items()):
++                    raise ValueError('F2 unknown previous execution requires BOS history')
++                if (history['previous_option'][i].item() != 3 or bool(history['target_valid'][i])
++                        or history['previous_target'][i].tolist() != [0., 0.]):
++                    raise ValueError('F2 BC history requires BOS option and invalid zero target')
+             # Option/target cannot be inferred from teacher labels.
+             if actual is not None:
+                 for key in ('previous_actual_option', 'previous_actual_target', 'previous_target_valid'):
+@@ -261,7 +267,7 @@ def prepare(manifest, cache_index, baseline):
+             raise ValueError('labels require independent event row tensors')
+         data[e['split']].append(dict(event_id=eid, features=features, base_logits=logits, history=history, labels=labels))
+         summaries.append(dict(event_id=eid, split=e['split'], rows=t, pixels_sha256=expected['pixel_sha256'], cache_sha256=refs[eid]['sha256'], source=SOURCE))
+-    return backbone.cpu(), data, dict(compute_protocol=protocol, cache_report_sha256=index['report']['sha256'], baseline_sha256=sha, manifest_sha256=file_sha(manifest), cache_index_sha256=file_sha(cache_index), sources=summaries)
++    return backbone.cpu(), data, dict(objective='f2_behavior_cloning' if obj['schema'] == 'v376-f2-bc-events/1' else 'legacy_structural_research', original_G4=False, dataset_schema=obj['schema'], compute_protocol=protocol, cache_report_sha256=index['report']['sha256'], baseline_sha256=sha, manifest_sha256=file_sha(manifest), cache_index_sha256=file_sha(cache_index), sources=summaries)
+ 
+ 
+ def windows(events):
+diff --git a/touhou_rl/tactical_train.py b/touhou_rl/tactical_train.py
+index 634e92c..5e7e4b7 100644
+--- a/touhou_rl/tactical_train.py
++++ b/touhou_rl/tactical_train.py
+@@ -7,15 +7,30 @@ import time
+ import torch
+ 
+ 
++F2_SCHEMA = 'v376-f2-bc-events/1'
++
++
+ def validate_training_gate(manifest):
+-    """Fail closed before touching weights; v3.7.3 real data requires explicit gates."""
+-    obj = json.loads(Path(manifest).read_text(encoding='utf-8'))
+-    required = {'schema': 'v373-paired-events/1', 'teacher_gate': 'passed',
+-                'pixel_alignment_gate': 'passed', 'data_audit_gate': 'passed',
+-                'input_kind': 'real_pixels'}
+-    for key, expected in required.items():
+-        if obj.get(key) != expected:
+-            raise ValueError(f'training gate rejected: {key} must be {expected!r}')
++    """Audit F2 content; legacy API checks structure only, not readiness."""
++    path = Path(manifest)
++    obj = json.loads(path.read_text(encoding='utf-8'))
++    if obj.get('schema') == F2_SCHEMA:
++        from .f2_dataset import audit_dataset, legacy_training_view
++        from .tactical_data import file_sha
++        audit = audit_dataset(path)
++        if (audit.get('passed') is not True or audit.get('errors') != []
++                or audit.get('manifest_sha256') != file_sha(path)):
++            raise ValueError(f'training gate rejected: F2 content audit failed: {audit.get("errors")}')
++        obj = legacy_training_view(path)
++        if obj.get('schema') != F2_SCHEMA or not obj.get('events'):
++            raise ValueError('training gate rejected: invalid F2 training view')
++    else:
++        required = {'schema': 'v373-paired-events/1', 'teacher_gate': 'passed',
++                    'pixel_alignment_gate': 'passed', 'data_audit_gate': 'passed',
++                    'input_kind': 'real_pixels'}
++        for key, expected in required.items():
++            if obj.get(key) != expected:
++                raise ValueError(f'training gate rejected: {key} must be {expected!r}')
+     groups = obj.get('split_groups', {})
+     if set(groups) != {'train', 'validation', 'test'} or any(not groups[s] for s in groups):
+         raise ValueError('nonempty independent train/validation/test groups required')
+@@ -111,8 +126,10 @@ def main(argv=None):
+     if args.command=='engineering-smoke':
+         engineering_smoke(args.baseline,args.out,steps=args.steps,device=args.device,seed=args.seed)
+     else:
+-        validate_training_gate(args.manifest)
+-        print('Data prerequisites validated; full event trainer must also validate content hashes.')
++        obj = validate_training_gate(args.manifest)
++        if obj.get('schema') != F2_SCHEMA:
++            parser.error('legacy schema is structural research only; not real-training ready')
++        print('F2 behavior-cloning content audited; research training eligible, NOT deployment or original G4.')
+ 
+ 
+ if __name__=='__main__':
