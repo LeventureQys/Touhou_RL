@@ -2,9 +2,9 @@
 
 > 用像素学会玩东方 Project · Teaching an agent to play Touhou Project from pixels alone
 
-**状态** Alpha / 研究阶段 · **最新记录版本** v3.7.4 · **测试** 1958 passed, 1 xfailed（2026-11-02 实测 127 s）· **环境** Windows 10/11 + Python 3.12 + PyTorch CUDA
+**状态** Alpha / 研究阶段 · **最新记录版本** v3.7.4 · **当前清理计划** v3.7.5 · **测试** 1958 passed, 1 xfailed（2026-11-02 实测 127 s）· **环境** Windows 10/11 + Python 3.12 + PyTorch CUDA
 
-**导航** [中文](#中文) · [English](#english) · [先读：真机数据获取能力说明](<DATA-ACQUISITION.md>) · [当前版本状态](<Document/Update/Alpha/v3.7.4/README.md>) · [过程日志](<Document/Dialogs/>)
+**导航** [中文](#中文) · [English](#english) · [先读：真机数据获取能力说明](<DATA-ACQUISITION.md>) · [当前版本状态](<Document/Update/Alpha/v3.7.4/README.md>) · [v3.7.5 清理计划](<Document/Update/Alpha/v3.7.5/README.md>) · [过程日志](<Document/Dialogs/>)
 
 > **一句话**：基础设施已经跑通并能被审计；**"会玩"还没有做到**。本文把已成立与未成立的分开写，每条都带证据路径。
 
@@ -47,12 +47,12 @@
 | 合成课程审计 | v3.7.1–v3.7.3 | 28 个有效世界、教师 V2 28/28、蒸馏负结果、像素信息探针、特权审计 | 🟡 卡点从"信息缺失"改写为"目标缺失" |
 | 同帧证明 | v3.7.4 | 帧栅栏变体（ticket + hold + 摘要/后台缓冲复读）+ 采集工具 | ✅ 240/240 帧通过；canonical 镜像未改 |
 
-**正在做（v3.7.4 → 下一版）**
+**正在做（v3.7.5 清理版本）**
 
-1. 把帧栅栏接进正式采集：`capture_dataset.py` 改用 `FenceFrameSampler`，样本写 `frame_proof=exact` + 变体镜像/地址表哈希；
-2. 为 `frame_proof=exact` 写**预注册**与数据集清单字段——在此之前不宣布任何 P3 数据集合格；
-3. 按像素信息探针的结论改**目标**：直接回归 `gap_center − player_x`（关系型读出），训练分布必须覆盖两个朝向与边缘位置；
-4. 把 P3 的合法标签源收窄到 F2 类（对象在真机可观测），或收窄版本范围并写明只做该类行为。
+1. 按 v3.7.5 清理计划收口所有未完成目标；
+2. 先完成 exact 采集接入、manifest、F2 标签预注册、契约和 CLI；
+3. 再执行关系型目标、P4 训练和 P5 因果闭环；
+4. 游戏缺失时，P3 真实采集、P6 真机配对和 P7 发布保持 blocked/not_run，不使用合成或工程冒烟替代。
 
 **之后**
 
