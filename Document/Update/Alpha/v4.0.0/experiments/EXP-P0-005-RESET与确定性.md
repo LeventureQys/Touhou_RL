@@ -4,11 +4,11 @@
 - 假设：给定 `StageStart`（面、难度、机体、种子），两个独立进程在相同输入序列下应当产生逐帧相同的状态哈希——这是整个训练场"可复现"的地基。
 - 预注册：主指标 = ①`RESET` 能离开标题画面并进入关卡（`ready=1`、`gameplaySetupState=COMPLETE`）；②同种子同输入的两个进程，状态哈希序列逐项相等。通过阈值 = 两条都成立。样本量 = 2 个进程 × 330 帧（受下面"当前局限"限制，未达 WP5 要求的 5,000 帧）。
 - 设置：
-  - 子模块 `rl-harness` 分支，提交 **`cabf029`**；二进制 4,707,760 B，sha256 `0c3ceb99…1634`
+  - 子模块 `rl-harness` 分支，提交 **`e151bcb`**；二进制 4,707,976 B，sha256 `8d724f7e…4615`
   - `RESET 0 1 0 1234`（Stage 1 / Normal / 結界組 / seed 1234）
   - 输入：固定种子的伪随机掩码序列，只用白名单位 `0x00F7`，每个掩码保持 2 帧
   - 环境：xvfb + `LIBGL_ALWAYS_SOFTWARE=1 LP_NUM_THREADS=1`
-- 结果：**两条主指标都成立**。
+- 结果：**主指标都成立，但覆盖帧数不足**。
   - `RESET` 回复 `ready=1 setup_frames=28 frames=0 stage=0 difficulty=1 team=0 seed=1234 setup_state=0`，`setup_state=0` 即 `GAMEPLAY_SETUP_COMPLETE`。
   - 两个进程的 `RESET` 后哈希都是 `84c0892f5f3686f2`；此后 330 帧内 **34 个采样点全部逐项相等**，且**两个进程都在同一帧（329）结束**。
 - 过程中修掉的两个真实缺陷（都是靠"逐字段比对"定位的，不是猜的）：
@@ -24,9 +24,20 @@
   - V7 未做：未换第三个进程或换种子重跑
   - V8 不适用
   - V9 是：指标在运行前由 `10-P0` WP5 验收第 1 条固定
-- 结论：**成立（部分）**——确定性成立，但**只覆盖 330 帧**，未达 WP5 要求的 5,000 帧。
-- **当前局限（重要）**：每个 episode 在约第 329 帧以 `exit=1, game_over=0` 结束。这不是死亡，而是**标题画面演示回放的链结束**：标题 idle 后会自动播放演示回放，`RESET` 切到游戏后那条回放链仍留在 `g_Chain` 里，放完就要求退出。彻底解决要靠 `10-P0` §4.3 的"标题模板 + SPAWN"：在标题初始化完成时 `PARK` 成模板，每次 `RESET` 从模板 fork 出干净进程——那是 P0-WP5 的工作。`Chain::Cut` 需要具体 `ChainElem*`，harness 现在拿不到标题链的句柄，所以就地手术不可行。
-- 另一个待查现象：`RESET` 之后立刻导出的状态里，分数/残机/火力/坐标等字段大多为 0，只有 RNG 种子和难度非零。说明进关后尚未真正进入可玩状态，第 1 个 `STEP` 之后才有值。下一轮要先弄清楚"setup 完成的时刻"与"玩法第一帧"之间差哪几步。
-- 成本：GPU 0 h；墙钟约 1.5 h；磁盘约 0.05 GB。
-- 证据：[rlharness-reset.patch](<../evidence/EXP-P0-005/rlharness-reset.patch>)（29,618 B，sha256 `194dec6e…78ce`，含 `98ec3bd..cabf029` 两个提交）
-- 下一步：①查清"setup 完成 → 玩法第一帧"的状态缺口；②实现标题模板 PARK/SPAWN 以摆脱演示回放链；③达标后再跑 5,000 帧版本，作为 G0.2 第 1 项的正式证据。
+- 结论：**部分成立**——确定性成立，但只覆盖 330 帧，未达 WP5 要求的 5,000 帧。
+- **关卡其实是活的**（新加 `DEBUG` 命令查清）：`RESET` 之后
+
+  ```text
+  RESET  -> OK reset=1 ready=1 setup_frames=80
+  DEBUG  -> curState=2 (GameManager) setupState=0 (COMPLETE) subthread=0 globals=1
+  STATE  -> f7=40000000 (lives=2.0) f8=40400000 (bombs=3.0)
+            f10=43400000 (px=192.0) f11=43c00000 (py=384.0) f14=1234 (种子)
+  ```
+
+  残机 2、bomb 3、自机在 (192, 384)、种子正是 1234。
+- **真正的障碍**：`RESET` 完成后**下一帧**，`PumpOneFrame()` 就返回 false（`STEP` 回复 `advanced=0 exit=1 game_over=0`）。原因是标题画面的链元素还在 `g_Chain` 里，它发现 `curState` 已不是标题态，于是要求退出。这与"约 329 帧后结束"是同一根因的两个表现：早前那次是先让演示回放跑到头再退出，现在是一换态就退出。
+  这正是 `10-P0` §4.3 要求 `RESET` 前先 `g_Chain.Cut` 掉标题链的原因；但 `Chain::Cut(ChainElem*)` 需要具体元素指针，harness 没有标题链的句柄。**所以这条必须靠 WP5 的"标题模板 + SPAWN"解决**：在标题初始化完成、链只有标题本身时 `PARK`，之后每次都从模板 fork，天然不带演示回放链。
+- 一个工程教训：`build.sh` 原先用 `git checkout bcddaa2 -- <files>` 重置，这条命令**同时改写索引**；补丁重新打到工作区之后提交，抓到的是基础版本，把四个打过补丁的文件回退了。已改为不回退、只靠 `apply.py` 的唯一标记做幂等，并用 `e151bcb` 修复了那次回退。
+- 成本：GPU 0 h；墙钟约 2.0 h；磁盘约 0.05 GB。
+- 证据：[rlharness-reset.patch](<../evidence/EXP-P0-005/rlharness-reset.patch>)（44,047 B，sha256 `20dbbf29…ca96`，含 `98ec3bd..e151bcb` 四个提交）
+- 下一步：①实现标题模板 `PARK`/`SPAWN`，从模板 fork 干净进程以摆脱标题链；②重跑 5,000 帧版本作为 G0.2 第 1 项的正式证据；③然后才接像素读回与共享内存。
