@@ -1,0 +1,609 @@
+From 98ec3bdca457f3ef10a099cbd2709ccbfa0ffde1 Mon Sep 17 00:00:00 2001
+From: root <root@ubuntu.localdomain>
+Date: Sat, 7 Nov 2026 21:42:39 +0800
+Subject: [PATCH] feat(rlharness): v4.0.0 harness skeleton with working control
+ protocol
+
+Adds the TH08_RL_HARNESS build option (default OFF) and the first vertical
+slice of the v4.0.0 training ground (10-P0 WP3):
+
+- src/rlharness/rlharness.hpp / .cpp: line-oriented control protocol over a
+  pipe pair (HELLO, PING, FRAME, HASH, STATE, STEP, QUIT), plus state export of
+  the 25 tracked fields and a FNV-1a 64 state hash.
+- src/main.cpp: GameWindow::Render()'s body without the timing gate becomes
+  PumpOneFrame(), and WinMain enters rlharness::Run() instead of the message
+  loop when --rl-control is present.
+- src/Global.cpp: Controller::GetInput() returns the commanded mask, so input
+  still flows through RecordInputAndFps and keeps the real +1 frame latency.
+- CMake: option(TH08_RL_HARNESS OFF); when ON it also defines
+  TH08_ENABLE_REPLAY_TRACE because Rng::ReplayTraceGenerationCount() is field 15
+  of the tracked set and lives behind that guard.
+
+The 25 tracked fields are copied verbatim from replay_trace.cpp, the field set
+already proven bit-identical against the retail replay corpus.
+
+Argument parsing reads /proc/self/cmdline: linux_runtime.cpp keeps argv in an
+anonymous namespace, so another TU cannot reach it without touching the
+platform layer.
+
+Verified: builds clean, passes scripts/verify-portable-linux.sh, and a smoke
+test drives HELLO/STEP/HASH/STATE/QUIT end to end (120 frames advance under
+command control, hashes change with state, RNG seed visible in the export).
+
+Not yet implemented: RESET/StageStart, pixel readback, shared memory, shadow
+role, BRANCH/PARK/SPAWN, null-device mode.
+---
+ CMakeLists.txt              |  18 ++
+ src/Global.cpp              |   9 +
+ src/main.cpp                |  66 +++++++
+ src/rlharness/rlharness.cpp | 341 ++++++++++++++++++++++++++++++++++++
+ src/rlharness/rlharness.hpp |  59 +++++++
+ 5 files changed, 493 insertions(+)
+ create mode 100644 src/rlharness/rlharness.cpp
+ create mode 100644 src/rlharness/rlharness.hpp
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 8602702..c5b4c4c 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -255,3 +255,21 @@ else()
+ endif()
+ 
+ set_target_properties(th08-modern PROPERTIES OUTPUT_NAME "th08-modern")
++
++option(TH08_RL_HARNESS "Enable the v4.0.0 reinforcement-learning harness" OFF)
++if(TH08_RL_HARNESS)
++    target_sources(th08-modern PRIVATE src/rlharness/rlharness.cpp)
++    # The harness needs Rng::ReplayTraceGenerationCount() (field 15 of the 25
++    # tracked fields), which lives behind TH08_ENABLE_REPLAY_TRACE.  So the
++    # harness build turns that on too; its recorder stays inert unless
++    # TH08_REPLAY_TRACE_REFERENCE is set, so it costs nothing at runtime.
++    target_compile_definitions(th08-modern PRIVATE TH08_RL_HARNESS TH08_ENABLE_REPLAY_TRACE)
++    if(NOT TH08_ENABLE_REPLAY_TRACE)
++        target_sources(th08-modern PRIVATE src/modern/linux/replay_trace.cpp)
++    endif()
++    # New code on a hot path (state export + protocol) keeps -O2; the
++    # reconstructed game TUs deliberately retain -O0.
++    set_source_files_properties(src/rlharness/rlharness.cpp PROPERTIES
++        COMPILE_OPTIONS "-O2;-fno-strict-aliasing")
++endif()
++
+diff --git a/src/Global.cpp b/src/Global.cpp
+index 27d5d02..36b1409 100644
+--- a/src/Global.cpp
++++ b/src/Global.cpp
+@@ -1,5 +1,8 @@
+ #include "th_pch.h"
+ 
++#ifdef TH08_RL_HARNESS
++#include "rlharness/rlharness.hpp"
++#endif
+ #ifdef TH08_MODERN_PORT
+ #include "modern/windows_runtime.hpp"
+ #endif
+@@ -721,6 +724,12 @@ u8 *Controller::GetControllerState()
+ 
+ u16 Controller::GetInput(void)
+ {
++#ifdef TH08_RL_HARNESS
++    // The mask the agent commanded this frame.  It still flows through
++    // RecordInputAndFps, so the +1 frame latency matches the real game (03 §3.3).
++    if (modern::rlharness::IsActive())
++        return modern::rlharness::CurrentMask();
++#endif
+     u8 keyboardState[256];
+     u16 buttons;
+ 
+diff --git a/src/main.cpp b/src/main.cpp
+index 78e0fdb..8e04734 100644
+--- a/src/main.cpp
++++ b/src/main.cpp
+@@ -20,6 +20,9 @@
+ #include "diffbuild.hpp"
+ #include "i18n.hpp"
+ #include "inttypes.hpp"
++#ifdef TH08_RL_HARNESS
++#include "rlharness/rlharness.hpp"
++#endif
+ #ifdef TH08_MODERN_PORT
+ #include "modern/windows_runtime.hpp"
+ #endif
+@@ -84,6 +87,62 @@ C_ASSERT(sizeof(GameWindow) == 0x44);
+ 
+ DIFFABLE_STATIC(HANDLE, g_ExclusiveMutex);
+ DIFFABLE_STATIC(GameWindow, g_GameWindow);
++
++#ifdef TH08_RL_HARNESS
++namespace modern
++{
++namespace rlharness
++{
++// One logic frame, no frame-rate gate, no frame skipping.  This is
++// GameWindow::Render() minus the timing gate, and it must keep draw calls: some
++// draw callbacks mutate game state (10-P0 §4.1).
++RlU64 g_frameCount;
++
++RlU64 FrameCount()
++{
++    return g_frameCount;
++}
++
++bool PumpOneFrame()
++{
++    i32 calcChainResult;
++
++    g_AnmManager->FlushVertexBuffer();
++
++    g_Supervisor.viewport.X = 0;
++    g_Supervisor.viewport.Y = 0;
++    g_Supervisor.viewport.Width = GAME_WINDOW_WIDTH;
++    g_Supervisor.viewport.Height = GAME_WINDOW_HEIGHT;
++    g_Supervisor.d3dDevice->SetViewport(&g_Supervisor.viewport);
++
++    calcChainResult = g_Chain.RunCalcChain();
++    g_SoundPlayer.ProcessQueues();
++
++    if (calcChainResult == 0 || calcChainResult == -1)
++    {
++        g_Supervisor.ThreadClose();
++        return false;
++    }
++
++    g_Supervisor.d3dDevice->BeginScene();
++    g_AnmManager->ClearVertexBuffer();
++    g_Supervisor.fogState = FOG_UNSET;
++    g_Supervisor.DisableFog();
++    g_Chain.RunDrawChain();
++    g_AnmManager->FlushVertexBuffer();
++    g_Supervisor.d3dDevice->SetTexture(0, NULL);
++    g_Supervisor.d3dDevice->EndScene();
++    g_GameWindow.framesSinceRedraw = 0;
++
++    GameWindow::Present();
++
++    ++g_frameCount;
++    return true;
++}
++} // namespace rlharness
++} // namespace modern
++#endif // TH08_RL_HARNESS
++
+ }; // namespace th08
+ 
+ using namespace th08;
+@@ -103,6 +162,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR pCmdLine
+     if (!modern::ConfigureDataDirectory())
+         return EXIT_FAILURE;
+ #endif
++#ifdef TH08_RL_HARNESS
++    modern::rlharness::ParseCommandLine();
++#endif
+ 
+     g_Supervisor.hInstance = hInstance;
+ 
+@@ -179,6 +241,10 @@ restart:
+         g_GameWindow.lastTimestamp = g_GameWindow.lastFrameTime;
+         g_GameWindow.curTimestamp = g_GameWindow.lastTimestamp;
+ 
++#ifdef TH08_RL_HARNESS
++        if (modern::rlharness::IsActive())
++            return modern::rlharness::Run();
++#endif
+         while (!g_GameWindow.windowIsClosing)
+         {
+             if (PeekMessageA(&msg, NULL, 0, 0, PM_REMOVE))
+diff --git a/src/rlharness/rlharness.cpp b/src/rlharness/rlharness.cpp
+new file mode 100644
+index 0000000..da95c47
+--- /dev/null
++++ b/src/rlharness/rlharness.cpp
+@@ -0,0 +1,341 @@
++// v4.0.0 reinforcement-learning harness (10-P0 WP3): control protocol + state export.
++//
++// Design notes
++// ------------
++// * The control channel is line-oriented ASCII over a pair of pipes.  Bulk data
++//   (pixels, full StateExport) belongs in shared memory per 03 §4.2; this first
++//   slice keeps control + the 25 tracked fields on the pipe so the plumbing can
++//   be tested end to end before the shared-memory layout is frozen.
++// * The 25 tracked fields are copied verbatim from replay_trace.cpp, which is
++//   the field set already proven bit-identical against the retail replay corpus.
++//   Reusing those exact expressions is deliberate: the hash this produces is the
++//   same hash G0.2 compares against.
++// * Every command that advances time goes through PumpOneFrame() in main.cpp,
++//   which is the no-timing-gate twin of GameWindow::Render().
++
++#ifdef TH08_RL_HARNESS
++
++#include "rlharness.hpp"
++
++#include <stdarg.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++
++#include "GameManager.hpp"
++#include "Player.hpp"
++#include "ReplayManager.hpp"
++#include "Gui.hpp"
++
++namespace th08
++{
++namespace modern
++{
++namespace rlharness
++{
++namespace
++{
++bool g_active;
++FILE *g_in;
++FILE *g_out;
++u16 g_mask;
++u32 g_stageOrigin[MAX_STAGES];
++bool g_stageOriginSet[MAX_STAGES];
++
++u32 FloatBits(const f32 &value)
++{
++    u32 bits;
++    memcpy(&bits, &value, sizeof(bits));
++    return bits;
++}
++
++// FNV-1a, 64 bit.  Deterministic across platforms because it only ever sees u32.
++RlU64 Fnv1a(RlU64 hash, u32 value)
++{
++    hash ^= static_cast<RlU64>(value);
++    hash *= 1099511628211ULL;
++    return hash;
++}
++
++// Fill the 25 tracked fields, identical in order to the replay-trace row.
++// Returns false when the engine is not in a state where the fields are defined.
++bool TrackedFields(u32 out[25])
++{
++    if (!g_GameManager.globals)
++        return false;
++    const int stage = g_GameManager.currentStage;
++    if (stage < 0 || stage >= MAX_STAGES)
++        return false;
++
++    const u32 generation = g_Rng.ReplayTraceGenerationCount();
++    if (!g_stageOriginSet[stage])
++    {
++        g_stageOrigin[stage] = generation;
++        g_stageOriginSet[stage] = true;
++    }
++
++    const ZunGlobals &globals = *g_GameManager.globals;
++    u32 row[25] = {
++        static_cast<u32>(FrameCount()),
++        static_cast<u32>(stage),
++        static_cast<u32>(g_ReplayManager ? g_ReplayManager->frameCounter : 0),
++        g_GameManager.gameplayFrameCounter,
++        globals.score,
++        static_cast<u32>(globals.graze),
++        FloatBits(globals.deaths),
++        FloatBits(globals.livesRemaining),
++        FloatBits(globals.bombsRemaining),
++        FloatBits(globals.playerPower),
++        FloatBits(g_Player.position.x),
++        FloatBits(g_Player.position.y),
++        FloatBits(g_Player.position.z),
++        static_cast<u8>(g_Player.playerState),
++        g_Rng.GetSeed(),
++        generation - g_stageOrigin[stage],
++        g_GuiMessageInputCurrent,
++        static_cast<u32>(globals.pointItemsCollected),
++        static_cast<u32>(globals.currentTimeOrbs),
++        static_cast<u32>(globals.youkaiGauge),
++        static_cast<u8>(globals.clockTime),
++        static_cast<u32>(globals.pointItemValue),
++        g_GameManager.character,
++        g_GameManager.shotType,
++        static_cast<u32>(g_GameManager.difficulty),
++    };
++    memcpy(out, row, sizeof(row));
++    return true;
++}
++
++void Reply(const char *fmt, ...)
++{
++    va_list args;
++    va_start(args, fmt);
++    vfprintf(g_out, fmt, args);
++    va_end(args);
++    fputc('\n', g_out);
++    fflush(g_out);
++}
++
++const char *RoleName()
++{
++    return "env";
++}
++
++void HandleHello()
++{
++    Reply("OK hello proto=%u harness=1 role=%s frames=%llu", PROTOCOL_VERSION, RoleName(),
++          static_cast<unsigned long long>(FrameCount()));
++}
++
++void HandleFrame()
++{
++    Reply("OK frame=%llu", static_cast<unsigned long long>(FrameCount()));
++}
++
++void HandleHash()
++{
++    u32 fields[25];
++    if (!TrackedFields(fields))
++    {
++        Reply("OK hash=undefined frames=%llu", static_cast<unsigned long long>(FrameCount()));
++        return;
++    }
++    RlU64 hash = 14695981039346656037ULL;
++    for (int i = 0; i < 25; ++i)
++        hash = Fnv1a(hash, fields[i]);
++    Reply("OK hash=%016llx frames=%llu", static_cast<unsigned long long>(hash),
++          static_cast<unsigned long long>(FrameCount()));
++}
++
++void HandleState()
++{
++    u32 fields[25];
++    if (!TrackedFields(fields))
++    {
++        Reply("OK state=undefined frames=%llu", static_cast<unsigned long long>(FrameCount()));
++        return;
++    }
++    // A flat, fixed-order dump so the Python side can diff two states field by field.
++    Reply("OK frames=%llu f0=%u f1=%u f2=%u f3=%u f4=%u f5=%u f6=%08x f7=%08x f8=%08x f9=%08x "
++          "f10=%08x f11=%08x f12=%08x f13=%u f14=%u f15=%u f16=%u f17=%u f18=%u f19=%u f20=%u "
++          "f21=%u f22=%u f23=%u f24=%u",
++          static_cast<unsigned long long>(FrameCount()),
++          fields[0], fields[1], fields[2], fields[3], fields[4], fields[5], fields[6], fields[7],
++          fields[8], fields[9], fields[10], fields[11], fields[12], fields[13], fields[14],
++          fields[15], fields[16], fields[17], fields[18], fields[19], fields[20], fields[21],
++          fields[22], fields[23], fields[24]);
++}
++
++// STEP <mask> <frames>: hold `mask` for `frames` logic frames, then report.
++void HandleStep(char *args)
++{
++    unsigned mask = 0;
++    unsigned frames = 0;
++    if (sscanf(args, "%u %u", &mask, &frames) != 2)
++    {
++        Reply("ERR step-usage STEP <mask> <frames>");
++        return;
++    }
++    if (frames > 100000)
++    {
++        Reply("ERR step-too-many");
++        return;
++    }
++    g_mask = static_cast<u16>(mask);
++    unsigned advanced = 0;
++    for (unsigned i = 0; i < frames; ++i)
++    {
++        if (!PumpOneFrame())
++        {
++            Reply("OK advanced=%u frame=%llu exit=1", advanced,
++                  static_cast<unsigned long long>(FrameCount()));
++            return;
++        }
++        ++advanced;
++    }
++    u32 fields[25];
++    RlU64 hash = 0;
++    if (TrackedFields(fields))
++    {
++        hash = 14695981039346656037ULL;
++        for (int i = 0; i < 25; ++i)
++            hash = Fnv1a(hash, fields[i]);
++    }
++    Reply("OK advanced=%u frame=%llu hash=%016llx", advanced,
++          static_cast<unsigned long long>(FrameCount()), static_cast<unsigned long long>(hash));
++}
++} // namespace
++
++bool ParseCommandLine()
++{
++    int inFd = 0;
++    int outFd = 1;
++    bool requested = false;
++
++    // The platform layer keeps argv in an anonymous namespace inside
++    // linux_runtime.cpp, so it has internal linkage and cannot be reached from
++    // another translation unit.  /proc/self/cmdline is the same data and lets
++    // the harness stay out of the platform layer entirely.
++    char buffer[4096];
++    FILE *cmdline = fopen("/proc/self/cmdline", "rb");
++    if (cmdline == NULL)
++        return false;
++    size_t total = fread(buffer, 1, sizeof(buffer) - 1, cmdline);
++    fclose(cmdline);
++    buffer[total] = '\0';
++
++    const char *args[128];
++    int count = 0;
++    const char *cursor = buffer;
++    const char *end = buffer + total;
++    while (cursor < end && count < 128)
++    {
++        args[count++] = cursor;
++        cursor += strlen(cursor) + 1;
++    }
++
++    for (int i = 1; i < count; ++i)
++    {
++        const char *arg = args[i];
++        if (strcmp(arg, "--rl-control") == 0 && i + 1 < count)
++        {
++            requested = true;
++            ++i;
++            if (sscanf(args[i], "%d,%d", &inFd, &outFd) != 2)
++            {
++                inFd = 0;
++                outFd = 1;
++            }
++        }
++        else if (strncmp(arg, "--rl-control=", 13) == 0)
++        {
++            requested = true;
++            if (sscanf(arg + 13, "%d,%d", &inFd, &outFd) != 2)
++            {
++                inFd = 0;
++                outFd = 1;
++            }
++        }
++    }
++    if (!requested)
++        return false;
++
++    g_in = fdopen(inFd, "r");
++    g_out = fdopen(outFd, "w");
++    if (!g_in || !g_out)
++        return false;
++    // The control channel must stay unbuffered on the reply side; replies are
++    // small and the Python side blocks on them.
++    setvbuf(g_out, NULL, _IONBF, 0);
++    g_mask = 0;
++    g_active = true;
++    return true;
++}
++
++bool IsActive()
++{
++    return g_active;
++}
++
++u16 CurrentMask()
++{
++    return g_mask;
++}
++
++void SetMask(u16 mask)
++{
++    g_mask = mask;
++}
++
++int Run()
++{
++    char line[4096];
++    u32 fields[25];
++    if (TrackedFields(fields))
++    {
++        // Nothing to do; the first STEP defines the stage origin.  The call is
++        // here so the origin is captured before any frame is advanced.
++    }
++    while (fgets(line, sizeof(line), g_in) != NULL)
++    {
++        size_t len = strlen(line);
++        while (len > 0 && (line[len - 1] == '\n' || line[len - 1] == '\r'))
++            line[--len] = '\0';
++        if (len == 0)
++            continue;
++
++        char *space = strchr(line, ' ');
++        char *args = NULL;
++        if (space)
++        {
++            *space = '\0';
++            args = space + 1;
++        }
++
++        if (strcmp(line, "HELLO") == 0)
++            HandleHello();
++        else if (strcmp(line, "PING") == 0)
++            Reply("OK pong");
++        else if (strcmp(line, "FRAME") == 0)
++            HandleFrame();
++        else if (strcmp(line, "HASH") == 0)
++            HandleHash();
++        else if (strcmp(line, "STATE") == 0)
++            HandleState();
++        else if (strcmp(line, "STEP") == 0)
++            HandleStep(args ? args : (char *)"");
++        else if (strcmp(line, "QUIT") == 0)
++        {
++            Reply("OK bye");
++            return 0;
++        }
++        else
++            Reply("ERR unknown-command %s", line);
++    }
++    return 0;
++}
++} // namespace rlharness
++} // namespace modern
++} // namespace th08
++
++#endif // TH08_RL_HARNESS
+diff --git a/src/rlharness/rlharness.hpp b/src/rlharness/rlharness.hpp
+new file mode 100644
+index 0000000..b08ac5a
+--- /dev/null
++++ b/src/rlharness/rlharness.hpp
+@@ -0,0 +1,59 @@
++#pragma once
++
++// v4.0.0 reinforcement-learning harness (10-P0 WP3).
++//
++// Everything here is compiled only when CMake is configured with
++// -DTH08_RL_HARNESS=ON.  The option is OFF by default and the vanilla build is
++// byte-identical to the unmodified portable branch when it is off.
++//
++// Roles (10-P0 §3):
++//   env    - renders, reads pixels back, never forks.
++//   shadow - null device, no window, no GL context; may fork for BRANCH.
++
++#ifdef TH08_RL_HARNESS
++
++#include "inttypes.hpp"
++
++namespace th08
++{
++namespace modern
++{
++namespace rlharness
++{
++// The reconstructed game headers stop at u32 (VC7 compatibility); 64-bit
++// counters and hashes get their own name so they cannot be confused with the
++// game's own typedefs.
++typedef unsigned long long RlU64;
++
++// Protocol version reported by HELLO; bump on any incompatible change.
++const u32 PROTOCOL_VERSION = 1;
++
++// Parses --rl-control / --rl-role out of the process arguments.  On Linux the
++// entry point stores argv in th08::modern::g_arguments because WinMain receives
++// NULL (see linux_runtime.cpp), so this reads those globals.  Returns true when
++// harness mode was requested (the caller then enters Run() instead of the normal
++// WinMain message loop).
++bool ParseCommandLine();
++
++// True once ParseCommandLine() succeeded.
++bool IsActive();
++
++// The button mask the engine should see this frame (bit layout from 03 §3.1).
++u16 CurrentMask();
++void SetMask(u16 mask);
++
++// Blocks on the control pipe, executes commands, returns a process exit code.
++int Run();
++
++// Implemented in main.cpp: advance exactly one logic frame with draw + present,
++// with no frame-rate gate and no frame skipping (the harness never skips).
++// Returns false when the engine asked to exit.
++bool PumpOneFrame();
++
++// Implemented in main.cpp: how many logic frames this process has executed.
++RlU64 FrameCount();
++}
++}
++}
++
++#endif // TH08_RL_HARNESS
+-- 
+2.34.1
+
