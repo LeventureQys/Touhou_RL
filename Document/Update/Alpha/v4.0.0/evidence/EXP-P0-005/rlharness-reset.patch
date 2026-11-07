@@ -1,7 +1,7 @@
 From 98ec3bdca457f3ef10a099cbd2709ccbfa0ffde1 Mon Sep 17 00:00:00 2001
 From: root <root@ubuntu.localdomain>
 Date: Sat, 7 Nov 2026 21:42:39 +0800
-Subject: [PATCH 1/4] feat(rlharness): v4.0.0 harness skeleton with working
+Subject: [PATCH 1/5] feat(rlharness): v4.0.0 harness skeleton with working
  control protocol
 
 Adds the TH08_RL_HARNESS build option (default OFF) and the first vertical
@@ -611,7 +611,7 @@ index 0000000..b08ac5a
 From cabf029fdb7a0f6a01ec69641fd11c237e508621 Mon Sep 17 00:00:00 2001
 From: root <root@ubuntu.localdomain>
 Date: Sat, 7 Nov 2026 22:13:58 +0800
-Subject: [PATCH 2/4] feat(rlharness): RESET/StageStart with deterministic
+Subject: [PATCH 2/5] feat(rlharness): RESET/StageStart with deterministic
  per-seed stage entry
 
 RESET <stage> <difficulty> <team> <seed> [practice] leaves the title screen and
@@ -893,7 +893,7 @@ index b08ac5a..6ea4aa5 100644
 From 72c83c33961d35ce409e31acc725cb686f6aed16 Mon Sep 17 00:00:00 2001
 From: root <root@ubuntu.localdomain>
 Date: Sat, 7 Nov 2026 22:15:42 +0800
-Subject: [PATCH 3/4] feat(rlharness): DEBUG command; locate why the frame
+Subject: [PATCH 3/5] feat(rlharness): DEBUG command; locate why the frame
  after RESET exits
 
 DEBUG reports curState, gameplaySetupState, the setup subthread, globals, stage,
@@ -1139,7 +1139,7 @@ index 9a7f6ac..59d3247 100644
 From e151bcbcde78725d208523682681598d4dd68dae Mon Sep 17 00:00:00 2001
 From: root <root@ubuntu.localdomain>
 Date: Sat, 7 Nov 2026 22:16:01 +0800
-Subject: [PATCH 4/4] fix(rlharness): restore the hooked files reverted by the
+Subject: [PATCH 4/5] fix(rlharness): restore the hooked files reverted by the
  previous commit
 
 The DEBUG commit rewound CMakeLists.txt, src/main.cpp, src/Global.cpp and
@@ -1335,6 +1335,327 @@ index 78e0fdb..ecba64b 100644
          while (!g_GameWindow.windowIsClosing)
          {
              if (PeekMessageA(&msg, NULL, 0, 0, PM_REMOVE))
+-- 
+2.34.1
+
+
+From 0217306da714a339c39923c885c2fbb9411339c7 Mon Sep 17 00:00:00 2001
+From: root <root@ubuntu.localdomain>
+Date: Sat, 7 Nov 2026 22:34:07 +0800
+Subject: [PATCH 5/5] feat(rlharness): deterministic stage start; G0.2 item 1
+ passes over 5,000 frames
+
+Two fixes, both found by instrumenting rather than guessing.
+
+1. Leave the title screen through the title's own code path.  Switching
+   g_Supervisor.curState from outside made the title's calc element notice the
+   change and ask the chain to exit, so the episode died on the very next pumped
+   frame - the reason an episode lasted only ~330 frames.  TitleScreen now calls
+   rlharness::ConsumePendingStart() from its Ready state and returns
+   CHAIN_CALLBACK_RESULT_CONTINUE_AND_REMOVE_JOB, exactly like the
+   developer-autoplay path already does, so the title removes itself.
+
+2. Wait for the stage's own setup, not the title's leftover flag.  RESET accepted
+   GAMEPLAY_SETUP_COMPLETE while that flag was still set from the title's own
+   initialisation: RESET returned ready=1 with setup_frames=35, curState=1 and no
+   setup subthread, and the real setup then ran later inside STEP at a
+   scheduler-dependent point.  RESET now requires the state to be observed
+   IN_PROGRESS before accepting COMPLETE; setup_frames is ~175 as it should be.
+
+Also fixes two fields that leaked harness artefacts into the hash:
+  - stage RNG origin is captured at reset instead of lazily on first HASH (the
+    lazy capture made field 15 underflow to 65534);
+  - g_ReplayManager->frameCounter is only read while flags.isReplay, because the
+    pointer is stale once the replay chain is gone.
+
+And DEBUG now reports the thread count from /proc/self/task: the process runs
+with 6-7 threads (SDL/Mesa), which is fine for determinism on one core but
+matters for the fork work in WP5, where 10-P0 4.7 requires a single thread.
+
+Result: two processes, same StageStart, same 2,500-chunk input plan, 5,000
+frames: 501 hash samples identical, ending hash 1ae73523eb15d77f.  Repeated
+twice, four runs in total.  That is 10-P0 WP5 acceptance item 1.
+---
+ src/TitleScreen.cpp         |   7 ++
+ src/rlharness/rlharness.cpp | 131 ++++++++++++++++++++++++++++--------
+ src/rlharness/rlharness.hpp |  10 +++
+ 3 files changed, 119 insertions(+), 29 deletions(-)
+
+diff --git a/src/TitleScreen.cpp b/src/TitleScreen.cpp
+index 2dca05c..904f07d 100644
+--- a/src/TitleScreen.cpp
++++ b/src/TitleScreen.cpp
+@@ -1,4 +1,7 @@
+ #include "th_pch.h"
++#ifdef TH08_RL_HARNESS
++#include "rlharness/rlharness.hpp"
++#endif
+ 
+ #include "AsciiManager.hpp"
+ #include "GameManager.hpp"
+@@ -446,6 +449,10 @@ ChainCallbackResult TitleScreen::OnUpdateStartMenu()
+ #ifdef TH08_MODERN_PORT
+         if (StartDeveloperReplayIfRequested())
+             return CHAIN_CALLBACK_RESULT_CONTINUE_AND_REMOVE_JOB;
++#endif
++#ifdef TH08_RL_HARNESS
++        if (modern::rlharness::ConsumePendingStart())
++            return CHAIN_CALLBACK_RESULT_CONTINUE_AND_REMOVE_JOB;
+ #endif
+         i = this->MoveCursorVertical(9);
+         if (i != 0)
+diff --git a/src/rlharness/rlharness.cpp b/src/rlharness/rlharness.cpp
+index 59d3247..6c2af76 100644
+--- a/src/rlharness/rlharness.cpp
++++ b/src/rlharness/rlharness.cpp
+@@ -1,9 +1,9 @@
+-// v4.0.0 reinforcement-learning harness (10-P0 WP3): control protocol + state export.
++﻿// v4.0.0 reinforcement-learning harness (10-P0 WP3): control protocol + state export.
+ //
+ // Design notes
+ // ------------
+ // * The control channel is line-oriented ASCII over a pair of pipes.  Bulk data
+-//   (pixels, full StateExport) belongs in shared memory per 03 §4.2; this first
++//   (pixels, full StateExport) belongs in shared memory per 03 搂4.2; this first
+ //   slice keeps control + the 25 tracked fields on the pipe so the plumbing can
+ //   be tested end to end before the shared-memory layout is frozen.
+ // * The 25 tracked fields are copied verbatim from replay_trace.cpp, which is
+@@ -21,6 +21,7 @@
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <string.h>
++#include <dirent.h>
+ 
+ #include "GameManager.hpp"
+ #include "Player.hpp"
+@@ -44,6 +45,12 @@ u32 g_stageOrigin[MAX_STAGES];
+ bool g_stageOriginSet[MAX_STAGES];
+ bool g_seedArmed;
+ u16 g_pendingSeed;
++bool g_startArmed;
++u32 g_startStage;
++u32 g_startDifficulty;
++u32 g_startTeam;
++u16 g_startSeed;
++bool g_startPractice;
+ 
+ u32 FloatBits(const f32 &value)
+ {
+@@ -81,7 +88,12 @@ bool TrackedFields(u32 out[25])
+     u32 row[25] = {
+         static_cast<u32>(FrameCount()),
+         static_cast<u32>(stage),
+-        static_cast<u32>(g_ReplayManager ? g_ReplayManager->frameCounter : 0),
++        // g_ReplayManager is only meaningful while a replay is playing; after
++        // the replay chain is cut it is a stale pointer, so reading it
++        // unconditionally leaks garbage into the hash.
++        static_cast<u32>((g_ReplayManager && g_GameManager.flags.isReplay)
++                             ? g_ReplayManager->frameCounter
++                             : 0),
+         g_GameManager.gameplayFrameCounter,
+         globals.score,
+         static_cast<u32>(globals.graze),
+@@ -191,7 +203,7 @@ void HandleStep(char *args)
+         if (!PumpOneFrame())
+         {
+             // The chain asked to exit.  In gameplay that means game over: the
+-            // engine sets showRetryMenu and stops (10-P0 §4.8).  The harness
++            // engine sets showRetryMenu and stops (10-P0 搂4.8).  The harness
+             // never continues into the retry menu.
+             Reply("OK advanced=%u frame=%llu exit=1 game_over=%u", advanced,
+                   static_cast<unsigned long long>(FrameCount()),
+@@ -214,8 +226,21 @@ void HandleStep(char *args)
+ 
+ void HandleDebug()
+ {
++    // 10-P0 搂4.7: the process must be single-threaded for the harness to be
++    // deterministic; a lingering thread races the main loop.
++    int threads = -1;
++    DIR *task = opendir("/proc/self/task");
++    if (task != NULL)
++    {
++        threads = -2; // "." and ".."
++        while (readdir(task) != NULL)
++            ++threads;
++        closedir(task);
++        if (threads < 0)
++            threads = 0;
++    }
+     Reply("OK curState=%d setupState=%u subthread=%d globals=%d stage=%d difficulty=%u shot=%u "
+-          "isReplay=%u isDemo=%u frames=%llu",
++          "isReplay=%u isDemo=%u threads=%d frames=%llu",
+           static_cast<int>(g_Supervisor.curState),
+           static_cast<unsigned>(g_GameManager.gameplaySetupState),
+           g_Supervisor.runningSubthreadHandle != NULL ? 1 : 0,
+@@ -225,7 +250,7 @@ void HandleDebug()
+           static_cast<unsigned>(g_GameManager.shotType),
+           static_cast<unsigned>(g_GameManager.flags.isReplay),
+           static_cast<unsigned>(g_GameManager.flags.isDemoMode),
+-          static_cast<unsigned long long>(FrameCount()));
++          threads, static_cast<unsigned long long>(FrameCount()));
+ }
+ 
+ // RESET <stage> <difficulty> <team> <seed> [practice]
+@@ -252,37 +277,37 @@ void HandleReset(char *args)
+         return;
+     }
+ 
+-    g_GameManager.SetIsReplayWeird(FALSE);
+-    g_GameManager.flags.isReplay = FALSE;
+-    g_GameManager.flags.isDemoMode = FALSE;
+-    g_GameManager.flags.isPracticeMode = practice ? TRUE : FALSE;
+-    g_GameManager.flags.isSpellPractice = FALSE;
+-    g_GameManager.difficulty = difficulty;
+-    g_GameManager.shotType = team;
+-    g_GameManager.currentStage = static_cast<i32>(stage);
+-    g_GameManager.replayMode = REPLAY_MODE_NORMAL;
+-
+-    // The seed is applied from inside GameManager's setup, not here: setup draws
+-    // from the RNG first (anti-tamper consumes values), so setting it now would
+-    // be overwritten before stageRngSeed is recorded.
+-    ArmSeed(static_cast<u16>(seed));
++    // Do NOT switch g_Supervisor.curState here.  Doing that from outside makes
++    // the title screen's calc element notice the change and ask the chain to
++    // exit, which kills the episode on the very next pumped frame (measured).
++    // Instead arm the request; the title's own Ready state consumes it and
++    // removes itself, which is exactly how the developer-autoplay path works.
++    ArmStart(stage, difficulty, team, static_cast<u16>(seed), practice != 0);
+ 
+     for (int i = 0; i < MAX_STAGES; ++i)
+         g_stageOriginSet[i] = false;
+-
+-    g_Supervisor.curState = SupervisorState_GameManager;
+-    g_Supervisor.StopAudio();
+-
+     // Setup runs on its own subthread; pump until it reports completion.
++    //
++    // It is NOT enough to wait for GAMEPLAY_SETUP_COMPLETE: the title screen
++    // leaves that flag at COMPLETE from its own initialisation, so the first
++    // check passes before the stage setup has even started.  Measured symptom:
++    // RESET returned ready=1 with setup_frames=35 while curState was still 1
++    // (title) and the setup subthread had not been created; the real setup then
++    // ran later, inside STEP, at a scheduler-dependent point.  So require the
++    // state to be seen IN_PROGRESS before accepting COMPLETE.
+     const unsigned kMaxSetupFrames = 1800;
+     unsigned pumped = 0;
+     bool ready = false;
++    bool sawInProgress = false;
+     while (pumped < kMaxSetupFrames)
+     {
+         if (!PumpOneFrame())
+             break;
+         ++pumped;
+-        if (g_GameManager.gameplaySetupState == GAMEPLAY_SETUP_COMPLETE &&
++        if (g_GameManager.gameplaySetupState == GAMEPLAY_SETUP_IN_PROGRESS)
++            sawInProgress = true;
++        if (sawInProgress &&
++            g_GameManager.gameplaySetupState == GAMEPLAY_SETUP_COMPLETE &&
+             g_Supervisor.runningSubthreadHandle == NULL)
+         {
+             ready = true;
+@@ -295,15 +320,18 @@ void HandleReset(char *args)
+     // keeps pumping frames, so the two threads interleave their draws from the
+     // shared RNG and the state on exit varies run to run (measured: same seed,
+     // same inputs, different g_Rng seed afterwards).  Reseeding at the quiescent
+-    // point — setup complete, subthread gone, main thread in control — makes the
++    // point 鈥?setup complete, subthread gone, main thread in control 鈥?makes the
+     // first gameplay frame start from an identical RNG in every run.
+     if (ready)
+     {
+         g_Rng.SetSeed(static_cast<u16>(seed));
+         // Gameplay globals are allocated by the first gameplay frame, so the
+-        // state right at setup completion is not yet readable.  Pump until they
+-        // exist; this consumption happens after the reseed, so it is deterministic.
+-        for (int i = 0; i < 8 && g_GameManager.globals == NULL; ++i)
++        // state right at setup completion is not yet readable.  The number of
++        // frames pumped here MUST be fixed: an "until globals exist" loop pumps
++        // a variable 0-8 frames, which advances gameplay by a different amount
++        // in each run and breaks determinism (measured: gameplayFrame 0 vs 1 at
++        // the same wall point, then the player died in only one of the two runs).
++        for (int i = 0; i < 2; ++i)
+         {
+             if (!PumpOneFrame())
+                 break;
+@@ -316,6 +344,17 @@ void HandleReset(char *args)
+     // Frame 0 is the first frame of the stage, so two runs of the same seed are
+     // comparable even though setup needed a different number of frames.
+     ResetFrameCount();
++    // Capture the RNG generation origin HERE, not lazily on the first HASH: a
++    // lazy capture records a different origin depending on when the caller first
++    // asks, which made field 15 underflow (65534) and diverge.
++    {
++        const int stageIndex = g_GameManager.currentStage;
++        if (stageIndex >= 0 && stageIndex < MAX_STAGES)
++        {
++            g_stageOrigin[stageIndex] = g_Rng.ReplayTraceGenerationCount();
++            g_stageOriginSet[stageIndex] = true;
++        }
++    }
+     if (TrackedFields(fields))
+     {
+         hash = 14695981039346656037ULL;
+@@ -344,6 +383,40 @@ void ApplyPendingSeed()
+     g_Rng.SetSeed(g_pendingSeed);
+ }
+ 
++void ArmStart(u32 stage, u32 difficulty, u32 team, u16 seed, bool practice)
++{
++    g_startStage = stage;
++    g_startDifficulty = difficulty;
++    g_startTeam = team;
++    g_startSeed = seed;
++    g_startPractice = practice;
++    g_startArmed = true;
++}
++
++bool ConsumePendingStart()
++{
++    if (!g_startArmed)
++        return false;
++    g_startArmed = false;
++
++    g_GameManager.SetIsReplayWeird(FALSE);
++    g_GameManager.flags.isReplay = FALSE;
++    g_GameManager.flags.isDemoMode = FALSE;
++    g_GameManager.flags.isPracticeMode = g_startPractice ? TRUE : FALSE;
++    g_GameManager.flags.isSpellPractice = FALSE;
++    g_GameManager.difficulty = g_startDifficulty;
++    g_GameManager.shotType = g_startTeam;
++    g_GameManager.currentStage = static_cast<i32>(g_startStage);
++    g_GameManager.replayMode = REPLAY_MODE_NORMAL;
++
++    // Applied later, from inside GameManager's setup.
++    ArmSeed(g_startSeed);
++
++    g_Supervisor.curState = SupervisorState_GameManager;
++    g_Supervisor.StopAudio();
++    return true;
++}
++
+ bool ParseCommandLine()
+ {
+     int inFd = 0;
+diff --git a/src/rlharness/rlharness.hpp b/src/rlharness/rlharness.hpp
+index 6ea4aa5..4125caa 100644
+--- a/src/rlharness/rlharness.hpp
++++ b/src/rlharness/rlharness.hpp
+@@ -67,6 +67,16 @@ void ResetFrameCount();
+ // it; GameManager's setup calls ApplyPendingSeed() for it.
+ void ArmSeed(u16 seed);
+ void ApplyPendingSeed();
++
++// Stage start is requested, not forced.  Switching g_Supervisor.curState from
++// outside makes the title screen's calc element notice that its state changed
++// and ask the chain to exit, which kills the episode on the very next frame.
++// So RESET only arms the request; the title screen's own Ready state calls
++// ConsumePendingStart() and, like it already does for the developer-autoplay
++// path, returns CHAIN_CALLBACK_RESULT_CONTINUE_AND_REMOVE_JOB so that the title
++// removes itself.  That is the only transition that leaves the chain healthy.
++void ArmStart(u32 stage, u32 difficulty, u32 team, u16 seed, bool practice);
++bool ConsumePendingStart();
+ }
+ }
+ }
 -- 
 2.34.1
 
