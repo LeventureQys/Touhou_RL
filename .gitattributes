@@ -2,3 +2,6 @@
 # core.autocrlf=true (the default on Windows checkouts).
 .gitattributes text eol=lf
 .gitmodules text eol=lf
+# Shell scripts run inside WSL2: a CRLF checkout would break the shebang and
+# every heredoc.  Pin the eol so a Windows checkout cannot rewrite them.
+*.sh text eol=lf

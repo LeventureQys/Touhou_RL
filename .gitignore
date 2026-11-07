@@ -84,3 +84,15 @@ Document/Update/Alpha/v3.6.1/data/probe/*/bullets/
 # Frame caches, 78 MB each (capture-round5/6).  The small raw.npz evidence
 # (~1 MB, regenerable) is deliberately kept.
 **/frames.npz
+
+# ---------------------------------------------------------------------------
+# v4.0.0 training ground (P0).  The harness worktree is a *second* checkout of
+# the th08 submodule, cut from origin/port/portable-64bit so the fence-modified
+# main tree is left alone (10-P0 WP1).  Never commit it: it is a build tree and
+# ~106 commits ahead of the pinned submodule; the branch is the source of truth.
+# Large v4.0.0 artifacts (pixel caches, checkpoints) live outside the repository
+# under $V400_DATA on the WSL ext4 drive; *.dat/*.pt above already cover the
+# accidental copies.
+# ---------------------------------------------------------------------------
+/third_party/th08-rl/
+
