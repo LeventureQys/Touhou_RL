@@ -1,0 +1,194 @@
+{
+  "checkedAt": "2026-11-07T14:13:28",
+  "checks": [
+    {
+      "data": {
+        "kernel": "6.18.54.1-microsoft-standard-WSL2",
+        "platform": "linux",
+        "wsl": true
+      },
+      "detail": "WSL2 kernel 6.18.54.1-microsoft-standard-WSL2",
+      "name": "platform",
+      "required": true,
+      "status": "ok"
+    },
+    {
+      "data": {
+        "base_prefix": "/usr",
+        "executable": "/root/v400-venv/bin/python",
+        "prefix": "/root/v400-venv",
+        "version": "3.10.12"
+      },
+      "detail": "3.10.12 (10-P0 WP0 asks for 3.12)",
+      "name": "python",
+      "required": true,
+      "status": "warn"
+    },
+    {
+      "data": {
+        "prefix": "/root/v400-venv"
+      },
+      "detail": "inside /root/v400-venv",
+      "name": "venv",
+      "required": false,
+      "status": "ok"
+    },
+    {
+      "data": {
+        "found": {
+          "Xvfb": "/usr/bin/Xvfb",
+          "cmake": "/usr/bin/cmake",
+          "g++": "/usr/bin/g++",
+          "gcc": "/usr/bin/gcc",
+          "git": "/usr/bin/git",
+          "ninja": "/usr/bin/ninja",
+          "pkg-config": "/usr/bin/pkg-config",
+          "xauth": "/usr/bin/xauth",
+          "xvfb-run": "/usr/bin/xvfb-run"
+        },
+        "versions": {
+          "cmake": "cmake version 3.22.1",
+          "g++": "g++ (Ubuntu 11.4.0-1ubuntu1~22.04.3) 11.4.0",
+          "git": "git version 2.34.1",
+          "ninja": "1.10.1"
+        }
+      },
+      "detail": "g++ (Ubuntu 11.4.0-1ubuntu1~22.04.3) 11.4.0; cmake version 3.22.1; 1.10.1; git version 2.34.1",
+      "name": "binaries",
+      "required": true,
+      "status": "ok"
+    },
+    {
+      "data": {
+        "versions": {
+          "SDL2_image": "2.0.5",
+          "SDL2_ttf": "2.0.18",
+          "fontconfig": "2.13.1",
+          "freetype2": "24.1.18",
+          "gl": "1.2",
+          "sdl2": "2.0.20"
+        }
+      },
+      "detail": "sdl2 2.0.20, SDL2_image 2.0.5, SDL2_ttf 2.0.18, fontconfig 2.13.1, freetype2 24.1.18, gl 1.2",
+      "name": "pkg_config",
+      "required": true,
+      "status": "ok"
+    },
+    {
+      "data": {
+        "command": [
+          "xvfb-run",
+          "-a",
+          "-s",
+          "-screen 0 1024x768x24",
+          "glxinfo",
+          "-B"
+        ],
+        "renderer": "D3D12 (NVIDIA GeForce RTX 4070 SUPER)",
+        "vendor": "Microsoft Corporation"
+      },
+      "detail": "Microsoft Corporation / D3D12 (NVIDIA GeForce RTX 4070 SUPER)",
+      "name": "gl",
+      "required": true,
+      "status": "ok"
+    },
+    {
+      "data": {
+        "cpp_count": 48,
+        "root": "/root/Touhou_RL",
+        "th08_branch": "HEAD",
+        "th08_head": "08c7f00"
+      },
+      "detail": "48 .cpp, th08 at HEAD@08c7f00",
+      "name": "repo",
+      "required": true,
+      "status": "ok"
+    },
+    {
+      "data": {
+        "assets": {
+          "th08.dat": {
+            "bytes": 46838025,
+            "expected_bytes": 46838025,
+            "path": "/root/v400-data/game/th08.dat",
+            "sha256": "9d7edf43b8ddd347cbb641836f6b5050745dd936f688daebbf9382ca557043bb"
+          },
+          "thbgm.dat": {
+            "bytes": 449961024,
+            "expected_bytes": 449961024,
+            "path": "/root/v400-data/game/thbgm.dat",
+            "sha256": "2c2ef05f9ff6f43f752dae5da519a2477372c3f8875b7b44996a8f69fdad4d89"
+          }
+        },
+        "directory": "/root/v400-data/game"
+      },
+      "detail": "verified in /root/v400-data/game",
+      "name": "assets",
+      "required": true,
+      "status": "ok"
+    },
+    {
+      "data": {
+        "cuda": true,
+        "devices": [
+          "NVIDIA GeForce RTX 4070 SUPER"
+        ],
+        "version": "2.14.1+cu130"
+      },
+      "detail": "torch 2.14.1+cu130 cuda=True devices=NVIDIA GeForce RTX 4070 SUPER",
+      "name": "torch",
+      "required": false,
+      "status": "ok"
+    },
+    {
+      "data": {
+        "gpus": [
+          "NVIDIA GeForce RTX 4070 SUPER, 617.42, 12282 MiB"
+        ]
+      },
+      "detail": "NVIDIA GeForce RTX 4070 SUPER, 617.42, 12282 MiB",
+      "name": "cuda",
+      "required": false,
+      "status": "ok"
+    },
+    {
+      "data": {
+        "cores": 20
+      },
+      "detail": "20 logical cores",
+      "name": "cores",
+      "required": true,
+      "status": "ok"
+    },
+    {
+      "data": {
+        "free_gb": 943.7,
+        "path": "/root/v400-data",
+        "warn_below_gb": 350.0
+      },
+      "detail": "943.7 GB free on /root/v400-data (D-05 budget needs headroom)",
+      "name": "disk",
+      "required": false,
+      "status": "ok"
+    },
+    {
+      "data": {
+        "faces": 3
+      },
+      "detail": "VL Gothic present (3 faces)",
+      "name": "fonts",
+      "required": false,
+      "status": "ok"
+    }
+  ],
+  "root": "/root/Touhou_RL",
+  "schema": "v400-env/1",
+  "verdict": {
+    "exit_code": 0,
+    "failed_required": [],
+    "ready": true,
+    "warnings": [
+      "python"
+    ]
+  }
+}

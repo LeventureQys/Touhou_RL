@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# v4.0.0 P0-WP0: bootstrap the TH08 training ground inside WSL2 (Ubuntu 24.04).
+# v4.0.0 P0-WP0: bootstrap the TH08 training ground inside WSL2 (Ubuntu).
 #
 # Run *inside* the distro.  Everything here is idempotent, never prompts for a
 # password, and never writes one to disk.
@@ -7,18 +7,22 @@
 #   bash tools/rl/v400_wsl_bootstrap.sh --dry-run     # print the plan, run nothing
 #   bash tools/rl/v400_wsl_bootstrap.sh               # apt + venv + pip
 #   bash tools/rl/v400_wsl_bootstrap.sh --assets-from /mnt/d/WorkShop/Touhou_RL/third_party/th08/build/play
-#   bash tools/rl/v400_wsl_bootstrap.sh --clone-from  /mnt/d/WorkShop/Touhou_RL
+#   bash tools/rl/v400_wsl_bootstrap.sh --clone-from  /mnt/d/WorkShop/Touhou_RL \
+#        --pip-index-url https://pypi.tuna.tsinghua.edu.cn/simple
 #
 # What it does, in order (see Document/Update/Alpha/v4.0.0/10-P0-训练场.md WP0):
-#   1. sanity-check that this really is Ubuntu 24.04 on WSL2;
+#   1. sanity-check that this really is an Ubuntu WSL2 distro;
 #   2. apt-get install the build/runtime dependencies;
-#   3. create a Python 3.12 venv at $V400_VENV (default ~/v400-venv) and pip install;
-#   4. [opt-in] clone the parent repository onto ext4;
+#   3. create a Python venv at $V400_VENV (default ~/v400-venv) and pip install;
+#   4. [opt-in] clone the parent repository onto ext4, submodule included;
 #   5. [opt-in] copy th08.dat / thbgm.dat into $V400_DATA/game and verify their hashes;
 #   6. remind you to run tools/rl/v400_env_check.py, which is the actual gate.
 #
 # Step 6 is the gate: this script only makes the tools available, it does not
 # prove the environment works.  Exit code 0 from v400_env_check.py does.
+#
+# Network notes: on a network where pypi.org or github.com is unreachable, pass
+# --pip-index-url <mirror>; the submodule is then cloned from --clone-from.
 
 set -euo pipefail
 
@@ -29,6 +33,14 @@ CLONE_FROM=""
 ASSETS_FROM=""
 TORCH_SPEC="${TORCH_SPEC:-torch}"
 TORCH_INDEX_URL="${TORCH_INDEX_URL:-}"
+# Where the general pip packages come from.  Empty means the default PyPI index.
+# On networks where pypi.org is unreachable, point it at a mirror:
+#   --pip-index-url https://pypi.tuna.tsinghua.edu.cn/simple
+PIP_INDEX_URL="${PIP_INDEX_URL:-}"
+# The th08 submodule is fetched from github.com, which is not reachable from every
+# network.  When --clone-from names a checkout that already contains the submodule,
+# the URL is rewritten so the objects come from the local copy instead.
+SUBMODULE_URL="https://github.com/N0zoM1z0/th08.git"
 
 # Packages from 10-P0 WP0, kept in one place so the script and the doc cannot drift.
 APT_PACKAGES=(
@@ -49,6 +61,10 @@ while [ $# -gt 0 ]; do
     --clone-from=*) CLONE_FROM="${1#*=}"; shift ;;
     --assets-from) ASSETS_FROM="${2:-}"; shift 2 ;;
     --assets-from=*) ASSETS_FROM="${1#*=}"; shift ;;
+    --pip-index-url) PIP_INDEX_URL="${2:-}"; shift 2 ;;
+    --pip-index-url=*) PIP_INDEX_URL="${1#*=}"; shift ;;
+    --torch-index-url) TORCH_INDEX_URL="${2:-}"; shift 2 ;;
+    --torch-index-url=*) TORCH_INDEX_URL="${1#*=}"; shift ;;
     -h|--help) usage; exit 0 ;;
     *) echo "unknown argument: $1 (try --help)" >&2; exit 2 ;;
   esac
@@ -111,13 +127,15 @@ else
   run python3 -m venv "$V400_VENV"
 fi
 PIP="$V400_VENV/bin/pip"
-run "$PIP" install --upgrade pip
+PIP_ARGS=()
+[ -n "$PIP_INDEX_URL" ] && PIP_ARGS=(--index-url "$PIP_INDEX_URL")
+run "$PIP" install "${PIP_ARGS[@]}" --upgrade pip
 if [ -n "$TORCH_INDEX_URL" ]; then
   run "$PIP" install --index-url "$TORCH_INDEX_URL" "$TORCH_SPEC"
 else
-  run "$PIP" install "$TORCH_SPEC"
+  run "$PIP" install "${PIP_ARGS[@]}" "$TORCH_SPEC"
 fi
-run "$PIP" install "${PIP_PACKAGES[@]}"
+run "$PIP" install "${PIP_ARGS[@]}" "${PIP_PACKAGES[@]}"
 
 # --------------------------------------------------------------------------
 step "4/6 repository (ext4, never /mnt/*)"
@@ -127,6 +145,12 @@ if [ -n "$CLONE_FROM" ]; then
     echo "  reusing $TARGET"
   else
     run git clone "$CLONE_FROM" "$TARGET"
+  fi
+  # github.com may be unreachable; prefer the local copy of the submodule when the
+  # source checkout already has it.  Written to the user config, not the repository.
+  if [ -d "$CLONE_FROM/third_party/th08/.git" ] || [ -f "$CLONE_FROM/third_party/th08/.git" ]; then
+    run git config --global "url.$CLONE_FROM/third_party/th08.insteadOf" "$SUBMODULE_URL"
+    echo "  submodule url rewritten to $CLONE_FROM/third_party/th08"
   fi
   run git -C "$TARGET" submodule update --init
 else
