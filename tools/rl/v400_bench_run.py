@@ -1,0 +1,1328 @@
+"""Bounded TH08 benchmark entry point; never fabricates measured episodes.
+
+Two artefacts can come out of here, and only these two:
+
+* ``bench/results.jsonl`` — **append-only** records of real engine attempts.  A
+  successful attempt carries real referee numbers; a failed attempt is recorded
+  as ``status="error"`` with the real exception text and **no** outcome numbers.
+* ``bench/scoreboard.md`` — a derived summary that states the provisional frame
+  cap and the sample-size limits it was computed under.
+
+Without ``--execute`` nothing is measured and the process exits 3.  With
+``--execute`` the runner starts the real Linux harness through
+``tools/rl/v400_wsl_env.WslHarnessClient``, drives it with a control policy over
+the unchanged HELLO/RESET/STEP/QUIT protocol, and reads the real ``STATE``
+record for the referee.  An episode ends on the engine's own game-over rule (a
+death committed while no spare lives remain), not by wandering inside the retry
+menu until the frame cap; the retry menu freezes gameplay and only the global
+frame counter keeps rising, which was measured and is why the rule exists.
+
+Frame cap: the cap of a stage is ``ceil(1.5 * measured human gameplay frames of
+that stage)`` and comes from ``bench/human_reference.json``
+(``cap_source="human_reference"``), whose numbers were collected from the real
+engine's ``STATE`` counters during retail replay playback.  Only when that file
+is missing — or when the operator passes ``--max-frames`` explicitly — does the
+runner fall back to a cap that is *not* human-referenced
+(``cap_source="provisional"`` / ``"operator_override"``), and the row says so.
+
+A ``--dev20`` row is one episode of the formal 20-seed dev run; it is still not a
+gate evaluation, but it is no longer labelled "not the 20-seed dev set".
+
+Reset-hash guard (EXP-P0-071): EXP-P0-070 run c measured one engine launch in 18
+(≈5.6 %) answering the identical ``RESET`` with a different ``hash`` while still
+reporting ``ready=1`` — a divergence that exists *before any* ``STEP``.  Every
+episode therefore verifies the ``RESET`` reply's own ``hash`` against an expected
+value (``--expect-reset-hash`` > ``V400_EXPECT_RESET_HASH`` > the first verified
+reset of the same run) and refuses to continue on a difference.  A refusal is
+fail-closed: **no row is appended** to ``results.jsonl`` and the process exits
+``4`` with both hashes and the exact ``stage_start`` in the error text.  The guard
+detects and rejects an unverified start state; it does not claim to have repaired
+the engine-side cause.
+"""
+
+from __future__ import annotations
+
+import argparse
+import json
+import subprocess
+import sys
+import time
+from datetime import datetime, timezone
+from pathlib import Path, PurePosixPath
+
+import numpy as np
+
+ROOT = Path(__file__).resolve().parents[2]
+if str(ROOT) not in sys.path:  # keep the CLI importable from any cwd
+    sys.path.insert(0, str(ROOT))
+
+from tools.rl.v400_wsl_env import WslHarnessClient  # noqa: E402
+from touhou_rl.v400.bench.human_reference import (  # noqa: E402
+    CAP_MULTIPLIER,
+    HumanReferenceError,
+    cap_for_suite,
+    load_reference,
+    reference_sha256,
+)
+from touhou_rl.v400.bench.judge import judge  # noqa: E402
+from touhou_rl.v400.bench.policies import RandomPolicy, StillPolicy  # noqa: E402
+from touhou_rl.v400.bench.reset_guard import (  # noqa: E402
+    DEFAULT_RESET_RETRIES,
+    MAX_RESET_RETRIES,
+    RESET_HASH_ENV,
+    ResetHashError,
+    ResetHashGuard,
+    ResetHashMismatch,
+    guard_from_config,
+    normalize_reset_hash,
+    stage_start_command,
+)
+from touhou_rl.v400.bench.results import row_stage, summarize  # noqa: E402
+from touhou_rl.v400.bench.suites import DEV_SEEDS, STAGE_ORDINALS, SUITES  # noqa: E402
+from touhou_rl.v400.gym.actions import cand_to_mask  # noqa: E402
+from touhou_rl.v400.gym.env import (  # noqa: E402
+    DECISION_FRAMES,
+    DIFFICULTIES,
+    F_BOMBS,
+    F_DEATHS,
+    F_LIVES,
+    F_SCORE,
+    _f32_bits,
+)
+
+DEFAULT_HUMAN_REFERENCE = ROOT / "Document/Update/Alpha/v4.0.0/bench/human_reference.json"
+DEFAULT_RESULTS = ROOT / "Document/Update/Alpha/v4.0.0/bench/results.jsonl"
+DEFAULT_SCOREBOARD = ROOT / "Document/Update/Alpha/v4.0.0/bench/scoreboard.md"
+
+#: Linux paths inside the WSL distro; the host passes them through unchanged.
+DEFAULT_BINARY = "/root/Touhou_RL/third_party/th08-rl/build/rl/th08-modern"
+DEFAULT_DATA_DIR = "/root/v400-data/game"
+DEFAULT_DISTRO = "Ubuntu"
+
+#: Cap provenance labels; every episode record carries exactly one of these.
+CAP_SOURCE = "provisional"
+CAP_SOURCE_HUMAN = "human_reference"
+CAP_SOURCE_OPERATOR = "operator_override"
+#: Fallback cap used only when no measured human reference covers the suite.
+DEFAULT_MAX_FRAMES = 3000
+#: The engine refuses a single STEP above this many frames.
+MAX_STEP_FRAMES = 100_000
+
+RESULT_SCHEMA = "v400-wp7-bench-episode/1"
+INVALID_SCHEMA = "v400-wp7-bench-invalidation/1"
+CORRECTION_SCHEMA = "v400-wp7-bench-stage-correction/1"
+SCOREBOARD_MARKER = "<!-- generated by tools/rl/v400_bench_run.py --summarize"
+
+#: EXP-P0-077: the stage argument is the engine's 0-based ``stage_index``
+#: (``ScoreDat.hpp``: ``STAGE1 = 0``), so ``RESET 0`` is the human-visible Stage 1.
+STAGE_INDEX_SEMANTICS = "0-based engine stage index (RESET <stage> == STATE.f1); index 0 is Stage 1"
+
+#: Exit code for "the reset state hash diverged, so nothing was measured".
+#: Distinct from 1 (a failed attempt that was still recorded) and from 2
+#: (argument error): callers must be able to tell a refused start state apart.
+EXIT_RESET_HASH_MISMATCH = 4
+
+#: Field indices are the documented 25-field order (see gym/env.py and rlharness).
+STATE_FIELDS = 25
+#: The engine prints f6..f12 as ``%08x`` float bits and the rest as ``%u``.
+HEX_FIELDS = frozenset(range(6, 13))
+
+PROVISIONAL_NOTES = (
+    "provisional frame cap: real engine episodes, but NOT a gate evaluation and "
+    "NOT the 20-seed dev set (3 dev seeds per agent, suite S1N, one stage)"
+)
+DEV20_NOTES = (
+    "formal 20-seed dev run (seeds 1000-1019, dev split only): real engine episodes with the "
+    "cap derived from the measured human reference; NOT a gate evaluation and NOT the confirm split"
+)
+
+
+def dev_seed(value: str) -> int:
+    try:
+        seed = int(value)
+    except ValueError as exc:
+        raise argparse.ArgumentTypeError("seed must be a registered dev seed") from exc
+    if seed not in DEV_SEEDS:
+        raise argparse.ArgumentTypeError("seed must be a registered dev seed")
+    return seed
+
+
+def reset_hash_arg(value: str) -> str:
+    """One hex state hash on the command line (never a placeholder)."""
+    try:
+        return normalize_reset_hash(value)
+    except ValueError as exc:
+        raise argparse.ArgumentTypeError(str(exc)) from exc
+
+
+def _iso(epoch: float) -> str:
+    return datetime.fromtimestamp(epoch, tz=timezone.utc).isoformat()
+
+
+# -- protocol helpers -----------------------------------------------------
+def parse_state(reply: str) -> dict[str, int]:
+    """Parse one real ``STATE`` reply into ``{"frames": .., "f0": .., "f24": ..}``.
+
+    ``HarnessClient.state()`` assumes every field is decimal, but the engine
+    prints f6..f12 as hexadecimal float bits.  After the first death that helper
+    raises ``ValueError``, so the runner parses the documented format itself and
+    preserves the exact u32 bits the engine emitted.
+    """
+    tokens = reply.split()
+    if not tokens or tokens[0] != "OK":
+        raise ValueError(f"STATE did not return OK: {reply!r}")
+    fields: dict[str, int] = {}
+    for token in tokens[1:]:
+        key, separator, value = token.partition("=")
+        if not separator:
+            continue
+        if key.startswith("f") and key[1:].isdigit():
+            index = int(key[1:])
+            fields[key] = int(value, 16) if index in HEX_FIELDS else int(value, 10)
+        elif key == "frames":
+            fields["frames"] = int(value, 10)
+    if "frames" not in fields or any(f"f{i}" not in fields for i in range(STATE_FIELDS)):
+        raise ValueError(f"STATE reply is incomplete: {reply!r}")
+    return fields
+
+
+class ProtocolStateReferee:
+    """Referee over one real ``STATE`` record, shaped like the env's shared block.
+
+    ``judge()`` expects ``env.shm.state()`` and ``env.shm.header()``.  The engine
+    builds that record from ``TrackedFields()`` — the same 25 values it copies
+    into the shared block when a segment is attached.  This runner never attaches
+    one (the Windows host cannot mmap the WSL ``/dev/shm`` segment), so the
+    referee reads the identical protocol record instead of inventing values.
+    """
+
+    def __init__(self, state: dict[str, int]) -> None:
+        self._state = state
+        self.shm = self  # judge() reaches the block through the environment
+
+    def state(self) -> np.ndarray:
+        return np.asarray([self._state[f"f{index}"] for index in range(STATE_FIELDS)], dtype="<u4")
+
+    def header(self) -> dict[str, int]:
+        return {"frame": int(self._state["frames"])}
+
+
+def _readings(state: dict[str, int]) -> dict[str, float]:
+    """The four HUD counters a referee reads, as the floats they were recorded from.
+
+    Field mapping was verified against a real still-policy episode (see
+    ``Document/Update/Alpha/v4.0.0/experiments/EXP-P0-048-WP7-real-random-still.md``):
+    at reset f6=0 deaths and f7=2 lives; the first death commit raises f6 to 1 and
+    the following respawn check lowers f7 to 1; the second death repeats that
+    pattern to f6=2 / f7=0; the third death raises f6 to 3 with f7 already 0,
+    which is exactly the engine's ``showRetryMenu`` branch.  f8 stays at 3 with no
+    bomb input, and f4 (score) freezes at that third death.
+    """
+    return {
+        "deaths": _f32_bits(state[f"f{F_DEATHS}"]),
+        "lives": _f32_bits(state[f"f{F_LIVES}"]),
+        "bombs": _f32_bits(state[f"f{F_BOMBS}"]),
+        "score": int(state[f"f{F_SCORE}"]),
+    }
+
+
+# -- harness provenance ---------------------------------------------------
+def _wsl_capture(distro: str, command: list[str], *, timeout: float = 60.0) -> str | None:
+    """Run one read-only command in WSL and return stripped stdout, or None."""
+    try:
+        done = subprocess.run(
+            ["wsl.exe", "-d", distro, "--", *command],
+            capture_output=True, text=True, timeout=timeout, check=False,
+        )
+    except Exception:
+        return None
+    if done.returncode != 0:
+        return None
+    return done.stdout.strip() or None
+
+
+def repository_path(binary: str) -> str | None:
+    """The harness checkout containing ``build/rl/<binary>``, in POSIX form.
+
+    ``pathlib.Path`` would apply Windows separators to a Linux path and break
+    ``git -C`` inside WSL, so the derivation is deliberately pure POSIX.
+    """
+    parents = PurePosixPath(binary).parents
+    if len(parents) <= 2:
+        return None
+    return str(parents[2])
+
+
+def collect_provenance(binary: str, distro: str) -> dict[str, str | None]:
+    """Real binary/commit/kernel identity of the engine that will run episodes."""
+    sha256 = _wsl_capture(distro, ["sha256sum", binary])
+    sha256 = sha256.split()[0] if sha256 else None
+    if sha256 is not None and (len(sha256) != 64 or any(c not in "0123456789abcdef" for c in sha256)):
+        sha256 = None
+    repository = repository_path(binary)
+    commit = _wsl_capture(distro, ["git", "-C", repository, "rev-parse", "HEAD"]) if repository else None
+    kernel = _wsl_capture(distro, ["uname", "-r"])
+    return {
+        "harness_binary": binary,
+        "harness_binary_sha256": sha256,
+        "harness_commit": commit,
+        "harness_distro": distro,
+        "harness_wsl_kernel": kernel,
+    }
+
+
+# -- one real episode -----------------------------------------------------
+def _policy_for(agent: str, seed: int):
+    if agent == "random":
+        return RandomPolicy(seed)
+    if agent == "still":
+        return StillPolicy()
+    raise ValueError(f"unsupported control policy: {agent!r}")
+
+
+def resolve_cap(*, reference: dict | None, suite_name: str,
+                explicit_max_frames: int | None = None) -> dict:
+    """The per-episode cap and exactly where it came from (never guessed).
+
+    Order of authority: an explicit operator ``--max-frames`` wins but is labelled
+    as an override; otherwise the measured human reference supplies
+    ``ceil(1.5 * human gameplay frames)``; otherwise the provisional default is
+    used *and labelled provisional*.
+    """
+    suite = SUITES[suite_name]
+    if explicit_max_frames is not None:
+        return {
+            "max_frames": int(explicit_max_frames),
+            "cap_source": CAP_SOURCE_OPERATOR,
+            "cap_reason": "operator supplied --max-frames; this cap is not derived from the human reference",
+        }
+    if reference is not None:
+        try:
+            human = cap_for_suite(reference, suite)
+        except HumanReferenceError as exc:
+            return {
+                "max_frames": DEFAULT_MAX_FRAMES,
+                "cap_source": CAP_SOURCE,
+                "cap_reason": (f"the human reference has no measured cap for suite {suite_name} ({exc}); "
+                               "fell back to the operator provisional cap"),
+            }
+        return {
+            "max_frames": human.cap,
+            "cap_source": CAP_SOURCE_HUMAN,
+            "cap_reason": (f"ceil({CAP_MULTIPLIER} x {human.human_frames} measured human gameplay frames "
+                           f"of {human.stage_name} ({human.difficulty}, shot {human.shot_name}))"),
+            "human_frames": human.human_frames,
+            "cap_multiplier": human.multiplier,
+            "human_reference_stage": human.stage_name,
+            "human_reference_stage_index": human.stage_index,
+            "human_reference_difficulty": human.difficulty,
+            "human_reference_shot": human.shot,
+            "human_reference_source_sha256": human.source_replay_sha256,
+        }
+    return {
+        "max_frames": DEFAULT_MAX_FRAMES,
+        "cap_source": CAP_SOURCE,
+        "cap_reason": "no measured human reference; operator-chosen provisional cap",
+    }
+
+
+def run_episode(
+    *,
+    agent: str,
+    suite_name: str,
+    seed: int,
+    max_frames: int | None = None,
+    binary: str = DEFAULT_BINARY,
+    data_dir: str = DEFAULT_DATA_DIR,
+    distro: str = DEFAULT_DISTRO,
+    timeout: float = 120.0,
+    cap: dict | None = None,
+    collection: str = "provisional",
+    human_reference_present: bool = False,
+    human_reference_path: str | None = None,
+    human_reference_sha256: str | None = None,
+    client_factory=None,
+    provenance: dict[str, str | None] | None = None,
+    reset_guard: ResetHashGuard | None = None,
+    expect_reset_hash: str | None = None,
+    reset_retries: int | None = None,
+    environ=None,
+    clock=time.monotonic,
+    wallclock=time.time,
+) -> dict:
+    """Run exactly one real episode and return its record (never a guess).
+
+    The episode starts only after the engine's own ``RESET`` hash matches the
+    expected start state (see the module docstring).  A refusal returns a
+    ``status="error"`` record carrying both hashes and ``reset_guard_failed``;
+    the CLI must not append such a record to the bench.
+    """
+    suite = SUITES[suite_name]
+    if cap is None:
+        if max_frames is None:
+            raise ValueError("run_episode requires either cap=... or max_frames=...")
+        cap = {"max_frames": int(max_frames), "cap_source": CAP_SOURCE,
+               "cap_reason": "explicit max_frames without a resolved cap provenance"}
+    max_frames = int(cap["max_frames"])
+    if reset_guard is None:
+        guard = guard_from_config(explicit=expect_reset_hash, environ=environ,
+                                  retries=reset_retries)
+    else:
+        if expect_reset_hash is not None or reset_retries is not None or environ is not None:
+            raise ValueError("pass either reset_guard=... or "
+                             "expect_reset_hash=/reset_retries=/environ=, not both")
+        guard = reset_guard
+    dev20 = collection == "dev20"
+    started_epoch = wallclock()
+    started_clock = clock()
+    identity = {
+        "schema": RESULT_SCHEMA,
+        "agent": agent,
+        "suite": suite_name,
+        "seed": seed,
+        "stages": list(suite.stage_indexes),
+        # EXP-P0-077: the declared stage is a 0-based engine stage index (the exact
+        # ``RESET <stage>`` argument).  The row carries the index *and* the measured
+        # reference name so a later reader never has to guess the numbering.
+        **({"stage_index": suite.stage_index, "stage_name": suite.stage_name,
+            "stage_index_semantics": STAGE_INDEX_SEMANTICS}
+           if suite.stage_index is not None else {}),
+        "difficulty": suite.difficulty,
+        "resources": suite.resources,
+        "max_frames": max_frames,
+        "cap_source": cap["cap_source"],
+        "cap_reason": cap.get("cap_reason"),
+        "human_reference_present": bool(human_reference_present),
+        "collection": "dev20" if dev20 else "provisional",
+        "dev_split": seed in DEV_SEEDS,
+        "decision_frames": DECISION_FRAMES,
+        "not_a_gate": True,
+        "not_the_20_seed_dev_set": not dev20,
+        "notes": DEV20_NOTES if dev20 else PROVISIONAL_NOTES,
+        "started_at": _iso(started_epoch),
+    }
+    for key in ("human_frames", "cap_multiplier", "human_reference_stage",
+                "human_reference_stage_index", "human_reference_difficulty",
+                "human_reference_shot", "human_reference_source_sha256"):
+        if key in cap:
+            identity[key] = cap[key]
+    if human_reference_path is not None:
+        identity["human_reference_path"] = human_reference_path
+    if human_reference_sha256 is not None:
+        identity["human_reference_sha256"] = human_reference_sha256
+    identity.update(provenance or {"harness_binary": binary, "harness_distro": distro})
+    identity["harness_commit"] = identity.get("harness_commit") or (
+        f"sha256-{identity['harness_binary_sha256'][:16]}"
+        if identity.get("harness_binary_sha256") else "unresolved"
+    )
+    identity.setdefault("harness_role", "shadow")
+
+    def failure(exc: BaseException) -> dict:
+        record = dict(identity)
+        record.update(
+            status="error",
+            measured=False,
+            error=f"{type(exc).__name__}: {exc}",
+            error_type=type(exc).__name__,
+            wall_s=round(clock() - started_clock, 3),
+            finished_at=_iso(wallclock()),
+            notes="real attempt failed; no numeric outcome is recorded or invented",
+        )
+        if isinstance(exc, ResetHashError):
+            # The start state was never verified: both hashes, the exact
+            # stage_start and the source of the expectation are recorded, and the
+            # CLI refuses to append this record to the bench.
+            record.update(exc.as_record())
+            record["notes"] = ("fail-closed on the RESET state-hash guard: the engine's start "
+                               "state was not verified, so no bench row is written")
+        return record
+
+    # This bounded runner executes one declared stage; multi-stage suites need a
+    # stage-boundary detector that does not exist yet, so refuse instead of
+    # reporting a full PSN run that was never played.
+    if len(suite.stage_indexes) != 1:
+        return failure(NotImplementedError(
+            f"suite {suite_name} declares {len(suite.stage_indexes)} stages; "
+            "multi-stage execution needs a stage-clear detector this runner does not have"
+        ))
+
+    create_client = client_factory or WslHarnessClient
+    client = None
+    try:
+        stage = suite.stage_indexes[0]
+        difficulty_index = DIFFICULTIES.index(suite.difficulty)
+        practice = suite.resources == "practice"
+        stage_start = stage_start_command(stage=stage, difficulty=difficulty_index,
+                                          team=0, seed=seed, practice=practice)
+        identity["reset_stage_start"] = stage_start
+        reset = None
+        refusal: ResetHashMismatch | None = None
+        for _attempt in range(1, guard.attempts_allowed + 1):
+            # A retry is a *fresh engine process*, not a second RESET on the same
+            # one: the real engine answered a repeated RESET on one process with
+            # ready=0 (measured 2026-11-09), so re-issuing RESET in-process cannot
+            # produce a new start state to verify.
+            client = create_client(binary, data_dir, distro=distro, timeout=timeout)
+            client.start()
+            hello = client.hello()
+            identity["harness_role"] = hello.get("role", identity.get("harness_role"))
+            identity["harness_protocol"] = hello.get("proto")
+            reply = client.reset(
+                stage=stage,
+                difficulty=difficulty_index,
+                team=0,
+                seed=seed,
+                practice=practice,
+            )
+            if reply.get("ready") != "1":
+                raise RuntimeError(f"RESET did not reach a playable state: {reply}")
+            try:
+                guard.check(reply, stage_start=stage_start)
+            except ResetHashMismatch as exc:
+                # A mismatch may be retried once; one that survives every attempt
+                # is a refusal, never a lucky start.
+                refusal = exc
+                try:
+                    client.close()
+                except Exception:
+                    pass
+                client = None
+                continue
+            reset = reply
+            break
+        if reset is None:
+            raise refusal if refusal is not None else RuntimeError(
+                f"RESET state-hash guard produced no verified start for {stage_start}")
+        identity["reset_hash_expected"] = guard.expected
+        identity["reset_hash_source"] = guard.source
+
+        start_state = parse_state(client.request("STATE"))
+        start = _readings(start_state)
+        # The engine's own 0-based stage index right after RESET (EXP-P0-077): this
+        # is the direct evidence that the requested ``stage_index`` is the stage
+        # that actually started, so a 1-based/0-based mistake cannot hide.
+        stage_at_start = int(start_state["f1"])
+        stage_consistent = stage_at_start == int(stage)
+        policy = _policy_for(agent, seed)
+        frames = 0
+        steps = 0
+        zero_advances = 0
+        previous = start
+        state = start_state
+        end = "frame_cap"
+        terminal_rule = "provisional frame cap reached without a game over"
+        while frames < max_frames:
+            want = min(DECISION_FRAMES, max_frames - frames)
+            reply = client.step(cand_to_mask(policy(None), 0), want)
+            advanced = int(reply.get("advanced", "0"))
+            frames += advanced
+            steps += 1
+            if advanced <= 0:
+                zero_advances += 1
+                if zero_advances >= 3 and reply.get("exit") != "1":
+                    raise RuntimeError(f"STEP advanced no frames without exiting: {reply}")
+            else:
+                zero_advances = 0
+            if reply.get("exit") == "1":
+                end = "game_over" if reply.get("game_over") == "1" else "engine_exit"
+                terminal_rule = "the engine ended the calc chain (STEP exit=1)"
+                break
+            # Death and lives are only visible in the real state record, so the
+            # referee samples it every decision step (see the field mapping note
+            # in _readings).
+            state = parse_state(client.request("STATE"))
+            current = _readings(state)
+            if current["deaths"] > previous["deaths"] and current["lives"] <= 0:
+                end = "game_over"
+                terminal_rule = (
+                    "death committed while livesRemaining<=0: the engine's own death branch "
+                    "(Player::UpdateDeathAndRespawn) raises showRetryMenu at the next respawn "
+                    "check, so the episode is over even though the chain keeps pumping the menu "
+                    "with no input"
+                )
+                break
+            previous = current
+        else:
+            end = "frame_cap"
+
+        try:
+            end_state = parse_state(client.request("STATE"))
+            final_state_source = "engine STATE reply after the final STEP"
+        except Exception:
+            # The chain may have left gameplay on a real engine exit; never guess,
+            # keep the last real reading and say so in the record.
+            end_state = state
+            final_state_source = "last successful per-step STATE reply (final STATE read failed)"
+        verdict = judge(ProtocolStateReferee(end_state))
+        finish = _readings(end_state)
+        wall_s = clock() - started_clock
+        record = dict(identity)
+        record.update(
+            status="ok",
+            measured=True,
+            ckpt="none",
+            ckpt_kind="control policy (no checkpoint)",
+            privilege="deploy_pixel",
+            policy_input="none: control policy emits actions without reading observations or privileged state",
+            referee="touhou_rl.v400.bench.judge.judge",
+            referee_state_source=(
+                "engine STATE reply built from TrackedFields(); the same 25-field record the "
+                "harness publishes into the shared block when one is attached"
+            ),
+            final_state_source=final_state_source,
+            frames=frames,
+            state_frame=verdict.frame,
+            gameplay_frame=int(end_state["f3"]),
+            steps=steps,
+            stage_observed=int(end_state["f1"]),
+            stage_start_observed=stage_at_start,
+            stage_consistent=stage_consistent,
+            deaths=verdict.deaths,
+            bombs_start=start["bombs"],
+            bombs_end=finish["bombs"],
+            bombs_used=round(start["bombs"] - finish["bombs"], 6),
+            lives_start=start["lives"],
+            lives_end=verdict.lives,
+            score_start=start["score"],
+            score=verdict.score,
+            cleared=False,
+            clear_semantics=f"no stage clear was observed; the episode ended by {end}",
+            end=end,
+            terminal_rule=terminal_rule,
+            cap_hit=end == "frame_cap",
+            reset_ready=1,
+            reset_setup_frames=int(reset.get("setup_frames", "-1")),
+            reset_hash=reset.get("hash"),
+            reset_verified=True,
+            **guard.as_record(),
+            wall_s=round(wall_s, 3),
+            frames_per_second=round(frames / wall_s, 3) if wall_s > 0 else 0.0,
+            finished_at=_iso(wallclock()),
+        )
+        return record
+    except BaseException as exc:  # recorded verbatim, never silently skipped
+        return failure(exc)
+    finally:
+        try:
+            if client is not None:
+                client.close()
+        except Exception:
+            pass
+
+
+# -- append-only storage --------------------------------------------------
+def append_row(path: Path, row: dict) -> None:
+    """Append one JSON line and prove the pre-existing bytes are still intact."""
+    path = Path(path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    before = path.read_bytes() if path.is_file() else b""
+    line = json.dumps(row, ensure_ascii=False, sort_keys=True) + "\n"
+    with open(path, "ab") as handle:
+        handle.write(line.encode("utf-8"))
+    after = path.read_bytes()
+    if not after.startswith(before) or after[len(before):] != line.encode("utf-8"):
+        raise RuntimeError(f"append verification failed; pre-existing content changed: {path}")
+
+
+def read_rows(path: Path) -> list[dict]:
+    path = Path(path)
+    if not path.is_file():
+        raise FileNotFoundError(f"no measured results file: {path}")
+    rows = []
+    for number, line in enumerate(path.read_text(encoding="utf-8").splitlines(), start=1):
+        if not line.strip():
+            continue
+        try:
+            row = json.loads(line)
+        except json.JSONDecodeError as exc:
+            raise ValueError(f"{path}:{number}: not a JSON record") from exc
+        if not isinstance(row, dict):
+            raise ValueError(f"{path}:{number}: not a JSON object")
+        rows.append(row)
+    return rows
+
+
+# -- scoreboard -----------------------------------------------------------
+def _unique(values) -> list:
+    return sorted({value for value in values if value is not None})
+
+
+def _stage_key(row: dict) -> tuple[int | None, str, str]:
+    """``(stage_index, stage_label, stage_source)`` for the scoreboard tables."""
+    index, name, source = row_stage(row)
+    if index is None:
+        return None, "unrecorded", "unrecorded"
+    return index, name or "unrecorded", source
+
+
+def render_scoreboard(ok: list[dict], errors: list[dict], invalid_records: list[dict],
+                      invalidated: set[str], corrections: list[dict] | None = None) -> str:
+    """A summary that names its own cap source, stage index and sample-size limits."""
+    corrections = corrections or []
+    formal = [row for row in ok if row.get("collection") == "dev20"]
+    legacy = [row for row in ok if row.get("collection") != "dev20"]
+    # A human-referenced episode that is not part of the formal dev run is not a
+    # provisional-cap row either; keeping them in one bucket would claim a cap
+    # provenance the row does not have (EXP-P0-077 added a single verification row).
+    legacy_provisional = [row for row in legacy if row.get("cap_source") != CAP_SOURCE_HUMAN]
+    legacy_human = [row for row in legacy if row.get("cap_source") == CAP_SOURCE_HUMAN]
+    agents = _unique(row["agent"] for row in ok)
+    suites = _unique(row["suite"] for row in ok)
+    seeds = _unique(row["seed"] for row in ok)
+    seed_counts = {agent: len({row["seed"] for row in ok if row["agent"] == agent})
+                   for agent in agents}
+    seed_counts_txt = ", ".join(f"{agent}: {count}" for agent, count in seed_counts.items())
+    per_agent = min(seed_counts.values()) if seed_counts else 0
+    end_counts: dict[str, int] = {}
+    for row in ok:
+        end_counts[row.get("end", "unrecorded")] = end_counts.get(row.get("end", "unrecorded"), 0) + 1
+    end_txt = ", ".join(f"{name}: {count}" for name, count in sorted(end_counts.items()))
+    harness = _unique(row.get("harness_commit", "unresolved") for row in ok)
+    sha256 = _unique(row.get("harness_binary_sha256") or "unresolved" for row in ok)
+    distro = _unique(row.get("harness_distro") or "unresolved" for row in ok)
+    kernel = _unique(row.get("harness_wsl_kernel") or "unresolved" for row in ok)
+    binary = _unique(row.get("harness_binary", "unresolved") for row in ok)
+    fallback_commit = [value for value in harness if value.startswith("sha256-")]
+
+    caps_by_source: dict[str, list[int]] = {}
+    for row in ok:
+        caps_by_source.setdefault(row.get("cap_source", "unrecorded"), []).append(row["max_frames"])
+    cap_source_txt = "; ".join(
+        f'`cap_source = "{source}"` max_frames '
+        f'{", ".join(str(cap) for cap in sorted(set(values)))} ({len(values)} row(s))'
+        for source, values in sorted(caps_by_source.items()))
+
+    human_rows = [row for row in ok if row.get("cap_source") == CAP_SOURCE_HUMAN]
+    human_lines: list[str] = []
+    seen_human: set[tuple] = set()
+
+    def _human_key(row: dict) -> tuple:
+        return (row.get("suite"), row.get("human_reference_stage"), row.get("human_frames"),
+                row.get("cap_multiplier"), row.get("max_frames"),
+                row.get("human_reference_source_sha256"))
+
+    # Which stages were actually measured under each human cap: the cap comes from
+    # one stage, and a row that played another stage under it is exactly the
+    # EXP-P0-077 defect, so the line has to say so instead of implying the cap fits.
+    stages_by_cap: dict[tuple, dict[str, int]] = {}
+    for row in human_rows:
+        index, name, _source = _stage_key(row)
+        label = f"{name} (idx {index})" if index is not None else "unrecorded stage"
+        bucket = stages_by_cap.setdefault(_human_key(row), {})
+        bucket[label] = bucket.get(label, 0) + 1
+    for row in human_rows:
+        key = _human_key(row)
+        if key in seen_human:
+            continue
+        seen_human.add(key)
+        measured_stages = stages_by_cap.get(key, {})
+        stage_txt = ", ".join(f"{label} ×{count}"
+                              for label, count in sorted(measured_stages.items()))
+        human_lines.append(
+            f"- suite `{row.get('suite')}` ({row.get('human_reference_difficulty')}, "
+            f"shot {row.get('human_reference_shot')}): cap = ceil({row.get('cap_multiplier')} × "
+            f"{row.get('human_frames')}) = **{row.get('max_frames')}** frames, from the measured "
+            f"`{row.get('human_reference_stage')}` of retail replay "
+            f"`{row.get('human_reference_source_sha256')}`; rows under this cap were measured on "
+            f"stage {stage_txt}"
+        )
+        if len(measured_stages) > 1:
+            human_lines.append(
+                "- **the cap above comes from one stage but rows under it played another**: "
+                "those rows are a real measurement of the stage the stage table names, not of "
+                "the stage the cap was derived from (EXP-P0-077)."
+            )
+    reference_paths = _unique(row.get("human_reference_path") for row in human_rows)
+    reference_shas = _unique(row.get("human_reference_sha256") for row in human_rows)
+
+    # EXP-P0-077: a table annotated by the 0-based stage_index, not by the suite
+    # name alone.  The suite name does not identify the stage: before the fix,
+    # ``S1N`` reset engine stage 1 (the real Stage 2).
+    stage_counts: dict[tuple[str, int | None, str, str, str], int] = {}
+    for row in ok:
+        index, name, source = _stage_key(row)
+        key = (row.get("suite", "?"), index, name,
+               row.get("cap_source", "unrecorded"), source)
+        stage_counts[key] = stage_counts.get(key, 0) + 1
+    stage_table: list[str] = [
+        "| Suite | Stage idx (0-based) | Ordinal | Stage name | Cap source | Episodes | Stage source |",
+        "|---|---:|---|---|---|---:|---|",
+    ]
+    for (suite, index, name, cap_source, source), count in sorted(stage_counts.items()):
+        ordinal = (STAGE_ORDINALS[index]
+                   if isinstance(index, int) and index < len(STAGE_ORDINALS) else "Extra")
+        index_text = "unrecorded" if index is None else str(index)
+        stage_table.append(
+            f"| {suite} | {index_text} | {ordinal} | {name} | {cap_source} | {count} | {source} |")
+    inconsistent = [row for row in ok if row.get("stage_consistent") is False]
+
+    if formal:
+        title = "TH08-Bench scoreboard — human-referenced dev set (20 seeds)"
+        status = (
+            "**Status: formal 20-seed dev board, non-gate.** Every row here is a real engine "
+            "episode whose per-episode frame cap comes from `bench/human_reference.json` "
+            "(`cap = ceil(1.5 × measured human gameplay frames of that stage)`). The seeds are "
+            "the dev split (1000-1019); the confirm split (60000+) was not touched. This is "
+            "**not** a gate evaluation and **not** a confirm-split estimate."
+        )
+    else:
+        title = "TH08-Bench scoreboard — provisional real-episode slice"
+        status = (
+            "**Status: provisional, non-gate.** These rows are real engine episodes, but their "
+            "frame cap is an operator-chosen provisional cap because no measured human "
+            "reference covers them. This is **not** a gate evaluation and **not** a 20-seed "
+            "dev-set result."
+        )
+
+    lines = [
+        f"{SCOREBOARD_MARKER}; source: results.jsonl (append-only) -->",
+        f"# {title}",
+        "",
+        status,
+        "",
+        "## Provenance",
+        "",
+        f"- engine: `{'; '.join(binary)}`",
+        f"- harness commit: `{'; '.join(harness)}`",
+        f"- harness binary sha256: `{'; '.join(sha256)}`",
+        f"- distro / kernel: `{'; '.join(distro)}` / `{'; '.join(kernel)}`",
+    ]
+    if fallback_commit:
+        lines.append(
+            "- note: a `sha256-...` value above means the git HEAD was not resolvable when "
+            "that row was recorded; `harness_binary_sha256` is then the binding identity of "
+            "the exact executable that ran."
+        )
+    lines += [
+        "- runner: `tools/rl/v400_bench_run.py --execute` (real HELLO/RESET/STEP/QUIT, "
+        "engine role shadow, null device: no SDL, GL, window or audio)",
+        "- referee: real `STATE` reply built from `TrackedFields()`; the same 25-field "
+        "record the harness publishes into the shared block when one is attached",
+        "- policy privilege: `deploy_pixel` by construction — the control policies read "
+        "neither the observation nor any privileged state and only emit button masks",
+        "",
+        "## Stage index (0-based) — EXP-P0-077",
+        "",
+        "- every stage number in this file is the engine's **0-based** `stage_index`: the "
+        "`RESET <stage> ...` argument and the `STATE.f1` field (`third_party/th08/src/"
+        "ScoreDat.hpp`: `STAGE1 = 0` … `STAGE6B = 7`, `Extra = 8`). `stage_index 0` is the "
+        "human-visible **Stage 1**, so ordinal label = `stage_index + 1`.",
+        "- `Stage source = declared` means the row records its own `stage_index`/`stage_name`; "
+        "`stage_observed` means the row predates EXP-P0-077 and its index is the engine's own "
+        "reported `STATE.f1` (measured, not inferred).",
+        "",
+    ] + stage_table + [
+        "",
+    ]
+    if inconsistent:
+        lines.append(
+            f"- **{len(inconsistent)} row(s) report `stage_consistent = false`**: the engine "
+            "started a different `STATE.f1` than the suite declared. Such a row is a real "
+            "measurement of another stage and must not be read as its suite's stage."
+        )
+        lines.append("")
+    lines += [
+        "## Frame cap and its measured source",
+        "",
+        f"- cap provenance in this file: {cap_source_txt}.",
+        "- cap rule: `cap = ceil(cap_multiplier × human gameplay_frames of that stage)`, "
+        "`cap_multiplier = 1.5`. The multiplier is a declared benchmark policy, not a "
+        "human measurement.",
+    ]
+    lines.extend(human_lines)
+    if human_rows:
+        lines += [
+            f"- human reference file(s): `{'; '.join(reference_paths) or 'unrecorded'}`; "
+            f"sha256 `{'; '.join(reference_shas) or 'unrecorded'}`",
+            "- those human numbers were collected as `collection_method = \"engine STATE "
+            "during real replay playback\"`: the engine's own gameplay-frame, death and bomb "
+            "counters read per stage while the real engine played a retail replay. They are "
+            "**not** derived from replay input records (`not_from_input_records = true`).",
+        ]
+    if legacy_provisional:
+        lines.append(
+            f"- {len(legacy_provisional)} row(s) carry a cap that is **not** human-referenced "
+            "(`cap_source = \"provisional\"`, operator-chosen). They are real episodes under "
+            "the earlier cap and are kept append-only as audit history; they are not part of "
+            "the dev-set table."
+        )
+    if legacy_human:
+        lines.append(
+            f"- {len(legacy_human)} row(s) are human-referenced single-episode checks outside "
+            "the formal dev run (`collection != \"dev20\"`). They measure a real episode under "
+            "the measured cap but are **not** dev-set cells; see the section at the end."
+        )
+    lines += [
+        "- an episode ends at whichever comes first: the engine's own game-over rule (a death "
+        "committed while `livesRemaining<=0`, which raises the retry menu and freezes "
+        "`gameplayFrameCounter`) or the cap. `frames` is the real episode length, so a "
+        "game-over episode records far fewer frames than its cap.",
+        "- because the episode ends on the death that exhausts the spare lives, `deaths` "
+        "saturates at `lives_start + 1` for every game-over row and cannot separate the "
+        "policies; `frames` (time to game over) and `score` are the discriminating numbers.",
+        "- `bombs_used` is `bombs_start - bombs_end`, so a negative value is a bomb-stock "
+        "*gain* (an item or extend refilled the counter), not a use; neither control policy "
+        "ever presses bomb, so this column can only measure counter movement.",
+        "- `cleared` is `false` for every row and its clear-rate column is **not** "
+        "interpretable as a pass rate.",
+        "",
+        "## Sample-size limits",
+        "",
+        f"- agents: {', '.join(agents)}; suites: {', '.join(suites)}; dev seeds: "
+        f"{', '.join(str(seed) for seed in seeds)}.",
+    ]
+    if formal:
+        lines.append(
+            f"- dev seeds per agent: {seed_counts_txt}; {len(ok)} real episodes total, of which "
+            f"{len(formal)} are the formal 20-seed dev run. This **is** the 20-seed dev set over "
+            "the dev split, and it is **not** the confirm split (60000+) and **not** PSN."
+        )
+    else:
+        lines.append(
+            f"- dev seeds per agent: {seed_counts_txt}; {len(ok)} real episodes total. "
+            f"This is **not** the 20-seed dev set (it has {per_agent} seeds per agent), "
+            "**not** the confirm split (60000+), and **not** PSN."
+        )
+    lines.append(
+        f"- every interval below is a bootstrap 95% CI over the rows shown; treat n = {per_agent} "
+        "per agent as a description of these episodes, not as an inference about the policies."
+    )
+    lines += [
+        "",
+        "## Per-episode measurements",
+        "",
+        f"End reasons: {end_txt}.",
+        "",
+        "| Agent | Suite | Stage idx | Stage | Seed | Frames | Gameplay frame | Deaths | "
+        "Bombs used | Lives end | Score | End | Wall s | Cap | Cap source |",
+        "|---|---|---:|---|---:|---:|---:|---:|---:|---:|---:|---|---:|---:|---|",
+    ]
+    for row in ok:
+        stage_index, stage_label, _stage_source = _stage_key(row)
+        lines.append(
+            f"| {row['agent']} | {row['suite']} | "
+            f"{'unrecorded' if stage_index is None else stage_index} | {stage_label} | "
+            f"{row['seed']} | {row['frames']} | "
+            f"{row.get('gameplay_frame', 'n/a')} | "
+            f"{row['deaths']:.3f} | {row['bombs_used']:.3f} | {row['lives_end']:.3f} | "
+            f"{row['score']} | {row['end']} | {row['wall_s']:.3f} | {row['max_frames']} | "
+            f"{row.get('cap_source', 'unrecorded')} |"
+        )
+    if formal:
+        lines += [
+            "",
+            "## Formal 20-seed dev table (cap_source = \"human_reference\")",
+            "",
+            summarize(formal).rstrip(),
+        ]
+    if legacy_provisional:
+        lines += [
+            "",
+            "## Provisional-cap table (superseded cap, retained append-only)",
+            "",
+            "These rows are real engine episodes, but their cap is not derived from human "
+            "play. They stay in `results.jsonl` unchanged; the table exists so the older "
+            "slice is not silently dropped.",
+            "",
+            summarize(legacy_provisional).rstrip(),
+        ]
+    if legacy_human:
+        lines += [
+            "",
+            "## Human-referenced episodes outside the formal dev set",
+            "",
+            "Real engine episodes under the measured human cap that are not part of the formal "
+            "20-seed dev run (they exist to verify the stage/reset semantics, not to add a "
+            "dev-set cell). Their stage is named by `stage_index`, so they are never pooled "
+            "with a row that ran a different stage.",
+            "",
+            summarize(legacy_human).rstrip(),
+        ]
+    lines += [
+        "",
+        "## Attempts that failed",
+        "",
+    ]
+    if errors:
+        lines.append("| Agent | Suite | Seed | Error | Wall s |")
+        lines.append("|---|---|---:|---|---:|")
+        for row in errors:
+            lines.append(
+                f"| {row.get('agent', '?')} | {row.get('suite', '?')} | {row.get('seed', '?')} | "
+                f"{str(row.get('error', 'unrecorded')).replace('|', '/')} | "
+                f"{float(row.get('wall_s', 0.0)):.3f} |"
+            )
+    else:
+        lines.append("None: every attempt recorded here reached a real referee reading.")
+    lines += ["", "## Superseded attempts", ""]
+    if invalid_records:
+        lines.append(
+            f"{len(invalidated)} earlier measured row(s) are marked **invalid** and are excluded "
+            "from the tables above. They stay in `results.jsonl` (append-only) as audit history, "
+            "not as scores."
+        )
+        lines.append("")
+        lines.append("| Recorded at | Invalidated rows | Reason |")
+        lines.append("|---|---:|---|")
+        for record in invalid_records:
+            stamps = record.get("invalidated_started_at") or []
+            lines.append(
+                f"| {record.get('created_at', '?')} | {len(stamps)} | "
+                f"{str(record.get('reason', 'unrecorded')).replace('|', '/')} |"
+            )
+    else:
+        lines.append("None: no earlier row was invalidated.")
+    lines += ["", "## Stage-index corrections (append-only audit records)", ""]
+    if corrections:
+        lines.append(
+            "These records correct a **stage label**, never a measured number: no row was "
+            "edited or deleted. The historical numbers stay exactly as measured; what changes "
+            "is which stage they describe."
+        )
+        lines.append("")
+        lines.append("| Recorded at | Suite | Rows restated | Those rows actually ran | Suite declares now | Reason |")
+        lines.append("|---|---|---:|---|---|---|")
+        for record in corrections:
+            affected = record.get("affected_started_at") or record.get("invalidated_started_at") or []
+            observed = record.get("observed_stage_indexes")
+            if isinstance(observed, list) and observed:
+                ran = ", ".join(str(index) for index in observed)
+            else:
+                ran = str(record.get("stage_index", "?"))
+            ran_name = record.get("stage_name") or "unrecorded"
+            lines.append(
+                f"| {record.get('created_at', '?')} | {record.get('suite', '?')} | "
+                f"{len(affected)} | `stage_index {ran}` ({ran_name}) | "
+                f"`stage_index {record.get('declared_stage_index', '?')}` "
+                f"({record.get('declared_stage_name', 'unrecorded')}) | "
+                f"{str(record.get('reason', 'unrecorded')).replace('|', '/')} |"
+            )
+        suitemates: dict[str, int] = {}
+        for record in corrections:
+            for name in record.get("corrected_labels") or ():
+                suitemates[str(name)] = suitemates.get(str(name), 0) + 1
+        if suitemates:
+            lines.append("")
+            lines.append(
+                "- labels restated: " + ", ".join(f"`{name}`" for name in sorted(suitemates))
+                + " — those rows were measured on the stage named above, so they are **not** "
+                "that suite's designated stage and must not be pooled with a corrected-stage row."
+            )
+    else:
+        lines.append("None: no stage label has been corrected.")
+    lines += [
+        "",
+        "## What is real, and what is not claimed",
+        "",
+        "Real: the Linux engine process, `RESET` readiness, `STEP` frame advancement, "
+        "the `STATE` death/life/bomb/score counters, the game-over transition, and the "
+        "wall clock.",
+        "",
+    ]
+    if formal:
+        lines.append(
+            "Not claimed: any gate pass, any confirm-split estimate, any stage clear, and any "
+            "bomb tactic skill — both control policies never press bomb, so `bombs_used` can "
+            "only measure counter movement. The human reference is used only to set a frame "
+            "cap; reaching 1.5× human stage length would not by itself mean human-level skill."
+        )
+    else:
+        lines.append(
+            "Not claimed: any comparison against human play, any gate pass, any 20-seed dev "
+            "estimate, any stage clear, and any bomb tactic skill — both control policies "
+            "never press bomb, so `bombs_used` can only measure counter movement."
+        )
+    lines.append("")
+    return "\n".join(lines)
+
+
+def write_scoreboard(path: Path, text: str) -> None:
+    """Write the derived scoreboard, refusing to clobber a file we did not generate."""
+    path = Path(path)
+    if path.is_file():
+        existing = path.read_text(encoding="utf-8")
+        if not existing.startswith(SCOREBOARD_MARKER):
+            raise RuntimeError(f"refusing to overwrite a scoreboard this tool did not generate: {path}")
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(text, encoding="utf-8")
+
+
+def invalidated_stamps(rows: list[dict]) -> set[str]:
+    """Every ``started_at`` value a later ``status="invalid"`` record names."""
+    stamps: set[str] = set()
+    for row in rows:
+        if row.get("status") != "invalid":
+            continue
+        for stamp in row.get("invalidated_started_at", ()) or ():
+            if isinstance(stamp, str):
+                stamps.add(stamp)
+    return stamps
+
+
+def summarize_results(results_path: Path, scoreboard_path: Path) -> dict:
+    """Read every recorded attempt and rewrite the derived scoreboard."""
+    rows = read_rows(results_path)
+    invalidated = invalidated_stamps(rows)
+    ok = [row for row in rows
+          if row.get("status", "ok") == "ok" and row.get("started_at") not in invalidated]
+    errors = [row for row in rows if row.get("status") == "error"]
+    invalid_records = [row for row in rows if row.get("status") == "invalid"]
+    corrections = [row for row in rows if row.get("status") == "corrected"]
+    if not ok:
+        return {"status": "error", "reason": "no measured episode with status ok",
+                "results": str(results_path), "errors": len(errors),
+                "invalidated": len(invalidated)}
+    write_scoreboard(scoreboard_path,
+                     render_scoreboard(ok, errors, invalid_records, invalidated, corrections))
+    return {"status": "ok", "scoreboard": str(scoreboard_path),
+            "episodes": len(ok), "errors": len(errors), "invalidated": len(invalidated),
+            "stage_corrections": len(corrections)}
+
+
+def invalidate_rows(rows: list[dict], results_path: Path, started_at: list[str],
+                    reason: str) -> dict:
+    """Append an audit record that marks earlier measured rows invalid (never edits them)."""
+    measured = {row.get("started_at"): row for row in rows
+                if row.get("status", "ok") == "ok"}
+    unknown = [stamp for stamp in started_at if stamp not in measured]
+    if unknown:
+        raise ValueError(f"no measured row with started_at={unknown!r} in {results_path}")
+    record = {
+        "schema": INVALID_SCHEMA,
+        "status": "invalid",
+        "measured": False,
+        "created_at": _iso(time.time()),
+        "invalidated_started_at": sorted(set(started_at)),
+        "invalidated_rows": [
+            {
+                "started_at": stamp,
+                "agent": measured[stamp].get("agent"),
+                "suite": measured[stamp].get("suite"),
+                "seed": measured[stamp].get("seed"),
+                "frames": measured[stamp].get("frames"),
+                "score": measured[stamp].get("score"),
+                "end": measured[stamp].get("end"),
+            }
+            for stamp in sorted(set(started_at))
+        ],
+        "reason": reason,
+        "notes": "audit-only record: the named rows stay in results.jsonl but are excluded "
+                 "from the scoreboard",
+    }
+    append_row(results_path, record)
+    return record
+
+
+def correct_stage_labels(rows: list[dict], results_path: Path, *, suite_name: str,
+                         reason: str) -> dict:
+    """Append an audit record that restates which stage a suite's rows ran on.
+
+    EXP-P0-077: ``S1N`` declared ``stages=[1]``, so the engine reset to ``stage_index
+    1`` (the real Stage 2) while the cap was looked up as ``Stage1``.  Those rows are
+    real measurements of Stage 2, so their numbers stay exactly as recorded and only
+    the label is corrected.  Nothing is edited, invalidated or deleted.
+    """
+    suite = SUITES[suite_name]
+    declared = suite.stage_index
+    affected = []
+    observed: set[int] = set()
+    for row in rows:
+        if row.get("status", "ok") != "ok" or row.get("suite") != suite_name:
+            continue
+        index, name, source = row_stage(row)
+        if index is None or index == declared:
+            continue
+        observed.add(index)
+        affected.append({"started_at": row.get("started_at"), "seed": row.get("seed"),
+                         "agent": row.get("agent"), "stage_index": index,
+                         "stage_name": name, "stage_source": source,
+                         "frames": row.get("frames"), "score": row.get("score")})
+    if not affected:
+        raise ValueError(f"no measured row of suite {suite_name} ran a stage other than its "
+                         f"declared stage_index {declared}; nothing to correct")
+    index = next(iter(observed)) if len(observed) == 1 else None
+    record = {
+        "schema": CORRECTION_SCHEMA,
+        "status": "corrected",
+        "measured": False,
+        "created_at": _iso(time.time()),
+        "suite": suite_name,
+        "declared_stage_index": declared,
+        "declared_stage_name": suite.stage_name,
+        "observed_stage_indexes": sorted(observed),
+        "stage_index": index,
+        "stage_name": (row_stage({"stage_index": index})[1] if index is not None else None),
+        "stage_index_semantics": STAGE_INDEX_SEMANTICS,
+        "corrected_labels": [suite_name],
+        "affected_rows": len(affected),
+        "affected_started_at": [item["started_at"] for item in affected],
+        "affected": affected,
+        "reason": reason,
+        "notes": ("audit-only record: the named rows keep their measured numbers and stay in "
+                  "results.jsonl; what is corrected is the stage they are read as having played"),
+    }
+    append_row(results_path, record)
+    return record
+
+
+# -- CLI ------------------------------------------------------------------
+def main(argv: list[str] | None = None) -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--agent", choices=("random", "still"))
+    parser.add_argument("--suite", choices=("S1N", "PSN"))
+    parser.add_argument("--seed", type=dev_seed)
+    parser.add_argument("--human-reference", type=Path, default=DEFAULT_HUMAN_REFERENCE)
+    parser.add_argument("--execute", action="store_true",
+                        help="start the real WSL harness and record one measured episode")
+    parser.add_argument("--max-frames", type=int, default=None,
+                        help="operator override for the per-episode cap; by default the cap is "
+                             "ceil(1.5 x measured human gameplay frames) from --human-reference")
+    parser.add_argument("--expect-reset-hash", type=reset_hash_arg, default=None,
+                        metavar="HEX",
+                        help="state hash the engine's real RESET reply must match before an "
+                             "episode may run (EXP-P0-071). Precedence: this flag, then the "
+                             f"{RESET_HASH_ENV} environment variable, then the first verified "
+                             "reset of the same run")
+    parser.add_argument("--reset-retries", type=int, default=DEFAULT_RESET_RETRIES,
+                        metavar="N",
+                        help="how often a mismatching RESET may be retried before the launch "
+                             f"fails closed (0..{MAX_RESET_RETRIES}, "
+                             f"default {DEFAULT_RESET_RETRIES})")
+    parser.add_argument("--dev20", action="store_true",
+                        help="label this episode as part of the formal 20-seed dev run "
+                             "(dev split only; the row stops claiming 'not the 20-seed dev set')")
+    parser.add_argument("--summarize", action="store_true",
+                        help="rebuild bench/scoreboard.md from the append-only results")
+    parser.add_argument("--invalidate", action="append", metavar="STARTED_AT",
+                        help="append an audit record that marks the measured row with this "
+                             "started_at invalid; repeatable, never edits the row itself")
+    parser.add_argument("--correct-stage", action="store_true",
+                        help="append a stage-label correction audit record for --suite: every "
+                             "measured row of that suite whose engine stage differs from the "
+                             "suite's declared 0-based stage_index is listed (requires --reason; "
+                             "no row is edited, invalidated or deleted)")
+    parser.add_argument("--reason", help="why those rows are invalid (required with --invalidate)")
+    parser.add_argument("--results", type=Path, default=DEFAULT_RESULTS)
+    parser.add_argument("--scoreboard", type=Path, default=DEFAULT_SCOREBOARD)
+    parser.add_argument("--binary", default=DEFAULT_BINARY)
+    parser.add_argument("--data-dir", default=DEFAULT_DATA_DIR)
+    parser.add_argument("--distro", default=DEFAULT_DISTRO)
+    parser.add_argument("--timeout", type=float, default=120.0)
+    args = parser.parse_args(argv)
+
+    needs_episode = args.execute or (not args.summarize and not args.invalidate
+                                     and not args.correct_stage)
+    if needs_episode:
+        missing = [flag for flag, value in
+                   (("--agent", args.agent), ("--suite", args.suite), ("--seed", args.seed))
+                   if value is None]
+        if missing:
+            parser.error("episode selection requires " + " ".join(missing))
+
+    if not args.execute and not args.summarize and not args.invalidate and not args.correct_stage:
+        # Fail closed and unchanged: no execution was requested, so there is
+        # nothing measured to report and no reference is ever created.
+        if not args.human_reference.is_file():
+            reason = "human_reference.json is missing; supply a real human reference"
+        else:
+            reason = "no --execute: refusing to report a measurement that was not run"
+        print(json.dumps({"status": "blocked", "reason": reason}, ensure_ascii=False))
+        return 3
+
+    exit_code = 0
+    if args.correct_stage:
+        if not args.reason:
+            parser.error("--correct-stage requires --reason")
+        if not args.suite:
+            parser.error("--correct-stage requires --suite")
+        try:
+            record = correct_stage_labels(read_rows(args.results), args.results,
+                                          suite_name=args.suite, reason=args.reason)
+        except (FileNotFoundError, ValueError, RuntimeError) as exc:
+            print(json.dumps({"status": "error", "reason": str(exc)}, ensure_ascii=False))
+            return 1
+        print(json.dumps(record, ensure_ascii=False, sort_keys=True))
+    if args.invalidate:
+        if not args.reason:
+            parser.error("--invalidate requires --reason")
+        try:
+            record = invalidate_rows(read_rows(args.results), args.results,
+                                     list(args.invalidate), args.reason)
+        except (FileNotFoundError, ValueError, RuntimeError) as exc:
+            print(json.dumps({"status": "error", "reason": str(exc)}, ensure_ascii=False))
+            return 1
+        print(json.dumps(record, ensure_ascii=False, sort_keys=True))
+
+    if args.execute:
+        if args.max_frames is not None and not 1 <= args.max_frames <= MAX_STEP_FRAMES:
+            parser.error(f"--max-frames must be in [1, {MAX_STEP_FRAMES}]")
+        if args.seed not in DEV_SEEDS:
+            parser.error("--seed must be a registered dev seed")
+        if not 0 <= args.reset_retries <= MAX_RESET_RETRIES:
+            parser.error(f"--reset-retries must be in [0, {MAX_RESET_RETRIES}]")
+        try:
+            guard = guard_from_config(explicit=args.expect_reset_hash,
+                                      retries=args.reset_retries)
+        except ValueError as exc:
+            # A malformed expectation must stop the run here, not be ignored.
+            parser.error(str(exc))
+        reference = None
+        if args.human_reference.is_file():
+            try:
+                reference = load_reference(args.human_reference)
+            except HumanReferenceError as exc:
+                # Fail closed: a reference that exists but cannot be trusted must
+                # not be silently downgraded to a provisional cap.
+                print(json.dumps({"status": "error",
+                                  "reason": f"unusable human reference: {exc}"}, ensure_ascii=False))
+                return 1
+        cap = resolve_cap(reference=reference, suite_name=args.suite,
+                          explicit_max_frames=args.max_frames)
+        provenance = collect_provenance(args.binary, args.distro)
+        row = run_episode(
+            agent=args.agent,
+            suite_name=args.suite,
+            seed=args.seed,
+            max_frames=args.max_frames,
+            cap=cap,
+            collection="dev20" if args.dev20 else "provisional",
+            binary=args.binary,
+            data_dir=args.data_dir,
+            distro=args.distro,
+            timeout=args.timeout,
+            human_reference_present=reference is not None,
+            human_reference_path=str(args.human_reference) if reference is not None else None,
+            human_reference_sha256=(reference_sha256(args.human_reference)
+                                    if reference is not None else None),
+            provenance=provenance,
+            reset_guard=guard,
+        )
+        if row.get("reset_guard_failed"):
+            # Fail closed and write nothing: an episode whose start state could
+            # not be verified is not a measurement, so it must not become a
+            # bench row even as a status="error" attempt.
+            print(json.dumps(row, ensure_ascii=False, sort_keys=True))
+            print(f"RESET state-hash guard refused {row.get('reset_stage_start')}: "
+                  f"{row.get('error')}; no bench row written, nothing measured",
+                  file=sys.stderr)
+            return EXIT_RESET_HASH_MISMATCH
+        append_row(args.results, row)
+        print(json.dumps(row, ensure_ascii=False, sort_keys=True))
+        if row.get("status") != "ok":
+            exit_code = 1
+
+    if args.summarize:
+        try:
+            report = summarize_results(args.results, args.scoreboard)
+        except (FileNotFoundError, ValueError, RuntimeError) as exc:
+            print(json.dumps({"status": "error", "reason": str(exc)}, ensure_ascii=False))
+            return 1
+        print(json.dumps(report, ensure_ascii=False, sort_keys=True))
+        if report["status"] != "ok" and exit_code == 0:
+            exit_code = 1
+
+    return exit_code
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

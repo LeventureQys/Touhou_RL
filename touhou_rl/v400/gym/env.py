@@ -11,6 +11,7 @@ refused, which is the mode the benchmark uses for students (03 §5, 20 §7).
 from __future__ import annotations
 
 import os
+from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass, field
 
 import numpy as np
@@ -99,27 +100,62 @@ class Th08Env:
         self.privileged = privileged
         self.decision_frames = decision_frames
         self.max_frames = max_frames
+        self._binary = binary
+        self._data_dir = data_dir
+        self._shm_name = shm_name
         self._client = HarnessClient(binary, data_dir, shm_name=shm_name)
         self._shm: SharedBlock | None = None
         self._frames = 0
         self._start: StageStart | None = None
         self._prev_deaths: float | None = None
         self._prev_score: int | None = None
+        self._restart_count = 0
+        self._recovery_log: list[dict[str, object]] = []
 
     # -- lifetime ---------------------------------------------------------
     def close(self) -> None:
-        if self._shm is not None:
-            self._shm.close()
-            self._shm = None
-        self._client.close()
+        shm = self._shm
+        self._shm = None
+        try:
+            if shm is not None:
+                shm.close()
+        finally:
+            self._client.close()
 
     def __enter__(self) -> "Th08Env":
+        self._start_client()
+        return self
+
+    def recover(self) -> None:
+        """Explicitly tear down and recreate the harness connection."""
+        old_shm = self._shm
+        self._shm = None
+        close_error: BaseException | None = None
+        try:
+            if old_shm is not None:
+                old_shm.close()
+        except BaseException as exc:
+            close_error = exc
+        try:
+            self._client.close()
+        except BaseException as exc:
+            if close_error is None:
+                close_error = exc
+        self._client = HarnessClient(self._binary, self._data_dir, shm_name=self._shm_name)
+        try:
+            self._start_client()
+        except BaseException:
+            self._shm = None
+            raise
+        if close_error is not None:
+            raise close_error
+
+    def _start_client(self) -> None:
         self._client.start()
         self._client.hello()
         self._client.attach_shm()
         self._client.readback(True)  # publish a frame every step
         self._shm = SharedBlock(self._client.shm_name or "")
-        return self
 
     def __exit__(self, *exc: object) -> None:
         self.close()
@@ -149,7 +185,22 @@ class Th08Env:
 
     def step(self, cand: int, bomb: int = 0) -> tuple[np.ndarray, float, bool, bool, Info]:
         mask = cand_to_mask(cand, bomb)
-        reply = self._client.step(mask, self.decision_frames)
+        try:
+            reply = self._client.step(mask, self.decision_frames)
+        except Exception as exc:
+            # A dead harness is recoverable: recreate the process and restore the
+            # deterministic stage before surfacing a clear event to the caller.
+            if self._start is None:
+                raise
+            self.recover()
+            self.reset(self._start)
+            self._restart_count += 1
+            self._recovery_log.append({
+                "episode_aborted": True,
+                "restart_index": self._restart_count,
+                "reason": type(exc).__name__,
+            })
+            raise RuntimeError("harness crashed; episode aborted and automatically restarted") from exc
         self._frames += int(reply.get("advanced", 0))
 
         events: list[str] = []
@@ -198,6 +249,19 @@ class Th08Env:
         self._prev_score = score
         return reward
 
+    @property
+    def obs_spec(self) -> dict[str, object]:
+        """Describe the RGBA8 observation returned by ``reset`` and ``step``."""
+        if self._shm is None:
+            raise RuntimeError("use the environment as a context manager")
+        pixels = self._shm.pixels()
+        return {
+            "shape": pixels.shape,
+            "dtype": np.uint8,
+            "low": 0,
+            "high": 255,
+        }
+
     # -- privileged extras ------------------------------------------------
     def state(self) -> dict[int, int]:
         if not self.privileged:
@@ -211,5 +275,52 @@ class Th08Env:
         return self._client.debug()
 
     @property
-    def stats(self):
-        return self._client.stats
+    def restart_count(self) -> int:
+        return self._restart_count
+
+    @property
+    def recovery_log(self) -> tuple[dict[str, object], ...]:
+        return tuple(self._recovery_log)
+
+    @property
+    def shm(self) -> SharedBlock | None:
+        """The attached shared-memory block, when the environment is active."""
+        return self._shm
+
+
+class VecTh08Env:
+    """Synchronous wrapper for a non-empty sequence of environments.
+
+    Results stay as per-environment sequences, so this wrapper does not impose
+    any observation or info type on the wrapped :class:`Th08Env` instances.
+    """
+
+    def __init__(self, envs) -> None:
+        self.envs = list(envs)
+        if not self.envs:
+            raise ValueError("VecTh08Env requires at least one environment")
+
+    def reset(self):
+        """Reset every environment concurrently and return one result per environment."""
+        with ThreadPoolExecutor(max_workers=len(self.envs)) as pool:
+            return list(pool.map(lambda environment: environment.reset(), self.envs))
+
+    def step(self, actions):
+        """Step every environment concurrently, preserving input order."""
+        actions = list(actions)
+        if len(actions) != len(self.envs):
+            raise ValueError("actions must contain one item per environment")
+        with ThreadPoolExecutor(max_workers=len(self.envs)) as pool:
+            return list(pool.map(lambda pair: pair[0].step(pair[1]), zip(self.envs, actions)))
+
+    def close(self) -> None:
+        """Close every environment, then re-raise the first close failure."""
+        first_error = None
+        for environment in self.envs:
+            try:
+                environment.close()
+            except BaseException as exc:
+                if first_error is None:
+                    first_error = exc
+        if first_error is not None:
+            raise first_error

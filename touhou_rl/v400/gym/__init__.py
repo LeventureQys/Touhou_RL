@@ -23,6 +23,7 @@ from touhou_rl.v400.gym.env import (
     PrivilegeError,
     StageStart,
     Th08Env,
+    VecTh08Env,
 )
 from touhou_rl.v400.gym.protocol import HarnessClient, HarnessError, ProtocolStats
 from touhou_rl.v400.gym.shm import MAGIC, SharedBlock, segment_path
@@ -43,6 +44,7 @@ __all__ = [
     "SharedBlock",
     "StageStart",
     "Th08Env",
+    "VecTh08Env",
     "cand_to_mask",
     "mask_to_cand",
     "segment_path",
