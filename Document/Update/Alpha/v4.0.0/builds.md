@@ -59,3 +59,27 @@ wsl.exe -d Ubuntu -- bash -lc 'sha256sum /root/Touhou_RL/third_party/th08-rl/bui
 T7.2 的统一构建 `build/rl_v3` 建立后，在本表追加一行：新 SHA-256、构建用的 commit、
 合并了哪些能力（`rl_laser` 的判定窗、`rl_events` 的 `0x0080`、`rl_score` 的分数字段、
 T7.1 的进程内重开），以及有哪些卡片开始使用它。
+
+## 6. T7.2 统一构建 `build/rl_v3`（2026-11-10 追加）
+
+本节的 1 行新记录只追加，不改 §1 的 8 行既有记录；那 8 个目录本次**只读取、未编译、未改动**，
+构建前后各做一次 `sha256sum`，16 个哈希逐一相同（日志 `/root/Touhou_RL/.tmp_v400_t7/build_rl_v3.log`）。
+
+| 目录 | 二进制 SHA-256（实测） | 字节 | 构建时间 | 基线 commit | 相对既有构建新增的能力 | 使用过它的卡片 |
+|---|---|---|---|---|---|---|
+| `build/rl_v3` | `691bfd77b7eca3361aa8bb7af0977556a70cc73a070b29a2447222ba7a568ef6` | 4,836,008 | 2026-11-10 10:14 | `1523df26ec643b7276d2cf487b299ad932a982b7`（`bef369a` + T7.1/T7.3 的 `rlharness.cpp` 改动，`rl-harness` 分支） | 统一构建：`rl_laser` 的激光判定窗 6 字段、`rl_events` 的 `EVENTS 0x0080 = STAGE_CLEAR`、`rl_score` 的 `HUD` 分数字段，加上 T7.1 的**进程内重开**（同一进程可反复 `RESET`）与 T7.3 的**状态区自动发布**（`RESET`/`STEP` 结束时写共享内存状态区）。`RESET` 回复尾部追加 `mode=cold\|in-process`、`state_published=`；25 字段 HASH、既有命令集与字段前缀一字未改 | EXP-P0-078（本构建：10×5,000 帧重开、G0.2 第 1 项复跑、12 份差分回放） |
+
+补充说明：
+
+- `rl_v3` 与既有 8 个目录的关系是**功能的并集**，不是其中任何一个的逐字节来源；与 `rl_events`
+  的 `HASH` 前 100 帧逐帧一致（EXP-P0-078 §7），`HASH` 前缀不变。
+- 从 `rl_v3` 起，`RESET` 的语义由"整局一次"放宽为"可重复"，且 `RESET`/`STEP` 之后共享内存
+  状态区已是最新；旧客户端仍按 `STATE` 先行读取即可，协议版本号未变（`PROTOCOL_VERSION = 1`）。
+- 建议 `rl_v3` 作为 EXP-P0-078 之后所有新实验的引擎；既有卡片引用的 8 个旧构建保持原样可复现。
+
+## 7. 复核命令（含 rl_v3）
+
+```bash
+wsl.exe -d Ubuntu -- bash -lc 'sha256sum /root/Touhou_RL/third_party/th08-rl/build/rl*/th08-modern'
+```
+

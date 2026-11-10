@@ -40,6 +40,17 @@ class PrivilegeError(RuntimeError):
     """Raised when a zero-privilege environment is asked for privileged data."""
 
 
+class StaleStateError(RuntimeError):
+    """The shared state block does not belong to the frame the engine just reported.
+
+    T7.3: the engine now publishes the 25 tracked fields itself at the end of
+    ``RESET`` and ``STEP``, so "send ``STATE`` first" is no longer a prerequisite.
+    This error is the fail-closed half of that change: if the block's frame
+    counter disagrees with the frame the reply describes, the caller would read a
+    previous episode's fields, and no value is returned instead.
+    """
+
+
 @dataclass(frozen=True)
 class StageStart:
     """Deterministic entry into a stage (03 §5)."""
@@ -111,6 +122,10 @@ class Th08Env:
         self._prev_score: int | None = None
         self._restart_count = 0
         self._recovery_log: list[dict[str, object]] = []
+        #: True once the engine has shown it publishes the state block itself
+        #: (``RESET`` carries ``state_published=1``, T7.3).  Older builds do not,
+        #: and for them the freshness check stays off instead of guessing.
+        self._state_published = False
 
     # -- lifetime ---------------------------------------------------------
     def close(self) -> None:
@@ -173,6 +188,8 @@ class Th08Env:
         )
         if reply.get("ready") != "1":
             raise RuntimeError(f"RESET did not reach a playable state: {reply}")
+        self._state_published = reply.get("state_published") == "1"
+        self._verify_state_block(reply)
         self._start = start
         self._frames = 0
         self._prev_deaths = None
@@ -202,6 +219,7 @@ class Th08Env:
             })
             raise RuntimeError("harness crashed; episode aborted and automatically restarted") from exc
         self._frames += int(reply.get("advanced", 0))
+        self._verify_state_block(reply)
 
         events: list[str] = []
         game_over = reply.get("game_over") == "1"
@@ -217,6 +235,31 @@ class Th08Env:
         return self._observation(), reward, terminated, truncated, info
 
     # -- internals --------------------------------------------------------
+    def _verify_state_block(self, reply: dict[str, str]) -> None:
+        """T7.3: refuse a state block that is older than the reply's own frame.
+
+        ``RESET`` and ``STEP`` publish the 25 tracked fields into the shared
+        block themselves (``rlharness.cpp`` calls ``PublishState`` in both
+        handlers), so a caller no longer has to send ``STATE`` before reading
+        them.  The ordering is not trusted blindly: the block's header carries the
+        frame it was written for, and it has to be the frame this reply reports.
+        A mismatch means the block still holds a previous episode's fields.
+
+        Capability gate: an engine that predates T7.3 answers ``RESET`` without
+        ``state_published=1``; for those the check stays off and the old
+        "``STATE`` first" rule still applies.  Nothing is fabricated either way.
+        """
+        if not self._state_published or self._shm is None:
+            return
+        reported = reply.get("frame", reply.get("frames"))
+        if reported is None:
+            raise StaleStateError(f"reply carries no frame number: {reply}")
+        header = self._shm.header()
+        if int(header["frame"]) != int(reported):
+            raise StaleStateError(
+                f"state block frame {int(header['frame'])} != engine frame {int(reported)}; "
+                "the block is not the state this reply describes")
+
     def _observation(self) -> np.ndarray:
         assert self._shm is not None
         return self._shm.pixels()

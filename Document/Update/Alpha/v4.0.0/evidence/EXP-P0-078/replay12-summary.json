@@ -1,0 +1,633 @@
+{
+  "schema": "v400-t7-replay12-summary/1",
+  "experiment": "EXP-P0-078",
+  "task": "T7.2 regression: 12 differential replays covering four difficulties",
+  "sourceReport": "/mnt/d/WorkShop/Touhou_RL/.tmp_v400_t7/replay12/report.json",
+  "expectedTotal": 12,
+  "summary": {
+    "total": 12,
+    "recorded": 12,
+    "compared": 12,
+    "identical": 12,
+    "different": 0,
+    "timeout": 0,
+    "failed": 0,
+    "remaining": 0,
+    "partial": false,
+    "allIdentical": true,
+    "totalRowsPerSide": 1244592
+  },
+  "builds": {
+    "on": {
+      "path": "/root/Touhou_RL/third_party/th08-rl/build/rl_v3/th08-modern",
+      "sha256": "691bfd77b7eca3361aa8bb7af0977556a70cc73a070b29a2447222ba7a568ef6",
+      "bytes": 4836008,
+      "recordSymbolPresent": true,
+      "problems": []
+    },
+    "off": {
+      "path": "/root/Touhou_RL/third_party/th08-rl/build/portable-retrace/th08-modern",
+      "sha256": "f920e14004fb065955d9baae39cddfa575c78bcf90482f862b700dcf153bd2f8",
+      "bytes": 4629432,
+      "recordSymbolPresent": true,
+      "problems": []
+    }
+  },
+  "repository": {
+    "worktree": "/root/Touhou_RL/third_party/th08-rl",
+    "head": "1523df26ec643b7276d2cf487b299ad932a982b7",
+    "dirty": false,
+    "recorderSource": "/root/Touhou_RL/third_party/th08-rl/src/modern/linux/replay_trace.cpp",
+    "recorderSourceSha256": "78cd4fe3834027cdd61014cff92f2ff998c33c490345cc6f93b4c27d92989398"
+  },
+  "cases": [
+    {
+      "case": "th8_ud2cd5",
+      "status": "identical",
+      "identical": true,
+      "difficulty": "Normal",
+      "shot": "Border Team",
+      "manifestFrames": 100979,
+      "seconds": 446.968,
+      "on": {
+        "status": "clean",
+        "rows": 100979,
+        "rowsSha256": "a56c59af475b2f5f54ae770a4c6f60b6b17e0258b7dc6ede2cc851bd1b49bd40",
+        "exitCode": 0,
+        "seconds": 145.28,
+        "problems": []
+      },
+      "off": {
+        "status": "clean",
+        "rows": 100979,
+        "rowsSha256": "a56c59af475b2f5f54ae770a4c6f60b6b17e0258b7dc6ede2cc851bd1b49bd40",
+        "exitCode": 0,
+        "seconds": 143.599,
+        "problems": []
+      },
+      "comparison": {
+        "completeJson": {
+          "firstDifference": null,
+          "identical": true,
+          "offBytes": 361,
+          "offExists": true,
+          "offSha256": "3ec4e29f1ce69ca458a2f6cdfc0272361023c9c06a961a378a44db35f1e39069",
+          "onBytes": 361,
+          "onExists": true,
+          "onSha256": "3ec4e29f1ce69ca458a2f6cdfc0272361023c9c06a961a378a44db35f1e39069"
+        },
+        "firstDifference": null,
+        "identical": true,
+        "rows": {
+          "firstDifference": null,
+          "identical": true,
+          "offRowBytes": 10097900,
+          "offRows": 100979,
+          "offSha256": "a56c59af475b2f5f54ae770a4c6f60b6b17e0258b7dc6ede2cc851bd1b49bd40",
+          "onRowBytes": 10097900,
+          "onRows": 100979,
+          "onSha256": "a56c59af475b2f5f54ae770a4c6f60b6b17e0258b7dc6ede2cc851bd1b49bd40"
+        }
+      }
+    },
+    {
+      "case": "th8_ud2c70",
+      "status": "identical",
+      "identical": true,
+      "difficulty": "Lunatic",
+      "shot": "Magic Team",
+      "manifestFrames": 106063,
+      "seconds": 172.253,
+      "on": {
+        "status": "clean",
+        "rows": 106063,
+        "rowsSha256": "e81b586fbc34a3fac3babdfec2ae44417f2c4a326d4b7f005d9c91dfc7fb0b61",
+        "exitCode": 0,
+        "seconds": 171.946,
+        "problems": []
+      },
+      "off": {
+        "status": "clean",
+        "rows": 106063,
+        "rowsSha256": "e81b586fbc34a3fac3babdfec2ae44417f2c4a326d4b7f005d9c91dfc7fb0b61",
+        "exitCode": 0,
+        "seconds": 169.014,
+        "problems": []
+      },
+      "comparison": {
+        "completeJson": {
+          "firstDifference": null,
+          "identical": true,
+          "offBytes": 367,
+          "offExists": true,
+          "offSha256": "f02201d3b5e84aab6e2f17d4261630a5a68d51eaaf2778a8b2a4f5aa0d5cc205",
+          "onBytes": 367,
+          "onExists": true,
+          "onSha256": "f02201d3b5e84aab6e2f17d4261630a5a68d51eaaf2778a8b2a4f5aa0d5cc205"
+        },
+        "firstDifference": null,
+        "identical": true,
+        "rows": {
+          "firstDifference": null,
+          "identical": true,
+          "offRowBytes": 10606300,
+          "offRows": 106063,
+          "offSha256": "e81b586fbc34a3fac3babdfec2ae44417f2c4a326d4b7f005d9c91dfc7fb0b61",
+          "onRowBytes": 10606300,
+          "onRows": 106063,
+          "onSha256": "e81b586fbc34a3fac3babdfec2ae44417f2c4a326d4b7f005d9c91dfc7fb0b61"
+        }
+      }
+    },
+    {
+      "case": "th8_ud2c5a",
+      "status": "identical",
+      "identical": true,
+      "difficulty": "Lunatic",
+      "shot": "Scarlet Team",
+      "manifestFrames": 112701,
+      "seconds": 173.918,
+      "on": {
+        "status": "clean",
+        "rows": 112701,
+        "rowsSha256": "aef195b5ce7a24978ca1b43533d2cb011ad2cf13a55100be67d7e22f9d17cd23",
+        "exitCode": 0,
+        "seconds": 171.634,
+        "problems": []
+      },
+      "off": {
+        "status": "clean",
+        "rows": 112701,
+        "rowsSha256": "aef195b5ce7a24978ca1b43533d2cb011ad2cf13a55100be67d7e22f9d17cd23",
+        "exitCode": 0,
+        "seconds": 173.433,
+        "problems": []
+      },
+      "comparison": {
+        "completeJson": {
+          "firstDifference": null,
+          "identical": true,
+          "offBytes": 368,
+          "offExists": true,
+          "offSha256": "e221b40011191bf54239cff0383d7a7e8ac141c04000e692d4a670d1d9a39e11",
+          "onBytes": 368,
+          "onExists": true,
+          "onSha256": "e221b40011191bf54239cff0383d7a7e8ac141c04000e692d4a670d1d9a39e11"
+        },
+        "firstDifference": null,
+        "identical": true,
+        "rows": {
+          "firstDifference": null,
+          "identical": true,
+          "offRowBytes": 11270100,
+          "offRows": 112701,
+          "offSha256": "aef195b5ce7a24978ca1b43533d2cb011ad2cf13a55100be67d7e22f9d17cd23",
+          "onRowBytes": 11270100,
+          "onRows": 112701,
+          "onSha256": "aef195b5ce7a24978ca1b43533d2cb011ad2cf13a55100be67d7e22f9d17cd23"
+        }
+      }
+    },
+    {
+      "case": "th8_ud2b6c",
+      "status": "identical",
+      "identical": true,
+      "difficulty": "Easy",
+      "shot": "Scarlet Team",
+      "manifestFrames": 96825,
+      "seconds": 433.233,
+      "on": {
+        "status": "clean",
+        "rows": 96825,
+        "rowsSha256": "d241bb442bb1c7f767c03fead66c733ef9bd2d7dfa056a966db403f1b381575e",
+        "exitCode": 0,
+        "seconds": 131.947,
+        "problems": []
+      },
+      "off": {
+        "status": "clean",
+        "rows": 96825,
+        "rowsSha256": "d241bb442bb1c7f767c03fead66c733ef9bd2d7dfa056a966db403f1b381575e",
+        "exitCode": 0,
+        "seconds": 131.592,
+        "problems": []
+      },
+      "comparison": {
+        "completeJson": {
+          "firstDifference": null,
+          "identical": true,
+          "offBytes": 362,
+          "offExists": true,
+          "offSha256": "2e34eb866722b8152123dad91d0a62ad4d4d68de45ca75e07c001351c780e7e5",
+          "onBytes": 362,
+          "onExists": true,
+          "onSha256": "2e34eb866722b8152123dad91d0a62ad4d4d68de45ca75e07c001351c780e7e5"
+        },
+        "firstDifference": null,
+        "identical": true,
+        "rows": {
+          "firstDifference": null,
+          "identical": true,
+          "offRowBytes": 9682500,
+          "offRows": 96825,
+          "offSha256": "d241bb442bb1c7f767c03fead66c733ef9bd2d7dfa056a966db403f1b381575e",
+          "onRowBytes": 9682500,
+          "onRows": 96825,
+          "onSha256": "d241bb442bb1c7f767c03fead66c733ef9bd2d7dfa056a966db403f1b381575e"
+        }
+      }
+    },
+    {
+      "case": "th8_ud2b73",
+      "status": "identical",
+      "identical": true,
+      "difficulty": "Easy",
+      "shot": "Remilia",
+      "manifestFrames": 93040,
+      "seconds": 131.9,
+      "on": {
+        "status": "clean",
+        "rows": 93040,
+        "rowsSha256": "13670b9ee60ae8e53a17155cefedc29d0476e1bf5e055dc239e0bd1353d0ab05",
+        "exitCode": 0,
+        "seconds": 131.594,
+        "problems": []
+      },
+      "off": {
+        "status": "clean",
+        "rows": 93040,
+        "rowsSha256": "13670b9ee60ae8e53a17155cefedc29d0476e1bf5e055dc239e0bd1353d0ab05",
+        "exitCode": 0,
+        "seconds": 131.581,
+        "problems": []
+      },
+      "comparison": {
+        "completeJson": {
+          "firstDifference": null,
+          "identical": true,
+          "offBytes": 362,
+          "offExists": true,
+          "offSha256": "cd74eee480d6cfdca25373693abef8a572787e2ee79a88a740e083836b00cb96",
+          "onBytes": 362,
+          "onExists": true,
+          "onSha256": "cd74eee480d6cfdca25373693abef8a572787e2ee79a88a740e083836b00cb96"
+        },
+        "firstDifference": null,
+        "identical": true,
+        "rows": {
+          "firstDifference": null,
+          "identical": true,
+          "offRowBytes": 9304000,
+          "offRows": 93040,
+          "offSha256": "13670b9ee60ae8e53a17155cefedc29d0476e1bf5e055dc239e0bd1353d0ab05",
+          "onRowBytes": 9304000,
+          "onRows": 93040,
+          "onSha256": "13670b9ee60ae8e53a17155cefedc29d0476e1bf5e055dc239e0bd1353d0ab05"
+        }
+      }
+    },
+    {
+      "case": "th8_ud2b74",
+      "status": "identical",
+      "identical": true,
+      "difficulty": "Easy",
+      "shot": "Youmu",
+      "manifestFrames": 95280,
+      "seconds": 133.447,
+      "on": {
+        "status": "clean",
+        "rows": 95280,
+        "rowsSha256": "dd1955bef658161b2b1a022478d66017b5c6bcb334fdb1b1d171b9ff9a22e38e",
+        "exitCode": 0,
+        "seconds": 133.133,
+        "problems": []
+      },
+      "off": {
+        "status": "clean",
+        "rows": 95280,
+        "rowsSha256": "dd1955bef658161b2b1a022478d66017b5c6bcb334fdb1b1d171b9ff9a22e38e",
+        "exitCode": 0,
+        "seconds": 132.814,
+        "problems": []
+      },
+      "comparison": {
+        "completeJson": {
+          "firstDifference": null,
+          "identical": true,
+          "offBytes": 362,
+          "offExists": true,
+          "offSha256": "8a9e87a04635ae9bb0f9638706f139cd4053410def176b7829efa38549be62c8",
+          "onBytes": 362,
+          "onExists": true,
+          "onSha256": "8a9e87a04635ae9bb0f9638706f139cd4053410def176b7829efa38549be62c8"
+        },
+        "firstDifference": null,
+        "identical": true,
+        "rows": {
+          "firstDifference": null,
+          "identical": true,
+          "offRowBytes": 9528000,
+          "offRows": 95280,
+          "offSha256": "dd1955bef658161b2b1a022478d66017b5c6bcb334fdb1b1d171b9ff9a22e38e",
+          "onRowBytes": 9528000,
+          "onRows": 95280,
+          "onSha256": "dd1955bef658161b2b1a022478d66017b5c6bcb334fdb1b1d171b9ff9a22e38e"
+        }
+      }
+    },
+    {
+      "case": "th8_ud2cc5",
+      "status": "identical",
+      "identical": true,
+      "difficulty": "Normal",
+      "shot": "Yukari",
+      "manifestFrames": 109987,
+      "seconds": 149.598,
+      "on": {
+        "status": "clean",
+        "rows": 109987,
+        "rowsSha256": "98d07fa5748342e6184a3df45d4cf9a8e8b245f133a582ffab34924c806b70c5",
+        "exitCode": 0,
+        "seconds": 149.148,
+        "problems": []
+      },
+      "off": {
+        "status": "clean",
+        "rows": 109987,
+        "rowsSha256": "98d07fa5748342e6184a3df45d4cf9a8e8b245f133a582ffab34924c806b70c5",
+        "exitCode": 0,
+        "seconds": 148.839,
+        "problems": []
+      },
+      "comparison": {
+        "completeJson": {
+          "firstDifference": null,
+          "identical": true,
+          "offBytes": 364,
+          "offExists": true,
+          "offSha256": "ab020dd7d3a4b1a25f8c351843811ae79a2d7a201484cb5bea955f9c433c3c32",
+          "onBytes": 364,
+          "onExists": true,
+          "onSha256": "ab020dd7d3a4b1a25f8c351843811ae79a2d7a201484cb5bea955f9c433c3c32"
+        },
+        "firstDifference": null,
+        "identical": true,
+        "rows": {
+          "firstDifference": null,
+          "identical": true,
+          "offRowBytes": 10998700,
+          "offRows": 109987,
+          "offSha256": "98d07fa5748342e6184a3df45d4cf9a8e8b245f133a582ffab34924c806b70c5",
+          "onRowBytes": 10998700,
+          "onRows": 109987,
+          "onSha256": "98d07fa5748342e6184a3df45d4cf9a8e8b245f133a582ffab34924c806b70c5"
+        }
+      }
+    },
+    {
+      "case": "th8_ud22fb",
+      "status": "identical",
+      "identical": true,
+      "difficulty": "Normal",
+      "shot": "Remilia",
+      "manifestFrames": 108555,
+      "seconds": 462.674,
+      "on": {
+        "status": "clean",
+        "rows": 108555,
+        "rowsSha256": "28702aa0ca00c619648ad051ce0ccdcaa8bd26d072b3edbd8bea6a752c4aa465",
+        "exitCode": 0,
+        "seconds": 156.145,
+        "problems": []
+      },
+      "off": {
+        "status": "clean",
+        "rows": 108555,
+        "rowsSha256": "28702aa0ca00c619648ad051ce0ccdcaa8bd26d072b3edbd8bea6a752c4aa465",
+        "exitCode": 0,
+        "seconds": 160.896,
+        "problems": []
+      },
+      "comparison": {
+        "completeJson": {
+          "firstDifference": null,
+          "identical": true,
+          "offBytes": 365,
+          "offExists": true,
+          "offSha256": "b65f6e11b1e475d73d3721ceb1ac3585de40384a2cff7a84dbde0ef7b387670c",
+          "onBytes": 365,
+          "onExists": true,
+          "onSha256": "b65f6e11b1e475d73d3721ceb1ac3585de40384a2cff7a84dbde0ef7b387670c"
+        },
+        "firstDifference": null,
+        "identical": true,
+        "rows": {
+          "firstDifference": null,
+          "identical": true,
+          "offRowBytes": 10855500,
+          "offRows": 108555,
+          "offSha256": "28702aa0ca00c619648ad051ce0ccdcaa8bd26d072b3edbd8bea6a752c4aa465",
+          "onRowBytes": 10855500,
+          "onRows": 108555,
+          "onSha256": "28702aa0ca00c619648ad051ce0ccdcaa8bd26d072b3edbd8bea6a752c4aa465"
+        }
+      }
+    },
+    {
+      "case": "th8_ud28a0",
+      "status": "identical",
+      "identical": true,
+      "difficulty": "Hard",
+      "shot": "Magic Team",
+      "manifestFrames": 101936,
+      "seconds": 154.897,
+      "on": {
+        "status": "clean",
+        "rows": 101936,
+        "rowsSha256": "187c36762badfb141b91791306de9b0a5ed90d211e8562ed090c3c9cdc2bf801",
+        "exitCode": 0,
+        "seconds": 151.697,
+        "problems": []
+      },
+      "off": {
+        "status": "clean",
+        "rows": 101936,
+        "rowsSha256": "187c36762badfb141b91791306de9b0a5ed90d211e8562ed090c3c9cdc2bf801",
+        "exitCode": 0,
+        "seconds": 154.605,
+        "problems": []
+      },
+      "comparison": {
+        "completeJson": {
+          "firstDifference": null,
+          "identical": true,
+          "offBytes": 364,
+          "offExists": true,
+          "offSha256": "860070034875853f5dec84c3e743f74818490fc241ad30dc5210f5fa8372e108",
+          "onBytes": 364,
+          "onExists": true,
+          "onSha256": "860070034875853f5dec84c3e743f74818490fc241ad30dc5210f5fa8372e108"
+        },
+        "firstDifference": null,
+        "identical": true,
+        "rows": {
+          "firstDifference": null,
+          "identical": true,
+          "offRowBytes": 10193600,
+          "offRows": 101936,
+          "offSha256": "187c36762badfb141b91791306de9b0a5ed90d211e8562ed090c3c9cdc2bf801",
+          "onRowBytes": 10193600,
+          "onRows": 101936,
+          "onSha256": "187c36762badfb141b91791306de9b0a5ed90d211e8562ed090c3c9cdc2bf801"
+        }
+      }
+    },
+    {
+      "case": "th8_ud239d",
+      "status": "identical",
+      "identical": true,
+      "difficulty": "Hard",
+      "shot": "Ghost Team",
+      "manifestFrames": 108947,
+      "seconds": 164.421,
+      "on": {
+        "status": "clean",
+        "rows": 108947,
+        "rowsSha256": "4fa30408f91595293351a9f87d7ad1453be6fe30062a3d936e5836b11cfab207",
+        "exitCode": 0,
+        "seconds": 164.005,
+        "problems": []
+      },
+      "off": {
+        "status": "clean",
+        "rows": 108947,
+        "rowsSha256": "4fa30408f91595293351a9f87d7ad1453be6fe30062a3d936e5836b11cfab207",
+        "exitCode": 0,
+        "seconds": 164.112,
+        "problems": []
+      },
+      "comparison": {
+        "completeJson": {
+          "firstDifference": null,
+          "identical": true,
+          "offBytes": 366,
+          "offExists": true,
+          "offSha256": "a298ed92ebaad5bd6682c7ae672567b1bd99df35fdfaae369da53ce03c4f8411",
+          "onBytes": 366,
+          "onExists": true,
+          "onSha256": "a298ed92ebaad5bd6682c7ae672567b1bd99df35fdfaae369da53ce03c4f8411"
+        },
+        "firstDifference": null,
+        "identical": true,
+        "rows": {
+          "firstDifference": null,
+          "identical": true,
+          "offRowBytes": 10894700,
+          "offRows": 108947,
+          "offSha256": "4fa30408f91595293351a9f87d7ad1453be6fe30062a3d936e5836b11cfab207",
+          "onRowBytes": 10894700,
+          "onRows": 108947,
+          "onSha256": "4fa30408f91595293351a9f87d7ad1453be6fe30062a3d936e5836b11cfab207"
+        }
+      }
+    },
+    {
+      "case": "th8_ud286e",
+      "status": "identical",
+      "identical": true,
+      "difficulty": "Hard",
+      "shot": "Remilia",
+      "manifestFrames": 108075,
+      "seconds": 161.012,
+      "on": {
+        "status": "clean",
+        "rows": 108075,
+        "rowsSha256": "0c3ecd6a600e444dc2cee6349e4eb3350bbdccc223d8b3f25e7cf2d71f536be0",
+        "exitCode": 0,
+        "seconds": 160.703,
+        "problems": []
+      },
+      "off": {
+        "status": "clean",
+        "rows": 108075,
+        "rowsSha256": "0c3ecd6a600e444dc2cee6349e4eb3350bbdccc223d8b3f25e7cf2d71f536be0",
+        "exitCode": 0,
+        "seconds": 159.808,
+        "problems": []
+      },
+      "comparison": {
+        "completeJson": {
+          "firstDifference": null,
+          "identical": true,
+          "offBytes": 365,
+          "offExists": true,
+          "offSha256": "90842578b3674dc2352b6abcfe280248132f35be8d163f2d37317f89bf167bd0",
+          "onBytes": 365,
+          "onExists": true,
+          "onSha256": "90842578b3674dc2352b6abcfe280248132f35be8d163f2d37317f89bf167bd0"
+        },
+        "firstDifference": null,
+        "identical": true,
+        "rows": {
+          "firstDifference": null,
+          "identical": true,
+          "offRowBytes": 10807500,
+          "offRows": 108075,
+          "offSha256": "0c3ecd6a600e444dc2cee6349e4eb3350bbdccc223d8b3f25e7cf2d71f536be0",
+          "onRowBytes": 10807500,
+          "onRows": 108075,
+          "onSha256": "0c3ecd6a600e444dc2cee6349e4eb3350bbdccc223d8b3f25e7cf2d71f536be0"
+        }
+      }
+    },
+    {
+      "case": "th8_ud2c74",
+      "status": "identical",
+      "identical": true,
+      "difficulty": "Lunatic",
+      "shot": "Remilia",
+      "manifestFrames": 102204,
+      "seconds": 183.335,
+      "on": {
+        "status": "clean",
+        "rows": 102204,
+        "rowsSha256": "1ab05343eaf727233df48afa867a4b62fafa49353c4ac44028299d157d2940a7",
+        "exitCode": 0,
+        "seconds": 180.696,
+        "problems": []
+      },
+      "off": {
+        "status": "clean",
+        "rows": 102204,
+        "rowsSha256": "1ab05343eaf727233df48afa867a4b62fafa49353c4ac44028299d157d2940a7",
+        "exitCode": 0,
+        "seconds": 182.945,
+        "problems": []
+      },
+      "comparison": {
+        "completeJson": {
+          "firstDifference": null,
+          "identical": true,
+          "offBytes": 368,
+          "offExists": true,
+          "offSha256": "0c245f35fe7630009893fc9a466e082f0a6c15a54fa585090d7c3b68f88774e2",
+          "onBytes": 368,
+          "onExists": true,
+          "onSha256": "0c245f35fe7630009893fc9a466e082f0a6c15a54fa585090d7c3b68f88774e2"
+        },
+        "firstDifference": null,
+        "identical": true,
+        "rows": {
+          "firstDifference": null,
+          "identical": true,
+          "offRowBytes": 10220400,
+          "offRows": 102204,
+          "offSha256": "1ab05343eaf727233df48afa867a4b62fafa49353c4ac44028299d157d2940a7",
+          "onRowBytes": 10220400,
+          "onRows": 102204,
+          "onSha256": "1ab05343eaf727233df48afa867a4b62fafa49353c4ac44028299d157d2940a7"
+        }
+      }
+    }
+  ]
+}

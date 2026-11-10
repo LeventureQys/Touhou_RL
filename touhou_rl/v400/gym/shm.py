@@ -9,6 +9,13 @@ Layout, all little endian::
 
 The engine is the only writer.  A reader takes the header's frame counter to tell
 whether it is looking at a frame it has already consumed.
+
+Since T7.1/T7.3 (task book, ``build/rl_v3``) the engine publishes this block
+itself at the end of every ``RESET`` and every ``STEP``, so ``STATE``/``HASH``
+are no longer a prerequisite for reading a current state: the header's frame
+number is the one the command's reply reports.  :class:`touhou_rl.v400.gym.env.Th08Env`
+verifies exactly that pairing and raises ``StaleStateError`` when it does not
+hold.
 """
 
 from __future__ import annotations
