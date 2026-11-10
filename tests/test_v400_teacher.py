@@ -1114,9 +1114,12 @@ def test_child_recording_is_one_batch_and_matches_the_main_process_tape():
         assert tape.lasers[index] == reference.lasers[index]
         assert tape.enemies[index] == reference.enemies[index]
     assert np.array_equal(tape.box_array(2), reference.box_array(2))
+    # EXP-P1-021: `lethal_counts()` also reports the engine's `damageable` laser
+    # rows (the laser judging window), so the exact contract is these four keys.
     assert tape.lethal_counts() == reference.lethal_counts() == {
         "bullets": 2,
         "lasers": 0,
+        "lasers_damageable": 0,
         "enemies": 0,
     }
 
