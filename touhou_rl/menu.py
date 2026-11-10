@@ -29,19 +29,58 @@ from .session import GameSession
 DEFAULT_TAP_HOLD_S = 0.06
 DEFAULT_SETTLE_S = 0.12
 
+#: Why posted keys cannot drive the Windows build.  ``Controller::GetInput``
+#: calls ``GetKeyboardState`` whenever ``dontUseDirectInput`` removed the
+#: DirectInput keyboard object (``Global.cpp:729-731``), and ``GetKeyboardState``
+#: returns the *calling thread's* key array, which only real (hardware or
+#: ``SendInput``) input to a foreground window updates -- a posted ``WM_KEYDOWN``
+#: does not touch it.  The window procedure cannot compensate either: ``main.cpp``
+#: handles only ``WM_ACTIVATEAPP`` in its message loop, no key messages at all.
+#: Measured 2026-11-08 (EXP-P0-053): three posted ``VK_DOWN`` taps left the title
+#: cursor at item 0.
+SENDINPUT_UPGRADE_REASON = (
+    "TH08 reads GetKeyboardState (Global.cpp:731) and its message loop handles no "
+    "WM_KEYDOWN (main.cpp:531), so posted keys cannot reach the engine"
+)
+
+
+def _ensure_engine_input(session: GameSession) -> bool:
+    """Foreground the game and make sure the active backend can reach the engine.
+
+    Returns ``True`` when the window is verified foreground, i.e. when a
+    scan-code ``SendInput`` will actually arrive.  A ``PostMessageKeyboard``
+    session is upgraded to ``SendInputKeyboard`` in place once the window is
+    foreground: posted keys are inert on this engine (see
+    ``SENDINPUT_UPGRADE_REASON``), which is what made ``--mode practice`` time out
+    in ``goto_start_menu_item``.
+    """
+    hwnd = session.refresh_window()
+    if not winapi.force_foreground(hwnd):
+        session.log_line(
+            "warning: could not take foreground for input; "
+            f"{winapi.input_window_state(hwnd)} {winapi.foreground_summary()}"
+        )
+        return False
+    keyboard = session.keyboard
+    if isinstance(keyboard, winapi.PostMessageKeyboard):
+        try:
+            keyboard.release_all()
+        except OSError:
+            pass
+        session.keyboard = winapi.SendInputKeyboard()
+        session.log_line(f"input backend upgraded PostMessage -> SendInput: {SENDINPUT_UPGRADE_REASON}")
+    return True
+
 
 def tap(session: GameSession, key: str, hold_s: float = DEFAULT_TAP_HOLD_S, settle_s: float = DEFAULT_SETTLE_S) -> None:
     assert session.keyboard is not None
-    if isinstance(session.keyboard, winapi.SendInputKeyboard):
-        if not winapi.force_foreground(session.refresh_window()):
-            session.log_line("warning: could not take foreground for SendInput")
+    _ensure_engine_input(session)
     session.keyboard.tap(key, hold_s)
     time.sleep(settle_s)
 
 
 def _ensure_foreground_if_needed(session: GameSession) -> None:
-    if isinstance(session.keyboard, winapi.SendInputKeyboard):
-        winapi.force_foreground(session.refresh_window())
+    _ensure_engine_input(session)
 
 
 def ensure_title(session: GameSession, timeout: float = 25.0) -> None:
@@ -90,6 +129,7 @@ def ensure_title(session: GameSession, timeout: float = 25.0) -> None:
 def goto_start_menu_item(session: GameSession, item: int, timeout: float = 5.0) -> None:
     """Move the StartMenu cursor to ``item`` using the reported cursor value."""
     deadline = time.perf_counter() + timeout
+    last_cursor = None
     while time.perf_counter() < deadline:
         state = session.read_state(with_bullets=False)
         if state.title_screen_current != spec.SCREEN_START_MENU:
@@ -97,9 +137,14 @@ def goto_start_menu_item(session: GameSession, item: int, timeout: float = 5.0) 
         delta = (item - state.title_cursor) % 9
         if delta == 0:
             return
+        last_cursor = state.title_cursor
         key = "down" if delta <= 4 else "up"
         tap(session, key, settle_s=0.1)
-    raise TimeoutError(f"could not move start menu cursor to item {item}")
+    raise TimeoutError(
+        f"could not move start menu cursor to item {item} (stuck at {last_cursor}); "
+        f"backend={type(session.keyboard).__name__} "
+        f"{winapi.input_window_state(session.refresh_window())} {winapi.foreground_summary()}"
+    )
 
 
 def _move_cursor(session: GameSession, target: int, getter, steps: int, timeout: float = 6.0) -> None:

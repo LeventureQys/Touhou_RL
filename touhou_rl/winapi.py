@@ -40,6 +40,8 @@ WM_CLOSE = 0x0010
 WM_KEYDOWN = 0x0100
 WM_KEYUP = 0x0101
 SW_RESTORE = 9
+SW_SHOW = 5
+MOUSEEVENTF_MOVE = 0x0001
 PROCESS_VM_READ = 0x0010
 PROCESS_QUERY_INFORMATION = 0x0400
 KEYEVENTF_KEYUP = 0x0002
@@ -128,6 +130,9 @@ user32.SetForegroundWindow.argtypes = [wt.HWND]
 user32.ShowWindow.argtypes = [wt.HWND, ctypes.c_int]
 user32.BringWindowToTop.argtypes = [wt.HWND]
 user32.SetFocus.argtypes = [wt.HWND]
+user32.SetActiveWindow.argtypes = [wt.HWND]
+user32.SetActiveWindow.restype = wt.HWND
+user32.SwitchToThisWindow.argtypes = [wt.HWND, wt.BOOL]
 user32.SendInput.argtypes = [wt.UINT, ctypes.POINTER(INPUT), ctypes.c_int]
 user32.PostMessageW.argtypes = [wt.HWND, wt.UINT, wt.WPARAM, wt.LPARAM]
 user32.GetWindowThreadProcessId.argtypes = [wt.HWND, ctypes.POINTER(wt.DWORD)]
@@ -313,34 +318,109 @@ def dialog_text(hwnd: int) -> str:
     return "\n".join(lines)
 
 
-def force_foreground(hwnd: int) -> bool:
-    """Bring ``hwnd`` to the foreground from a background process.
+def force_foreground(hwnd: int, timeout_s: float = 2.0, attempts: int = 3) -> bool:
+    """Bring ``hwnd`` to the foreground from a background process and verify it.
 
-    ``SetForegroundWindow`` is refused when the caller does not own the current
-    foreground, so attach our input queue to both the foreground thread and the
-    target thread for the duration of the call.
+    Two things make the naive version fail on this host:
+
+    * ``SetForegroundWindow`` is only *allowed* when the caller owns the current
+      foreground, so we attach our input queue to both the foreground thread and
+      the target thread for the duration of the call (the classic workaround).
+    * The switch is asynchronous: right after a successful call
+      ``GetForegroundWindow`` can still report the old window -- or ``0`` while
+      no window owns the foreground yet -- so a one-shot check reports failure
+      for a transfer that did happen.  Measured on 2026-11-08: the call returned
+      non-zero and ``GetForegroundWindow()`` returned 0 in the same millisecond.
+      Poll for ``timeout_s`` instead.
+
+    ``SendInput`` with a zero-distance mouse move makes this process the "last
+    input" process, which is the other documented precondition for the transfer.
+    It is harmless on an idle desktop and absent when the desktop is locked
+    (where the call fails with ``ERROR_ACCESS_DENIED`` and we simply continue).
     """
     if not hwnd or not user32.IsWindow(hwnd):
         return False
     if user32.GetForegroundWindow() == hwnd:
         return True
-    user32.ShowWindow(hwnd, SW_RESTORE)
-    user32.BringWindowToTop(hwnd)
-    fg = user32.GetForegroundWindow()
-    current = kernel32.GetCurrentThreadId()
-    fg_thread = user32.GetWindowThreadProcessId(fg, None) if fg else 0
     target_thread = user32.GetWindowThreadProcessId(hwnd, None)
-    attached = []
-    for thread in (fg_thread, target_thread):
-        if thread and user32.AttachThreadInput(current, thread, True):
-            attached.append(thread)
-    try:
-        user32.SetForegroundWindow(hwnd)
-        user32.SetFocus(hwnd)
-    finally:
-        for thread in attached:
-            user32.AttachThreadInput(current, thread, False)
+    current = kernel32.GetCurrentThreadId()
+    for _attempt in range(attempts):
+        _nudge_input()
+        if is_iconic(hwnd):
+            user32.ShowWindow(hwnd, SW_RESTORE)
+        user32.ShowWindow(hwnd, SW_SHOW)
+        user32.BringWindowToTop(hwnd)
+        fg = user32.GetForegroundWindow()
+        attached: list[int] = []
+        threads = []
+        if fg:
+            threads.append(user32.GetWindowThreadProcessId(fg, None))
+        if target_thread:
+            threads.append(target_thread)
+        for thread in threads:
+            if thread and thread != current and user32.AttachThreadInput(current, thread, True):
+                attached.append(thread)
+        try:
+            user32.SetForegroundWindow(hwnd)
+            user32.SetFocus(hwnd)
+            user32.SetActiveWindow(hwnd)
+        except OSError:  # pragma: no cover - SetActiveWindow can refuse
+            pass
+        finally:
+            for thread in attached:
+                user32.AttachThreadInput(current, thread, False)
+        deadline = time.perf_counter() + timeout_s / attempts
+        while time.perf_counter() < deadline:
+            if user32.GetForegroundWindow() == hwnd:
+                return True
+            time.sleep(0.02)
+        # Last resort: the shell's own "switch to this window" helper.
+        try:
+            user32.SwitchToThisWindow(hwnd, True)
+        except OSError:  # pragma: no cover - absent on some builds
+            pass
+        deadline = time.perf_counter() + 0.15
+        while time.perf_counter() < deadline:
+            if user32.GetForegroundWindow() == hwnd:
+                return True
+            time.sleep(0.02)
     return user32.GetForegroundWindow() == hwnd
+
+
+def _nudge_input() -> bool:
+    """Make this process the last-input process (zero-distance mouse move)."""
+    inp = INPUT()
+    inp.type = 0  # INPUT_MOUSE
+    inp.mi = MOUSEINPUT(0, 0, 0, MOUSEEVENTF_MOVE, 0, None)
+    try:
+        return user32.SendInput(1, ctypes.byref(inp), ctypes.sizeof(INPUT)) == 1
+    except OSError:  # pragma: no cover - locked desktop
+        return False
+
+
+def foreground_summary() -> str:
+    """One-line description of the current foreground window (for diagnostics).
+
+    ``menu`` logs this when it cannot take the foreground, so a failed capture
+    says whether another application held it, or whether the window was
+    minimised/cloaked, instead of only "could not take foreground".
+    """
+    hwnd = int(user32.GetForegroundWindow() or 0)
+    if not hwnd:
+        return "foreground=<none>"
+    return f"foreground=0x{hwnd:X} class={class_name(hwnd)!r} title={window_title(hwnd)[:48]!r}"
+
+
+def input_window_state(hwnd: int) -> str:
+    """Describe ``hwnd`` as an input target: visible/iconic/cloaked/foreground."""
+    if not hwnd:
+        return "hwnd=0"
+    return (
+        f"hwnd=0x{hwnd:X} visible={bool(user32.IsWindowVisible(hwnd))} "
+        f"iconic={is_iconic(hwnd)} cloaked={is_cloaked(hwnd)} "
+        f"foreground={user32.GetForegroundWindow() == hwnd}"
+    )
+
 
 
 # ---------------------------------------------------------------------------
