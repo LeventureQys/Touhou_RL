@@ -144,4 +144,35 @@ P0 训练场 ──► P1 搜索教师 ──┐
 - 不改 canonical 构建、原始镜像、默认模型；不往外部游戏进程写内存。
 - 所有引擎改动都放在研究编译开关后面，默认关闭，并且必须通过回放逐位验证。
 - 负结论在落笔之前，必须先通过有效性自检。
-- 门不过，就不往下走。
+
+
+## 九、当前状态（2026-11-07）
+
+> 本节记录当前执行结果；前文的路线说明和历史状态保留，不以本节内容回写或伪造覆盖。
+
+- **回归结果**：v4.0.0 明确回归为 **29 collected / 29 passed / 0 failed / 0 errors**。
+- **语法校验**：`compileall` 退出码为 **0**。
+- **已完成**：`obs_spec`、`recover`、`VecTh08Env` 最小切片，以及 WP5 fake/in-process 生命周期入口。
+- **WP5 边界**：上述 WP5 完成**不等于**真实跨进程验证，也不等于像素一致性验证。
+- **数据状态**：manifest 中共 6 个对象：`exists=true` 3 个、`exists=false` 3 个。缺失对象为 `game/th08.cfg.rl`、`starts/index.jsonl`、`bench/human_reference.json`；三项的 `missing_reason` 均说明未在解析到的根目录 `/root/v400-data` 找到，且 `V400_DATA` was unset。manifest 路径：`Document/Update/Alpha/v4.0.0/v400-data-manifest.json`；生成时间：`2026-11-08T07:11:52.9310891Z`。
+- **发布门**：G6=`blocked`；G7=`not_run`。
+- **发布结论**：当前**不可发布**；在所有对象存在且 `V400_DATA` 成功解析前，不得宣称 G6 或 G7 通过。
+
+## 十、G6/G7 发布门状态
+
+- **权威数据来源**：`Document/Update/Alpha/v4.0.0/v400-data-manifest.json`
+- **manifest 生成时间**：`2026-11-08T07:11:52.9310891Z`
+- **对象统计**：共 6 项；`exists=true` 3 项，`exists=false` 3 项。缺失项：`game/th08.cfg.rl`、`starts/index.jsonl`、`bench/human_reference.json`。三项 `missing_reason` 均为在 `/root/v400-data` 未找到，且 `V400_DATA` was unset。
+- **G6：`blocked`**
+- **G7：`not_run`**
+- **判定依据**：存在任何对象 `missing` 或 `V400_DATA` 未解析时，G6 必须为 `blocked`，G7 必须为 `not_run`；因此当前不得宣称 G6 或 G7 已通过，当前不可发布。
+
+后续解除阻塞并填入每个发布门的权威记录时，必须同时提供：
+
+- 时间戳（应明确时区或使用 UTC）；
+- 任务标识；
+- 执行命令及完整参数（包括用于确认 `V400_DATA` 解析和逐项 manifest 校验的命令）；
+- 每条命令的实际退出码（不得用预期值代替；本次未执行真实发布或下载，不得伪造退出码）；
+- 原始证据（例如完整日志、报告或其不可变存档位置）。
+
+在数据对象全部存在、`V400_DATA` 成功解析并完成相应门禁命令前，不得将 G6/G7 改为通过，也不得执行真实发布或下载。

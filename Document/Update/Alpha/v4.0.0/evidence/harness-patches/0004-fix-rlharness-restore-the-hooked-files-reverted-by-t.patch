@@ -1,0 +1,202 @@
+From e151bcbcde78725d208523682681598d4dd68dae Mon Sep 17 00:00:00 2001
+From: root <root@ubuntu.localdomain>
+Date: Sat, 7 Nov 2026 22:16:01 +0800
+Subject: [PATCH 04/10] fix(rlharness): restore the hooked files reverted by
+ the previous commit
+
+The DEBUG commit rewound CMakeLists.txt, src/main.cpp, src/Global.cpp and
+src/GameManager.cpp to bcddaa2.  Cause: build.sh resets those files to the base
+commit with `git checkout bcddaa2 -- <files>`, which writes both the worktree
+and the index; re-applying the patches afterwards only touched the worktree, so
+the commit captured the base versions.
+
+build.sh is changed to reset only the worktree (`git checkout bcddaa2 --` then
+`git reset --` is not enough either) - see the accompanying note.  This commit
+restores the four files to their patched content.
+---
+ CMakeLists.txt      | 18 ++++++++++++
+ src/GameManager.cpp |  6 ++++
+ src/Global.cpp      |  9 ++++++
+ src/main.cpp        | 71 +++++++++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 104 insertions(+)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 8602702..c5b4c4c 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -255,3 +255,21 @@ else()
+ endif()
+ 
+ set_target_properties(th08-modern PROPERTIES OUTPUT_NAME "th08-modern")
++
++option(TH08_RL_HARNESS "Enable the v4.0.0 reinforcement-learning harness" OFF)
++if(TH08_RL_HARNESS)
++    target_sources(th08-modern PRIVATE src/rlharness/rlharness.cpp)
++    # The harness needs Rng::ReplayTraceGenerationCount() (field 15 of the 25
++    # tracked fields), which lives behind TH08_ENABLE_REPLAY_TRACE.  So the
++    # harness build turns that on too; its recorder stays inert unless
++    # TH08_REPLAY_TRACE_REFERENCE is set, so it costs nothing at runtime.
++    target_compile_definitions(th08-modern PRIVATE TH08_RL_HARNESS TH08_ENABLE_REPLAY_TRACE)
++    if(NOT TH08_ENABLE_REPLAY_TRACE)
++        target_sources(th08-modern PRIVATE src/modern/linux/replay_trace.cpp)
++    endif()
++    # New code on a hot path (state export + protocol) keeps -O2; the
++    # reconstructed game TUs deliberately retain -O0.
++    set_source_files_properties(src/rlharness/rlharness.cpp PROPERTIES
++        COMPILE_OPTIONS "-O2;-fno-strict-aliasing")
++endif()
++
+diff --git a/src/GameManager.cpp b/src/GameManager.cpp
+index 4ff1af0..5560e90 100644
+--- a/src/GameManager.cpp
++++ b/src/GameManager.cpp
+@@ -1,4 +1,7 @@
+ #include "th_pch.h"
++#ifdef TH08_RL_HARNESS
++#include "rlharness/rlharness.hpp"
++#endif
+ 
+ #include "GameManager.hpp"
+ #include "AnmManager.hpp"
+@@ -944,6 +947,9 @@ void __fastcall GameManager::GameplaySetupThread(void *unused)
+         gameManager->UpdateAntiTamper();
+         *reinterpret_cast<u16 *>(&g_Rng) = replaySeed;
+     }
++#ifdef TH08_RL_HARNESS
++    modern::rlharness::ApplyPendingSeed();
++#endif
+     gameManager->stageRngSeed = *reinterpret_cast<u16 *>(&g_Rng);
+ 
+     if (Background::RegisterChain(gameManager->currentStage))
+diff --git a/src/Global.cpp b/src/Global.cpp
+index 27d5d02..36b1409 100644
+--- a/src/Global.cpp
++++ b/src/Global.cpp
+@@ -1,5 +1,8 @@
+ #include "th_pch.h"
+ 
++#ifdef TH08_RL_HARNESS
++#include "rlharness/rlharness.hpp"
++#endif
+ #ifdef TH08_MODERN_PORT
+ #include "modern/windows_runtime.hpp"
+ #endif
+@@ -721,6 +724,12 @@ u8 *Controller::GetControllerState()
+ 
+ u16 Controller::GetInput(void)
+ {
++#ifdef TH08_RL_HARNESS
++    // The mask the agent commanded this frame.  It still flows through
++    // RecordInputAndFps, so the +1 frame latency matches the real game (03 §3.3).
++    if (modern::rlharness::IsActive())
++        return modern::rlharness::CurrentMask();
++#endif
+     u8 keyboardState[256];
+     u16 buttons;
+ 
+diff --git a/src/main.cpp b/src/main.cpp
+index 78e0fdb..ecba64b 100644
+--- a/src/main.cpp
++++ b/src/main.cpp
+@@ -20,6 +20,9 @@
+ #include "diffbuild.hpp"
+ #include "i18n.hpp"
+ #include "inttypes.hpp"
++#ifdef TH08_RL_HARNESS
++#include "rlharness/rlharness.hpp"
++#endif
+ #ifdef TH08_MODERN_PORT
+ #include "modern/windows_runtime.hpp"
+ #endif
+@@ -84,6 +87,67 @@ C_ASSERT(sizeof(GameWindow) == 0x44);
+ 
+ DIFFABLE_STATIC(HANDLE, g_ExclusiveMutex);
+ DIFFABLE_STATIC(GameWindow, g_GameWindow);
++
++#ifdef TH08_RL_HARNESS
++namespace modern
++{
++namespace rlharness
++{
++// One logic frame, no frame-rate gate, no frame skipping.  This is
++// GameWindow::Render() minus the timing gate, and it must keep draw calls: some
++// draw callbacks mutate game state (10-P0 §4.1).
++RlU64 g_frameCount;
++
++RlU64 FrameCount()
++{
++    return g_frameCount;
++}
++
++void ResetFrameCount()
++{
++    g_frameCount = 0;
++}
++
++bool PumpOneFrame()
++{
++    i32 calcChainResult;
++
++    g_AnmManager->FlushVertexBuffer();
++
++    g_Supervisor.viewport.X = 0;
++    g_Supervisor.viewport.Y = 0;
++    g_Supervisor.viewport.Width = GAME_WINDOW_WIDTH;
++    g_Supervisor.viewport.Height = GAME_WINDOW_HEIGHT;
++    g_Supervisor.d3dDevice->SetViewport(&g_Supervisor.viewport);
++
++    calcChainResult = g_Chain.RunCalcChain();
++    g_SoundPlayer.ProcessQueues();
++
++    if (calcChainResult == 0 || calcChainResult == -1)
++    {
++        g_Supervisor.ThreadClose();
++        return false;
++    }
++
++    g_Supervisor.d3dDevice->BeginScene();
++    g_AnmManager->ClearVertexBuffer();
++    g_Supervisor.fogState = FOG_UNSET;
++    g_Supervisor.DisableFog();
++    g_Chain.RunDrawChain();
++    g_AnmManager->FlushVertexBuffer();
++    g_Supervisor.d3dDevice->SetTexture(0, NULL);
++    g_Supervisor.d3dDevice->EndScene();
++    g_GameWindow.framesSinceRedraw = 0;
++
++    GameWindow::Present();
++
++    ++g_frameCount;
++    return true;
++}
++} // namespace rlharness
++} // namespace modern
++#endif // TH08_RL_HARNESS
++
+ }; // namespace th08
+ 
+ using namespace th08;
+@@ -103,6 +167,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR pCmdLine
+     if (!modern::ConfigureDataDirectory())
+         return EXIT_FAILURE;
+ #endif
++#ifdef TH08_RL_HARNESS
++    modern::rlharness::ParseCommandLine();
++#endif
+ 
+     g_Supervisor.hInstance = hInstance;
+ 
+@@ -179,6 +246,10 @@ restart:
+         g_GameWindow.lastTimestamp = g_GameWindow.lastFrameTime;
+         g_GameWindow.curTimestamp = g_GameWindow.lastTimestamp;
+ 
++#ifdef TH08_RL_HARNESS
++        if (modern::rlharness::IsActive())
++            return modern::rlharness::Run();
++#endif
+         while (!g_GameWindow.windowIsClosing)
+         {
+             if (PeekMessageA(&msg, NULL, 0, 0, PM_REMOVE))
+-- 
+2.34.1
+

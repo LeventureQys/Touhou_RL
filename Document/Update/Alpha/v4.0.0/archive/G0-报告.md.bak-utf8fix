@@ -1,0 +1,278 @@
+# v4.0.0 P0 G0 门报告草案
+
+> 日期：2026-11-08；状态：**G0 NOT PASS / BLOCKED / 未放行**。本草案只核对当前真实证据，不把模拟 WP5、合成单测、历史截图或不完整的零售轨迹计为完成。
+
+## 1. 结论摘要
+
+G0 当前不能 PASS，也不能宣称 WP1、WP5、WP8 已完成。历史阻塞记录 [`WP1-WP8-G0-blocked-20261107.md`](WP1-WP8-G0-blocked-20261107.md) 的“无 EXE”只针对当时检查的 WSL 游戏目录，非全仓缺少零售原件。**本轮实测更正**：`third_party/th08/resources/th08.exe` 为冻结目标，独立核验大小 **840,704 B**、官方 SHA-256 `330fbdbf58a710829d65277b4f312cfbb38d5448b3df523e79350b879213d924`；两例公开回放 SHA 也已匹配。Wine32、wineboot、xdotool 均已安装，已验证 `/usr/bin/wine`、`/usr/bin/wineboot`、`/usr/bin/xdotool`，i386 可用，Wine 版本为 **wine-6.0.3**；因此旧“Wine/xdotool 缺失”叙述已失效。easy-0-b 官方 capture 已尝试 **两次**，两次均 **exit 1 / Incomplete capture**：私有 Xvfb socket 失败，WSLg `:0` 无断点；`rows.jsonl` 为 **0 bytes**（SHA-256 `e3b0...b855`），`complete.json` 缺失，真实参考仍 **0/2**。研究构建 `third_party/th08/build/play/th08.exe` 为 **898,048 B**、SHA-256 `cdd23bca0c724941866efda5da280be67eb6cdd935f83548045c2a8e037f1ddf`，不能替代原件。WP3 真实 shadow frame1200 已接线并验证：`BULLETS` `count=33` 且字段返回，`ENEMIES` `count=6` 且字段返回，`ITEMS` `count=6`，`LASERS` `count=0`（2400 帧）且非法 `limit` 返回 `ERR`，所有命令 exit 0；激光非空字段尚未验证。完整影子/像素门仍未完成。
+
+## 2. 证据索引与可信边界
+
+- 规格与阈值：[`10-P0-训练场.md`](../10-P0-训练场.md)、[`20-基准与评测.md`](../20-基准与评测.md)。
+- 当前执行状态：[`任务清单.md`](../任务清单.md)。
+- 逐项阻塞与命令退出码：[`WP1-WP8-G0-blocked-20261107.md`](WP1-WP8-G0-blocked-20261107.md)。
+- WP0：[`experiments/EXP-P0-000-环境就绪.md`](../experiments/EXP-P0-000-环境就绪.md)，退出码 0，但有 Ubuntu/Python/CUDA 后缀偏差。
+- WP1/标题与构建：[`experiments/EXP-P0-001-原样构建与标题画面.md`](../experiments/EXP-P0-001-原样构建与标题画面.md)，只证明原样构建/标题运行，不证明 108/108。
+- WP2：`EXP-P0-022` 三个独立 shadow 进程各运行 1,000 帧，fps/核分别为 **14616.8385 / 14837.4009 / 14507.8759**，均超过 5,000 门，均值 **14654.0384 fps/核**；首轮同进程 RESET 失败 **exit 3** 予以保留。该证据不是渲染+读回 2,000 fps，也不构成 G0.3 通过。
+- WP3：真实 shadow frame1200 的四池结果已较完整：`BULLETS` `count=33` 且字段返回，`ENEMIES` `count=6` 且字段返回，命令 `exit 0`；此前 `ITEMS` `count=6`、`LASERS` `count=0`（2400 帧）及非法 `limit` 返回 `ERR` 均保留。物品/激光非空字段证据分别存在，按真实结果记录；完整影子/像素门仍未完成。
+- WP4：**EXP-P0-027 已纠正 EXP-P0-026 的“无 ELF”错误**：`/root/Touhou_RL/third_party/th08-rl/build/rl/th08-modern` 是真实可执行 ELF64，不能以 `/mnt/d` 工作区路径缺失推断 `/root` 不存在。WSL `/root` ELF 可直接完成 HELLO/RESET/STEP；后续 EXP-P0-028 的 Windows `wsl.exe` launcher 路径正确，但本会话 X connection `:0` broken、进程 exit 1，Windows 发起的真实单环境仍 **blocked**。reader-thread 合同测试记录为 **7/12 通过**，不得把此前选择性通过或 WSL 直接协议切片写作 Windows 真实单环境通过。WP6 `human_reference` fail-closed 为 **5 passed、exit 0**，但真实人类数据未知；WP7/WP8 见对应实验卡，均未形成合法门证据。故 G0.1、G0.2、G0.3、G0.4 及完整工程/bench 门均不得翻转。
+
+## 3. G0 判据逐项判定
+
+| 判据 | 规格 | 当前判定 | 依据/缺口 |
+|---|---|---|---|
+| G0.1 保真 | harness ON，108 份回放逐位一致 | **未测/阻塞** | 无可信零售参考轨迹；EXP-P0-045 已核验：manifest 中 108 条 `retailTrace.sha256` 只是期望指纹，公开 `.rpy` URL 可达但**没有公开的 `rows.jsonl`/`complete.json` 参考产物**，`.rpy` 解码不能替代零售执行轨迹，故仍 0/108，不能用 `.rpy` 或原样标题运行替代 |
+| G0.2 确定性 | WP5 五项全部通过 | **未确认** | PARK/SPAWN 真实父代理协议 `exit 0`；BRANCH 20×300=6000/6000；影子/主 10000 帧 167/167 检查点一致；第 4 项由 EXP-P0-044 取得 **PASS-with-limit**（两个独立真实 `env` 进程各 100 帧、原始 RGBA 逐字节 `different_frame_count=0`、两进程 `exit 0`；但源树 dirty，只能以 binary SHA-256 作构建身份，且仅覆盖单条全零输入轨迹）；第 5 项计时均值 15470.3us 仍包含子执行/wait；整体验收脚本 `exit 3`，故 G0.2 仍未全通过。 |
+| G0.3 吞吐 | 渲染+读回全机≥2,000 fps，推演≥5,000 fps/核 | **推演切片通过，G0 硬门未确认** | 真实 shadow 1000 帧 `exit 0`，wall `.069103362s`，`14471.07595 fps/核`；10000 帧因 `curState6` 跨终局 `exit 3`，不能作为完整通过证据。渲染+读回全机历史约 1,100–1,204 fps，仍未达到 ≥2,000 的 G0 硬门。 |
+| G0.4 像素 | 3 份 Normal×200 帧双端报告和增强建议 | **未测/阻塞** | 0/3、0/600 真实配对；严格分析器存在不能代替输入 |
+| 工程 | `pytest -m not harness`、`pytest -m harness`、子模块 CI/diff 全绿 | **未确认** | 较早记录为 **477 passed、2 skipped、退出码 0、66.64s**；历史诊断记录为 **1 failed、480 passed、2 skipped**（旧测试错误断言 EXP032 负证据）；当前最新全量回归为 **482 passed、2 skipped、65.86s、exit 0**；**2 skipped 不等于 G0，也不能声称所有真实门通过**，尚无子模块 CI/真实 harness 集成门全部通过的证据 |
+| bench | random/still 在 S1N/PSN 开发集 scoreboard | **未确认** | WP7 汇总框架已落地，但真实逐局数据及 scoreboard 缺失 |
+
+## 4. 已执行/可追溯命令状态
+
+阻塞卡记录的选择性命令：
+
+- 历史 WSL 资源探查退出码 **2**：当时检查的是 `/mnt/d/WorkShop/Touhou_RL/third_party/th08-rl`，该路径缺失；**不表示**当前 `/root/Touhou_RL/third_party/th08-rl` 不存在。后者现已存在并有 `build/rl` 构建产物，真实回放基线仍未恢复。新核查 `wsl.exe -d Ubuntu -- test -r /mnt/d/WorkShop/Touhou_RL/third_party/th08/resources/th08.exe` 退出码 **0**，`stat -c '%s %n'` 退出码 **0**、报告 **840704** 字节；只读访问原件无需将其写入 WSL 游戏目录。
+- 环境与采集：Wine32、wineboot、xdotool 已安装并验证 `/usr/bin/wine`、`/usr/bin/wineboot`、`/usr/bin/xdotool`，i386 可用，版本 **wine-6.0.3**。easy-0-b 官方 capture **两次均 exit 1 / Incomplete capture**；私有 Xvfb socket 失败，WSLg `:0` 无断点；`rows.jsonl` **0 bytes**、SHA-256 **`e3b0...b855`**，`complete.json` 缺失，真实参考仍 **0/2**。
+- 本轮 Windows `tests` 全套最新实测统计为 **482 passed、2 skipped、65.86s、exit 0**；命令为 `python -m pytest -p no:cacheprovider --basetemp .tmp_v400_round6_final -q tests`。历史先前 **1 failed / 480 passed / 2 skipped** 作为诊断保留，该失败来自旧测试错误地把 EXP032 负证据断言为 PASS。**2 skipped 不等于 G0，也不能声称所有真实门通过**
+- **EXP-P0-024 / WP7 真实 runner：BLOCKED**。`human_reference` 缺失时严格退出 **3**；WSL binary 运行 **40s 无返回后被终止**；没有合法 score，不能生成或宣称 scoreboard。
+- **EXP-P0-025 / WP8 strict pixel pair：BLOCKED**。缺失 manifests 时严格路径分别退出 **3/6**；相关 tests **passed**，但没有真实 manifests，不能形成像素门通过证据。
+- **EXP-P0-030 / WP4 真实 16 实例短压测：有界切片通过，但不等于 10 分钟门。** WSL 真实运行了 **16 instances**，每实例 **100 steps / 100 frames**；wall time **3.8787s**，使用的是 **bounded limit 60s**。16 个实例 `errors` 均为 `null`、`exits` 均为 **0**；**PIDs 已记录**，清理后复核 **无 WSL 残留**；机器记录为 **20 cores**。该结果只证明 bounded-60s 短压测切片，不证明规格要求的 **10 分钟**多实例门，不能翻转 WP4 或 G0。因而 WP4 当前应表述为“16 实例 bounded-60s 短压测通过、10 分钟门未完成”。WP1、WP7、WP8/像素仍 blocked。
+
+本报告自身验收命令：
+
+```powershell
+git diff --check -- Document/Update/Alpha/v4.0.0/gates/G0-报告.md Document/Update/Alpha/v4.0.0/v4.0.0-P0-WP1-WP9-执行计划.md
+```
+
+## 5. 解阻与放行顺序
+
+1. 负责人确认现存 `third_party/th08/resources/th08.exe` 的来源授权及采集机、数据版本；其 **840,704 B** 和冻结 SHA-256 已核验，不得覆盖原件或将哈希不同的 `third_party/th08/build/play/th08.exe` 当作原件。通过 WSL `/mnt/d/WorkShop/Touhou_RL/third_party/th08/resources/th08.exe` 只读挂载访问。Wine32、wineboot、xdotool 已安装并验证，i386 与 wine-6.0.3 已确认；easy-0-b 官方 capture 已两次失败（均 exit 1 / Incomplete capture），需解决私有 Xvfb socket/WSLg `:0` 无断点问题或导入可信零售轨迹，再扩展 108 例。
+2. 核验现存 WSL `/root/Touhou_RL/third_party/th08-rl` 的 commit 与 `build/rl` 构建可运行性；在真实 Windows fence 与 Linux harness 上以同一 `.rpy` 生成 manifest：每份 200 个 `logicFrame`、PNG、状态 SHA。
+3. 运行 `v400_pixel_pair.py`，完成 3 份 Normal×200，人工复核最差十帧；不得用 `--frames 1` 验收。
+- **EXP-P0-030 / WP4 真实 16 实例短压测：有界切片通过，但不等于 10 分钟门。** WSL 真实运行了 **16 instances**，每实例 **100 steps / 100 frames**；wall time **3.8787s**，使用的是 **bounded limit 60s**。16 个实例 `errors` 均为 `null`、`exits` 均为 **0**；**PIDs 已记录**，清理后复核 **无 WSL 残留**；机器记录为 **20 cores**。该结果只证明 bounded-60s 短压测切片，不证明规格要求的 **10 分钟**多实例门，不能翻转 WP4 或 G0。因而 WP4 当前应表述为“16 实例 bounded-60s 短压测通过、10 分钟门未完成”。WP1、WP7、WP8/像素仍 blocked。
+5. 完成 WP6 起点库/人类参考、WP7 random/still 开发 scoreboard；跑完整工程命令。
+6. 重新填写本报告每一行的实际命令、退出码、commit、数据 SHA 和证据链接；只有所有 G0 判据满足才由负责人确认 PASS。
+
+## 6. 风险、回退与禁止事项
+
+- 回放不一致：保留 O0，关闭 harness 或二分挂钩，不得以“接近”放行。
+- 吞吐低于 500 fps：停止扩展，评估原生 Linux、Windows harness 或降低观测分辨率；不得偷偷改阈值。
+- fork 不安全：保留单环境最低切片，WP5 标阻塞；不得把 reset 重复运行称 fork。
+- 像素差异：报告滤波/色彩/内容差异，进入增强；不得静默遮盖 FPS HUD。
+- 数据/轨迹来源不明：来源授权与参考轨迹继续阻塞；不得仅凭 `th08.exe` 文件名判定原件。现存 `resources/th08.exe` 的大小和 SHA 已与冻结值独立比对；研究构建 `build/play/th08.exe` 不可替用。
+
+## 7. 最低可运行切片（非 G0）
+
+当前可作为开发切片的是：WP0 自检、原样标题运行、部分 harness 控制协议、单 `Th08Env` 1,000 step、状态/像素 SHM 读回和 30 项单测。原件已核验但该切片不提供 fork 影子、不提供**已验证的零售回放基线**、不提供双端像素证据，故不构成 WP5/WP8/G0 完成。
+
+**最终草案结论：G0 NOT PASS / BLOCKED。原件已按冻结大小和 SHA 核验；Wine32、wineboot、xdotool 已安装且路径/i386/wine-6.0.3 已验证，但 easy-0-b 官方 capture 两次均 exit 1 / Incomplete capture，真实参考仍 0/2。WP2 真实 shadow 1000 帧通过但 10000 帧因 `curState6` 跨终局 exit 3；WP3 真实 shadow frame1200 的四池已较完整：`BULLETS` `count=33`、字段返回，`ENEMIES` `count=6`、字段返回，命令 `exit 0`；此前 `ITEMS` `count=6`、`LASERS` `count=0`/2400 帧及非法参数 `ERR` 均保留，物品/激光非空字段证据分别存在并按真实结果记录；完整影子/像素门仍未验收；WP5 第 4 项像素 blocked、第 5 项计时均值 15470.3us 包含子执行/wait、整体脚本 exit 3；WP1 0/2、WP4 16 环境未测、WP7 scoreboard 未测、WP8 未测。最终全量 Windows 测试必须重新取当前状态，不得凭旧数相加，故保持 BLOCKED。
+
+## 8. 新增真实证据（2026-11-08，覆盖本报告中同类旧状态）
+
+- 本轮 WP3 最终补录：真实 shadow frame1200 的四命令结果为 `BULLETS count=33`、`ENEMIES count=6`、`ITEMS count=6`、`LASERS count=0/2400`；非法 `limit` 返回 `ERR`。WSL build/diff **exit 0**。这些结果不构成完整影子/像素门通过。
+
+- **EXP-P0-031 / WP1 loopback Xvfb 诊断：失败。** Xvfb 报 `Unrecognized option 127.0.0.1`，因此 collector 未执行，结果为 **0 rows**；WP1 仍为 **0/2**，不能生成可信零售参考轨迹。
+- **EXP-P0-029 / WP4 launcher：单实例成功。** 真实 Windows→WSL launcher 单实例协议成功，相关证据保留。
+- **EXP-P0-030 / WP4：16×100 有界切片成功但不等于 10 分钟门。** wall **3.8787s**，16 个实例全部成功；该结果不满足规格要求的 10 分钟长门。
+- **WP7/WP8：BLOCKED。** WP7 缺少合法 scoreboard，WP8 缺少真实双端 manifests/像素配对，均不得以测试通过替代。
+- **最终 Windows 全量主代理回归：478 passed、2 skipped、63.29s、exit 0。** 该结果不替代 WP1、WP7、WP8/像素及其他真实 G0 门证据。
+- **保留证据边界：** WP2、WP3、WP5 的既有真实证据继续保留；本次同步不将其改写为 G0 通过。
+
+### 最新同步结论（2026-11-08）
+
+G0 **BLOCKED / NOT PASS**。EXP-P0-031 的 loopback Xvfb 诊断因 `Xvfb Unrecognized option 127.0.0.1` 失败，collector 未执行且为 0 rows，WP1 仍 0/2；EXP-P0-029 launcher 单实例成功；EXP-P0-030 16×100 bounded 运行 3.8787s 全成功，但不等 10 分钟门；WP7/WP8 仍 blocked。最终 Windows 全量主代理为 **478 passed、2 skipped、63.29s、exit 0**，仅作为工程回归证据，不构成 G0 放行。WP2/3/5 既有证据保留。
+本轮新增证据的运行结果：shadow `HELLO/RESET/DEBUG/STEP`、BRANCH、PARK、SPAWN 均为真实运行记录；BRANCH 与 SPAWN 的进程退出码均明确为 **0**（PARK 为真实 template pid 记录，不以 pid 作为退出码）。完整 WP5/WP1/WP2/WP3 实体池/WP4/WP8 验收尚未完成，不能把上述切片证据写成 G0 PASS。
+
+**更新后结论：G0 NOT PASS / BLOCKED；G0.2 仍未全通过。WP1 为 0/2；WP2 三个独立 shadow 进程各 1000 帧，均过 5000/核；WP3 真实 shadow frame1200 四类命令结果为 `BULLETS count=33`、`ENEMIES count=6`、`ITEMS count=6`、`LASERS count=0/2400`，非法 limit 返回 `ERR`，WSL build/diff **exit 0**；WP4 的 EXP027 已证实 `/root` ELF 存在且可直接 HELLO/RESET/STEP，EXP026“无 ELF”结论错误；EXP028 旧 launcher 因 X `:0` broken、进程 exit 1，EXP029 以 `env -u DISPLAY` + shadow 修复后，真实 Windows→WSL `HELLO/RESET/STEP/QUIT` launcher exit 0，协议/WSL 回归 **12/12 passed**；EXP-P0-030 已补录真实 **16 instances × each 100 steps/100 frames**，wall **3.8787s**、bounded limit **60s**，所有 `errors=null`、`exits=0`，PIDs 已记录，清理后无 WSL 残留，机器 **20 cores**；但这只是 bounded-60s 短压测，**不等于 10 分钟门**，故 WP4 10 分钟门仍未完成。WP5 切片和像素 blocked；WP7、WP8 仍 blocked。最终全量 Windows 测试采用 **478 passed、2 skipped、exit 0、63.29s**；**2 skipped 不等于 G0**，不能替代缺失的 WP1、WP7、WP8/像素及其他真实门证据，故保持 BLOCKED。
+
+## 9. �û�Ҫ�������״̬ͬ����2026-11-08��
+
+- **EXP-P0-030 / WP4��16��100 bounded ��ѹ��ɹ����� 10 ���ӳ���δ��ɡ�** ��ȷ�� 16 instances �� each 100 steps/100 frames��wall **3.8787s**��bounded limit **60s**��ȫ���ɹ����ⲻ�ǹ��Ҫ��� 10 �������ա���ǰ�������ż�Ϊ **in_progress/δ֤**������д PASS��
+- **EXP-P0-032��10 ���ӳ���״̬Ϊ in_progress/δ֤��** ��ǰδ��ȡ���ɺ���� job/���� 10 ����ԭʼ������ʲ�α����ɡ��˳����ͨ�����ۡ�
+- **EXP-P0-033 / WP7��BLOCKED��** ȱ�ٺϷ� `human_reference.json`��runner fail-closed �˳� 3���޺Ϸ� scoreboard/episode �����
+- **EXP-P0-034 / WP8��BLOCKED��** Windows fence ����ʵ capture/manifest��δ�γ���ʵ˫�� pixel pair��Linux-only probe ���Լ���Բ����� WP8 ֤�ݡ�
+- **EXP-P0-029 / WP4��WSL ��ʵ���ɹ���** ��ʵ Windows��WSL launcher �� `HELLO/RESET/STEP/QUIT` �ɹ���Э��/WSL �ع� **12/12 passed**��
+- **���� Windows ȫ��������ع飺479 passed��2 skipped��65.20s��exit 0��** �ù��̻ع�������� WP1/WP7/WP8 ��������ʵ G0 �š�
+- **����ͬ�����ۣ�G0 BLOCKED / NOT PASS��**
+
+
+## 10. 权威证据同步（2026-11-08）
+
+- Provider：**DeepSeek**；模型：**DeepSeek v4.1 flash**。
+- **WP4 不得判定通过。** 权威原始文件 `.tmp_v400_wp4_long.json` 显示 `wall_seconds=58.3528413772583`（约 **58.35 秒**，目标 600 秒），16/16 实例均报告 `HarnessError: harness closed the control pipe` 且 `exit_code=1`；未达到 600 秒，`all_instances_reached_deadline=false`。
+- **原始JSON与代理口头摘要矛盾，采用原始JSON：58.35秒、未达600秒、16/16失败，需重跑/修复后才判定。** 因此不能采用“600.299 秒/15 成功”的口头版本，也不能声称 WP4 通过。
+- 最新可确认的全量 Windows 回归为 **478 passed、2 skipped、63.29s、exit 0**；不得与旧统计相加。该工程回归不替代 WP1/WP4/WP7/WP8 等真实门证据。
+
+**结论保持：G0 BLOCKED / NOT PASS。**
+
+## 权威状态同步（2026-11-08；Provider=DeepSeek；模型=DeepSeek v4.1 flash）
+
+- **测试状态（不可提前宣称全量 PASS）**：修改前旧全量为 **1 failed / 480 passed / 2 skipped**；该失败来自旧测试错误地把 EXP032 负证据断言为 PASS。测试现已修改，当前聚焦测试为 **4 passed**；新的全量主代理正在运行，结果尚未出，故不写全量 PASS。
+- **EXP-P0-032（WP4，证据裁决）**：采用原始 JSON，不采用与其矛盾的摘要。原始 JSON 为 wall **58.35 s**（原始值约 58.3528 s），**16/16 `pipe closed` / `exit 1`**，未达到 **600 s** deadline，`all_instances_reached_deadline=false`。另一份 **600.299 s / 15 成功**摘要及其 JSON 与原始 JSON 矛盾，**不采纳**，不得作为 WP4 或 G0 通过依据。
+- **WP1：BLOCKED**；真实零售回放/108 份基线仍未形成可验收证据。
+- **WP7：BLOCKED**；缺少合法 human reference/可复核 scoreboard。
+- **WP8：BLOCKED**；缺少 Windows fence 真实 capture/manifest，未形成同一回放的真实双端 pixel pair。
+- **全量 Windows 回归统计按时间点区分**：较早记录为 **479 passed / 2 skipped / 65.20 s / exit 0**；较新记录（本次采用）为 **478 passed / 2 skipped / 63.29 s / exit 0**。两者均仅为工程回归，不替代 WP1/WP4/WP7/WP8 或其他 G0 真实门证据，禁止相加或混写。
+
+**最终裁决：G0 BLOCKED / NOT PASS。** 在 EXP-P0-035 的失败复现、EXP-P0-032 原始 JSON 裁决及 WP1/WP7/WP8 阻塞解除前，不得翻转为 PASS。
+## 11. 审计裁决（2026-11-08；权威覆盖）
+
+本节优先于本文内较早或互相矛盾的摘要，审计范围为 EXP-P0-032/035/029/033/034 与当前工作区证据；Provider=DeepSeek，模型=DeepSeek v4.1 flash。
+
+- **EXP-P0-032 历史失败证据（不代表 EXP039 子门失败）**：其原始 `.tmp_v400_wp4_long.json` 为 `requested_seconds=600`、`wall_seconds=58.3528413772583`，16/16 实例 `HarnessError: harness closed the control pipe`、`exit_code=1`，`all_instances_reached_deadline=false`；不得采用同编号矛盾摘要中的 600.299 秒/15 成功。
+- **EXP-P0-035 历史失败证据**：其原始 `.tmp_v400_wp4_reconcile_30.json` 为 16 实例中 11 到达 deadline、5 实例约 2.904–4.378 秒 `pipe closed`、`exit_code=134`，wall `30.113247632980347 s`，无 WSL 残留；该历史结果不是当前 EXP039 16×600 运行子门的判定，也不能外推完整 WP4 无泄漏/无僵尸门。
+- **EXP-P0-029 仅证明单实例** Windows→WSL `HELLO/RESET/STEP/QUIT` 成功（launcher exit 0、12/12 回归），不替代多实例长门。
+- **EXP-P0-033/WP7 与 EXP-P0-034/WP8 仍 BLOCKED**：缺少合法 human reference/可复核 scoreboard，以及 Windows fence 真实 capture/manifest 与双端 pixel pair；测试通过不构成真实门证据。
+- **数字口径**：工程回归采用最新可追溯的 **482 passed、2 skipped、65.86s、exit 0**；历史较早统计保留为诊断，不得相加或混写，且工程回归不替代 WP1/WP4/WP7/WP8。
+
+**最终裁决：G0 BLOCKED / NOT PASS；WP4 16×600运行子门 PASS-with-limit；EXP041 显示 Linux 引擎 PID/zombie unknown，完整 WP4 无泄漏/无僵尸门未证。**
+
+## 12. EXP038/EXP039 状态同步（2026-11-08；Provider=DeepSeek；模型=DeepSeek v4.1 flash）
+
+- **EXP038（WP4，真实独立 data-dir 16×30 秒）**：真实独立 `data-dir` 运行 16 个实例、30 秒窗口，wall **33.0134 s**，**16/16 `exit 0`**；16/16 `errors=null`、16/16 `exits=0`；cleanup **0**，复核**无 WSL 残留**。该结果是新的独立短时稳定性证据，但不等于规格要求的 600 秒/10 分钟门。
+- **EXP-P0-032 早期失败保留**：其原始 JSON 仍为 wall **58.3528413772583 s**、16/16 `harness closed the control pipe`、`exit_code=1`、未达到 600 秒；EXP038 不覆盖、不改写该早期失败证据。
+- **EXP039**：当前正在运行真实 **600 s** 任务，结果**尚未落盘**；在原始结果文件形成并核验前，不作成功或失败结论，不将其视为 600 秒门证据。
+
+
+
+## 13. EXP039 长门权威同步（2026-11-08；Provider=DeepSeek；模型=DeepSeek v4.1 flash）
+
+- **EXP039（WP4，真实隔离 data-dir 16×600 秒）可判定为 16×600 运行子门 PASS-with-limit**：依据[EXP-P0-039-WP4-16x600.md](../experiments/EXP-P0-039-WP4-16x600.md)及原始文件 `.tmp_v400_wp4_diag_039_600.json`。`requested_seconds=600`，`wall_seconds=602.7674422264099 s`；16/16 实例均达到 deadline，每实例 `run_seconds` 为 `600.0105726718903–600.0186829566956 s`。依据 EXP-P0-040 独立审计，该结果缺少 Linux 引擎 PID、僵尸与内存时序证据，完整 WP4 无泄漏/无僵尸门未证；缺证不等于失败。
+- 16 实例 `frames` 合计 **15,061,600**；全部 `error=null`、`exit_code=0`；`all_instances_reached_deadline=true`、`all_exit_zero=true`、`all_error_free=true`；`cleanup_exit_code=0`；`remaining_wsl_process_lines=[]`、`no_wsl_processes=true`。原始 JSON SHA-256：`731cfec8956e0642e65f3454f5786ba3b3819cd4e770a07046895d789d6aa2c5`。
+- **WP4 16×600运行子门 PASS-with-limit**。EXP038 的隔离 16×30 秒成功作为短时先例保留；EXP-P0-032/EXP-P0-035 的旧失败继续保留为旧版本共享 `data-dir` 历史，不覆盖、不改写 EXP039 的隔离 16×600 运行子门证据。依据 EXP-P0-040 独立审计：无 Linux 引擎 PID/僵尸与内存时序证据，完整 WP4 无泄漏/无僵尸门未证；缺证不等于失败。
+- 本条仅确认 EXP039 的 WP4 16×600 运行子门 PASS-with-limit，不翻转 G0：G0 仍 **NOT PASS / BLOCKED**，原因包括 WP1、WP7、WP8 以及 WP5 像素项尚未形成真实可验收证据；无 Linux 引擎 PID/僵尸与内存时序证据，完整 WP4 无泄漏/无僵尸门未证。此前“EXP039 尚未落盘/不得作结论”的表述由本权威同步覆盖，但旧审计文字保留以维持历史可追溯性。
+
+**更新后最终裁决：WP4 16×600运行子门 PASS-with-limit；无 Linux 引擎 PID/僵尸与内存时序证据，完整 WP4 无泄漏/无僵尸门未证；G0 NOT PASS / BLOCKED。WP1、WP7、WP8、WP5 像素仍为 G0 NOT PASS。**
+
+- **EXP038（WP4，真实独立 data-dir 16×30 秒）**：真实独立 `data-dir` 运行 16 个实例、30 秒窗口，wall **33.0134 s**，16/16 `exit 0`；16/16 `errors=null`、16/16 `exits=0`；cleanup **0**，复核**无 WSL 残留**。该结果是新的独立短时稳定性证据，但不等于规格要求的 600 秒/10 分钟门。
+- **EXP-P0-032 早期失败保留**：其原始 JSON 仍为 wall **58.3528413772583 s**、16/16 `harness closed the control pipe`、`exit_code=1`、未达到 600 秒；EXP038 不覆盖、不改写该早期失败证据。
+- **EXP039**：当前正在运行真实 **600 s** 任务，结果**尚未落盘**；在原始结果文件形成并核验前，不作成功或失败结论，不将其视为 600 秒门证据。
+
+
+
+## 13. EXP039 长门权威同步（2026-11-08；Provider=DeepSeek；模型=DeepSeek v4.1 flash）
+
+- **EXP039（WP4，真实隔离 data-dir 16×600 秒）为 16×600 运行子门 PASS-with-limit**：依据[EXP-P0-039-WP4-16x600.md](../experiments/EXP-P0-039-WP4-16x600.md)及原始文件 `.tmp_v400_wp4_diag_039_600.json`。`requested_seconds=600`，`wall_seconds=602.7674422264099 s`；16/16 实例均达到 deadline；16/16 `exit_code=0`、无 errors；`all_instances_reached_deadline=true`、`cleanup_exit_code=0`、无 WSL 残留。原始 JSON SHA-256：`731cfec8956e0642e65f3454f5786ba3b3819cd4e770a07046895d789d6aa2c5`。EXP040 独立审计限定：无 Linux 引擎 PID/僵尸与内存时序证据，完整 WP4 无泄漏/无僵尸门未证；缺证不等于失败。
+- **WP4 16×600运行子门 PASS-with-limit**。EXP038 的隔离 16×30 秒成功与 EXP-P0-032/EXP-P0-035 的旧失败历史均保留，互不覆盖。EXP040 独立审计确认：无 Linux 引擎 PID/僵尸与内存时序证据，完整 WP4 无泄漏/无僵尸门未证；缺证不等于失败。
+- 本条仅更新 WP4 门状态，不翻转 G0：**G0 仍 NOT PASS / BLOCKED；WP1、WP7、WP8、WP5 像素仍 BLOCKED**。
+
+## 14. 最新全量回归权威同步（2026-11-08；Provider=DeepSeek；模型=DeepSeek v4.1 flash）
+
+- 主代理最新全量命令：`python -m pytest -p no:cacheprovider --basetemp .tmp_v400_round6_final -q tests`。
+- 结果：**482 passed、2 skipped、65.86s、exit 0**。该工程回归不替代 WP1/WP7/WP8 或 WP5 像素真实门证据。
+- 历史诊断保留：先前 **1 failed / 480 passed / 2 skipped**；失败源于旧测试错误地把 EXP032 负证据断言为 PASS。修正旧负证据测试后得到本次全量结果；不得据此标记 G0 PASS。
+
+**最终裁决：WP4 16×600运行子门 PASS-with-limit；无 Linux 引擎 PID/僵尸与内存时序证据，完整 WP4 无泄漏/无僵尸门未证；WP1、WP7、WP8、WP5 像素 BLOCKED；G0 NOT PASS / BLOCKED。**
+
+## 16. 用户指定最新状态（2026-11-08）
+
+- 当前全量回归命令：`$env:PYTHONPATH='D:\WorkShop\Touhou_RL'; python -m pytest -p no:cacheprovider --basetemp .tmp_v400_round7_final -q tests; exit $LASTEXITCODE`。
+- 当前全量回归：**482 passed、2 skipped、65.86s、exit 0**。工程回归不替代任何真实 G0 门；2 skipped 不等于 G0 通过。
+- **EXP039：PASS-with-limit**，16×600 运行子门已通过；**EXP041：Linux 引擎 PID/zombie unknown**，完整 WP4 无泄漏/无僵尸门仍未证。
+- **WP1、WP7、WP8、WP5 像素：G0 BLOCKED**。WP1 零售 capture/108 基线仍缺，WP7 合法 human reference/scoreboard 仍缺，WP8 双端 manifests/pixel pair 仍缺，WP5 像素字节项仍缺。
+- 最终裁决：**G0 NOT PASS / BLOCKED**。
+
+
+- [EXP-P0-041](../experiments/EXP-P0-041-WP4-sampler-rollback.md)记录：**未实测的 Linux PID sampler 已回退**，不得把 Windows/启动侧 PID 当作 Linux 引擎 PID。
+- 回退后的真实 **16×10 秒有界复核**：脚本退出码 **0**；原始 `.tmp_v400_wp4_diag_041_16x10.json` 记录 `requested_seconds=10.0`、`wall_seconds=13.027353286743164`，16/16 实例 `error=null`、`exit_code=0`，全部到达 deadline；`cleanup_exit_code=0`、`remaining_wsl_process_lines=[]`。这是有界复核，不是再次执行 600 秒长门。
+- 原始 JSON 中 `linux_samples={}`、`linux_post_cleanup.status=unknown`，因此 **Linux 引擎 PID 唯一性及 zombie 状态仍为 unknown**；`cleanup_exit_code=0` 和 WSL 进程列表为空，均不能代替 Linux PID/zombie 专项证据。
+- **EXP-P0-039 的 16×600 运行子门 PASS-with-limit 保留**；EXP-P0-032 的旧失败历史也保留，互不覆盖。最新 **482 passed、2 skipped、65.86s、exit 0** 只是历史全量回归，EXP041 后没有新的全量结果，不得称为本次回退后的全量验收。
+
+
+
+## 17. 用户指定最新状态（2026-11-08）
+
+- **EXP-P0-042 / WP6/WP7：**官方 replay observer 理论上可提供 `stageFrames` 与 `endScores`，但当前实际采集仍为 `0 rows`、超时退出 **124**；observer 未提供可权威核验的 death/bomb 语义。因此不能生成合法 `human_reference.json`，WP7 scoreboard 继续 **BLOCKED**。
+- **EXP-P0-043 / WP8：**Windows 默认 preflight 的缺失路径不能推断 WSL 资源缺失；WSL Wine/data 已独立核验。但当前仍没有同一回放、同一 `logicFrame` 的 Windows/Linux PNG 与 state hash 配对，WP8 继续 **BLOCKED**。
+- **WP4：**16×600 运行子门为 **PASS-with-limit**；Linux 引擎 PID/zombie 状态仍 **unknown**，完整无泄漏/无僵尸门未证，不得扩大为完整 WP4 PASS。
+- 最新全量 Windows 回归：**482 passed、2 skipped、65.86s、exit 0**；工程回归不替代真实 WP1/WP4/WP7/WP8 门，`2 skipped` 不等于 G0 通过。
+
+**全局裁决：G0 NOT PASS / BLOCKED。**
+
+## 18. EXP-P0-044 / EXP-P0-045 权威同步（2026-11-08；Provider=DeepSeek；模型=DeepSeek v4.1 flash）
+
+本节依据主代理独立读取原始证据文件后写入；优先于本文中仍称“WP5 第 4 项像素 blocked”的较早表述（旧表述保留以维持历史可追溯性，但不再是当前状态）。
+
+- **WP5 第 4 项（轨迹 + harness 像素字节再生成）：PASS-with-limit。** 证据：[EXP-P0-044](../experiments/EXP-P0-044-WP5真实轨迹像素再生成.md) 与原始 [`.tmp_v400_wp5_pixel_rebuild_20261108/report.json`](../../../../../.tmp_v400_wp5_pixel_rebuild_20261108/report.json)。主代理独立复核该 JSON 得到：`status=pass`、`captures=2`、两次 `frames` 均为 **100**、`different_frame_count=0`、两进程 `exit_code` 均为 **0**、`source_tree_dirty=true`；`binary_sha256=591c521df161cb9e5d5a5168d88207390ae4a3eb49b2d1c653f4ad775a25d3eb`，原始 RGBA 缓存 `original_cache_sha256=7ba9973f767671a029edb160866a24ecc43231d88b90639660134e851733e4d8`。
+  - 该结果来自 **两个完全独立的真实 `env` 进程**、各自独立新建 data-dir（`th08.cfg`/`score.dat` 复制，`*.dat` 只读符号链接）、相同 StageStart `[0,1,0,1,0]` 与相同逐帧 `masks=[0]×100`；比较的是 `/dev/shm` 偏移 192 起 **1,228,800 个原始 RGBA 字节**，不是 PNG 元数据、`PIXELS` checksum 或 state hash，也没有遮盖 HUD。
+  - **限制（必须同时记录）**：源工作树 dirty，`HEAD=f563df58c44037b44208c393a86540b434b0c83b` 仅是提交基线，**不能单独作为精确构建身份**，只能与上述 binary SHA-256 一起引用；该实验只覆盖**单条全零输入轨迹的 100 帧**，不证明任意轨迹、其他构建或零售对照可重建。因此判 PASS-with-limit，不构成 G0.2 全通过。
+- **WP1 参考轨迹来源：仍 BLOCKED（0/108）。** 证据：[EXP-P0-045](../experiments/EXP-P0-045-retail-trace-source.md)。manifest 的 108 条 `retailTrace.sha256` 只是期望指纹；公开 replay URL/archive 返回 HTTP 200，但**没有公开的 `rows.jsonl` + `complete.json` 参考产物**；`refs/`、`th08_replay/`、官方 fixture 目录只有元数据/`.rpy` 输入。`.rpy` 解码或其输入记录不能替代零售执行轨迹。官方 native portable trace recorder 需要预置 `TH08_REPLAY_TRACE_REFERENCE`，当前不能自举，故本机尚未产生任何可核验参考。
+- **未变更的其余阻塞**：WP7 仍缺合法 human reference/可复核 scoreboard（EXP-P0-042）；WP8 仍缺同一回放、同一 `logicFrame` 的 Windows/Linux PNG 与 state-hash 配对（EXP-P0-043）；WP4 的 16×600 运行子门仍为 PASS-with-limit，Linux 引擎 PID/zombie 仍 unknown（EXP-P0-040/041）；Windows 全量工程回归 **482 passed、2 skipped、65.86s、exit 0** 只是工程回归，不替代任何真实门。
+
+**最终裁决：WP5 第 4 项 PASS-with-limit；WP1 0/108、WP7、WP8、WP4 完整清理门仍 BLOCKED；G0 NOT PASS / BLOCKED。**
+
+## 19. WP5 五项与 G0.2 综合判定（2026-11-08；Provider=DeepSeek；模型=DeepSeek v4.1 flash）
+
+本节由主代理独立读取两份原始 JSON 后写入，**优先于本文任何较早称“WP5 某项目 blocked”或“G0.2 未确认”的表述**；旧段落保留以维持历史可追溯性。
+
+### 19.1 第 1 项（同起点同输入 5,000 帧逐帧哈希）：PASS-with-limit
+
+- 证据：[EXP-P0-049](../experiments/EXP-P0-049-WP5-determinism-5000.md)，原始 [`.tmp_v400_wp5_determinism_5000.json`](../../../../../.tmp_v400_wp5_determinism_5000.json)（独立复核 `status=pass`）。
+- 两个**完全独立的真实 shadow 进程**，各自全新 data-dir，`RESET 0 1 0 1234 1`，同一 5,000 帧固定掩码序列（SplitMix64 seed=400，白名单 `0x00F7`，掩码文本 SHA-256 `4173ff413d4bc18e27b771e86de16a441f765ac92b273c68ab7e32f5ee585e1f`）。
+- 逐帧比对：`frames_compared=5000`、`equal_frames=5000`、`different_frames=0`、`first_differing_frame=null`；两序列哈希列表 SHA-256 均 `75132e28dc224dc8ecedccecdb498baf9e6ee93f0741d5fd8f03b458e92ba473`，帧 0 哈希 `d97b43478cc24bae` 亦相等。
+- 两进程 `exit_code` 均 0，`DEBUG` 均为 `threads=1`/`subthread=0`，wall `5.339 s`。
+- **限制**：`practice=1`；哈希为 25 字段 FNV-1a，**不是全内存哈希**；源树 dirty（binary SHA `591c521df161cb9e5d5a5168d88207390ae4a3eb49b2d1c653f4ad775a25d3eb` + HEAD `f563df5`），构建身份须与 binary SHA 一并引用；仅单序列、单关卡。
+
+### 19.2 第 5 项（`BRANCH` 开销）：PASS，口径已修正
+
+- 证据：[EXP-P0-050](../experiments/EXP-P0-050-WP5-branch-cost-decomposition.md)，原始 [`.tmp_v400_wp5_branch_cost.json`](../../../../../.tmp_v400_wp5_branch_cost.json)（独立复核 `status=measured`，`n=105`，引擎/工具退出码 0/0）。
+- 105 次真实 `BRANCH`（7 档 horizon × 5 次 × 3 pass）。回归拆分（`child_us`）：每帧开销斜率 **41.4249 µs/frame**、固定开销截距 **519.2911 µs**、`R²=0.997917`。
+- 交叉检查：`fork_us − child_us` 均值 **895.0381 µs**（std 109.48，n=105），各 horizon 均值 806.5–996.4 µs，判定为跨 horizon 大致平坦。
+- **关键口径**：这是**回归推断**，不是直接插桩 `fork()` 系统调用计时；原始 `fork_us` 是**含子进程执行与 wait 的混合量**，不得单独当作 fork 开销。
+
+### 19.3 G0.2 综合判定：PASS-with-limits（不是无条件 PASS）
+
+五项中第 1、2、3、5 项已取得真实证据，第 4 项仅 PASS-with-limit（单条 100 帧全零输入轨迹、源树 dirty）。因此 G0.2 记为 **PASS-with-limits**，并带四项限制：
+
+1. 构建身份依赖 dirty 源树的 binary SHA，`HEAD` 只是提交基线；
+2. 第 4 项只覆盖单条全零轨迹 100 帧，未覆盖任意轨迹或其他构建；
+3. 第 1 项为 practice 起点、单序列单关卡，且状态哈希是 25 字段而非全内存；
+4. 第 5 项为回归推断，非系统调用级插桩。
+
+### 19.4 其余门状态（本节不翻转）
+
+- **G0.1 保真：BLOCKED（0/108）**。WP1 零售参考轨迹仍缺（EXP-P0-045）。
+- **WP7：provisional，非门证据。** [Bench scoreboard](../bench/scoreboard.md) 记录 **6 局真实引擎 episode**（random/still × dev seed 1000–1002），但帧上限是操作者临时值（`max_frames=3000`，`cap_source=provisional`），**没有实测人类参考**，且裁判 `deaths`/`lives` 字段映射仍**存在疑问、正在核实**。因此这些数字只是 provisional slice，**不得作为 WP7 门证据或与人类比较**。
+- **WP8：BLOCKED。** 已找到 Windows 侧真实抓帧路径（[EXP-P0-047](../experiments/EXP-P0-047-WP8-windows-research-build-capture.md)：`build_fence/th08.exe` SHA `bc1894fe…8565`，demo 单帧退出码 0、13/13 同帧校验通过），但那是**研究构建**而非零售原件，且仍无同一回放、同一 `logicFrame` 的双端 PNG + state-hash 配对（EXP-P0-043）。
+- **WP4**：16×600 运行子门 PASS-with-limit，Linux 引擎 PID/zombie 仍 unknown（EXP-P0-040/041）。
+
+**G0 整体裁决：G0.2 PASS-with-limits；G0.1 BLOCKED；WP7 provisional 非门、WP8 BLOCKED；G0 整体 NOT PASS / BLOCKED。**
+
+
+
+## 20. WP6 人类参考与 WP7 正式 dev20（2026-11-08；Provider=DeepSeek；模型=DeepSeek v4.1 flash）
+
+本节由主代理独立读取原始证据后写入，**优先于本文较早称“WP7 缺合法 human reference”、“WP7 只有 provisional 非门数据”的表述**；旧段落保留以维持历史可追溯。
+
+### 20.1 WP6 人类参考：MEASURED（带覆盖限制）
+
+- 证据：[EXP-P0-046](../experiments/EXP-P0-046-human-reference-autoplay.md)；产物 [bench/human_reference.json](../bench/human_reference.json)。
+- 采集方法：**真实引擎在真实回放播放中逐帧读取 `STATE`/`DEBUG` 计数器**；`collection_method="engine STATE during real replay playback"`、`not_from_input_records=true`，不是由 inputRecords 推算。
+- 两个 set、各 6 面（格式：面 — gameplay_frames/deaths/bombs_used）：
+  - Lunatic `Th8_ud0059.rpy`（SHA-256 `62b02a172780d846f4109fd0dcc762692c5205692670c0f7400c2026c409a5e9`）：Stage1 16732/0/1、Stage2 19009/0/0、Stage3 22394/0/0、Stage4B 26909/0/2、Stage5 30943/0/1、Stage6B 35959/1/2。
+  - Normal `Th8_ud2970.rpy`（SHA-256 `e621086d814fba4838a2c84e4081162524c3c7e84d1bc4ca3f6621f9ca52d96f`）：Stage1 13258/0/0、Stage2 18525/0/0、Stage3 20009/0/0、Stage4A 27722/0/3、Stage5 25675/1/0、Stage6B 36403/0/0。
+- `cap_multiplier=1.5`，`cap_rule=ceil(1.5 × 该面人类 gameplay_frames)`；S1N 的上限因此为 `ceil(1.5 × 13258) = 19887` 逻辑帧。
+- 限制（必须同时引用）：`coverage.complete=false`，缺 Lunatic 的 Stage4A/Stage6A/Extra 与 Normal 的 Stage4B/Stage6A/Extra；每个难度只有一份回放、一名玩家，是参照点而非总体估计；`gameplay_frames` 是逻辑帧并含清关/过场序列，不是渲染帧；测量发生在 shadow/null-device 回放播放中，不等同真人实时输入延迟。
+- 口径核验（主代理逐项重算）：上述 12 个逐面数字与 `bench/human_reference.json` 完全一致；12 面的 `gameplay_frames − replay_input_frames_cross_check` 均为 **69–500 帧**（最小 69、最大 500），差额即清关序列，属已记录口径而非数据误差。
+
+### 20.2 WP7 正式 dev20（dev split、非门评估）
+
+- 证据：[EXP-P0-057](../experiments/EXP-P0-057-WP7-human-reference-dev20.md)；逐局记录 [bench/results.jsonl](../bench/results.jsonl)。
+- 主代理独立统计：`cap_source="human_reference"` 共 **40 行**，`status` 全为 `ok`，即 20 个 dev seeds（1000–1019）× {random, still} × S1N；每行均 `dev_split=true`、`collection="dev20"`、`not_a_gate=true`、`privilege="deploy_pixel"`、`cap_hit=false`、`max_frames=19887`，且行内记录 `harness_binary_sha256`（`591c521df161cb9e5d5a5168d88207390ae4a3eb49b2d1c653f4ad775a25d3eb`）与 `human_reference_sha256`。
+- 成绩（n=20/臂）：
+  - random：frames 均值 **2046.4**（min 1640、max 2710），score 均值 **39331.2**；
+  - still：frames 均值 **1705.9**（min 1646、max 1748），score 均值 **64089.2**。
+- 40 局 `end` 全为 `game_over`、`cleared` 全为 `false`；最大 frames 2710 远小于上限 19887，故**没有一局触顶**，成绩不是截断产物。
+- 限制：只覆盖 **S1N（Stage 1 / normal）开发集**，不是 confirm split，也不是门评估；`game_over` 终局规则使 `deaths` 饱和，`cleared=false` 不能解释为“过关率为 0”；PSN 与 confirm 100 局仍未跑。
+
+### 20.3 本节不翻转的其余门
+
+- **G0.1 保真：BLOCKED（零售 0/108）。** 零售参考轨迹仍缺（EXP-P0-045）；可复核的退路 C 差分证据是 **3/108 份回放 ON 与原样 OFF 逐字节一致**（EXP-P0-051，295,040 行/侧），只证明 harness 未改变原样构建行为，**不证明与零售逐位一致**。工作区内未找到“12/108 差分一致”的证据，故本节只写 3/108，不写未证数字。
+- **G0.3 吞吐：未达。** 渲染 + 读回 ≥ 2,000 fps 的全机硬门仍未通过；推演侧 3×1,000 帧 shadow 切片均值 **14,654 fps/核**（EXP-P0-022）仅为切片证据。
+- **WP8：BLOCKED。** 仍无同一回放、同一 `logicFrame` 的 Windows/零售与 Linux 双端 PNG + state-hash 配对（EXP-P0-043；EXP-P0-047/053 的 Windows 侧为研究构建）。
+- **WP4：**16×600 运行子门 PASS-with-limit；Linux 引擎 PID/zombie 与内存时序仍 **unknown**（EXP-P0-040/041）。
+- **WP5 第 4 项：**PASS-with-limit（单条 100 帧全零轨迹、源树 dirty，EXP-P0-044）。
+- **工程回归**：当前可追溯的全量结果仍为 **482 passed、2 skipped、65.86s、exit 0**（`.tmp_v400_round7_final`）；本节未重跑全量，不把它当作新门证据。
+
+**本节裁决：WP6 人类参考 = MEASURED（覆盖不全）；WP7 dev20 完成但仅为 dev split / S1N、不是门评估；G0.1 BLOCKED、G0.3 未达、G0.4 BLOCKED、WP4 清理门 unknown；G0 整体 NOT PASS / BLOCKED。**

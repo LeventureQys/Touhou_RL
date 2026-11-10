@@ -1,0 +1,107 @@
+From 56ee7f11e3b488f0da655fa2263a21b1d194f068 Mon Sep 17 00:00:00 2001
+From: root <root@ubuntu.localdomain>
+Date: Sat, 7 Nov 2026 22:36:11 +0800
+Subject: [PATCH 06/10] feat(rlharness): PIXELS reads the rendered frame back
+ (env observation path)
+
+glReadPixels right after EndScene, rows flipped, FNV-1a checksum reported, and an
+optional binary PPM written for inspection.  This is the env role's observation
+path from 10-P0 4.5 and it captures the full 640x480 client area including the
+HUD, which is what D-03 requires the reward detector to see.
+
+Measured on Stage 1 Normal after 120 frames: 640x480, 983,868 non-zero bytes,
+checksum 7572677e928cabf3, and the dumped frame shows the player, enemies with
+HP bars and the full HUD (Player x8, Power 0, Point 0/100, Time 0/2500, Normal).
+
+First slice only: the frame goes to a file / checksum over the pipe.  The shared
+memory layout and PBO double buffering are the next step, as is the readback cost
+measurement that P0-WP2 still owes.
+
+Requires <GL/gl.h> in this TU: the project force-includes linux_compat.hpp, which
+does not pull in the GL declarations.
+---
+ src/rlharness/rlharness.cpp | 54 +++++++++++++++++++++++++++++++++++++
+ 1 file changed, 54 insertions(+)
+
+diff --git a/src/rlharness/rlharness.cpp b/src/rlharness/rlharness.cpp
+index 6c2af76..8b93de7 100644
+--- a/src/rlharness/rlharness.cpp
++++ b/src/rlharness/rlharness.cpp
+@@ -22,6 +22,7 @@
+ #include <stdlib.h>
+ #include <string.h>
+ #include <dirent.h>
++#include <GL/gl.h>
+ 
+ #include "GameManager.hpp"
+ #include "Player.hpp"
+@@ -417,6 +418,57 @@ bool ConsumePendingStart()
+     return true;
+ }
+ 
++// PIXELS <ppm-path>: read the rendered frame back and write it as binary PPM.
++//
++// This is the env role's observation path (10-P0 §4.5): glReadPixels right after
++// EndScene.  OpenGL returns rows bottom-up, so they are flipped here.  The first
++// slice writes a PPM so the bytes can be inspected; the shared-memory layout
++// comes next.
++void HandlePixels(char *args)
++{
++    const unsigned width = 640;
++    const unsigned height = 480;
++    static unsigned char rgba[640 * 480 * 4];
++
++    glReadPixels(0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, rgba);
++
++    unsigned long long sum = 14695981039346656037ULL;
++    unsigned nonzero = 0;
++    for (unsigned i = 0; i < width * height * 4; ++i)
++    {
++        sum = (sum ^ rgba[i]) * 1099511628211ULL;
++        if (rgba[i] != 0)
++            ++nonzero;
++    }
++
++    const char *path = args;
++    if (path != NULL && path[0] == '/')
++    {
++        FILE *file = fopen(path, "wb");
++        if (file != NULL)
++        {
++            fprintf(file, "P6\n%u %u\n255\n", width, height);
++            static unsigned char row[640 * 3];
++            for (unsigned y = 0; y < height; ++y)
++            {
++                const unsigned srcY = height - 1 - y;
++                for (unsigned x = 0; x < width; ++x)
++                {
++                    row[x * 3 + 0] = rgba[(srcY * width + x) * 4 + 0];
++                    row[x * 3 + 1] = rgba[(srcY * width + x) * 4 + 1];
++                    row[x * 3 + 2] = rgba[(srcY * width + x) * 4 + 2];
++                }
++                fwrite(row, 1, width * 3, file);
++            }
++            fclose(file);
++        }
++        Reply("OK pixels=%ux%u nonzero=%u checksum=%016llx path=%s", width, height, nonzero,
++              sum, path);
++        return;
++    }
++    Reply("OK pixels=%ux%u nonzero=%u checksum=%016llx", width, height, nonzero, sum);
++}
++
+ bool ParseCommandLine()
+ {
+     int inFd = 0;
+@@ -537,6 +589,8 @@ int Run()
+             HandleStep(args ? args : (char *)"");
+         else if (strcmp(line, "RESET") == 0)
+             HandleReset(args ? args : (char *)"");
++        else if (strcmp(line, "PIXELS") == 0)
++            HandlePixels(args ? args : (char *)"");
+         else if (strcmp(line, "DEBUG") == 0)
+             HandleDebug();
+         else if (strcmp(line, "QUIT") == 0)
+-- 
+2.34.1
+

@@ -1,0 +1,255 @@
+{
+  "schema": "v400-wp7-human-reference/1",
+  "collection_method": "engine STATE during real replay playback",
+  "not_from_input_records": true,
+  "measured_at": "2026-11-08T23:43:36+08:00",
+  "measured_at_source": "file mtime of the measured evidence JSON (EXP-P0-046 recorded no in-band clock)",
+  "measured_evidence": {
+    "experiment": "EXP-P0-046",
+    "kind": "real-engine-replay-playback",
+    "source": "STATE/DEBUG counters of the real WSL TH08 harness during retail replay playback",
+    "path": "D:\\WorkShop\\Touhou_RL\\.tmp_v400_human_autoplay\\EXP-P0-046_measured_stages.json"
+  },
+  "engine": {
+    "binary": "/root/Touhou_RL/third_party/th08-rl/build/rl/th08-modern",
+    "data_dir": "/root/v400-data/game",
+    "role": "shadow",
+    "process": "wsl.exe -d Ubuntu",
+    "binary_sha256": "591c521df161cb9e5d5a5168d88207390ae4a3eb49b2d1c653f4ad775a25d3eb",
+    "binary_sha256_source": "sha256sum of /root/Touhou_RL/third_party/th08-rl/build/rl/th08-modern inside WSL Ubuntu, re-verified at build time"
+  },
+  "cap_multiplier": 1.5,
+  "cap_rule": "ceil(cap_multiplier * measured human gameplay_frames of that stage)",
+  "coverage": {
+    "all_stages": [
+      "Stage1",
+      "Stage2",
+      "Stage3",
+      "Stage4A",
+      "Stage4B",
+      "Stage5",
+      "Stage6A",
+      "Stage6B",
+      "Extra"
+    ],
+    "measured": {
+      "lunatic": [
+        "Stage1",
+        "Stage2",
+        "Stage3",
+        "Stage4B",
+        "Stage5",
+        "Stage6B"
+      ],
+      "normal": [
+        "Stage1",
+        "Stage2",
+        "Stage3",
+        "Stage4A",
+        "Stage5",
+        "Stage6B"
+      ]
+    },
+    "missing": {
+      "lunatic": [
+        "Stage4A",
+        "Stage6A",
+        "Extra"
+      ],
+      "normal": [
+        "Stage4B",
+        "Stage6A",
+        "Extra"
+      ]
+    },
+    "complete": false
+  },
+  "caveats": [
+    "stage coverage is incomplete: no measured human play exists for Stage6A, for Stage4A on lunatic, for Stage4B on normal, or for Extra; a suite that needs one of those stages has no human-referenced cap and must not be given one",
+    "each replay records only six stages: the per-stage numbers come from the stages the player actually recorded, not from a full six-stage run of every route",
+    "single normal corpus: every normal number comes from one replay (Th8_ud2970.rpy) by one player, so it is a reference point, not a population estimate",
+    "gameplay_frames counts logic frames and includes the stage-clear sequence; the replay input stream stops at stage clear, so gameplay_frames exceeds replay_input_frames_cross_check by the clear-sequence length (69-500 frames here). It is not a rendering-frame count, and dialogue fast-forward makes logic frames exceed rendered frames",
+    "deaths is the engine death-counter delta and bombs_used counts bomb activations: a deathbomb spends two stock and still counts once, and the death-time bomb refill is not a use; bombs_stock_spent is deliberately not stored here",
+    "the measurement is replay playback in the shadow/null-device engine, not live human play: there is no human input latency, no menu time, and every stage was played by a separate process started at that stage's own beginning"
+  ],
+  "sets": [
+    {
+      "source_replay_file": "Th8_ud0059.rpy",
+      "source_replay_sha256": "62b02a172780d846f4109fd0dcc762692c5205692670c0f7400c2026c409a5e9",
+      "source_replay_size_bytes": 44253,
+      "difficulty": "lunatic",
+      "difficulty_index": 3,
+      "shot": 10,
+      "shot_name": "Youmu",
+      "stages": [
+        {
+          "stage_index": 0,
+          "stage_name": "Stage1",
+          "gameplay_frames": 16732,
+          "deaths": 0,
+          "bombs_used": 1,
+          "stage_cleared": true,
+          "end_reason": "next_stage",
+          "score_end": 18456495,
+          "lives_start": 2,
+          "lives_end": 2,
+          "replay_input_frames_cross_check": 16663
+        },
+        {
+          "stage_index": 1,
+          "stage_name": "Stage2",
+          "gameplay_frames": 19009,
+          "deaths": 0,
+          "bombs_used": 0,
+          "stage_cleared": true,
+          "end_reason": "next_stage",
+          "score_end": 56979542,
+          "lives_start": 2,
+          "lives_end": 3,
+          "replay_input_frames_cross_check": 18940
+        },
+        {
+          "stage_index": 2,
+          "stage_name": "Stage3",
+          "gameplay_frames": 22394,
+          "deaths": 0,
+          "bombs_used": 0,
+          "stage_cleared": true,
+          "end_reason": "next_stage",
+          "score_end": 139791135,
+          "lives_start": 3,
+          "lives_end": 6,
+          "replay_input_frames_cross_check": 22303
+        },
+        {
+          "stage_index": 4,
+          "stage_name": "Stage4B",
+          "gameplay_frames": 26909,
+          "deaths": 0,
+          "bombs_used": 2,
+          "stage_cleared": true,
+          "end_reason": "next_stage",
+          "score_end": 248792077,
+          "lives_start": 6,
+          "lives_end": 7,
+          "replay_input_frames_cross_check": 26818
+        },
+        {
+          "stage_index": 5,
+          "stage_name": "Stage5",
+          "gameplay_frames": 30943,
+          "deaths": 0,
+          "bombs_used": 1,
+          "stage_cleared": true,
+          "end_reason": "next_stage",
+          "score_end": 360304141,
+          "lives_start": 7,
+          "lives_end": 8,
+          "replay_input_frames_cross_check": 30852
+        },
+        {
+          "stage_index": 7,
+          "stage_name": "Stage6B",
+          "gameplay_frames": 35959,
+          "deaths": 1,
+          "bombs_used": 2,
+          "stage_cleared": true,
+          "end_reason": "finish_replay",
+          "score_end": 635583645,
+          "lives_start": 8,
+          "lives_end": 7,
+          "replay_input_frames_cross_check": 35518
+        }
+      ]
+    },
+    {
+      "source_replay_file": "Th8_ud2970.rpy",
+      "source_replay_sha256": "e621086d814fba4838a2c84e4081162524c3c7e84d1bc4ca3f6621f9ca52d96f",
+      "source_replay_size_bytes": 41398,
+      "difficulty": "normal",
+      "difficulty_index": 1,
+      "shot": 6,
+      "shot_name": "Marisa",
+      "stages": [
+        {
+          "stage_index": 0,
+          "stage_name": "Stage1",
+          "gameplay_frames": 13258,
+          "deaths": 0,
+          "bombs_used": 0,
+          "stage_cleared": true,
+          "end_reason": "next_stage",
+          "score_end": 8179952,
+          "lives_start": 2,
+          "lives_end": 2,
+          "replay_input_frames_cross_check": 13189
+        },
+        {
+          "stage_index": 1,
+          "stage_name": "Stage2",
+          "gameplay_frames": 18525,
+          "deaths": 0,
+          "bombs_used": 0,
+          "stage_cleared": true,
+          "end_reason": "next_stage",
+          "score_end": 28480266,
+          "lives_start": 2,
+          "lives_end": 3,
+          "replay_input_frames_cross_check": 18434
+        },
+        {
+          "stage_index": 2,
+          "stage_name": "Stage3",
+          "gameplay_frames": 20009,
+          "deaths": 0,
+          "bombs_used": 0,
+          "stage_cleared": true,
+          "end_reason": "next_stage",
+          "score_end": 69474118,
+          "lives_start": 3,
+          "lives_end": 6,
+          "replay_input_frames_cross_check": 19940
+        },
+        {
+          "stage_index": 3,
+          "stage_name": "Stage4A",
+          "gameplay_frames": 27722,
+          "deaths": 0,
+          "bombs_used": 3,
+          "stage_cleared": true,
+          "end_reason": "next_stage",
+          "score_end": 132290333,
+          "lives_start": 6,
+          "lives_end": 7,
+          "replay_input_frames_cross_check": 27631
+        },
+        {
+          "stage_index": 5,
+          "stage_name": "Stage5",
+          "gameplay_frames": 25675,
+          "deaths": 1,
+          "bombs_used": 0,
+          "stage_cleared": true,
+          "end_reason": "next_stage",
+          "score_end": 203568518,
+          "lives_start": 7,
+          "lives_end": 8,
+          "replay_input_frames_cross_check": 25606
+        },
+        {
+          "stage_index": 7,
+          "stage_name": "Stage6B",
+          "gameplay_frames": 36403,
+          "deaths": 0,
+          "bombs_used": 0,
+          "stage_cleared": true,
+          "end_reason": "finish_replay",
+          "score_end": 396652042,
+          "lives_start": 8,
+          "lives_end": 8,
+          "replay_input_frames_cross_check": 35903
+        }
+      ]
+    }
+  ]
+}

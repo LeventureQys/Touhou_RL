@@ -1,0 +1,281 @@
+From cabf029fdb7a0f6a01ec69641fd11c237e508621 Mon Sep 17 00:00:00 2001
+From: root <root@ubuntu.localdomain>
+Date: Sat, 7 Nov 2026 22:13:58 +0800
+Subject: [PATCH 02/10] feat(rlharness): RESET/StageStart with deterministic
+ per-seed stage entry
+
+RESET <stage> <difficulty> <team> <seed> [practice] leaves the title screen and
+enters a stage, following TitleScreen::StartDeveloperReplayIfRequested()
+(TitleScreen.cpp:188-247): set the GameManager fields, switch the supervisor to
+GameManager, then pump until gameplaySetupState == COMPLETE and the setup
+subthread is gone.
+
+Determinism required two corrections, both found by diffing the 25 exported
+fields between two runs of the same seed instead of guessing:
+
+1. The setup runs on a subthread while the main loop keeps pumping frames, so the
+   two threads interleave draws from the shared RNG.  Seeding only inside
+   GameManager's setup (before stageRngSeed is recorded) is not enough: the RNG
+   state on exit differed run to run (15169 vs 20883).  RESET now reseeds at the
+   quiescent point - setup complete, subthread gone, main thread in control.
+
+2. The harness frame counter is process-wide and the setup needs a
+   scheduler-dependent number of frames, so field 0 of the tracked set differed
+   between runs even when the game state matched.  ResetFrameCount() rewinds it
+   at stage start, making frame 0 the first frame of the stage - which is also
+   what the replay trace's field 0 means.
+
+Result: two processes, same seed, same 2,500-chunk input plan, produce identical
+hash sequences over the 330 frames an episode currently survives (34 samples).
+Both runs also end on the same frame.
+
+Also reports game_over explicitly from STEP (g_GameManager.showRetryMenu).
+
+Known limitation: the episode ends at ~frame 329 with exit=1 and game_over=0.
+That is the title screen's demo replay chain ending, not a death.  Removing it
+properly needs the title template + spawn that P0-WP5 adds; Chain::Cut takes a
+specific ChainElem, which the harness does not have a handle to.  Until then
+RESET is deterministic but short-lived.
+---
+ src/GameManager.cpp         |   6 ++
+ src/main.cpp                |   5 ++
+ src/rlharness/rlharness.cpp | 128 +++++++++++++++++++++++++++++++++++-
+ src/rlharness/rlharness.hpp |  15 +++++
+ 4 files changed, 152 insertions(+), 2 deletions(-)
+
+diff --git a/src/GameManager.cpp b/src/GameManager.cpp
+index 4ff1af0..5560e90 100644
+--- a/src/GameManager.cpp
++++ b/src/GameManager.cpp
+@@ -1,4 +1,7 @@
+ #include "th_pch.h"
++#ifdef TH08_RL_HARNESS
++#include "rlharness/rlharness.hpp"
++#endif
+ 
+ #include "GameManager.hpp"
+ #include "AnmManager.hpp"
+@@ -944,6 +947,9 @@ void __fastcall GameManager::GameplaySetupThread(void *unused)
+         gameManager->UpdateAntiTamper();
+         *reinterpret_cast<u16 *>(&g_Rng) = replaySeed;
+     }
++#ifdef TH08_RL_HARNESS
++    modern::rlharness::ApplyPendingSeed();
++#endif
+     gameManager->stageRngSeed = *reinterpret_cast<u16 *>(&g_Rng);
+ 
+     if (Background::RegisterChain(gameManager->currentStage))
+diff --git a/src/main.cpp b/src/main.cpp
+index 8e04734..ecba64b 100644
+--- a/src/main.cpp
++++ b/src/main.cpp
+@@ -103,6 +103,11 @@ RlU64 FrameCount()
+     return g_frameCount;
+ }
+ 
++void ResetFrameCount()
++{
++    g_frameCount = 0;
++}
++
+ bool PumpOneFrame()
+ {
+     i32 calcChainResult;
+diff --git a/src/rlharness/rlharness.cpp b/src/rlharness/rlharness.cpp
+index da95c47..9a7f6ac 100644
+--- a/src/rlharness/rlharness.cpp
++++ b/src/rlharness/rlharness.cpp
+@@ -26,6 +26,7 @@
+ #include "Player.hpp"
+ #include "ReplayManager.hpp"
+ #include "Gui.hpp"
++#include "Supervisor.hpp"
+ 
+ namespace th08
+ {
+@@ -41,6 +42,8 @@ FILE *g_out;
+ u16 g_mask;
+ u32 g_stageOrigin[MAX_STAGES];
+ bool g_stageOriginSet[MAX_STAGES];
++bool g_seedArmed;
++u16 g_pendingSeed;
+ 
+ u32 FloatBits(const f32 &value)
+ {
+@@ -187,8 +190,12 @@ void HandleStep(char *args)
+     {
+         if (!PumpOneFrame())
+         {
+-            Reply("OK advanced=%u frame=%llu exit=1", advanced,
+-                  static_cast<unsigned long long>(FrameCount()));
++            // The chain asked to exit.  In gameplay that means game over: the
++            // engine sets showRetryMenu and stops (10-P0 §4.8).  The harness
++            // never continues into the retry menu.
++            Reply("OK advanced=%u frame=%llu exit=1 game_over=%u", advanced,
++                  static_cast<unsigned long long>(FrameCount()),
++                  g_GameManager.showRetryMenu ? 1u : 0u);
+             return;
+         }
+         ++advanced;
+@@ -204,8 +211,123 @@ void HandleStep(char *args)
+     Reply("OK advanced=%u frame=%llu hash=%016llx", advanced,
+           static_cast<unsigned long long>(FrameCount()), static_cast<unsigned long long>(hash));
+ }
++
++// RESET <stage> <difficulty> <team> <seed> [practice]
++//
++// Mirrors TitleScreen::StartDeveloperReplayIfRequested() (TitleScreen.cpp:188-247),
++// the shortest path that leaves the title screen and enters a stage: set the
++// GameManager fields, then switch the supervisor to GameManager and let its
++// setup subthread run.
++void HandleReset(char *args)
++{
++    unsigned stage = 0;
++    unsigned difficulty = 1;
++    unsigned team = 0;
++    unsigned seed = 0;
++    unsigned practice = 0;
++    if (sscanf(args, "%u %u %u %u %u", &stage, &difficulty, &team, &seed, &practice) < 4)
++    {
++        Reply("ERR reset-usage RESET <stage> <difficulty> <team> <seed> [practice]");
++        return;
++    }
++    if (stage > 8 || difficulty > 4 || team > 11 || seed > 0xFFFF)
++    {
++        Reply("ERR reset-range stage<=8 difficulty<=4 team<=11 seed<=65535");
++        return;
++    }
++
++    g_GameManager.SetIsReplayWeird(FALSE);
++    g_GameManager.flags.isReplay = FALSE;
++    g_GameManager.flags.isDemoMode = FALSE;
++    g_GameManager.flags.isPracticeMode = practice ? TRUE : FALSE;
++    g_GameManager.flags.isSpellPractice = FALSE;
++    g_GameManager.difficulty = difficulty;
++    g_GameManager.shotType = team;
++    g_GameManager.currentStage = static_cast<i32>(stage);
++    g_GameManager.replayMode = REPLAY_MODE_NORMAL;
++
++    // The seed is applied from inside GameManager's setup, not here: setup draws
++    // from the RNG first (anti-tamper consumes values), so setting it now would
++    // be overwritten before stageRngSeed is recorded.
++    ArmSeed(static_cast<u16>(seed));
++
++    for (int i = 0; i < MAX_STAGES; ++i)
++        g_stageOriginSet[i] = false;
++
++    g_Supervisor.curState = SupervisorState_GameManager;
++    g_Supervisor.StopAudio();
++
++    // Setup runs on its own subthread; pump until it reports completion.
++    const unsigned kMaxSetupFrames = 1800;
++    unsigned pumped = 0;
++    bool ready = false;
++    while (pumped < kMaxSetupFrames)
++    {
++        if (!PumpOneFrame())
++            break;
++        ++pumped;
++        if (g_GameManager.gameplaySetupState == GAMEPLAY_SETUP_COMPLETE &&
++            g_Supervisor.runningSubthreadHandle == NULL)
++        {
++            ready = true;
++            break;
++        }
++    }
++
++    // Authoritative seed pin, and the reason it is here rather than only inside
++    // GameManager's setup: the setup runs on a subthread while the main loop
++    // keeps pumping frames, so the two threads interleave their draws from the
++    // shared RNG and the state on exit varies run to run (measured: same seed,
++    // same inputs, different g_Rng seed afterwards).  Reseeding at the quiescent
++    // point — setup complete, subthread gone, main thread in control — makes the
++    // first gameplay frame start from an identical RNG in every run.
++    if (ready)
++    {
++        g_Rng.SetSeed(static_cast<u16>(seed));
++        // Gameplay globals are allocated by the first gameplay frame, so the
++        // state right at setup completion is not yet readable.  Pump until they
++        // exist; this consumption happens after the reseed, so it is deterministic.
++        for (int i = 0; i < 8 && g_GameManager.globals == NULL; ++i)
++        {
++            if (!PumpOneFrame())
++                break;
++            ++pumped;
++        }
++    }
++
++    u32 fields[25];
++    RlU64 hash = 0;
++    // Frame 0 is the first frame of the stage, so two runs of the same seed are
++    // comparable even though setup needed a different number of frames.
++    ResetFrameCount();
++    if (TrackedFields(fields))
++    {
++        hash = 14695981039346656037ULL;
++        for (int i = 0; i < 25; ++i)
++            hash = Fnv1a(hash, fields[i]);
++    }
++    Reply("OK reset=1 ready=%u setup_frames=%u frames=%llu stage=%u difficulty=%u team=%u seed=%u "
++          "setup_state=%u hash=%016llx",
++          ready ? 1u : 0u, pumped, static_cast<unsigned long long>(FrameCount()), stage, difficulty,
++          team, seed, static_cast<unsigned>(g_GameManager.gameplaySetupState),
++          static_cast<unsigned long long>(hash));
++}
+ } // namespace
+ 
++void ArmSeed(u16 seed)
++{
++    g_pendingSeed = seed;
++    g_seedArmed = true;
++}
++
++void ApplyPendingSeed()
++{
++    if (!g_seedArmed)
++        return;
++    g_seedArmed = false;
++    g_Rng.SetSeed(g_pendingSeed);
++}
++
+ bool ParseCommandLine()
+ {
+     int inFd = 0;
+@@ -324,6 +446,8 @@ int Run()
+             HandleState();
+         else if (strcmp(line, "STEP") == 0)
+             HandleStep(args ? args : (char *)"");
++        else if (strcmp(line, "RESET") == 0)
++            HandleReset(args ? args : (char *)"");
+         else if (strcmp(line, "QUIT") == 0)
+         {
+             Reply("OK bye");
+diff --git a/src/rlharness/rlharness.hpp b/src/rlharness/rlharness.hpp
+index b08ac5a..6ea4aa5 100644
+--- a/src/rlharness/rlharness.hpp
++++ b/src/rlharness/rlharness.hpp
+@@ -52,6 +52,21 @@ bool PumpOneFrame();
+ 
+ // Implemented in main.cpp: how many logic frames this process has executed.
+ RlU64 FrameCount();
++
++// Implemented in main.cpp: rewind the frame counter to zero.  STAGE START CALLS
++// THIS: the setup subthread needs a scheduler-dependent number of frames to
++// finish, so a process-wide counter would differ between two runs of the same
++// seed and poison the state hash.  After a reset, frame 0 is the first frame of
++// the stage, which is also what the replay trace's field 0 means.
++void ResetFrameCount();
++
++// RESET support.  The seed cannot be applied when the command is parsed: the
++// engine draws from the RNG during setup (anti-tamper consumes two values), so
++// the seed has to land at the one place that mirrors the replay path — right
++// before GameManager records stageRngSeed (10-P0 §4.3).  ArmSeed() only stores
++// it; GameManager's setup calls ApplyPendingSeed() for it.
++void ArmSeed(u16 seed);
++void ApplyPendingSeed();
+ }
+ }
+ }
+-- 
+2.34.1
+

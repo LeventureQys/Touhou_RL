@@ -1,0 +1,204 @@
+From eb55712a324902057a093d9e8bb0f0b1506af678 Mon Sep 17 00:00:00 2001
+From: root <root@ubuntu.localdomain>
+Date: Sun, 8 Nov 2026 03:07:45 +0800
+Subject: [PATCH 08/10] feat(rlharness): POSIX shared memory for state and
+ pixels
+
+Layout from 10-P0 3: [0,64) header, [64,192) the 25 tracked fields as u32,
+[192,...) 640x480 RGBA.  SHM <name> creates and maps the segment; HASH and STATE
+publish the fields, PIXELS and the per-frame readback publish the frame.  The
+header carries magic, protocol version, frame number, state hash, sizes and a
+validity flag word.
+
+Verified from Python by mapping /dev/shm/v400smoke: 1,228,992 bytes,
+magic 0x30303456, version 1, frame 40, header hash equal to the HASH reply,
+25 state fields readable (f0=40 f1=0 f14=20048 f24=1), flags=0x3, and the pixel
+block containing real frame data.
+
+Important finding for G0.2 item 4 and WP8: the state hash was identical across
+two runs but the pixel checksum differed.  The HUD prints a wall-clock fps
+counter ("174.00 fps"), so the rendered pixels are time-dependent even when the
+game state is bit-identical.  Byte-identical pixel regeneration therefore needs
+either a fixed fps readout in harness mode or an agreement that the HUD fps
+region is excluded from the comparison.
+---
+ src/rlharness/rlharness.cpp | 121 ++++++++++++++++++++++++++++++++++++
+ 1 file changed, 121 insertions(+)
+
+diff --git a/src/rlharness/rlharness.cpp b/src/rlharness/rlharness.cpp
+index 89da634..b00ebb1 100644
+--- a/src/rlharness/rlharness.cpp
++++ b/src/rlharness/rlharness.cpp
+@@ -24,6 +24,9 @@
+ #include <dirent.h>
+ #include <GL/gl.h>
+ #include <time.h>
++#include <fcntl.h>
++#include <sys/mman.h>
++#include <unistd.h>
+ 
+ #include "GameManager.hpp"
+ #include "Player.hpp"
+@@ -37,6 +40,10 @@ namespace modern
+ {
+ namespace rlharness
+ {
++// Defined later in this file; declared here because the command handlers
++// above them publish into the shared block and after every readback.
++void PublishState(const u32 fields[25], unsigned long long hash);
++void PublishPixels(const unsigned char *rgba);
+ namespace
+ {
+ bool g_active;
+@@ -160,6 +167,7 @@ void HandleHash()
+     RlU64 hash = 14695981039346656037ULL;
+     for (int i = 0; i < 25; ++i)
+         hash = Fnv1a(hash, fields[i]);
++    PublishState(fields, hash);
+     Reply("OK hash=%016llx frames=%llu", static_cast<unsigned long long>(hash),
+           static_cast<unsigned long long>(FrameCount()));
+ }
+@@ -172,6 +180,7 @@ void HandleState()
+         Reply("OK state=undefined frames=%llu", static_cast<unsigned long long>(FrameCount()));
+         return;
+     }
++    PublishState(fields, 0);
+     // A flat, fixed-order dump so the Python side can diff two states field by field.
+     Reply("OK frames=%llu f0=%u f1=%u f2=%u f3=%u f4=%u f5=%u f6=%08x f7=%08x f8=%08x f9=%08x "
+           "f10=%08x f11=%08x f12=%08x f13=%u f14=%u f15=%u f16=%u f17=%u f18=%u f19=%u f20=%u "
+@@ -432,6 +441,8 @@ void HandlePixels(char *args)
+     static unsigned char rgba[640 * 480 * 4];
+ 
+     glReadPixels(0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, rgba);
++    // Also publish into the shared block so a reader sees the same bytes.
++    PublishPixels(rgba);
+ 
+     unsigned long long sum = 14695981039346656037ULL;
+     unsigned nonzero = 0;
+@@ -525,6 +536,114 @@ void HandleReadback(char *args)
+           ReadbackFrames(), ReadbackMicros());
+ }
+ 
++// Shared-memory layout (10-P0 §3).
++//
++//   [0, 64)      header: magic, protocol version, frame, state hash, sizes
++//   [64, 192)    the 25 tracked fields, as u32
++//   [192, ...)   pixels, RGBA8, 640x480
++//
++// The control pipe carries commands and short replies; bulk data lands here so
++// the Python side can map the same pages.  Only the frame owner writes; readers
++// take the header's frame counter as the seqlock value.
++bool g_shmActive;
++void *g_shmBase;
++size_t g_shmSize;
++char g_shmName[128];
++
++static const size_t SHM_HEADER_OFFSET = 0;
++static const size_t SHM_STATE_OFFSET = 64;
++static const size_t SHM_PIXELS_OFFSET = 192;
++static const u32 SHM_MAGIC = 0x30303456u; // "V400"
++static const u32 SHM_VERSION = 1;
++
++struct ShmHeader
++{
++    u32 magic;
++    u32 version;
++    unsigned long long frame;
++    unsigned long long stateHash;
++    u32 pixelWidth;
++    u32 pixelHeight;
++    u32 stateBytes;
++    u32 flags;
++};
++
++// flags bits
++static const u32 SHM_FLAG_STATE_VALID = 1u << 0;
++static const u32 SHM_FLAG_PIXELS_VALID = 1u << 1;
++
++bool AttachShared(const char *name)
++{
++    if (name == NULL || name[0] == '\0')
++        return false;
++    const size_t total = SHM_PIXELS_OFFSET + 640u * 480u * 4u;
++    const int fd = shm_open(name, O_CREAT | O_RDWR, 0600);
++    if (fd < 0)
++        return false;
++    if (ftruncate(fd, static_cast<off_t>(total)) != 0)
++    {
++        close(fd);
++        return false;
++    }
++    void *base = mmap(NULL, total, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
++    close(fd);
++    if (base == MAP_FAILED)
++        return false;
++
++    g_shmBase = base;
++    g_shmSize = total;
++    g_shmActive = true;
++    strncpy(g_shmName, name, sizeof(g_shmName) - 1);
++    g_shmName[sizeof(g_shmName) - 1] = '\0';
++
++    ShmHeader *header = static_cast<ShmHeader *>(g_shmBase);
++    memset(header, 0, sizeof(*header));
++    header->magic = SHM_MAGIC;
++    header->version = SHM_VERSION;
++    header->pixelWidth = 640;
++    header->pixelHeight = 480;
++    header->stateBytes = 25 * sizeof(u32);
++    return true;
++}
++
++void PublishState(const u32 fields[25], unsigned long long hash)
++{
++    if (!g_shmActive)
++        return;
++    ShmHeader *header = static_cast<ShmHeader *>(g_shmBase);
++    memcpy(static_cast<unsigned char *>(g_shmBase) + SHM_STATE_OFFSET, fields, 25 * sizeof(u32));
++    header->stateHash = hash;
++    header->frame = FrameCount();
++    header->flags |= SHM_FLAG_STATE_VALID;
++}
++
++void PublishPixels(const unsigned char *rgba)
++{
++    if (!g_shmActive || rgba == NULL)
++        return;
++    ShmHeader *header = static_cast<ShmHeader *>(g_shmBase);
++    memcpy(static_cast<unsigned char *>(g_shmBase) + SHM_PIXELS_OFFSET, rgba, 640u * 480u * 4u);
++    header->frame = FrameCount();
++    header->flags |= SHM_FLAG_PIXELS_VALID;
++}
++
++// SHM <name>: attach (and create if needed) the shared block.
++void HandleShm(char *args)
++{
++    if (args == NULL || args[0] == '\0')
++    {
++        Reply("OK shm=%s active=%u bytes=%llu", g_shmActive ? g_shmName : "",
++              g_shmActive ? 1u : 0u, static_cast<unsigned long long>(g_shmSize));
++        return;
++    }
++    if (!AttachShared(args))
++    {
++        Reply("ERR shm-attach-failed %s", args);
++        return;
++    }
++    Reply("OK shm=%s active=1 bytes=%llu", g_shmName, static_cast<unsigned long long>(g_shmSize));
++}
++
+ bool ParseCommandLine()
+ {
+     int inFd = 0;
+@@ -649,6 +768,8 @@ int Run()
+             HandlePixels(args ? args : (char *)"");
+         else if (strcmp(line, "READBACK") == 0)
+             HandleReadback(args ? args : (char *)"");
++        else if (strcmp(line, "SHM") == 0)
++            HandleShm(args ? args : (char *)"");
+         else if (strcmp(line, "DEBUG") == 0)
+             HandleDebug();
+         else if (strcmp(line, "QUIT") == 0)
+-- 
+2.34.1
+

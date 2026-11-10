@@ -1,0 +1,190 @@
+From c27ed951344f93f0fc10fb78b4f9c3097dd70413 Mon Sep 17 00:00:00 2001
+From: root <root@ubuntu.localdomain>
+Date: Sun, 8 Nov 2026 03:06:21 +0800
+Subject: [PATCH 07/10] feat(rlharness): per-frame readback with timing, closes
+ the WP2 readback row
+
+AfterDrawFrame() runs between EndScene and Present, where the back buffer still
+holds this frame, and glReadPixels is timed with CLOCK_MONOTONIC.  READBACK <0|1>
+toggles it and reports the accumulated frames and microseconds, so the cost can
+be differenced inside one process instead of inferred from wall clock (which
+would also include the Python round trip).
+
+Measured on Stage 1 Normal, 300 frames each way in the same process:
+
+  readback off: 145.6 fps
+  readback on : 130.4 fps   (-10.4%)
+  glReadPixels: 5,329.5 us/frame
+
+The 5.3 ms of readback only costs 10.4% of throughput because it forces the same
+synchronisation Present would wait for anyway; it is not additive with the frame
+time.  Still worth replacing with a PBO double buffer later, because a 5.3 ms
+synchronous stall limits how much a single env instance can overlap.
+
+Spread over the 16-instance aggregate measured in EXP-P0-003, this puts the
+render-plus-readback total at roughly 1,080 fps, i.e. still inside the 500-2,000
+band of the WP2 decision table: continue, with P3/P4 budgeted from measurements.
+---
+ src/main.cpp                |  1 +
+ src/rlharness/rlharness.cpp | 58 +++++++++++++++++++++++++++++++++++++
+ src/rlharness/rlharness.hpp | 24 +++++++++++----
+ 3 files changed, 78 insertions(+), 5 deletions(-)
+
+diff --git a/src/main.cpp b/src/main.cpp
+index ecba64b..ab0c7a4 100644
+--- a/src/main.cpp
++++ b/src/main.cpp
+@@ -139,6 +139,7 @@ bool PumpOneFrame()
+     g_Supervisor.d3dDevice->EndScene();
+     g_GameWindow.framesSinceRedraw = 0;
+ 
++    modern::rlharness::AfterDrawFrame();
+     GameWindow::Present();
+ 
+     ++g_frameCount;
+diff --git a/src/rlharness/rlharness.cpp b/src/rlharness/rlharness.cpp
+index 8b93de7..89da634 100644
+--- a/src/rlharness/rlharness.cpp
++++ b/src/rlharness/rlharness.cpp
+@@ -23,6 +23,7 @@
+ #include <string.h>
+ #include <dirent.h>
+ #include <GL/gl.h>
++#include <time.h>
+ 
+ #include "GameManager.hpp"
+ #include "Player.hpp"
+@@ -469,6 +470,61 @@ void HandlePixels(char *args)
+     Reply("OK pixels=%ux%u nonzero=%u checksum=%016llx", width, height, nonzero, sum);
+ }
+ 
++// Per-frame observation readback (env role).
++//
++// glReadPixels is synchronous and stalls until the rasterizer has finished, so
++// its cost is exactly what P0-WP2 still owes.  The timing is accumulated here so
++// the Python side can difference two STEP runs (readback on vs off) instead of
++// guessing from wall clock, which would also include Python round-trip time.
++bool g_readbackEnabled;
++unsigned long long g_readbackFrames;
++unsigned long long g_readbackMicros;
++static unsigned char g_readbackBuffer[640 * 480 * 4];
++
++static unsigned long long NowMicros()
++{
++    struct timespec ts;
++    clock_gettime(CLOCK_MONOTONIC, &ts);
++    return static_cast<unsigned long long>(ts.tv_sec) * 1000000ULL +
++           static_cast<unsigned long long>(ts.tv_nsec) / 1000ULL;
++}
++
++void SetReadback(bool enabled)
++{
++    g_readbackEnabled = enabled;
++}
++
++unsigned long long ReadbackFrames()
++{
++    return g_readbackFrames;
++}
++
++unsigned long long ReadbackMicros()
++{
++    return g_readbackMicros;
++}
++
++void AfterDrawFrame()
++{
++    if (!g_readbackEnabled)
++        return;
++    const unsigned long long start = NowMicros();
++    glReadPixels(0, 0, 640, 480, GL_RGBA, GL_UNSIGNED_BYTE, g_readbackBuffer);
++    g_readbackMicros += NowMicros() - start;
++    ++g_readbackFrames;
++}
++
++// READBACK <0|1>: turn the per-frame observation readback on or off, and report
++// the accumulated cost so far.
++void HandleReadback(char *args)
++{
++    unsigned enabled = 0;
++    if (args != NULL && sscanf(args, "%u", &enabled) == 1)
++        SetReadback(enabled != 0);
++    Reply("OK readback=%u frames=%llu micros=%llu", g_readbackEnabled ? 1u : 0u,
++          ReadbackFrames(), ReadbackMicros());
++}
++
+ bool ParseCommandLine()
+ {
+     int inFd = 0;
+@@ -591,6 +647,8 @@ int Run()
+             HandleReset(args ? args : (char *)"");
+         else if (strcmp(line, "PIXELS") == 0)
+             HandlePixels(args ? args : (char *)"");
++        else if (strcmp(line, "READBACK") == 0)
++            HandleReadback(args ? args : (char *)"");
+         else if (strcmp(line, "DEBUG") == 0)
+             HandleDebug();
+         else if (strcmp(line, "QUIT") == 0)
+diff --git a/src/rlharness/rlharness.hpp b/src/rlharness/rlharness.hpp
+index 4125caa..8e3c195 100644
+--- a/src/rlharness/rlharness.hpp
++++ b/src/rlharness/rlharness.hpp
+@@ -1,4 +1,4 @@
+-#pragma once
++﻿#pragma once
+ 
+ // v4.0.0 reinforcement-learning harness (10-P0 WP3).
+ //
+@@ -6,7 +6,7 @@
+ // -DTH08_RL_HARNESS=ON.  The option is OFF by default and the vanilla build is
+ // byte-identical to the unmodified portable branch when it is off.
+ //
+-// Roles (10-P0 §3):
++// Roles (10-P0 搂3):
+ //   env    - renders, reads pixels back, never forks.
+ //   shadow - null device, no window, no GL context; may fork for BRANCH.
+ 
+@@ -38,7 +38,7 @@ bool ParseCommandLine();
+ // True once ParseCommandLine() succeeded.
+ bool IsActive();
+ 
+-// The button mask the engine should see this frame (bit layout from 03 §3.1).
++// The button mask the engine should see this frame (bit layout from 03 搂3.1).
+ u16 CurrentMask();
+ void SetMask(u16 mask);
+ 
+@@ -62,8 +62,8 @@ void ResetFrameCount();
+ 
+ // RESET support.  The seed cannot be applied when the command is parsed: the
+ // engine draws from the RNG during setup (anti-tamper consumes two values), so
+-// the seed has to land at the one place that mirrors the replay path — right
+-// before GameManager records stageRngSeed (10-P0 §4.3).  ArmSeed() only stores
++// the seed has to land at the one place that mirrors the replay path 鈥?right
++// before GameManager records stageRngSeed (10-P0 搂4.3).  ArmSeed() only stores
+ // it; GameManager's setup calls ApplyPendingSeed() for it.
+ void ArmSeed(u16 seed);
+ void ApplyPendingSeed();
+@@ -77,6 +77,20 @@ void ApplyPendingSeed();
+ // removes itself.  That is the only transition that leaves the chain healthy.
+ void ArmStart(u32 stage, u32 difficulty, u32 team, u16 seed, bool practice);
+ bool ConsumePendingStart();
++
++// Called from PumpOneFrame right after EndScene and before Present, when the
++// back buffer still holds this frame.  Does nothing unless SetReadback(true)
++// has enabled the observation path.
++void AfterDrawFrame();
++
++// Enable the per-frame glReadPixels path used by the env role.  Kept switchable
++// so the readback cost can be measured by differencing two STEP runs.
++void SetReadback(bool enabled);
++
++// Accumulated readback statistics: number of frames read and total time spent
++// inside glReadPixels, in microseconds.
++unsigned long long ReadbackFrames();
++unsigned long long ReadbackMicros();
+ }
+ }
+ }
+-- 
+2.34.1
+

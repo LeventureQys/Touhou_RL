@@ -1,0 +1,33 @@
+From f563df58c44037b44208c393a86540b434b0c83b Mon Sep 17 00:00:00 2001
+From: root <root@ubuntu.localdomain>
+Date: Sun, 8 Nov 2026 03:19:35 +0800
+Subject: [PATCH 09/10] fix(rlharness): publish pixels from the per-frame
+ readback path
+
+AfterDrawFrame read the frame back but never copied it into the shared block, so
+a reader saw flags=0 and zeros even though the READBACK counters showed hundreds
+of frames read.  Only the explicit PIXELS command published.
+
+Found because Th08Env consumed the shared block instead of polling the PIXELS
+command: observation shapes were right (480,640,4) but the header frame stayed 0
+while readback reported 290 frames, which isolated the gap to the publish step
+rather than to the readback itself.
+---
+ src/rlharness/rlharness.cpp | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/src/rlharness/rlharness.cpp b/src/rlharness/rlharness.cpp
+index b00ebb1..1782cb3 100644
+--- a/src/rlharness/rlharness.cpp
++++ b/src/rlharness/rlharness.cpp
+@@ -521,6 +521,7 @@ void AfterDrawFrame()
+         return;
+     const unsigned long long start = NowMicros();
+     glReadPixels(0, 0, 640, 480, GL_RGBA, GL_UNSIGNED_BYTE, g_readbackBuffer);
++    PublishPixels(g_readbackBuffer);
+     g_readbackMicros += NowMicros() - start;
+     ++g_readbackFrames;
+ }
+-- 
+2.34.1
+
