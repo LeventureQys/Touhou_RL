@@ -51,11 +51,33 @@ The assemble phase takes a cross-process lock on ``<out-dir>/.assemble.lock``
 because ``manifest.json`` is a read-modify-write file: two channels finalising at
 the same time must not lose each other's shard entry.
 
+**Observation version (T2 closeout / D-14).**  ``--obs`` selects the planes the
+shard stores and defaults to ``v1``, so every existing command and artifact is
+unchanged:
+
+* ``--obs v1`` (default) — ``obs/play64.npy`` (4,64,64) + ``obs/hud.npy`` (56,160),
+  obs-v1 digest, exactly as before;
+* ``--obs v3`` — ``obs/play96x112.npy`` (4,112,96) + ``obs/hud.npy`` (56,160) +
+  ``obs/act_hist.npy`` (8,18), obs-v3 digest
+  (``touhou_rl/v400/student/obs_spec_v3.py``).  The 96x112 plane is EXP-P3-010's
+  input B byte for byte; ``act_hist`` is rebuilt during assemble from the same
+  aligned label rows with obs-v2's frozen rule (``chosen_plan.first_action``,
+  cleared at the shard start), and ``shard.json`` records
+  ``obs_spec_version="obs-v3"``, its digest and ``obs_version="v3"``.
+
 Run inside WSL (the binary is a Linux ELF)::
 
     env -u DISPLAY xvfb-run -a /root/v400-venv/bin/python \
         tools/rl/v400_d0_dual.py --decisions 60 --stage 0 --difficulty 1 --seed 1 \
         --work-dir .tmp_v400_d0_dual --out-dir .tmp_v400_d0_dual/d0
+
+    # obs-v3 (T3's D1 format); one instance, its own data root so it never waits
+    # on another batch's engines:
+    env -u DISPLAY xvfb-run -a /root/v400-venv/bin/python tools/rl/v400_d0_dual.py \
+        --phase all --decisions 200 --stage 0 --difficulty 1 --seed 1 --obs v3 \
+        --work-dir .tmp_v400_obsv3/work --out-dir .tmp_v400_obsv3/d0 \
+        --data-root /root/v400-data/obsv3 \
+        --engine-limit 4 --engine-pattern 'th08-modern --data-dir /root/v400-data/obsv3'
 """
 
 from __future__ import annotations
@@ -78,16 +100,21 @@ import numpy as np
 if __package__ in (None, ""):  # allow ``python tools/rl/v400_d0_dual.py``
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
-from touhou_rl.v400.student import dataset, obs_spec  # noqa: E402
+from touhou_rl.v400.student import dataset, obs_spec, obs_spec_v2  # noqa: E402
 from touhou_rl.v400.teacher import config as teacher_config  # noqa: E402
 from touhou_rl.v400.teacher.engine import EXPECTED_ENGINE_SHA256, sha256_file  # noqa: E402
 from touhou_rl.v400.teacher.obs import (  # noqa: E402
     ALIGNMENT,
+    OBS_V1,
+    OBS_V3,
+    OBS_VERSIONS,
     DecisionObservationBuffer,
     ObservationError,
     RenderFrame,
     TeacherObsShardWriter,
     check_frozen_spec,
+    check_obs_version,
+    obs_version_spec,
     require_rendered,
 )
 
@@ -462,6 +489,8 @@ def run_pixels(args, labels: list[dict[str, Any]]) -> dict[str, Any]:
     from touhou_rl.v400.gym.shm import PIXELS_OFFSET, SharedBlock
     from touhou_rl.v400.labels.runner import ControlClient
 
+    spec = obs_version_spec(getattr(args, "obs", OBS_V1))
+
     binary = args.binary or str(Path(args.engine) / "th08-modern")
     if sha256_file(binary) != args.expected_sha:
         raise DualError(
@@ -472,7 +501,7 @@ def run_pixels(args, labels: list[dict[str, Any]]) -> dict[str, Any]:
     pixel_bytes = 640 * 480 * 4
     client = ControlClient(binary, data["data_dir"], role="env", timeout=args.timeout,
                            stderr_path=log_path)
-    buffer = DecisionObservationBuffer()
+    buffer = DecisionObservationBuffer(play_shape=spec.planes[0].shape_tail[1:])
     samples: list[dict[str, Any]] = []
     pairs: list[dict[str, Any]] = []
     renders: list[dict[str, float]] = []
@@ -485,6 +514,8 @@ def run_pixels(args, labels: list[dict[str, Any]]) -> dict[str, Any]:
         "channel": "B", "role": "env", "shm": shm_name, "engine_binary": binary,
         "engine_sha256": args.expected_sha, "reset_command": reset_command(args),
         "data_dir": data, "alignment": "hash-checkpoint",
+        "obs_version": spec.short,
+        "play_shape": list(spec.planes[0].shape_tail),
     }
     started = time.monotonic()
     try:
@@ -508,7 +539,7 @@ def run_pixels(args, labels: list[dict[str, Any]]) -> dict[str, Any]:
             if reset_frame != 0:
                 raise DualError(f"RESET left the frame counter at {reset_frame}, expected 0")
             # Episode-start padding: the last render the RESET left in the block.
-            play, hud, header = _read_frame(block, f"post-RESET seed render")
+            play, hud, header = _read_frame(block, f"post-RESET seed render", args.obs)
             seed = RenderFrame(frame=int(header["frame"]), play=play, hud=hud)
             renders.append(require_rendered(play, hud, where="post-RESET seed render"))
             buffer.reset(seed)
@@ -535,7 +566,8 @@ def run_pixels(args, labels: list[dict[str, Any]]) -> dict[str, Any]:
                             f"{reply.get('advanced')} on STEP {mask} 1")
                     expected_render = decision_frame + offset
                     started_px = time.perf_counter()
-                    play, hud, header = _read_frame(block, f"frame {expected_render}")
+                    play, hud, header = _read_frame(block, f"frame {expected_render}",
+                                                    args.obs)
                     pixels_ms += (time.perf_counter() - started_px) * 1000.0
                     frames_read += 1
                     renders.append(require_rendered(play, hud, where=f"frame {expected_render}"))
@@ -659,16 +691,20 @@ def _write_alignment(args, labels, pairs) -> dict[str, Any]:
     return payload
 
 
-def _read_frame(block, where: str):
+def _read_frame(block, where: str, obs_version: str = OBS_V1):
     from touhou_rl.v400.gym.shm import FLAG_PIXELS_VALID
-    from touhou_rl.v400.student import obs_spec
 
     header = block.header()
     if not int(header.get("flags", 0)) & FLAG_PIXELS_VALID:
         raise DualError(f"{where}: shared block has no published pixels")
     if int(header.get("width", 0)) != 640 or int(header.get("height", 0)) != 480:
         raise DualError(f"{where}: readback is {header.get('width')}x{header.get('height')}")
-    play, hud = obs_spec.encode_planes(block.pixels())
+    if obs_version == OBS_V3:
+        from touhou_rl.v400.student import obs_spec_v3
+
+        play, hud = obs_spec_v3.encode_planes_v3(block.pixels())
+    else:
+        play, hud = obs_spec.encode_planes(block.pixels())
     return play, hud, header
 
 
@@ -790,26 +826,34 @@ def shard_resume_report(shard_dir: str | Path) -> dict[str, Any] | None:
     """``(report)`` if a finished, loadable shard already sits at ``shard_dir``.
 
     "Finished" means the writer renamed its staging directory, and "loadable"
-    means ``dataset.load_teacher_shard`` still accepts it (shard.json schema, obs
-    spec digest, plane shapes/sizes and the sha256 of both planes).  A ``.partial``
-    staging directory is *not* a shard and never short-circuits a resume.
+    means the loader of the shard's **own** obs version still accepts it
+    (``dataset.load_teacher_shard`` for v1, ``obs_v3_dataset.load_teacher_shard_v3``
+    for v3 — the version is read from ``shard.json``, not from the CLI flag, so a
+    v3 shard is never skipped as "unloadable" and never accepted by the wrong
+    loader).  A ``.partial`` staging directory is *not* a shard and never
+    short-circuits a resume.
     """
 
     path = Path(shard_dir)
     if not (path / "shard.json").is_file():
         return None
     try:
-        shard = dataset.load_teacher_shard(path)
+        raw = json.loads((path / "shard.json").read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return None
+    try:
+        if raw.get("obs_spec_version") == obs_spec.OBS_SPEC_VERSION:
+            shard = dataset.load_teacher_shard(path)
+        else:
+            from touhou_rl.v400.student import obs_v3_dataset
+
+            shard = obs_v3_dataset.load_teacher_shard_v3(path)
         decisions = len(shard)
     except Exception:  # a corrupt shard must be re-made, not silently accepted
         return None
     if decisions <= 0:
         return None
     report = shard.report()
-    try:
-        raw = json.loads((path / "shard.json").read_text(encoding="utf-8"))
-    except (OSError, json.JSONDecodeError):
-        raw = {}
     report["stop_reason"] = raw.get("stop_reason")
     report["stage_clear"] = raw.get("stage_clear")
     report["obs_bytes_per_decision"] = (raw.get("obs") or {}).get("bytes_per_decision")
@@ -856,9 +900,54 @@ def out_dir_lock(out_dir: str | Path):
 # ---------------------------------------------------------------------------
 # assemble: A's labels + B's pixels -> the EXP-P1-013 shard
 # ---------------------------------------------------------------------------
+def v3_action_history(labels: list[dict[str, Any]]) -> tuple[np.ndarray, dict[str, Any]]:
+    """Rebuild the obs-v3 ``act_hist`` (N,8,18) from the aligned label rows.
+
+    The reconstruction is obs-v2's frozen rule: a D0/teacher-driven row executes
+    ``chosen_plan.first_action`` at its decision, so ``build_action_history`` can
+    rebuild ``a[t-8]..a[t-1]``.  The stage is constant inside one dual shard (the
+    CLI's ``--stage``; a stage-clear commit is the single boundary the dual
+    alignment either trims or refuses), so the history is cleared at the shard
+    start and at every stage change that the shard really contains.
+
+    Anything the rule cannot reconstruct is refused here, never padded silently.
+    """
+
+    try:
+        cand, stage = obs_spec_v2.reconstruct_from_label_rows(labels)
+        history = obs_spec_v2.build_action_history(cand, stage)
+        obs_spec_v2.check_action_history(history)
+    except obs_spec_v2.ObsSpecV2Error as error:
+        raise DualError(
+            f"obs-v3 act_hist cannot be reconstructed from the label rows: {error}"
+        ) from error
+    zeros = (history.sum(axis=-1) == 0).sum(axis=1)
+    info = {
+        "field": "act_hist",
+        "shape": list(history.shape),
+        "dtype": "uint8",
+        "order": obs_spec_v2.ACTION_HISTORY_ORDER,
+        "excludes_current_action": True,
+        "source": ("chosen_plan.first_action (teacher-driven dual shard; the action "
+                   "the teacher committed at that decision)"),
+        "stage_values": sorted({int(value) for value in stage}),
+        "stage_changes": int(np.sum(np.asarray(stage)[1:] != np.asarray(stage)[:-1]))
+        if len(stage) > 1 else 0,
+        "zero_rows_at_start": int(zeros[0]) if len(zeros) else 0,
+        "rows_with_padding": int((zeros > 0).sum()),
+        "first_unpadded_row": (int(np.argmax(zeros == 0))
+                               if bool((zeros == 0).any()) else -1),
+        "executed_cand_histogram": np.bincount(cand, minlength=obs_spec.N_MOVE_CLASSES)
+        .tolist() if len(cand) else [],
+        "sha256": obs_spec_v2.history_digest(history),
+    }
+    return history, info
+
+
 def assemble(args, labels: list[dict[str, Any]], pixels: dict[str, np.ndarray],
              channel_a: dict[str, Any], channel_b: dict[str, Any]) -> dict[str, Any]:
-    check_frozen_spec()
+    spec = obs_version_spec(getattr(args, "obs", OBS_V1))
+    check_obs_version(spec.short)
     out_dir = Path(args.out_dir)
     shard_key = args.shard_key
     labels, pixels, trim_info = _trim_stage_transition(args, labels, pixels, channel_a)
@@ -867,8 +956,23 @@ def assemble(args, labels: list[dict[str, Any]], pixels: dict[str, np.ndarray],
     render_frames = pixels["render_frames"]
     pads = pixels["pads"]
     decision_frames = pixels["decision_frames"]
-    if play.shape != (len(labels), obs_spec.FRAME_STACK, *obs_spec.PLAY_SHAPE):
-        raise DualError(f"pixels play shape {play.shape} != ({len(labels)},4,64,64)")
+    expected_play = (len(labels), *spec.planes[0].shape_tail)
+    if play.shape != expected_play:
+        raise DualError(
+            f"pixels play shape {play.shape} != {expected_play} for {spec.version}")
+    act_hist = history_info = None
+    if spec.short == OBS_V3:
+        from touhou_rl.v400.student import obs_spec_v3
+
+        act_hist, history_info = v3_action_history(labels)
+        if act_hist.shape[0] != len(labels):
+            raise DualError(
+                f"act_hist rows {act_hist.shape[0]} != {len(labels)} decisions")
+        expected_bytes_per_decision = obs_spec_v3.BYTES_PER_DECISION
+    else:
+        expected_bytes_per_decision = (
+            obs_spec.FRAME_STACK * obs_spec.PLAY_SHAPE[0] * obs_spec.PLAY_SHAPE[1]
+            + obs_spec.HUD_SHAPE[0] * obs_spec.HUD_SHAPE[1])
     pairs = json.loads(Path(args.alignment_json).read_text(encoding="utf-8"))
     pair_rows = pairs["pairs"]
     evidence = {"boundaries": int(pairs["boundaries"]),
@@ -936,6 +1040,12 @@ def assemble(args, labels: list[dict[str, Any]], pixels: dict[str, np.ndarray],
         "label_channel": "shadow",
         "pixel_channel": "env",
         "alignment_method": "hash-checkpoint",
+        # The requested observation version and the planes it implies.  ``shard.json``
+        # already carries ``obs_spec_version``/``obs_spec_digest``; these keys make the
+        # request auditable next to the planes that were actually written.
+        "obs_requested": spec.short,
+        "obs_planes": [plane.meta_key for plane in spec.planes],
+        "obs_bytes_per_decision_expected": expected_bytes_per_decision,
         "alignment_extra": alignment_extra,
         "engine_shadow": {
             "binary": channel_a.get("engine_binary"),
@@ -952,7 +1062,10 @@ def assemble(args, labels: list[dict[str, Any]], pixels: dict[str, np.ndarray],
         "pixel_channel_report": channel_b,
         "hash_checkpoint_pairs": pair_rows,
     }
-    writer = TeacherObsShardWriter(out_dir, key=shard_key, meta=meta)
+    if history_info is not None:
+        meta["act_hist"] = history_info
+    writer = TeacherObsShardWriter(out_dir, key=shard_key, meta=meta,
+                                   obs_version=spec.short)
     try:
         for index, row in enumerate(labels):
             sample = {
@@ -969,6 +1082,8 @@ def assemble(args, labels: list[dict[str, Any]], pixels: dict[str, np.ndarray],
                     "p3_label_frame": int(decision_frames[index]),
                 },
             }
+            if act_hist is not None:
+                sample["act_hist"] = act_hist[index]
             writer.add(
                 decision=index,
                 decision_frame=int(decision_frames[index]),
@@ -1000,13 +1115,57 @@ def assemble(args, labels: list[dict[str, Any]], pixels: dict[str, np.ndarray],
 
 
 def verify_load(args, summary: dict[str, Any]) -> dict[str, Any]:
-    from touhou_rl.v400.teacher.obs import FROZEN_OBS_SPEC_DIGEST
+    from touhou_rl.v400.teacher.obs import (
+        FROZEN_OBS_SPEC_DIGEST,
+        FROZEN_OBS_SPEC_V3_DIGEST,
+    )
 
     shard_dir = Path(summary["dir"])
     # With --allow-early-stop the shard holds the decisions the teacher really
     # produced (a stage clear / death ends the segment), so the load gate must ask
     # for that count, not the requested cap.
     expected = int(getattr(args, "decisions_actual", None) or args.decisions)
+    if obs_version_spec(getattr(args, "obs", OBS_V1)).short == OBS_V3:
+        from touhou_rl.v400.student import obs_v3_dataset
+
+        loaded = obs_v3_dataset.load_teacher_samples_v3(
+            [shard_dir / "labels.jsonl"],
+            min_samples=expected,
+            obs_root=Path(args.out_dir),
+            require_observations=True,
+        )
+        shard = obs_v3_dataset.load_teacher_shard_v3(shard_dir)
+        sample = shard[0]
+        normalized = shard.normalized(1)
+        return {
+            "obs_version": shard.obs_version,
+            "samples": int(loaded["count"]),
+            "expected_samples": expected,
+            "samples_match": int(loaded["count"]) == expected,
+            "scores_shape": list(np.asarray(loaded["samples"][0]["scores"]).shape),
+            "verified_mask_shape": list(
+                np.asarray(loaded["samples"][0]["verified_mask"]).shape),
+            "play_shape": list(np.asarray(sample["play"]).shape),
+            "play_dtype": str(np.asarray(sample["play"]).dtype),
+            "hud_shape": list(np.asarray(sample["hud"]).shape),
+            "hud_dtype": str(np.asarray(sample["hud"]).dtype),
+            "act_hist_shape": list(np.asarray(sample["act_hist"]).shape),
+            "act_hist_dtype": str(np.asarray(sample["act_hist"]).dtype),
+            "normalized_play_dtype": str(normalized["play"].dtype),
+            "normalized_act_hist_shape": list(
+                np.asarray(normalized["act_hist"]).shape),
+            "verified_actions_first_row": list(sample["verified_actions"]),
+            "obs_spec_version": loaded["obs_spec_version"],
+            "obs_spec_digest": loaded["obs_spec_digest"],
+            "frozen_digest_expected": FROZEN_OBS_SPEC_V3_DIGEST,
+            "digest_matches_frozen": (loaded["obs_spec_digest"]
+                                      == FROZEN_OBS_SPEC_V3_DIGEST),
+            "alignment": loaded["alignment"],
+            "obs_unresolved": loaded["obs_unresolved"],
+            "bytes_per_decision": (shard.meta.get("obs") or {}).get(
+                "bytes_per_decision"),
+            "shard": shard.report(),
+        }
     loaded = dataset.load_teacher_samples(
         [shard_dir / "labels.jsonl"],
         min_samples=expected,
@@ -1017,6 +1176,7 @@ def verify_load(args, summary: dict[str, Any]) -> dict[str, Any]:
     sample = shard[0]
     normalized = shard.normalized(1)
     report = {
+        "obs_version": OBS_V1,
         "samples": int(loaded["count"]),
         "expected_samples": expected,
         "samples_match": int(loaded["count"]) == expected,
@@ -1051,6 +1211,11 @@ def parse_args(argv=None):
     parser.add_argument("--difficulty", type=int, default=1)
     parser.add_argument("--team", type=int, default=0)
     parser.add_argument("--seed", type=int, default=1)
+    # T2/D-14: obs-v1 stays the default (every existing shard); obs-v3 stores the
+    # 96x112 play plane plus the 8x18 action history (T3's D1 format).
+    parser.add_argument("--obs", choices=OBS_VERSIONS, default=OBS_V1,
+                        help="observation version written by --phase assemble: "
+                             "v1 (default, play64+hud) or v3 (play96x112+hud+act_hist)")
     # EXP-P3-004: the D0 pipeline must be able to collect with any *registered*
     # teacher profile, not just ``full``/``fast`` — the label-signal 2x2 re-runs
     # channel A with ``fast3`` (FAST with verify_k=3).  The choice list is the

@@ -45,6 +45,14 @@ never a loadable ``<key>``) — when the frozen obs-spec digest does not match t
 live module, when a shared-memory frame cannot be read (no pixel flag, bad magic,
 wrong size), when the header frame is not ``decided_frame - 1``, or when the
 engine's frame counter disagrees with the decision index (``d != 4*k``).
+
+**Observation versions.**  ``obs_version="v1"`` (the default, every existing D0 and
+DAgger shard) writes ``play64.npy`` + ``hud.npy`` exactly as before.  ``"v3"``
+(:mod:`touhou_rl.v400.student.obs_spec_v3`, D-14) keeps the same label rows, the same
+alignment and the same ``hud`` bytes but stores the 96x112 play plane
+(``play96x112.npy``) plus the 8x18 action history (``act_hist.npy``).  The version,
+its spec digest and every plane shape are recorded in ``shard.json``; the v1 default
+is byte-for-byte unchanged.
 """
 
 from __future__ import annotations
@@ -55,7 +63,7 @@ import struct
 import time
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, Callable, Iterable, Sequence
+from typing import Any, Callable, Final, Iterable, Sequence
 
 import numpy as np
 
@@ -109,6 +117,110 @@ ALIGNMENT: dict[str, Any] = {
     ),
     "frame_unit": "engine logic frames (FrameCount, reset to 0 by RESET)",
 }
+
+#: ``obs_spec_v3_digest()`` of the frozen obs-v3 spec (``obs-spec-v3.md`` line 5).
+#: The same literal-on-purpose rule as :data:`FROZEN_OBS_SPEC_DIGEST`: a v3 shard
+#: must not be written under a spec nobody froze.
+FROZEN_OBS_SPEC_V3_DIGEST = (
+    "ef2fbd15385f26f425db2bfe855d105ee009023acb08c26916e811963553a105")
+
+
+# ---------------------------------------------------------------------------
+# observation versions the writer can emit (v1 = default, v3 = T2 / D-14)
+# ---------------------------------------------------------------------------
+#: Short version tags accepted on the command line and in ``shard.json``.
+OBS_V1: Final = "v1"
+OBS_V3: Final = "v3"
+OBS_VERSIONS: Final[tuple[str, ...]] = (OBS_V1, OBS_V3)
+
+
+@dataclass(frozen=True)
+class ObsPlane:
+    """One stored plane: sample key, ``shard.json`` key, file name and shape."""
+
+    sample_key: str
+    meta_key: str
+    filename: str
+    shape_tail: tuple[int, ...]
+    #: True for the stacked playfield plane (metadata carries stack/stack_order).
+    stack: bool = False
+
+
+@dataclass(frozen=True)
+class ObsVersionSpec:
+    """Everything that differs between stored observation versions."""
+
+    short: str
+    version: str
+    digest: str
+    encoder: str
+    planes: tuple[ObsPlane, ...]
+    alignment: dict[str, Any]
+
+
+#: obs-v3's alignment statement: obs-v1's instant and window, unchanged, plus the
+#: two additions of obs-v3 (96x112 play plane, obs-v2 action history).
+ALIGNMENT_V3: dict[str, Any] = {
+    **ALIGNMENT,
+    "obs_spec_version": "obs-v3",
+    "play_plane": "play96x112: 112 rows x 96 cols uint8, 4x4 integer block mean of "
+                  "the native 384x448 playfield (EXP-P3-010 input B)",
+    "play_plane_note": (
+        "obs-v1's observation instant, label time, stack order and HUD are unchanged; "
+        "only the playfield resolution and the added action history differ"),
+    "action_history": (
+        "act_hist (8,18) uint8: one-hot of the 8 actions executed at decisions "
+        "t-8..t-1 (oldest first), reconstructed from the same label rows "
+        "(chosen_plan.first_action for a teacher-driven shard, dagger.executed_cand "
+        "for a DAgger shard) and cleared at the shard start and at every stage change"),
+    "action_history_excludes_current_action": True,
+    "action_history_pad": "all-zero row",
+}
+
+
+def normalize_obs_version(short: str | None) -> str:
+    """``None``/``"v1"``/``"v3"`` -> the canonical short tag, or fail closed."""
+
+    value = OBS_V1 if short is None else str(short)
+    if value not in OBS_VERSIONS:
+        raise ObservationError(
+            f"observation version {short!r} is not one of {OBS_VERSIONS}")
+    return value
+
+
+def obs_version_spec(short: str = OBS_V1) -> ObsVersionSpec:
+    """The stored-plane contract of one observation version."""
+
+    version = normalize_obs_version(short)
+    if version == OBS_V1:
+        return ObsVersionSpec(
+            short=OBS_V1,
+            version=obs_spec.OBS_SPEC_VERSION,
+            digest=FROZEN_OBS_SPEC_DIGEST,
+            encoder="touhou_rl.v400.student.obs_spec.encode_planes",
+            planes=(
+                ObsPlane("play", obs_spec.PLAY_PLANE, "play64.npy",
+                         (obs_spec.FRAME_STACK, *obs_spec.PLAY_SHAPE), stack=True),
+                ObsPlane("hud", obs_spec.HUD_PLANE, "hud.npy", obs_spec.HUD_SHAPE),
+            ),
+            alignment=dict(ALIGNMENT),
+        )
+    from touhou_rl.v400.student import obs_spec_v3  # local: v3 is optional
+
+    return ObsVersionSpec(
+        short=OBS_V3,
+        version=obs_spec_v3.OBS_SPEC_VERSION,
+        digest=obs_spec_v3.obs_spec_v3_digest(),
+        encoder="touhou_rl.v400.student.obs_spec_v3.encode_planes_v3",
+        planes=(
+            ObsPlane("play", obs_spec_v3.PLAY_PLANE, "play96x112.npy",
+                     (obs_spec_v3.FRAME_STACK, *obs_spec_v3.PLAY_SHAPE), stack=True),
+            ObsPlane("hud", obs_spec_v3.HUD_PLANE, "hud.npy", obs_spec_v3.HUD_SHAPE),
+            ObsPlane("act_hist", "act_hist", "act_hist.npy",
+                     obs_spec_v3.ACTION_HISTORY_SHAPE),
+        ),
+        alignment=dict(ALIGNMENT_V3),
+    )
 
 
 class ObservationError(RuntimeError):
@@ -185,6 +297,32 @@ def check_frozen_spec(version: str | None = None, digest: str | None = None) -> 
             "document, not a silent re-record"
         )
     return FROZEN_OBS_SPEC_DIGEST
+
+
+def check_obs_version(short: str = OBS_V1, version: str | None = None,
+                      digest: str | None = None) -> str:
+    """Refuse to record unless the live encoder is the frozen one of ``short``.
+
+    ``v1`` delegates to :func:`check_frozen_spec` (so its behaviour is unchanged);
+    ``v3`` checks the frozen obs-v3 digest literal the same way.
+    """
+
+    if normalize_obs_version(short) == OBS_V1:
+        return check_frozen_spec(version, digest)
+    from touhou_rl.v400.student import obs_spec_v3  # local: v3 is optional
+
+    live_version = obs_spec_v3.OBS_SPEC_VERSION if version is None else version
+    live_digest = (obs_spec_v3.obs_spec_v3_digest() if digest is None else digest)
+    try:
+        obs_spec_v3.check_obs_spec_v3(live_version, live_digest)
+    except obs_spec_v3.ObsSpecV3Error as error:
+        raise ObservationError(f"frozen obs-v3 check failed: {error}") from error
+    if obs_spec_v3.obs_spec_v3_digest() != FROZEN_OBS_SPEC_V3_DIGEST:
+        raise ObservationError(
+            "obs_spec_v3_digest() drifted from the frozen obs-v3 digest "
+            f"{FROZEN_OBS_SPEC_V3_DIGEST}: a spec change needs obs-v4 + a new "
+            "document, not a silent re-record")
+    return FROZEN_OBS_SPEC_V3_DIGEST
 
 
 def decision_window(decision_frame: int, *, stack: int = obs_spec.FRAME_STACK) -> dict[str, Any]:
@@ -363,11 +501,18 @@ class DecisionObservationBuffer:
     ``d-4 .. d-1`` (or the documented episode-start padding).
     """
 
-    def __init__(self, *, stack: int = obs_spec.FRAME_STACK) -> None:
+    def __init__(self, *, stack: int = obs_spec.FRAME_STACK,
+                 play_shape: Sequence[int] | None = None) -> None:
         if stack != obs_spec.FRAME_STACK:
             raise ObservationError(
                 f"frame stack is frozen at {obs_spec.FRAME_STACK}, got {stack}")
         self.stack = int(stack)
+        #: ``(rows, cols)`` of one play frame: obs-v1's 64x64 by default, obs-v3's
+        #: (112, 96) when the caller asks for it.  The HUD is the same in both.
+        self.play_shape = tuple(int(value) for value in
+                                (play_shape if play_shape is not None
+                                 else obs_spec.PLAY_SHAPE))
+        self.hud_shape = tuple(obs_spec.HUD_SHAPE)
         self.frames: list[RenderFrame] = []
         self.seed: RenderFrame | None = None
 
@@ -384,10 +529,11 @@ class DecisionObservationBuffer:
         self.frames = []
 
     def push(self, frame: RenderFrame) -> None:
-        if frame.play.shape != obs_spec.PLAY_SHAPE:
-            raise ObservationError(f"play frame shape {frame.play.shape} != {obs_spec.PLAY_SHAPE}")
-        if frame.hud.shape != obs_spec.HUD_SHAPE:
-            raise ObservationError(f"hud frame shape {frame.hud.shape} != {obs_spec.HUD_SHAPE}")
+        if tuple(frame.play.shape) != self.play_shape:
+            raise ObservationError(
+                f"play frame shape {frame.play.shape} != {self.play_shape}")
+        if tuple(frame.hud.shape) != self.hud_shape:
+            raise ObservationError(f"hud frame shape {frame.hud.shape} != {self.hud_shape}")
         if frame.play.dtype != np.uint8 or frame.hud.dtype != np.uint8:
             raise ObservationError("play/hud must be uint8")
         if self.frames and frame.frame <= self.frames[-1].frame:
@@ -766,13 +912,17 @@ class TeacherObservationRun:
 # the shard writer (streamed, staged, atomic rename)
 # ---------------------------------------------------------------------------
 class TeacherObsShardWriter:
-    """``shards/<key>/{labels.jsonl, obs/play64.npy, obs/hud.npy, shard.json}``.
+    """``shards/<key>/{labels.jsonl, obs/<planes>.npy, shard.json}``.
 
     Rows are streamed (a 200k-decision shard is ~5 GB and is never held in RAM).
     Everything is written under ``shards/.<key>.partial/`` and only renamed to
     ``shards/<key>/`` by :meth:`finalize`, so a crashed or failed run leaves an
     explicitly incomplete directory that neither the manifest nor
     ``dataset.load_teacher_shard`` will accept.
+
+    ``obs_version`` selects the stored planes (:func:`obs_version_spec`): ``"v1"``
+    (default) keeps ``play64.npy`` + ``hud.npy``; ``"v3"`` stores
+    ``play96x112.npy`` + ``hud.npy`` + ``act_hist.npy``.
     """
 
     def __init__(
@@ -781,9 +931,12 @@ class TeacherObsShardWriter:
         *,
         key: str,
         meta: dict[str, Any],
+        obs_version: str = OBS_V1,
     ) -> None:
         self.out_root = Path(out_root)
         self.key = str(key)
+        self.spec = obs_version_spec(obs_version)
+        self.obs_version = self.spec.short
         if not self.key or "/" in self.key or self.key.startswith("."):
             raise ObservationError(f"invalid shard key {key!r}")
         self.final_dir = self.out_root / "shards" / self.key
@@ -805,10 +958,11 @@ class TeacherObsShardWriter:
         self.render_stats: list[dict[str, float]] = []
         self._labels_path = self.partial_dir / "labels.jsonl"
         self._labels = open(self._labels_path, "w", encoding="utf-8")
-        self._play = NpyAppendWriter(self.partial_dir / "obs" / "play64.npy",
-                                     (obs_spec.FRAME_STACK, *obs_spec.PLAY_SHAPE), np.uint8)
-        self._hud = NpyAppendWriter(self.partial_dir / "obs" / "hud.npy",
-                                    obs_spec.HUD_SHAPE, np.uint8)
+        self._writers: dict[str, NpyAppendWriter] = {
+            plane.sample_key: NpyAppendWriter(
+                self.partial_dir / "obs" / plane.filename, plane.shape_tail, np.uint8)
+            for plane in self.spec.planes
+        }
         self._closed = False
         self._finalized = False
         self.started_at = time.strftime("%Y-%m-%dT%H:%M:%S")
@@ -833,14 +987,17 @@ class TeacherObsShardWriter:
             raise ObservationError(
                 f"{self.key}: decision {decision} frame {decision_frame} != window "
                 f"{expected_frame}")
-        play = np.asarray(sample["play"], dtype=np.uint8)
-        hud = np.asarray(sample["hud"], dtype=np.uint8)
-        if play.shape != (obs_spec.FRAME_STACK, *obs_spec.PLAY_SHAPE):
-            raise ObservationError(f"{self.key}: play stack {play.shape} is not obs-v1")
-        if hud.shape != obs_spec.HUD_SHAPE:
-            raise ObservationError(f"{self.key}: hud {hud.shape} is not obs-v1")
-        self._play.append(play)
-        self._hud.append(hud)
+        for plane in self.spec.planes:
+            if plane.sample_key not in sample:
+                raise ObservationError(
+                    f"{self.key}: sample has no {plane.sample_key!r} plane; obs "
+                    f"{self.spec.version} stores {[p.sample_key for p in self.spec.planes]}")
+            array = np.asarray(sample[plane.sample_key], dtype=np.uint8)
+            if array.shape != plane.shape_tail:
+                raise ObservationError(
+                    f"{self.key}: {plane.sample_key} shape {array.shape} != "
+                    f"{plane.shape_tail} for {self.spec.version}")
+            self._writers[plane.sample_key].append(array)
         row = self._label_row(int(decision), int(decision_frame), label, sample, extra or {})
         self._labels.write(json.dumps(row, ensure_ascii=False) + "\n")
         self.rows += 1
@@ -859,6 +1016,27 @@ class TeacherObsShardWriter:
         scores = np.asarray(label.scores, dtype=np.float64)
         mask = np.asarray(label.verified_mask, dtype=bool)
         chosen = label.chosen_plan
+        # ``obs`` keeps obs-v1's key order for v1 shards (shard, shard_dir, play, hud,
+        # row, ...); a v3 shard inserts ``act_hist`` right after ``hud``.
+        obs_block: dict[str, Any] = {
+            "shard": self.key,
+            "shard_dir": str(self.final_dir),
+        }
+        for plane in self.spec.planes:
+            obs_block[plane.sample_key] = f"obs/{plane.filename}"
+        obs_block.update({
+            "row": decision,
+            "observation_time": OBSERVATION_TIME,
+            "stack": obs_spec.FRAME_STACK,
+            "stack_order": obs_spec.STACK_ORDER,
+            "render_frames": [int(value) for value in sample["render_frames"]],
+            "newest_render_frame": int(sample["window"]["newest_render_frame"]),
+            "label_frame": decision_frame,
+            "label_frames": list(sample["window"]["label_frames"]),
+            "p3_window_last_row": int(sample["window"]["p3_window_last_row"]),
+            "p3_label_frame": int(sample["window"]["p3_label_frame"]),
+            "pad": int(sample["pad"]),
+        })
         row = {
             "kind": "decision",
             "schema": TEACHER_OBS_SCHEMA,
@@ -878,23 +1056,7 @@ class TeacherObsShardWriter:
             "chosen_plan": None if chosen is None else chosen.as_dict(),
             "stage": int(label.stage),
             "difficulty": int(label.difficulty),
-            "obs": {
-                "shard": self.key,
-                "shard_dir": str(self.final_dir),
-                "play": "obs/play64.npy",
-                "hud": "obs/hud.npy",
-                "row": decision,
-                "observation_time": OBSERVATION_TIME,
-                "stack": obs_spec.FRAME_STACK,
-                "stack_order": obs_spec.STACK_ORDER,
-                "render_frames": [int(value) for value in sample["render_frames"]],
-                "newest_render_frame": int(sample["window"]["newest_render_frame"]),
-                "label_frame": decision_frame,
-                "label_frames": list(sample["window"]["label_frames"]),
-                "p3_window_last_row": int(sample["window"]["p3_window_last_row"]),
-                "p3_label_frame": int(sample["window"]["p3_label_frame"]),
-                "pad": int(sample["pad"]),
-            },
+            "obs": obs_block,
         }
         row.update(extra)
         return row
@@ -905,17 +1067,22 @@ class TeacherObsShardWriter:
             raise ObservationError(f"{self.key}: finalize after close")
         if self.rows == 0:
             raise ObservationError(f"{self.key}: a shard needs at least one decision")
-        check_frozen_spec()
+        check_obs_version(self.obs_version)
         self._labels.flush()
         self._labels.close()
         self._closed = True
-        play_meta = self._play.finalize()
-        hud_meta = self._hud.finalize()
-        # Shard-relative paths (the writer only knows the file names).
-        play_meta["path"] = "obs/play64.npy"
-        hud_meta["path"] = "obs/hud.npy"
-        play_meta["sha256"] = sha256_file(self.partial_dir / play_meta["path"])
-        hud_meta["sha256"] = sha256_file(self.partial_dir / hud_meta["path"])
+        plane_meta: dict[str, dict[str, Any]] = {}
+        obs_bytes = 0
+        for plane in self.spec.planes:
+            meta = self._writers[plane.sample_key].finalize()
+            # Shard-relative paths (the writer only knows the file names).
+            meta["path"] = f"obs/{plane.filename}"
+            meta["sha256"] = sha256_file(self.partial_dir / meta["path"])
+            if plane.stack:
+                meta["stack"] = obs_spec.FRAME_STACK
+                meta["stack_order"] = obs_spec.STACK_ORDER
+            plane_meta[plane.meta_key] = meta
+            obs_bytes += int(meta["bytes"])
         labels_meta = {
             "path": "labels.jsonl",
             "rows": int(self.rows),
@@ -924,11 +1091,10 @@ class TeacherObsShardWriter:
         }
         first_frame = int(self.frames[0][0])
         last_frame = int(self.frames[-1][0])
-        obs_bytes = int(play_meta["bytes"]) + int(hud_meta["bytes"])
         # EXP-P1-014 dual channel: the pixels can come from an independent env-role
         # replay instead of this process.  ``alignment_extra`` is the only hook the
         # dual tool needs; without it the frozen ALIGNMENT is written verbatim.
-        alignment = dict(ALIGNMENT)
+        alignment = dict(self.spec.alignment)
         alignment.update({str(key): value
                           for key, value in (self.meta.get("alignment_extra") or {}).items()})
         shard: dict[str, Any] = {
@@ -936,9 +1102,10 @@ class TeacherObsShardWriter:
             "shard": self.key,
             "complete": True,
             "created_at": self.started_at,
-            "obs_spec_version": obs_spec.OBS_SPEC_VERSION,
-            "obs_spec_digest": obs_spec.obs_spec_digest(),
-            "encoder": "touhou_rl.v400.student.obs_spec.encode_planes",
+            "obs_spec_version": self.spec.version,
+            "obs_spec_digest": self.spec.digest,
+            "obs_version": self.obs_version,
+            "encoder": self.spec.encoder,
             "alignment": alignment,
             "decision_count": int(self.rows),
             "decision_frames": obs_spec.DECISION_FRAMES,
@@ -948,10 +1115,7 @@ class TeacherObsShardWriter:
             "stage_frames": [first_frame, last_frame + int(self.meta.get("frames_per_decision", 4))],
             "labels": labels_meta,
             "obs": {
-                "play64": {**play_meta, "shape": play_meta["shape"],
-                           "stack": obs_spec.FRAME_STACK,
-                           "stack_order": obs_spec.STACK_ORDER},
-                "hud": {**hud_meta, "shape": hud_meta["shape"]},
+                **plane_meta,
                 "bytes_per_decision": obs_bytes // int(self.rows),
                 "bytes_total": obs_bytes,
             },
@@ -969,7 +1133,7 @@ class TeacherObsShardWriter:
             raise ObservationError(f"{self.final_dir} appeared during finalize")
         self.partial_dir.rename(self.final_dir)
         manifest = self._update_manifest(shard)
-        return {
+        summary = {
             "shard": self.key,
             "dir": str(self.final_dir),
             "decisions": int(self.rows),
@@ -978,14 +1142,20 @@ class TeacherObsShardWriter:
             "obs_bytes_per_decision": obs_bytes // int(self.rows),
             "labels_bytes": labels_meta["bytes"],
             "labels_sha256": labels_meta["sha256"],
-            "play_sha256": play_meta["sha256"],
-            "hud_sha256": hud_meta["sha256"],
             "obs_spec_version": shard["obs_spec_version"],
             "obs_spec_digest": shard["obs_spec_digest"],
+            "obs_version": self.obs_version,
+            "planes": {plane.sample_key: dict(plane_meta[plane.meta_key])
+                       for plane in self.spec.planes},
             "render": shard["render"],
             "manifest": manifest,
             "dropped": list(self.dropped),
         }
+        # Flat per-plane hashes: v1 keeps ``play_sha256``/``hud_sha256`` (the keys
+        # every existing consumer reads); v3 adds ``act_hist_sha256``.
+        for plane in self.spec.planes:
+            summary[f"{plane.sample_key}_sha256"] = plane_meta[plane.meta_key]["sha256"]
+        return summary
 
     def _update_manifest(self, shard: dict[str, Any]) -> dict[str, Any]:
         path = self.out_root / "manifest.json"
@@ -1009,11 +1179,12 @@ class TeacherObsShardWriter:
                 "created_at": shard["created_at"],
                 "obs_spec_version": shard["obs_spec_version"],
                 "obs_spec_digest": shard["obs_spec_digest"],
-                "alignment": dict(ALIGNMENT),
+                "obs_version": self.obs_version,
+                "alignment": dict(self.spec.alignment),
                 "shards": [],
             }
         entries = [row for row in payload.get("shards") or [] if row.get("shard") != self.key]
-        entries.append({
+        entry = {
             "shard": self.key,
             "dir": str(self.final_dir),
             "decisions": int(self.rows),
@@ -1024,9 +1195,10 @@ class TeacherObsShardWriter:
             "seed": self.meta.get("seed"),
             "mode": self.meta.get("mode"),
             "labels_sha256": shard["labels"]["sha256"],
-            "play_sha256": shard["obs"]["play64"]["sha256"],
-            "hud_sha256": shard["obs"]["hud"]["sha256"],
-        })
+        }
+        for plane in self.spec.planes:
+            entry[f"{plane.sample_key}_sha256"] = shard["obs"][plane.meta_key]["sha256"]
+        entries.append(entry)
         entries.sort(key=lambda row: str(row["shard"]))
         payload["shards"] = entries
         payload["totals"] = {
@@ -1055,8 +1227,8 @@ class TeacherObsShardWriter:
                 self._labels.flush()
                 self._labels.close()
                 self._closed = True
-            self._play.abort()
-            self._hud.abort()
+            for writer in self._writers.values():
+                writer.abort()
             (self.partial_dir / "incomplete.json").write_text(
                 json.dumps(detail, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
         except Exception:  # pragma: no cover - evidence is best effort on a bad path
@@ -1073,12 +1245,19 @@ class TeacherObsShardWriter:
 
 __all__ = [
     "ALIGNMENT",
+    "ALIGNMENT_V3",
     "DecisionObservationBuffer",
     "FROZEN_OBS_SPEC_DIGEST",
+    "FROZEN_OBS_SPEC_V3_DIGEST",
     "MANIFEST_SCHEMA",
     "NpyAppendWriter",
     "OBSERVATION_TIME",
+    "OBS_V1",
+    "OBS_V3",
+    "OBS_VERSIONS",
+    "ObsPlane",
     "ObservationError",
+    "ObsVersionSpec",
     "RenderFrame",
     "SHARD_SCHEMA",
     "ShmPixelSource",
@@ -1086,7 +1265,10 @@ __all__ = [
     "TeacherObservationRun",
     "TeacherObsShardWriter",
     "check_frozen_spec",
+    "check_obs_version",
     "decision_window",
     "default_shm_name",
+    "normalize_obs_version",
+    "obs_version_spec",
     "sha256_file",
 ]
