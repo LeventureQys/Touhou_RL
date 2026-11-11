@@ -19,6 +19,7 @@ from touhou_rl.v400.gym.actions import (
 from touhou_rl.v400.gym.env import (
     DECISION_FRAMES,
     DIFFICULTIES,
+    FrameReply,
     Info,
     PrivilegeError,
     StageStart,
@@ -27,12 +28,23 @@ from touhou_rl.v400.gym.env import (
 )
 from touhou_rl.v400.gym.protocol import HarnessClient, HarnessError, ProtocolStats
 from touhou_rl.v400.gym.shm import MAGIC, SharedBlock, segment_path
+from touhou_rl.v400.gym.trajectory import (
+    RecordedTrajectory,
+    TakeoverReport,
+    TrajectoryStart,
+    TrajectoryStartError,
+    load_d0_shard,
+    load_d0_shards,
+    replay_to_frame,
+    sample_target_frame,
+)
 
 __all__ = [
     "AGENT_MASK",
     "CAND_MASKS",
     "DECISION_FRAMES",
     "DIFFICULTIES",
+    "FrameReply",
     "HarnessClient",
     "HarnessError",
     "Info",
@@ -40,12 +52,20 @@ __all__ = [
     "N_CAND",
     "PrivilegeError",
     "ProtocolStats",
+    "RecordedTrajectory",
     "STUDENT_ACTIONS",
     "SharedBlock",
     "StageStart",
+    "TakeoverReport",
     "Th08Env",
+    "TrajectoryStart",
+    "TrajectoryStartError",
     "VecTh08Env",
     "cand_to_mask",
+    "load_d0_shard",
+    "load_d0_shards",
     "mask_to_cand",
+    "replay_to_frame",
+    "sample_target_frame",
     "segment_path",
 ]

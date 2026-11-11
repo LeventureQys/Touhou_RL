@@ -37,6 +37,11 @@ DEFAULT_TIMEOUT = 300.0
 #: ``ERR hazards-too-large`` rather than being truncated.
 HAZARDS_REPLY_CAPACITY = 256 * 1024
 
+#: Roles the engine accepts from ``--rl-role``.  ``env`` is the default (with
+#: rendering); ``shadow`` is the null device, which needs no display and is what
+#: the deterministic replay checks use.
+ROLES = ("env", "shadow")
+
 
 class HarnessError(RuntimeError):
     """The engine replied with ``ERR`` or died."""
@@ -467,6 +472,7 @@ class HarnessClient:
         shm_name: str | None = None,
         env: dict[str, str] | None = None,
         timeout: float = DEFAULT_TIMEOUT,
+        role: str = "env",
     ) -> None:
         self.binary = Path(binary).expanduser()
         self.data_dir = Path(data_dir).expanduser()
@@ -474,7 +480,10 @@ class HarnessClient:
             raise FileNotFoundError(f"harness binary not found: {self.binary}")
         if not self.data_dir.is_dir():
             raise FileNotFoundError(f"game data dir not found: {self.data_dir}")
+        if role not in ROLES:
+            raise ValueError(f"unknown role: {role!r} (known: {ROLES})")
 
+        self.role = role
         self.shm_name = shm_name
         self.timeout = timeout
         self.stats = ProtocolStats()
@@ -493,6 +502,12 @@ class HarnessClient:
         )
         if env:
             self._env.update(env)
+        if self.role == "shadow":
+            # The null device refuses a display on purpose (null_device.cpp
+            # ``NullDevicePreflight``): a shadow process must not be able to
+            # create a window, so an inherited ``DISPLAY`` is dropped here
+            # instead of being left for the engine to trip over.
+            self._env.pop("DISPLAY", None)
 
     # -- lifetime ---------------------------------------------------------
     def __enter__(self) -> "HarnessClient":
@@ -506,6 +521,11 @@ class HarnessClient:
         if self._proc is not None:
             raise RuntimeError("client already started")
         argv = [str(self.binary), "--data-dir", str(self.data_dir), "--rl-control", "0,1"]
+        if self.role != "env":
+            # ``--rl-role shadow`` is the engine's null-device mode: no SDL window
+            # and no GL.  The state export and the 25-field hash are the same; only
+            # rendering is gone, which is why a shadow process needs no X server.
+            argv += ["--rl-role", self.role]
         self._proc = subprocess.Popen(
             argv,
             stdin=subprocess.PIPE,

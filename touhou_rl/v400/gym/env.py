@@ -88,6 +88,23 @@ class Info:
         return self.state is not None
 
 
+@dataclass(frozen=True)
+class FrameReply:
+    """One raw ``STEP`` reply, as the tracker needs it.
+
+    ``hash`` is the engine's own 25-field digest (absent on the ``exit=1`` reply,
+    which is exactly the case a trajectory fast-forward must refuse); ``frame``
+    is the engine's ``FrameCount`` after the advance, i.e. the stage frame the
+    recorded corpora number their hashes with.
+    """
+
+    frame: int
+    advanced: int
+    hash: str | None
+    exit: bool = False
+    game_over: bool = False
+
+
 def _f32_bits(value: int) -> float:
     """Reinterpret a tracked field as the float it was recorded from."""
     import struct
@@ -107,14 +124,18 @@ class Th08Env:
         privileged: bool = True,
         decision_frames: int = DECISION_FRAMES,
         max_frames: int = 100_000,
+        role: str = "env",
     ) -> None:
         self.privileged = privileged
         self.decision_frames = decision_frames
         self.max_frames = max_frames
+        #: ``env`` renders (needs a display); ``shadow`` is the null device and
+        #: exports the same 25 fields and hash without GL.
+        self.role = role
         self._binary = binary
         self._data_dir = data_dir
         self._shm_name = shm_name
-        self._client = HarnessClient(binary, data_dir, shm_name=shm_name)
+        self._client = HarnessClient(binary, data_dir, shm_name=shm_name, role=role)
         self._shm: SharedBlock | None = None
         self._frames = 0
         self._start: StageStart | None = None
@@ -126,6 +147,9 @@ class Th08Env:
         #: (``RESET`` carries ``state_published=1``, T7.3).  Older builds do not,
         #: and for them the freshness check stays off instead of guessing.
         self._state_published = False
+        #: The hash the last ``RESET`` reply carried, lowercase hex, or ``None``.
+        #: ``TrajectoryStart`` compares it with the recorded frame-0 hash.
+        self.last_reset_hash: str | None = None
 
     # -- lifetime ---------------------------------------------------------
     def close(self) -> None:
@@ -156,7 +180,8 @@ class Th08Env:
         except BaseException as exc:
             if close_error is None:
                 close_error = exc
-        self._client = HarnessClient(self._binary, self._data_dir, shm_name=self._shm_name)
+        self._client = HarnessClient(self._binary, self._data_dir, shm_name=self._shm_name,
+                                     role=self.role)
         try:
             self._start_client()
         except BaseException:
@@ -190,6 +215,8 @@ class Th08Env:
             raise RuntimeError(f"RESET did not reach a playable state: {reply}")
         self._state_published = reply.get("state_published") == "1"
         self._verify_state_block(reply)
+        reported = reply.get("hash")
+        self.last_reset_hash = reported.strip().lower() if isinstance(reported, str) else None
         self._start = start
         self._frames = 0
         self._prev_deaths = None
@@ -233,6 +260,57 @@ class Th08Env:
         terminated = game_over
         truncated = (not terminated) and self._frames >= self.max_frames
         return self._observation(), reward, terminated, truncated, info
+
+    def advance(self, mask: int, frames: int = 1) -> FrameReply:
+        """Advance ``frames`` engine frames with one raw ``mask`` (per frame).
+
+        Additive to the gym surface: :meth:`step` stays candidate/bomb based and
+        keeps moving ``decision_frames`` frames per call.  A recorded trajectory
+        needs the other granularity — the mask that was committed on *each* frame
+        — and the engine's own hash of the frame it landed on, which is what a
+        :class:`~touhou_rl.v400.gym.trajectory.TrajectoryStart` verifies against
+        the recorded value.
+
+        Unlike :meth:`step` this is **fail-closed on a dead harness**: it never
+        recreates the process and replays the stage start, because a restarted
+        episode is no longer the recorded trajectory and resuming from it would
+        be a silent divergence.  The caller gets a ``RuntimeError`` instead.
+
+        Bookkeeping matches :meth:`step`: ``self._frames`` counts what the engine
+        advanced and the privileged reward baselines are re-read from the state
+        block, so the first :meth:`step` after a fast-forward does not credit
+        deaths or score that happened while the caller was not in control.
+        """
+        if not 0 <= int(mask) <= 0xFFFF:
+            raise ValueError(f"mask out of range: {mask}")
+        if not 1 <= int(frames) <= 100_000:
+            raise ValueError(f"frames out of range: {frames}")
+        if self._shm is None:
+            raise RuntimeError("use the environment as a context manager")
+        try:
+            reply = self._client.step(int(mask), int(frames))
+        except Exception as exc:
+            raise RuntimeError(
+                "harness died during a raw frame advance; a recorded trajectory cannot be "
+                "resumed from a restarted episode") from exc
+        advanced = int(reply.get("advanced", 0))
+        exited = reply.get("exit") == "1"
+        self._frames += advanced
+        self._verify_state_block(reply)
+        if not exited:
+            # On an exit reply the engine has not published this frame's fields,
+            # so the baselines are left alone rather than taken from the last
+            # published frame.
+            state = self._shm.state()
+            self._prev_deaths = _f32_bits(int(state[F_DEATHS]))
+            self._prev_score = int(state[F_SCORE])
+        return FrameReply(
+            frame=int(reply.get("frame", self._frames)),
+            advanced=advanced,
+            hash=reply.get("hash"),
+            exit=exited,
+            game_over=reply.get("game_over") == "1",
+        )
 
     # -- internals --------------------------------------------------------
     def _verify_state_block(self, reply: dict[str, str]) -> None:
