@@ -41,6 +41,22 @@ about the engine:
    ``per_seed`` rows.  A five-episode mean with no interval is no longer a
    reportable result: ``tools/rl/v400_eval_power.py`` refuses to call a difference
    an effect unless both arms come with a CI and those CIs are disjoint.
+
+T4 adds an **obs-v3** route and changes nothing about the two existing ones:
+``--obs v3`` / ``--arch v3`` loads a v3 checkpoint through
+:func:`touhou_rl.v400.student.model_v3.load_checkpoint_v3`, feeds the policy the
+frozen obs-v3 planes (96x112 playfield + HUD) and the 8x18 history, and stamps the
+episode with obs-v3's version/digest so a v3 checkpoint can never be scored under
+a v1/v2 record (or the other way round).  The frame ruler, the window options and
+the 20-seed protocol are untouched.
+
+    xvfb-run -a -s "-screen 0 1024x768x24" /root/v400-venv/bin/python \
+      tools/rl/v400_student_eval.py \
+      --engine /root/Touhou_RL/third_party/th08-rl/build/rl_v3/th08-modern \
+      --data-dir /root/Touhou_RL/third_party/th08-rl/data \
+      --checkpoint .tmp_v400_p3v3/checkpoint-v3.pt \
+      --obs v3 --seeds 1000-1019 --max-frames 19887 \
+      --stage 0 --difficulty normal --stop-on-death --out-dir .tmp_v400_p3v3/eval
 """
 
 from __future__ import annotations
@@ -65,12 +81,14 @@ from touhou_rl.v400.gym.shm import FLAG_PIXELS_VALID, SharedBlock  # noqa: E402
 from touhou_rl.v400.labels.state import state_from_reply  # noqa: E402
 from touhou_rl.v400.student import obs_spec  # noqa: E402
 from touhou_rl.v400.student import obs_spec_v2  # noqa: E402
+from touhou_rl.v400.student import obs_spec_v3  # noqa: E402
 from touhou_rl.v400.student.model import checkpoint_digest, load_checkpoint  # noqa: E402
 from touhou_rl.v400.student.model_v2 import (  # noqa: E402
     ARCH_GRU,
     GRUCache,
     load_checkpoint_v2,
 )
+from touhou_rl.v400.student.model_v3 import load_checkpoint_v3  # noqa: E402
 
 EPISODE_SCHEMA = "v400-student-eval-episode-1"
 SUMMARY_SCHEMA = "v400-student-eval-summary-1"
@@ -334,6 +352,7 @@ def run_episode(
     timeout: float = 240.0,
     obs_window: str = "consecutive",
     obs_v2: bool = False,
+    obs_v3: bool = False,
     arch: str = "mlp",
     repeat: int = 0,
 ) -> dict:
@@ -352,18 +371,36 @@ def run_episode(
     shards stored); ``strided`` is the legacy single render per decision, whose
     stack spans 8 frames.  The frame budget per decision is identical either
     way, so the two modes share the frame ruler.
+
+    ``obs_v3`` (T4) switches the policy input to the frozen obs-v3 contract: the
+    96x112 play plane (4x4 integer block mean), the same HUD strip, and the 8x18
+    one-hot of the policy's own last eight decisions.  The episode record then
+    carries obs-v3's version/digest, so
+    :func:`validate_episode_record` refuses a v1/v2 record under a v3 checkpoint.
     """
 
     import torch
 
     if obs_window not in OBS_WINDOWS:
         raise EvalError(f"obs_window {obs_window!r} not in {sorted(OBS_WINDOWS)}")
+    if obs_v3 and obs_v2:
+        raise EvalError("obs_v3 and obs_v2 are exclusive observation contracts")
 
     started = time.monotonic()
-    spec_version = (obs_spec_v2.OBS_SPEC_VERSION if obs_v2
-                    else obs_spec.OBS_SPEC_VERSION)
-    spec_digest = (obs_spec_v2.obs_spec_v2_digest() if obs_v2
-                   else obs_spec.obs_spec_digest())
+    if obs_v3:
+        spec_version = obs_spec_v3.OBS_SPEC_VERSION
+        spec_digest = obs_spec_v3.obs_spec_v3_digest()
+        policy_input = ("play96x112 4-frame stack + hud strip + act_hist (8x18 one-hot "
+                        "of the policy's own last 8 decisions); no privileged state")
+    elif obs_v2:
+        spec_version = obs_spec_v2.OBS_SPEC_VERSION
+        spec_digest = obs_spec_v2.obs_spec_v2_digest()
+        policy_input = ("play64 4-frame stack + hud strip + act_hist (8x18 one-hot of "
+                        "the policies own last 8 decisions); no privileged state")
+    else:
+        spec_version = obs_spec.OBS_SPEC_VERSION
+        spec_digest = obs_spec.obs_spec_digest()
+        policy_input = "play64 4-frame stack + hud strip; no privileged state"
     identity = {
         "schema": EPISODE_SCHEMA,
         "checkpoint": str(checkpoint_path),
@@ -392,10 +429,7 @@ def run_episode(
         "stage_argument_semantics": "RESET stage is 0-based; S1N = stage 0 (Stage1)",
         "stop_on_death": bool(stop_on_death),
         "privilege": "deploy_pixel",
-        "policy_input": ("play64 4-frame stack + hud strip + act_hist (8x18 one-hot of "
-                         "the policies own last 8 decisions); no privileged state"
-                         if obs_v2 else
-                         "play64 4-frame stack + hud strip; no privileged state"),
+        "policy_input": policy_input,
         "referee_state_source": "engine STATE reply after each decision",
         "engine": str(engine),
         "engine_sha256": _sha256(engine),
@@ -444,10 +478,16 @@ def run_episode(
             state = state_from_reply(client.request("STATE"))
             previous = _readings(state)
             stage_start = int(state["stage"])
-        buffer = obs_spec.ObservationBuffer()
-        history = obs_spec_v2.ActionHistoryBuffer() if obs_v2 else None
+        if obs_v3:
+            buffer = obs_spec_v3.ObservationBufferV3()
+            history = obs_spec_v2.ActionHistoryBuffer()
+            encode = obs_spec_v3.encode_planes_v3
+        else:
+            buffer = obs_spec.ObservationBuffer()
+            history = obs_spec_v2.ActionHistoryBuffer() if obs_v2 else None
+            encode = obs_spec.encode_planes
         gru_cache = (GRUCache(model.seq_len) if (obs_v2 and arch == ARCH_GRU) else None)
-        play, hud = obs_spec.encode_planes(shm.pixels())
+        play, hud = encode(shm.pixels())
         buffer.push(play, hud)
         renders = 1
 
@@ -455,7 +495,11 @@ def run_episode(
             arrays = buffer.arrays()
             play_t = torch.from_numpy(arrays["play"][None]).float()
             hud_t = torch.from_numpy(arrays["hud"][None]).float()
-            if obs_v2:
+            if obs_v3:
+                # (1,8,18): the v3 student takes the history as a grid, not flattened.
+                hist_t = torch.from_numpy(history.rows()[None]).float()
+                cand, bomb = model.act(play_t, hud_t, hist_t)
+            elif obs_v2:
                 # (B,S,18): the model takes the 8x18 window, not the flattened 144
                 hist_t = torch.from_numpy(history.rows()[None]).float()
                 if gru_cache is not None:
@@ -501,10 +545,10 @@ def run_episode(
                         ended = ("death_stop", "controller")
                         break
                 previous = current
-                play, hud = obs_spec.encode_planes(shm.pixels())
+                play, hud = encode(shm.pixels())
                 buffer.push(play, hud)
                 renders += 1
-            if obs_v2:
+            if history is not None:
                 # The history at decision t must hold a[0..t-1]; push only after the
                 # action has been applied, so the current decision can never leak in.
                 history.push(cand)
@@ -854,9 +898,33 @@ def build_parser() -> argparse.ArgumentParser:
                              "policy is fed act_hist (the 8x18 one-hot of its own last 8 "
                              "decisions) in addition to the obs-v1 planes; the GRU arm "
                              "carries its 8-decision embedding cache across decisions")
+    parser.add_argument("--obs", choices=("v1", "v2", "v3"), default=None,
+                        help="observation contract of the checkpoint: v1 (default), "
+                             "v2 (identical to --obs-v2) or v3 (T4: the 96x112 play "
+                             "plane + act_hist)")
+    parser.add_argument("--arch", choices=("mlp", "gru", "v3"), default=None,
+                        help="architecture hint; 'v3' loads the obs-v3 IMPALA-ResNet "
+                             "student (it also implies --obs v3)")
     parser.add_argument("--out-dir", default=".tmp_v400_p3/eval")
     parser.add_argument("--device", default="cpu")
     return parser
+
+
+def route_obs(args) -> str:
+    """Which checkpoint/observation contract this invocation evaluates.
+
+    ``"v3"`` when ``--obs v3`` or ``--arch v3`` is given (T4), ``"v2"`` for the
+    obs-v2 arms (``--obs-v2``, ``--obs v2`` or ``--arch mlp|gru``), ``"v1"``
+    otherwise -- i.e. every pre-T4 invocation keeps its old meaning.
+    """
+
+    obs = str(getattr(args, "obs", None) or "")
+    arch = str(getattr(args, "arch", None) or "")
+    if obs == "v3" or arch == "v3":
+        return "v3"
+    if getattr(args, "obs_v2", False) or obs == "v2" or arch in ("mlp", "gru"):
+        return "v2"
+    return "v1"
 
 
 def _policy_identity(payload: dict) -> tuple[str, str]:
@@ -864,6 +932,17 @@ def _policy_identity(payload: dict) -> tuple[str, str]:
 
     train = payload.get("train") or {}
     version = str(train.get("bc_version") or "")
+    if (payload.get("arch") == "v3"
+            or payload.get("obs_spec_version") == obs_spec_v3.OBS_SPEC_VERSION):
+        model_bits = payload.get("model") or {}
+        return (
+            "BC v3 on obs-v3 (T4): teacher soft labels on the 96x112 play plane + the "
+            "8-decision action history, IMPALA-ResNet student with a spatial readout; "
+            "not a G3 pass, not PSN, not the confirm split.",
+            f"obs-v3 arch={payload.get('arch')} trunk={model_bits.get('trunk')} "
+            f"tau={train.get('tau')} parameters={payload.get('parameters')} "
+            f"obs_digest={payload.get('obs_spec_digest')}",
+        )
     if payload.get("obs_spec_version") == obs_spec_v2.OBS_SPEC_VERSION:
         model = payload.get("model") or {}
         return (
@@ -894,7 +973,11 @@ def main(argv: list[str] | None = None) -> int:
 
     out_dir = Path(args.out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
-    if args.obs_v2:
+    route = route_obs(args)
+    if route == "v3":
+        model, payload = load_checkpoint_v3(args.checkpoint, device=args.device)
+        arch = "v3"
+    elif route == "v2":
         model, payload = load_checkpoint_v2(args.checkpoint, device=args.device)
         arch = str((payload.get("model") or {}).get("arch", ""))
         if arch not in ("mlp", "gru"):
@@ -926,7 +1009,8 @@ def main(argv: list[str] | None = None) -> int:
                 shm_name=shm_name,
                 stop_on_death=bool(args.stop_on_death),
                 obs_window=str(args.obs_window),
-                obs_v2=bool(args.obs_v2),
+                obs_v2=(route == "v2"),
+                obs_v3=(route == "v3"),
                 arch=arch,
                 repeat=repeat,
             )

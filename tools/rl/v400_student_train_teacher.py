@@ -29,6 +29,23 @@ Run (GPU box, dataset on this machine)::
       --checkpoint .tmp_v400_p3v1/checkpoint-v1.pt \
       --metrics .tmp_v400_p3v1/train-metrics.json \
       --sweep-seconds 110 --train-seconds 420
+
+T4 (obs-v3) is a third route through the same entry point, added without
+changing either existing one::
+
+    python tools/rl/v400_student_train_teacher.py \
+      --obs v3 --arch v3 --taus 2.0 --d1-root /root/v400-data/d1 \
+      --checkpoint .tmp_v400_p3v3/checkpoint-v3.pt \
+      --metrics .tmp_v400_p3v3/train-metrics.json \
+      --split-json .tmp_v400_p3v3/split.json \
+      --train-seconds 5400 --batch-size 128 --accept-partial-d1
+
+``--obs v3``/``--arch v3`` forwards to :mod:`touhou_rl.v400.student.train_v3`
+(see :func:`route_obs`); ``--obs v3`` alone is enough, and every other flag
+combination behaves exactly as it did before T4.  The default ``--taus`` is the
+obs-v1 sweep (``1.0,2.0,4.0``), and a sweep is refused by both the obs-v2 and the
+obs-v3 routes for the same reason (one pre-registered tau), so a v3 invocation
+passes ``--taus 2.0``.
 """
 
 from __future__ import annotations
@@ -641,6 +658,9 @@ def train_run(
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--d0-root", default=".tmp_v400_d0/d0")
+    parser.add_argument("--d1-root", default=None,
+                        help="T4: the obs-v3 / D1 corpus root for --obs v3 (falls back "
+                             "to --d0-root when unset); unused by the v1/v2 arms")
     parser.add_argument("--extra-root", action="append", default=None, metavar="DIR",
                         help="further D0-shaped root whose complete shards join the same "
                              "aggregate and the same whole-episode split (EXP-P3-003: the "
@@ -686,9 +706,32 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--obs-v2-root", default=".tmp_v400_obsv2/obsv2",
                         help="obs-v2 root built by "
                              "python -m touhou_rl.v400.student.obs_v2_dataset build")
-    parser.add_argument("--arch", choices=("mlp", "gru"), default=None,
+    parser.add_argument("--arch", choices=("mlp", "gru", "v3"), default=None,
                         help="obs-v2 architecture: mlp (feed-forward, default) or gru "
-                             "(single-layer GRU over 8 decisions, BPTT 8)")
+                             "(single-layer GRU over 8 decisions, BPTT 8); 'v3' routes to "
+                             "the obs-v3 IMPALA-ResNet student (T4)")
+    parser.add_argument("--obs", choices=("v1", "v2", "v3"), default="v1",
+                        help="observation contract: v1 (default, unchanged), v2 (adds the "
+                             "8x18 act_hist, same as --obs-v2) or v3 (96x112 + act_hist, "
+                             "the T4 student)")
+    parser.add_argument("--accept-partial-d1", action="store_true",
+                        help="obs-v3 arms: train on a D1 below the decision contract, "
+                             "recording the real count as a waiver")
+    parser.add_argument("--value-target", default="verified-share",
+                        choices=("verified-share", "margin", "none"),
+                        help="obs-v3 arms: proxy target of the auxiliary value head")
+    parser.add_argument("--aux-weight", type=float, default=0.5,
+                        help="obs-v3 arms: lambda_aux of the perception heads (13-P3 §2.4)")
+    parser.add_argument("--value-weight", type=float, default=0.25,
+                        help="obs-v3 arms: lambda_v of the value head (13-P3 §2.4)")
+    parser.add_argument("--trunk", type=int, default=512,
+                        help="obs-v3 arms: trunk width (13-P3 §2.3: 512)")
+    parser.add_argument("--stage-channels", default="32,64,64",
+                        help="obs-v3 arms: IMPALA stage widths (13-P3 §2.3: 32/64/64)")
+    parser.add_argument("--gate-observations", choices=("shard", "aggregate"),
+                        default="shard",
+                        help="obs-v3 arms: per-shard loader gate (default) or also run "
+                             "load_teacher_samples_v3(require_observations=True)")
     parser.add_argument("--seq-len", type=int, default=8)
     parser.add_argument("--bptt", type=int, default=8)
     parser.add_argument("--hist-hidden", type=int, default=64)
@@ -744,9 +787,84 @@ def _obs_v2_argv(args) -> list[str]:
     return argv
 
 
+def route_obs(args) -> str:
+    """Which trainer this invocation routes to: ``"v3"``, ``"v2"`` or ``"v1"``.
+
+    T4 adds obs-v3 without touching either existing path: ``--obs v3`` or
+    ``--arch v3`` selects :mod:`touhou_rl.v400.student.train_v3`; every other
+    combination keeps the pre-T4 behaviour (``--obs-v2``/``--arch mlp|gru`` ->
+    ``obs_v2_train``, nothing set -> the obs-v1 loop in :func:`main`).
+    """
+
+    obs = str(getattr(args, "obs", "v1") or "v1")
+    arch = getattr(args, "arch", None)
+    if obs == "v3" or arch == "v3":
+        return "v3"
+    if getattr(args, "obs_v2", False) or obs == "v2" or arch is not None:
+        return "v2"
+    return "v1"
+
+
+def _train_v3_argv(args) -> list[str]:
+    """Translate this parser's namespace into ``train_v3``'s CLI.
+
+    obs-v3 is trained by :mod:`touhou_rl.v400.student.train_v3` (the obs-v3 corpus
+    is mem-mapped, which the obs-v1/v2 loaders do not do), so only the shared flags
+    plus the v3-specific ones this parser exposes are forwarded.  ``--width`` /
+    ``--hidden`` / ``--hist-hidden`` / ``--gru-input`` describe the obs-v1/v2
+    networks and are not forwarded: the v3 width is ``--trunk`` (512 by default) and
+    the HUD/history widths have their own defaults.
+    """
+
+    taus = [part for part in str(args.taus).split(",") if part.strip()]
+    if len(taus) != 1:
+        raise SystemExit(
+            f"obs-v3 takes exactly one tau via --taus (got {args.taus!r}); T4 keeps "
+            "EXP-P3-008's pre-registered tau=2.0 so the row stays comparable")
+    d1_root = str(getattr(args, "d1_root", None) or args.d0_root)
+    argv = [
+        "--d1-root", d1_root,
+        "--checkpoint", str(args.checkpoint),
+        "--metrics", str(args.metrics),
+        "--split-json", str(args.split_json),
+        "--tau", taus[0],
+        "--train-seconds", str(args.train_seconds),
+        "--max-total-seconds", str(args.max_total_seconds),
+        "--max-steps", str(args.max_steps),
+        "--batch-size", str(args.batch_size),
+        "--eval-batch", str(args.eval_batch),
+        "--lr", str(args.lr),
+        "--weight-decay", str(args.weight_decay),
+        "--bomb-weight", str(args.bomb_weight),
+        "--bomb-pos-weight-max", str(args.bomb_pos_weight_max),
+        "--aux-weight", str(args.aux_weight),
+        "--value-weight", str(args.value_weight),
+        "--value-target", str(args.value_target),
+        "--trunk", str(args.trunk),
+        "--stage-channels", str(args.stage_channels),
+        "--eval-every", str(args.eval_every),
+        "--val-eval-samples", str(args.val_eval_samples),
+        "--split-seed", str(args.split_seed),
+        "--seed", str(args.seed),
+        "--gate-observations", str(args.gate_observations),
+    ]
+    for root in args.extra_root or []:
+        argv.extend(["--extra-root", str(root)])
+    if args.accept_partial_d1:
+        argv.append("--accept-partial-d1")
+    if args.device:
+        argv.extend(["--device", str(args.device)])
+    return argv
+
+
 def main(argv: list[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
-    if args.obs_v2 or args.arch is not None:
+    route = route_obs(args)
+    if route == "v3":
+        from touhou_rl.v400.student import train_v3
+
+        return train_v3.main(_train_v3_argv(args))
+    if route == "v2":
         from touhou_rl.v400.student import obs_v2_train
 
         return obs_v2_train.main(_obs_v2_argv(args))
