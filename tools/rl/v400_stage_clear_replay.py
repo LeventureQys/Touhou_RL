@@ -21,6 +21,11 @@ pixel dataset around every real stage-clear edge:
              fail-closed journal record, never a fabricated event.
 * ``report`` folds the worker journals into ``report.json`` / ``summary.json``.
 
+With ``--online-detector`` the worker also runs the streaming form of the
+stage-clear pixel criterion (``OnlineStageClear``) on every frame it captures —
+no replay, no engine truth, only the ``play64`` plane — so the same production
+run yields the live-stream recall / precision / delay that G2 row 14 needs.
+
 The stage's own frames are the only unavoidable cost: replay playback is
 sequential, so a stage clear cannot be reached without simulating the stage.
 """
@@ -57,9 +62,92 @@ WINDOW = PRE_FRAMES + POST_FRAMES + 1
 RING = 420
 GRAY = (299, 587, 114)
 
+#: EXP-P2-008/009 stage-clear pixel criterion, *streaming* form (G2 row 14,
+#: WP5 online validation).  The constants are the ones the detector gate's own
+#: ``thresholds`` block reports (``.tmp_v400_sclear2/stage-clear-gate-386.json``:
+#: jump 2.0 / floor 0.0 / sustain 5 / refractory 150) and must stay identical:
+#: the online number exists only to show that the same rule works on a live
+#: per-frame stream, never to re-tune it.
+ONLINE_JUMP = 2.0
+ONLINE_FLOOR = 0.0
+ONLINE_SUSTAIN = 5
+ONLINE_REFRACTORY = 150
+ONLINE_MATCH_WINDOW = 10
+
 
 class ReplayError(RuntimeError):
     pass
+
+
+def vgrad_plane(play) -> float:
+    """Top-minus-bottom brightness of one ``play64`` frame (rows = vertical)."""
+
+    top = float(play[:16, :].mean())
+    bottom = float(play[48:, :].mean())
+    return top - bottom
+
+
+class OnlineStageClear:
+    """Frame-by-frame form of ``stage_clear_pixel_predictions``.
+
+    Same rule: a ``vgrad`` jump of at least ``ONLINE_JUMP`` that stays above
+    ``ONLINE_FLOOR`` for ``ONLINE_SUSTAIN`` consecutive frames, with an
+    ``ONLINE_REFRACTORY``-frame lockout.  The offline scorer reports the alarm at
+    the *jump* frame ``t`` (it can look ahead inside the window); the streaming
+    form first knows the ``sustain`` run is complete at ``t + sustain - 1``.
+    Both frames are recorded, so the recall/precision numbers are directly
+    comparable to the offline ones and the detection delay is not hidden.
+    """
+
+    def __init__(self, *, jump: float = ONLINE_JUMP, floor: float = ONLINE_FLOOR,
+                 sustain: int = ONLINE_SUSTAIN, refractory: int = ONLINE_REFRACTORY):
+        self.jump = float(jump)
+        self.floor = float(floor)
+        self.sustain = int(sustain)
+        self.refractory = int(refractory)
+        self.previous: float | None = None
+        self.index = -1
+        self.pending: list[tuple[int, int, float, float]] = []
+        self.frames: list[int] = []
+        self.values: list[float] = []
+        self.alarms: list[dict] = []
+        self.last_event = -(10 ** 9)
+        self.seconds = 0.0
+
+    def push(self, frame: int, play) -> list[dict]:
+        started = time.perf_counter()
+        value = vgrad_plane(play)
+        delta = 0.0 if self.previous is None else value - self.previous
+        self.previous = value
+        self.index += 1
+        self.frames.append(int(frame))
+        self.values.append(float(value))
+        if delta >= self.jump and value >= self.floor:
+            self.pending.append((self.index, int(frame), value, delta))
+        alive: list[tuple[int, int, float, float]] = []
+        confirmed: list[dict] = []
+        for candidate in self.pending:
+            index, event_frame, event_value, event_delta = candidate
+            if index == self.index:
+                # created on this very frame; the floor check was done above
+                alive.append(candidate)
+                continue
+            if value < self.floor:
+                # the ``sustain`` run broke before it completed
+                continue
+            if index + self.sustain - 1 > self.index:
+                alive.append(candidate)
+                continue
+            if event_frame - self.last_event < self.refractory:
+                continue
+            confirmed.append({"eventFrame": event_frame, "alarmFrame": int(frame),
+                              "vgrad": event_value, "delta": event_delta})
+        self.pending = alive
+        for alarm in confirmed:
+            self.alarms.append(alarm)
+            self.last_event = alarm["eventFrame"]
+        self.seconds += time.perf_counter() - started
+        return confirmed
 
 
 def sha256_file(path: Path) -> str:
@@ -437,6 +525,7 @@ def capture_event(np, args, event: dict, out_root: Path, deadline: float) -> dic
                     f"(frame={events.get('frames')} edge={events.get('stageClearEdgeFrame')})")
         record["frameAtCaptureStart"] = frame
         client.ask("READBACK 1")
+        online = OnlineStageClear() if getattr(args, "online_detector", False) else None
         ring: list[dict] = []
         previous = None
         edge = None
@@ -461,6 +550,12 @@ def capture_event(np, args, event: dict, out_root: Path, deadline: float) -> dic
                     raise ReplayError(
                         f"pixel frame {header['frame']} != EVENTS frame {events.get('frames')} - 1")
             planes = encode_frame(np, rgba)
+            if online is not None:
+                try:
+                    online.push(frame, planes["play"])
+                except Exception as exc:  # never let scoring kill a capture
+                    record["onlineError"] = f"{type(exc).__name__}: {exc}"
+                    online = None
             stats = frame_stats(np, planes, previous)
             previous = planes["lum"].astype(np.float32)
             level = int(events.get("stageClear", "0"))
@@ -549,6 +644,38 @@ def capture_event(np, args, event: dict, out_root: Path, deadline: float) -> dic
         (event_dir / "meta.json").write_text(json.dumps(meta, indent=1) + "\n", encoding="utf-8")
         record.update({"status": "captured", "eventDir": str(event_dir),
                        "npzSha256": meta["npzSha256"], "frames": meta["frames"]})
+        if online is not None:
+            try:
+                # The whole per-frame stream the detector actually saw, kept as a
+                # float array (a 1,100-frame stream is ~4 KB compressed): the
+                # refractory state at the edge can then be re-scored on the
+                # *continuous* stream instead of on the 181-frame slice, which is
+                # what EXP-P2-011 §4 asked for.
+                stream_path = event_dir / "stream.npz"
+                np.savez_compressed(
+                    stream_path,
+                    frame=np.asarray(online.frames, dtype=np.int64),
+                    vgrad=np.asarray(online.values, dtype=np.float32))
+                online_block_data = {
+                    "frames": len(online.frames),
+                    "firstFrame": online.frames[0] if online.frames else None,
+                    "lastFrame": online.frames[-1] if online.frames else None,
+                    "alarms": online.alarms,
+                    "seconds": round(online.seconds, 4),
+                    "stream": str(stream_path),
+                    "streamSha256": sha256_file(stream_path),
+                    "criterion": {
+                        "jump": online.jump, "floor": online.floor,
+                        "sustain": online.sustain, "refractory": online.refractory,
+                        "matchWindow": ONLINE_MATCH_WINDOW,
+                    },
+                }
+                record["online"] = online_block_data
+                meta["online"] = online_block_data
+                (event_dir / "meta.json").write_text(json.dumps(meta, indent=1) + "\n",
+                                                     encoding="utf-8")
+            except Exception as exc:  # the capture itself stays valid
+                record["onlineError"] = f"{type(exc).__name__}: {exc}"
     except ReplayError as exc:
         record["error"] = str(exc)
     finally:
@@ -670,6 +797,99 @@ def coverage_block(captured: list[dict], plan: dict | None) -> dict:
     }
 
 
+def wilson_lower_bound(successes: int, trials: int, z: float = 1.96) -> float:
+    if trials <= 0:
+        return 0.0
+    p = successes / trials
+    denominator = 1.0 + z * z / trials
+    centre = p + z * z / (2 * trials)
+    margin = z * ((p * (1 - p) / trials + z * z / (4 * trials * trials)) ** 0.5)
+    return max(0.0, (centre - margin) / denominator)
+
+
+def online_block(records: list[dict], *, window: int = ONLINE_MATCH_WINDOW) -> dict:
+    """Live-stream recall / precision / latency of the streaming criterion.
+
+    A prediction is any alarm the streaming rule raised while pixels were
+    flowing; an event is matched when one of its alarms reports the jump frame
+    inside ``[edge, edge + window]`` — exactly the offline matching rule.  The
+    detection delay (when the rule could first *know*, ``alarmFrame``) is
+    reported separately from the matched frame, so the ``sustain`` lookahead is
+    never hidden.
+    """
+
+    events = matched = predictions = 0
+    frames_seen = 0
+    seconds = 0.0
+    latencies: list[int] = []
+    delays: list[int] = []
+    misses: list[dict] = []
+    extras: list[dict] = []
+    for record in records:
+        block = record.get("online")
+        if not block:
+            continue
+        events += 1
+        frames_seen += int(block.get("frames") or 0)
+        seconds += float(block.get("seconds") or 0.0)
+        alarms = block.get("alarms") or []
+        predictions += len(alarms)
+        edge = record.get("edgeFrame")
+        if edge is None:
+            continue
+        matched_alarm = None
+        for alarm in alarms:
+            if edge <= int(alarm["eventFrame"]) <= edge + window:
+                matched_alarm = alarm
+                break
+        if matched_alarm is not None:
+            matched += 1
+            latencies.append(int(matched_alarm["eventFrame"]) - int(edge))
+            delays.append(int(matched_alarm["alarmFrame"]) - int(edge))
+        else:
+            misses.append({"case": record["case"], "stage": record["stage"],
+                           "edge": int(edge),
+                           "alarms": [int(a["eventFrame"]) for a in alarms]})
+    for record in records:
+        block = record.get("online") or {}
+        edge = record.get("edgeFrame")
+        if edge is None:
+            continue
+        for alarm in block.get("alarms") or []:
+            if not (edge <= int(alarm["eventFrame"]) <= edge + window):
+                extras.append({"case": record["case"], "stage": record["stage"],
+                               "edge": int(edge), "alarm": int(alarm["eventFrame"])})
+    return {
+        "schema": "v400-stage-clear-online/1",
+        "events": events,
+        "matched": matched,
+        "predictions": predictions,
+        "frames": frames_seen,
+        "ruleSeconds": round(seconds, 3),
+        "msPerFrame": round(1000.0 * seconds / frames_seen, 4) if frames_seen else None,
+        "recall": {"n": events, "successes": matched, "value": matched / events if events else 0.0,
+                   "lower_bound_95": wilson_lower_bound(matched, events), "method": "wilson"},
+        "precision": {"n": predictions, "successes": matched,
+                      "value": matched / predictions if predictions else 0.0,
+                      "lower_bound_95": wilson_lower_bound(matched, predictions),
+                      "method": "wilson"},
+        "latency": {
+            "n": len(latencies),
+            "median": sorted(latencies)[len(latencies) // 2] if latencies else None,
+            "max": max(latencies) if latencies else None,
+            "delayMedian": sorted(delays)[len(delays) // 2] if delays else None,
+            "delayMax": max(delays) if delays else None,
+            "limit": window,
+        },
+        "misses": misses,
+        "extraAlarms": extras[:40],
+        "window": window,
+        "criterion": (f"streaming form of play64 top-minus-bottom brightness jump >= {ONLINE_JUMP} "
+                      f"while the panel stays top-lit (>= {ONLINE_FLOOR}), sustain {ONLINE_SUSTAIN}, "
+                      f"{ONLINE_REFRACTORY}-frame refractory"),
+    }
+
+
 def run_report(args) -> int:
     out_root = Path(args.out)
     out_root.mkdir(parents=True, exist_ok=True)
@@ -708,11 +928,18 @@ def run_report(args) -> int:
         "coverage": coverage,
         "records": records,
     }
+    online = online_block(captured)
+    if online["events"]:
+        report["online"] = online
     (out_root / "report.json").write_text(json.dumps(report, indent=1) + "\n", encoding="utf-8")
     summary = {k: report[k] for k in ("attempts", "captured", "failed", "failureReasons",
                                       "byDifficulty", "distinctStages", "stageFramesSum",
                                       "engineSecondsSum", "effectiveFps")}
     summary["coverage"] = coverage
+    if "online" in report:
+        summary["online"] = {k: report["online"][k] for k in
+                             ("events", "matched", "predictions", "recall", "precision",
+                              "latency", "frames", "msPerFrame")}
     (out_root / "summary.json").write_text(json.dumps(summary, indent=2) + "\n", encoding="utf-8")
     (out_root / "coverage.json").write_text(
         json.dumps(coverage, indent=1) + "\n", encoding="utf-8")
@@ -752,6 +979,9 @@ def main(argv=None) -> int:
     worker.add_argument("--resume-dir", action="append", default=[],
                         help="prior output dir; its captured (case, stage) pairs are skipped")
     worker.add_argument("--binary-sha256", default=None)
+    worker.add_argument("--online-detector", action="store_true",
+                        help="run the streaming stage-clear criterion on every captured frame "
+                             "(G2 row 14 / WP5 online validation); pixels only, no engine truth")
     worker.set_defaults(func=run_worker)
 
     report = sub.add_parser("report", help="fold worker journals")

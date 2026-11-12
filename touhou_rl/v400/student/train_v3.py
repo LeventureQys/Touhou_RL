@@ -806,7 +806,13 @@ def main(argv: Sequence[str] | None = None) -> int:
 
     assignments = teacher_bc.assign_shard_splits(keys, ratios=teacher_bc.SPLIT_RATIOS,
                                                  seed=int(args.split_seed))
-    seeds = {row["shard"]: int(row["seed"]) for row in rows}
+    # D1 covers stage_index 0..7 and re-uses small seed numbers per stage, so the
+    # episode identity is (stage, seed) -- not the seed alone.  Two shards are the
+    # same episode only when both agree; the duplicate (stage, seed) pairs are
+    # quarantined before training, so this stays a strict isolation check.
+    seeds = {
+        row["shard"]: f"{int(row['stage'])}:{int(row['seed'])}" for row in rows
+    }
     decisions = {row["shard"]: int(row["decisions"]) for row in rows}
     split_report = teacher_bc.split_report(assignments, decisions=decisions, seeds=seeds)
     split_report["split_seed"] = int(args.split_seed)
@@ -860,6 +866,11 @@ def main(argv: Sequence[str] | None = None) -> int:
 
     model = _model_from_args(args)
     parameters = model.n_parameters()
+    # The batches are materialised straight onto ``device`` (batch_tensors), so the
+    # module has to live there too; without this the first conv raises
+    # "Input type (torch.cuda.FloatTensor) and weight type (torch.FloatTensor)".
+    if hasattr(model, "to"):
+        model = model.to(device)
     print(f"[v3] {parameters:,} parameters, canonical={model.is_canonical()}, "
           f"device={device}", flush=True)
 

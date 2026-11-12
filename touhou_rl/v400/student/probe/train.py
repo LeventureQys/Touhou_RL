@@ -213,8 +213,14 @@ def _device(device: str | None):
 def train_probe(name: str, *, train_dir: Path, seeds: Sequence[int] = TRAIN_SPLIT,
                 train_seed: int = 0, epochs: int = EPOCHS, batch: int = BATCH,
                 lr: float = LEARNING_RATE, limit: int | None = None,
-                device: str | None = None, log=print) -> dict[str, Any]:
-    """Train one candidate input's head; returns weights + a training report."""
+                device: str | None = None, pos_weight: float | None = None,
+                log=print) -> dict[str, Any]:
+    """Train one candidate input's head; returns weights + a training report.
+
+    ``pos_weight`` is the pre-registered anti-collapse fallback (EXP-P3-010
+    0.3): it is only used when plain BCE drives an input to micro-F1 = 0, and
+    the same constant is then applied to every input.
+    """
 
     import torch
     import torch.nn.functional as F
@@ -228,6 +234,8 @@ def train_probe(name: str, *, train_dir: Path, seeds: Sequence[int] = TRAIN_SPLI
     source = BatchSource(shards, name, limit=limit, seed=train_seed)
     model = ProbeModel(name).to(dev)
     optimiser = torch.optim.Adam(model.parameters(), lr=lr)
+    weight = None if pos_weight is None else torch.tensor(
+        [float(pos_weight)], device=dev)
     history: list[dict[str, float]] = []
     started = time.monotonic()
     samples_seen = 0
@@ -244,7 +252,7 @@ def train_probe(name: str, *, train_dir: Path, seeds: Sequence[int] = TRAIN_SPLI
             valid = payload["valid"].to(dev)
             logits = model(x, anchors)
             per_cell = F.binary_cross_entropy_with_logits(
-                logits, target, reduction="none")
+                logits, target, reduction="none", pos_weight=weight)
             denom = valid.sum().clamp_min(1.0)
             loss = (per_cell * valid).sum() / denom
             optimiser.zero_grad(set_to_none=True)
@@ -265,6 +273,7 @@ def train_probe(name: str, *, train_dir: Path, seeds: Sequence[int] = TRAIN_SPLI
         "epochs": int(epochs),
         "batch": int(batch),
         "lr": float(lr),
+        "pos_weight": None if pos_weight is None else float(pos_weight),
         "device": str(dev),
         "history": history,
         "wall_s": round(wall, 3),
@@ -277,13 +286,22 @@ def train_probe(name: str, *, train_dir: Path, seeds: Sequence[int] = TRAIN_SPLI
 
 def evaluate_probe(model, name: str, *, test_dir: Path,
                    seeds: Sequence[int] = TEST_SPLIT, batch: int = 512,
-                   device: str | None = None, limit: int | None = None) -> dict[str, Any]:
-    """Micro-F1 plus per-seed counts on the holdout seeds."""
+                   device: str | None = None, limit: int | None = None,
+                   anchor_cells: dict[int, np.ndarray] | None = None) -> dict[str, Any]:
+    """Micro-F1 plus per-seed counts on the holdout seeds.
+
+    ``anchor_cells`` is for input D's deployment arm (``D+loc``): a per-seed
+    ``(count, 2)`` array of *predicted* window anchors in label cells.  The
+    labels still come from the true window, so the score measures exactly the
+    cost of placing D's crop with the pixel locator instead of engine state.
+    """
 
     import torch
 
     from touhou_rl.v400.student.probe.net import F1Counts, count_cells
 
+    if anchor_cells is not None and name != "D":
+        raise TrainError("only input D takes predicted anchors")
     dev = _device(device)
     model.eval()
     shards = open_shards(Path(test_dir), seeds)
@@ -296,11 +314,19 @@ def evaluate_probe(model, name: str, *, test_dir: Path,
             counts = F1Counts()
             labels = shard.labels
             take = shard.count if limit is None else min(shard.count, int(limit))
+            predicted_anchors = (None if anchor_cells is None
+                                 else np.asarray(anchor_cells[int(shard.seed)]))
+            if predicted_anchors is not None:
+                if predicted_anchors.shape != (shard.count, 2):
+                    raise TrainError(
+                        f"predicted anchors {predicted_anchors.shape} != "
+                        f"{(shard.count, 2)} for seed {shard.seed}")
             for start in range(0, take, int(batch)):
                 stop = min(start + int(batch), take)
                 tensors = np.empty(
                     (stop - start, *INPUT_SPECS[name].shape), dtype=np.float32)
-                anchors = labels["anchors"][start:stop]
+                anchors = (labels["anchors"][start:stop] if predicted_anchors is None
+                           else predicted_anchors[start:stop])
                 for slot, row in enumerate(range(start, stop)):
                     fields = {"native": np.asarray(shard.native[row])}
                     tensors[slot] = build_input(
@@ -324,6 +350,7 @@ def evaluate_probe(model, name: str, *, test_dir: Path,
         "input": name,
         "test_seeds": [int(seed) for seed in seeds],
         "threshold": THRESHOLD,
+        "anchor_source": "truth" if anchor_cells is None else "locator",
         "micro": total.as_dict(),
         "per_seed": per_seed,
         "windows": int(windows),
@@ -480,6 +507,49 @@ def evaluate_locator(model, *, test_dir: Path, seeds: Sequence[int] = TEST_SPLIT
     }
 
 
+def locator_anchor_cells(model, *, test_dir: Path,
+                         seeds: Sequence[int] = TEST_SPLIT, batch: int = 256,
+                         device: str | None = None, limit: int | None = None
+                         ) -> dict[int, np.ndarray]:
+    """Predict D's 24x24 window anchors from pixels only (the ``D+loc`` arm).
+
+    The locator returns a sub-pixel playfield position; it is snapped with the
+    same :func:`~touhou_rl.v400.student.probe.labels.snap_anchor` the labels use,
+    so D's crop is placed exactly where a deployment would place it.  No engine
+    state is read: the shipped model would have the same information.
+    """
+
+    import torch
+
+    from touhou_rl.v400.student.probe.labels import CELL_PX, snap_anchor
+    from touhou_rl.v400.student.probe.net import decode_locator
+
+    dev = _device(device)
+    model.eval()
+    predicted: dict[int, np.ndarray] = {}
+    for shard in open_shards(Path(test_dir), seeds):
+        take = shard.count if limit is None else min(shard.count, int(limit))
+        cells = np.zeros((shard.count, 2), dtype=np.int64)
+        with torch.no_grad():
+            for start in range(0, take, int(batch)):
+                stop = min(start + int(batch), take)
+                planes = np.empty((stop - start, 1, 64, 64), dtype=np.float32)
+                for slot, row in enumerate(range(start, stop)):
+                    planes[slot] = build_input(
+                        "A", {"native": np.asarray(shard.native[row])})
+                heat = torch.sigmoid(model(torch.from_numpy(planes).to(dev)))
+                heat = heat.cpu().numpy()[:, 0]
+                for slot, row in enumerate(range(start, stop)):
+                    x, y = decode_locator(heat[slot])
+                    anchor_x, anchor_y = snap_anchor(x, y)
+                    cells[row] = (anchor_y // CELL_PX, anchor_x // CELL_PX)
+        predicted[int(shard.seed)] = cells
+        shard.close()
+    if not predicted:
+        raise TrainError("the locator predicted zero holdout windows")
+    return predicted
+
+
 # ---------------------------------------------------------------------------
 # the pre-registered selection rule
 # ---------------------------------------------------------------------------
@@ -553,6 +623,7 @@ __all__ = [
     "evaluate_probe",
     "iter_samples",
     "load_seed_labels",
+    "locator_anchor_cells",
     "naive_baselines",
     "open_shards",
     "select_input",

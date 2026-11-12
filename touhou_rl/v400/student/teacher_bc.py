@@ -126,19 +126,26 @@ def assign_shard_splits(
 
 
 def check_episode_isolation(
-    assignments: Mapping[str, str], seeds: Mapping[str, int]
-) -> dict[str, int]:
-    """Re-derive the shard -> seed mapping and refuse a seed spanning two splits."""
+    assignments: Mapping[str, str], seeds: Mapping[str, object]
+) -> dict[str, str]:
+    """Re-derive the shard -> episode mapping and refuse an episode spanning two splits.
+
+    ``seeds`` is the *episode identity* of each shard.  For a single-stage corpus
+    that is the reset seed; for a multi-stage corpus (D1, stage_index 0..7) the
+    same seed number is reused on every stage, so the caller passes a composite
+    identity such as ``"3:4"``.  Anything hashable is accepted and rendered with
+    ``str`` so the error message stays readable.
+    """
 
     unknown = [key for key in assignments if key not in seeds]
     if unknown:
         raise SplitError(f"shard(s) without a seed: {sorted(unknown)[:3]}")
-    seed_to_split: dict[int, str] = {}
-    duplicates: dict[int, list[str]] = {}
+    seed_to_split: dict[str, str] = {}
+    duplicates: dict[str, list[str]] = {}
     for key, split in assignments.items():
         if split not in SPLIT_NAMES:
             raise SplitError(f"shard {key} has unknown split {split!r}")
-        seed = int(seeds[key])
+        seed = str(seeds[key])
         previous = seed_to_split.get(seed)
         if previous is not None and previous != split:
             raise SplitError(
@@ -147,7 +154,7 @@ def check_episode_isolation(
         if previous is not None:
             duplicates.setdefault(seed, []).append(key)
         seed_to_split[seed] = split
-    return {str(seed): split for seed, split in sorted(seed_to_split.items())}
+    return {seed: split for seed, split in sorted(seed_to_split.items())}
 
 
 def split_report(
@@ -174,7 +181,7 @@ def split_report(
         report[name] = {
             "shards": keys,
             "shard_count": len(keys),
-            "seeds": sorted(int(seeds[key]) for key in keys),
+            "seeds": sorted(str(seeds[key]) for key in keys),
             "decisions": split_decisions,
             "fraction": split_decisions / total,
         }

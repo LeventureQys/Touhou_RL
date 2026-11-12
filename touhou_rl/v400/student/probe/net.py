@@ -108,7 +108,7 @@ def window_logits(
             LOCAL_MARGIN_PX:LOCAL_MARGIN_PX + WINDOW_PX,
             LOCAL_MARGIN_PX:LOCAL_MARGIN_PX + WINDOW_PX,
         ]
-        return F.adaptive_max_pool2d(inner, (WINDOW_CELLS, WINDOW_CELLS))
+        return F.adaptive_max_pool2d(inner, (WINDOW_CELLS, WINDOW_CELLS))[:, 0]
 
     cells = F.adaptive_max_pool2d(logits, (GRID_HEIGHT, GRID_WIDTH))
     if anchors is None:
@@ -121,14 +121,14 @@ def window_logits(
     pad = WINDOW_CELLS
     padded = F.pad(cells, (pad, pad, pad, pad))
     offsets = torch.arange(WINDOW_CELLS, device=cells.device)
-    row_index = rows + offsets.view(1, -1) + pad
-    col_index = cols + offsets.view(1, -1) + pad
-    index = torch.arange(batch, device=cells.device).view(-1, 1, 1)
-    # Clamp instead of raising: cells outside the grid are masked by `valid`
-    # (the label side already decided they are not scored).
-    row_index = row_index.clamp(0, padded.shape[2] - 1)
-    col_index = col_index.clamp(0, padded.shape[3] - 1)
-    return padded[index, row_index[:, :, None], col_index[:, None, :]]
+    row_index = (rows + offsets.view(1, -1) + pad).clamp(0, padded.shape[2] - 1)
+    col_index = (cols + offsets.view(1, -1) + pad).clamp(0, padded.shape[3] - 1)
+    # Flatten and gather instead of three-way advanced indexing: one explicit
+    # linear index per output cell, no broadcast surprises.
+    flat = padded.reshape(batch, -1)
+    linear = (row_index.view(batch, -1, 1) * padded.shape[3]
+              + col_index.view(batch, 1, -1)).reshape(batch, -1)
+    return torch.gather(flat, 1, linear).reshape(batch, WINDOW_CELLS, WINDOW_CELLS)
 
 
 class ProbeModel(nn.Module):

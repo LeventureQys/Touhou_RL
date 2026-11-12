@@ -1425,3 +1425,96 @@ def test_stage_clear_coverage_report_schema_and_zero_fill(tmp_path: Path):
     assert bare["difficulties"]["Easy"]["captured"] == 3
     assert bare["difficulties"]["Easy"]["available"] is None
     assert bare["zeroDifficulties"] == ["Normal", "Hard", "Lunatic", "Extra"]
+
+
+# ---------------------------------------------------------------------------
+# EXP-P2-011: the *streaming* form of the stage-clear criterion (G2 row 14)
+# ---------------------------------------------------------------------------
+def test_online_stage_clear_stream_matches_the_offline_criterion():
+    """The frame-by-frame rule must raise exactly the offline rule's alarms.
+
+    G2 row 14 is only meaningful if the online detector *is* the gate's detector,
+    so this pins the equivalence on the same synthetic window the offline tests
+    use, at the gate's own thresholds (jump 2.0 / floor 0.0 / sustain 5 / 150).
+    """
+
+    import numpy as np
+
+    from tools.rl import v400_stage_clear_replay as replay
+
+    thresholds = dict(jump=2.0, floor=0.0, sustain=5, refractory=150)
+    for edge in (60, 80, 120):
+        play = _play64_window(edge=edge, length=181)
+        offline = det.stage_clear_pixel_predictions(play, **thresholds)
+        rule = replay.OnlineStageClear(**thresholds)
+        alarms = []
+        for index in range(play.shape[0]):
+            alarms.extend(rule.push(index, play[index]))
+        assert [alarm["eventFrame"] for alarm in alarms] == offline == [edge]
+        # the streaming form first *knows* at eventFrame + sustain - 1
+        assert [alarm["alarmFrame"] for alarm in alarms] == [edge + 4]
+        assert rule.seconds >= 0.0
+
+    # a one-frame blip is not a sustained top-lit panel: neither rule reports it
+    blip = _play64_window(edge=60, length=181)
+    blip[20:21] = np.linspace(40.0, 10.0, 64, dtype=np.float32)[None, :, None]
+    rule = replay.OnlineStageClear(**thresholds)
+    alarms = []
+    for index in range(blip.shape[0]):
+        alarms.extend(rule.push(index, blip[index]))
+    assert det.stage_clear_pixel_predictions(blip, **thresholds) == [60]
+    assert [alarm["eventFrame"] for alarm in alarms] == [60]
+
+
+def test_online_stage_clear_refractory_and_floor():
+    import numpy as np
+
+    from tools.rl import v400_stage_clear_replay as replay
+
+    # two top-lit panels 20 frames apart: the 150-frame refractory keeps only one
+    play = _play64_window(edge=60, length=181)
+    play[80:] = np.linspace(10.0, 40.0, 64, dtype=np.float32)[None, :, None]
+    play[90:] = np.linspace(40.0, 10.0, 64, dtype=np.float32)[None, :, None]
+    rule = replay.OnlineStageClear(jump=2.0, floor=0.0, sustain=5, refractory=150)
+    alarms = []
+    for index in range(play.shape[0]):
+        alarms.extend(rule.push(index, play[index]))
+    assert [alarm["eventFrame"] for alarm in alarms] == [60]
+
+    # floor above the panel brightness: nothing can be confirmed
+    rule = replay.OnlineStageClear(jump=2.0, floor=99.0, sustain=5, refractory=150)
+    alarms = []
+    for index in range(play.shape[0]):
+        alarms.extend(rule.push(index, play[index]))
+    assert alarms == []
+
+
+def test_online_block_scores_and_fails_closed():
+    from tools.rl import v400_stage_clear_replay as replay
+
+    records = [
+        {"case": "a", "stage": 0, "edgeFrame": 100,
+         "online": {"frames": 40, "seconds": 0.02,
+                    "alarms": [{"eventFrame": 100, "alarmFrame": 104}]}},
+        {"case": "b", "stage": 1, "edgeFrame": 200,
+         "online": {"frames": 40, "seconds": 0.02,
+                    "alarms": [{"eventFrame": 212, "alarmFrame": 216}]}},
+        {"case": "c", "stage": 2, "edgeFrame": 300,
+         "online": {"frames": 40, "seconds": 0.02, "alarms": []}},
+    ]
+    block = replay.online_block(records)
+    assert block["schema"] == "v400-stage-clear-online/1"
+    assert block["events"] == 3
+    assert block["matched"] == 1
+    assert block["predictions"] == 2
+    assert block["recall"]["value"] == 1 / 3
+    assert block["precision"]["value"] == 1 / 2
+    assert block["latency"]["median"] == 0
+    assert block["latency"]["delayMedian"] == 4
+    assert [m["case"] for m in block["misses"]] == ["b", "c"]
+    assert [e["case"] for e in block["extraAlarms"]] == ["b"]
+
+    empty = replay.online_block([])
+    assert empty["events"] == 0
+    assert empty["recall"]["lower_bound_95"] == 0.0
+    assert empty["precision"]["value"] == 0.0

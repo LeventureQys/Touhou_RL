@@ -238,7 +238,8 @@ def stack_window(planes: Any, t: int, *, window: int = WINDOW) -> np.ndarray:
     return np.asarray(planes[indices], dtype=np.uint8)
 
 
-def frame_channels(planes: Any, t: int, *, window: int = WINDOW) -> np.ndarray:
+def frame_channels(planes: Any, t: int, *, window: int = WINDOW,
+                   channels: int | None = None) -> np.ndarray:
     """``(CHANNELS, H, W)`` float32 feature stack for the window ending at ``t``.
 
     Channel order (see ``CHANNELS``/``LAGS``)::
@@ -256,6 +257,9 @@ def frame_channels(planes: Any, t: int, *, window: int = WINDOW) -> np.ndarray:
     vanishes (or explodes) looks like against its own recent history: it is the
     only leg that is non-zero for a *static* background with a disappearing
     object.
+
+    ``channels`` trims the stack to the leading legs, so a checkpoint trained
+    before a leg was added still loads and scores on exactly the legs it saw.
     """
 
     stack = stack_window(planes, t, window=window).astype(np.float32)
@@ -268,13 +272,19 @@ def frame_channels(planes: Any, t: int, *, window: int = WINDOW) -> np.ndarray:
     diff6 = prev3 - prev6
     collapse = np.abs(diff1) - np.abs(diff3)
     novelty = current - stack[:-1].mean(axis=0)
-    return np.stack(
+    out = np.stack(
         [current / 255.0, diff1 / 64.0, diff3 / 64.0, diff6 / 64.0,
          collapse / 64.0, novelty / 64.0]
     ).astype(np.float32)
+    if channels is not None:
+        if not 1 <= int(channels) <= out.shape[0]:
+            raise PixelDeathError(f"channels must be 1..{out.shape[0]}, got {channels}")
+        out = out[: int(channels)]
+    return out
 
 
-def batch_channels(planes: Any, ends: Sequence[int], *, window: int = WINDOW) -> np.ndarray:
+def batch_channels(planes: Any, ends: Sequence[int], *, window: int = WINDOW,
+                   channels: int | None = None) -> np.ndarray:
     """Vectorised :func:`frame_channels` over many window ends: ``(B, C, H, W)``."""
 
     planes = np.asarray(planes)
@@ -308,6 +318,10 @@ def batch_channels(planes: Any, ends: Sequence[int], *, window: int = WINDOW) ->
         ],
         axis=1,
     )
+    if channels is not None:
+        if not 1 <= int(channels) <= out.shape[1]:
+            raise PixelDeathError(f"channels must be 1..{out.shape[1]}, got {channels}")
+        out = out[:, : int(channels)]
     return out.astype(np.float32)
 
 
@@ -631,6 +645,7 @@ def build_samples(
     seed: int,
     negatives_per_positive: float = 2.0,
     respawn_negatives: bool = True,
+    respawn_share: float = 0.5,
     jitter: int = 0,
 ) -> dict[str, Any]:
     """Deterministic training samples: all positives + sampled negatives.
@@ -638,7 +653,14 @@ def build_samples(
     ``jitter`` (train only) shifts a positive window end by ``Uniform(-j, +j)``
     so the model cannot key on the exact onset frame; the label stays 1 inside
     the ``±2`` tolerance the task asks for.  Negatives are drawn from (a) the
-    respawn band right after a dissolve, (b) frames elsewhere.
+    respawn band right after a dissolve and (b) frames elsewhere.
+
+    ``respawn_share`` splits the negative budget between the two pools.  The
+    shipped 2026-11-10 checkpoint was trained before this parameter existed:
+    ``keep_respawn`` was taken first up to the *whole* budget, so the model saw
+    25,291 respawn frames and only **57** ordinary gameplay frames — it learned
+    "respawn looks like death" and fired on ordinary play (EXP-P2-011 §3).  Both
+    pools are now sampled uniformly at random, never "the first N".
     """
 
     generator = np.random.default_rng(seed)
@@ -672,7 +694,13 @@ def build_samples(
     dedup_positives = sorted(set(positives))
     budget = int(negatives_per_positive * max(1, len(dedup_positives)))
     respawn_unique = sorted(set(respawn) - set(dedup_positives))
-    keep_respawn = respawn_unique[:budget]
+    share = max(0.0, min(1.0, float(respawn_share)))
+    respawn_budget = min(len(respawn_unique), int(round(budget * share)))
+    if respawn_budget < len(respawn_unique):
+        picks = generator.choice(len(respawn_unique), size=respawn_budget, replace=False)
+        keep_respawn = [respawn_unique[int(index)] for index in sorted(picks)]
+    else:
+        keep_respawn = respawn_unique
     remaining = max(0, budget - len(keep_respawn))
     pool_set = set(pool) - set(dedup_positives) - set(keep_respawn)
     pool_list = sorted(pool_set)
@@ -1138,6 +1166,13 @@ def main(argv: list[str] | None = None) -> int:
                        help="auxiliary player-location head (168 = 14x12 grid, 0 = off)")
     train.add_argument("--aux-weight", type=float, default=0.5)
     train.add_argument("--negatives-per-positive", type=float, default=6.0)
+    train.add_argument("--respawn-share", type=float, default=0.5,
+                       help="fraction of the negative budget drawn from the respawn band; "
+                            "the rest is ordinary gameplay frames (see build_samples)")
+    train.add_argument("--pos-weight", type=float, default=1.0,
+                       help="loss re-weighting on top of the sampling ratio (1.0 = none)")
+    train.add_argument("--channels", type=int, default=CHANNELS,
+                       help="leading feature legs to train on (a checkpoint records its own)")
     train.add_argument("--jitter", type=int, default=2)
     train.add_argument("--seed", type=int, default=20261110)
     train.add_argument("--device", default="cuda")
@@ -1276,7 +1311,8 @@ class _PlaneCache:
         return handle
 
 
-def _batch_features(cache: _PlaneCache, samples: Sequence[tuple[int, int]]) -> np.ndarray:
+def _batch_features(cache: _PlaneCache, samples: Sequence[tuple[int, int]],
+                    *, channels: int | None = None) -> np.ndarray:
     """``(B, C, H, W)`` features for samples grouped by shard."""
 
     by_shard: dict[int, list[tuple[int, int]]] = {}
@@ -1285,7 +1321,7 @@ def _batch_features(cache: _PlaneCache, samples: Sequence[tuple[int, int]]) -> n
     out = None
     for shard_index, entries in by_shard.items():
         planes = cache.planes(shard_index)
-        block = batch_channels(planes, [frame for _, frame in entries])
+        block = batch_channels(planes, [frame for _, frame in entries], channels=channels)
         if out is None:
             out = np.zeros((len(samples),) + block.shape[1:], dtype=np.float32)
         for offset, (position, _) in enumerate(entries):
@@ -1372,7 +1408,7 @@ def _mmap_planes(row: dict[str, Any], *, resolution: str = "play96"):
 
 
 def shard_probabilities(model, row: dict[str, Any], *, device, resolution: str = "play96",
-                        batch_size: int = 256) -> np.ndarray:
+                        batch_size: int = 256, channels: int | None = None) -> np.ndarray:
     """Per-frame alarm probability for one stored run (rows ``< WINDOW-1`` = 0)."""
 
     frames = int(row["frames"])
@@ -1383,7 +1419,7 @@ def shard_probabilities(model, row: dict[str, Any], *, device, resolution: str =
         return probs
     for start in range(0, ends.size, batch_size):
         chunk = ends[start : start + batch_size]
-        features = batch_channels(planes, chunk)
+        features = batch_channels(planes, chunk, channels=channels)
         probs[chunk] = _scores(model, features, device=device, batch_size=batch_size)
     del planes
     return probs
@@ -1397,11 +1433,13 @@ def _select_threshold(
     thresholds: Iterable[float],
     resolution: str,
     prominences: Iterable[float] = (0.0, 0.2, 0.4),
+    channels: int | None = None,
 ) -> tuple[tuple[float, float], list[dict[str, Any]]]:
     """Sweep (threshold, prominence) on the **val** split, pick the best joint LB."""
 
     prob_map = {row["dir"]: shard_probabilities(model, row, device=device,
-                                                resolution=resolution) for row in rows}
+                                                resolution=resolution,
+                                                channels=channels) for row in rows}
     table: list[dict[str, Any]] = []
     for threshold in thresholds:
         for prominence in prominences:
@@ -1443,6 +1481,7 @@ def _evaluate_split(
     threshold: float,
     prominence: float = 0.0,
     resolution: str = "play96",
+    channels: int | None = None,
 ) -> dict[str, Any]:
     """Event + frame metrics for one split, including the bomb-empty slice."""
 
@@ -1455,7 +1494,8 @@ def _evaluate_split(
     per_shard: list[dict[str, Any]] = []
     event_rows: list[dict[str, Any]] = []
     for row in rows:
-        probs = shard_probabilities(model, row, device=device, resolution=resolution)
+        probs = shard_probabilities(model, row, device=device, resolution=resolution,
+                                    channels=channels)
         found = predict_events(probs, threshold=float(threshold),
                                prominence=float(prominence))
         row_events = [int(value) for value in row.get("events") or []]
@@ -1563,17 +1603,19 @@ def train_command(args) -> int:
     torch.manual_seed(seed)
     np.random.seed(seed)
     device = _torch_device(args.device)
+    channels = int(getattr(args, "channels", CHANNELS) or CHANNELS)
     samples = build_samples(
         rows,
         seed=seed,
         negatives_per_positive=float(args.negatives_per_positive),
+        respawn_share=float(getattr(args, "respawn_share", 0.5)),
         jitter=int(args.jitter),
     )
     labels = np.asarray(samples["labels"], dtype=np.float32)
     positions = np.asarray(samples["samples"], dtype=np.int64)
     cache = _PlaneCache(rows)
     position_cache = _PositionCache(rows) if int(getattr(args, "aux_cells", 0)) else None
-    model = build_model(width=int(args.width),
+    model = build_model(width=int(args.width), channels=channels,
                         aux_cells=int(getattr(args, "aux_cells", 0))).to(device)
     parameters = model_parameters(model)
     if parameters > 500_000:
@@ -1581,8 +1623,13 @@ def train_command(args) -> int:
     optimiser = torch.optim.AdamW(model.parameters(), lr=float(args.lr), weight_decay=1e-4)
     positives = max(1, int(labels.sum()))
     negatives = int(len(labels) - positives)
+    # ``pos_weight = negatives/positives`` makes a 1:6 corpus behave like 1:1 for
+    # the loss, which on this data produced a fire-on-everything detector (52
+    # alarms for 7 deaths online, EXP-P2-011 §3).  The mix is handled by the
+    # sampling ratio; the loss keeps the explicit knob.
+    pos_weight = float(getattr(args, "pos_weight", 1.0))
     loss_fn = nn.BCEWithLogitsLoss(
-        pos_weight=torch.tensor([negatives / positives], device=device)
+        pos_weight=torch.tensor([pos_weight * negatives / positives], device=device)
     )
     aux_weight = float(getattr(args, "aux_weight", 0.5))
     generator = np.random.default_rng(seed)
@@ -1601,7 +1648,7 @@ def train_command(args) -> int:
                 break
             chunk = order[start : start + batch_size]
             batch_samples = [tuple(int(v) for v in positions[index]) for index in chunk]
-            features = _batch_features(cache, batch_samples)
+            features = _batch_features(cache, batch_samples, channels=channels)
             target = torch.from_numpy(labels[chunk]).to(device)
             inputs = torch.from_numpy(features).to(device)
             optimiser.zero_grad(set_to_none=True)
@@ -1621,7 +1668,8 @@ def train_command(args) -> int:
         # validation on a fixed stride of the val frames for a cheap signal
         (threshold, prominence), table = _select_threshold(
             model, val_rows[:60], device=device,
-            thresholds=(0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9), resolution="play96"
+            thresholds=(0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9), resolution="play96",
+            channels=channels,
         )
         entry = {
             "epoch": epoch,
@@ -1649,7 +1697,7 @@ def train_command(args) -> int:
         "state": model.state_dict(),
         "config": {
             "width": int(args.width),
-            "channels": CHANNELS,
+            "channels": channels,
             "window": WINDOW,
             "lags": list(LAGS),
             "resolution": "play96",
@@ -1695,10 +1743,15 @@ def load_checkpoint(path: str | Path, *, device=None):
     if payload.get("schema") != "v400-wp5-pixel-ckpt-1":
         raise PixelDeathError(f"checkpoint schema {payload.get('schema')!r} is not a WP5 model")
     config = payload.get("config") or {}
-    model = build_model(width=int(config.get("width", 32)),
+    state = payload.get("state") or {}
+    weight = state.get("body.0.weight")
+    channels = int(config.get("channels") or (weight.shape[1] if weight is not None
+                                              else CHANNELS))
+    model = build_model(width=int(config.get("width", 32)), channels=channels,
                         aux_cells=int(config.get("auxCells", 0)))
     model.load_state_dict(payload["state"])
     model.eval()
+    payload.setdefault("config", {})["channels"] = channels
     if device is not None:
         model = model.to(device)
     return model, payload
@@ -1711,6 +1764,7 @@ def eval_command(args) -> int:
         raise PixelDeathError(f"split schema {split.get('schema')!r} is not {SPLIT_SCHEMA!r}")
     device = _torch_device(args.device)
     model, payload = load_checkpoint(args.checkpoint, device=device)
+    channels = int((payload.get("config") or {}).get("channels") or CHANNELS)
     wanted = [name for name in str(args.splits).split(",") if name]
     rows_of = {name: split_rows(split, name) for name in wanted}
     if args.thresholds:
@@ -1722,12 +1776,12 @@ def eval_command(args) -> int:
         (threshold, prominence), table = _select_threshold(
             model, rows_of.get("val") or split_rows(split, "train")[:40], device=device,
             thresholds=(0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5,
-                        0.6, 0.7, 0.8, 0.9), resolution="play96",
+                        0.6, 0.7, 0.8, 0.9), resolution="play96", channels=channels,
         )
         selected_on = "val"
     results = {
         name: _evaluate_split(model, rows_of[name], device=device, threshold=threshold,
-                              prominence=prominence)
+                              prominence=prominence, channels=channels)
         for name in wanted
     }
     checkpoint = {
@@ -1778,6 +1832,7 @@ def bench_command(args) -> int:
     import torch
 
     model, payload = load_checkpoint(args.checkpoint)
+    channels = int((payload.get("config") or {}).get("channels") or CHANNELS)
     if args.threads:
         torch.set_num_threads(int(args.threads))
     frames = int(args.frames)
@@ -1785,13 +1840,13 @@ def bench_command(args) -> int:
     planes = rng.integers(0, 255, size=(frames + WINDOW, ) + PLAY96_SHAPE, dtype=np.uint8)
     # warm up
     for frame in range(WINDOW - 1, WINDOW + 8):
-        features = frame_channels(planes, frame)
+        features = frame_channels(planes, frame, channels=channels)
         with torch.no_grad():
             model(torch.from_numpy(features)[None])
     times: list[float] = []
     for frame in range(WINDOW - 1, WINDOW - 1 + frames):
         started = time.perf_counter()
-        features = frame_channels(planes, frame)
+        features = frame_channels(planes, frame, channels=channels)
         with torch.no_grad():
             model(torch.from_numpy(features)[None])
         times.append((time.perf_counter() - started) * 1000.0)
@@ -1800,6 +1855,7 @@ def bench_command(args) -> int:
         "schema": "v400-wp5-pixel-bench-1",
         "frames": frames,
         "threads": torch.get_num_threads(),
+        "channels": channels,
         "parameters": payload.get("parameters"),
         "ms_per_frame_mean": float(times_arr.mean()),
         "ms_per_frame_median": float(np.median(times_arr)),

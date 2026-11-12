@@ -129,7 +129,7 @@ def test_window_start_is_never_usable():
 
 
 def test_build_samples_keeps_labels_aligned_with_samples(tmp_path):
-    # EXP-P2-010 ¡ì2.3 regression: sorting must carry the label, otherwise the
+    # EXP-P2-010 Â§2.3 regression: sorting must carry the label, otherwise the
     # trainer is fed a mislabelled corpus and every metric below is noise.
     shards = _corpus(tmp_path, per_stratum=4)
     rows = [row.as_row() | {"events": [20 + index],
@@ -555,3 +555,58 @@ def test_split_command_round_trip(tmp_path):
 def test_index_command_fails_closed_on_an_empty_root(tmp_path):
     with pytest.raises(pd.PixelDeathError):
         pd.main(["index", "--root", str(tmp_path), "--out", str(tmp_path / "index.json")])
+
+
+# ---------------------------------------------------------------------------
+# EXP-P2-011: a checkpoint trained before a feature leg was added must still
+# load and score on exactly the legs it saw (the shipped WP5 CNN is 5-channel,
+# the current feature builder emits 6).
+# ---------------------------------------------------------------------------
+def _planes(frames: int = 40):
+    generator = np.random.default_rng(7)
+    return generator.integers(0, 255, size=(frames, *pd.PLAY96_SHAPE), dtype=np.uint8)
+
+
+def test_frame_channels_trims_to_the_leading_legs():
+    planes = _planes()
+    full = pd.frame_channels(planes, 20)
+    trimmed = pd.frame_channels(planes, 20, channels=5)
+    assert full.shape == (pd.CHANNELS,) + pd.PLAY96_SHAPE
+    assert trimmed.shape == (5,) + pd.PLAY96_SHAPE
+    assert np.array_equal(trimmed, full[:5])
+    assert not np.array_equal(full[5], full[0])
+    for bad in (0, pd.CHANNELS + 1):
+        with pytest.raises(pd.PixelDeathError):
+            pd.frame_channels(planes, 20, channels=bad)
+
+
+def test_batch_channels_trims_to_the_leading_legs():
+    planes = _planes()
+    ends = [10, 20, 30]
+    full = pd.batch_channels(planes, ends)
+    trimmed = pd.batch_channels(planes, ends, channels=5)
+    assert full.shape == (3, pd.CHANNELS) + pd.PLAY96_SHAPE
+    assert trimmed.shape == (3, 5) + pd.PLAY96_SHAPE
+    assert np.array_equal(trimmed, full[:, :5])
+    with pytest.raises(pd.PixelDeathError):
+        pd.batch_channels(planes, ends, channels=99)
+
+
+def test_load_checkpoint_infers_the_channel_count_from_the_state_dict(tmp_path):
+    torch = pytest.importorskip("torch")
+    model = pd.build_model(width=8, channels=5)
+    payload = {
+        "schema": "v400-wp5-pixel-ckpt-1",
+        "state": model.state_dict(),
+        "config": {"width": 8, "auxCells": 0},
+        "valThreshold": 0.7,
+    }
+    path = tmp_path / "ckpt.pt"
+    torch.save(payload, path)
+    loaded, meta = pd.load_checkpoint(path)
+    assert meta["config"]["channels"] == 5
+    assert loaded.body[0].weight.shape[1] == 5
+    features = pd.frame_channels(_planes(), 20, channels=5)
+    scores = pd._scores(loaded.to("cpu"), features[None], device=torch.device("cpu"),
+                        batch_size=1)
+    assert scores.shape == (1,)

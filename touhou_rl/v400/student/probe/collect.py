@@ -1,4 +1,4 @@
-"""Replay D0's recorded per-frame masks and re-render the native playfield.
+﻿"""Replay D0's recorded per-frame masks and re-render the native playfield.
 
 Why a replay and not a re-collection: EXP-P1-014 already proved that an env-role
 engine fed the same ``RESET`` and the same per-frame button masks produces the
@@ -44,6 +44,12 @@ from typing import Any, Iterable, Sequence
 
 import numpy as np
 
+from touhou_rl.v400.gym.protocol import (
+    HazardFrame,
+    PlayerSnapshot,
+    parse_hazards_reply,
+    parse_player_reply,
+)
 from touhou_rl.v400.gym.shm import PIXELS_OFFSET, FLAG_PIXELS_VALID, SharedBlock, segment_path
 from touhou_rl.v400.labels.danger import evaluate_future_danger
 from touhou_rl.v400.labels.player import player_label
@@ -95,15 +101,29 @@ class ReplayRow:
     frame_post: int
 
 
-def _hash_field(payload: Any, name: str, where: str) -> tuple[str, int]:
-    if not isinstance(payload, dict):
-        raise CollectError(f"{where}: {name} is not an object: {payload!r}")
-    value = str(payload.get("hash", ""))
+def _hash_field(payload: Any, name: str, where: str,
+                expected_frame: int | None = None) -> str:
+    """Accept both D0 hash spellings: a bare digest, or ``{hash, frames}``.
+
+    The *assembled* shard stores ``"hash_pre": "7f04c7361749ed9f"``; channel A's
+    raw ``work/<seed>/labels.jsonl`` stores ``{"hash": ..., "frames": ...}``.
+    Both are the same engine checkpoint; only the frame counter is implicit in
+    the shard form, where it is ``decision * FRAMES_PER_DECISION`` by construction.
+    """
+
+    if isinstance(payload, dict):
+        value = str(payload.get("hash", ""))
+        if "frames" in payload and expected_frame is not None:
+            if int(payload["frames"]) != int(expected_frame):
+                raise CollectError(
+                    f"{where}: {name} frame {payload['frames']} != {expected_frame}")
+    elif isinstance(payload, str):
+        value = payload
+    else:
+        raise CollectError(f"{where}: {name} is not a hash: {payload!r}")
     if len(value) != 16 or any(ch not in "0123456789abcdef" for ch in value):
         raise CollectError(f"{where}: {name} is not an engine hash: {value!r}")
-    if "frames" not in payload:
-        raise CollectError(f"{where}: {name} has no frame counter: {payload!r}")
-    return value, int(payload["frames"])
+    return value
 
 
 def load_replay_rows(path: str | Path, *, limit: int | None = None) -> list[ReplayRow]:
@@ -126,21 +146,17 @@ def load_replay_rows(path: str | Path, *, limit: int | None = None) -> list[Repl
             if len(masks) != FRAMES_PER_DECISION:
                 raise CollectError(
                     f"{where}: {len(masks)} per-frame masks, need {FRAMES_PER_DECISION}")
-            pre_hash, pre_frame = _hash_field(payload.get("hash_pre"), "hash_pre", where)
-            post_hash, post_frame = _hash_field(payload.get("hash_post"), "hash_post", where)
-            if pre_frame != index * FRAMES_PER_DECISION:
-                raise CollectError(
-                    f"{where}: hash_pre frame {pre_frame} != {index * FRAMES_PER_DECISION}")
-            if post_frame != (index + 1) * FRAMES_PER_DECISION:
-                raise CollectError(
-                    f"{where}: hash_post frame {post_frame} != {(index + 1) * FRAMES_PER_DECISION}")
+            frame_pre = index * FRAMES_PER_DECISION
+            frame_post = (index + 1) * FRAMES_PER_DECISION
+            pre_hash = _hash_field(payload.get("hash_pre"), "hash_pre", where, frame_pre)
+            post_hash = _hash_field(payload.get("hash_post"), "hash_post", where, frame_post)
             rows.append(ReplayRow(
                 decision=index,
                 step_frames=tuple(masks),
                 hash_pre=pre_hash,
                 hash_post=post_hash,
-                frame_pre=pre_frame,
-                frame_post=post_frame,
+                frame_pre=frame_pre,
+                frame_post=frame_post,
             ))
             if limit is not None and len(rows) >= int(limit):
                 break
@@ -233,6 +249,16 @@ def _hash_reply(client: ControlClient) -> tuple[str, int]:
     if "frames" not in fields:
         raise CollectError(f"HASH reply has no counter: {fields!r}")
     return value, int(fields["frames"])
+
+
+def _hazards(client: ControlClient) -> HazardFrame:
+    """``HAZARDS`` (all slots) through the frozen parser the labels use."""
+
+    return parse_hazards_reply(client.request("HAZARDS", timeout=120.0))
+
+
+def _player(client: ControlClient) -> PlayerSnapshot:
+    return parse_player_reply(client.request("PLAYER"))
 
 
 def _read_native(block: SharedBlock, where: str) -> tuple[np.ndarray, dict[str, int]]:
@@ -332,7 +358,7 @@ def collect_seed(
 
         # Frame -1 (the render RESET left behind) is decision 0's newest picture.
         seeded = time.perf_counter()
-        hazards = client.hazards()
+        hazards = _hazards(client)
         occupied, distance = grid_arrays(hazards)
         grid_ms += (time.perf_counter() - seeded) * 1000.0
         window.append(_Frame(frame=-1, hazards=hazards,
@@ -391,7 +417,7 @@ def collect_seed(
             started_px = time.perf_counter()
             native_pixels, header = _read_native(block, f"decision {index}")
             pixel_ms += (time.perf_counter() - started_px) * 1000.0
-            player = client.player()
+            player = _player(client)
             current = window[-1]
             anchor_x, anchor_y = snap_anchor(player.position[0], player.position[1])
             pending.append(_Pending(
@@ -413,7 +439,7 @@ def collect_seed(
                         f"decision {index} frame {offset}: advanced="
                         f"{reply.get('advanced')} on STEP {mask} 1")
                 started_grid = time.perf_counter()
-                hazards = client.hazards()
+                hazards = _hazards(client)
                 occupied, distance = grid_arrays(hazards)
                 grid_ms += (time.perf_counter() - started_grid) * 1000.0
                 window.append(_Frame(frame=row.frame_pre + offset, hazards=hazards,
