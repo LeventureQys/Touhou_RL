@@ -38,7 +38,7 @@ WSL 的 `third_party/th08-rl` 被 `.gitignore` 忽略（`/third_party/th08-rl/`�
 | `.tmp_v410_s1c` | **2.34 GB** | D410-S1：20 个 train seeds（1–20）/ 66,143 decisions；干净 train-seed 采集；S1 权威数据 |
 | `.tmp_v410_wp05_round1` | **2.85 GB** | DAgger round1：16 episodes / 56,000 decisions / 112,000 frames；β=1.0；HASH 112,000/112,000 |
 | `.tmp_v410_wp05_round2` | **2.67 GB** | DAgger round2：15 episodes / 52,500 decisions / 105,000 frames；β=0.5；injection 0.500857；HASH 105,000/105,000 |
-| `.tmp_v410_wp05_round3` | **0.91 GB** | round3：已落盘 4 shards / 14,000 decisions（seeds 2040–2043，含计时探针是单独的 timing/），**未完成**；目标 50k |
+| `.tmp_v410_wp05_round3` | **2.6 GB** | round3：**15 episodes / 50,787 decisions / 101,574 frames**（seeds 2040–2054；14 集 decisions、1 集 death_stop@2048）；β=0.5；injection 0.502629；HASH 101,574/101,574；已完成（计时探针在单独 timing/，不计入） |
 | `.tmp_v410_wp04_arms` | **0.08 GB** | 四臂 12 个 checkpoint（B0/B1/B2/B3 × seed0–2） |
 | `.tmp_v410_wp05_train50k` | **0.28 GB** | 50k round1 的 labels/checkpoint（`6ebe4ea9…`） |
 | `.tmp_v410_wp05_train_beta05` | ~0.10 GB | 1k β=0.5 训练（`a11ba0b7…`） |
@@ -81,7 +81,7 @@ WSL 数据：
   - `WP02/`：教师；`G4101_100_TEACHER.md`（100/100）、四批 chunk + 8px 审计；
   - `WP03/`：S1/MULTI 计划与数据审计；
   - `WP04/`：四臂/20 dev；
-  - `WP05/`：DAgger 数据、训练、20 dev、idle 诊断、tie-break/class-weight；
+  - `WP05/`：DAgger 数据、训练、20 dev、idle 诊断、tie-break/class-weight；`round3.json`/`ROUND3.md`（50,787 decisions，已完成）；
   - `WP06/`：事件/状态机契约（G410-3 未实现）。
 - `ASSET_SYNC.sha256`：关键文档/checkpoint/引擎的校验清单。
 
@@ -89,7 +89,7 @@ WSL 数据：
 
 **可用**：
 - 真实 TH08 引擎 rl_v3/rl_laser、G0.1 108/108 零售证据；
-- D410-S1 66,143、DAgger round1 56k / round2 52.5k、round3 14k（未完成）；
+- D410-S1 66,143、DAgger round1 56k / round2 52.5k、round3 50,787（已完成）；
 - 学生 evaluator、DAgger 采集器、teacher label/verify、四臂/多种 DAgger checkpoint；
 - v4.1 状态/证据/预算工具与 108/108 报告。
 

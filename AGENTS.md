@@ -224,7 +224,7 @@ python -m compileall -q touhou_rl
 
 - Windows：`D:\WorkShop\Touhou_RL`，分支 `v400`；
 - WSL：`/root/Touhou_RL` + `/root/v400-data`；rl_v3 SHA `691bfd77…`，rl_laser SHA `1462829b…`；
-- 数据：`.tmp_v400_d1`（28.8GB，D1 canonical）、`.tmp_v410_s1c`（2.34GB，S1 66,143）、`.tmp_v410_wp05_round1/2/3`（DAgger 56k/52.5k/尚未完成的 14k）；
+- 数据：`.tmp_v400_d1`（28.8GB，D1 canonical）、`.tmp_v410_s1c`（2.34GB，S1 66,143）、`.tmp_v410_wp05_round1/2/3`（DAgger 56k/52.5k/50,787）；
 - 学生最好也只是 20 dev **0/20**；G410-0 passed，G410-1 教师 100/100 但 8px/数据腿未结，G410-2…G410-7 未通过。
 
 ### 8.2 资产操作红线
@@ -248,5 +248,6 @@ python -m compileall -q touhou_rl
 ### 8.4 当前暂停状态
 
 - 目标已 **paused**（第 102 轮）；不要自动恢复 WP05 采集/训练，除非用户明确要求 resume。
-- 暂停时 round3 保留 4 shards（seeds 2040–2043，14,000 decisions）；不要删除。
+- 暂停时 round3 已完成 15 shards / 50,787 decisions（seeds 2040–2054）；不要删除，也不要在未 resume 时继续训练。
+- `state.json`/journal 是暂停快照；round3 完成与 tie-break 结果的证据已落盘，resume 时再同步 state/journal。
 - G410-0 **passed**；G410-1 teacher 100/100 但 8px/数据腿未结；G410-2…G410-7 未通过。
