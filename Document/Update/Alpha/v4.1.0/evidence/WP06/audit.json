@@ -1,0 +1,1599 @@
+{
+  "schema": "v410-wp06-audit/1",
+  "work_package": "v4.1.0 WP06.0",
+  "generated_at": "2026-11-13T06:51:54+08:00",
+  "status": "audit_completed_design_only",
+  "executive_summary": "现有 v4.0 detector 的 HUD 资源读数（lives/bombs 100%，Wilson 95% 下界 99.997%）与 bomb 事件（436/436，LB 99.126%，延迟 0）可复用；death 的像素检测（HUD 差分上限 64.5%、NCC 16.41%/17.43%、CNN 8.38%/2.08%）、stage_clear 的旧门锚点（像素过渡起点中位 -112 帧，旧窗把 40/55 次提前命中记成漏检）、game_over 的旧静态规则（延迟 89 帧）不能直接用于 v4.1 的 pixel-only 输入。D1 的 frame_event_flags 是每 4 帧一次的单帧快照：469,216 行里 death=0、bomb=0，而 45 个 shard 实际 stop_reason=death，不能当事件真值。v4.1 必须先冻结首次可见证据锚点，做全分辨率 HUD + 像素定位/局部窗 + 显式状态机，再谈 99% 事件门。",
+  "scope": {
+    "task": "只读审计 v4.0 reward/event detector 与标签事件语义，设计 v4.1 G410-3 的像素事件/状态机与数据/评测计划",
+    "did": [
+      "静态审计 detector 源码、测试、实验卡、README WP06/G410-3、obs_spec_v3、collector、pixel_death、stage_clear_replay",
+      "抽样/全量统计 .tmp_v400_d1 的 137 个 shard 的 frame_event_flags 与结局",
+      "读取 WP5 round1/round2、G2C bomb/game_over/stage_clear、stage-clear 语料的已有结果",
+      "设计 7 状态机、事件可见锚点、death 双延迟、过面双时间、资源归因、数据/评测/确认集计划"
+    ],
+    "did_not": [
+      "未启动游戏/引擎",
+      "未训练/微调任何模型",
+      "未采集新数据",
+      "未运行 pytest/compileall（避免写缓存/__pycache__）",
+      "未修改 v400/v380/v390、tools/rl/v400_*、tests/test_v400_*、third_party/、v410 既有文件、state/journal/budget/assets、其它 WP 证据",
+      "未 commit/push，未删除/覆盖旧文件"
+    ],
+    "whitelist_used": [
+      "Document/Update/Alpha/v4.1.0/evidence/WP06/PLAN.md",
+      "Document/Update/Alpha/v4.1.0/evidence/WP06/audit.json",
+      ".tmp_v410_wp06_audit/ (running directory, not committed)"
+    ]
+  },
+  "inputs": [
+    {
+      "path": "tools/rl/v400_p2_reward_detector.py",
+      "bytes": 153611,
+      "lines": 3738,
+      "sha256": "88cbf7da379bed804291224ddfe89dc64ad5b4198977282d1e425d75787242f0",
+      "role": "existing v4.0 reward/event detector"
+    },
+    {
+      "path": "tests/test_v400_reward_detector.py",
+      "bytes": 69988,
+      "lines": 1520,
+      "sha256": "7fc75afb62ceeaa0084f2c3da24258659be75749a94d520c59f7f553e50ea1cb",
+      "role": "existing detector tests; 66 test_* functions counted statically, not run in this audit"
+    },
+    {
+      "path": "tools/rl/v400_p2_bulk_collect.py",
+      "bytes": 49408,
+      "lines": 1268,
+      "sha256": "7eda640c53131bbabfaedea5d5c70b5742f6885a932e208f030cb23fe9a54040",
+      "role": "plane/label schema and HUD crop source"
+    },
+    {
+      "path": "tools/rl/v400_pixel_death.py",
+      "bytes": 78378,
+      "lines": 1914,
+      "sha256": "ff8a8318a0e18189a60ed093b8bf0db5e55395631b73779f1aecd6ebf7358172",
+      "role": "WP5 pixel-only death CNN, feature stack and event rule"
+    },
+    {
+      "path": "tools/rl/v400_stage_clear_replay.py",
+      "bytes": 45858,
+      "sha256": "bb7547278636ff32b178a32895e9a37c6791fecba44ed4ea58318bc0399c2493",
+      "role": "streaming OnlineStageClear with eventFrame/alarmFrame"
+    },
+    {
+      "path": "tools/rl/v400_d1_collect.py",
+      "bytes": 93410,
+      "sha256": "c9d310f7bb7d3d1745a2efd12c7f0506fe226dff9da747b761bc41c024c908a1",
+      "role": "D1 shard writer; copies the teacher decision's single-frame frame_event_flags into labels.jsonl"
+    },
+    {
+      "path": "touhou_rl/v400/student/obs_spec_v3.py",
+      "bytes": 21904,
+      "lines": 494,
+      "sha256": "6eabcb6c3792aa1605eb49907ef6afc87d5ce38f39decb874407d2e9adace92a",
+      "role": "frozen obs-v3 play/HUD conventions; locator limitation"
+    },
+    {
+      "path": "Document/Update/Alpha/v4.0.0/experiments/EXP-P2-003-reward-detector-g2.md",
+      "bytes": 15157,
+      "lines": 177,
+      "sha256": "e63afbed4bade6738a5e38638c70c59dbf2f4daa40f841de12fbd95fb4971e1e",
+      "role": "v0 detector + G2 results"
+    },
+    {
+      "path": "Document/Update/Alpha/v4.0.0/experiments/EXP-P2-004-event-detector-g2.md",
+      "bytes": 17683,
+      "lines": 245,
+      "sha256": "5b65374b4b645d4d7517ed40828f65685773e3243fd4f612ee8675b1b23bfa92",
+      "role": "v1 HUD-sequence event detector + event/HUD semantics"
+    },
+    {
+      "path": "Document/Update/Alpha/v4.0.0/experiments/EXP-P2-007-g2-gap-close.md",
+      "bytes": 31707,
+      "lines": 471,
+      "sha256": "cb0c787354eacaf6efb38f82815d25da4bace04d7e861b9ed4ac8c37644ea642",
+      "role": "bomb/game_over/stage_clear gates and +4/+29 dissolve paths"
+    },
+    {
+      "path": "Document/Update/Alpha/v4.0.0/experiments/EXP-P2-011-wp5-online-386.md",
+      "bytes": 15168,
+      "lines": 206,
+      "sha256": "025bf4337064e954c8f48af7f93fb80016d604e250beb7aa96ec6f997be97444",
+      "role": "WP5 online four-class results and stage_clear anchor mismatch"
+    },
+    {
+      "path": "Document/Update/Alpha/v4.1.0/README.md",
+      "bytes": 84790,
+      "lines": 877,
+      "sha256": "8fc51064e5e54e7cdf6e0b924dcaefd0b3020d148ceeaf5bc0deb9294ae4876c",
+      "role": "WP06 requirements and G410-3 acceptance table"
+    },
+    {
+      "path": ".tmp_v400_g2online/wp5-summary.json",
+      "bytes": 5534,
+      "sha256": "286a2ab06b8457a4b297dca26a9b00c71d0468434ab8ecdfae9a8c22b1e5782e",
+      "role": "WP5 round1 online summary (453 episodes)"
+    },
+    {
+      "path": ".tmp_v400_d1/d1/manifest.json",
+      "bytes": 105442,
+      "sha256": "cf564f405702cfa76a13b37a7f083ca81166da876128b669e4d2f881893a709e",
+      "role": "D1 corpus manifest"
+    },
+    {
+      "path": ".tmp_v400_d1/d1/shards/*/shard.json",
+      "bytes": 184432534,
+      "sha256_aggregate": "799aef4c88204ad481de6e66177587460725056c78c43734db6d5a3e251d4b93",
+      "role": "137 complete D1 shards; aggregate over sorted (name, sha256(shard.json))"
+    }
+  ],
+  "existing_detector": {
+    "identity": {
+      "file": "tools/rl/v400_p2_reward_detector.py",
+      "lines": 3738,
+      "sha256": "88cbf7da379bed804291224ddfe89dc64ad5b4198977282d1e425d75787242f0",
+      "schemas": {
+        "metrics": "v400-p2det-g2-1",
+        "index": "v400-p2det-index-1",
+        "label_version": "p2-v2-1"
+      },
+      "cli_subcommands": [
+        "split",
+        "train",
+        "report",
+        "train-v1",
+        "report-v1",
+        "report-v2",
+        "score-gate",
+        "stage-clear-gate",
+        "wp5-online"
+      ],
+      "cli_ref": "tools/rl/v400_p2_reward_detector.py:3618-3732"
+    },
+    "components": [
+      {
+        "id": "v0_multitask_cnn",
+        "kind": "learned",
+        "inputs": {
+          "play": "4-frame stack (oldest-first t-3..t) of play96 (112x96) or play64 (64x64), uint8/255",
+          "hud": "1x56x160 green-channel HUD strip, uint8/255"
+        },
+        "heads": ["death", "bomb", "lives(7)", "bombs(9)", "score_delta(3)"],
+        "parameters": 1752967,
+        "training_data": "p2-v2-1 index shards; whole-stage split train {0,1,2,4} / val {5} / test {3,6}; deterministic frame subsample with all death positives",
+        "results": {
+          "death_event_recall_best": 0.3333333333333333,
+          "death_event_recall_play96_best": 0.03125,
+          "death_still_stratum": "0/48 in all four variants",
+          "lives_read_accuracy": 1.0,
+          "bombs_read_accuracy": 1.0,
+          "score_sign_accuracy": 0.919,
+          "source": "EXP-P2-003 §5/§5.1"
+        },
+        "reuse": "architecture/training loop/metrics only; the playfield death head is rejected",
+        "refs": [
+          "tools/rl/v400_p2_reward_detector.py:637-689",
+          "tools/rl/v400_p2_reward_detector.py:567-631",
+          "tools/rl/v400_p2_reward_detector.py:974-1085"
+        ]
+      },
+      {
+        "id": "v1_hud_reader",
+        "kind": "learned",
+        "inputs": {
+          "lives_crop": "HUD rows 28:40, all 160 cols, 1 channel",
+          "bombs_crop": "HUD rows 44:56, all 160 cols, 1 channel",
+          "score_crop": "9 cells rows 8:24, x0=3+13i or measured x0=8+13i, each 16x13"
+        },
+        "outputs": ["lives 0..6", "bombs 0..8", "9 score digits 0..9"],
+        "results": {
+          "lives_accuracy": 1.0,
+          "lives_lb_95": 0.99997,
+          "bombs_accuracy": 1.0,
+          "bombs_lb_95": 0.99997,
+          "score_digit_accuracy": 0.7386,
+          "score_integer_accuracy": 0.218,
+          "score_sign_accuracy": 0.7627,
+          "score_negative_samples": 0,
+          "score_sign_settled": 0.9956,
+          "score_sign_rolling": 0.4773,
+          "source": "EXP-P2-004 §5/§5.2, EXP-P2-005"
+        },
+        "reuse": "crop geometry + reader architecture as fallback; retrain/convert to color full-resolution HUD",
+        "refs": [
+          "tools/rl/v400_p2_reward_detector.py:1389-1443",
+          "tools/rl/v400_p2_reward_detector.py:1620-1678",
+          "tools/rl/v400_p2_reward_detector.py:1718-1774",
+          "tools/rl/v400_p2_reward_detector.py:1923-1986"
+        ]
+      },
+      {
+        "id": "v1_causal_event_head",
+        "kind": "learned",
+        "inputs": "20-dim per-frame reading vector: lives posterior 7 + bombs posterior 9 + score-delta sign one-hot 3 + normalized decoded score 1; causal 1-D CNN over t-4..t",
+        "outputs": ["death logit", "bomb logit"],
+        "results": {
+          "learned_death_test_recall": 0.0037,
+          "note": "did not converge; deterministic HUD diff was delivered instead",
+          "source": "EXP-P2-004 §5/§8"
+        },
+        "reuse": "causal window/event-head pattern only; not a working detector",
+        "refs": [
+          "tools/rl/v400_p2_reward_detector.py:1681-1702",
+          "tools/rl/v400_p2_reward_detector.py:1807-1884",
+          "tools/rl/v400_p2_reward_detector.py:1487-1499"
+        ]
+      },
+      {
+        "id": "deterministic_hud_diff",
+        "kind": "hand_written",
+        "inputs": "lives or bombs reading series",
+        "rule": "event at every frame where the reading strictly decreases",
+        "results": {
+          "death_recall_event": 0.6926,
+          "death_precision_event": 0.9894,
+          "death_latency_median": 4,
+          "death_latency_p95": 4,
+          "death_latency_max": 10,
+          "death_observable_ceiling": "342/530 = 64.53% in the full v4.0 corpus; last-life deaths (188/530, lives==0) have no decrement",
+          "bomb_recall_event": 1.0,
+          "bomb_precision_event": 1.0,
+          "bomb_latency": 0,
+          "bomb_n": 436,
+          "bomb_lb_95": 0.9912659466498849,
+          "source": "EXP-P2-004 §5, .tmp_v400_g2c/bomb-gate.json"
+        },
+        "reuse": "reuse as confirmation layer; not sufficient as the sole death detector",
+        "refs": [
+          "tools/rl/v400_p2_reward_detector.py:1473-1484",
+          "tools/rl/v400_p2_reward_detector.py:2493-2558",
+          "tools/rl/v400_p2_reward_detector.py:2684-2750",
+          "tools/rl/v400_p2_reward_detector.py:2753-2794"
+        ]
+      },
+      {
+        "id": "stage_clear_vgrad_detector",
+        "kind": "hand_written",
+        "inputs": "play64 (64x64) top-minus-bottom brightness vgrad = mean(rows 0:16) - mean(rows 48:64)",
+        "rule": "delta(vgrad) >= 4.0 while vgrad >= 3.0 for 5 frames; 150-frame refractory; event frame = jump",
+        "results": {
+          "slice_recall": 0.992,
+          "continuous_stream_recall_old_window": 0.2727,
+          "continuous_stream_hits": "15/55",
+          "pixel_onset_lead_vs_engine_bit_median": -112,
+          "pixel_onset_lead_range": [-172, 1],
+          "source": "EXP-P2-008, EXP-P2-009, EXP-P2-011 §3.1"
+        },
+        "reuse": "vgrad feature + jump/sustain/refractory streaming shape; anchor semantics must change to visible onset",
+        "refs": [
+          "tools/rl/v400_p2_reward_detector.py:3088-3101",
+          "tools/rl/v400_p2_reward_detector.py:3104-3116",
+          "tools/rl/v400_p2_reward_detector.py:3127-3158",
+          "tools/rl/v400_stage_clear_replay.py:71-75",
+          "tools/rl/v400_stage_clear_replay.py:82-150"
+        ]
+      },
+      {
+        "id": "pixel_death_ncc",
+        "kind": "hand_written_template",
+        "inputs": "play96 5x5 patch at the player, positions from engine PLAYER px/py",
+        "rule": "zero-mean NCC collapse: ncc[t] <= 0.55 and ncc[t-1] >= 0.9, 90-frame refractory",
+        "results": {
+          "event_recall": 0.1641,
+          "event_recall_lb_95": 0.1414,
+          "event_precision": 0.1743,
+          "event_precision_lb_95": 0.1503,
+          "n_events": 908,
+          "n_predictions": 855,
+          "latency_median": 0,
+          "latency_max": 10,
+          "ncc_drop": "1.0 -> ~0.38 at +0..+4 frames after engine death",
+          "source": "EXP-P2-008 §14"
+        },
+        "reuse": "signal and feature idea; the engine-position dependency is prohibited at runtime; needs a pixel locator",
+        "refs": [
+          "tools/rl/v400_p2_reward_detector.py:3402-3409",
+          "tools/rl/v400_p2_reward_detector.py:3412-3451",
+          "tools/rl/v400_p2_reward_detector.py:3454-3468",
+          "tools/rl/v400_p2_reward_detector.py:3471-3518"
+        ]
+      },
+      {
+        "id": "pixel_death_cnn",
+        "kind": "learned",
+        "inputs": "play96 7-frame causal window compressed to 6 channels: current, diff1, diff3, diff6, motion-collapse contrast, appearance novelty",
+        "outputs": "per-frame death probability; rising edge +1 confirmation +60 refractory",
+        "parameters": 89009,
+        "parameters_note": "cards report 88,721 (5-leg) and 89,009 (6-leg); treat as ~89k",
+        "results": {
+          "offline_test_recall": 0.0838,
+          "offline_test_precision": 0.0208,
+          "offline_test_events": 394,
+          "online_round1_recall_w10": 0.1947,
+          "online_round1_precision_w10": 0.0458,
+          "online_round1_recall_w30": 0.363,
+          "online_round1_precision_w30": 0.0854,
+          "source": "EXP-P2-011 §3.3, .tmp_v400_g2online/wp5-summary.json"
+        },
+        "reuse": "feature stack and event rule; not the detector (far from 99%)",
+        "refs": [
+          "tools/rl/v400_pixel_death.py:58-94",
+          "tools/rl/v400_pixel_death.py:241-325",
+          "tools/rl/v400_pixel_death.py:764-857",
+          "tools/rl/v400_pixel_death.py:932-1015",
+          "tools/rl/v400_pixel_death.py:1220-1273"
+        ]
+      },
+      {
+        "id": "game_over_static_rule",
+        "kind": "hand_written",
+        "inputs": "play96 mean absolute difference between t and t-60",
+        "rule": "static if mean |x[t]-x[t-60]| < 1.7360956101190477; rising edge = game over",
+        "results": {
+          "g2c_intervals": 406,
+          "g2c_recall": 1.0,
+          "g2c_precision": 1.0,
+          "g2c_lb_95": 0.9906266225780888,
+          "g2c_latency_median": 89,
+          "wp5_round1_intervals": 415,
+          "wp5_round1_detections": 0,
+          "wp5_round1_note": "episodes were closed 30 frames after game over, so the 60-frame-lag rule was structurally untestable",
+          "wp5_round2_intervals": 260,
+          "wp5_round2_static_runs_at_88_or_89": 253,
+          "wp5_round2_misses": 7,
+          "source": ".tmp_v400_g2c/gameover-gate-valid.json, .tmp_v400_g2online/wp5-summary.json, run2/"
+        },
+        "reuse": "staticness as a confirmation feature only; first-visible game_over needs a panel/edge detector, not a 60-frame lag",
+        "refs": [
+          ".tmp_v400_g2online/wp5_online386.py:72-73",
+          ".tmp_v400_g2online/wp5_online386.py:215-225",
+          ".tmp_v400_g2online/aggregate_wp5.py:16-20"
+        ]
+      },
+      {
+        "id": "g2_scoring_and_verdicts",
+        "kind": "statistics",
+        "inputs": "per-shard event/latency series",
+        "outputs": "frame/event P/R, Wilson 95% LB, rule-of-three, two-scope and two-column verdicts",
+        "notes": [
+          "proportion() hardcodes z=1.96 (one-sided 95%)",
+          "pass_99 means lower_bound_95 >= 0.99, not a 99% confidence bound",
+          "zero-sample rows never pass and are rendered as n/a, not 0%",
+          "g2_verdict_v2 keeps as_written and amended columns separate; signed=false"
+        ],
+        "reuse": "reuse formulas/fail-closed shape; parameterize confidence; add cluster bootstrap",
+        "refs": [
+          "tools/rl/v400_p2_reward_detector.py:106-236",
+          "tools/rl/v400_p2_reward_detector.py:179-217",
+          "tools/rl/v400_p2_reward_detector.py:1502-1535",
+          "tools/rl/v400_p2_reward_detector.py:2818-3001"
+        ]
+      },
+      {
+        "id": "dataset_split_and_fail_closed",
+        "kind": "data",
+        "inputs": "index.json with shards, engine_sha256, label_version",
+        "rule": "whole stages to splits; reject mixed engine SHA/label version/empty split/short planes",
+        "reuse": "fail-closed pattern; split unit must become trajectory/ancestor for v4.1",
+        "refs": [
+          "tools/rl/v400_p2_reward_detector.py:267-397"
+        ]
+      }
+    ],
+    "event_types": [
+      {
+        "name": "death",
+        "engine_bit": "0x0004",
+        "v0_head": "death (2-class, predicts t+1)",
+        "v1_head": "deterministic lives decrement; learned causal head did not converge",
+        "best_result": "HUD diff 69.26%/98.94%, latency 4/4/10, n=270/189; observable ceiling 64.53%",
+        "v410_role": "event; first-visible anchor; all deaths incl last-life"
+      },
+      {
+        "name": "bomb",
+        "engine_bit": "0x0001",
+        "v0_head": "bomb (2-class, predicts t+1)",
+        "v1_head": "deterministic bombs decrement, same frame",
+        "best_result": "436/436, LB 99.126%, latency 0",
+        "v410_role": "event; HUD icon decrement; death-bomb subtype"
+      },
+      {
+        "name": "hit",
+        "engine_bit": "0x0002",
+        "v0_head": "none",
+        "v1_head": "none (playfield was described as auxiliary hazard input, not implemented)",
+        "best_result": "no detector",
+        "v410_role": "HIT_PENDING state; diagnostic; disambiguates death-bomb"
+      },
+      {
+        "name": "dying_started",
+        "engine_bit": "0x0200",
+        "v0_head": "none",
+        "v1_head": "none",
+        "best_result": "no detector",
+        "v410_role": "diagnostic label only; not a gate event"
+      },
+      {
+        "name": "stage_clear",
+        "engine_bit": "0x0080 (rl_events build only; level bit)",
+        "v0_head": "none",
+        "v1_head": "none in the main detector; separate stage_clear_vgrad gate",
+        "best_result": "250 events, 99.2% slice / 15/55 continuous under the old gate window; 1 event in G2C with bit 0x80 for 79 frames",
+        "v410_role": "stage_transition event; visible anchor is primary; engine bit/index are labels"
+      },
+      {
+        "name": "game_over",
+        "engine_bit": "none (HUD gameOverFlag or harness STEP game_over)",
+        "v0_head": "none",
+        "v1_head": "none",
+        "best_result": "static rule 406/406, LB 99.063%, latency 89",
+        "v410_role": "event; first-visible panel; GAME_OVER state"
+      },
+      {
+        "name": "extend",
+        "engine_bit": "none (proxy: lives rises)",
+        "v0_head": "lives classification only",
+        "v1_head": "none",
+        "best_result": "not measured as an event",
+        "v410_role": "resource increase cause; must be separated from stage reset"
+      },
+      {
+        "name": "menu/pause",
+        "engine_bit": "none (REPLAY_FRAME_EVENT_PAUSE_RECORDED 0x0100 is a replay word, not used here)",
+        "v0_head": "none",
+        "v1_head": "none",
+        "best_result": "not measured",
+        "v410_role": "MENU state/event; truth from input log + visible annotation"
+      },
+      {
+        "name": "score_delta",
+        "engine_bit": "none; label is displayScore/globalsScore delta",
+        "v0_head": "score_delta (3-class)",
+        "v1_head": "reader digits + sign; settled subset 99.56%, rolling 47.73%",
+        "best_result": "not a 3-class pass; negative class only at stage reset",
+        "v410_role": "resource/reward; visible displayScore with settled logic"
+      }
+    ],
+    "component_groups": {
+      "hud": ["v1_hud_reader", "deterministic_hud_diff"],
+      "template": ["pixel_death_ncc", "stage_clear_vgrad_detector", "game_over_static_rule"],
+      "learned": ["v0_multitask_cnn", "v1_hud_reader", "v1_causal_event_head", "pixel_death_cnn"],
+      "statistics": ["g2_scoring_and_verdicts", "dataset_split_and_fail_closed"]
+    },
+    "hud_geometry": {
+      "stored_plane": "56x160 uint8, green channel only, screen rows 48-72/80-96/96-112, columns 480-640",
+      "score_band_rows": [0, 24],
+      "lives_band_rows": [24, 40],
+      "bombs_band_rows": [40, 56],
+      "detector_score_crop_rows": [8, 24],
+      "detector_lives_crop_rows": [28, 40],
+      "detector_bombs_crop_rows": [44, 56],
+      "score_cells": "9 cells, pitch 13 px; legacy x0=3, measured x0=8; glyph ink 2 px into the cell",
+      "refs": [
+        "tools/rl/v400_p2_bulk_collect.py:85-101",
+        "tools/rl/v400_p2_bulk_collect.py:141-180",
+        "tools/rl/v400_p2_reward_detector.py:1389-1443",
+        "touhou_rl/v400/student/obs_spec_v3.py:84-91"
+      ]
+    },
+    "label_semantics": {
+      "source": "EVENTS is ReplayManager::frameEventFlags; the rl_events build appends 0x0080. Pixel data is never used to make a label.",
+      "bits": {
+        "bomb_started_0x0001": "bomb event; HUD bombs decrements on the SAME frame (134/134, 436/436 in the G2C corpus)",
+        "player_hit_0x0002": "hit; used by the teacher's death-bomb rule; not a death",
+        "player_death_committed_0x0004": "death committed; the visual dissolve is 0..4 frames later; HUD lives decrements at +4 if bombs>0 or +29 if bombs==0",
+        "enemy_removed_0x0020": "not used by the reward/event heads",
+        "item_collected_0x0040": "not used by the reward/event heads",
+        "pause_recorded_0x0100": "replay pause word; not used as menu truth here",
+        "player_dying_started_0x0200": "dying edge; diagnostic, 24 sampled rows in D1",
+        "effect_spawned_0x0400": "effect; not a death evidence by itself",
+        "bullet_pattern_spawned_0x0800": "not used",
+        "enemy_spawned_0x1000": "not used",
+        "player_grazed_0x2000": "not used",
+        "stage_clear_0x0080": "rl_events-only level bit; captured event stayed set for 79 frames; stage index flipped 77 frames later; not an edge"
+      },
+      "timing": {
+        "bomb": "same frame as HUD bombs decrement; latency 0",
+        "death": "engine bit at commit; HUD lives decrement +4 (bombs>0) or +29 (bombs==0); visual sprite loss 0..4",
+        "stage_clear": "level bit, not an edge; stage index later; pixel visible transition is earlier (median -112 in the continuous corpus)",
+        "game_over": "no engine event bit; HUD gameOverFlag/harness STEP game_over is the label; visible panel is earlier than the 89-frame static rule",
+        "extend": "proxy: lives rises; also rises on stage reset/continue, so it needs cause attribution"
+      },
+      "gaps": {
+        "d1": "per-decision single-frame snapshot; death/bomb bits are 0 in 469,216 rows; stage/difficulty row fields are stale",
+        "p2_v2_1": "per-frame labels for the v4.0 corpus (WSL), but only 56x160 green HUD and no full-color HUD/menu truth",
+        "stage_clear": "0x0080 exists only in the rl_events build; the old G2 gate had no pixel detector",
+        "menu": "no engine bit; input log + visible annotation required"
+      }
+    },
+    "state_machine": {
+      "present": false,
+      "closest": "v1 causal event head (stateless per frame + 5-frame window) and deterministic HUD-diff events; no explicit alive/hit_pending/respawn/stage/game_over/menu/unknown states",
+      "consequence": "death vs hit vs respawn vs death-bomb vs game over are not separated; a second alarm during respawn is only suppressed by a fixed refractory"
+    },
+    "latency_definition": {
+      "v0": "death head predicts death bit on t+1; event latency = detection frame - true death frame, window before=10/after=10",
+      "v1": "event detected on the HUD reading change; latency = detection frame - label frame (positive = after the event); match window before=0/after=10",
+      "stage_clear": "old gate window [engine edge, engine edge+10]; the pixel jump can be ~112 frames earlier and is then counted as a miss",
+      "game_over": "static rule reports 89 frames after the gameOverFlag onset",
+      "new_requirement": "G410-3 uses the first visible evidence anchor, not the engine edge; engine latency is a separate secondary metric"
+    },
+    "training_data": {
+      "p2_v2_1_dataset": {
+        "frames": 357729,
+        "shards": 194,
+        "location": "WSL /root/v400-data/p2det/out-main (not present in this Windows workspace)",
+        "label_version": "p2-v2-1",
+        "source": "EXP-P2-004 §0"
+      },
+      "d1": {
+        "frames": 1876864,
+        "decisions": 469216,
+        "shards": 137,
+        "stages": [0, 1, 2, 3, 4, 5, 6, 7],
+        "difficulty": [1],
+        "seeds": 25,
+        "obs_spec": "obs-v3",
+        "labels": "v400-teacher-obs-1, per-decision, no li/bo/sc columns, no per-frame event truth",
+        "usable_for": "ALIVE/background pixels, player locator pretraining, stage 0 stage-transition frames; not for event truth"
+      },
+      "p2v2_small": {
+        "shards": 7,
+        "frames": 3989,
+        "labels": "p2-v2-1 with li/bo/sc and event bits",
+        "usable_for": "schema/smoke only"
+      },
+      "wp5_online": {
+        "round1_episodes": 453,
+        "round1_frames": 551250,
+        "round2_episodes": 285,
+        "round2_frames": 372891,
+        "truth": "EVENTS/HUD/STATE logged for scoring; detector sees pixels only",
+        "usable_for": "death/bomb/game_over strata and negative/positive mining, but not Normal all-stage coverage"
+      },
+      "stage_clear": {
+        "cases": 250,
+        "captured_in_combined_report": 165,
+        "normal_cases": 27,
+        "normal_stages": {"0": 21, "1": 3, "2": 3},
+        "normal_stages_3_to_7": 0,
+        "streams": 55,
+        "usable_for": "stage transition feature/anchor development; not a Normal all-stage confirmation set"
+      }
+    },
+    "results_summary": {
+      "v1_lives_bombs": "100% / LB 99.997%",
+      "v1_death_hud_diff": "69.26% recall / 98.94% precision / latency 4-4-10 (n=270/189)",
+      "bomb_g2c": "436/436, LB 99.126%, latency 0",
+      "game_over_g2c": "406/406, LB 99.063%, latency 89",
+      "stage_clear_one_event": "bit 0x80 for 79 frames, stage flip +77, no pixel detector in that gate",
+      "stage_clear_pixel": "250 events, 99.2% in slices, 15/55 in continuous stream under the old [edge,edge+10] window",
+      "ncc_death": "16.41%/17.43%, LB 14.14/15.03, n=908/855, latency median 0 max 10",
+      "cnn_death": "test 8.38%/2.08%; online 19.5%/4.6% @10, 36.3%/8.5% @30",
+      "v0_death": "best event recall 33.33% (play64 w4); still 0/48 in all variants"
+    },
+    "known_limits": [
+      {
+        "id": "L1_hud_only_ceiling",
+        "category": "death observability",
+        "evidence": "342/530 deaths have a lives decrement; 188/530 occur while lives==0 (EXP-P2-004 §1)",
+        "implication": "any HUD-only death detector caps at 64.53%; last-life deaths need a pixel/visual anchor"
+      },
+      {
+        "id": "L2_last_life",
+        "category": "death observability",
+        "evidence": "188/530 deaths in the v4.0 corpus; WP5 round1 has 139/1325 deaths with bombs==0 and a +29-frame HUD path",
+        "implication": "the old +4/+10 latency window is a corpus artifact; the visible dissolve is still 0..4 frames, but HUD confirmation is late"
+      },
+      {
+        "id": "L3_visual_signal_not_threshold_separable",
+        "category": "pixel death",
+        "evidence": "NCC 1.0->0.38 in the death window, but non-death frames have 1% low NCC; NCC 16.41%/17.43%; CNN 8.38%/2.08% offline",
+        "implication": "a hand threshold or a small global CNN is not enough; need localization + local window + state fusion"
+      },
+      {
+        "id": "L4_player_locator",
+        "category": "pixel localization",
+        "evidence": "T2a PlayerLocator median error 11.59 px vs 4 px gate; obs-v3 deliberately excludes self_state (obs_spec_v3.py:35-40,133-141)",
+        "implication": "NCC's engine px/py dependency cannot be replaced without a better pixel locator; this is a hard prerequisite"
+      },
+      {
+        "id": "L5_stage_anchor_mismatch",
+        "category": "stage transition",
+        "evidence": "pixel onset median -112 frames vs engine bit; old gate 15/55; slice 248/250 is an artifact of cropping the lead (EXP-P2-011 §3.1)",
+        "implication": "the old window must not be reused; G410-3 needs the visible anchor frozen before detector work"
+      },
+      {
+        "id": "L6_game_over_latency",
+        "category": "game over",
+        "evidence": "89-frame latency; WP5 round1 0/415 because episodes closed before the 60-frame lag; round2 253/260 at +88/89",
+        "implication": "the static rule is a confirmation feature, not a first-visible detector; a panel/edge detector is needed"
+      },
+      {
+        "id": "L7_score_semantics",
+        "category": "score",
+        "evidence": "HUD draws displayScore rolling with (score-displayScore)>>5; settled sign 99.56%, rolling 47.73%, integer 21.8%; score has no decrement path except stage reset",
+        "implication": "reward must use visible displayScore with settled logic; score negatives only at stage reset and must not be counted as damage"
+      },
+      {
+        "id": "L8_learned_event_head",
+        "category": "learning",
+        "evidence": "v1 event head did not converge (0.37% recall); v0 learned dive-specific cues; threshold transfer across stages failed",
+        "implication": "do not start with a learned event head; start with interpretable HUD/state rules and add learning only for failure slices"
+      },
+      {
+        "id": "L9_data_split",
+        "category": "evaluation",
+        "evidence": "v0 split by stage; stage-clear by replay; D1 has seeds but no ancestor graph",
+        "implication": "v4.1 must split by original trajectory/ancestor and seal confirmation; otherwise repeated windows inflate n"
+      },
+      {
+        "id": "L10_d1_flags_snapshot",
+        "category": "labels",
+        "evidence": "469,216 D1 label rows: death=0, bomb=0, hit=95, dying=24, stage_clear 0x80=270; 45 shards stopped on death",
+        "implication": "D1 frame_event_flags is a per-decision single-frame snapshot; it cannot be event truth and must not be used to fit/evaluate events"
+      },
+      {
+        "id": "L11_label_schema",
+        "category": "labels",
+        "evidence": "detector requires index schema v400-p2det-index-1 and label_version p2-v2-1; D1 is v400-teacher-obs-1 and has no li/bo/sc columns",
+        "implication": "no adapter exists; the existing train-v1 path cannot consume D1 or the v4.1 DAgger labels"
+      },
+      {
+        "id": "L12_hud_resolution",
+        "category": "input",
+        "evidence": "stored HUD is 56x160 green-channel; v4.1 requires the original client area or a selected region preserving HUD",
+        "implication": "reuse geometry but collect full-resolution color HUD; a model trained on 56x160 cannot see color/icons/menus"
+      },
+      {
+        "id": "L13_game_over_truth",
+        "category": "labels",
+        "evidence": "game_over truth is HUD gameOverFlag or harness STEP game_over; no engine event bit; pause/menu has no engine bit",
+        "implication": "menu truth needs input logs + visible annotation; game_over truth can only be used offline"
+      },
+      {
+        "id": "L14_stage_clear_bit",
+        "category": "labels",
+        "evidence": "0x0080 is exported only by rl_events and is a level bit (79 frames in the captured event); stage index flips 77 frames later",
+        "implication": "do not require the bit in runtime; do not treat it as an edge; keep engine labels separate from visible anchors"
+      },
+      {
+        "id": "L15_confidence_convention",
+        "category": "statistics",
+        "evidence": "proportion() uses z=1.96 and pass_99 compares the 95% LB to 0.99; at n=400 zero failures the 95% LB is 99.049% but the 99%-confidence LB is 98.665% (needs n>=536)",
+        "implication": "pre-register the confidence convention; recommend >=550 events/class so both readings pass"
+      },
+      {
+        "id": "L16_stale_label_metadata",
+        "category": "labels",
+        "evidence": "D1 label rows carry stage=0/difficulty=0 even for a stage-7/difficulty-1 shard (observed on d1-s7d1-n3218-seed1-shard); row-level stage/difficulty are not authoritative",
+        "implication": "always use shard.json for stage/difficulty/seed; never group or split by the label row's stage field"
+      }
+    ]
+  },
+  "reuse_matrix": [
+    {
+      "component": "HUD crop geometry (score/lives/bombs)",
+      "verdict": "reuse",
+      "reason": "measured and stable; lives/bombs 100% with LB 99.997%",
+      "refs": ["tools/rl/v400_p2_reward_detector.py:1389-1443", "tools/rl/v400_p2_bulk_collect.py:85-101"]
+    },
+    {
+      "component": "HUD reader CNN",
+      "verdict": "adapt",
+      "reason": "architecture/crops reusable; retrain or replace with template reader on full-resolution color HUD; keep as fallback",
+      "refs": ["tools/rl/v400_p2_reward_detector.py:1620-1678", "tools/rl/v400_p2_reward_detector.py:1718-1774"]
+    },
+    {
+      "component": "deterministic HUD diff (lives/bombs)",
+      "verdict": "adapt",
+      "reason": "bomb same-frame rule is proven (436/436); death rule is only a confirmation layer (64.5% ceiling, +4/+29)",
+      "refs": ["tools/rl/v400_p2_reward_detector.py:1473-1484", "tools/rl/v400_p2_reward_detector.py:2493-2558"]
+    },
+    {
+      "component": "v1 causal event head",
+      "verdict": "reject",
+      "reason": "did not converge; not a working detector",
+      "refs": ["tools/rl/v400_p2_reward_detector.py:1681-1702", "Document/Update/Alpha/v4.0.0/experiments/EXP-P2-004-event-detector-g2.md §8"]
+    },
+    {
+      "component": "v0 playfield death head",
+      "verdict": "reject",
+      "reason": "dive-domain shortcut; still 0/48; threshold not transferable",
+      "refs": ["tools/rl/v400_p2_reward_detector.py:637-689", "Document/Update/Alpha/v4.0.0/experiments/EXP-P2-003-reward-detector-g2.md §5.1/§7"]
+    },
+    {
+      "component": "NCC player-patch template",
+      "verdict": "adapt",
+      "reason": "signal is real but the engine px/py dependency is prohibited; requires a pixel locator and local window",
+      "refs": ["tools/rl/v400_p2_reward_detector.py:3402-3518", "touhou_rl/v400/student/probe/net.py:157-223"]
+    },
+    {
+      "component": "pixel death CNN feature stack",
+      "verdict": "reuse",
+      "reason": "6-channel causal stack is architecture-independent and already implemented in numpy; reuse on local player patch",
+      "refs": ["tools/rl/v400_pixel_death.py:241-325"]
+    },
+    {
+      "component": "pixel death CNN detector",
+      "verdict": "reject",
+      "reason": "8.38%/2.08% offline, 19.5%/4.6% online; far from 99%",
+      "refs": ["tools/rl/v400_pixel_death.py:1-42", "Document/Update/Alpha/v4.0.0/experiments/EXP-P2-011-wp5-online-386.md §3.3"]
+    },
+    {
+      "component": "stage-clear vgrad feature",
+      "verdict": "reuse",
+      "reason": "cheap, deterministic, and proven to fire at the visible transition; needs an independently frozen visible anchor",
+      "refs": ["tools/rl/v400_p2_reward_detector.py:3104-3116", "tools/rl/v400_stage_clear_replay.py:82-150"]
+    },
+    {
+      "component": "stage-clear old gate/window",
+      "verdict": "reject",
+      "reason": "anchored on the engine edge; penalizes correct early pixel detections; 15/55 in continuous stream",
+      "refs": ["tools/rl/v400_p2_reward_detector.py:3088-3101", "Document/Update/Alpha/v4.0.0/experiments/EXP-P2-011-wp5-online-386.md §3.1"]
+    },
+    {
+      "component": "game_over static rule",
+      "verdict": "adapt",
+      "reason": "good confirmation feature (406/406, LB 99.063%) but 89-frame latency; use panel/edge for first visible and staticness as confirmation",
+      "refs": [".tmp_v400_g2online/wp5_online386.py:72-73", ".tmp_v400_g2online/wp5_online386.py:215-225"]
+    },
+    {
+      "component": "statistics/matching/fail-closed verdicts",
+      "verdict": "adapt",
+      "reason": "reuse formulas and zero-sample policy; parameterize confidence (95%/99%) and add cluster bootstrap; latency P95 nearest-rank",
+      "refs": ["tools/rl/v400_p2_reward_detector.py:106-236", "tools/rl/v400_p2_reward_detector.py:179-217", "tools/rl/v400_p2_reward_detector.py:2818-3001"]
+    },
+    {
+      "component": "stage split / fail-closed dataset loading",
+      "verdict": "adapt",
+      "reason": "keep fail-closed checks; change split unit to trajectory/ancestor",
+      "refs": ["tools/rl/v400_p2_reward_detector.py:267-397"]
+    },
+    {
+      "component": "D1 frame_event_flags as event truth",
+      "verdict": "reject",
+      "reason": "per-decision snapshot; death/bomb bits are 0 in all 469,216 rows while 45 shards stop on death",
+      "refs": ["touhou_rl/v400/teacher/decide.py:164", "touhou_rl/v400/teacher/decide.py:277", "touhou_rl/v400/teacher/decide.py:304-311", "tools/rl/v400_d1_collect.py:1124-1147"]
+    },
+    {
+      "component": "56x160 green HUD as v4.1 input",
+      "verdict": "reject",
+      "reason": "v4.1 requires the original client area or a selected region preserving HUD; the green strip loses color/icons/menus",
+      "refs": ["tools/rl/v400_p2_bulk_collect.py:85-101", "touhou_rl/v400/student/obs_spec_v3.py:84-91"]
+    }
+  ],
+  "reusable_code_index": [
+    {
+      "path": "tools/rl/v400_p2_reward_detector.py",
+      "symbol": "wilson_lower_bound / rule_of_three_lower_bound / proportion / binary_scores",
+      "lines": "106-163",
+      "why": "Wilson and zero-failure bounds; reuse the formula, parameterize confidence (95%/99%) and keep zero-sample fail-closed"
+    },
+    {
+      "path": "tools/rl/v400_p2_reward_detector.py",
+      "symbol": "event_starts / match_events / latency_summary",
+      "lines": "166-236",
+      "why": "one-to-one greedy event matching and latency summary; reuse with before=0 for visible anchors and nearest-rank P95"
+    },
+    {
+      "path": "tools/rl/v400_p2_reward_detector.py",
+      "symbol": "load_index / shard_entries / build_split",
+      "lines": "267-397",
+      "why": "fail-closed dataset loading and split leakage checks; change split unit to trajectory/ancestor"
+    },
+    {
+      "path": "tools/rl/v400_p2_reward_detector.py",
+      "symbol": "build_model / train_model / evaluate_shards / g2_metrics",
+      "lines": "637-951",
+      "why": "v0 training/eval harness and metrics; architecture is reusable, the playfield death head is not"
+    },
+    {
+      "path": "tools/rl/v400_p2_reward_detector.py",
+      "symbol": "HUD geometry constants / score_glyph_boxes / hud_crops",
+      "lines": "1389-1443, 1620-1635",
+      "why": "measured HUD crop geometry and 9-cell score layout; reuse on full-resolution color HUD"
+    },
+    {
+      "path": "tools/rl/v400_p2_reward_detector.py",
+      "symbol": "HudCorpus / build_reader_model / train_reader / read_sequence",
+      "lines": "1538-1617, 1639-1678, 1718-1804",
+      "why": "HUD reader architecture and sequence reading; keep as fallback, retrain on color/full-resolution HUD"
+    },
+    {
+      "path": "tools/rl/v400_p2_reward_detector.py",
+      "symbol": "hud_diff_events / reader_accuracy / observable_death_scopes / observable_bomb_scopes / game_over_metrics / stage_clear_metrics",
+      "lines": "1473-1484, 1923-1986, 2493-2794",
+      "why": "deterministic HUD diff, reader accuracy split, two-scope and game_over/stage_clear label accounting; reuse as confirmation/diagnostics"
+    },
+    {
+      "path": "tools/rl/v400_p2_reward_detector.py",
+      "symbol": "g2_verdict_v2 / render_v2_table",
+      "lines": "2818-3074",
+      "why": "two-column verdict and zero-sample rendering policy; adapt to G410-3 rows"
+    },
+    {
+      "path": "tools/rl/v400_p2_reward_detector.py",
+      "symbol": "stage_clear_vgrad / stage_clear_pixel_flags / stage_clear_pixel_predictions / stage_clear_cross_validation / stage_clear_corpus_gate",
+      "lines": "3088-3158, 3250-3394",
+      "why": "vgrad feature, jump/sustain/refractory event rule and replay-level CV; reuse feature/rule shape, replace the old engine-edge anchor"
+    },
+    {
+      "path": "tools/rl/v400_p2_reward_detector.py",
+      "symbol": "player_patch_ncc / pixel_death_predictions / pixel_death_metrics",
+      "lines": "3402-3518",
+      "why": "NCC collapse signal and event metrics; the engine px/py position dependency must be replaced by a pixel locator"
+    },
+    {
+      "path": "tools/rl/v400_pixel_death.py",
+      "symbol": "frame_channels / batch_channels",
+      "lines": "241-325",
+      "why": "6-channel causal pixel feature stack; directly reusable on a local player window"
+    },
+    {
+      "path": "tools/rl/v400_pixel_death.py",
+      "symbol": "AlarmRule / predict_events / event_metrics / online_gate",
+      "lines": "764-1015",
+      "why": "rising-edge + confirmation delay + refractory + prominence rule, and online fail-closed gate; reuse the rule, not the 99% claim"
+    },
+    {
+      "path": "tools/rl/v400_pixel_death.py",
+      "symbol": "build_model / train_command / eval_command / gate_command",
+      "lines": "1220-1273, 1589-1900",
+      "why": "small fully-convolutional model and train/eval/gate harness; reuse for local-window experiments only"
+    },
+    {
+      "path": "tools/rl/v400_stage_clear_replay.py",
+      "symbol": "vgrad_plane / OnlineStageClear",
+      "lines": "82-150",
+      "why": "streaming eventFrame/alarmFrame form of the vgrad rule; reuse the dual-timestamp streaming state"
+    },
+    {
+      "path": "touhou_rl/v400/student/probe/net.py",
+      "symbol": "PlayerLocator / decode_locator / locator_target",
+      "lines": "157-223",
+      "why": "pixel-only player localizer baseline; T2a median 11.59 px means it must be improved for local patch use"
+    },
+    {
+      "path": "touhou_rl/v400/student/probe/train.py",
+      "symbol": "train_locator / evaluate_locator / locator_anchor_cells",
+      "lines": "389-557",
+      "why": "locator training/eval harness and 4 px gate pattern; reuse to train/evaluate a higher-resolution locator"
+    },
+    {
+      "path": "touhou_rl/v400/student/obs_spec_v3.py",
+      "symbol": "encode_planes_v3 / HUD constants / PLAY constants",
+      "lines": "84-91, 294-339",
+      "why": "frozen play/HUD encoding conventions; v4.1 must keep playfield/HUD determinism but widen HUD to color/full region"
+    },
+    {
+      "path": "tools/rl/v400_p2_bulk_collect.py",
+      "symbol": "hud_bands / plane_shapes / encode_frame",
+      "lines": "108-180",
+      "why": "measured bands and integer block-mean encoding; reuse for compact planes, add a color HUD region"
+    },
+    {
+      "path": "touhou_rl/v400/labels/events.py",
+      "symbol": "EVENT_BITS / REPLAY_FRAME_EVENT_*",
+      "lines": "46-58",
+      "why": "authoritative event bit values; labels only, never runtime input"
+    },
+    {
+      "path": "touhou_rl/v400/teacher/decide.py",
+      "symbol": "decide / frame_event_flags snapshot",
+      "lines": "164, 277, 304-311",
+      "why": "shows why D1 frame_event_flags is a single decision-time snapshot and cannot be per-frame truth"
+    }
+  ],
+  "v410_event_semantics": {
+    "canonical_states": [
+      {
+        "id": "ALIVE",
+        "meaning": "gameplay; player sprite visible and stable; HUD readable; no menu/transition",
+        "enter": "initial; respawn complete; stage transition complete; menu closed",
+        "exit": "hit evidence, death evidence, stage transition evidence, menu evidence, or state-unknown"
+      },
+      {
+        "id": "HIT_PENDING",
+        "meaning": "short post-hit invulnerability/blink window; death-bomb may occur; not a death",
+        "enter": "sprite blink/white flash/local novelty spike or hit evidence",
+        "exit": "death -> RESPAWN/GAME_OVER; bomb consumed and survived -> ALIVE; W_hit expires -> ALIVE"
+      },
+      {
+        "id": "RESPAWN",
+        "meaning": "player sprite absent/dissolving; waiting for respawn or terminal panel",
+        "enter": "death evidence at A_death and not terminal",
+        "exit": "player reappears at bottom and stable K frames -> ALIVE; lives==0 and terminal panel -> GAME_OVER"
+      },
+      {
+        "id": "STAGE_TRANSITION",
+        "meaning": "stage-clear sequence: boss death/white flash/panel/banner",
+        "enter": "visible transition onset A_stage_visible",
+        "exit": "new stage ALIVE stable; or MENU/UNKNOWN"
+      },
+      {
+        "id": "GAME_OVER",
+        "meaning": "terminal game-over/continue/retry panel; lives==0",
+        "enter": "last-life death + terminal panel first visible",
+        "exit": "restart -> ALIVE; back to title -> MENU"
+      },
+      {
+        "id": "MENU",
+        "meaning": "non-terminal pause/title/options menu",
+        "enter": "menu first visible",
+        "exit": "close -> previous state; new game -> ALIVE"
+      },
+      {
+        "id": "UNKNOWN",
+        "meaning": "state itself is undecidable (black/loading/cutscene; both HUD and player cues invalid)",
+        "enter": "observations invalid and no state can be maintained",
+        "exit": "observations valid; no zero-fill and no engine correction"
+      }
+    ],
+    "state_priority": ["UNKNOWN", "GAME_OVER", "MENU", "STAGE_TRANSITION", "RESPAWN", "HIT_PENDING", "ALIVE"],
+    "transitions": [
+      {
+        "from": "ALIVE",
+        "to": "HIT_PENDING",
+        "trigger": "hit/blink/white-flash evidence",
+        "emits": "hit_pending_interval_start",
+        "notes": "does not emit death; must not be counted as a life loss"
+      },
+      {
+        "from": "HIT_PENDING",
+        "to": "RESPAWN",
+        "trigger": "death evidence before W_hit expires",
+        "emits": "death",
+        "notes": "death-bomb failure is a death; death is still counted once"
+      },
+      {
+        "from": "HIT_PENDING",
+        "to": "ALIVE",
+        "trigger": "bombs decrement + no lives decrement within W_confirm, or W_hit expires",
+        "emits": "bomb, death_bomb",
+        "notes": "successful death-bomb consumes a bomb and does not cost a life"
+      },
+      {
+        "from": "RESPAWN",
+        "to": "ALIVE",
+        "trigger": "player reappears at bottom and stable K frames; lives>0",
+        "emits": "respawn",
+        "notes": "respawn blink must not fire a second death; refractory is explicit, not the only guard"
+      },
+      {
+        "from": "RESPAWN",
+        "to": "GAME_OVER",
+        "trigger": "lives==0 and terminal panel visible (or no respawn within T_terminal after last-life death)",
+        "emits": "game_over",
+        "notes": "last-life death is in the death denominator; game_over is a separate event"
+      },
+      {
+        "from": "ALIVE",
+        "to": "STAGE_TRANSITION",
+        "trigger": "A_stage_visible (independently annotated visible onset)",
+        "emits": "stage_transition",
+        "notes": "engine bit/stage index are labels only; lead is reported, not penalized"
+      },
+      {
+        "from": "STAGE_TRANSITION",
+        "to": "ALIVE",
+        "trigger": "new stage stable (background/banner end/HUD reset)",
+        "emits": "stage_transition_end",
+        "notes": "resource reset in this window is cause=reset, not bomb/death"
+      },
+      {
+        "from": "ALIVE",
+        "to": "MENU",
+        "trigger": "pause/title/options menu first visible",
+        "emits": "menu",
+        "notes": "menu truth comes from input log + visible annotation"
+      },
+      {
+        "from": "MENU",
+        "to": "ALIVE",
+        "trigger": "menu closed or new game",
+        "emits": "menu_end",
+        "notes": "new game resets the resource baseline; emit no fake negative/positive deltas"
+      },
+      {
+        "from": "ALIVE",
+        "to": "GAME_OVER",
+        "trigger": "last-life death + terminal panel",
+        "emits": "death, game_over",
+        "notes": "both events are emitted; they are scored separately"
+      },
+      {
+        "from": "GAME_OVER",
+        "to": "ALIVE",
+        "trigger": "pixel-terminal-driven restart succeeds",
+        "emits": "restart",
+        "notes": "restart cycle is logged; 100 cycles / >=99 success"
+      },
+      {
+        "from": "ANY",
+        "to": "UNKNOWN",
+        "trigger": "state undecidable",
+        "emits": "unknown_interval_start",
+        "notes": "events during UNKNOWN stay in the denominator as unobservable; no zero-fill"
+      },
+      {
+        "from": "UNKNOWN",
+        "to": "LAST_STATE",
+        "trigger": "observations valid again",
+        "emits": "unknown_interval_end",
+        "notes": "if a death happened during UNKNOWN, it is reported as unobservable, not silently deleted"
+      }
+    ],
+    "events": [
+      {
+        "name": "death",
+        "anchor": "A_death = first frame a human can see the death: sprite vanish/dissolve OR death effect at the player position; HUD lives decrement only if both visual cues are invisible; respawn-only as last resort",
+        "visible_evidence_classes": ["sprite_vanish", "death_effect", "hud_lives_decrement", "respawn_only"],
+        "engine_truth": "EVENTS & 0x4 rising edge; also EVENTS & 0x200 (dying started) as a diagnostic",
+        "runtime_inputs": ["player local patch", "sprite-present/NCC/novelty", "HUD lives", "state machine history"],
+        "primary_latency": "alarm - A_death, P95 <= 10, matching window [A_death, A_death+10], before=0",
+        "secondary_latency": "alarm - engine death frame, P95 <= 30, max <= 60, signed",
+        "denominator": "all real deaths, including last-life, death-bomb failure, stage/menu-period deaths; unobservable listed separately but not removed",
+        "notes": "one death emits once; respawn blink cannot fire a second death"
+      },
+      {
+        "name": "bomb",
+        "anchor": "first frame the bombs icon count decreases (same frame as engine 0x1); bomb activation effect only if HUD unreadable",
+        "engine_truth": "EVENTS & 0x1 rising edge",
+        "runtime_inputs": ["HUD bombs icons", "bomb activation effect"],
+        "primary_latency": "alarm - A_bomb, P95 <= 10 (target 0)",
+        "secondary_latency": "alarm - engine bomb frame (should be 0)",
+        "denominator": "all bomb uses; death-frame bomb-stock movement is ambiguous and must be attributed to death, not counted as a bomb event unless a bomb activation is visible",
+        "notes": "G2C proves 436/436 same-frame with HUD decrement"
+      },
+      {
+        "name": "death_bomb",
+        "anchor": "bomb activation/consumption during HIT_PENDING with no lives decrement",
+        "engine_truth": "no dedicated bit; use 0x2 + 0x1 + input log",
+        "runtime_inputs": ["HIT_PENDING", "HUD bombs decrement", "HUD lives unchanged"],
+        "primary_latency": "report as a bomb subtype; <=10",
+        "secondary_latency": "not applicable",
+        "denominator": "subset of bomb events; must not be counted as death",
+        "notes": "a late death-bomb that still dies is a death (and may also consume a bomb)"
+      },
+      {
+        "name": "respawn",
+        "anchor": "first frame the player sprite reappears at the bottom after a death",
+        "engine_truth": "no engine bit; visible annotation; engine player_state/py only offline",
+        "runtime_inputs": ["player local patch", "position tracker", "HUD lives"],
+        "primary_latency": "state event, diagnostic",
+        "secondary_latency": "not applicable",
+        "denominator": "death subset with lives>0; report separately",
+        "notes": "invincibility blink is expected; stable K frames ends RESPAWN"
+      },
+      {
+        "name": "stage_transition",
+        "anchor": "A_stage_visible = first frame of the stage-clear sequence (boss death/white flash/panel/banner), independently annotated; NOT the engine bit or stage index",
+        "engine_truth": "EVENTS & 0x80 rising edge (level bit) and STATE.stage change",
+        "runtime_inputs": ["play64 vgrad", "panel/banner templates", "HUD reset cues"],
+        "primary_latency": "alarm - A_stage_visible, P95 <= 10",
+        "secondary_latency": "lead vs engine bit and stage index, signed, reported only",
+        "denominator": "all stage transitions in Normal s0-s7; >=400 total, >=30 per stage",
+        "notes": "old [edge, edge+10] window is not used; old G2 remains separate"
+      },
+      {
+        "name": "game_over",
+        "anchor": "first frame the terminal game-over/continue/retry panel or letterbox is visible; NOT after 60 static frames",
+        "engine_truth": "HUD gameOverFlag rising edge (offline only)",
+        "runtime_inputs": ["terminal panel template/edge", "lives==0 history", "player absent"],
+        "primary_latency": "alarm - A_game_over, P95 <= 10",
+        "secondary_latency": "alarm - gameOverFlag, reported",
+        "denominator": "all terminal intervals; >=400",
+        "notes": "retry menu is part of GAME_OVER; it is a menu_kind=retry sub-event, not a separate menu denominator"
+      },
+      {
+        "name": "menu",
+        "anchor": "first frame a non-terminal pause/title/options menu is visible",
+        "engine_truth": "input log + visible annotation; no engine bit",
+        "runtime_inputs": ["menu templates/edges"],
+        "primary_latency": "alarm - A_menu, P95 <= 10",
+        "secondary_latency": "not applicable",
+        "denominator": "all non-terminal menu entries; >=400",
+        "notes": "game-over retry menu is excluded from this denominator to avoid double counting"
+      },
+      {
+        "name": "hit_pending",
+        "anchor": "first frame of blink/white flash/local novelty spike",
+        "engine_truth": "EVENTS & 0x2 (offline only)",
+        "runtime_inputs": ["local patch time series"],
+        "primary_latency": "diagnostic",
+        "secondary_latency": "not applicable",
+        "denominator": "diagnostic; no hard gate",
+        "notes": "used to disambiguate death-bomb and avoid counting a hit as a death"
+      }
+    ],
+    "death_anchor": {
+      "definition": "A_death is the earliest frame at which a human can see that the player died, independently annotated and frozen before detector evaluation; it is not the engine death bit and not the HUD lives decrement when the sprite dissolve is visible.",
+      "evidence_priority": ["sprite_vanish", "death_effect", "hud_lives_decrement", "respawn_only"],
+      "visual_timing": "the sprite is gone/dissolving 0..4 frames after the engine death bit (EXP-P2-008 §14); the +29-frame path is a HUD refresh delay, not a later visual death",
+      "annotation": "two independent annotators blind to detector output and engine frames; adjudication for disagreements; anchor_version + sha256 + adjudication record frozen",
+      "latency": {
+        "primary": "alarm - A_death, P95 <= 10, matching window [A_death, A_death+10], before=0; alarm < A_death is a false positive",
+        "secondary": "alarm - engine death frame, P95 <= 30, max <= 60, signed",
+        "p95_method": "nearest-rank ceil(0.95*n)-1; report median/max/n"
+      },
+      "inclusion": [
+        "all real deaths, including last-life, death-bomb failure, deaths during stage transition or menu, and deaths under partial occlusion",
+        "unobservable deaths (UNKNOWN/black/cutscene) are listed as an unobservable subset and stay in the denominator",
+        "do not delete an event because no detector could see it; do not add repeated replays as independent events"
+      ],
+      "forbidden": [
+        "using the HUD lives decrement as the primary anchor when the sprite dissolve is visible",
+        "using engine EVENTS/STATE/HUD truth at runtime",
+        "changing the anchor after seeing detector output"
+      ]
+    },
+    "stage_transition": {
+      "timestamps": {
+        "A_stage_visible": "first human-visible frame of the stage-clear sequence (boss death/white flash/panel/banner), independently annotated",
+        "E_stage_bit": "EVENTS & 0x80 rising edge; level bit; captured example set for 79 consecutive frames",
+        "E_stage_index": "STATE.stage flip; captured example 77 frames after E_stage_bit",
+        "alarm": "detector confirmation frame; includes sustain frames",
+        "lead_bit": "alarm - E_stage_bit, signed; expected negative (early); report distribution",
+        "lead_index": "alarm - E_stage_index, signed; report distribution"
+      },
+      "primary_gate": "alarm - A_stage_visible P95 <= 10, P/R LB >=99%, n>=400",
+      "secondary_report": "lead_bit/lead_index median/P95/range; do not use them to pass or fail; do not modify engine semantics",
+      "old_gate": "the old [edge, edge+10] window is retired for G410-3; old G2 stays as originally reconciled"
+    },
+    "resource_semantics": {
+      "targets": {
+        "lives": "0..6 or unknown; star icons; increase=extend or reset; decrease=death",
+        "bombs": "0..8 or unknown; bomb icons; decrease=bomb or death handling; increase=pickup or reset",
+        "score": "9 digits of visible displayScore; globalsScore is offline-only; settled/rolling flag"
+      },
+      "cause_attribution": [
+        "lives decrease: death event only; must be paired with a death state",
+        "lives increase: extend vs stage reset/continue; cause=extend or cause=reset",
+        "bombs decrease: bomb event vs death handling; use bomb activation visual; if ambiguous, label ambiguous and do not count as a bomb",
+        "bombs increase: pickup vs reset; cause=pickup or cause=reset",
+        "score decrease: stage reset/score zeroing only (no damage path); cause=reset; never a damage penalty",
+        "score increase: normal score; after a reset, rebase to the new zero"
+      ],
+      "reset_windows": "stage transition and restart windows produce resource resets; suppress bomb/death/event rewards there and label cause=reset",
+      "score_reward": "use visible displayScore after settle; do not train against globalsScore; report rolling frames and cumulative error",
+      "unknown": "never zero-fill; report unknown_ratio per field and coverage"
+    },
+    "unknown_policy": {
+      "partial_hud": "if HUD is unreadable but the player/state cues are valid, keep the state and set hud_unknown=true; do not enter UNKNOWN",
+      "full_unknown": "enter UNKNOWN only when the state itself is undecidable; hold last state; no events emitted while UNKNOWN",
+      "no_engine_correction": "runtime UNKNOWN must not be corrected by engine truth; offline analysis may explain it but cannot rewrite runtime output",
+      "denominator": "events during UNKNOWN stay in the denominator as unobservable; they are reported and counted as misses, not deleted",
+      "reporting": "unknown intervals, duration ratio, and per-field unknown ratio are first-class outputs"
+    }
+  },
+  "data_inventory": {
+    "d1": {
+      "location": ".tmp_v400_d1/d1/shards",
+      "shards": 137,
+      "decisions": 469216,
+      "frames": 1876864,
+      "frame_seconds_at_60hz": 31281.07,
+      "stages": {"0": 19, "1": 16, "2": 16, "3": 17, "4": 16, "5": 16, "6": 17, "7": 20},
+      "difficulty": [1],
+      "seeds": 25,
+      "frames_per_decision": 4,
+      "obs_spec": "obs-v3",
+      "play_shape": [112, 96],
+      "hud_shape": [56, 160],
+      "hud_channels": "green only",
+      "labels_schema": "v400-teacher-obs-1",
+      "labels_per": "decision; no li/bo/sc; no per-frame event truth",
+      "stops": {"stage_changed": 15, "max_frames": 77, "death": 45},
+      "deaths_observed": 45,
+      "stage_clear_shards": 15,
+      "event_flag_rows": {
+        "rows": 469216,
+        "null": 0,
+        "death_0x4": 0,
+        "bomb_0x1": 0,
+        "hit_0x2": 95,
+        "dying_0x200": 24,
+        "stage_clear_0x80": 270,
+        "effect_0x400": 287867
+      },
+      "stage_clear_by_stage": {"0": 15},
+      "death_by_stage": {"2": 1, "3": 13, "4": 10, "5": 3, "6": 14, "7": 4},
+      "usable_for": ["ALIVE/background pixels", "player locator pretraining", "stage 0 stage-transition frames", "negative/false-alarm mining"],
+      "not_usable_for": ["death/game_over event truth", "per-frame HUD labels", "post-death respawn/game-over/restart"],
+      "verification": ".tmp_v410_wp06_audit/audit_verify.py: d1_inventory/flag_census"
+    },
+    "p2v2_small": {
+      "location": ".tmp_v400_p2v2/dataset",
+      "shards": 7,
+      "frames": 3989,
+      "label_version": "p2-v2-1",
+      "usable_for": "schema smoke only",
+      "source": ".tmp_v400_p2v2/dataset/manifest.json"
+    },
+    "wp5_online": {
+      "round1": {
+        "location": ".tmp_v400_g2online/run",
+        "episodes": 453,
+        "frames": 551250,
+        "death_events": 1325,
+        "death_with_bombs_zero": 139,
+        "bomb_events": 530,
+        "game_over_intervals": 415,
+        "death_w10": {"recall": 0.19471698113207547, "recall_lb_95": 0.17429027191485016, "precision": 0.045825932504440496, "precision_lb_95": 0.040666464813530874, "predictions": 5630},
+        "death_w30": {"recall": 0.3630188679245283, "recall_lb_95": 0.3375566725738109, "precision": 0.08543516873889875},
+        "hud_lives_reference_w10": {"recall": 0.5901886792452831, "precision": 0.8631346578366446, "note": "circular; reference only"},
+        "bomb": {"recall": 1.0, "recall_lb_95": 0.9928038579233991, "precision": 1.0, "latency_max": 0},
+        "game_over": {"intervals": 415, "detections": 0, "note": "episode closed 30 frames after game over; 60-frame static rule structurally untestable"},
+        "source": ".tmp_v400_g2online/wp5-summary.json"
+      },
+      "round2": {
+        "location": ".tmp_v400_g2online/run2",
+        "episodes": 285,
+        "frames": 372891,
+        "death_events": 832,
+        "game_over_intervals": 260,
+        "static_runs": 253,
+        "static_lag": {"88": 5, "89": 248},
+        "misses": 7,
+        "note": "same detectors, longer post-game-over hold; static rule is a confirmation feature, not a first-visible detector",
+        "verification": ".tmp_v410_wp06_audit/probe12_wp5_round2.py, probe13_wp5_go_lag.py"
+      }
+    },
+    "g2c_gates": {
+      "bomb": {
+        "events": 436,
+        "observable_events": 436,
+        "predictions": 436,
+        "matched": 436,
+        "recall": 1.0,
+        "recall_lb_95": 0.9912659466498849,
+        "precision": 1.0,
+        "precision_lb_95": 0.9912659466498849,
+        "latency": {"median": 0, "p95": 0, "max": 0, "n": 436},
+        "detector": "HUD bombs strictly decreased",
+        "source": ".tmp_v400_g2c/bomb-gate.json"
+      },
+      "game_over": {
+        "intervals": 406,
+        "detection_runs": 406,
+        "recall": 1.0,
+        "recall_lb_95": 0.9906266225780888,
+        "precision": 1.0,
+        "precision_lb_95": 0.9906266225780888,
+        "latency": {"median": 89, "max": 89, "n": 406},
+        "detector": "play96 mean |x[t]-x[t-60]| < 1.736, rising edge",
+        "source": ".tmp_v400_g2c/gameover-gate-valid.json"
+      },
+      "stage_clear": {
+        "bit": 128,
+        "bit_frames": {"count": 79, "first": 13598, "last": 13676},
+        "stage_flip_frames": [13675],
+        "proxy_latency": {"n": 1, "median": 77, "max": 77},
+        "pixel_detector": "none in that gate",
+        "source": ".tmp_v400_g2c/stage_clear_gate.json"
+      }
+    },
+    "stage_clear_corpus": {
+      "cases": 250,
+      "combined_captured": 165,
+      "normal_captured": 27,
+      "normal_stage_counts": {"0": 21, "1": 3, "2": 3},
+      "normal_stages_3_to_7": 0,
+      "continuous_streams": 55,
+      "pixel_slice_recall": 0.992,
+      "continuous_stream_recall_old_window": 0.2727,
+      "pixel_onset_lead_median": -112,
+      "pixel_onset_lead_range": [-172, 1],
+      "sources": [".tmp_v400_sclear2/combined/report.json", "EXP-P2-011 §3.1"]
+    },
+    "p2det_big": {
+      "location": "WSL /root/v400-data/p2det/out-main (not local)",
+      "shards": 194,
+      "frames": 357729,
+      "label_version": "p2-v2-1",
+      "note": "quoted from EXP-P2-004; not re-verified locally; do not use as v4.1 confirmation"
+    },
+    "coverage_matrix": {
+      "normal_all_stages": {"have": "D1 stage 0-7 pixels", "missing": "per-frame event/HUD labels; Normal stage 3-7 stage transitions"},
+      "death": {"have": "WP5 1,325 + D1 45 death-stopped shards (no flags)", "missing": "visible anchors; last-life labels; full per-frame truth"},
+      "death_bomb": {"have": "WP5 139 bomb==0 deaths and 1,186 bomb>0; no dedicated death-bomb run", "missing": "controlled death-bomb policy/events"},
+      "bomb": {"have": "436 G2C + 530 WP5", "missing": "death-frame bomb-stock ambiguity labels; pickup vs reset labels"},
+      "stage_transition": {"have": "250 cases (Normal 27, stages 0-2)", "missing": "Normal stage 3-7, >=400 events, visible anchors"},
+      "game_over": {"have": "406 G2C intervals + 415 WP5 truth", "missing": "first-visible panel labels and 10-frame-latency detector"},
+      "menu": {"have": "none", "missing": "pause/title data and input logs"},
+      "respawn": {"have": "WP5 has lives series but no explicit respawn labels", "missing": "respawn anchors and states"},
+      "long_no_event": {"have": "none at 10h scale", "missing": "10h equivalent Normal streams"},
+      "occlusion_slow_boss": {"have": "incidental only", "missing": "systematic strata"},
+      "ancestor_graph": {"have": "seeds in D1; no ancestor IDs", "missing": "trajectory/ancestor manifest and sealed split"}
+    }
+  },
+  "data_plan": {
+    "scope": {
+      "difficulty": "Normal (difficulty index 1) only for the G410-3 gate",
+      "stages": "0..7 (Stage 1..6B); other difficulties/teams are explicit OOD and not in the gate",
+      "engine": "one frozen SHA per collection batch; mixed SHA fails closed",
+      "stream": "one continuous run from RESET to game over/restart; 60 Hz; no mid-run RESET except a real restart",
+      "runtime_truth": "EVENTS/STATE/HUD only in separate offline label files; never fed to the detector"
+    },
+    "minimum_event_counts": {
+      "per_class_positives": 400,
+      "per_class_predictions": 400,
+      "recommended": 550,
+      "reason": "400 meets the README 95%-confidence Wilson LB>=99%; 99%-confidence LB>=99% needs n>=536 at zero failures; 550 gives margin",
+      "classes": ["death", "bomb", "stage_transition", "game_over", "menu"],
+      "death_strata_min_each": 100,
+      "death_total_note": "the death denominator is unique deaths >=400; the six strata may overlap, so plan >=600 death events to cover each stratum with >=100",
+      "death_strata": ["bombs>0", "bombs==0 (+29)", "last_life", "death_bomb_failure", "stage/menu-period death", "occluded death"],
+      "bomb_subtypes_min_each": 100,
+      "bomb_subtypes": ["normal bomb", "death_bomb", "pickup", "death-frame stock move"],
+      "stage_transition_per_stage_min": 30,
+      "respawn_min": 300,
+      "hit_pending_min": 400,
+      "background_hours": 10,
+      "background_per_stage_hours": 1,
+      "restart_cycles": 100,
+      "restart_success_min": 99
+    },
+    "policies": {
+      "natural_teacher": "fast teacher trajectories for ALIVE/background/stage transitions",
+      "still": "shoot only; produces death/game over reliably",
+      "dive": "dense death positives (EXP-P2-003 §2.2)",
+      "bomb_on_hit": "press bomb in the hit window; produces death-bomb and bomb-depletion paths; measure W_hit from data",
+      "pause_injector": "scripted pause/unpause for menu states",
+      "restart_driver": "pixel-terminal-driven retry/title navigation for restart cycles"
+    },
+    "capture_tiers": {
+      "T0_per_frame": {
+        "planes": ["play96 (112x96, u8)", "play64 (64x64, u8)", "full-resolution color HUD region 160x64x3", "player-local 96x96x3 around the tracked position", "input mask"],
+        "labels": ["frame_event_flags per frame", "STATE lives/bombs/score/stage", "HUD displayScore/lives/bombs/gameOverFlag", "PLAYER x/y only offline", "input/reset/restart log"],
+        "raw_bytes_per_frame_estimate": 73216,
+        "note": "compression ratio must be measured in a 1-hour pilot; do not assume PNG size"
+      },
+      "T1_event_window": "full 640x480 RGBA lossless PNG for +/-120 frames around every death/bomb/death_bomb/stage_transition/game_over/menu event; plus periodic anchors",
+      "T2_long_run": "T0 compact + one full frame per 600 frames; 10h equivalent",
+      "budget": "150 GB authorized; pilot measures bytes/frame and fails closed before full collection"
+    },
+    "annotation": {
+      "anchors": ["death", "stage_transition", "game_over", "menu"],
+      "procedure": "two independent annotators, blind to detector output and engine frames; adjudication; freeze anchor_version and sha256",
+      "labels": ["first visible frame", "evidence class", "occlusion/unknown reason", "stratum"],
+      "no_post_hoc": "never redefine the anchor after seeing detector results"
+    },
+    "split": {
+      "unit": "original trajectory and its ancestors (seed, RESET chain, restart lineage, replay derivation)",
+      "splits": ["train >=60% trajectories", "dev >=20%", "confirmation >=20%"],
+      "confirmation_seed_ranges": "pre-registered before collection; not opened until freeze",
+      "checks": ["same ancestor across splits -> fail closed", "missing stratum in a split -> fail closed", "mixed engine SHA -> fail closed", "confirmation opened before freeze -> fail closed"]
+    },
+    "confirmation_seal": {
+      "freeze": ["detector code", "state machine", "thresholds", "anchor definition", "eval script"],
+      "manifest": "confirmation-manifest.json with sha256, seed ranges, trajectories, event counts per class, engine SHA",
+      "one_shot": "open once; any component change requires a new version and a new sealed set; no reuse",
+      "evidence": "per-stream/per-event JSONL + manifest + commands + exit codes + failure videos/timeouts",
+      "separation": "old G2 data/thresholds/windows are not renamed or reused as G410-3 confirmation"
+    },
+    "no_synthetic": "confirmation must be real engine frames; synthetic overlays/augmentation may only be used in training and must be labeled; they cannot enter confirmation"
+  },
+  "evaluation_plan": {
+    "event_pr": {
+      "matching": "one-to-one greedy; p matches d iff A_d <= p <= A_d+10; each prediction at most one event; unmatched predictions are FP",
+      "min_counts": {"positives": 400, "predictions": 400, "recommended": 550},
+      "confidence": {
+        "primary_readme": "one-sided 95% Wilson LB >=0.99 (z=1.959963985); at n=400 zero failures LB=0.990488 (passes)",
+        "stricter": "one-sided 99% Wilson LB (z=2.326347874); at n=400 zero failures LB=0.986651 (fails); n>=536 needed",
+        "rule": "pre-register one convention in the manifest; report both; never switch after seeing results"
+      },
+      "clusters": {
+        "unit": "original trajectory ancestor",
+        "method": "per-cluster recall/precision + 10,000 cluster bootstrap; 99% percentile interval; report design effect",
+        "primary_if": "design effect > 1.5 -> cluster interval is primary; Wilson is secondary",
+        "min_clusters": 100
+      },
+      "classes": ["death", "bomb", "stage_transition", "game_over", "menu"],
+      "diagnostics": ["death_bomb", "respawn", "hit_pending"],
+      "zero_samples": "never pass; never report 0% or 100%; predictions <400 fail closed"
+    },
+    "latency": {
+      "death_primary": "P95(alarm - A_death) <=10; window [A_death, A_death+10]; before=0",
+      "death_secondary": "P95(alarm - engine death) <=30; max <=60; signed",
+      "bomb": "P95 <=10 (target 0)",
+      "stage_transition": "P95(alarm - A_stage_visible) <=10; report lead_bit/lead_index",
+      "game_over": "P95(alarm - A_game_over) <=10",
+      "menu": "P95(alarm - A_menu) <=10",
+      "method": "nearest-rank ceil(0.95*n)-1; report median/max/n; n<20 also list every event",
+      "confirmation_delay": "sustain/confirmation frames are included in latency; never subtract them"
+    },
+    "resources": {
+      "lives_bombs": "per-segment (600 frames) accuracy; Wilson 95% LB >=0.995; worst trajectory/window reported; unknown <=1% per field",
+      "score": "per-digit/integer/settled sign; settled sign LB >=0.99; rolling diagnostic; negative class (stage reset) reported separately; no negative -> untestable",
+      "reward": "visible displayScore + resource/event reward; per-episode cumulative reward error; resource inconsistency count; reset causes excluded from damage reward",
+      "no_frame_weighting": "do not let 100k static frames dominate the confidence; segment/trajectory weighting is mandatory"
+    },
+    "long_run": {
+      "hours": 10,
+      "per_stage_hours": 1,
+      "false_alarms_per_game_hour": 1,
+      "report": ["background FP", "unknown ratio", "resource inconsistency", "cumulative reward error", "Poisson/rule-of-three upper bound if zero FP"],
+      "fail_closed": "no 0-event segment -> cannot claim the long-run gate"
+    },
+    "restart": {
+      "cycles": 100,
+      "success_min": 99,
+      "driver": "pixel-terminal only (GAME_OVER/MENU); no engine terminal truth",
+      "failure_evidence": "video + timeout + reason per failure",
+      "claim": "99/100 is a point estimate; report Wilson interval and do not claim a 99% lower bound",
+      "training_use": "pure-pixel training may only use this termination/restart path or a pre-fixed truncation"
+    },
+    "runtime_purity": {
+      "forbidden": ["EVENTS", "STATE", "HUD", "PLAYER", "game_over flag", "stage_clear bit", "engine death bit"],
+      "test": "scramble/delete the truth file; detector output must be byte-identical; import audit forbids protocol/truth modules in the runtime path",
+      "unknown": "no engine correction of UNKNOWN; offline analysis cannot rewrite runtime output"
+    },
+    "fail_closed": [
+      "missing HUD/frame gap/non-monotonic time/mixed engine SHA/mixed anchor_version/opened confirmation/insufficient samples -> non-zero exit",
+      "zero samples are not 0% and not 100%",
+      "no pass by report-only self-declaration; machine-readable per-event evidence is required"
+    ],
+    "g410_3_gate_draft": [
+      {"id": "G410-3-1", "requirement": "event/anchor/state machine frozen and versioned", "evidence": "anchor_version, sha256, adjudication"},
+      {"id": "G410-3-2", "requirement": "death >=400 (recommend 550), P/R LB>=99%, visible P95<=10, engine P95<=30/max<=60, all deaths incl last-life", "evidence": "per-event JSONL"},
+      {"id": "G410-3-3", "requirement": "bomb/death_bomb >=400, P/R LB>=99%, latency<=10, no death-frame bomb miscount", "evidence": "per-event JSONL"},
+      {"id": "G410-3-4", "requirement": "stage_transition >=400, P/R LB>=99%, visible P95<=10, dual timestamps reported", "evidence": "per-event JSONL"},
+      {"id": "G410-3-5", "requirement": "game_over/menu each >=400, P/R LB>=99%, first-visible P95<=10", "evidence": "per-event JSONL"},
+      {"id": "G410-3-6", "requirement": "lives/bombs segment LB>=99.5%, score settled sign LB>=99%, unknown<=1%, negatives honestly untestable", "evidence": "per-segment report"},
+      {"id": "G410-3-7", "requirement": "10h long-run, FP<=1/game-hour, unknown/resource/reward-error reported", "evidence": "long-run report"},
+      {"id": "G410-3-8", "requirement": "100 restart cycles, >=99 success, failure videos/timeouts", "evidence": "restart log"},
+      {"id": "G410-3-9", "requirement": "sealed one-shot confirmation, independent ancestors/seeds, no tuning after freeze", "evidence": "confirmation manifest"},
+      {"id": "G410-3-10", "requirement": "runtime purity: no EVENTS/STATE/HUD truth; scrambled-truth invariance", "evidence": "purity test"},
+      {"id": "G410-3-11", "requirement": "machine-readable evidence + commands + exit codes; no report-only pass", "evidence": "evidence bundle"}
+    ]
+  },
+  "risks": [
+    {
+      "id": "R1_anchor_subjectivity",
+      "risk": "the first visible death/stage/game_over frame is subjective; a lax anchor could make latency look better",
+      "mitigation": "two blind annotators + adjudication + frozen anchor_version + disagreement rate; detector never edits the anchor",
+      "residual": "rare ambiguous frames; report them as a separate stratum"
+    },
+    {
+      "id": "R2_player_locator",
+      "risk": "full-resolution player localization may fail under effects/occlusion; T2a baseline is 11.59 px",
+      "mitigation": "template + tracking + confidence; local 96x96 window; explicit UNKNOWN; compare against engine PLAYER only offline",
+      "residual": "occluded deaths may be unobservable; keep them in the denominator"
+    },
+    {
+      "id": "R3_death_bomb_ambiguity",
+      "risk": "bomb effect vs death dissolve looks similar; death-frame bomb-stock moves are ambiguous",
+      "mitigation": "HIT_PENDING + bombs/lives deltas + +4/+29 confirmation + dedicated bomb-on-hit data",
+      "residual": "some frames may be labeled ambiguous; report both interpretations, never silently pick the favorable one"
+    },
+    {
+      "id": "R4_stage_visible_semantics",
+      "risk": "vgrad jump may fire on boss death/white flash, not the panel; annotation may disagree",
+      "mitigation": "independent annotation of the first human-visible transition; report sub-anchors (boss defeat/panel/banner); per-stage calibration",
+      "residual": "stage 2 background is already top-lit; jump (not level) is mandatory"
+    },
+    {
+      "id": "R5_game_over_menu_confusion",
+      "risk": "pause/title/retry panels share templates; game over vs menu can be confused",
+      "mitigation": "history (lives==0), menu kind templates, input log; GAME_OVER vs MENU separation by definition",
+      "residual": "rare overlays; use UNKNOWN rather than guessing"
+    },
+    {
+      "id": "R6_clustered_events",
+      "risk": "repeated deaths in one trajectory inflate n and narrow Wilson intervals",
+      "mitigation": "ancestor split + cluster bootstrap + design effect; if >1.5, cluster interval is primary",
+      "residual": "few clusters may widen intervals; plan >=100 clusters/class"
+    },
+    {
+      "id": "R7_storage_budget",
+      "risk": "full-resolution HUD/local windows + full event windows exceed 150 GB",
+      "mitigation": "1-hour pilot measures bytes/frame; tiered capture; event windows only; fail closed before full collection",
+      "residual": "may need to reduce T1 duration or background frame rate; must not shrink event frames"
+    },
+    {
+      "id": "R8_engine_drift",
+      "risk": "engine SHA/behavior changes invalidate anchors/thresholds",
+      "mitigation": "freeze SHA per batch; mixed SHA fails closed; no rebuild during confirmation",
+      "residual": "a new build requires a new version and new confirmation"
+    },
+    {
+      "id": "R9_score_reset",
+      "risk": "stage reset creates a real score drop; counting it as damage corrupts reward",
+      "mitigation": "cause=reset windows; rebase after reset; report score negatives separately",
+      "residual": "reset and death can co-occur; state machine priority resolves"
+    },
+    {
+      "id": "R10_confidence_convention",
+      "risk": "team conflates '95% LB >= 99%' with '99% confidence LB'; 400/400 passes the former but fails the latter",
+      "mitigation": "pre-register the convention; report both; recommend 550/class",
+      "residual": "if 99% confidence is required, 400 is insufficient; data plan must say so"
+    },
+    {
+      "id": "R11_old_g2_contamination",
+      "risk": "old G2 windows/thresholds/data leak into G410-3",
+      "mitigation": "separate names, manifests and confirmation sets; old G2 stays as written; no stage/data reuse without explicit declaration",
+      "residual": "shared underlying engine data is allowed only as declared dev/OOD, never as confirmation"
+    }
+  ],
+  "not_claimed": [
+    "not G410-3 passed; no runtime detector, no confirmation set, no gate result",
+    "no data collected, no training, no game/engine started in this work package",
+    "no v400/v410 code, tests, state/journal/budget/assets or other WP evidence modified",
+    "no proof that pixel-only death can reach 99%; current NCC/CNN/HUD-diff evidence is far below",
+    "no proof that 400 events are enough for a 99%-confidence lower bound; n>=536 is required for that reading",
+    "no proof that the old vgrad onset equals the human-visible stage transition; independent annotation is required",
+    "no proof that game_over/menu can be detected within 10 frames; the old static rule took 89 frames",
+    "no proof that the pixel player locator can reach <=2 px; the T2a baseline is 11.59 px",
+    "no proof that D1 frame_event_flags can be event truth; death and bomb bits are 0 in all 469,216 rows",
+    "no renaming of old G2 95% bounds/windows/thresholds into G410-3",
+    "no claim that this audit's static test count (66 test_* functions) means the tests pass; pytest was not run"
+  ],
+  "next_task": {
+    "id": "WP06.1",
+    "objective": "offline event/state-machine contract and coverage audit; no game, no training, no data collection",
+    "deliverables": [
+      "touhou_rl/v410/reward/events.py (event definitions, anchors, matching, Wilson 95/99, cluster bootstrap)",
+      "touhou_rl/v410/reward/state_machine.py (7 states + internal DYING subphase)",
+      "touhou_rl/v410/reward/labels.py (per-frame label contract/conversion)",
+      "touhou_rl/v410/reward/audit.py (read-only coverage audit over D1/WP5/G2C/stage-clear)",
+      "tests/test_v410_reward_events.py and tests/test_v410_reward_state_machine.py",
+      "machine-readable coverage report aligned with this audit.json"
+    ],
+    "acceptance_draft": [
+      "pytest exit 0 for the new tests",
+      "compileall exit 0",
+      "audit exit 0 only means the report was produced; coverage status is in the JSON, not the exit code",
+      "the audit re-derives D1 137/469,216/1,876,864, death bit 0, stage_clear 270, WP5 1,325/530/415, G2C 436/406, Normal stage-clear 27",
+      "no engine launch, no training, no data collection"
+    ],
+    "commands_draft": [
+      "$env:PYTHONPATH='D:\\WorkShop\\Touhou_RL'",
+      "python -m pytest -p no:cacheprovider --basetemp .tmp_v410_wp06_pytest -q tests/test_v410_reward_events.py tests/test_v410_reward_state_machine.py",
+      "python -m compileall -q touhou_rl/v410/reward",
+      "python -m touhou_rl.v410.reward.audit --corpus .tmp_v400_d1/d1 --out .tmp_v410_wp06_audit/wp061_coverage.json"
+    ],
+    "note": "WP06.0 does not create these files; they are a later task's deliverables"
+  },
+  "validation": {
+    "commands": [
+      {
+        "command": "python .tmp_v410_wp06_audit/audit_verify.py",
+        "exit_code": 0,
+        "output": ".tmp_v410_wp06_audit/audit_verify.out.json",
+        "asserts": [
+          "detector sha256/lines",
+          "D1 137 shards / 469,216 decisions / 1,876,864 frames / 45 deaths / 15 stage clears / difficulty [1]",
+          "D1 flags: death=0, bomb=0, hit=95, dying=24, stage_clear 0x80=270",
+          "WP5 round1 1,325 deaths / 530 bombs / 415 game_over",
+          "WP5 round2 260 game_over / 253 static starts / 7 misses",
+          "G2C bomb 436, game_over 406, stage_clear bit 128/79 frames/flip 13675",
+          "Normal stage-clear captured 27 (s0=21, s1=3, s2=3)"
+        ]
+      }
+    ],
+    "also_run": [
+      ".tmp_v410_wp06_audit/probe02_events.py",
+      ".tmp_v410_wp06_audit/probe03_inventory.py",
+      ".tmp_v410_wp06_audit/probe04_flag_census.py",
+      ".tmp_v410_wp06_audit/probe05_hashes.py",
+      ".tmp_v410_wp06_audit/probe06_stage_outcomes.py",
+      ".tmp_v410_wp06_audit/probe08_g2c2.py",
+      ".tmp_v410_wp06_audit/probe12_wp5_round2.py",
+      ".tmp_v410_wp06_audit/probe13_wp5_go_lag.py",
+      ".tmp_v410_wp06_audit/probe15_wilson.py"
+    ],
+    "not_run": ["pytest", "compileall", "engine", "collection", "training", "commit", "push"],
+    "engine_started": false,
+    "data_collected": false,
+    "trained": false,
+    "files_modified_outside_whitelist": [],
+    "concurrent_untracked_files": [
+      "Document/Update/Alpha/v4.1.0/evidence/WP06/STATUS.md was observed at 2026-11-13T06:56:48+08:00, created by another process/agent (not written, modified or deleted by WP06.0); this audit's whitelist is only PLAN.md, audit.json and .tmp_v410_wp06_audit/"
+    ],
+    "working_directory": "D:\\WorkShop\\Touhou_RL",
+    "python": "3.12.10 (Windows audit interpreter)"
+  }
+}

@@ -1,0 +1,76 @@
+{
+  "schema": "v410-seed-sensitivity/1",
+  "created_at": "2026-11-13T00:42:00+08:00",
+  "wp": "WP01",
+  "status": "verified_with_warning",
+  "engine": {
+    "path": "/root/Touhou_RL/third_party/th08-rl/build/rl_v3/th08-modern",
+    "sha256": "691bfd77b7eca3361aa8bb7af0977556a70cc73a070b29a2447222ba7a568ef6"
+  },
+  "method": "Fixed action (cand=0, bomb=0, 2-frame decisions) on stage 0 / normal / team 0; seeds 1,2,3; compare all 25 STATE fields at every decision and ignore only the rng_seed field itself, because rng_seed is tracked and would otherwise make any cross-seed hash differ at frame 0. No training, no data capture.",
+  "probes": {
+    "first_life": {
+      "source": "seed_probe_first_life.json",
+      "resources": "standard",
+      "decisions": 350,
+      "frames": 700,
+      "result": "no non-rng divergence across seeds 1/2/3 in the first 700 frames; still dies at frame 706, before any seed-dependent event",
+      "first_non_seed_divergence": null
+    },
+    "standard_after_first_death": {
+      "source": "seed_probe_standard.json",
+      "resources": "standard",
+      "decisions": 3000,
+      "frames": 6000,
+      "first_non_seed_divergence": {
+        "1_vs_2": {"frame": 906, "field": "score"},
+        "1_vs_3": {"frame": 952, "field": "score"}
+      },
+      "field_diff_counts": {
+        "1_vs_2": {"score": 2547, "player_power": 158, "stage_generation": 69, "youkai_gauge": 235, "graze": 2467, "time_orbs": 93, "point_item_value": 2387},
+        "1_vs_3": {"score": 2524, "player_power": 87, "youkai_gauge": 217, "stage_generation": 89, "graze": 2472, "time_orbs": 89, "point_item_value": 2332}
+      }
+    },
+    "practice_after_first_death": {
+      "source": "seed_probe_practice.json",
+      "resources": "practice",
+      "decisions": 3000,
+      "frames": 6000,
+      "first_non_seed_divergence": {
+        "1_vs_2": {"frame": 970, "field": "score"},
+        "1_vs_3": {"frame": 1078, "field": "stage_generation"}
+      }
+    }
+  },
+  "findings": [
+    "The first 700 frames of stage 0 with a fixed action are bit-identical across seeds 1/2/3 except for the tracked rng_seed field; the first life is seed-invariant on this path.",
+    "Seed-dependent gameplay first appears after the first death/respawn: about frame 906-952 with standard resources and 970-1078 with practice resources (score/stage_generation first, then graze/power/items).",
+    "Therefore any episode that ends before roughly frame 1,000 on this path is not an independent environment-seed sample: different seeds produce the same trajectory. Counting such episodes as 3 or 100 independent samples overstates the effective sample size.",
+    "The baseline rows' three seeds differ only through the policy's own RNG (random) or not at all (still/fixed); they must not be used as evidence of environment-seed independence.",
+    "G1 teacher episodes survive to ~13k frames and their frames varied across seeds 1000-1019; that is consistent with the seed lever becoming active after the first respawn, not with seeds being globally inert.",
+    "Formal G410 suites must report the first seed-divergence frame for their policy/segment and count effective independent episodes; a suite whose episodes end before that frame must be treated as one trajectory, not N seeds."
+  ],
+  "policy_rule": {
+    "name": "seed_sensitivity_rule",
+    "rule": "Before using a set of seeds as independent samples, record the first non-rng state divergence frame for the policy/segment. Episodes ending before that frame are duplicates for denominator purposes; count them once and report the duplication explicitly.",
+    "effective_sample_formula": "effective_n = number of distinct trajectories after grouping episodes that never reach the first divergence frame",
+    "applies_to": ["S1N", "PSN", "RUNN", "G410-2", "G410-4", "G410-5", "G410-6", "G410-7"],
+    "not_a_gate": "This is a denominator rule and a warning; it does not by itself pass or fail a capability gate."
+  },
+  "sources": {
+    "probe_first_life": "seed_probe_first_life.json",
+    "probe_standard": "seed_probe_standard.json",
+    "probe_practice": "seed_probe_practice.json",
+    "script_first_life": "probe_seed_first_life.py",
+    "script_standard": "probe_seed_standard.py",
+    "script_practice": "probe_seed_practice.py",
+    "baselines": "baselines.json",
+    "consistency": "consistency.json"
+  },
+  "limitations": [
+    "Only stage 0 / normal / team 0 and a fixed action were probed.",
+    "The exact first-divergence frame is path-dependent; every policy/segment must be calibrated, not assumed.",
+    "The probe compares the 25 tracked STATE fields; it does not compare enemy/bullet memory that is not exported.",
+    "No teacher or student was run for this probe; the G1 observation is cited as context, not re-measured here."
+  ]
+}

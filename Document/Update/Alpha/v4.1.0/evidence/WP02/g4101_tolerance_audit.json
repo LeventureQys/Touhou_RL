@@ -1,0 +1,299 @@
+{
+  "schema": "v410-g4101-tolerance-audit/1",
+  "work_package": "v4.1.0 G410-1 teacher trajectory-consistency audit (tolerance 8.0 px vs raw 1e-3)",
+  "generated_at": "2026-11-13T12:09:18+08:00",
+  "status": "audit_complete",
+  "question": "On dev seed 1000 with the fast teacher and the rl_laser engine, is the raw 1e-3 trajectory_mismatch (2456/3251 = 75.546%) a strict-threshold artefact or a real teacher/verifier problem?",
+  "answer": "Predominantly a strict-threshold artefact: the same 3,251 plans at tolerance 8.0 px mismatch 25 (0.769%), geo_dead_engine_alive and geo_alive_engine_dead stay 0, and the run still clears (13,004 frames, 0 deaths). 8 of the 25 residual plans are a real, reproducible model drift in the last 8 decisions before the stage change (139.583771 px), not threshold noise. This is NOT a G410-1 pass: one dev seed only; the 100 confirm-seed formal scope is still open.",
+  "seed": 1000,
+  "seed_class": "dev",
+  "mode": "fast",
+  "stage": 0,
+  "difficulty": "normal",
+  "difficulty_index": 1,
+  "engine": {
+    "path": "/root/Touhou_RL/third_party/th08-rl/build/rl_laser/th08-modern",
+    "sha256": "1462829ba756bab49aae0878686988687dbaa109ea1750729d1202b555340d2f",
+    "expected_sha256": "1462829ba756bab49aae0878686988687dbaa109ea1750729d1202b555340d2f",
+    "sha_match": true,
+    "engine_dir": "/root/Touhou_RL/third_party/th08-rl/build/rl_laser"
+  },
+  "environment": {
+    "host": "WSL2 Ubuntu",
+    "python": "3.10.12",
+    "python_executable": "/root/v400-venv/bin/python",
+    "cwd": "/mnt/d/WorkShop/Touhou_RL",
+    "data_dir": "/root/v400-data/g1/inst0",
+    "data_dir_note": "same per-worker instance as WP02 fast20 worker 0; /root/v400-data/game was not written"
+  },
+  "command": {
+    "driver": "bash .tmp_v410_g4101_tol8/run_tol8.sh",
+    "driver_inner": "/root/v400-venv/bin/python -u .tmp_v410_g4101_tol8/run_tol8.py > .tmp_v410_g4101_tol8/run_tol8.log 2>&1",
+    "teacher_argv": [
+      "--decisions", "10000",
+      "--max-frames", "19887",
+      "--stop-on-death",
+      "--stage", "0",
+      "--difficulty", "normal",
+      "--seed", "1000",
+      "--mode", "fast",
+      "--quiet",
+      "--out", "/mnt/d/WorkShop/Touhou_RL/.tmp_v410_g4101_tol8/seed1000_tol8.jsonl",
+      "--data-dir", "/root/v400-data/g1/inst0",
+      "--engine", "/root/Touhou_RL/third_party/th08-rl/build/rl_laser",
+      "--binary", "/root/Touhou_RL/third_party/th08-rl/build/rl_laser/th08-modern",
+      "--expected-sha", "1462829ba756bab49aae0878686988687dbaa109ea1750729d1202b555340d2f"
+    ],
+    "deviation_from_task_command": "--out used an absolute path (cwd fixed at the repo root); every other argument is verbatim. --binary/--engine/--data-dir/--expected-sha unchanged.",
+    "source_change": "none",
+    "patch": "touhou_rl.v400.teacher.decide.verify_plans = functools.partial(touhou_rl.v400.teacher.verify.verify_plans, tolerance=8.0) applied in memory by .tmp_v410_g4101_tol8/run_tol8.py before runpy.run_path('tools/rl/v400_teacher.py', run_name='__main__')"
+  },
+  "run": {
+    "exit_code": 0,
+    "driver_exit_code": 0,
+    "wsl_exit_code": 0,
+    "wall_s": 298.891,
+    "driver_wall_s": 299,
+    "started_at": "2026-11-13T12:02:40+08:00",
+    "finished_at": "2026-11-13T12:07:39+08:00",
+    "status": "ok",
+    "stop_reason": "stage_changed",
+    "stage_clear": true,
+    "stage_at_stop": 1,
+    "stage_transitions": [
+      {"decision": 3250, "frame": 13004, "from_stage": 0, "to_stage": 1, "frames_in_stage": 13004, "deaths_in_stage": 0}
+    ],
+    "decisions": 3251,
+    "requested_decisions": 10000,
+    "frames_committed": 13004,
+    "survival_frames": 13004,
+    "survival_seconds": 216.733,
+    "deaths_observed": 0,
+    "bombs_spent": 0.0,
+    "bomb_decisions": 0,
+    "decisions_per_second": 11.2313,
+    "realtime_multiple": 0.7488,
+    "config": {"horizon": 32, "beam": 24, "verify_k": 1, "max_iterations": 1, "durations": [1, 2], "shoot_always": true, "shoot_pulse_period": 24}
+  },
+  "tolerance_patch": {
+    "tolerance_px": 8.0,
+    "verify_plans_calls": 3251,
+    "verify_plans_tolerances_seen": [8.0],
+    "verify_plans_plans_seen": 3251,
+    "patch_still_installed_after_cli": true,
+    "flag_disagreements_with_8px": 0,
+    "flag_disagreement_note": "all 3,251 trajectory_matches values equal (max_position_error <= 8.0) plan by plan",
+    "smoke_preflight": {"decisions": 2, "frames": 8, "exit_code": 0, "verify_plans_calls": 2, "tolerances_seen": [8.0]}
+  },
+  "raw": {
+    "tolerance_px": 0.001,
+    "sources": [
+      "Document/Update/Alpha/v4.1.0/evidence/WP02/fast20.jsonl (seed 1000 row, consistency block)",
+      ".tmp_v410_wp02_audit/teacher1000.jsonl (sha256 a1d6923efd8398619632d086bd854677e27cfd501158d2aeaafb37c9ca2f434b, 11931643 B, the corpus WP02.4 calibrated on)"
+    ],
+    "plans_verified": 3251,
+    "trajectory_mismatch": 2456,
+    "mismatch_rate": 0.75546,
+    "match": 795,
+    "geo_dead_engine_alive": 0,
+    "geo_alive_engine_dead": 0,
+    "agree_alive": 3251,
+    "agree_dead": 0,
+    "died_true_plans": 0,
+    "decisions": 3251,
+    "frames_committed": 13004,
+    "stage_clear": true,
+    "deaths_observed": 0
+  },
+  "tol8": {
+    "tolerance_px": 8.0,
+    "source": ".tmp_v410_g4101_tol8/seed1000_tol8.jsonl",
+    "plans_verified": 3251,
+    "trajectory_mismatch": 25,
+    "mismatch_rate": 0.00769,
+    "match": 3226,
+    "coverage": 0.99231,
+    "geo_dead_engine_alive": 0,
+    "geo_alive_engine_dead": 0,
+    "agree_alive": 3251,
+    "agree_dead": 0,
+    "died_true_plans": 0,
+    "moving_alive": 1704,
+    "idle_alive": 1522,
+    "decisions": 3251,
+    "frames_committed": 13004,
+    "stage_clear": true,
+    "deaths_observed": 0
+  },
+  "delta": {
+    "trajectory_mismatch": -2431,
+    "mismatch_rate_pp": -74.777,
+    "plans_verified": 0,
+    "geo_counters": 0,
+    "frames": 0,
+    "deaths": 0
+  },
+  "calibration_cross_check": {
+    "reference": "WP02.4 CALIBRATION.md / labels_calibrated_summary.json (MODEL_MATCH_TOLERANCE = 8.0 px, pre-registered rule: smallest grid threshold with coverage >= 0.99 of died=false plans, capped at 16 px)",
+    "wp024_selected_tolerance_px": 8.0,
+    "wp024_covered": 3226,
+    "wp024_coverage": 0.99231,
+    "wp024_mismatch": 25,
+    "wp024_moving_alive": 1704,
+    "wp024_idle_alive": 1522,
+    "recomputed_covered": 3226,
+    "recomputed_coverage": 0.99231,
+    "recomputed_mismatch": 25,
+    "recomputed_moving_alive": 1704,
+    "recomputed_idle_alive": 1522,
+    "all_match": true,
+    "threshold_table_match": true,
+    "note": "the 8 px mismatch set is exactly WP02.4's 25 unknown plans; no plan moved between the two accounts"
+  },
+  "threshold_table": [
+    {"threshold_px": 0.001, "covered": 795, "coverage": 0.24454, "mismatch": 2456, "moving_covered": 0, "moving_coverage": 0.0},
+    {"threshold_px": 0.5, "covered": 795, "coverage": 0.24454, "mismatch": 2456, "moving_covered": 0, "moving_coverage": 0.0},
+    {"threshold_px": 1.0, "covered": 795, "coverage": 0.24454, "mismatch": 2456, "moving_covered": 0, "moving_coverage": 0.0},
+    {"threshold_px": 2.0, "covered": 1217, "coverage": 0.374346, "mismatch": 2034, "moving_covered": 44, "moving_coverage": 0.025596},
+    {"threshold_px": 4.0, "covered": 2203, "coverage": 0.677638, "mismatch": 1048, "moving_covered": 766, "moving_coverage": 0.445608},
+    {"threshold_px": 8.0, "covered": 3226, "coverage": 0.99231, "mismatch": 25, "moving_covered": 1704, "moving_coverage": 0.991274},
+    {"threshold_px": 16.0, "covered": 3243, "coverage": 0.997539, "mismatch": 8, "moving_covered": 1719, "moving_coverage": 1.0}
+  ],
+  "error_stats": {
+    "count": 3251,
+    "min": 0.0,
+    "median": 3.414212,
+    "mean": 3.304276,
+    "max": 139.583771,
+    "quantiles": {"p50": 3.414212, "p75": 4.242633, "p90": 6.0, "p95": 6.828424, "p99": 8.0},
+    "count_zero": 795,
+    "count_exactly_8px": 31,
+    "count_gt_8px": 25,
+    "within_1e_5_of_8px": 54,
+    "within_1e_5_note": "31 plans exactly 8.0, 6 at 7.999994, 17 in (8.0, 8.001): the 8.0 line is knife-edge, not a gap in the distribution"
+  },
+  "residuals": {
+    "count": 25,
+    "first_action_histogram": {"0": 10, "2": 3, "3": 1, "6": 6, "7": 1, "8": 2, "13": 1, "15": 1},
+    "min_error": 8.000003,
+    "max_error": 139.583771,
+    "classes": [
+      {
+        "name": "floating_point_boundary",
+        "count": 17,
+        "error_range": [8.000003, 8.000015],
+        "detail": "8.0 < max_position_error < 8.001; died=false, frames_advanced=32; excluded by the inclusive 8.0 comparison by 3e-6..1.5e-5 px"
+      },
+      {
+        "name": "stage_clear_window",
+        "count": 8,
+        "error": 139.583771,
+        "decisions": [3243, 3244, 3245, 3246, 3247, 3248, 3249, 3250],
+        "frames": [12976, 12980, 12984, 12988, 12992, 12996, 13000, 13004],
+        "detail": "first_action=0, duration=1, died=false, frames_advanced=32; the last 8 decisions before the stage 0->1 change; a real model drift (the geometry model does not reproduce the engine across the stage transition), not threshold noise"
+      }
+    ],
+    "exactly_8px_but_covered": 31
+  },
+  "determinism": {
+    "reference_corpus": ".tmp_v410_wp02_audit/teacher1000.jsonl",
+    "reference_sha256": "a1d6923efd8398619632d086bd854677e27cfd501158d2aeaafb37c9ca2f434b",
+    "compared_fields": ["first_action", "duration", "died", "frames_advanced", "max_position_error", "end_xy"],
+    "decisions_equal": true,
+    "plans_equal": true,
+    "plan_field_differences": 0,
+    "trajectory_flag_flips": 2431,
+    "report_fields_identical": true,
+    "report_fields_compared": ["status", "stop_reason", "stage_clear", "stage_at_stop", "decisions", "frames_committed", "survival_frames", "deaths_observed", "bombs_spent", "bomb_decisions", "seed", "stage", "difficulty", "mode"],
+    "note": "tolerance only enters VerifiedPlan.trajectory_matches / Consistency; plan choice and commits are unaffected, and the rerun reproduces the raw run plan for plan"
+  },
+  "conclusion": {
+    "raw_1e-3_is_mostly_strict_threshold_noise": true,
+    "mismatch_drop_below_5_percent": true,
+    "geo_contradictions_zero": true,
+    "residual_is_not_pure_noise": true,
+    "residual_real_drift_count": 8,
+    "residual_real_drift_rate": 0.00246,
+    "death_semantics_not_exercised": true,
+    "death_semantics_note": "0 died=true plans and 0 run deaths: the two geo counters are only exercised in the both-alive cell (agree_alive=3251); the dead cells get their positive examples from WP02.5 (7 verified_dead) and later runs with deaths",
+    "v2h_would_not_fix_the_metric": true,
+    "v2h_note": "POSITION_TOLERANCE lives in verify.py and is shared by full/fast/v2a..v2h; v2h only raises verify_k to 3, which scales the mismatch count per decision. The rate is a property of the plan mix and may differ somewhat per profile, but switching profile does not remove the 1e-3 semantics",
+    "g4101_pass": false
+  },
+  "limitations": [
+    "single dev seed (1000), single stage (engine stage 0 = Stage 1), single difficulty (normal), single profile (fast: horizon 32 / beam 24 / verify_k 1); other seeds/stages/profiles are not covered",
+    "8 px is a model-consistency tolerance from the WP02.4 pre-registered rule, not a survival threshold; died is the only survival truth",
+    "0 deaths in this run: the no-contradiction result covers the both-alive cell only, not geo-vs-engine death disagreement",
+    "the 8 px line is knife-edge: 31 plans sit exactly at 8.0 and 17 just above it; a different threshold would move the count (8.001 px would leave only the 8 stage-window plans)",
+    "wall/time is not comparable to WP02 fast20 (452.6 s): an unrelated WP05 dagger-collect job (rl_v3 engine, different data dirs) was running during this audit",
+    "the patch is in-memory only: the shipped verify.py POSITION_TOLERANCE is still 1e-3, so any run that does not go through this wrapper still writes the raw metric",
+    "the plan-for-plan equality holds for this engine SHA + seed + data dir; a different build or polluted data dir must be re-measured"
+  ],
+  "not_claimed": [
+    "not a G410-1 pass: no gate/threshold/release check was evaluated; the 100 confirm seeds (61300-61399) were not run and no confirm-seed data was collected or used, so this single dev seed cannot stand in for them",
+    "not a new dataset or new labels: one dev-seed replay at 8 px; nothing was trained, collected or converted into training samples",
+    "not survival truth: 8 px is a model-consistency tolerance; the engine's died flag remains the only survival verdict, and this run has 0 deaths",
+    "not 'the teacher is fine': the 8 stage-window plans at 139.583771 px are a reproducible teacher/model-side defect (the model does not follow the engine across the stage transition), even though it caused no death misjudgement here",
+    "not a v400 source change: decide.py/verify.py/pos-tolerance are untouched; the tolerance exists only inside the run-dir wrapper"
+  ],
+  "next_steps": [
+    "report raw 1e-3, 8 px (or max_position_error distribution), geo counters and the concrete seed/plan list together for the 100 confirm-seed G410-1 teacher leg, instead of only plans_verified == decisions",
+    "put the 'execution and verification consistent' gate on the death semantics (geo_dead_engine_alive == 0 and geo_alive_engine_dead == 0) plus WP02.4's error <= 8 for label positivity, not on the 1e-3 flag",
+    "no tolerance fix is required before chunk3/4 (0.769% < 5%); if engineering budget is spent, target the stage-boundary drift (model does not rebuild the stage-transition frames) rather than raising 8.0",
+    "optionally rerun this wrapper on another dev seed (1000-1019 only, never a confirm seed) to check whether the 0.769% and the 25 residual composition are seed-stable",
+    "changing verify.py's POSITION_TOLERANCE would be a v400 source change needing its own work package and regression (tests assert the current trajectory_matches semantics); this audit did not touch it"
+  ],
+  "artifacts": {
+    "evidence": {
+      "markdown": {"path": "Document/Update/Alpha/v4.1.0/evidence/WP02/G4101_TOLERANCE_AUDIT.md", "bytes": 18221, "sha256": "f47bc3f334d2233f786e626186a15aabeb3027ae2973525f5aed7dc6c07fa41c"},
+      "json": {"path": "Document/Update/Alpha/v4.1.0/evidence/WP02/g4101_tolerance_audit.json", "note": "this file; self-referential hash not written"}
+    },
+    "run_dir": {
+      "path": ".tmp_v410_g4101_tol8/",
+      "committed": false,
+      "files": {
+        "seed1000_tol8.jsonl": {"bytes": 11918830, "sha256": "bd2a30a88e0057da0bbb4855a8b4c37578d144016cd703608fb79b7f4a01c341", "lines": 3252, "kind": "1 report + 3251 decision rows"},
+        "run_tol8.py": {"bytes": 6654, "role": "monkeypatch wrapper"},
+        "run_tol8.sh": {"bytes": 954, "role": "driver, writes run_meta.json"},
+        "run_tol8.log": {"bytes": 6059, "sha256": "9d92706cc1810e43b9c5cbcce9698cbc5c9adc1ea307f3f1473054c942e18aee", "kind": "teacher report + TOL8_META line"},
+        "tol8_patch_meta.json": {"bytes": 1542, "kind": "patch proof: calls/tolerances/plans/exit code"},
+        "run_meta.json": {"bytes": 350, "kind": "driver exit code and wall"},
+        "tol8_analysis.json": {"bytes": 5216, "sha256": "37f1b01cf798c869c962e8338de9d9193b3471f672e90a89c8a73ee087c66882", "kind": "recomputed 8 px numbers"},
+        "tol8_vs_raw.json": {"bytes": 1453, "sha256": "fc11c2999ee4a13cc7d852185e4375955f609096ce5f3550ecfb0a9866e05416", "kind": "plan-for-plan determinism diff"},
+        "raw_analysis.json": {"kind": "same analysis code on the raw corpus (baseline)"},
+        "residuals_gt8px.json": {"kind": "the 25 plans above 8 px"},
+        "analyze_tol8.py": {"kind": "analysis code (reads JSONL)"},
+        "compare_tol8_raw.py": {"kind": "determinism diff code"},
+        "dump_residuals.py": {"kind": "residual lister"},
+        "boundary_stats.py": {"kind": "8 px boundary census"},
+        "smoke.jsonl": {"kind": "2-decision preflight run"},
+        "validate_evidence.py": {"kind": "self-check: recomputes every cited count and re-hashes every cited artifact (67 checks, 0 failed)"},
+        "git_status_before.txt": {"kind": "targeted git status snapshot taken before the evidence files were written"},
+        "git_status_after.txt": {"kind": "targeted git status snapshot taken after the evidence files were written (diff vs before: 0 lines)"}
+      }
+    },
+    "read_only_inputs": {
+      "tools/rl/v400_teacher.py": "unchanged",
+      "touhou_rl/v400/teacher/decide.py": "unchanged",
+      "touhou_rl/v400/teacher/verify.py": "unchanged (POSITION_TOLERANCE = 1e-3)",
+      ".tmp_v410_wp02_audit/teacher1000.jsonl": "read-only, 11931643 B, sha256 a1d6923efd8398619632d086bd854677e27cfd501158d2aeaafb37c9ca2f434b"
+    }
+  },
+  "constraints_respected": {
+    "trained": false,
+    "collected_data": false,
+    "confirm_seeds_used": false,
+    "v400_source_modified": false,
+    "tools_rl_v400_modified": false,
+    "tests_modified": false,
+    "third_party_modified": false,
+    "state_journal_budget_assets_written": false,
+    "committed": false,
+    "pushed": false,
+    "files_created": [
+      "Document/Update/Alpha/v4.1.0/evidence/WP02/G4101_TOLERANCE_AUDIT.md",
+      "Document/Update/Alpha/v4.1.0/evidence/WP02/g4101_tolerance_audit.json",
+      ".tmp_v410_g4101_tol8/ (run directory, not committed)"
+    ]
+  }
+}

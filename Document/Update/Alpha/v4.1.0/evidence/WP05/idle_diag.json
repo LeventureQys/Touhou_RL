@@ -1,0 +1,2209 @@
+{
+ "schema": "v410-wp0511-idle-diag/1",
+ "kind": "wp05.11-idle-diag",
+ "wp": "WP05.11",
+ "version": "v4.1.0",
+ "generated_at": "2026-11-13T07:16:58Z",
+ "title": "beta=0.5 DAgger data and 20k student: idle / action-distribution diagnosis",
+ "one_line": "The 20,000-step student's dev idle share (60.87 %) matches its training-label prior (61.72 %) to 0.85 pp, and 66.16 % of those labels are idle because the teacher's 18-way geometry score is an exact tie in 44.58 % of decisions and the first-maximum rule then picks candidate 0 (idle); under a uniform random tie-break the same score vectors would yield 4.67 % idle. Idle is never the unique best action in 52,500 decisions.",
+ "read_only": true,
+ "scope": {
+  "inputs": [
+   ".tmp_v410_wp05_round2/shards/dagger-s0d1seed2025..2039/labels.jsonl (15 shards, 52,500 rows)",
+   ".tmp_v410_wp05_round2/shards/dagger-s0d1seed2025..2039/shard.json (cross-check only)",
+   "Document/Update/Alpha/v4.1.0/evidence/WP05/train_beta05_20k.json",
+   ".tmp_v410_wp05_train_beta05_20k/eval_dev20.json",
+   "touhou_rl/v400/gym/actions.py, touhou_rl/spec.py (action class table)",
+   "touhou_rl/v410/student/bc.py, s1_data.py (label/category semantics, read-only)",
+   "touhou_rl/v410/teacher_audit.py + student/diagnostics.py (quote of the documented post-discount score convention, read-only)"
+  ],
+  "outputs": [
+   "Document/Update/Alpha/v4.1.0/evidence/WP05/idle_diag.json",
+   "Document/Update/Alpha/v4.1.0/evidence/WP05/IDLE_DIAG.md",
+   ".tmp_v410_wp05_idle_diag/ (run directory, not committed)"
+  ],
+  "did_not_do": [
+   "no training run",
+   "no data collection",
+   "no new DAgger round",
+   "no shard regenerated or modified",
+   "no G410-2",
+   "no confirm seeds",
+   "no commit / push",
+   "no source file modified"
+  ]
+ },
+ "action_space": {
+  "encoder": "cand = focus * 9 + move, shooting always on, bombing off (touhou_rl/v400/gym/actions.py)",
+  "moves": [
+   "idle",
+   "N",
+   "NE",
+   "E",
+   "SE",
+   "S",
+   "SW",
+   "W",
+   "NW"
+  ],
+  "focus": "cand >= 9 holds the focus button",
+  "idle_definition": "cand == 0 (no direction held). cand 9 is focus-idle and is reported separately, never merged into idle.",
+  "labels": [
+   "idle",
+   "N",
+   "NE",
+   "E",
+   "SE",
+   "S",
+   "SW",
+   "W",
+   "NW",
+   "focus-idle",
+   "focus-N",
+   "focus-NE",
+   "focus-E",
+   "focus-SE",
+   "focus-S",
+   "focus-SW",
+   "focus-W",
+   "focus-NW"
+  ]
+ },
+ "label_semantics": {
+  "chosen": "chosen_plan.first_action == teacher_cand on 52,500/52,500 rows, so the BC target is always the teacher action; beta only decides what was executed, never what was labelled",
+  "executed": "teacher_cand when injected (26,295 rows), student_cand otherwise (26,205 rows)",
+  "raw_geo_score": "stored post-discount: unverified_discount = 5.0 is already subtracted from the 17 unverified candidates, so true[i] = raw[i] + 5.0 * (i != chosen). Documented in teacher_audit.py:1840-1867 and student/diagnostics.py:1048.",
+  "collector": "the 15 shards were rolled out by one checkpoint, b0_s0_dagger_step1000.pt (sha256 6ebe4ea9..., shard.json), so 'student' below is the D1 collection student, not the 20k student"
+ },
+ "headline": {
+  "rows": 52500,
+  "shards": 15,
+  "decisions_per_shard": 3500,
+  "injected": 26295,
+  "agreement_rows": 41819,
+  "teacher_idle": 0.661562,
+  "student_idle": 0.736857,
+  "executed_idle": 0.698895,
+  "teacher_focus": 0.034648,
+  "student_focus": 0.013124,
+  "agreement_rate": 0.796552,
+  "label_prior_idle_dagger": 0.661562,
+  "label_prior_idle_s1": 0.439554,
+  "label_prior_idle_mix": 0.61716,
+  "dev20_idle": 0.608711,
+  "dev20_idle_minus_mix_prior": -0.008449,
+  "dev20_unique_actions_mean": 12.45,
+  "dev20_entropy_bits": 1.865994,
+  "teacher_flat_row_share": 0.44579,
+  "teacher_chosen_ties_runner_up_share": 0.784971,
+  "idle_labels_from_flat_rows": 23404,
+  "idle_labels_from_flat_rows_share_of_idle": 0.673845,
+  "counterfactual_idle_random_tie_break": 0.04669,
+  "idle_unique_best_rows": 0
+ },
+ "tables": {
+  "action_histogram_18": {
+   "note": "counts over all 52,500 DAgger decisions; teacher == label target",
+   "rows": 52500,
+   "labels": [
+    "idle",
+    "N",
+    "NE",
+    "E",
+    "SE",
+    "S",
+    "SW",
+    "W",
+    "NW",
+    "focus-idle",
+    "focus-N",
+    "focus-NE",
+    "focus-E",
+    "focus-SE",
+    "focus-S",
+    "focus-SW",
+    "focus-W",
+    "focus-NW"
+   ],
+   "teacher": [
+    34732,
+    410,
+    1696,
+    5447,
+    425,
+    473,
+    1714,
+    5419,
+    365,
+    0,
+    40,
+    573,
+    447,
+    127,
+    56,
+    363,
+    131,
+    82
+   ],
+   "student": [
+    38685,
+    32,
+    1043,
+    5379,
+    184,
+    18,
+    1092,
+    5334,
+    44,
+    0,
+    0,
+    141,
+    264,
+    41,
+    0,
+    224,
+    19,
+    0
+   ],
+   "executed": [
+    36692,
+    217,
+    1370,
+    5416,
+    311,
+    267,
+    1424,
+    5381,
+    203,
+    0,
+    22,
+    349,
+    342,
+    75,
+    23,
+    292,
+    81,
+    35
+   ],
+   "teacher_share": [
+    0.661562,
+    0.00781,
+    0.032305,
+    0.103752,
+    0.008095,
+    0.00901,
+    0.032648,
+    0.103219,
+    0.006952,
+    0.0,
+    0.000762,
+    0.010914,
+    0.008514,
+    0.002419,
+    0.001067,
+    0.006914,
+    0.002495,
+    0.001562
+   ],
+   "student_share": [
+    0.736857,
+    0.00061,
+    0.019867,
+    0.102457,
+    0.003505,
+    0.000343,
+    0.0208,
+    0.1016,
+    0.000838,
+    0.0,
+    0.0,
+    0.002686,
+    0.005029,
+    0.000781,
+    0.0,
+    0.004267,
+    0.000362,
+    0.0
+   ],
+   "executed_share": [
+    0.698895,
+    0.004133,
+    0.026095,
+    0.103162,
+    0.005924,
+    0.005086,
+    0.027124,
+    0.102495,
+    0.003867,
+    0.0,
+    0.000419,
+    0.006648,
+    0.006514,
+    0.001429,
+    0.000438,
+    0.005562,
+    0.001543,
+    0.000667
+   ]
+  },
+  "idle_focus": {
+   "idle": {
+    "teacher": 0.661562,
+    "student": 0.736857,
+    "executed": 0.698895,
+    "teacher_count": 34732,
+    "student_count": 38685,
+    "executed_count": 36692
+   },
+   "no_direction_including_focus_idle": {
+    "teacher": 0.661562,
+    "student": 0.736857,
+    "executed": 0.698895
+   },
+   "focus": {
+    "teacher": 0.034648,
+    "student": 0.013124,
+    "executed": 0.023219,
+    "teacher_count": 1819,
+    "focus_idle_counts": {
+     "teacher": 0,
+     "student": 0,
+     "executed": 0
+    }
+   }
+  },
+  "agreement": {
+   "rows": 52500,
+   "agreement": 41819,
+   "disagreement": 10681,
+   "agreement_rate": 0.796552,
+   "idle_confusion": {
+    "note": "rows x teacher/move, student idle vs move; idle means cand 0",
+    "teacher_idle_student_idle": 33679,
+    "teacher_idle_student_move": 1053,
+    "teacher_move_student_idle": 5006,
+    "teacher_move_student_move": 12762,
+    "p_student_idle_given_teacher_move": 0.281742,
+    "p_student_move_given_teacher_idle": 0.030318,
+    "p_teacher_idle_given_student_move": 0.076221,
+    "idle_agreement_share_of_all_agreement": 0.805352
+   }
+  },
+  "injected_split": {
+   "injected": {
+    "rows": 26295,
+    "teacher": [
+     17484,
+     196,
+     821,
+     2712,
+     215,
+     257,
+     860,
+     2709,
+     179,
+     0,
+     22,
+     276,
+     208,
+     54,
+     23,
+     174,
+     70,
+     35
+    ],
+    "student": [
+     19477,
+     11,
+     494,
+     2675,
+     88,
+     8,
+     528,
+     2662,
+     20,
+     0,
+     0,
+     68,
+     130,
+     20,
+     0,
+     106,
+     8,
+     0
+    ],
+    "executed": [
+     17484,
+     196,
+     821,
+     2712,
+     215,
+     257,
+     860,
+     2709,
+     179,
+     0,
+     22,
+     276,
+     208,
+     54,
+     23,
+     174,
+     70,
+     35
+    ],
+    "idle_teacher": 0.664917,
+    "idle_student": 0.740711,
+    "focus_teacher": 0.032782,
+    "focus_student": 0.012626,
+    "agreement": 0.796552
+   },
+   "student_only": {
+    "rows": 26205,
+    "teacher": [
+     17248,
+     214,
+     875,
+     2735,
+     210,
+     216,
+     854,
+     2710,
+     186,
+     0,
+     18,
+     297,
+     239,
+     73,
+     33,
+     189,
+     61,
+     47
+    ],
+    "student": [
+     19208,
+     21,
+     549,
+     2704,
+     96,
+     10,
+     564,
+     2672,
+     24,
+     0,
+     0,
+     73,
+     134,
+     21,
+     0,
+     118,
+     11,
+     0
+    ],
+    "executed": [
+     19208,
+     21,
+     549,
+     2704,
+     96,
+     10,
+     564,
+     2672,
+     24,
+     0,
+     0,
+     73,
+     134,
+     21,
+     0,
+     118,
+     11,
+     0
+    ],
+    "idle_teacher": 0.658195,
+    "idle_student": 0.73299,
+    "focus_teacher": 0.03652,
+    "focus_student": 0.013623
+   }
+  },
+  "per_teacher_class": {
+   "idle": {
+    "rows": 34732,
+    "share_of_rows": 0.661562,
+    "student_match": 33679,
+    "student_recall": 0.969682,
+    "student_idle": 33679,
+    "p_student_idle": 0.969682,
+    "student_ew": 661,
+    "student_vertical": 0,
+    "student_diagonal": 286,
+    "student_focus": 106
+   },
+   "N": {
+    "rows": 410,
+    "share_of_rows": 0.00781,
+    "student_match": 16,
+    "student_recall": 0.039024,
+    "student_idle": 143,
+    "p_student_idle": 0.34878,
+    "student_ew": 161,
+    "student_vertical": 16,
+    "student_diagonal": 75,
+    "student_focus": 15
+   },
+   "NE": {
+    "rows": 1696,
+    "share_of_rows": 0.032305,
+    "student_match": 406,
+    "student_recall": 0.239387,
+    "student_idle": 566,
+    "p_student_idle": 0.333726,
+    "student_ew": 586,
+    "student_vertical": 1,
+    "student_diagonal": 488,
+    "student_focus": 55
+   },
+   "E": {
+    "rows": 5447,
+    "share_of_rows": 0.103752,
+    "student_match": 3581,
+    "student_recall": 0.657426,
+    "student_idle": 1037,
+    "p_student_idle": 0.19038,
+    "student_ew": 3971,
+    "student_vertical": 6,
+    "student_diagonal": 352,
+    "student_focus": 81
+   },
+   "SE": {
+    "rows": 425,
+    "share_of_rows": 0.008095,
+    "student_match": 18,
+    "student_recall": 0.042353,
+    "student_idle": 224,
+    "p_student_idle": 0.527059,
+    "student_ew": 127,
+    "student_vertical": 2,
+    "student_diagonal": 62,
+    "student_focus": 10
+   },
+   "S": {
+    "rows": 473,
+    "share_of_rows": 0.00901,
+    "student_match": 9,
+    "student_recall": 0.019027,
+    "student_idle": 333,
+    "p_student_idle": 0.704017,
+    "student_ew": 80,
+    "student_vertical": 9,
+    "student_diagonal": 41,
+    "student_focus": 10
+   },
+   "SW": {
+    "rows": 1714,
+    "share_of_rows": 0.032648,
+    "student_match": 360,
+    "student_recall": 0.210035,
+    "student_idle": 623,
+    "p_student_idle": 0.363477,
+    "student_ew": 574,
+    "student_vertical": 4,
+    "student_diagonal": 444,
+    "student_focus": 69
+   },
+   "W": {
+    "rows": 5419,
+    "share_of_rows": 0.103219,
+    "student_match": 3527,
+    "student_recall": 0.650858,
+    "student_idle": 1089,
+    "p_student_idle": 0.20096,
+    "student_ew": 3931,
+    "student_vertical": 1,
+    "student_diagonal": 329,
+    "student_focus": 69
+   },
+   "NW": {
+    "rows": 365,
+    "share_of_rows": 0.006952,
+    "student_match": 16,
+    "student_recall": 0.043836,
+    "student_idle": 122,
+    "p_student_idle": 0.334247,
+    "student_ew": 192,
+    "student_vertical": 2,
+    "student_diagonal": 40,
+    "student_focus": 9
+   },
+   "focus-idle": {
+    "rows": 0,
+    "share_of_rows": 0.0,
+    "student_match": 0,
+    "student_recall": null,
+    "student_idle": 0,
+    "p_student_idle": null,
+    "student_ew": 0,
+    "student_vertical": 0,
+    "student_diagonal": 0,
+    "student_focus": 0
+   },
+   "focus-N": {
+    "rows": 40,
+    "share_of_rows": 0.000762,
+    "student_match": 0,
+    "student_recall": 0.0,
+    "student_idle": 15,
+    "p_student_idle": 0.375,
+    "student_ew": 11,
+    "student_vertical": 0,
+    "student_diagonal": 12,
+    "student_focus": 2
+   },
+   "focus-NE": {
+    "rows": 573,
+    "share_of_rows": 0.010914,
+    "student_match": 91,
+    "student_recall": 0.158813,
+    "student_idle": 251,
+    "p_student_idle": 0.438045,
+    "student_ew": 134,
+    "student_vertical": 0,
+    "student_diagonal": 74,
+    "student_focus": 114
+   },
+   "focus-E": {
+    "rows": 447,
+    "share_of_rows": 0.008514,
+    "student_match": 65,
+    "student_recall": 0.145414,
+    "student_idle": 215,
+    "p_student_idle": 0.480984,
+    "student_ew": 94,
+    "student_vertical": 1,
+    "student_diagonal": 58,
+    "student_focus": 79
+   },
+   "focus-SE": {
+    "rows": 127,
+    "share_of_rows": 0.002419,
+    "student_match": 9,
+    "student_recall": 0.070866,
+    "student_idle": 50,
+    "p_student_idle": 0.393701,
+    "student_ew": 43,
+    "student_vertical": 0,
+    "student_diagonal": 20,
+    "student_focus": 14
+   },
+   "focus-S": {
+    "rows": 56,
+    "share_of_rows": 0.001067,
+    "student_match": 0,
+    "student_recall": 0.0,
+    "student_idle": 31,
+    "p_student_idle": 0.553571,
+    "student_ew": 13,
+    "student_vertical": 1,
+    "student_diagonal": 9,
+    "student_focus": 2
+   },
+   "focus-SW": {
+    "rows": 363,
+    "share_of_rows": 0.006914,
+    "student_match": 42,
+    "student_recall": 0.115702,
+    "student_idle": 198,
+    "p_student_idle": 0.545455,
+    "student_ew": 80,
+    "student_vertical": 3,
+    "student_diagonal": 34,
+    "student_focus": 48
+   },
+   "focus-W": {
+    "rows": 131,
+    "share_of_rows": 0.002495,
+    "student_match": 0,
+    "student_recall": 0.0,
+    "student_idle": 76,
+    "p_student_idle": 0.580153,
+    "student_ew": 26,
+    "student_vertical": 2,
+    "student_diagonal": 25,
+    "student_focus": 2
+   },
+   "focus-NW": {
+    "rows": 82,
+    "share_of_rows": 0.001562,
+    "student_match": 0,
+    "student_recall": 0.0,
+    "student_idle": 33,
+    "p_student_idle": 0.402439,
+    "student_ew": 29,
+    "student_vertical": 2,
+    "student_diagonal": 14,
+    "student_focus": 4
+   }
+  },
+  "label_prior_vs_dev": {
+   "note": "dagger_share = teacher labels on DAgger states; s1_share = teacher labels on the D410-S1 preference states; mix = 0.8 * dagger + 0.2 * s1 (the WP05.9 training mix); dev_share = the 20k student's 20 dev episodes (17,151 decisions)",
+   "rows": {
+    "dagger": 52500,
+    "s1": 46397,
+    "mix_s1_share": 0.2,
+    "dev_decisions": 17151
+   },
+   "per_class": [
+    {
+     "class": 0,
+     "label": "idle",
+     "dagger_count": 34732,
+     "dagger_share": 0.661562,
+     "s1_count": 20394,
+     "s1_share": 0.439554,
+     "mix_prior_share": 0.61716,
+     "dev_count": 10440,
+     "dev_share": 0.608711,
+     "dev_over_mix_prior": 0.986309,
+     "dagger_teacher_share": 0.661562,
+     "collection_student_share": 0.736857,
+     "executed_share": 0.698895
+    },
+    {
+     "class": 1,
+     "label": "N",
+     "dagger_count": 410,
+     "dagger_share": 0.00781,
+     "s1_count": 1081,
+     "s1_share": 0.023299,
+     "mix_prior_share": 0.010907,
+     "dev_count": 67,
+     "dev_share": 0.003906,
+     "dev_over_mix_prior": 0.358105,
+     "dagger_teacher_share": 0.00781,
+     "collection_student_share": 0.00061,
+     "executed_share": 0.004133
+    },
+    {
+     "class": 2,
+     "label": "NE",
+     "dagger_count": 1696,
+     "dagger_share": 0.032305,
+     "s1_count": 4049,
+     "s1_share": 0.087269,
+     "mix_prior_share": 0.043298,
+     "dev_count": 546,
+     "dev_share": 0.031835,
+     "dev_over_mix_prior": 0.735261,
+     "dagger_teacher_share": 0.032305,
+     "collection_student_share": 0.019867,
+     "executed_share": 0.026095
+    },
+    {
+     "class": 3,
+     "label": "E",
+     "dagger_count": 5447,
+     "dagger_share": 0.103752,
+     "s1_count": 4660,
+     "s1_share": 0.100438,
+     "mix_prior_share": 0.103089,
+     "dev_count": 2371,
+     "dev_share": 0.138243,
+     "dev_over_mix_prior": 1.341001,
+     "dagger_teacher_share": 0.103752,
+     "collection_student_share": 0.102457,
+     "executed_share": 0.103162
+    },
+    {
+     "class": 4,
+     "label": "SE",
+     "dagger_count": 425,
+     "dagger_share": 0.008095,
+     "s1_count": 974,
+     "s1_share": 0.020993,
+     "mix_prior_share": 0.010675,
+     "dev_count": 71,
+     "dev_share": 0.00414,
+     "dev_over_mix_prior": 0.387832,
+     "dagger_teacher_share": 0.008095,
+     "collection_student_share": 0.003505,
+     "executed_share": 0.005924
+    },
+    {
+     "class": 5,
+     "label": "S",
+     "dagger_count": 473,
+     "dagger_share": 0.00901,
+     "s1_count": 567,
+     "s1_share": 0.012221,
+     "mix_prior_share": 0.009652,
+     "dev_count": 53,
+     "dev_share": 0.00309,
+     "dev_over_mix_prior": 0.320149,
+     "dagger_teacher_share": 0.00901,
+     "collection_student_share": 0.000343,
+     "executed_share": 0.005086
+    },
+    {
+     "class": 6,
+     "label": "SW",
+     "dagger_count": 1714,
+     "dagger_share": 0.032648,
+     "s1_count": 3165,
+     "s1_share": 0.068216,
+     "mix_prior_share": 0.039761,
+     "dev_count": 555,
+     "dev_share": 0.03236,
+     "dev_over_mix_prior": 0.813858,
+     "dagger_teacher_share": 0.032648,
+     "collection_student_share": 0.0208,
+     "executed_share": 0.027124
+    },
+    {
+     "class": 7,
+     "label": "W",
+     "dagger_count": 5419,
+     "dagger_share": 0.103219,
+     "s1_count": 3300,
+     "s1_share": 0.071125,
+     "mix_prior_share": 0.0968,
+     "dev_count": 2543,
+     "dev_share": 0.148271,
+     "dev_over_mix_prior": 1.531721,
+     "dagger_teacher_share": 0.103219,
+     "collection_student_share": 0.1016,
+     "executed_share": 0.102495
+    },
+    {
+     "class": 8,
+     "label": "NW",
+     "dagger_count": 365,
+     "dagger_share": 0.006952,
+     "s1_count": 520,
+     "s1_share": 0.011208,
+     "mix_prior_share": 0.007803,
+     "dev_count": 23,
+     "dev_share": 0.001341,
+     "dev_over_mix_prior": 0.171848,
+     "dagger_teacher_share": 0.006952,
+     "collection_student_share": 0.000838,
+     "executed_share": 0.003867
+    },
+    {
+     "class": 9,
+     "label": "focus-idle",
+     "dagger_count": 0,
+     "dagger_share": 0.0,
+     "s1_count": 0,
+     "s1_share": 0.0,
+     "mix_prior_share": 0.0,
+     "dev_count": 0,
+     "dev_share": 0.0,
+     "dev_over_mix_prior": null,
+     "dagger_teacher_share": 0.0,
+     "collection_student_share": 0.0,
+     "executed_share": 0.0
+    },
+    {
+     "class": 10,
+     "label": "focus-N",
+     "dagger_count": 40,
+     "dagger_share": 0.000762,
+     "s1_count": 126,
+     "s1_share": 0.002716,
+     "mix_prior_share": 0.001153,
+     "dev_count": 6,
+     "dev_share": 0.00035,
+     "dev_over_mix_prior": 0.303645,
+     "dagger_teacher_share": 0.000762,
+     "collection_student_share": 0.0,
+     "executed_share": 0.000419
+    },
+    {
+     "class": 11,
+     "label": "focus-NE",
+     "dagger_count": 573,
+     "dagger_share": 0.010914,
+     "s1_count": 2834,
+     "s1_share": 0.061082,
+     "mix_prior_share": 0.020948,
+     "dev_count": 162,
+     "dev_share": 0.009446,
+     "dev_over_mix_prior": 0.450932,
+     "dagger_teacher_share": 0.010914,
+     "collection_student_share": 0.002686,
+     "executed_share": 0.006648
+    },
+    {
+     "class": 12,
+     "label": "focus-E",
+     "dagger_count": 447,
+     "dagger_share": 0.008514,
+     "s1_count": 3192,
+     "s1_share": 0.068798,
+     "mix_prior_share": 0.020571,
+     "dev_count": 148,
+     "dev_share": 0.008629,
+     "dev_over_mix_prior": 0.419475,
+     "dagger_teacher_share": 0.008514,
+     "collection_student_share": 0.005029,
+     "executed_share": 0.006514
+    },
+    {
+     "class": 13,
+     "label": "focus-SE",
+     "dagger_count": 127,
+     "dagger_share": 0.002419,
+     "s1_count": 328,
+     "s1_share": 0.007069,
+     "mix_prior_share": 0.003349,
+     "dev_count": 40,
+     "dev_share": 0.002332,
+     "dev_over_mix_prior": 0.696302,
+     "dagger_teacher_share": 0.002419,
+     "collection_student_share": 0.000781,
+     "executed_share": 0.001429
+    },
+    {
+     "class": 14,
+     "label": "focus-S",
+     "dagger_count": 56,
+     "dagger_share": 0.001067,
+     "s1_count": 78,
+     "s1_share": 0.001681,
+     "mix_prior_share": 0.00119,
+     "dev_count": 4,
+     "dev_share": 0.000233,
+     "dev_over_mix_prior": 0.19587,
+     "dagger_teacher_share": 0.001067,
+     "collection_student_share": 0.0,
+     "executed_share": 0.000438
+    },
+    {
+     "class": 15,
+     "label": "focus-SW",
+     "dagger_count": 363,
+     "dagger_share": 0.006914,
+     "s1_count": 535,
+     "s1_share": 0.011531,
+     "mix_prior_share": 0.007838,
+     "dev_count": 103,
+     "dev_share": 0.006005,
+     "dev_over_mix_prior": 0.766177,
+     "dagger_teacher_share": 0.006914,
+     "collection_student_share": 0.004267,
+     "executed_share": 0.005562
+    },
+    {
+     "class": 16,
+     "label": "focus-W",
+     "dagger_count": 131,
+     "dagger_share": 0.002495,
+     "s1_count": 385,
+     "s1_share": 0.008298,
+     "mix_prior_share": 0.003656,
+     "dev_count": 14,
+     "dev_share": 0.000816,
+     "dev_over_mix_prior": 0.223208,
+     "dagger_teacher_share": 0.002495,
+     "collection_student_share": 0.000362,
+     "executed_share": 0.001543
+    },
+    {
+     "class": 17,
+     "label": "focus-NW",
+     "dagger_count": 82,
+     "dagger_share": 0.001562,
+     "s1_count": 209,
+     "s1_share": 0.004505,
+     "mix_prior_share": 0.00215,
+     "dev_count": 5,
+     "dev_share": 0.000292,
+     "dev_over_mix_prior": 0.135786,
+     "dagger_teacher_share": 0.001562,
+     "collection_student_share": 0.0,
+     "executed_share": 0.000667
+    }
+   ],
+   "aggregates": {
+    "mix_prior_idle": 0.61716,
+    "dev_idle": 0.608711,
+    "dev_minus_prior": -0.008449,
+    "mix_prior_vertical": 0.158724,
+    "dev_vertical": 0.09533,
+    "mix_prior_focus": 0.060855,
+    "dev_focus": 0.028103,
+    "dev_horizontal_EW": 0.286514,
+    "mix_prior_horizontal_EW": 0.199889,
+    "dev_idle_plus_EW": 0.895225
+   },
+   "dev_unique_actions_min_max": [
+    9,
+    16
+   ],
+   "dev_idle_share_min_max": [
+    0.5257289879931389,
+    0.6501305483028721
+   ],
+   "zero_or_near_zero": [
+    {
+     "class": 1,
+     "label": "N",
+     "dagger_count": 410,
+     "s1_count": 1081,
+     "dev_count": 67,
+     "dev_over_mix_prior": 0.358105,
+     "reason": "fewer than 500 teacher labels: too rare to learn from"
+    },
+    {
+     "class": 4,
+     "label": "SE",
+     "dagger_count": 425,
+     "s1_count": 974,
+     "dev_count": 71,
+     "dev_over_mix_prior": 0.387832,
+     "reason": "fewer than 500 teacher labels: too rare to learn from"
+    },
+    {
+     "class": 5,
+     "label": "S",
+     "dagger_count": 473,
+     "s1_count": 567,
+     "dev_count": 53,
+     "dev_over_mix_prior": 0.320149,
+     "reason": "fewer than 500 teacher labels: too rare to learn from"
+    },
+    {
+     "class": 8,
+     "label": "NW",
+     "dagger_count": 365,
+     "s1_count": 520,
+     "dev_count": 23,
+     "dev_over_mix_prior": 0.171848,
+     "reason": "present in the teacher labels but emitted on fewer than 30 of 17,151 dev decisions"
+    },
+    {
+     "class": 9,
+     "label": "focus-idle",
+     "dagger_count": 0,
+     "s1_count": 0,
+     "dev_count": 0,
+     "dev_over_mix_prior": null,
+     "reason": "absent from the teacher labels: 0 occurrences in 52,500 DAgger rows and 0 in 46,397 S1 rows, so no label and no recall can exist"
+    },
+    {
+     "class": 10,
+     "label": "focus-N",
+     "dagger_count": 40,
+     "s1_count": 126,
+     "dev_count": 6,
+     "dev_over_mix_prior": 0.303645,
+     "reason": "present in the teacher labels but emitted on fewer than 30 of 17,151 dev decisions"
+    },
+    {
+     "class": 12,
+     "label": "focus-E",
+     "dagger_count": 447,
+     "s1_count": 3192,
+     "dev_count": 148,
+     "dev_over_mix_prior": 0.419475,
+     "reason": "fewer than 500 teacher labels: too rare to learn from"
+    },
+    {
+     "class": 13,
+     "label": "focus-SE",
+     "dagger_count": 127,
+     "s1_count": 328,
+     "dev_count": 40,
+     "dev_over_mix_prior": 0.696302,
+     "reason": "fewer than 500 teacher labels: too rare to learn from"
+    },
+    {
+     "class": 14,
+     "label": "focus-S",
+     "dagger_count": 56,
+     "s1_count": 78,
+     "dev_count": 4,
+     "dev_over_mix_prior": 0.19587,
+     "reason": "present in the teacher labels but emitted on fewer than 30 of 17,151 dev decisions"
+    },
+    {
+     "class": 15,
+     "label": "focus-SW",
+     "dagger_count": 363,
+     "s1_count": 535,
+     "dev_count": 103,
+     "dev_over_mix_prior": 0.766177,
+     "reason": "fewer than 500 teacher labels: too rare to learn from"
+    },
+    {
+     "class": 16,
+     "label": "focus-W",
+     "dagger_count": 131,
+     "s1_count": 385,
+     "dev_count": 14,
+     "dev_over_mix_prior": 0.223208,
+     "reason": "present in the teacher labels but emitted on fewer than 30 of 17,151 dev decisions"
+    },
+    {
+     "class": 17,
+     "label": "focus-NW",
+     "dagger_count": 82,
+     "s1_count": 209,
+     "dev_count": 5,
+     "dev_over_mix_prior": 0.135786,
+     "reason": "present in the teacher labels but emitted on fewer than 30 of 17,151 dev decisions"
+    }
+   ]
+  },
+  "teacher_tie_structure": {
+   "note": "true[i] = raw_geo_score[i] + 5.0*(i != chosen); the stored array is post-discount, so these are the teacher's real geometric gaps",
+   "flat_row_share": 0.44579,
+   "band_lt_0.01": 0.448057,
+   "band_lt_0.2": 0.634667,
+   "band_lt_1.0": 0.888286,
+   "chosen_ties_runner_up": 41211,
+   "chosen_ties_runner_up_rate": 0.784971,
+   "idle_labels_total": 34732,
+   "idle_labels_from_flat_rows": 23404,
+   "idle_labels_from_flat_rows_share": 0.673845,
+   "idle_labels_where_idle_is_a_maximiser": 34732,
+   "idle_labels_where_idle_is_the_only_maximiser": 0,
+   "checks": {
+    "idle_tie_lost_to_other_index": 1,
+    "idle_top_score_not_chosen": 1,
+    "flat_row_chosen_not_idle": 0,
+    "ew_exact_tie_rows": 24205,
+    "ew_tie_won_by_E": 6,
+    "ew_tie_won_by_W": 0,
+    "idle_chosen_with_nonzero_band": 11328,
+    "idle_chosen_as_unique_top": 11328,
+    "idle_chosen_but_not_top": 0
+   },
+   "first_maximum_reproduces_chosen": {
+    "reproduces_chosen": 52498,
+    "share": 0.999962
+   },
+   "maximiser_set_size": {
+    "1": 11289,
+    "2": 2428,
+    "3": 1352,
+    "4": 1342,
+    "5": 771,
+    "6": 707,
+    "7": 238,
+    "8": 1073,
+    "9": 4110,
+    "10": 1713,
+    "11": 82,
+    "12": 2177,
+    "13": 83,
+    "14": 96,
+    "15": 1266,
+    "16": 125,
+    "17": 244,
+    "18": 23404
+   },
+   "maximiser_set_size_share": {
+    "1": 0.215029,
+    "2": 0.046248,
+    "3": 0.025752,
+    "4": 0.025562,
+    "5": 0.014686,
+    "6": 0.013467,
+    "7": 0.004533,
+    "8": 0.020438,
+    "9": 0.078286,
+    "10": 0.032629,
+    "11": 0.001562,
+    "12": 0.041467,
+    "13": 0.001581,
+    "14": 0.001829,
+    "15": 0.024114,
+    "16": 0.002381,
+    "17": 0.004648,
+    "18": 0.44579
+   },
+   "counterfactual_idle_share": {
+    "current_first_max": 0.661581,
+    "random_over_maximisers": 0.04669,
+    "move_first": 0.0,
+    "no_idle_in_action_space": 0.0
+   },
+   "counterfactual_note": "recomputed offline on the stored scores; no engine, no new data, no training. 'random' is uniform over the exact maximiser set, 'move_first' takes the lowest-index non-idle maximiser, 'no_idle' removes candidate 0 from the action space.",
+   "move_first_hist": {
+    "N": 34309,
+    "NE": 1809,
+    "E": 5587,
+    "SE": 561,
+    "S": 862,
+    "SW": 1715,
+    "W": 5424,
+    "NW": 369,
+    "focus-idle": 45,
+    "focus-N": 40,
+    "focus-NE": 573,
+    "focus-E": 447,
+    "focus-SE": 127,
+    "focus-S": 56,
+    "focus-SW": 363,
+    "focus-W": 131,
+    "focus-NW": 82
+   },
+   "no_idle_hist": {
+    "N": 34309,
+    "NE": 1809,
+    "E": 5587,
+    "SE": 561,
+    "S": 862,
+    "SW": 1715,
+    "W": 5424,
+    "NW": 369,
+    "focus-idle": 45,
+    "focus-N": 40,
+    "focus-NE": 573,
+    "focus-E": 447,
+    "focus-SE": 127,
+    "focus-S": 56,
+    "focus-SW": 363,
+    "focus-W": 131,
+    "focus-NW": 82
+   },
+   "no_idle_agrees_with_chosen": {
+    "rows": 17766,
+    "share": 0.3384
+   }
+  },
+  "position": {
+   "note": "chosen_plan.end_xy of every decision, i.e. the position after the 2-frame committed slot; playfield proxy, rollout model error <= 4 px",
+   "n": 52500,
+   "x_le_48": 11537,
+   "x_ge_352": 2,
+   "y_ge_400": 21446,
+   "y_ge_380": 38685,
+   "y_lt_360": 6834,
+   "share_x_le_48": 0.219752,
+   "share_x_ge_352": 3.8e-05,
+   "share_y_ge_400": 0.408495,
+   "share_y_ge_380": 0.736857,
+   "share_y_lt_360": 0.130171,
+   "x_hist_32": {
+    "0": 78,
+    "1": 13010,
+    "2": 5107,
+    "3": 2720,
+    "4": 1645,
+    "5": 3011,
+    "6": 2854,
+    "7": 1882,
+    "8": 2236,
+    "9": 8817,
+    "10": 11138,
+    "11": 2
+   },
+   "y_hist_32": {
+    "9": 1190,
+    "10": 4406,
+    "11": 10509,
+    "12": 25071,
+    "13": 11324
+   },
+   "step_direction": {
+    "zero": 35221,
+    "horizontal": 6967,
+    "vertical": 2383,
+    "diagonal": 7914,
+    "n": 52485
+   },
+   "step_direction_share": {
+    "zero": 0.671068,
+    "horizontal": 0.132743,
+    "vertical": 0.045403,
+    "diagonal": 0.150786
+   }
+  },
+  "sequences": {
+   "student": {
+    "self_transition": {
+     "same": 47464,
+     "pairs": 52485,
+     "rate": 0.904335
+    },
+    "runs": 5036,
+    "longest": 1334,
+    "mean_length": 10.4249,
+    "mass_at_least": {
+     "2": 50401,
+     "3": 48687,
+     "4": 47319,
+     "6": 45515,
+     "8": 43850,
+     "12": 41392,
+     "16": 39145,
+     "24": 35609,
+     "32": 32937,
+     "64": 27315,
+     "128": 22018,
+     "256": 16740,
+     "512": 16740
+    },
+    "mass_share_at_least": {
+     "2": 0.960019,
+     "3": 0.927371,
+     "4": 0.901314,
+     "6": 0.866952,
+     "8": 0.835238,
+     "12": 0.788419,
+     "16": 0.745619,
+     "24": 0.678267,
+     "32": 0.627371,
+     "64": 0.520286,
+     "128": 0.41939,
+     "256": 0.318857,
+     "512": 0.318857
+    }
+   },
+   "executed": {
+    "self_transition": {
+     "same": 43061,
+     "pairs": 52485,
+     "rate": 0.820444
+    },
+    "runs": 9439,
+    "longest": 1167,
+    "mean_length": 5.562,
+    "mass_at_least": {
+     "2": 46709,
+     "3": 43829,
+     "4": 42038,
+     "6": 39720,
+     "8": 37960,
+     "12": 35822,
+     "16": 34012,
+     "24": 30691,
+     "32": 28389,
+     "64": 23752,
+     "128": 19608,
+     "256": 15156,
+     "512": 15156
+    },
+    "mass_share_at_least": {
+     "2": 0.889695,
+     "3": 0.834838,
+     "4": 0.800724,
+     "6": 0.756571,
+     "8": 0.723048,
+     "12": 0.682324,
+     "16": 0.647848,
+     "24": 0.58459,
+     "32": 0.540743,
+     "64": 0.452419,
+     "128": 0.373486,
+     "256": 0.288686,
+     "512": 0.288686
+    }
+   },
+   "periodic_coverage_share": {
+    "2": {
+     "student": 0.765467,
+     "executed": 0.663867
+    },
+    "3": {
+     "student": 0.765467,
+     "executed": 0.663867
+    },
+    "4": {
+     "student": 0.765467,
+     "executed": 0.664324
+    },
+    "5": {
+     "student": 0.766057,
+     "executed": 0.664819
+    },
+    "6": {
+     "student": 0.765733,
+     "executed": 0.664857
+    }
+   },
+   "note": "closed-loop sequences of the collection student (D1, b0_s0_dagger_step1000.pt) and of the executed action, 3,500 decisions per shard, 52,500 per arm"
+  },
+  "run_buckets": {
+   "1": {
+    "rows": 2099,
+    "share": 0.039981,
+    "teacher_idle_share": 0.203907,
+    "flat_row_share": 0.024297,
+    "share_y_ge_400": 0.37494,
+    "teacher_top3": [
+     [
+      "idle",
+      428
+     ],
+     [
+      "W",
+      327
+     ],
+     [
+      "NE",
+      305
+     ]
+    ]
+   },
+   "2-3": {
+    "rows": 3082,
+    "share": 0.058705,
+    "teacher_idle_share": 0.164504,
+    "flat_row_share": 0.041856,
+    "share_y_ge_400": 0.438352,
+    "teacher_top3": [
+     [
+      "E",
+      779
+     ],
+     [
+      "W",
+      518
+     ],
+     [
+      "idle",
+      507
+     ]
+    ]
+   },
+   "4-7": {
+    "rows": 3469,
+    "share": 0.066076,
+    "teacher_idle_share": 0.127414,
+    "flat_row_share": 0.042375,
+    "share_y_ge_400": 0.461516,
+    "teacher_top3": [
+     [
+      "E",
+      1095
+     ],
+     [
+      "W",
+      885
+     ],
+     [
+      "idle",
+      442
+     ]
+    ]
+   },
+   "8-31": {
+    "rows": 10913,
+    "share": 0.207867,
+    "teacher_idle_share": 0.310822,
+    "flat_row_share": 0.118299,
+    "share_y_ge_400": 0.503894,
+    "teacher_top3": [
+     [
+      "idle",
+      3392
+     ],
+     [
+      "W",
+      3093
+     ],
+     [
+      "E",
+      2360
+     ]
+    ]
+   },
+   "32-127": {
+    "rows": 10919,
+    "share": 0.207981,
+    "teacher_idle_share": 0.764814,
+    "flat_row_share": 0.320359,
+    "share_y_ge_400": 0.448576,
+    "teacher_top3": [
+     [
+      "idle",
+      8351
+     ],
+     [
+      "E",
+      845
+     ],
+     [
+      "W",
+      542
+     ]
+    ]
+   },
+   "128-511": {
+    "rows": 5278,
+    "share": 0.100533,
+    "teacher_idle_share": 0.973664,
+    "flat_row_share": 0.626942,
+    "share_y_ge_400": 0.034483,
+    "teacher_top3": [
+     [
+      "idle",
+      5139
+     ],
+     [
+      "E",
+      35
+     ],
+     [
+      "S",
+      20
+     ]
+    ]
+   },
+   "512-+inf": {
+    "rows": 16740,
+    "share": 0.318857,
+    "teacher_idle_share": 0.98405,
+    "flat_row_share": 0.894803,
+    "share_y_ge_400": 0.425806,
+    "teacher_top3": [
+     [
+      "idle",
+      16473
+     ],
+     [
+      "NE",
+      55
+     ],
+     [
+      "E",
+      42
+     ]
+    ]
+   }
+  },
+  "long_run_actions": {
+   "note": "decisions inside a student run of length >= 32, by action",
+   "rows": 32937,
+   "histogram": {
+    "idle": 31980,
+    "E": 675,
+    "W": 282
+   },
+   "idle_share": 0.970945
+  },
+  "cycles": {
+   "note": "exact period-p blocks (p = 2..6) with >= 2 distinct actions inside one period, block length >= max(8, 2p); constant runs excluded",
+   "coverage": {
+    "executed_p3": 134,
+    "executed_p4": 485,
+    "executed_p5": 183,
+    "executed_p6": 140,
+    "student_p3": 24,
+    "student_p4": 247,
+    "student_p5": 175,
+    "student_p6": 87
+   },
+   "coverage_share": {
+    "executed_p3": 0.002552,
+    "executed_p4": 0.009238,
+    "executed_p5": 0.003486,
+    "executed_p6": 0.002667,
+    "student_p3": 0.000457,
+    "student_p4": 0.004705,
+    "student_p5": 0.003333,
+    "student_p6": 0.001657
+   },
+   "blocks": {
+    "executed_p3": 16,
+    "executed_p4": 55,
+    "executed_p5": 17,
+    "executed_p6": 11,
+    "student_p3": 3,
+    "student_p4": 29,
+    "student_p5": 16,
+    "student_p6": 7
+   }
+  },
+  "horizontal_sliding": {
+   "note": "decisions inside a maximal run of one fixed horizontal action (E or W) of length >= 8",
+   "short_8_31": 4897,
+   "long_32_plus": 146,
+   "share": 0.096057
+  },
+  "flat_rows": {
+   "rows": 23404,
+   "share": 0.44579,
+   "share_y_ge_400": 0.336395
+  },
+  "per_shard": [
+   {
+    "seed": 2025,
+    "shard": "dagger-s0d1seed2025",
+    "rows": 3500,
+    "injected": 1730,
+    "agreement": 2804,
+    "idle_teacher": 0.668571,
+    "idle_student": 0.735714,
+    "idle_executed": 0.705714,
+    "focus_teacher": 0.033143,
+    "focus_student": 0.012857,
+    "focus_executed": 0.021429,
+    "max_student_run": 1126,
+    "max_executed_run": 957,
+    "seq_sha256_labels": "84e7686aec220c97b8cda868b422546bdfa2e188c1d77963eb91abc6c9a9a4ef"
+   },
+   {
+    "seed": 2026,
+    "shard": "dagger-s0d1seed2026",
+    "rows": 3500,
+    "injected": 1759,
+    "agreement": 2776,
+    "idle_teacher": 0.663143,
+    "idle_student": 0.734571,
+    "idle_executed": 0.699143,
+    "focus_teacher": 0.034857,
+    "focus_student": 0.013714,
+    "focus_executed": 0.023143,
+    "max_student_run": 1191,
+    "max_executed_run": 963,
+    "seq_sha256_labels": "9e697cd2b03cdae42c1c94f14e9c39a7ee66e90f9b7e41126b0f2865824b6e39"
+   },
+   {
+    "seed": 2027,
+    "shard": "dagger-s0d1seed2027",
+    "rows": 3500,
+    "injected": 1754,
+    "agreement": 2703,
+    "idle_teacher": 0.631714,
+    "idle_student": 0.710857,
+    "idle_executed": 0.67,
+    "focus_teacher": 0.040571,
+    "focus_student": 0.011714,
+    "focus_executed": 0.024286,
+    "max_student_run": 1133,
+    "max_executed_run": 1029,
+    "seq_sha256_labels": "1291be24738a0284f3ed500983fb90ae0c625a067ca10fe8cc6e9be9a1319b97"
+   },
+   {
+    "seed": 2028,
+    "shard": "dagger-s0d1seed2028",
+    "rows": 3500,
+    "injected": 1787,
+    "agreement": 2703,
+    "idle_teacher": 0.644571,
+    "idle_student": 0.748,
+    "idle_executed": 0.696286,
+    "focus_teacher": 0.041714,
+    "focus_student": 0.015714,
+    "focus_executed": 0.029714,
+    "max_student_run": 1120,
+    "max_executed_run": 943,
+    "seq_sha256_labels": "69562d75033bda1f713917c44b9124a98851ec2e6d68f1423a2caf067b7596f6"
+   },
+   {
+    "seed": 2029,
+    "shard": "dagger-s0d1seed2029",
+    "rows": 3500,
+    "injected": 1758,
+    "agreement": 2805,
+    "idle_teacher": 0.686,
+    "idle_student": 0.742857,
+    "idle_executed": 0.711429,
+    "focus_teacher": 0.030857,
+    "focus_student": 0.016571,
+    "focus_executed": 0.024286,
+    "max_student_run": 1180,
+    "max_executed_run": 1024,
+    "seq_sha256_labels": "3a0f02d29be57195a1e70795f7975320f535bf3c4f85a33e481cfca3c199c36e"
+   },
+   {
+    "seed": 2030,
+    "shard": "dagger-s0d1seed2030",
+    "rows": 3500,
+    "injected": 1739,
+    "agreement": 2763,
+    "idle_teacher": 0.653429,
+    "idle_student": 0.734,
+    "idle_executed": 0.694,
+    "focus_teacher": 0.036286,
+    "focus_student": 0.012571,
+    "focus_executed": 0.023429,
+    "max_student_run": 1097,
+    "max_executed_run": 1098,
+    "seq_sha256_labels": "821870ce5e73747a1a90b158bf0c909baeaf6b3a237086ce532e8d9da2110df8"
+   },
+   {
+    "seed": 2031,
+    "shard": "dagger-s0d1seed2031",
+    "rows": 3500,
+    "injected": 1751,
+    "agreement": 2872,
+    "idle_teacher": 0.662286,
+    "idle_student": 0.719429,
+    "idle_executed": 0.689714,
+    "focus_teacher": 0.032571,
+    "focus_student": 0.015143,
+    "focus_executed": 0.024286,
+    "max_student_run": 1037,
+    "max_executed_run": 1037,
+    "seq_sha256_labels": "e36d79028c2ceca2479e03b373075bdc3a95acbfb825f23719be13f933033ba2"
+   },
+   {
+    "seed": 2032,
+    "shard": "dagger-s0d1seed2032",
+    "rows": 3500,
+    "injected": 1764,
+    "agreement": 2704,
+    "idle_teacher": 0.649714,
+    "idle_student": 0.740286,
+    "idle_executed": 0.696,
+    "focus_teacher": 0.032857,
+    "focus_student": 0.010286,
+    "focus_executed": 0.020286,
+    "max_student_run": 1129,
+    "max_executed_run": 948,
+    "seq_sha256_labels": "a1e55a7709aa7811c32ec5fd0564e0b15efadb30695683c9e42f1d29b5ea6f1e"
+   },
+   {
+    "seed": 2033,
+    "shard": "dagger-s0d1seed2033",
+    "rows": 3500,
+    "injected": 1721,
+    "agreement": 2890,
+    "idle_teacher": 0.695714,
+    "idle_student": 0.764,
+    "idle_executed": 0.731143,
+    "focus_teacher": 0.029429,
+    "focus_student": 0.014571,
+    "focus_executed": 0.02,
+    "max_student_run": 1334,
+    "max_executed_run": 1167,
+    "seq_sha256_labels": "872a7cdbc8c978fefe9e4477332210265a17922b5800b83807e26d7c33a307ba"
+   },
+   {
+    "seed": 2034,
+    "shard": "dagger-s0d1seed2034",
+    "rows": 3500,
+    "injected": 1730,
+    "agreement": 2809,
+    "idle_teacher": 0.677143,
+    "idle_student": 0.743143,
+    "idle_executed": 0.705429,
+    "focus_teacher": 0.034286,
+    "focus_student": 0.009429,
+    "focus_executed": 0.022,
+    "max_student_run": 1143,
+    "max_executed_run": 976,
+    "seq_sha256_labels": "c19e5bdfc0e102ab19cf1b730ffdcfa49d5b344ec00daa9df2ff7cb14a3bd891"
+   },
+   {
+    "seed": 2035,
+    "shard": "dagger-s0d1seed2035",
+    "rows": 3500,
+    "injected": 1826,
+    "agreement": 2905,
+    "idle_teacher": 0.684,
+    "idle_student": 0.75,
+    "idle_executed": 0.718857,
+    "focus_teacher": 0.035714,
+    "focus_student": 0.02,
+    "focus_executed": 0.029143,
+    "max_student_run": 1140,
+    "max_executed_run": 1109,
+    "seq_sha256_labels": "fa80506ba4e4da9ce58ee6d3fc178f573542c20cefd5082f4df52da7a60eb898"
+   },
+   {
+    "seed": 2036,
+    "shard": "dagger-s0d1seed2036",
+    "rows": 3500,
+    "injected": 1765,
+    "agreement": 2734,
+    "idle_teacher": 0.647429,
+    "idle_student": 0.728857,
+    "idle_executed": 0.689143,
+    "focus_teacher": 0.036,
+    "focus_student": 0.015143,
+    "focus_executed": 0.025143,
+    "max_student_run": 892,
+    "max_executed_run": 883,
+    "seq_sha256_labels": "ccb9959a54b2e20c64addc9f2f29b9b9d8a1eb1be526a4a94d1da5779b2d9bf8"
+   },
+   {
+    "seed": 2037,
+    "shard": "dagger-s0d1seed2037",
+    "rows": 3500,
+    "injected": 1746,
+    "agreement": 2904,
+    "idle_teacher": 0.671143,
+    "idle_student": 0.719429,
+    "idle_executed": 0.694571,
+    "focus_teacher": 0.031714,
+    "focus_student": 0.014571,
+    "focus_executed": 0.021429,
+    "max_student_run": 1036,
+    "max_executed_run": 1037,
+    "seq_sha256_labels": "f1324d414f347d1bcb44af48eaf3a82f9425550ea74a35130587498add5ae3dc"
+   },
+   {
+    "seed": 2038,
+    "shard": "dagger-s0d1seed2038",
+    "rows": 3500,
+    "injected": 1755,
+    "agreement": 2695,
+    "idle_teacher": 0.631143,
+    "idle_student": 0.727143,
+    "idle_executed": 0.676857,
+    "focus_teacher": 0.031429,
+    "focus_student": 0.006857,
+    "focus_executed": 0.017714,
+    "max_student_run": 1035,
+    "max_executed_run": 975,
+    "seq_sha256_labels": "c063cfea565289e4a3dc738ee38485cfcf75690ef0eefe1abb923dac7b5b2c2c"
+   },
+   {
+    "seed": 2039,
+    "shard": "dagger-s0d1seed2039",
+    "rows": 3500,
+    "injected": 1710,
+    "agreement": 2752,
+    "idle_teacher": 0.657429,
+    "idle_student": 0.754571,
+    "idle_executed": 0.705143,
+    "focus_teacher": 0.038286,
+    "focus_student": 0.007714,
+    "focus_executed": 0.022,
+    "max_student_run": 1147,
+    "max_executed_run": 1010,
+    "seq_sha256_labels": "ee067467573436aba8a31f768129bff3469d2ac2d93ebb8700fb8b1ff9b3af00"
+   }
+  ]
+ },
+ "diagnosis": {
+  "q1_teacher_idle_or_student_learned_idle": {
+   "answer": "both, with very different weights: the teacher's own label distribution is already 66.16 % idle, and the collection student adds +7.53 pp of its own (73.69 %). 87 % of the student's idle mass is teacher-endorsed; 13 % (5,006 rows, 9.53 % of all rows) is idle invented on rows where the teacher asked for a move.",
+   "teacher_idle": 0.661562,
+   "student_idle": 0.736857,
+   "student_minus_teacher": 0.075295,
+   "p_student_idle_given_teacher_move": 0.281742,
+   "p_student_move_given_teacher_idle": 0.030318,
+   "student_idle_rows_teacher_also_idle": 33679,
+   "student_idle_rows_teacher_move": 5006,
+   "student_idle_teacher_endorsed_share": 0.870596,
+   "idle_agreement_share_of_all_agreement": 0.805352,
+   "why_teacher_idle_is_high": "44.58 % of the decisions have an exactly flat 18-way score; idle wins those by being candidate 0. 67.39 % of the teacher's idle labels come from those flat rows, and idle is never the unique best action in the whole corpus."
+  },
+  "q2_direction_classes_with_near_zero_recall": {
+   "answer": "no direction class has exactly zero recall in the 20k dev histogram except class 9 (focus-idle), which has zero teacher rows and therefore zero training labels -- it is absent by construction, not learned away. Every other class is emitted at dev, but the vertically oriented ones collapse to 0.19-0.50x of their label prior while E/W grow to 1.33-1.44x.",
+   "dev_lowest_ratio": [
+    {
+     "class": 17,
+     "label": "focus-NW",
+     "dev_over_mix_prior": 0.135786,
+     "dev_count": 5,
+     "dagger_count": 82
+    },
+    {
+     "class": 8,
+     "label": "NW",
+     "dev_over_mix_prior": 0.171848,
+     "dev_count": 23,
+     "dagger_count": 365
+    },
+    {
+     "class": 14,
+     "label": "focus-S",
+     "dev_over_mix_prior": 0.19587,
+     "dev_count": 4,
+     "dagger_count": 56
+    },
+    {
+     "class": 16,
+     "label": "focus-W",
+     "dev_over_mix_prior": 0.223208,
+     "dev_count": 14,
+     "dagger_count": 131
+    },
+    {
+     "class": 10,
+     "label": "focus-N",
+     "dev_over_mix_prior": 0.303645,
+     "dev_count": 6,
+     "dagger_count": 40
+    },
+    {
+     "class": 5,
+     "label": "S",
+     "dev_over_mix_prior": 0.320149,
+     "dev_count": 53,
+     "dagger_count": 473
+    }
+   ],
+   "collection_student_zero_recall": [
+    {
+     "class": 9,
+     "label": "focus-idle",
+     "teacher_rows": 0,
+     "student_match": 0
+    },
+    {
+     "class": 10,
+     "label": "focus-N",
+     "teacher_rows": 40,
+     "student_match": 0
+    },
+    {
+     "class": 14,
+     "label": "focus-S",
+     "teacher_rows": 56,
+     "student_match": 0
+    },
+    {
+     "class": 16,
+     "label": "focus-W",
+     "teacher_rows": 131,
+     "student_match": 0
+    },
+    {
+     "class": 17,
+     "label": "focus-NW",
+     "teacher_rows": 82,
+     "student_match": 0
+    }
+   ]
+  },
+  "q3_edge_or_fixed_direction_loops": {
+   "answer": "there is a pinning loop, but it is an idle-freeze, not a left/right slide loop: 31.9 % of all decisions sit inside a constant-action run of >= 512 decisions, 97.1 % of the decisions inside runs >= 32 are idle, 67.1 % of decision steps produce no position change at all, and only 0.28 % of decisions sit in a horizontal E/W run of >= 32. Exact two-action cycles (ABAB...) cover 0.09 %-0.92 % of decisions, so there is no short oscillation either.",
+   "student_self_transition_rate": 0.904335,
+   "executed_self_transition_rate": 0.820444,
+   "longest_student_run": 1334,
+   "longest_executed_run": 1167,
+   "share_in_runs_ge_512": 0.318857,
+   "share_in_runs_ge_128": 0.41939,
+   "idle_share_inside_runs_ge_32": 0.970945,
+   "horizontal_sliding_share": 0.096057,
+   "cycle_coverage_share": {
+    "executed_p3": 0.002552,
+    "executed_p4": 0.009238,
+    "executed_p5": 0.003486,
+    "executed_p6": 0.002667,
+    "student_p3": 0.000457,
+    "student_p4": 0.004705,
+    "student_p5": 0.003333,
+    "student_p6": 0.001657
+   },
+   "zero_movement_step_share": 0.671068,
+   "position_bands": {
+    "y_ge_400": 0.408495,
+    "y_ge_380": 0.736857,
+    "y_lt_360": 0.130171,
+    "x_le_48": 0.219752,
+    "x_ge_352": 3.8e-05
+   },
+   "caveat": "positions come from chosen_plan.end_xy of the collection rollout (rollout model error <= 4 px); the dev episodes persist action histograms only, so the 20k student's own position band is not measured here"
+  }
+ },
+ "hypotheses": [
+  {
+   "id": "H1",
+   "name": "dev 的 idle 占比就是标签先验，不是策略漂移",
+   "statement": "20k 学生在 80/20 混合下把训练标签的 idle 先验（61.72 %）复现到 1 pp 以内；加步数只会让 dev idle 更靠近这个先验（1k 71.07 % → 5k 62.84 % → 20k 60.87 %），而不是离开它",
+   "evidence": {
+    "mix_prior_idle": 0.61716,
+    "dev20_idle": 0.608711,
+    "delta_pp": -0.8449,
+    "dev_idle_by_budget": {
+     "1k": 0.7107,
+     "5k": 0.6284,
+     "20k": 0.6087
+    },
+    "source_1k_5k": "EVAL_BETA05_20K.md section 6.2 (same 15 shards, same labels, same seed, only --steps changed)"
+   },
+   "falsifier": "如果换过权重的先验之后 dev idle 不跟着走（例如新先验 45 % 而 dev idle 仍在 58 % 以上），这条就被推翻",
+   "test_without_new_data": "把 dev 的逐类占比和 mix 先验对比（本文件 §4 已做）：残差 -0.84 pp",
+   "test_with_one_run": "同一批行、同一个 seed，把 idle 样本权重降到 0.5 重跑 20k，看 dev idle 是否落到新先验附近（~52 %）"
+  },
+  {
+   "id": "H2",
+   "name": "66 % 的 idle 标签是「取第一个最大值」tie-break 的工件",
+   "statement": "教师的 18 路分数在大多数决策上没有分辨力（44.58 % 完全打平、78.50 % 与次优完全打平），idle 从来不是唯一最大值，标签分布由「第一个最大值胜出」这条规则决定，而它总是先遇到候选 0",
+   "evidence": {
+    "flat_row_share": 0.44579,
+    "idle_labels_from_flat_rows": 23404,
+    "idle_labels_from_flat_rows_share": 0.673845,
+    "idle_unique_best_rows": 0,
+    "first_maximum_reproduces_chosen": 0.999962,
+    "counterfactual_idle_random": 0.04669,
+    "counterfactual_idle_move_first": 0.0
+   },
+   "falsifier": "如果在打平行里分层抽样、用引擎分别验证 idle 与被并列的方向，发现 idle 确实系统性地更安全，那这个打平就是真实偏好而不是工件",
+   "test_without_new_data": "§7 的反事实表（已完成）：同一批分数，随机 tie-break → 4.67 % idle",
+   "test_with_one_run": "用去平局后的分数（move-first 或带种子的随机）重新标一遍再训练：先验先动，dev idle 应该跟着动"
+  },
+  {
+   "id": "H3",
+   "name": "采集学生自己「卡住」的状态在供应 idle 标签",
+   "statement": "idle 标签占比是「采集学生卡了多久」的单调函数：run 长度 = 1 时教师只标 20.39 % idle，run 4-7 时 12.74 %，run 32-127 时 76.48 %，run ≥ 512 时 98.41 %",
+   "evidence": {
+    "teacher_idle_by_run_bucket": {
+     "1": 0.203907,
+     "2-3": 0.164504,
+     "4-7": 0.127414,
+     "8-31": 0.310822,
+     "32-127": 0.764814,
+     "128-511": 0.973664,
+     "512-+inf": 0.98405
+    },
+    "flat_row_share_by_run_bucket": {
+     "1": 0.024297,
+     "2-3": 0.041856,
+     "4-7": 0.042375,
+     "8-31": 0.118299,
+     "32-127": 0.320359,
+     "128-511": 0.626942,
+     "512-+inf": 0.894803
+    },
+    "share_of_rows_in_runs_ge_512": 0.318857
+   },
+   "falsifier": "如果第二轮采集以全新状态（run == 1）为主、idle 标签占比却仍是 ~66 %，这条就被推翻",
+   "test_without_new_data": "§5 的 run 分桶表（已完成）",
+   "test_with_one_collection": "反卡死采集器（连续 K 次同一动作后强制换向）采一轮，idle 标签占比应降到 45 % 以下"
+  },
+  {
+   "id": "H4",
+   "name": "竖直/斜向动作被饿死，学生能做的事被先验封顶",
+   "statement": "教师的非 idle 质量 61 % 是水平向（E/W 20.69 % vs N+S 1.68 %、斜向 8.00 %），于是学生把质量从竖直搬到水平：dev 有 89.52 % 的决策是 idle 或纯水平，竖直/斜向 12 类里有 7 类在 dev 只剩先验的 0.14×–0.39×（NE 0.74×、SW 0.81× 是例外）",
+   "evidence": {
+    "mix_prior_horizontal_EW": 0.199889,
+    "mix_prior_vertical": 0.158724,
+    "dev_vertical": 0.09533,
+    "dev_idle_plus_EW": 0.895225,
+    "lowest_dev_over_prior": [
+     {
+      "class": 17,
+      "label": "focus-NW",
+      "ratio": 0.135786
+     },
+     {
+      "class": 8,
+      "label": "NW",
+      "ratio": 0.171848
+     },
+     {
+      "class": 14,
+      "label": "focus-S",
+      "ratio": 0.19587
+     },
+     {
+      "class": 16,
+      "label": "focus-W",
+      "ratio": 0.223208
+     },
+     {
+      "class": 10,
+      "label": "focus-N",
+      "ratio": 0.303645
+     }
+    ]
+   },
+   "falsifier": "如果只写「只会 E/W/idle」的脚本策略在同样 20 个 dev 种子上活到和 20k 学生一样长（~1,715 帧），就说明缺竖直动作足以解释存活，而不只是相关",
+   "test_without_new_data": "把 dev 直方图和先验对比（已完成）：89.52 % 的 dev 决策是零位移或纯水平位移",
+   "test_with_one_eval": "用同一个 20 dev 种子评测一个脚本化的「只 E/W/idle」控制器（一次 eval，不训练）"
+  }
+ ],
+ "recommendations": [
+  {
+   "id": "R1",
+   "priority": "P0",
+   "action": "先在源头修标签分布，再花任何算力：给几何分去平局，或者有意识地选择 tie-break 规则（move-first、带种子随机、或 idle 最后才选），然后离线重算这 52,500 条标签。§7 的反事实表明同一批分数在三行不同规则下给出 66.16 % / 4.67 % / 0.00 % 三种 idle。",
+   "why": "现在 66.16 % 的 idle 不是教师偏好，而是候选 0 赢下了每一次并列",
+   "cost": "只做离线重算，不需要引擎"
+  },
+  {
+   "id": "R2",
+   "priority": "P0",
+   "action": "重新平衡训练目标：把 idle 降到 D410-S1 的水平（43.96 %）或更低，并抬高只有 1.68 % / 8.00 % 的竖直、斜向和 focus 类。之后用新的先验衡量 dev idle，而不是对着 60.87 % 看。",
+   "why": "H1 预测 dev idle 跟随先验；dev 的逐类比值（竖直/斜向 12 类里 7 类跌到 0.14×–0.39×）说明先验已经是约束瓶颈",
+   "cost": "一次 20k 训练，带样本权重，不需要新数据"
+  },
+  {
+   "id": "R3",
+   "priority": "P1",
+   "action": "第二轮 DAgger 要让采集器「反卡死」：连续 K 次（K ≈ 16–32）执行同一动作后强制换向，并在卡死期间以 β=1.0 注入教师；同时记录 run 长度，好让新数据能对照 H3 检查。",
+   "why": "31.9 % 的决策落在 ≥ 512 的 run 里，这些行 98.41 % 被标成 idle；用同一个采集器再采一轮只会复现同一个状态分布",
+   "cost": "一轮采集（本轮不做，留给 WP05.12）"
+  },
+  {
+   "id": "R4",
+   "priority": "P1",
+   "action": "不要在现有语料上加步数：5k → 20k 用 4 倍预算只换来 -1.97 pp 的 dev idle 和 +25.55 帧，而且 dev idle 已经收敛到标签先验上。",
+   "why": "先验不变，再大的优化压力也不可能把 idle 压到先验以下",
+   "cost": "无（这是一条「不要做」）"
+  },
+  {
+   "id": "R5",
+   "priority": "P2",
+   "action": "让「贴边 idle」在评测时可测：20 个 dev 局只持久化动作直方图，所以 20k 学生的位置带（y ≥ 380、x ≤ 48）根本无法核对。给 eval summary 加上逐局 x/y 分带占比和 idle run 长度分布。",
+   "why": "贴边/卡死的证据现在只来自采集 rollout，不来自被测学生",
+   "cost": "eval summary 里加一行，不需要改引擎"
+  }
+ ],
+ "not_claimed": [
+  "NOT G410-2: no confirm seed was run, no gate is evaluated, no pass rate or development score is defined or implied",
+  "no training, no data collection, no new DAgger round, no shard regenerated, no engine run of any kind",
+  "this is not a claim that the teacher's idle labels are unsafe: only that they are tie-determined, and that the label distribution is what the student reproduces",
+  "this is not a claim that the 20k student hugs an edge at dev: its position band is not logged (R5); the position numbers come from the collection rollout only",
+  "'random tie-break -> 4.67 % idle' is a counterfactual on the stored scores, not a proposed policy and not a claim that 4.67 % idle would survive better",
+  "single training seed (0), single checkpoint, single collector checkpoint (b0_s0_dagger_step1000); no variance estimate",
+  "the 18-way recomputation depends on the documented conventions unverified_discount = 5.0 and verify_k = 1; if either changes the decomposition changes with it",
+  "D410-S1 numbers are the teacher target_counts recorded in train_beta05_20k.json; the S1 rows were not re-read here"
+ ],
+ "limits": [
+  "五个 β=0.5 臂共用同一个采集 checkpoint，所以 shard 统计里的 student 是采集学生 D1，永远不会是 20k 臂",
+  "labels.jsonl 只对 chosen 一个候选做了验证，所以「被并列的那个方向同样安全」无法用这份数据核对",
+  "位置通道是几何 rollout 的 end_xy（模型误差 ≤ 4 px，抽样行 trajectory_matches = false），不是引擎里的玩家坐标",
+  "run/循环分析用的是 15 个 shard 的序列（52,500 决策）；dev 局只存直方图",
+  "DAgger 状态先验（66.16 %）和 S1 状态先验（43.96 %）的对比把「状态分布」和「产生它的 rollout 策略」混在一起——这是描述性的，不是受控 A/B"
+ ],
+ "verification": {
+  "checks": [
+   {
+    "check": "rows == 52,500",
+    "ok": true,
+    "detail": 52500
+   },
+   {
+    "check": "shards == 15",
+    "ok": true,
+    "detail": 15
+   },
+   {
+    "check": "teacher histogram sums to rows",
+    "ok": true,
+    "detail": 52500
+   },
+   {
+    "check": "student histogram sums to rows",
+    "ok": true,
+    "detail": 52500
+   },
+   {
+    "check": "executed histogram sums to rows",
+    "ok": true,
+    "detail": 52500
+   },
+   {
+    "check": "chosen histogram == teacher histogram",
+    "ok": true,
+    "detail": "chosen == teacher"
+   },
+   {
+    "check": "agreement + disagreement == rows",
+    "ok": true,
+    "detail": [
+     41819,
+     10681
+    ]
+   },
+   {
+    "check": "agreement matches the published 41,819",
+    "ok": true,
+    "detail": 41819
+   },
+   {
+    "check": "injected matches the published 26,295",
+    "ok": true,
+    "detail": 26295
+   },
+   {
+    "check": "injected + student_only == rows",
+    "ok": true,
+    "detail": "split"
+   },
+   {
+    "check": "idle + move cells == rows",
+    "ok": true,
+    "detail": "2x2"
+   },
+   {
+    "check": "confusion matrix sums to rows",
+    "ok": true,
+    "detail": "18x18"
+   },
+   {
+    "check": "dev histogram sums to 17,151",
+    "ok": true,
+    "detail": 17151
+   },
+   {
+    "check": "per-episode histograms sum to the pooled one",
+    "ok": true,
+    "detail": "episode sum"
+   },
+   {
+    "check": "mix prior idle == 0.617160",
+    "ok": true,
+    "detail": 0.61716
+   },
+   {
+    "check": "mix prior reproduces the published majority baseline",
+    "ok": true,
+    "detail": [
+     0.6171578125,
+     0.61716
+    ]
+   },
+   {
+    "check": "first-max reproduces chosen >= 99.99 %",
+    "ok": true,
+    "detail": {
+     "reproduces_chosen": 52498,
+     "share": 0.999962
+    }
+   },
+   {
+    "check": "idle never the unique maximum",
+    "ok": true,
+    "detail": {
+     "current_first_max": 0.661581,
+     "random_over_maximisers": 0.04669,
+     "move_first": 0.0,
+     "no_idle_in_action_space": 0.0
+    }
+   },
+   {
+    "check": "every flat row is labelled idle",
+    "ok": true,
+    "detail": 0
+   },
+   {
+    "check": "idle labels == flat rows + idle-as-maximiser rows",
+    "ok": true,
+    "detail": [
+     23404,
+     11328,
+     34732
+    ]
+   },
+   {
+    "check": "run bucket shares sum to 1",
+    "ok": true,
+    "detail": 1.0
+   },
+   {
+    "check": "class 9 has zero teacher rows",
+    "ok": true,
+    "detail": [
+     0,
+     0
+    ]
+   },
+   {
+    "check": "per-shard rows sum to rows",
+    "ok": true,
+    "detail": "per_shard"
+   },
+   {
+    "check": "focus share consistent with the class table",
+    "ok": true,
+    "detail": "focus"
+   }
+  ],
+  "passed": 24,
+  "failed": 0,
+  "status": "pass"
+ }
+}

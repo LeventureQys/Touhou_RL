@@ -1,0 +1,580 @@
+{
+ "schema": "v410-s1b-plan/1",
+ "step": "WP03.1b",
+ "version": "4.1.0",
+ "generated_at": "2026-11-13T03:10:18+0800",
+ "tool": {
+  "module": ".tmp_v410_s1b/tools/assemble_evidence.py (runtime, not committed)",
+  "python": "3.10.12",
+  "command": [
+   ".tmp_v410_s1b/tools/assemble_evidence.py"
+  ]
+ },
+ "objective": "extend the WP03.1a stage-0 slice (8 seeds / 26,625 obs decisions) to 20 seeds / >= 50,000 obs decisions under the same obs-v3 contract and carry calibrated labels for every decision",
+ "existing_slice": {
+  "source": "WP03.1a calibrated relabel of the pre-existing D1 stage-0 shards",
+  "shards": 8,
+  "seed_range": [
+   1,
+   8
+  ],
+  "decisions": 26625,
+  "observations_present": true,
+  "manifest": "Document/Update/Alpha/v4.1.0/evidence/WP03/relabel_manifest.json",
+  "audit": "Document/Update/Alpha/v4.1.0/evidence/WP03/s1_partial_audit.json"
+ },
+ "targets": {
+  "min_decisions": 50000,
+  "min_seeds": 20,
+  "decisions_needed": 23375,
+  "seeds_needed": 12,
+  "synthetic_padding_allowed": false
+ },
+ "engine": {
+  "build_dir": "/root/Touhou_RL/third_party/th08-rl/build/rl_v3",
+  "binary": "/root/Touhou_RL/third_party/th08-rl/build/rl_v3/th08-modern",
+  "sha256": "691bfd77b7eca3361aa8bb7af0977556a70cc73a070b29a2447222ba7a568ef6",
+  "expected_sha": "691bfd77b7eca3361aa8bb7af0977556a70cc73a070b29a2447222ba7a568ef6",
+  "sha256_source": "sha256sum of /root/Touhou_RL/third_party/th08-rl/build/rl_v3/th08-modern in WSL; identical to the SHA the WP03.1a shards were collected with",
+  "runtime_check": "tools/rl/v400_d1_collect.py verifies the binary sha256 before every shard and fail-closes on a mismatch (observed in preflight)",
+  "note": "rl_v3 only; rl_laser is never used here"
+ },
+ "read_only_inputs": [
+  {
+   "path": "tools/rl/v400_d1_collect.py",
+   "sha256": "c9d310f7bb7d3d1745a2efd12c7f0506fe226dff9da747b761bc41c024c908a1",
+   "modified": false
+  },
+  {
+   "path": "tools/rl/v400_teacher.py",
+   "sha256": "5c98e088fe6b77a875d9cc4fc8e884a75b370cbfdd2671a7a40e1f0d078d23ed",
+   "modified": false
+  },
+  {
+   "path": "tools/rl/v410_relabel_d1.py",
+   "sha256": "d669f7a76995f1816595fcd2a9294b9cfad094dc21801dd3291459a353f7b4a4",
+   "modified": false
+  },
+  {
+   "path": "touhou_rl/v410/dataset_plan.py",
+   "sha256": "04c69360414f97f68f0c9d41911f5b02620c49702c3b22b9b7bfb74ffccd2373",
+   "modified": false
+  }
+ ],
+ "params": {
+  "stages": "0",
+  "seeds_smoke": "1000",
+  "seeds_main": "1000-1011",
+  "decisions_per_shard": 3300,
+  "probe_cap_frames": 16000,
+  "plan_limit_per_stage_smoke": 1,
+  "plan_limit_per_stage_main": 12,
+  "workers_smoke": 1,
+  "workers_main": 4,
+  "mode": "fast",
+  "difficulty": 1,
+  "team": 0,
+  "obs": "v3",
+  "start_mix": [
+   "shard"
+  ],
+  "data_root_prefix": "/root/v400-data/s1b",
+  "work_dir": ".tmp_v410_s1b",
+  "out_dir": ".tmp_v410_s1b/d1"
+ },
+ "plan_limit_note": "the default per-stage target is 2,000,000 frames, i.e. 154 shards of 13,004 frames. WP03.1b needs 12 shards (one per new seed), so both plans pass an explicit --plan-limit-per-stage (1 for the smoke, 12 for the main run). The plan records the difference as coverage_shortfall_reason=plan_limit_per_stage; it is a deliberate 12-shard slice of the full D1 plan, not the full plan.",
+ "probe": {
+  "reachability": {
+   "stage0": {
+    "stage": 0,
+    "seed": 1000,
+    "status": "ok",
+    "decisions": 3251,
+    "frames": 13004,
+    "cap_frames": 16000,
+    "capped": false,
+    "stop_reason": "stage_changed",
+    "stage_clear": true,
+    "death_frame": null,
+    "teacher_fps": 76.764,
+    "wall_s": 169.403,
+    "reachable_is_lower_bound": false
+   }
+  },
+  "wall_s": null,
+  "note": "one episode per stage, to death or to the 16,000-frame cap; stage 0 clears at 13,004 frames for seed 1000, so a shard never exceeds 'reachable // 4' = 3,251 decisions even though the per-shard cap is 3,300"
+ },
+ "planned": {
+  "smoke": {
+   "shards": 1,
+   "frames_expected": 13004,
+   "decisions_expected": 3251,
+   "keys": [
+    "d1-s0d1-n3251-seed1000-shard"
+   ],
+   "seeds": [
+    1000
+   ]
+  },
+  "main": {
+   "shards": 12,
+   "frames_expected": 156048,
+   "decisions_expected": 39012,
+   "keys": [
+    "d1-s0d1-n3251-seed1000-shard",
+    "d1-s0d1-n3251-seed1001-shard",
+    "d1-s0d1-n3251-seed1002-shard",
+    "d1-s0d1-n3251-seed1003-shard",
+    "d1-s0d1-n3251-seed1004-shard",
+    "d1-s0d1-n3251-seed1005-shard",
+    "d1-s0d1-n3251-seed1006-shard",
+    "d1-s0d1-n3251-seed1007-shard",
+    "d1-s0d1-n3251-seed1008-shard",
+    "d1-s0d1-n3251-seed1009-shard",
+    "d1-s0d1-n3251-seed1010-shard",
+    "d1-s0d1-n3251-seed1011-shard"
+   ],
+   "seeds": [
+    1000,
+    1001,
+    1002,
+    1003,
+    1004,
+    1005,
+    1006,
+    1007,
+    1008,
+    1009,
+    1010,
+    1011
+   ]
+  },
+  "expected_new_decisions": 39012,
+  "expected_total_decisions": 65637,
+  "expected_seeds_union": [
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   1000,
+   1001,
+   1002,
+   1003,
+   1004,
+   1005,
+   1006,
+   1007,
+   1008,
+   1009,
+   1010,
+   1011
+  ]
+ },
+ "preflight": {
+  "attempt": 1,
+  "passed": false,
+  "argv": [
+   "env",
+   "-u",
+   "DISPLAY",
+   "/root/v400-venv/bin/python",
+   "tools/rl/v400_d1_collect.py",
+   "--phase",
+   "probe",
+   "--stages",
+   "0",
+   "--seeds",
+   "1000",
+   "--probe-cap-frames",
+   "16000",
+   "--work-dir",
+   ".tmp_v410_s1b",
+   "--out-dir",
+   ".tmp_v410_s1b/d1",
+   "--data-root-prefix",
+   "/root/v400-data/s1b",
+   "--engine",
+   "/root/Touhou_RL/third_party/th08-rl/build/rl_v3/th08-modern",
+   "--expected-sha",
+   "691bfd77b7eca3361aa8bb7af0977556a70cc73a070b29a2447222ba7a568ef6"
+  ],
+  "note": "the first attempt pointed --engine at the binary itself; the collector appends /th08-modern to --engine, so it fail-closed with engine_sha_mismatch instead of running. The collector recorded the failure as probe evidence (probe status=failed, wall_s=0.328) rather than crashing, and the tee pipeline masked the process exit code. probe/stage0/* and reachability.json were then overwritten by the successful retry, so the quoted line below is the phase output as printed at the time; it is a recorded preflight finding, not part of the accepted evidence chain.",
+  "observed_failure": {
+   "status": "engine_sha_mismatch",
+   "reason": "engine binary not found: /root/Touhou_RL/third_party/th08-rl/build/rl_v3/th08-modern/th08-modern; engine_dir: /root/Touhou_RL/third_party/th08-rl/build/rl_v3/th08-modern",
+   "expected_sha256": "691bfd77b7eca3361aa8bb7af0977556a70cc73a070b29a2447222ba7a568ef6"
+  },
+  "fix": "pass the build directory /root/Touhou_RL/third_party/th08-rl/build/rl_v3"
+ },
+ "commands": [
+  {
+   "phase": "probe",
+   "plan": "smoke",
+   "argv": [
+    "env",
+    "-u",
+    "DISPLAY",
+    "/root/v400-venv/bin/python",
+    "tools/rl/v400_d1_collect.py",
+    "--phase",
+    "probe",
+    "--stages",
+    "0",
+    "--seeds",
+    "1000",
+    "--probe-cap-frames",
+    "16000",
+    "--work-dir",
+    ".tmp_v410_s1b",
+    "--out-dir",
+    ".tmp_v410_s1b/d1",
+    "--data-root-prefix",
+    "/root/v400-data/s1b",
+    "--engine",
+    "/root/Touhou_RL/third_party/th08-rl/build/rl_v3",
+    "--expected-sha",
+    "691bfd77b7eca3361aa8bb7af0977556a70cc73a070b29a2447222ba7a568ef6"
+   ],
+   "exit_code": 0,
+   "exit_code_source": "tools/run_cmd.py ledger (2026-11-13T03:01:54, wall 187.2 s)",
+   "log": ".tmp_v410_s1b/logs/smoke_probe.log",
+   "result": {
+    "probe": {
+     "stage": 0,
+     "seed": 1000,
+     "status": "ok",
+     "decisions": 3251,
+     "frames": 13004,
+     "cap_frames": 16000,
+     "capped": false,
+     "stop_reason": "stage_changed",
+     "stage_clear": true,
+     "death_frame": null,
+     "teacher_fps": 76.764,
+     "wall_s": 169.403,
+     "reachable_is_lower_bound": false
+    },
+    "wall_s": 187.2
+   }
+  },
+  {
+   "phase": "plan",
+   "plan": "smoke",
+   "argv": [
+    "env",
+    "-u",
+    "DISPLAY",
+    "/root/v400-venv/bin/python",
+    "tools/rl/v400_d1_collect.py",
+    "--phase",
+    "plan",
+    "--plan-name",
+    "smoke",
+    "--stages",
+    "0",
+    "--seeds",
+    "1000",
+    "--decisions-per-shard",
+    "3300",
+    "--plan-limit-per-stage",
+    "1",
+    "--work-dir",
+    ".tmp_v410_s1b",
+    "--out-dir",
+    ".tmp_v410_s1b/d1",
+    "--data-root-prefix",
+    "/root/v400-data/s1b",
+    "--engine",
+    "/root/Touhou_RL/third_party/th08-rl/build/rl_v3",
+    "--expected-sha",
+    "691bfd77b7eca3361aa8bb7af0977556a70cc73a070b29a2447222ba7a568ef6"
+   ],
+   "exit_code": 0,
+   "exit_code_source": "tools/run_cmd.py ledger (2026-11-13T03:05:05, wall 10.0 s)",
+   "log": ".tmp_v410_s1b/logs/smoke_plan.log",
+   "result": {
+    "shards": 1,
+    "frames": 13004,
+    "status": "ok",
+    "wall_s": 10.0
+   }
+  },
+  {
+   "phase": "run",
+   "plan": "smoke",
+   "argv": [
+    "env",
+    "-u",
+    "DISPLAY",
+    "/root/v400-venv/bin/python",
+    "tools/rl/v400_d1_collect.py",
+    "--phase",
+    "run",
+    "--plan-name",
+    "smoke",
+    "--workers",
+    "1",
+    "--work-dir",
+    ".tmp_v410_s1b",
+    "--out-dir",
+    ".tmp_v410_s1b/d1",
+    "--data-root-prefix",
+    "/root/v400-data/s1b",
+    "--engine",
+    "/root/Touhou_RL/third_party/th08-rl/build/rl_v3",
+    "--expected-sha",
+    "691bfd77b7eca3361aa8bb7af0977556a70cc73a070b29a2447222ba7a568ef6"
+   ],
+   "exit_code": 0,
+   "exit_code_source": "tee pipeline masked the exit code; main() returns EXIT_OK iff run.smoke.json.failed is empty, and failed=[] with every shard exit_code=0",
+   "log": ".tmp_v410_s1b/logs/smoke_run.log",
+   "result": {
+    "ran": 1,
+    "failed": [],
+    "records": [
+     {
+      "key": "d1-s0d1-n3251-seed1000-shard",
+      "stage": 0,
+      "start_mode": "shard",
+      "exit_code": 0,
+      "wall_s": 290.796,
+      "log": ".tmp_v410_s1b/logs/d1-s0d1-n3251-seed1000-shard.log",
+      "report": ".tmp_v410_s1b/reports/d1-s0d1-n3251-seed1000-shard.json"
+     }
+    ]
+   }
+  },
+  {
+   "phase": "probe",
+   "plan": "main",
+   "argv": [
+    "env",
+    "-u",
+    "DISPLAY",
+    "/root/v400-venv/bin/python",
+    "tools/rl/v400_d1_collect.py",
+    "--phase",
+    "probe",
+    "--stages",
+    "0",
+    "--seeds",
+    "1000-1011",
+    "--probe-cap-frames",
+    "16000",
+    "--work-dir",
+    ".tmp_v410_s1b",
+    "--out-dir",
+    ".tmp_v410_s1b/d1",
+    "--data-root-prefix",
+    "/root/v400-data/s1b",
+    "--engine",
+    "/root/Touhou_RL/third_party/th08-rl/build/rl_v3",
+    "--expected-sha",
+    "691bfd77b7eca3361aa8bb7af0977556a70cc73a070b29a2447222ba7a568ef6"
+   ],
+   "exit_code": 0,
+   "exit_code_source": "tools/run_cmd.py ledger (2026-11-13T02:32:12, wall 185.6 s)",
+   "log": ".tmp_v410_s1b/logs/main_probe.log",
+   "result": {
+    "probe": {
+     "stage": 0,
+     "seed": 1000,
+     "status": "ok",
+     "decisions": 3251,
+     "frames": 13004,
+     "cap_frames": 16000,
+     "capped": false,
+     "stop_reason": "stage_changed",
+     "stage_clear": true,
+     "death_frame": null,
+     "teacher_fps": 76.764,
+     "wall_s": 169.403,
+     "reachable_is_lower_bound": false
+    },
+    "wall_s": 185.6
+   }
+  },
+  {
+   "phase": "plan",
+   "plan": "main",
+   "argv": [
+    "env",
+    "-u",
+    "DISPLAY",
+    "/root/v400-venv/bin/python",
+    "tools/rl/v400_d1_collect.py",
+    "--phase",
+    "plan",
+    "--plan-name",
+    "s1b",
+    "--stages",
+    "0",
+    "--seeds",
+    "1000-1011",
+    "--decisions-per-shard",
+    "3300",
+    "--plan-limit-per-stage",
+    "12",
+    "--work-dir",
+    ".tmp_v410_s1b",
+    "--out-dir",
+    ".tmp_v410_s1b/d1",
+    "--data-root-prefix",
+    "/root/v400-data/s1b",
+    "--engine",
+    "/root/Touhou_RL/third_party/th08-rl/build/rl_v3",
+    "--expected-sha",
+    "691bfd77b7eca3361aa8bb7af0977556a70cc73a070b29a2447222ba7a568ef6"
+   ],
+   "exit_code": 0,
+   "exit_code_source": "tools/run_cmd.py ledger (2026-11-13T02:35:21, wall 4.2 s)",
+   "log": ".tmp_v410_s1b/logs/main_plan.log",
+   "result": {
+    "shards": 12,
+    "frames": 156048,
+    "status": "ok",
+    "wall_s": 4.2
+   }
+  },
+  {
+   "phase": "run",
+   "plan": "main",
+   "argv": [
+    "env",
+    "-u",
+    "DISPLAY",
+    "/root/v400-venv/bin/python",
+    "tools/rl/v400_d1_collect.py",
+    "--phase",
+    "run",
+    "--plan-name",
+    "s1b",
+    "--workers",
+    "4",
+    "--work-dir",
+    ".tmp_v410_s1b",
+    "--out-dir",
+    ".tmp_v410_s1b/d1",
+    "--data-root-prefix",
+    "/root/v400-data/s1b",
+    "--engine",
+    "/root/Touhou_RL/third_party/th08-rl/build/rl_v3",
+    "--expected-sha",
+    "691bfd77b7eca3361aa8bb7af0977556a70cc73a070b29a2447222ba7a568ef6"
+   ],
+   "exit_code": 0,
+   "exit_code_source": "tools/run_cmd.py ledger (2026-11-13T02:35:28, wall 1491.4 s)",
+   "log": ".tmp_v410_s1b/logs/main_run.log",
+   "result": {
+    "ran": 11,
+    "failed": [],
+    "records": [
+     {
+      "key": "d1-s0d1-n3251-seed1001-shard",
+      "stage": 0,
+      "start_mode": "shard",
+      "exit_code": 0,
+      "wall_s": 460.513,
+      "log": ".tmp_v410_s1b/logs/d1-s0d1-n3251-seed1001-shard.log",
+      "report": ".tmp_v410_s1b/reports/d1-s0d1-n3251-seed1001-shard.json"
+     },
+     {
+      "key": "d1-s0d1-n3251-seed1002-shard",
+      "stage": 0,
+      "start_mode": "shard",
+      "exit_code": 0,
+      "wall_s": 475.445,
+      "log": ".tmp_v410_s1b/logs/d1-s0d1-n3251-seed1002-shard.log",
+      "report": ".tmp_v410_s1b/reports/d1-s0d1-n3251-seed1002-shard.json"
+     },
+     {
+      "key": "d1-s0d1-n3251-seed1003-shard",
+      "stage": 0,
+      "start_mode": "shard",
+      "exit_code": 0,
+      "wall_s": 463.52,
+      "log": ".tmp_v410_s1b/logs/d1-s0d1-n3251-seed1003-shard.log",
+      "report": ".tmp_v410_s1b/reports/d1-s0d1-n3251-seed1003-shard.json"
+     },
+     {
+      "key": "d1-s0d1-n3251-seed1004-shard",
+      "stage": 0,
+      "start_mode": "shard",
+      "exit_code": 0,
+      "wall_s": 479.066,
+      "log": ".tmp_v410_s1b/logs/d1-s0d1-n3251-seed1004-shard.log",
+      "report": ".tmp_v410_s1b/reports/d1-s0d1-n3251-seed1004-shard.json"
+     },
+     {
+      "key": "d1-s0d1-n3251-seed1005-shard",
+      "stage": 0,
+      "start_mode": "shard",
+      "exit_code": 0,
+      "wall_s": 463.917,
+      "log": ".tmp_v410_s1b/logs/d1-s0d1-n3251-seed1005-shard.log",
+      "report": ".tmp_v410_s1b/reports/d1-s0d1-n3251-seed1005-shard.json"
+     },
+     {
+      "key": "d1-s0d1-n3251-seed1006-shard",
+      "stage": 0,
+      "start_mode": "shard",
+      "exit_code": 0,
+      "wall_s": 479.022,
+      "log": ".tmp_v410_s1b/logs/d1-s0d1-n3251-seed1006-shard.log",
+      "report": ".tmp_v410_s1b/reports/d1-s0d1-n3251-seed1006-shard.json"
+     },
+     {
+      "key": "d1-s0d1-n3251-seed1007-shard",
+      "stage": 0,
+      "start_mode": "shard",
+      "exit_code": 0,
+      "wall_s": 470.489,
+      "log": ".tmp_v410_s1b/logs/d1-s0d1-n3251-seed1007-shard.log",
+      "report": ".tmp_v410_s1b/reports/d1-s0d1-n3251-seed1007-shard.json"
+     },
+     {
+      "key": "d1-s0d1-n3251-seed1008-shard",
+      "stage": 0,
+      "start_mode": "shard",
+      "exit_code": 0,
+      "wall_s": 468.69,
+      "log": ".tmp_v410_s1b/logs/d1-s0d1-n3251-seed1008-shard.log",
+      "report": ".tmp_v410_s1b/reports/d1-s0d1-n3251-seed1008-shard.json"
+     },
+     {
+      "key": "d1-s0d1-n3251-seed1009-shard",
+      "stage": 0,
+      "start_mode": "shard",
+      "exit_code": 0,
+      "wall_s": 413.668,
+      "log": ".tmp_v410_s1b/logs/d1-s0d1-n3251-seed1009-shard.log",
+      "report": ".tmp_v410_s1b/reports/d1-s0d1-n3251-seed1009-shard.json"
+     },
+     {
+      "key": "d1-s0d1-n3251-seed1010-shard",
+      "stage": 0,
+      "start_mode": "shard",
+      "exit_code": 0,
+      "wall_s": 408.023,
+      "log": ".tmp_v410_s1b/logs/d1-s0d1-n3251-seed1010-shard.log",
+      "report": ".tmp_v410_s1b/reports/d1-s0d1-n3251-seed1010-shard.json"
+     },
+     {
+      "key": "d1-s0d1-n3251-seed1011-shard",
+      "stage": 0,
+      "start_mode": "shard",
+      "exit_code": 0,
+      "wall_s": 413.311,
+      "log": ".tmp_v410_s1b/logs/d1-s0d1-n3251-seed1011-shard.log",
+      "report": ".tmp_v410_s1b/reports/d1-s0d1-n3251-seed1011-shard.json"
+     }
+    ],
+    "wall_s": 1491.4
+   }
+  }
+ ]
+}

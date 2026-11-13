@@ -1,0 +1,23 @@
+usage: v410.py [-h] {preflight,status,check,verify-release} ...
+
+v4.1.0 thin CLI: preflight / status / check / verify-release.
+
+It dispatches to :mod:`touhou_rl.v410.evidence`; it does not train, collect,
+launch the game or read sealed assets.  Exit codes follow the v4.1.0 spec:
+
+* 0 requested check actually passed
+* 2 argument / protocol error
+* 3 evidence or dependency not satisfied
+* 4 environment / external resource missing
+* 5 run timed out or failed
+* 6 budget insufficient
+
+positional arguments:
+  {preflight,status,check,verify-release}
+    preflight           probe the machine without launching the game
+    status              read and validate state.json
+    check               validate WP evidence
+    verify-release      validate a release scope
+
+options:
+  -h, --help            show this help message and exit

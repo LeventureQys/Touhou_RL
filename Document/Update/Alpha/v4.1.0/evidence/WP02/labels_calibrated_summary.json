@@ -1,0 +1,1028 @@
+{
+  "schema": "v410-teacher-calibration-summary/1",
+  "generated_at": "2026-11-12T17:35:20+00:00",
+  "tool": {
+    "module": "touhou_rl.v410.teacher_calibration",
+    "version": "4.1.0",
+    "python": "3.12.10",
+    "command": [
+      "python",
+      "-m",
+      "touhou_rl.v410.teacher_calibration",
+      "--input",
+      ".tmp_v410_wp02_audit/teacher1000.jsonl",
+      "--summary",
+      "Document/Update/Alpha/v4.1.0/evidence/WP02/labels_calibrated_summary.json",
+      "--sample",
+      "Document/Update/Alpha/v4.1.0/evidence/WP02/labels_calibrated_sample.jsonl",
+      "--sample-limit",
+      "100"
+    ]
+  },
+  "source": {
+    "path": ".tmp_v410_wp02_audit\\teacher1000.jsonl",
+    "sha256": "a1d6923efd8398619632d086bd854677e27cfd501158d2aeaafb37c9ca2f434b",
+    "bytes": 11931643,
+    "report_rows": 1,
+    "decisions": 3251,
+    "skipped": 0
+  },
+  "report": {
+    "status": "ok",
+    "stop_reason": "stage_changed",
+    "mode": "fast",
+    "stage": 0,
+    "difficulty": 1,
+    "seed": 1000,
+    "decisions": 3251,
+    "requested_decisions": 10000,
+    "decisions_per_decision_frames": 2,
+    "committed_frames_per_decision": 4,
+    "frames_committed": 13004,
+    "survival_frames": 13004,
+    "stage_clear": true,
+    "deaths_observed": 0,
+    "config": {
+      "horizon": 32,
+      "beam": 24,
+      "verify_k": 1,
+      "durations": [
+        1,
+        2
+      ]
+    }
+  },
+  "calibration": {
+    "schema": "v410-teacher-calibration/1",
+    "rule": "smallest grid threshold with coverage >= 0.99 of died=false verified plans, capped at 16.0 px",
+    "coverage_target": 0.99,
+    "error_grid": [
+      0.001,
+      0.5,
+      1.0,
+      2.0,
+      4.0,
+      8.0,
+      16.0
+    ],
+    "cap": 16.0,
+    "coverage_basis": "died=false verified plans whose max_position_error <= threshold",
+    "moving_definition": "first_action != 0",
+    "idle_definition": "first_action == 0",
+    "verified_plans": 3251,
+    "died_false_plans": 3251,
+    "died_true_plans": 0,
+    "missing_error_plans": 0,
+    "missing_action_plans": 0,
+    "moving_plans": 1719,
+    "idle_plans": 1532,
+    "threshold_table": [
+      {
+        "threshold": 0.001,
+        "covered": 795,
+        "coverage": 0.24454,
+        "mismatch_count": 2456,
+        "moving_covered": 0,
+        "moving_coverage": 0.0,
+        "idle_covered": 795,
+        "idle_coverage": 0.51893,
+        "meets_coverage_target": false,
+        "within_cap": true,
+        "selected": false
+      },
+      {
+        "threshold": 0.5,
+        "covered": 795,
+        "coverage": 0.24454,
+        "mismatch_count": 2456,
+        "moving_covered": 0,
+        "moving_coverage": 0.0,
+        "idle_covered": 795,
+        "idle_coverage": 0.51893,
+        "meets_coverage_target": false,
+        "within_cap": true,
+        "selected": false
+      },
+      {
+        "threshold": 1.0,
+        "covered": 795,
+        "coverage": 0.24454,
+        "mismatch_count": 2456,
+        "moving_covered": 0,
+        "moving_coverage": 0.0,
+        "idle_covered": 795,
+        "idle_coverage": 0.51893,
+        "meets_coverage_target": false,
+        "within_cap": true,
+        "selected": false
+      },
+      {
+        "threshold": 2.0,
+        "covered": 1217,
+        "coverage": 0.374346,
+        "mismatch_count": 2034,
+        "moving_covered": 44,
+        "moving_coverage": 0.025596,
+        "idle_covered": 1173,
+        "idle_coverage": 0.765666,
+        "meets_coverage_target": false,
+        "within_cap": true,
+        "selected": false
+      },
+      {
+        "threshold": 4.0,
+        "covered": 2203,
+        "coverage": 0.677638,
+        "mismatch_count": 1048,
+        "moving_covered": 766,
+        "moving_coverage": 0.445608,
+        "idle_covered": 1437,
+        "idle_coverage": 0.93799,
+        "meets_coverage_target": false,
+        "within_cap": true,
+        "selected": false
+      },
+      {
+        "threshold": 8.0,
+        "covered": 3226,
+        "coverage": 0.99231,
+        "mismatch_count": 25,
+        "moving_covered": 1704,
+        "moving_coverage": 0.991274,
+        "idle_covered": 1522,
+        "idle_coverage": 0.993473,
+        "meets_coverage_target": true,
+        "within_cap": true,
+        "selected": true
+      },
+      {
+        "threshold": 16.0,
+        "covered": 3243,
+        "coverage": 0.997539,
+        "mismatch_count": 8,
+        "moving_covered": 1719,
+        "moving_coverage": 1.0,
+        "idle_covered": 1524,
+        "idle_coverage": 0.994778,
+        "meets_coverage_target": true,
+        "within_cap": true,
+        "selected": false
+      }
+    ],
+    "selected_tolerance": 8.0,
+    "selected_index": 5,
+    "covered": 3226,
+    "coverage": 0.99231,
+    "moving_covered": 1704,
+    "moving_coverage": 0.991274,
+    "idle_covered": 1522,
+    "idle_coverage": 0.993473,
+    "mismatch_count": 25,
+    "selection_reason": "threshold 8.0 px is the smallest grid value whose coverage (3226/3251 = 0.992310) reaches the 0.99 target; the next smaller grid value 4.0 px only covers 2203/3251 = 0.677638",
+    "source": {
+      "path": ".tmp_v410_wp02_audit\\teacher1000.jsonl",
+      "sha256": "a1d6923efd8398619632d086bd854677e27cfd501158d2aeaafb37c9ca2f434b",
+      "bytes": 11931643,
+      "lines": 3252,
+      "decisions": 3251,
+      "report_rows": 1,
+      "skipped": 0,
+      "error_count": 0,
+      "errors": []
+    },
+    "report": {
+      "status": "ok",
+      "stop_reason": "stage_changed",
+      "mode": "fast",
+      "stage": 0,
+      "difficulty": 1,
+      "seed": 1000,
+      "decisions": 3251,
+      "requested_decisions": 10000,
+      "decisions_per_decision_frames": 2,
+      "committed_frames_per_decision": 4,
+      "frames_committed": 13004,
+      "survival_frames": 13004,
+      "stage_clear": true,
+      "deaths_observed": 0,
+      "config": {
+        "horizon": 32,
+        "beam": 24,
+        "verify_k": 1,
+        "durations": [
+          1,
+          2
+        ]
+      }
+    }
+  },
+  "old_conservative": {
+    "rule": "WP02.3: died=False AND trajectory_matches=True (verify.py POSITION_TOLERANCE=1e-3) AND frames_advanced >= duration*frames_per_decision",
+    "statuses": [
+      "verified_alive",
+      "verified_dead",
+      "unknown"
+    ],
+    "alive": 795,
+    "dead": 0,
+    "unknown": 2456,
+    "total": 3251,
+    "fractions": {
+      "verified_alive": 0.24454,
+      "verified_dead": 0.0,
+      "unknown": 0.75546
+    },
+    "source": "recomputed on this corpus with teacher_labels.convert_teacher_row (WP02.3 rule); the WP02.3 labels_summary.json is not modified"
+  },
+  "calibrated": {
+    "rule": "smallest grid threshold with coverage >= 0.99 of died=false verified plans, capped at 16.0 px",
+    "tolerance": 8.0,
+    "statuses": [
+      "verified_alive",
+      "verified_dead",
+      "unknown"
+    ],
+    "alive": 3226,
+    "dead": 0,
+    "unknown": 25,
+    "total": 3251,
+    "fractions": {
+      "verified_alive": 0.99231,
+      "verified_dead": 0.0,
+      "unknown": 0.00769
+    },
+    "model_mismatch": 25,
+    "incomplete": 0,
+    "moving_alive": 1704,
+    "idle_alive": 1522,
+    "coverage": 0.99231,
+    "coverage_matched": 3226,
+    "coverage_plans": 3251,
+    "note": "verified_alive here means died=False AND max_position_error <= tolerance AND frames_advanced >= max(horizon, duration*decision_frames); it is not a survival guarantee"
+  },
+  "delta": {
+    "alive": 2431,
+    "dead": 0,
+    "unknown": -2431,
+    "moving_alive": 1704,
+    "note": "the calibrated rule moves drifting-but-alive plans from unknown to alive; deaths do not move because died=True is verified_dead under both rules"
+  },
+  "model_match": {
+    "true": 3226,
+    "false": 25,
+    "missing": 0,
+    "note": "model_match is max_position_error <= tolerance per verified plan; for a died plan it is informational only, the verdict stays verified_dead"
+  },
+  "horizon_source": "frames_advanced",
+  "verification_horizon_missing": true,
+  "horizon": {
+    "source": "frames_advanced",
+    "value": 32,
+    "decision_frames": 2,
+    "verification_horizon_missing": true,
+    "horizon_missing_decisions": 3251,
+    "note": "the teacher JSONL writes no verification_horizon/ horizon field, so horizon_source=frames_advanced: the claim rests on the frames the plan actually advanced, not on a recorded horizon"
+  },
+  "per_first_action": [
+    {
+      "action": 0,
+      "verified_plans": 1532,
+      "calibrated_alive": 1522,
+      "calibrated_dead": 0,
+      "calibrated_unknown": 10,
+      "conservative_alive": 795
+    },
+    {
+      "action": 1,
+      "verified_plans": 69,
+      "calibrated_alive": 69,
+      "calibrated_dead": 0,
+      "calibrated_unknown": 0,
+      "conservative_alive": 0
+    },
+    {
+      "action": 2,
+      "verified_plans": 290,
+      "calibrated_alive": 287,
+      "calibrated_dead": 0,
+      "calibrated_unknown": 3,
+      "conservative_alive": 0
+    },
+    {
+      "action": 3,
+      "verified_plans": 326,
+      "calibrated_alive": 325,
+      "calibrated_dead": 0,
+      "calibrated_unknown": 1,
+      "conservative_alive": 0
+    },
+    {
+      "action": 4,
+      "verified_plans": 71,
+      "calibrated_alive": 71,
+      "calibrated_dead": 0,
+      "calibrated_unknown": 0,
+      "conservative_alive": 0
+    },
+    {
+      "action": 5,
+      "verified_plans": 34,
+      "calibrated_alive": 34,
+      "calibrated_dead": 0,
+      "calibrated_unknown": 0,
+      "conservative_alive": 0
+    },
+    {
+      "action": 6,
+      "verified_plans": 212,
+      "calibrated_alive": 206,
+      "calibrated_dead": 0,
+      "calibrated_unknown": 6,
+      "conservative_alive": 0
+    },
+    {
+      "action": 7,
+      "verified_plans": 208,
+      "calibrated_alive": 207,
+      "calibrated_dead": 0,
+      "calibrated_unknown": 1,
+      "conservative_alive": 0
+    },
+    {
+      "action": 8,
+      "verified_plans": 42,
+      "calibrated_alive": 40,
+      "calibrated_dead": 0,
+      "calibrated_unknown": 2,
+      "conservative_alive": 0
+    },
+    {
+      "action": 9,
+      "verified_plans": 0,
+      "calibrated_alive": 0,
+      "calibrated_dead": 0,
+      "calibrated_unknown": 0,
+      "conservative_alive": 0
+    },
+    {
+      "action": 10,
+      "verified_plans": 8,
+      "calibrated_alive": 8,
+      "calibrated_dead": 0,
+      "calibrated_unknown": 0,
+      "conservative_alive": 0
+    },
+    {
+      "action": 11,
+      "verified_plans": 179,
+      "calibrated_alive": 179,
+      "calibrated_dead": 0,
+      "calibrated_unknown": 0,
+      "conservative_alive": 0
+    },
+    {
+      "action": 12,
+      "verified_plans": 198,
+      "calibrated_alive": 198,
+      "calibrated_dead": 0,
+      "calibrated_unknown": 0,
+      "conservative_alive": 0
+    },
+    {
+      "action": 13,
+      "verified_plans": 16,
+      "calibrated_alive": 15,
+      "calibrated_dead": 0,
+      "calibrated_unknown": 1,
+      "conservative_alive": 0
+    },
+    {
+      "action": 14,
+      "verified_plans": 3,
+      "calibrated_alive": 3,
+      "calibrated_dead": 0,
+      "calibrated_unknown": 0,
+      "conservative_alive": 0
+    },
+    {
+      "action": 15,
+      "verified_plans": 35,
+      "calibrated_alive": 34,
+      "calibrated_dead": 0,
+      "calibrated_unknown": 1,
+      "conservative_alive": 0
+    },
+    {
+      "action": 16,
+      "verified_plans": 16,
+      "calibrated_alive": 16,
+      "calibrated_dead": 0,
+      "calibrated_unknown": 0,
+      "conservative_alive": 0
+    },
+    {
+      "action": 17,
+      "verified_plans": 12,
+      "calibrated_alive": 12,
+      "calibrated_dead": 0,
+      "calibrated_unknown": 0,
+      "conservative_alive": 0
+    }
+  ],
+  "labels": {
+    "schema": "v410-teacher-calibration-summary/1",
+    "decisions": 3251,
+    "report_rows": 1,
+    "skipped": 0,
+    "verified_plans_total": 3251,
+    "old_conservative": {
+      "rule": "WP02.3: died=False AND trajectory_matches=True (verify.py POSITION_TOLERANCE=1e-3) AND frames_advanced >= duration*frames_per_decision",
+      "statuses": [
+        "verified_alive",
+        "verified_dead",
+        "unknown"
+      ],
+      "alive": 795,
+      "dead": 0,
+      "unknown": 2456,
+      "total": 3251,
+      "fractions": {
+        "verified_alive": 0.24454,
+        "verified_dead": 0.0,
+        "unknown": 0.75546
+      },
+      "source": "recomputed on the same rows with the WP02.3 rule (teacher_labels.convert_teacher_row); the WP02.3 evidence is not rewritten"
+    },
+    "calibrated": {
+      "rule": "smallest grid threshold with coverage >= 0.99 of died=false verified plans, capped at 16.0 px",
+      "tolerance": 8.0,
+      "statuses": [
+        "verified_alive",
+        "verified_dead",
+        "unknown"
+      ],
+      "alive": 3226,
+      "dead": 0,
+      "unknown": 25,
+      "total": 3251,
+      "fractions": {
+        "verified_alive": 0.99231,
+        "verified_dead": 0.0,
+        "unknown": 0.00769
+      },
+      "model_mismatch": 25,
+      "incomplete": 0,
+      "moving_alive": 1704,
+      "idle_alive": 1522,
+      "coverage": 0.99231,
+      "coverage_matched": 3226,
+      "coverage_plans": 3251
+    },
+    "delta": {
+      "alive": 2431,
+      "dead": 0,
+      "unknown": -2431
+    },
+    "per_first_action": [
+      {
+        "action": 0,
+        "verified_plans": 1532,
+        "calibrated_alive": 1522,
+        "calibrated_dead": 0,
+        "calibrated_unknown": 10,
+        "conservative_alive": 795
+      },
+      {
+        "action": 1,
+        "verified_plans": 69,
+        "calibrated_alive": 69,
+        "calibrated_dead": 0,
+        "calibrated_unknown": 0,
+        "conservative_alive": 0
+      },
+      {
+        "action": 2,
+        "verified_plans": 290,
+        "calibrated_alive": 287,
+        "calibrated_dead": 0,
+        "calibrated_unknown": 3,
+        "conservative_alive": 0
+      },
+      {
+        "action": 3,
+        "verified_plans": 326,
+        "calibrated_alive": 325,
+        "calibrated_dead": 0,
+        "calibrated_unknown": 1,
+        "conservative_alive": 0
+      },
+      {
+        "action": 4,
+        "verified_plans": 71,
+        "calibrated_alive": 71,
+        "calibrated_dead": 0,
+        "calibrated_unknown": 0,
+        "conservative_alive": 0
+      },
+      {
+        "action": 5,
+        "verified_plans": 34,
+        "calibrated_alive": 34,
+        "calibrated_dead": 0,
+        "calibrated_unknown": 0,
+        "conservative_alive": 0
+      },
+      {
+        "action": 6,
+        "verified_plans": 212,
+        "calibrated_alive": 206,
+        "calibrated_dead": 0,
+        "calibrated_unknown": 6,
+        "conservative_alive": 0
+      },
+      {
+        "action": 7,
+        "verified_plans": 208,
+        "calibrated_alive": 207,
+        "calibrated_dead": 0,
+        "calibrated_unknown": 1,
+        "conservative_alive": 0
+      },
+      {
+        "action": 8,
+        "verified_plans": 42,
+        "calibrated_alive": 40,
+        "calibrated_dead": 0,
+        "calibrated_unknown": 2,
+        "conservative_alive": 0
+      },
+      {
+        "action": 9,
+        "verified_plans": 0,
+        "calibrated_alive": 0,
+        "calibrated_dead": 0,
+        "calibrated_unknown": 0,
+        "conservative_alive": 0
+      },
+      {
+        "action": 10,
+        "verified_plans": 8,
+        "calibrated_alive": 8,
+        "calibrated_dead": 0,
+        "calibrated_unknown": 0,
+        "conservative_alive": 0
+      },
+      {
+        "action": 11,
+        "verified_plans": 179,
+        "calibrated_alive": 179,
+        "calibrated_dead": 0,
+        "calibrated_unknown": 0,
+        "conservative_alive": 0
+      },
+      {
+        "action": 12,
+        "verified_plans": 198,
+        "calibrated_alive": 198,
+        "calibrated_dead": 0,
+        "calibrated_unknown": 0,
+        "conservative_alive": 0
+      },
+      {
+        "action": 13,
+        "verified_plans": 16,
+        "calibrated_alive": 15,
+        "calibrated_dead": 0,
+        "calibrated_unknown": 1,
+        "conservative_alive": 0
+      },
+      {
+        "action": 14,
+        "verified_plans": 3,
+        "calibrated_alive": 3,
+        "calibrated_dead": 0,
+        "calibrated_unknown": 0,
+        "conservative_alive": 0
+      },
+      {
+        "action": 15,
+        "verified_plans": 35,
+        "calibrated_alive": 34,
+        "calibrated_dead": 0,
+        "calibrated_unknown": 1,
+        "conservative_alive": 0
+      },
+      {
+        "action": 16,
+        "verified_plans": 16,
+        "calibrated_alive": 16,
+        "calibrated_dead": 0,
+        "calibrated_unknown": 0,
+        "conservative_alive": 0
+      },
+      {
+        "action": 17,
+        "verified_plans": 12,
+        "calibrated_alive": 12,
+        "calibrated_dead": 0,
+        "calibrated_unknown": 0,
+        "conservative_alive": 0
+      }
+    ],
+    "model_match": {
+      "true": 3226,
+      "false": 25,
+      "missing": 0
+    },
+    "horizon_source": "frames_advanced",
+    "verification_horizon_missing": true,
+    "horizon_missing": {
+      "decisions": 3251,
+      "fraction": 1.0
+    },
+    "error_count": 0,
+    "calibration": {
+      "schema": "v410-teacher-calibration/1",
+      "rule": "smallest grid threshold with coverage >= 0.99 of died=false verified plans, capped at 16.0 px",
+      "coverage_target": 0.99,
+      "error_grid": [
+        0.001,
+        0.5,
+        1.0,
+        2.0,
+        4.0,
+        8.0,
+        16.0
+      ],
+      "cap": 16.0,
+      "coverage_basis": "died=false verified plans whose max_position_error <= threshold",
+      "moving_definition": "first_action != 0",
+      "idle_definition": "first_action == 0",
+      "verified_plans": 3251,
+      "died_false_plans": 3251,
+      "died_true_plans": 0,
+      "missing_error_plans": 0,
+      "missing_action_plans": 0,
+      "moving_plans": 1719,
+      "idle_plans": 1532,
+      "threshold_table": [
+        {
+          "threshold": 0.001,
+          "covered": 795,
+          "coverage": 0.24454,
+          "mismatch_count": 2456,
+          "moving_covered": 0,
+          "moving_coverage": 0.0,
+          "idle_covered": 795,
+          "idle_coverage": 0.51893,
+          "meets_coverage_target": false,
+          "within_cap": true,
+          "selected": false
+        },
+        {
+          "threshold": 0.5,
+          "covered": 795,
+          "coverage": 0.24454,
+          "mismatch_count": 2456,
+          "moving_covered": 0,
+          "moving_coverage": 0.0,
+          "idle_covered": 795,
+          "idle_coverage": 0.51893,
+          "meets_coverage_target": false,
+          "within_cap": true,
+          "selected": false
+        },
+        {
+          "threshold": 1.0,
+          "covered": 795,
+          "coverage": 0.24454,
+          "mismatch_count": 2456,
+          "moving_covered": 0,
+          "moving_coverage": 0.0,
+          "idle_covered": 795,
+          "idle_coverage": 0.51893,
+          "meets_coverage_target": false,
+          "within_cap": true,
+          "selected": false
+        },
+        {
+          "threshold": 2.0,
+          "covered": 1217,
+          "coverage": 0.374346,
+          "mismatch_count": 2034,
+          "moving_covered": 44,
+          "moving_coverage": 0.025596,
+          "idle_covered": 1173,
+          "idle_coverage": 0.765666,
+          "meets_coverage_target": false,
+          "within_cap": true,
+          "selected": false
+        },
+        {
+          "threshold": 4.0,
+          "covered": 2203,
+          "coverage": 0.677638,
+          "mismatch_count": 1048,
+          "moving_covered": 766,
+          "moving_coverage": 0.445608,
+          "idle_covered": 1437,
+          "idle_coverage": 0.93799,
+          "meets_coverage_target": false,
+          "within_cap": true,
+          "selected": false
+        },
+        {
+          "threshold": 8.0,
+          "covered": 3226,
+          "coverage": 0.99231,
+          "mismatch_count": 25,
+          "moving_covered": 1704,
+          "moving_coverage": 0.991274,
+          "idle_covered": 1522,
+          "idle_coverage": 0.993473,
+          "meets_coverage_target": true,
+          "within_cap": true,
+          "selected": true
+        },
+        {
+          "threshold": 16.0,
+          "covered": 3243,
+          "coverage": 0.997539,
+          "mismatch_count": 8,
+          "moving_covered": 1719,
+          "moving_coverage": 1.0,
+          "idle_covered": 1524,
+          "idle_coverage": 0.994778,
+          "meets_coverage_target": true,
+          "within_cap": true,
+          "selected": false
+        }
+      ],
+      "selected_tolerance": 8.0,
+      "selected_index": 5,
+      "covered": 3226,
+      "coverage": 0.99231,
+      "moving_covered": 1704,
+      "moving_coverage": 0.991274,
+      "idle_covered": 1522,
+      "idle_coverage": 0.993473,
+      "mismatch_count": 25,
+      "selection_reason": "threshold 8.0 px is the smallest grid value whose coverage (3226/3251 = 0.992310) reaches the 0.99 target; the next smaller grid value 4.0 px only covers 2203/3251 = 0.677638",
+      "source": {
+        "path": ".tmp_v410_wp02_audit\\teacher1000.jsonl",
+        "sha256": "a1d6923efd8398619632d086bd854677e27cfd501158d2aeaafb37c9ca2f434b",
+        "bytes": 11931643,
+        "lines": 3252,
+        "decisions": 3251,
+        "report_rows": 1,
+        "skipped": 0,
+        "error_count": 0,
+        "errors": []
+      },
+      "report": {
+        "status": "ok",
+        "stop_reason": "stage_changed",
+        "mode": "fast",
+        "stage": 0,
+        "difficulty": 1,
+        "seed": 1000,
+        "decisions": 3251,
+        "requested_decisions": 10000,
+        "decisions_per_decision_frames": 2,
+        "committed_frames_per_decision": 4,
+        "frames_committed": 13004,
+        "survival_frames": 13004,
+        "stage_clear": true,
+        "deaths_observed": 0,
+        "config": {
+          "horizon": 32,
+          "beam": 24,
+          "verify_k": 1,
+          "durations": [
+            1,
+            2
+          ]
+        }
+      }
+    }
+  },
+  "counts": {
+    "decisions": 3251,
+    "report_rows": 1,
+    "written": 100,
+    "skipped": 0,
+    "error_count": 0,
+    "verified_plans_total": 3251,
+    "alive": 3226,
+    "dead": 0,
+    "unknown": 25,
+    "model_mismatch": 25,
+    "incomplete": 0,
+    "model_match_true": 3226,
+    "model_match_false": 25,
+    "model_match_missing": 0,
+    "moving_alive": 1704,
+    "idle_alive": 1522,
+    "conservative_alive": 795,
+    "conservative_dead": 0,
+    "conservative_unknown": 2456,
+    "died_true_plans": 0,
+    "died_false_plans": 3251,
+    "horizon_missing": 3251,
+    "per_first_action": {
+      "0": {
+        "verified_plans": 1532,
+        "verified_alive": 1522,
+        "verified_dead": 0,
+        "unknown": 10,
+        "conservative_alive": 795
+      },
+      "1": {
+        "verified_plans": 69,
+        "verified_alive": 69,
+        "verified_dead": 0,
+        "unknown": 0,
+        "conservative_alive": 0
+      },
+      "2": {
+        "verified_plans": 290,
+        "verified_alive": 287,
+        "verified_dead": 0,
+        "unknown": 3,
+        "conservative_alive": 0
+      },
+      "3": {
+        "verified_plans": 326,
+        "verified_alive": 325,
+        "verified_dead": 0,
+        "unknown": 1,
+        "conservative_alive": 0
+      },
+      "4": {
+        "verified_plans": 71,
+        "verified_alive": 71,
+        "verified_dead": 0,
+        "unknown": 0,
+        "conservative_alive": 0
+      },
+      "5": {
+        "verified_plans": 34,
+        "verified_alive": 34,
+        "verified_dead": 0,
+        "unknown": 0,
+        "conservative_alive": 0
+      },
+      "6": {
+        "verified_plans": 212,
+        "verified_alive": 206,
+        "verified_dead": 0,
+        "unknown": 6,
+        "conservative_alive": 0
+      },
+      "7": {
+        "verified_plans": 208,
+        "verified_alive": 207,
+        "verified_dead": 0,
+        "unknown": 1,
+        "conservative_alive": 0
+      },
+      "8": {
+        "verified_plans": 42,
+        "verified_alive": 40,
+        "verified_dead": 0,
+        "unknown": 2,
+        "conservative_alive": 0
+      },
+      "9": {
+        "verified_plans": 0,
+        "verified_alive": 0,
+        "verified_dead": 0,
+        "unknown": 0,
+        "conservative_alive": 0
+      },
+      "10": {
+        "verified_plans": 8,
+        "verified_alive": 8,
+        "verified_dead": 0,
+        "unknown": 0,
+        "conservative_alive": 0
+      },
+      "11": {
+        "verified_plans": 179,
+        "verified_alive": 179,
+        "verified_dead": 0,
+        "unknown": 0,
+        "conservative_alive": 0
+      },
+      "12": {
+        "verified_plans": 198,
+        "verified_alive": 198,
+        "verified_dead": 0,
+        "unknown": 0,
+        "conservative_alive": 0
+      },
+      "13": {
+        "verified_plans": 16,
+        "verified_alive": 15,
+        "verified_dead": 0,
+        "unknown": 1,
+        "conservative_alive": 0
+      },
+      "14": {
+        "verified_plans": 3,
+        "verified_alive": 3,
+        "verified_dead": 0,
+        "unknown": 0,
+        "conservative_alive": 0
+      },
+      "15": {
+        "verified_plans": 35,
+        "verified_alive": 34,
+        "verified_dead": 0,
+        "unknown": 1,
+        "conservative_alive": 0
+      },
+      "16": {
+        "verified_plans": 16,
+        "verified_alive": 16,
+        "verified_dead": 0,
+        "unknown": 0,
+        "conservative_alive": 0
+      },
+      "17": {
+        "verified_plans": 12,
+        "verified_alive": 12,
+        "verified_dead": 0,
+        "unknown": 0,
+        "conservative_alive": 0
+      }
+    },
+    "errors": [],
+    "verified_plans": 3251,
+    "decision_frames": 2,
+    "horizon": 32,
+    "horizon_source": "frames_advanced",
+    "tolerance": 8.0,
+    "coverage": 0.99231,
+    "coverage_matched": 3226,
+    "coverage_plans": 3251,
+    "sample": {
+      "path": "Document\\Update\\Alpha\\v4.1.0\\evidence\\WP02\\labels_calibrated_sample.jsonl",
+      "rows": 100,
+      "limit": 100,
+      "sha256": "2ce3fcca2d7f047b02ca9af6de9d30780892229ef478fedef007f5281ed454bf",
+      "classes": {
+        "alive": 75,
+        "dead": 0,
+        "unknown": 25
+      },
+      "selection": "deterministic: equal quota per decision-level calibrated class present in the stream, unused quota filled in class order, rows sorted by decision"
+    },
+    "verification_horizon_missing": true
+  },
+  "sample": {
+    "path": "Document\\Update\\Alpha\\v4.1.0\\evidence\\WP02\\labels_calibrated_sample.jsonl",
+    "rows": 100,
+    "limit": 100,
+    "sha256": "2ce3fcca2d7f047b02ca9af6de9d30780892229ef478fedef007f5281ed454bf",
+    "classes": {
+      "alive": 75,
+      "dead": 0,
+      "unknown": 25
+    },
+    "selection": "deterministic: equal quota per decision-level calibrated class present in the stream, unused quota filled in class order, rows sorted by decision"
+  },
+  "cross_check": {
+    "available": true,
+    "path": "D:\\WorkShop\\Touhou_RL\\Document\\Update\\Alpha\\v4.1.0\\evidence\\WP02\\labels_summary.json",
+    "note": "read-only: the WP02.3 labels_summary.json is compared, never rewritten",
+    "sha256": "709acbb5d8221072dc0a93299a104515b799ae4a05274f5824ed7de876fbfebd",
+    "reference": {
+      "verified_alive": 795,
+      "verified_dead": 0,
+      "unknown": 2456
+    },
+    "recomputed": {
+      "verified_alive": 795,
+      "verified_dead": 0,
+      "unknown": 2456
+    },
+    "matches": true,
+    "reference_source_sha256": "a1d6923efd8398619632d086bd854677e27cfd501158d2aeaafb37c9ca2f434b",
+    "source_sha256": "a1d6923efd8398619632d086bd854677e27cfd501158d2aeaafb37c9ca2f434b",
+    "source_sha256_matches": true
+  },
+  "not_claimed": [
+    "not a G410-1 pass: this is WP02.4's model-consistency calibration and an offline re-label of one existing teacher JSONL; no gate, threshold or release check is evaluated or satisfied here",
+    "not a new dataset: the input is the existing seed 1000 / mode fast / stage 0 teacher JSONL; nothing was launched, recorded, trained or collected",
+    "not survival ground truth: the calibrated tolerance is a model-consistency threshold fitted on this corpus, not a survival criterion.  The engine's `died` flag is the only survival verdict, and it is what `verified_dead` rests on"
+  ],
+  "limits": [
+    "the tolerance is fitted, not measured: 8.0 px is the smallest pre-registered grid value whose coverage of the died=false plans reaches 99%; it says how far the engine may drift from the model before the plan stops being a positive sample, nothing about survival",
+    "unknown plans are not negative samples: the 25 plans above the selected tolerance were died=false too, so calling them dead would manufacture deaths",
+    "horizon_source is 'frames_advanced': the teacher JSONL writes no verification_horizon, so the horizon that verified_alive rests on is the frame count the plan actually advanced (verification_horizon_missing=true)",
+    "the source run observed 0 deaths, so verified_dead=0 here is a property of this corpus; the death branch is covered by synthetic tests, not by this sample",
+    "single run scope: seed 1000, mode fast, stage 0, difficulty 1.  Another stage/mode may need its own calibration — the rule recomputes, the constant does not travel as a belief",
+    "25 plan(s) remain above the selected tolerance and stay unknown; they are the residual model-drift tail, not deaths"
+  ]
+}

@@ -1,0 +1,2478 @@
+{
+ "schema": "v410-s1c-run/1",
+ "step": "WP03.1c",
+ "version": "4.1.0",
+ "generated_at": "2026-11-13T03:53:46+0800",
+ "collector": "tools/rl/v400_d1_collect.py (read-only, unmodified)",
+ "engine": {
+  "build_dir": "/root/Touhou_RL/third_party/th08-rl/build/rl_v3",
+  "binary": "/root/Touhou_RL/third_party/th08-rl/build/rl_v3/th08-modern",
+  "sha256": "691bfd77b7eca3361aa8bb7af0977556a70cc73a070b29a2447222ba7a568ef6"
+ },
+ "seed_policy": {
+  "train_seed_range": [
+   1,
+   49999
+  ],
+  "dev_seed_ranges": [
+   [
+    1000,
+    1099
+   ]
+  ],
+  "confirm_seed_ranges": [
+   [
+    60000,
+    60199
+   ]
+  ],
+  "new_seeds_collected": [
+   9,
+   10,
+   11,
+   12,
+   13,
+   14,
+   15,
+   16,
+   17,
+   18,
+   19,
+   20
+  ],
+  "dev_seeds_collected": []
+ },
+ "smoke": {
+  "plan": "smoke",
+  "plan_status": "ok",
+  "stages": [
+   0
+  ],
+  "seeds": [
+   9
+  ],
+  "start_mix": [
+   "shard"
+  ],
+  "mode": "fast",
+  "difficulty": 1,
+  "obs_spec_version": "obs-v3",
+  "obs_spec_digest": "ef2fbd15385f26f425db2bfe855d105ee009023acb08c26916e811963553a105",
+  "decisions_per_shard_cap": 3300,
+  "plan_limit_per_stage": 1,
+  "shards_planned": 1,
+  "frames_planned": 13200,
+  "missing_obs_planes": [],
+  "coverage": {
+   "shortfall_frames": 1986800,
+   "stages_short": [
+    0
+   ],
+   "note": "a shortfall is recorded, never padded with synthetic frames"
+  },
+  "errors": [],
+  "stages_detail": [
+   {
+    "stage": 0,
+    "reachable_frames": 13868,
+    "reachable_is_lower_bound": false,
+    "teacher_cleared": true,
+    "death_frame": null,
+    "per_stage_target": 2000000,
+    "decisions_per_shard": 3300,
+    "frames_per_shard": 13200,
+    "trajectory_decisions_cap": 1000,
+    "shards_needed": 152,
+    "shards_planned": 1,
+    "frames_planned": 13200,
+    "start_modes": [
+     "shard"
+    ],
+    "coverage_shortfall": 1986800,
+    "coverage_shortfall_reason": "plan_limit_per_stage"
+   }
+  ],
+  "run": {
+   "ran": 1,
+   "failed": [],
+   "workers": null
+  },
+  "shards": [
+   {
+    "shard": "d1-s0d1-n3300-seed9-shard",
+    "stage": 0,
+    "seed": 9,
+    "start_mode": "shard",
+    "collected_in": "smoke",
+    "decisions_requested": 3300,
+    "decisions": 3300,
+    "frames": [
+     0,
+     13200
+    ],
+    "frames_from_decisions": 13200,
+    "status": "ok",
+    "exit_code": 0,
+    "exit_code_source": "run_record",
+    "wall_s": 295.724,
+    "stop_reason": "max_frames",
+    "stage_clear": false,
+    "deaths_observed": 0,
+    "transition_trim": false,
+    "obs_spec_version": "obs-v3",
+    "obs_spec_digest": "ef2fbd15385f26f425db2bfe855d105ee009023acb08c26916e811963553a105",
+    "obs": {
+     "play96x112": {
+      "path": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed9-shard/obs/play96x112.npy",
+      "shape": [
+       3300,
+       4,
+       112,
+       96
+      ],
+      "dtype": "uint8",
+      "rows": 3300,
+      "bytes": 141926922,
+      "sha256": "77580b50684327be4417757b516779c375500e0fbcda6a693a197ce230342972",
+      "sha256_recorded": "77580b50684327be4417757b516779c375500e0fbcda6a693a197ce230342972",
+      "sha256_matches_recorded": true
+     },
+     "hud": {
+      "path": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed9-shard/obs/hud.npy",
+      "shape": [
+       3300,
+       56,
+       160
+      ],
+      "dtype": "uint8",
+      "rows": 3300,
+      "bytes": 29568522,
+      "sha256": "1aff2a1f1e9051927aff92a0f76ec7a52e966b4b4a265ab68fdd2a5ce1c65b0c",
+      "sha256_recorded": "1aff2a1f1e9051927aff92a0f76ec7a52e966b4b4a265ab68fdd2a5ce1c65b0c",
+      "sha256_matches_recorded": true
+     },
+     "act_hist": {
+      "path": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed9-shard/obs/act_hist.npy",
+      "shape": [
+       3300,
+       8,
+       18
+      ],
+      "dtype": "uint8",
+      "rows": 3300,
+      "bytes": 475722,
+      "sha256": "c1259480c376581d80d4bab5d8b09adebc32227f21cf9e040048543e227be00b",
+      "sha256_recorded": "c1259480c376581d80d4bab5d8b09adebc32227f21cf9e040048543e227be00b",
+      "sha256_matches_recorded": true
+     }
+    },
+    "obs_rows_match_decisions": true,
+    "obs_sha256_all_match_recorded": true,
+    "labels": {
+     "path": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed9-shard/labels.jsonl",
+     "rows": 3300,
+     "rows_match_decisions": true,
+     "sha256": "7d58b03d0f311d008cb2f5feaed303434d94281c6f2815626c4c21c6f912ab4d",
+     "sha256_recorded": "7d58b03d0f311d008cb2f5feaed303434d94281c6f2815626c4c21c6f912ab4d"
+    },
+    "work_labels": {
+     "path": ".tmp_v410_s1c/work/d1-s0d1-n3300-seed9-shard/labels.jsonl",
+     "present": true,
+     "rows": 3301,
+     "kinds": {
+      "report": 1,
+      "decision": 3300
+     },
+     "decision_rows": 3300,
+     "report_rows": 1,
+     "sha256": "6fe4dafca75f32261e32bd5edf2fb216633041c7d6203e46a67d930499676cb2",
+     "bytes": 13461219,
+     "decisions_beyond_stored": 0,
+     "kept": true
+    },
+    "alignment": {
+     "method": "hash-checkpoint",
+     "decisions": 3300,
+     "boundaries": 6600,
+     "checkpoints_equal": 6600,
+     "checkpoints_mismatched": 0
+    },
+    "channel_a": {
+     "decisions": 3300,
+     "decisions_requested": 3300,
+     "stopped_early": false,
+     "stop_reason": "max_frames",
+     "stage_clear": false,
+     "deaths_observed": 0,
+     "frames_committed": 13200,
+     "labels_sha256": "6fe4dafca75f32261e32bd5edf2fb216633041c7d6203e46a67d930499676cb2",
+     "exit_code": 0
+    },
+    "load": {
+     "samples": 3300,
+     "expected_samples": 3300,
+     "samples_match": true,
+     "obs_spec_version": "obs-v3",
+     "obs_spec_digest": "ef2fbd15385f26f425db2bfe855d105ee009023acb08c26916e811963553a105",
+     "digest_matches_frozen": true,
+     "unresolved": 0,
+     "play_shape": [
+      3300,
+      4,
+      112,
+      96
+     ],
+     "hud_shape": [
+      3300,
+      56,
+      160
+     ],
+     "act_hist_shape": [
+      3300,
+      8,
+      18
+     ],
+     "frames": [
+      0,
+      13200
+     ],
+     "decisions": 3300
+    },
+    "teacher_fps": 73.101,
+    "env_fps": 118.558
+   }
+  ],
+  "totals": {
+   "shards": 1,
+   "decisions": 3300,
+   "frames_from_decisions": 13200,
+   "frames_stage_frames": 13200,
+   "stage_clear": 0,
+   "deaths_observed": 0,
+   "trimmed": 0,
+   "checkpoints_equal": 6600,
+   "checkpoints_total": 6600,
+   "work_label_rows": 3301,
+   "obs_sha256_all_match_recorded": true,
+   "obs_rows_match_decisions": true,
+   "labels_rows_match_decisions": true
+  }
+ },
+ "main": {
+  "plan": "s1c",
+  "plan_status": "ok",
+  "stages": [
+   0
+  ],
+  "seeds": [
+   9,
+   10,
+   11,
+   12,
+   13,
+   14,
+   15,
+   16,
+   17,
+   18,
+   19,
+   20
+  ],
+  "start_mix": [
+   "shard"
+  ],
+  "mode": "fast",
+  "difficulty": 1,
+  "obs_spec_version": "obs-v3",
+  "obs_spec_digest": "ef2fbd15385f26f425db2bfe855d105ee009023acb08c26916e811963553a105",
+  "decisions_per_shard_cap": 3300,
+  "plan_limit_per_stage": 12,
+  "shards_planned": 12,
+  "frames_planned": 158400,
+  "missing_obs_planes": [],
+  "coverage": {
+   "shortfall_frames": 1841600,
+   "stages_short": [
+    0
+   ],
+   "note": "a shortfall is recorded, never padded with synthetic frames"
+  },
+  "errors": [],
+  "stages_detail": [
+   {
+    "stage": 0,
+    "reachable_frames": 13868,
+    "reachable_is_lower_bound": false,
+    "teacher_cleared": true,
+    "death_frame": null,
+    "per_stage_target": 2000000,
+    "decisions_per_shard": 3300,
+    "frames_per_shard": 13200,
+    "trajectory_decisions_cap": 1000,
+    "shards_needed": 152,
+    "shards_planned": 12,
+    "frames_planned": 158400,
+    "start_modes": [
+     "shard",
+     "shard",
+     "shard",
+     "shard",
+     "shard",
+     "shard",
+     "shard",
+     "shard",
+     "shard",
+     "shard",
+     "shard",
+     "shard"
+    ],
+    "coverage_shortfall": 1841600,
+    "coverage_shortfall_reason": "plan_limit_per_stage"
+   }
+  ],
+  "run": {
+   "ran": 11,
+   "failed": [],
+   "workers": null
+  },
+  "shards": [
+   {
+    "shard": "d1-s0d1-n3300-seed9-shard",
+    "stage": 0,
+    "seed": 9,
+    "start_mode": "shard",
+    "collected_in": "smoke",
+    "decisions_requested": 3300,
+    "decisions": 3300,
+    "frames": [
+     0,
+     13200
+    ],
+    "frames_from_decisions": 13200,
+    "status": "ok",
+    "exit_code": 0,
+    "exit_code_source": "smoke_run",
+    "wall_s": null,
+    "stop_reason": "max_frames",
+    "stage_clear": false,
+    "deaths_observed": 0,
+    "transition_trim": false,
+    "obs_spec_version": "obs-v3",
+    "obs_spec_digest": "ef2fbd15385f26f425db2bfe855d105ee009023acb08c26916e811963553a105",
+    "obs": {
+     "play96x112": {
+      "path": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed9-shard/obs/play96x112.npy",
+      "shape": [
+       3300,
+       4,
+       112,
+       96
+      ],
+      "dtype": "uint8",
+      "rows": 3300,
+      "bytes": 141926922,
+      "sha256": "77580b50684327be4417757b516779c375500e0fbcda6a693a197ce230342972",
+      "sha256_recorded": "77580b50684327be4417757b516779c375500e0fbcda6a693a197ce230342972",
+      "sha256_matches_recorded": true
+     },
+     "hud": {
+      "path": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed9-shard/obs/hud.npy",
+      "shape": [
+       3300,
+       56,
+       160
+      ],
+      "dtype": "uint8",
+      "rows": 3300,
+      "bytes": 29568522,
+      "sha256": "1aff2a1f1e9051927aff92a0f76ec7a52e966b4b4a265ab68fdd2a5ce1c65b0c",
+      "sha256_recorded": "1aff2a1f1e9051927aff92a0f76ec7a52e966b4b4a265ab68fdd2a5ce1c65b0c",
+      "sha256_matches_recorded": true
+     },
+     "act_hist": {
+      "path": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed9-shard/obs/act_hist.npy",
+      "shape": [
+       3300,
+       8,
+       18
+      ],
+      "dtype": "uint8",
+      "rows": 3300,
+      "bytes": 475722,
+      "sha256": "c1259480c376581d80d4bab5d8b09adebc32227f21cf9e040048543e227be00b",
+      "sha256_recorded": "c1259480c376581d80d4bab5d8b09adebc32227f21cf9e040048543e227be00b",
+      "sha256_matches_recorded": true
+     }
+    },
+    "obs_rows_match_decisions": true,
+    "obs_sha256_all_match_recorded": true,
+    "labels": {
+     "path": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed9-shard/labels.jsonl",
+     "rows": 3300,
+     "rows_match_decisions": true,
+     "sha256": "7d58b03d0f311d008cb2f5feaed303434d94281c6f2815626c4c21c6f912ab4d",
+     "sha256_recorded": "7d58b03d0f311d008cb2f5feaed303434d94281c6f2815626c4c21c6f912ab4d"
+    },
+    "work_labels": {
+     "path": ".tmp_v410_s1c/work/d1-s0d1-n3300-seed9-shard/labels.jsonl",
+     "present": true,
+     "rows": 3301,
+     "kinds": {
+      "report": 1,
+      "decision": 3300
+     },
+     "decision_rows": 3300,
+     "report_rows": 1,
+     "sha256": "6fe4dafca75f32261e32bd5edf2fb216633041c7d6203e46a67d930499676cb2",
+     "bytes": 13461219,
+     "decisions_beyond_stored": 0,
+     "kept": true
+    },
+    "alignment": {
+     "method": "hash-checkpoint",
+     "decisions": 3300,
+     "boundaries": 6600,
+     "checkpoints_equal": 6600,
+     "checkpoints_mismatched": 0
+    },
+    "channel_a": {
+     "decisions": 3300,
+     "decisions_requested": 3300,
+     "stopped_early": false,
+     "stop_reason": "max_frames",
+     "stage_clear": false,
+     "deaths_observed": 0,
+     "frames_committed": 13200,
+     "labels_sha256": "6fe4dafca75f32261e32bd5edf2fb216633041c7d6203e46a67d930499676cb2",
+     "exit_code": 0
+    },
+    "load": {
+     "samples": 3300,
+     "expected_samples": 3300,
+     "samples_match": true,
+     "obs_spec_version": "obs-v3",
+     "obs_spec_digest": "ef2fbd15385f26f425db2bfe855d105ee009023acb08c26916e811963553a105",
+     "digest_matches_frozen": true,
+     "unresolved": 0,
+     "play_shape": [
+      3300,
+      4,
+      112,
+      96
+     ],
+     "hud_shape": [
+      3300,
+      56,
+      160
+     ],
+     "act_hist_shape": [
+      3300,
+      8,
+      18
+     ],
+     "frames": [
+      0,
+      13200
+     ],
+     "decisions": 3300
+    },
+    "teacher_fps": 73.101,
+    "env_fps": 118.558
+   },
+   {
+    "shard": "d1-s0d1-n3300-seed10-shard",
+    "stage": 0,
+    "seed": 10,
+    "start_mode": "shard",
+    "collected_in": "s1c",
+    "decisions_requested": 3300,
+    "decisions": 3300,
+    "frames": [
+     0,
+     13200
+    ],
+    "frames_from_decisions": 13200,
+    "status": "ok",
+    "exit_code": 0,
+    "exit_code_source": "run_record",
+    "wall_s": 469.262,
+    "stop_reason": "max_frames",
+    "stage_clear": false,
+    "deaths_observed": 0,
+    "transition_trim": false,
+    "obs_spec_version": "obs-v3",
+    "obs_spec_digest": "ef2fbd15385f26f425db2bfe855d105ee009023acb08c26916e811963553a105",
+    "obs": {
+     "play96x112": {
+      "path": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed10-shard/obs/play96x112.npy",
+      "shape": [
+       3300,
+       4,
+       112,
+       96
+      ],
+      "dtype": "uint8",
+      "rows": 3300,
+      "bytes": 141926922,
+      "sha256": "7625377a802867b5443aeb11d06628256b87a506ec6917e30fbf839ba093a3e9",
+      "sha256_recorded": "7625377a802867b5443aeb11d06628256b87a506ec6917e30fbf839ba093a3e9",
+      "sha256_matches_recorded": true
+     },
+     "hud": {
+      "path": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed10-shard/obs/hud.npy",
+      "shape": [
+       3300,
+       56,
+       160
+      ],
+      "dtype": "uint8",
+      "rows": 3300,
+      "bytes": 29568522,
+      "sha256": "4460b807cd730fff0c49bc44f7f24b1b55ca28682761b940c2294870ee138019",
+      "sha256_recorded": "4460b807cd730fff0c49bc44f7f24b1b55ca28682761b940c2294870ee138019",
+      "sha256_matches_recorded": true
+     },
+     "act_hist": {
+      "path": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed10-shard/obs/act_hist.npy",
+      "shape": [
+       3300,
+       8,
+       18
+      ],
+      "dtype": "uint8",
+      "rows": 3300,
+      "bytes": 475722,
+      "sha256": "44cb1aabe90b55da68022d0d3d3266e28565d0adeae186230169026f633aa7ee",
+      "sha256_recorded": "44cb1aabe90b55da68022d0d3d3266e28565d0adeae186230169026f633aa7ee",
+      "sha256_matches_recorded": true
+     }
+    },
+    "obs_rows_match_decisions": true,
+    "obs_sha256_all_match_recorded": true,
+    "labels": {
+     "path": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed10-shard/labels.jsonl",
+     "rows": 3300,
+     "rows_match_decisions": true,
+     "sha256": "011f6c1cc3db232ca296177b9afc445a4922e94b1d5513f4e5746350cff622a0",
+     "sha256_recorded": "011f6c1cc3db232ca296177b9afc445a4922e94b1d5513f4e5746350cff622a0"
+    },
+    "work_labels": {
+     "path": ".tmp_v410_s1c/work/d1-s0d1-n3300-seed10-shard/labels.jsonl",
+     "present": true,
+     "rows": 3301,
+     "kinds": {
+      "report": 1,
+      "decision": 3300
+     },
+     "decision_rows": 3300,
+     "report_rows": 1,
+     "sha256": "24b9ef25728d4c23c5ed19cfdc96849f8baa1198c32119b8029f0a471823975e",
+     "bytes": 13416385,
+     "decisions_beyond_stored": 0,
+     "kept": true
+    },
+    "alignment": {
+     "method": "hash-checkpoint",
+     "decisions": 3300,
+     "boundaries": 6600,
+     "checkpoints_equal": 6600,
+     "checkpoints_mismatched": 0
+    },
+    "channel_a": {
+     "decisions": 3300,
+     "decisions_requested": 3300,
+     "stopped_early": false,
+     "stop_reason": "max_frames",
+     "stage_clear": false,
+     "deaths_observed": 0,
+     "frames_committed": 13200,
+     "labels_sha256": "24b9ef25728d4c23c5ed19cfdc96849f8baa1198c32119b8029f0a471823975e",
+     "exit_code": 0
+    },
+    "load": {
+     "samples": 3300,
+     "expected_samples": 3300,
+     "samples_match": true,
+     "obs_spec_version": "obs-v3",
+     "obs_spec_digest": "ef2fbd15385f26f425db2bfe855d105ee009023acb08c26916e811963553a105",
+     "digest_matches_frozen": true,
+     "unresolved": 0,
+     "play_shape": [
+      3300,
+      4,
+      112,
+      96
+     ],
+     "hud_shape": [
+      3300,
+      56,
+      160
+     ],
+     "act_hist_shape": [
+      3300,
+      8,
+      18
+     ],
+     "frames": [
+      0,
+      13200
+     ],
+     "decisions": 3300
+    },
+    "teacher_fps": 38.974,
+    "env_fps": 105.088
+   },
+   {
+    "shard": "d1-s0d1-n3300-seed11-shard",
+    "stage": 0,
+    "seed": 11,
+    "start_mode": "shard",
+    "collected_in": "s1c",
+    "decisions_requested": 3300,
+    "decisions": 3300,
+    "frames": [
+     0,
+     13200
+    ],
+    "frames_from_decisions": 13200,
+    "status": "ok",
+    "exit_code": 0,
+    "exit_code_source": "run_record",
+    "wall_s": 467.452,
+    "stop_reason": "max_frames",
+    "stage_clear": false,
+    "deaths_observed": 0,
+    "transition_trim": false,
+    "obs_spec_version": "obs-v3",
+    "obs_spec_digest": "ef2fbd15385f26f425db2bfe855d105ee009023acb08c26916e811963553a105",
+    "obs": {
+     "play96x112": {
+      "path": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed11-shard/obs/play96x112.npy",
+      "shape": [
+       3300,
+       4,
+       112,
+       96
+      ],
+      "dtype": "uint8",
+      "rows": 3300,
+      "bytes": 141926922,
+      "sha256": "ef5d5e7cc8530886adc18915d9c3b8430fe875b3d44aa985d371bdf4fb0557a8",
+      "sha256_recorded": "ef5d5e7cc8530886adc18915d9c3b8430fe875b3d44aa985d371bdf4fb0557a8",
+      "sha256_matches_recorded": true
+     },
+     "hud": {
+      "path": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed11-shard/obs/hud.npy",
+      "shape": [
+       3300,
+       56,
+       160
+      ],
+      "dtype": "uint8",
+      "rows": 3300,
+      "bytes": 29568522,
+      "sha256": "78066f0c60df47d3e887679a97ffbc0d452c76be125ac0358cbf7a04236e43d2",
+      "sha256_recorded": "78066f0c60df47d3e887679a97ffbc0d452c76be125ac0358cbf7a04236e43d2",
+      "sha256_matches_recorded": true
+     },
+     "act_hist": {
+      "path": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed11-shard/obs/act_hist.npy",
+      "shape": [
+       3300,
+       8,
+       18
+      ],
+      "dtype": "uint8",
+      "rows": 3300,
+      "bytes": 475722,
+      "sha256": "755b8b51b9888e8a09bdd89fb8948619242c81a5cee57cac0c7404f0c22c4a24",
+      "sha256_recorded": "755b8b51b9888e8a09bdd89fb8948619242c81a5cee57cac0c7404f0c22c4a24",
+      "sha256_matches_recorded": true
+     }
+    },
+    "obs_rows_match_decisions": true,
+    "obs_sha256_all_match_recorded": true,
+    "labels": {
+     "path": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed11-shard/labels.jsonl",
+     "rows": 3300,
+     "rows_match_decisions": true,
+     "sha256": "bc663759e3746742ee3e677ba716c286fe1633da04fdbf8047291d0977db149a",
+     "sha256_recorded": "bc663759e3746742ee3e677ba716c286fe1633da04fdbf8047291d0977db149a"
+    },
+    "work_labels": {
+     "path": ".tmp_v410_s1c/work/d1-s0d1-n3300-seed11-shard/labels.jsonl",
+     "present": true,
+     "rows": 3301,
+     "kinds": {
+      "report": 1,
+      "decision": 3300
+     },
+     "decision_rows": 3300,
+     "report_rows": 1,
+     "sha256": "32cd6f895706dcb3fdf890da8d1e327a7f6079d8328b31e29098a7eaa3b6a2bd",
+     "bytes": 13390046,
+     "decisions_beyond_stored": 0,
+     "kept": true
+    },
+    "alignment": {
+     "method": "hash-checkpoint",
+     "decisions": 3300,
+     "boundaries": 6600,
+     "checkpoints_equal": 6600,
+     "checkpoints_mismatched": 0
+    },
+    "channel_a": {
+     "decisions": 3300,
+     "decisions_requested": 3300,
+     "stopped_early": false,
+     "stop_reason": "max_frames",
+     "stage_clear": false,
+     "deaths_observed": 0,
+     "frames_committed": 13200,
+     "labels_sha256": "32cd6f895706dcb3fdf890da8d1e327a7f6079d8328b31e29098a7eaa3b6a2bd",
+     "exit_code": 0
+    },
+    "load": {
+     "samples": 3300,
+     "expected_samples": 3300,
+     "samples_match": true,
+     "obs_spec_version": "obs-v3",
+     "obs_spec_digest": "ef2fbd15385f26f425db2bfe855d105ee009023acb08c26916e811963553a105",
+     "digest_matches_frozen": true,
+     "unresolved": 0,
+     "play_shape": [
+      3300,
+      4,
+      112,
+      96
+     ],
+     "hud_shape": [
+      3300,
+      56,
+      160
+     ],
+     "act_hist_shape": [
+      3300,
+      8,
+      18
+     ],
+     "frames": [
+      0,
+      13200
+     ],
+     "decisions": 3300
+    },
+    "teacher_fps": 39.15,
+    "env_fps": 105.618
+   },
+   {
+    "shard": "d1-s0d1-n3300-seed12-shard",
+    "stage": 0,
+    "seed": 12,
+    "start_mode": "shard",
+    "collected_in": "s1c",
+    "decisions_requested": 3300,
+    "decisions": 3298,
+    "frames": [
+     0,
+     13192
+    ],
+    "frames_from_decisions": 13192,
+    "status": "ok",
+    "exit_code": 0,
+    "exit_code_source": "run_record",
+    "wall_s": 465.746,
+    "stop_reason": "stage_changed",
+    "stage_clear": true,
+    "deaths_observed": 0,
+    "transition_trim": false,
+    "obs_spec_version": "obs-v3",
+    "obs_spec_digest": "ef2fbd15385f26f425db2bfe855d105ee009023acb08c26916e811963553a105",
+    "obs": {
+     "play96x112": {
+      "path": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed12-shard/obs/play96x112.npy",
+      "shape": [
+       3298,
+       4,
+       112,
+       96
+      ],
+      "dtype": "uint8",
+      "rows": 3298,
+      "bytes": 141840906,
+      "sha256": "9946291c300273297e8f496d6610e393a0aef88dd34456b3410baeff41912f2c",
+      "sha256_recorded": "9946291c300273297e8f496d6610e393a0aef88dd34456b3410baeff41912f2c",
+      "sha256_matches_recorded": true
+     },
+     "hud": {
+      "path": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed12-shard/obs/hud.npy",
+      "shape": [
+       3298,
+       56,
+       160
+      ],
+      "dtype": "uint8",
+      "rows": 3298,
+      "bytes": 29550602,
+      "sha256": "3385f8ea1d18aa98210c0af1572dea13b828a0f4182a6eb7ea4443834868a1f3",
+      "sha256_recorded": "3385f8ea1d18aa98210c0af1572dea13b828a0f4182a6eb7ea4443834868a1f3",
+      "sha256_matches_recorded": true
+     },
+     "act_hist": {
+      "path": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed12-shard/obs/act_hist.npy",
+      "shape": [
+       3298,
+       8,
+       18
+      ],
+      "dtype": "uint8",
+      "rows": 3298,
+      "bytes": 475434,
+      "sha256": "5b3188d4f38e693efc5bbbc196507d1e7d98c60082fce86f33d615e217e32c3b",
+      "sha256_recorded": "5b3188d4f38e693efc5bbbc196507d1e7d98c60082fce86f33d615e217e32c3b",
+      "sha256_matches_recorded": true
+     }
+    },
+    "obs_rows_match_decisions": true,
+    "obs_sha256_all_match_recorded": true,
+    "labels": {
+     "path": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed12-shard/labels.jsonl",
+     "rows": 3298,
+     "rows_match_decisions": true,
+     "sha256": "f79f8ab6cef1ca4ac5c9489e4eeca6f70b55a97d4de847bca66a923b0033d028",
+     "sha256_recorded": "f79f8ab6cef1ca4ac5c9489e4eeca6f70b55a97d4de847bca66a923b0033d028"
+    },
+    "work_labels": {
+     "path": ".tmp_v410_s1c/work/d1-s0d1-n3300-seed12-shard/labels.jsonl",
+     "present": true,
+     "rows": 3300,
+     "kinds": {
+      "report": 1,
+      "decision": 3299
+     },
+     "decision_rows": 3299,
+     "report_rows": 1,
+     "sha256": "d5027f48b0ad617390187993da438cb89a19f43e5320e9b6003a65a075f915f1",
+     "bytes": 13399481,
+     "decisions_beyond_stored": 1,
+     "kept": true
+    },
+    "alignment": {
+     "method": "hash-checkpoint",
+     "decisions": 3298,
+     "boundaries": 6596,
+     "checkpoints_equal": 6596,
+     "checkpoints_mismatched": 0
+    },
+    "channel_a": {
+     "decisions": 3299,
+     "decisions_requested": 3300,
+     "stopped_early": true,
+     "stop_reason": "stage_changed",
+     "stage_clear": true,
+     "deaths_observed": 0,
+     "frames_committed": 13196,
+     "labels_sha256": "d5027f48b0ad617390187993da438cb89a19f43e5320e9b6003a65a075f915f1",
+     "exit_code": 0
+    },
+    "load": {
+     "samples": 3298,
+     "expected_samples": 3298,
+     "samples_match": true,
+     "obs_spec_version": "obs-v3",
+     "obs_spec_digest": "ef2fbd15385f26f425db2bfe855d105ee009023acb08c26916e811963553a105",
+     "digest_matches_frozen": true,
+     "unresolved": 0,
+     "play_shape": [
+      3298,
+      4,
+      112,
+      96
+     ],
+     "hud_shape": [
+      3298,
+      56,
+      160
+     ],
+     "act_hist_shape": [
+      3298,
+      8,
+      18
+     ],
+     "frames": [
+      0,
+      13192
+     ],
+     "decisions": 3298
+    },
+    "teacher_fps": 39.365,
+    "env_fps": 105.244
+   },
+   {
+    "shard": "d1-s0d1-n3300-seed13-shard",
+    "stage": 0,
+    "seed": 13,
+    "start_mode": "shard",
+    "collected_in": "s1c",
+    "decisions_requested": 3300,
+    "decisions": 3274,
+    "frames": [
+     0,
+     13096
+    ],
+    "frames_from_decisions": 13096,
+    "status": "ok",
+    "exit_code": 0,
+    "exit_code_source": "run_record",
+    "wall_s": 463.527,
+    "stop_reason": "stage_changed",
+    "stage_clear": true,
+    "deaths_observed": 0,
+    "transition_trim": false,
+    "obs_spec_version": "obs-v3",
+    "obs_spec_digest": "ef2fbd15385f26f425db2bfe855d105ee009023acb08c26916e811963553a105",
+    "obs": {
+     "play96x112": {
+      "path": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed13-shard/obs/play96x112.npy",
+      "shape": [
+       3274,
+       4,
+       112,
+       96
+      ],
+      "dtype": "uint8",
+      "rows": 3274,
+      "bytes": 140808714,
+      "sha256": "aac84a385aab64f62caf78f7a6b1bcc0182ba34225759367a9aef101745cc84f",
+      "sha256_recorded": "aac84a385aab64f62caf78f7a6b1bcc0182ba34225759367a9aef101745cc84f",
+      "sha256_matches_recorded": true
+     },
+     "hud": {
+      "path": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed13-shard/obs/hud.npy",
+      "shape": [
+       3274,
+       56,
+       160
+      ],
+      "dtype": "uint8",
+      "rows": 3274,
+      "bytes": 29335562,
+      "sha256": "b98efbaa168cac1e51a13e8624d4111934b829a150bee5296d371cbc61028210",
+      "sha256_recorded": "b98efbaa168cac1e51a13e8624d4111934b829a150bee5296d371cbc61028210",
+      "sha256_matches_recorded": true
+     },
+     "act_hist": {
+      "path": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed13-shard/obs/act_hist.npy",
+      "shape": [
+       3274,
+       8,
+       18
+      ],
+      "dtype": "uint8",
+      "rows": 3274,
+      "bytes": 471978,
+      "sha256": "de7a6f8c0e6c22a1bd02bea9b438704a1273ed9fd33221b3c093eff7a99081c1",
+      "sha256_recorded": "de7a6f8c0e6c22a1bd02bea9b438704a1273ed9fd33221b3c093eff7a99081c1",
+      "sha256_matches_recorded": true
+     }
+    },
+    "obs_rows_match_decisions": true,
+    "obs_sha256_all_match_recorded": true,
+    "labels": {
+     "path": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed13-shard/labels.jsonl",
+     "rows": 3274,
+     "rows_match_decisions": true,
+     "sha256": "30ed45a2974c206da6e6180b10e2f1aaefbbe696169dea2b0f5bbb54d69470cb",
+     "sha256_recorded": "30ed45a2974c206da6e6180b10e2f1aaefbbe696169dea2b0f5bbb54d69470cb"
+    },
+    "work_labels": {
+     "path": ".tmp_v410_s1c/work/d1-s0d1-n3300-seed13-shard/labels.jsonl",
+     "present": true,
+     "rows": 3276,
+     "kinds": {
+      "report": 1,
+      "decision": 3275
+     },
+     "decision_rows": 3275,
+     "report_rows": 1,
+     "sha256": "1700ddec90cbf323b89c6281bdd4fda24f912ca0e45f96ec714616da5bd17ff1",
+     "bytes": 13301696,
+     "decisions_beyond_stored": 1,
+     "kept": true
+    },
+    "alignment": {
+     "method": "hash-checkpoint",
+     "decisions": 3274,
+     "boundaries": 6548,
+     "checkpoints_equal": 6548,
+     "checkpoints_mismatched": 0
+    },
+    "channel_a": {
+     "decisions": 3275,
+     "decisions_requested": 3300,
+     "stopped_early": true,
+     "stop_reason": "stage_changed",
+     "stage_clear": true,
+     "deaths_observed": 0,
+     "frames_committed": 13100,
+     "labels_sha256": "1700ddec90cbf323b89c6281bdd4fda24f912ca0e45f96ec714616da5bd17ff1",
+     "exit_code": 0
+    },
+    "load": {
+     "samples": 3274,
+     "expected_samples": 3274,
+     "samples_match": true,
+     "obs_spec_version": "obs-v3",
+     "obs_spec_digest": "ef2fbd15385f26f425db2bfe855d105ee009023acb08c26916e811963553a105",
+     "digest_matches_frozen": true,
+     "unresolved": 0,
+     "play_shape": [
+      3274,
+      4,
+      112,
+      96
+     ],
+     "hud_shape": [
+      3274,
+      56,
+      160
+     ],
+     "act_hist_shape": [
+      3274,
+      8,
+      18
+     ],
+     "frames": [
+      0,
+      13096
+     ],
+     "decisions": 3274
+    },
+    "teacher_fps": 39.262,
+    "env_fps": 104.966
+   },
+   {
+    "shard": "d1-s0d1-n3300-seed14-shard",
+    "stage": 0,
+    "seed": 14,
+    "start_mode": "shard",
+    "collected_in": "s1c",
+    "decisions_requested": 3300,
+    "decisions": 3300,
+    "frames": [
+     0,
+     13200
+    ],
+    "frames_from_decisions": 13200,
+    "status": "ok",
+    "exit_code": 0,
+    "exit_code_source": "run_record",
+    "wall_s": 481.313,
+    "stop_reason": "max_frames",
+    "stage_clear": false,
+    "deaths_observed": 0,
+    "transition_trim": false,
+    "obs_spec_version": "obs-v3",
+    "obs_spec_digest": "ef2fbd15385f26f425db2bfe855d105ee009023acb08c26916e811963553a105",
+    "obs": {
+     "play96x112": {
+      "path": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed14-shard/obs/play96x112.npy",
+      "shape": [
+       3300,
+       4,
+       112,
+       96
+      ],
+      "dtype": "uint8",
+      "rows": 3300,
+      "bytes": 141926922,
+      "sha256": "f76c12e4c0f9000e89210caf357c1c3d2293133258a89d1d10f31349163692a6",
+      "sha256_recorded": "f76c12e4c0f9000e89210caf357c1c3d2293133258a89d1d10f31349163692a6",
+      "sha256_matches_recorded": true
+     },
+     "hud": {
+      "path": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed14-shard/obs/hud.npy",
+      "shape": [
+       3300,
+       56,
+       160
+      ],
+      "dtype": "uint8",
+      "rows": 3300,
+      "bytes": 29568522,
+      "sha256": "a043ff7c6605c9d06145562245c3ea6b6ccc1ea66a1ec389a5407a88fdc3534d",
+      "sha256_recorded": "a043ff7c6605c9d06145562245c3ea6b6ccc1ea66a1ec389a5407a88fdc3534d",
+      "sha256_matches_recorded": true
+     },
+     "act_hist": {
+      "path": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed14-shard/obs/act_hist.npy",
+      "shape": [
+       3300,
+       8,
+       18
+      ],
+      "dtype": "uint8",
+      "rows": 3300,
+      "bytes": 475722,
+      "sha256": "6bffdf30022b23d66e35b31bf07f2ed3bd7b76642e02df787c7e41806c2aa1d3",
+      "sha256_recorded": "6bffdf30022b23d66e35b31bf07f2ed3bd7b76642e02df787c7e41806c2aa1d3",
+      "sha256_matches_recorded": true
+     }
+    },
+    "obs_rows_match_decisions": true,
+    "obs_sha256_all_match_recorded": true,
+    "labels": {
+     "path": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed14-shard/labels.jsonl",
+     "rows": 3300,
+     "rows_match_decisions": true,
+     "sha256": "9dfa34f9f3e74fcd5209e746788dfd7a2db1085ce7280c1de18ad2384f1a56a5",
+     "sha256_recorded": "9dfa34f9f3e74fcd5209e746788dfd7a2db1085ce7280c1de18ad2384f1a56a5"
+    },
+    "work_labels": {
+     "path": ".tmp_v410_s1c/work/d1-s0d1-n3300-seed14-shard/labels.jsonl",
+     "present": true,
+     "rows": 3301,
+     "kinds": {
+      "report": 1,
+      "decision": 3300
+     },
+     "decision_rows": 3300,
+     "report_rows": 1,
+     "sha256": "bdf276a868fcf00f717ebfbf051e8ff60927769b9bf4b537ffc3f36e699ab4a1",
+     "bytes": 13482616,
+     "decisions_beyond_stored": 0,
+     "kept": true
+    },
+    "alignment": {
+     "method": "hash-checkpoint",
+     "decisions": 3300,
+     "boundaries": 6600,
+     "checkpoints_equal": 6600,
+     "checkpoints_mismatched": 0
+    },
+    "channel_a": {
+     "decisions": 3300,
+     "decisions_requested": 3300,
+     "stopped_early": false,
+     "stop_reason": "max_frames",
+     "stage_clear": false,
+     "deaths_observed": 0,
+     "frames_committed": 13200,
+     "labels_sha256": "bdf276a868fcf00f717ebfbf051e8ff60927769b9bf4b537ffc3f36e699ab4a1",
+     "exit_code": 0
+    },
+    "load": {
+     "samples": 3300,
+     "expected_samples": 3300,
+     "samples_match": true,
+     "obs_spec_version": "obs-v3",
+     "obs_spec_digest": "ef2fbd15385f26f425db2bfe855d105ee009023acb08c26916e811963553a105",
+     "digest_matches_frozen": true,
+     "unresolved": 0,
+     "play_shape": [
+      3300,
+      4,
+      112,
+      96
+     ],
+     "hud_shape": [
+      3300,
+      56,
+      160
+     ],
+     "act_hist_shape": [
+      3300,
+      8,
+      18
+     ],
+     "frames": [
+      0,
+      13200
+     ],
+     "decisions": 3300
+    },
+    "teacher_fps": 37.566,
+    "env_fps": 106.005
+   },
+   {
+    "shard": "d1-s0d1-n3300-seed15-shard",
+    "stage": 0,
+    "seed": 15,
+    "start_mode": "shard",
+    "collected_in": "s1c",
+    "decisions_requested": 3300,
+    "decisions": 3300,
+    "frames": [
+     0,
+     13200
+    ],
+    "frames_from_decisions": 13200,
+    "status": "ok",
+    "exit_code": 0,
+    "exit_code_source": "run_record",
+    "wall_s": 473.754,
+    "stop_reason": "max_frames",
+    "stage_clear": false,
+    "deaths_observed": 0,
+    "transition_trim": false,
+    "obs_spec_version": "obs-v3",
+    "obs_spec_digest": "ef2fbd15385f26f425db2bfe855d105ee009023acb08c26916e811963553a105",
+    "obs": {
+     "play96x112": {
+      "path": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed15-shard/obs/play96x112.npy",
+      "shape": [
+       3300,
+       4,
+       112,
+       96
+      ],
+      "dtype": "uint8",
+      "rows": 3300,
+      "bytes": 141926922,
+      "sha256": "6ee1e713e185dc32c65dc017ac6c1d14e4dd78013763774715213661d6b1e239",
+      "sha256_recorded": "6ee1e713e185dc32c65dc017ac6c1d14e4dd78013763774715213661d6b1e239",
+      "sha256_matches_recorded": true
+     },
+     "hud": {
+      "path": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed15-shard/obs/hud.npy",
+      "shape": [
+       3300,
+       56,
+       160
+      ],
+      "dtype": "uint8",
+      "rows": 3300,
+      "bytes": 29568522,
+      "sha256": "79527a539a603e94486fd724711a1471e3d29c0ccc7aab727b82a777b27a839c",
+      "sha256_recorded": "79527a539a603e94486fd724711a1471e3d29c0ccc7aab727b82a777b27a839c",
+      "sha256_matches_recorded": true
+     },
+     "act_hist": {
+      "path": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed15-shard/obs/act_hist.npy",
+      "shape": [
+       3300,
+       8,
+       18
+      ],
+      "dtype": "uint8",
+      "rows": 3300,
+      "bytes": 475722,
+      "sha256": "8d6502ca67565d9a7cc64572d11934ff52219235bb359f27f40fb855ddf7ea9b",
+      "sha256_recorded": "8d6502ca67565d9a7cc64572d11934ff52219235bb359f27f40fb855ddf7ea9b",
+      "sha256_matches_recorded": true
+     }
+    },
+    "obs_rows_match_decisions": true,
+    "obs_sha256_all_match_recorded": true,
+    "labels": {
+     "path": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed15-shard/labels.jsonl",
+     "rows": 3300,
+     "rows_match_decisions": true,
+     "sha256": "8a78867bb5c6fbc2389abc7f3d7e2c93bc136c5d4e71c94f5e26f102f63af8b9",
+     "sha256_recorded": "8a78867bb5c6fbc2389abc7f3d7e2c93bc136c5d4e71c94f5e26f102f63af8b9"
+    },
+    "work_labels": {
+     "path": ".tmp_v410_s1c/work/d1-s0d1-n3300-seed15-shard/labels.jsonl",
+     "present": true,
+     "rows": 3301,
+     "kinds": {
+      "report": 1,
+      "decision": 3300
+     },
+     "decision_rows": 3300,
+     "report_rows": 1,
+     "sha256": "5da62af2608b8930bea81c7201e4d1d27d449f745ed46d0fd7f19723f127dd8e",
+     "bytes": 13400643,
+     "decisions_beyond_stored": 0,
+     "kept": true
+    },
+    "alignment": {
+     "method": "hash-checkpoint",
+     "decisions": 3300,
+     "boundaries": 6600,
+     "checkpoints_equal": 6600,
+     "checkpoints_mismatched": 0
+    },
+    "channel_a": {
+     "decisions": 3300,
+     "decisions_requested": 3300,
+     "stopped_early": false,
+     "stop_reason": "max_frames",
+     "stage_clear": false,
+     "deaths_observed": 0,
+     "frames_committed": 13200,
+     "labels_sha256": "5da62af2608b8930bea81c7201e4d1d27d449f745ed46d0fd7f19723f127dd8e",
+     "exit_code": 0
+    },
+    "load": {
+     "samples": 3300,
+     "expected_samples": 3300,
+     "samples_match": true,
+     "obs_spec_version": "obs-v3",
+     "obs_spec_digest": "ef2fbd15385f26f425db2bfe855d105ee009023acb08c26916e811963553a105",
+     "digest_matches_frozen": true,
+     "unresolved": 0,
+     "play_shape": [
+      3300,
+      4,
+      112,
+      96
+     ],
+     "hud_shape": [
+      3300,
+      56,
+      160
+     ],
+     "act_hist_shape": [
+      3300,
+      8,
+      18
+     ],
+     "frames": [
+      0,
+      13200
+     ],
+     "decisions": 3300
+    },
+    "teacher_fps": 38.481,
+    "env_fps": 105.344
+   },
+   {
+    "shard": "d1-s0d1-n3300-seed16-shard",
+    "stage": 0,
+    "seed": 16,
+    "start_mode": "shard",
+    "collected_in": "s1c",
+    "decisions_requested": 3300,
+    "decisions": 3300,
+    "frames": [
+     0,
+     13200
+    ],
+    "frames_from_decisions": 13200,
+    "status": "ok",
+    "exit_code": 0,
+    "exit_code_source": "run_record",
+    "wall_s": 477.826,
+    "stop_reason": "max_frames",
+    "stage_clear": false,
+    "deaths_observed": 0,
+    "transition_trim": false,
+    "obs_spec_version": "obs-v3",
+    "obs_spec_digest": "ef2fbd15385f26f425db2bfe855d105ee009023acb08c26916e811963553a105",
+    "obs": {
+     "play96x112": {
+      "path": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed16-shard/obs/play96x112.npy",
+      "shape": [
+       3300,
+       4,
+       112,
+       96
+      ],
+      "dtype": "uint8",
+      "rows": 3300,
+      "bytes": 141926922,
+      "sha256": "48dfcc0d405df11fd1c3335b399ff63cfbd67a2f64b53f85aee08a6a3ffcedfb",
+      "sha256_recorded": "48dfcc0d405df11fd1c3335b399ff63cfbd67a2f64b53f85aee08a6a3ffcedfb",
+      "sha256_matches_recorded": true
+     },
+     "hud": {
+      "path": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed16-shard/obs/hud.npy",
+      "shape": [
+       3300,
+       56,
+       160
+      ],
+      "dtype": "uint8",
+      "rows": 3300,
+      "bytes": 29568522,
+      "sha256": "a6b88a4523be773651fccae27be214a02845ee00b49de20d51ac0b7cb706a693",
+      "sha256_recorded": "a6b88a4523be773651fccae27be214a02845ee00b49de20d51ac0b7cb706a693",
+      "sha256_matches_recorded": true
+     },
+     "act_hist": {
+      "path": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed16-shard/obs/act_hist.npy",
+      "shape": [
+       3300,
+       8,
+       18
+      ],
+      "dtype": "uint8",
+      "rows": 3300,
+      "bytes": 475722,
+      "sha256": "94dbe48a8368aff7624e949fd5b891e475b6d095b6a4846311ab6b4fbc45a3ca",
+      "sha256_recorded": "94dbe48a8368aff7624e949fd5b891e475b6d095b6a4846311ab6b4fbc45a3ca",
+      "sha256_matches_recorded": true
+     }
+    },
+    "obs_rows_match_decisions": true,
+    "obs_sha256_all_match_recorded": true,
+    "labels": {
+     "path": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed16-shard/labels.jsonl",
+     "rows": 3300,
+     "rows_match_decisions": true,
+     "sha256": "95e35d1c714a7217ba2d1d7f736e27facea6fe1e01589acdbc1152c34efe3b06",
+     "sha256_recorded": "95e35d1c714a7217ba2d1d7f736e27facea6fe1e01589acdbc1152c34efe3b06"
+    },
+    "work_labels": {
+     "path": ".tmp_v410_s1c/work/d1-s0d1-n3300-seed16-shard/labels.jsonl",
+     "present": true,
+     "rows": 3301,
+     "kinds": {
+      "report": 1,
+      "decision": 3300
+     },
+     "decision_rows": 3300,
+     "report_rows": 1,
+     "sha256": "8e4bd7ee94310aa3075c042936cc40ca710ea8095b074e2f9d12545ba1d68c28",
+     "bytes": 13415337,
+     "decisions_beyond_stored": 0,
+     "kept": true
+    },
+    "alignment": {
+     "method": "hash-checkpoint",
+     "decisions": 3300,
+     "boundaries": 6600,
+     "checkpoints_equal": 6600,
+     "checkpoints_mismatched": 0
+    },
+    "channel_a": {
+     "decisions": 3300,
+     "decisions_requested": 3300,
+     "stopped_early": false,
+     "stop_reason": "max_frames",
+     "stage_clear": false,
+     "deaths_observed": 0,
+     "frames_committed": 13200,
+     "labels_sha256": "8e4bd7ee94310aa3075c042936cc40ca710ea8095b074e2f9d12545ba1d68c28",
+     "exit_code": 0
+    },
+    "load": {
+     "samples": 3300,
+     "expected_samples": 3300,
+     "samples_match": true,
+     "obs_spec_version": "obs-v3",
+     "obs_spec_digest": "ef2fbd15385f26f425db2bfe855d105ee009023acb08c26916e811963553a105",
+     "digest_matches_frozen": true,
+     "unresolved": 0,
+     "play_shape": [
+      3300,
+      4,
+      112,
+      96
+     ],
+     "hud_shape": [
+      3300,
+      56,
+      160
+     ],
+     "act_hist_shape": [
+      3300,
+      8,
+      18
+     ],
+     "frames": [
+      0,
+      13200
+     ],
+     "decisions": 3300
+    },
+    "teacher_fps": 38.016,
+    "env_fps": 105.448
+   },
+   {
+    "shard": "d1-s0d1-n3300-seed17-shard",
+    "stage": 0,
+    "seed": 17,
+    "start_mode": "shard",
+    "collected_in": "s1c",
+    "decisions_requested": 3300,
+    "decisions": 3274,
+    "frames": [
+     0,
+     13096
+    ],
+    "frames_from_decisions": 13096,
+    "status": "ok",
+    "exit_code": 0,
+    "exit_code_source": "run_record",
+    "wall_s": 469.033,
+    "stop_reason": "stage_changed",
+    "stage_clear": true,
+    "deaths_observed": 0,
+    "transition_trim": false,
+    "obs_spec_version": "obs-v3",
+    "obs_spec_digest": "ef2fbd15385f26f425db2bfe855d105ee009023acb08c26916e811963553a105",
+    "obs": {
+     "play96x112": {
+      "path": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed17-shard/obs/play96x112.npy",
+      "shape": [
+       3274,
+       4,
+       112,
+       96
+      ],
+      "dtype": "uint8",
+      "rows": 3274,
+      "bytes": 140808714,
+      "sha256": "5f3adc91ea03b81c8003f7ef365b56fa338a1c3a41d0fa2b19bb35d21383945c",
+      "sha256_recorded": "5f3adc91ea03b81c8003f7ef365b56fa338a1c3a41d0fa2b19bb35d21383945c",
+      "sha256_matches_recorded": true
+     },
+     "hud": {
+      "path": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed17-shard/obs/hud.npy",
+      "shape": [
+       3274,
+       56,
+       160
+      ],
+      "dtype": "uint8",
+      "rows": 3274,
+      "bytes": 29335562,
+      "sha256": "582aeeba8c38cbf8fcea3fae417d94654158d0639d98ee85ee559057b0f7edab",
+      "sha256_recorded": "582aeeba8c38cbf8fcea3fae417d94654158d0639d98ee85ee559057b0f7edab",
+      "sha256_matches_recorded": true
+     },
+     "act_hist": {
+      "path": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed17-shard/obs/act_hist.npy",
+      "shape": [
+       3274,
+       8,
+       18
+      ],
+      "dtype": "uint8",
+      "rows": 3274,
+      "bytes": 471978,
+      "sha256": "cadc49549151e2079ab7482046d1b9bfbc92dc788802f1b2aa98ac996d270f39",
+      "sha256_recorded": "cadc49549151e2079ab7482046d1b9bfbc92dc788802f1b2aa98ac996d270f39",
+      "sha256_matches_recorded": true
+     }
+    },
+    "obs_rows_match_decisions": true,
+    "obs_sha256_all_match_recorded": true,
+    "labels": {
+     "path": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed17-shard/labels.jsonl",
+     "rows": 3274,
+     "rows_match_decisions": true,
+     "sha256": "fbdebdc39d4cf367299ec670a0d3988c190f988b77b9178ff569615051b8ceae",
+     "sha256_recorded": "fbdebdc39d4cf367299ec670a0d3988c190f988b77b9178ff569615051b8ceae"
+    },
+    "work_labels": {
+     "path": ".tmp_v410_s1c/work/d1-s0d1-n3300-seed17-shard/labels.jsonl",
+     "present": true,
+     "rows": 3276,
+     "kinds": {
+      "report": 1,
+      "decision": 3275
+     },
+     "decision_rows": 3275,
+     "report_rows": 1,
+     "sha256": "13b0d14e6f009d056c8e6d8d6691c9119156a1261ce00fbc7e29574b32b95834",
+     "bytes": 13304486,
+     "decisions_beyond_stored": 1,
+     "kept": true
+    },
+    "alignment": {
+     "method": "hash-checkpoint",
+     "decisions": 3274,
+     "boundaries": 6548,
+     "checkpoints_equal": 6548,
+     "checkpoints_mismatched": 0
+    },
+    "channel_a": {
+     "decisions": 3275,
+     "decisions_requested": 3300,
+     "stopped_early": true,
+     "stop_reason": "stage_changed",
+     "stage_clear": true,
+     "deaths_observed": 0,
+     "frames_committed": 13100,
+     "labels_sha256": "13b0d14e6f009d056c8e6d8d6691c9119156a1261ce00fbc7e29574b32b95834",
+     "exit_code": 0
+    },
+    "load": {
+     "samples": 3274,
+     "expected_samples": 3274,
+     "samples_match": true,
+     "obs_spec_version": "obs-v3",
+     "obs_spec_digest": "ef2fbd15385f26f425db2bfe855d105ee009023acb08c26916e811963553a105",
+     "digest_matches_frozen": true,
+     "unresolved": 0,
+     "play_shape": [
+      3274,
+      4,
+      112,
+      96
+     ],
+     "hud_shape": [
+      3274,
+      56,
+      160
+     ],
+     "act_hist_shape": [
+      3274,
+      8,
+      18
+     ],
+     "frames": [
+      0,
+      13096
+     ],
+     "decisions": 3274
+    },
+    "teacher_fps": 38.618,
+    "env_fps": 105.208
+   },
+   {
+    "shard": "d1-s0d1-n3300-seed18-shard",
+    "stage": 0,
+    "seed": 18,
+    "start_mode": "shard",
+    "collected_in": "s1c",
+    "decisions_requested": 3300,
+    "decisions": 3298,
+    "frames": [
+     0,
+     13192
+    ],
+    "frames_from_decisions": 13192,
+    "status": "ok",
+    "exit_code": 0,
+    "exit_code_source": "run_record",
+    "wall_s": 406.275,
+    "stop_reason": "stage_changed",
+    "stage_clear": true,
+    "deaths_observed": 0,
+    "transition_trim": false,
+    "obs_spec_version": "obs-v3",
+    "obs_spec_digest": "ef2fbd15385f26f425db2bfe855d105ee009023acb08c26916e811963553a105",
+    "obs": {
+     "play96x112": {
+      "path": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed18-shard/obs/play96x112.npy",
+      "shape": [
+       3298,
+       4,
+       112,
+       96
+      ],
+      "dtype": "uint8",
+      "rows": 3298,
+      "bytes": 141840906,
+      "sha256": "baac53fa92c64408e3a6247ef8afc8d45c7bcaf252e99b86919068a2e4ba7bd3",
+      "sha256_recorded": "baac53fa92c64408e3a6247ef8afc8d45c7bcaf252e99b86919068a2e4ba7bd3",
+      "sha256_matches_recorded": true
+     },
+     "hud": {
+      "path": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed18-shard/obs/hud.npy",
+      "shape": [
+       3298,
+       56,
+       160
+      ],
+      "dtype": "uint8",
+      "rows": 3298,
+      "bytes": 29550602,
+      "sha256": "f4b61a0b2034dcae9159df7afa81a9cb6bde3ca3d46bfe2864759dd73b3c96de",
+      "sha256_recorded": "f4b61a0b2034dcae9159df7afa81a9cb6bde3ca3d46bfe2864759dd73b3c96de",
+      "sha256_matches_recorded": true
+     },
+     "act_hist": {
+      "path": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed18-shard/obs/act_hist.npy",
+      "shape": [
+       3298,
+       8,
+       18
+      ],
+      "dtype": "uint8",
+      "rows": 3298,
+      "bytes": 475434,
+      "sha256": "cb0d20a40c4885443a792e7d1b2e11d8947a34dcde59064e22e284d1067bcad0",
+      "sha256_recorded": "cb0d20a40c4885443a792e7d1b2e11d8947a34dcde59064e22e284d1067bcad0",
+      "sha256_matches_recorded": true
+     }
+    },
+    "obs_rows_match_decisions": true,
+    "obs_sha256_all_match_recorded": true,
+    "labels": {
+     "path": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed18-shard/labels.jsonl",
+     "rows": 3298,
+     "rows_match_decisions": true,
+     "sha256": "ef437bb0402f64301fec1789b7a726939fdeb1240ae0bcfd08f13f43a05baa54",
+     "sha256_recorded": "ef437bb0402f64301fec1789b7a726939fdeb1240ae0bcfd08f13f43a05baa54"
+    },
+    "work_labels": {
+     "path": ".tmp_v410_s1c/work/d1-s0d1-n3300-seed18-shard/labels.jsonl",
+     "present": true,
+     "rows": 3300,
+     "kinds": {
+      "report": 1,
+      "decision": 3299
+     },
+     "decision_rows": 3299,
+     "report_rows": 1,
+     "sha256": "aeb8f5aac48888c6767c8e80eb5e8b1af5bb6f3b41e298682caf878e38b0c8a3",
+     "bytes": 13384941,
+     "decisions_beyond_stored": 1,
+     "kept": true
+    },
+    "alignment": {
+     "method": "hash-checkpoint",
+     "decisions": 3298,
+     "boundaries": 6596,
+     "checkpoints_equal": 6596,
+     "checkpoints_mismatched": 0
+    },
+    "channel_a": {
+     "decisions": 3299,
+     "decisions_requested": 3300,
+     "stopped_early": true,
+     "stop_reason": "stage_changed",
+     "stage_clear": true,
+     "deaths_observed": 0,
+     "frames_committed": 13196,
+     "labels_sha256": "aeb8f5aac48888c6767c8e80eb5e8b1af5bb6f3b41e298682caf878e38b0c8a3",
+     "exit_code": 0
+    },
+    "load": {
+     "samples": 3298,
+     "expected_samples": 3298,
+     "samples_match": true,
+     "obs_spec_version": "obs-v3",
+     "obs_spec_digest": "ef2fbd15385f26f425db2bfe855d105ee009023acb08c26916e811963553a105",
+     "digest_matches_frozen": true,
+     "unresolved": 0,
+     "play_shape": [
+      3298,
+      4,
+      112,
+      96
+     ],
+     "hud_shape": [
+      3298,
+      56,
+      160
+     ],
+     "act_hist_shape": [
+      3298,
+      8,
+      18
+     ],
+     "frames": [
+      0,
+      13192
+     ],
+     "decisions": 3298
+    },
+    "teacher_fps": 46.562,
+    "env_fps": 111.665
+   },
+   {
+    "shard": "d1-s0d1-n3300-seed19-shard",
+    "stage": 0,
+    "seed": 19,
+    "start_mode": "shard",
+    "collected_in": "s1c",
+    "decisions_requested": 3300,
+    "decisions": 3300,
+    "frames": [
+     0,
+     13200
+    ],
+    "frames_from_decisions": 13200,
+    "status": "ok",
+    "exit_code": 0,
+    "exit_code_source": "run_record",
+    "wall_s": 408.036,
+    "stop_reason": "max_frames",
+    "stage_clear": false,
+    "deaths_observed": 0,
+    "transition_trim": false,
+    "obs_spec_version": "obs-v3",
+    "obs_spec_digest": "ef2fbd15385f26f425db2bfe855d105ee009023acb08c26916e811963553a105",
+    "obs": {
+     "play96x112": {
+      "path": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed19-shard/obs/play96x112.npy",
+      "shape": [
+       3300,
+       4,
+       112,
+       96
+      ],
+      "dtype": "uint8",
+      "rows": 3300,
+      "bytes": 141926922,
+      "sha256": "6803941291c4824d7ba1ea57e754b432031b33b7912ce65b9d338350f1d8524e",
+      "sha256_recorded": "6803941291c4824d7ba1ea57e754b432031b33b7912ce65b9d338350f1d8524e",
+      "sha256_matches_recorded": true
+     },
+     "hud": {
+      "path": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed19-shard/obs/hud.npy",
+      "shape": [
+       3300,
+       56,
+       160
+      ],
+      "dtype": "uint8",
+      "rows": 3300,
+      "bytes": 29568522,
+      "sha256": "880649f3c034e2972f2afe93f320760b33a0caef4edd1d19016d43151074f5b3",
+      "sha256_recorded": "880649f3c034e2972f2afe93f320760b33a0caef4edd1d19016d43151074f5b3",
+      "sha256_matches_recorded": true
+     },
+     "act_hist": {
+      "path": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed19-shard/obs/act_hist.npy",
+      "shape": [
+       3300,
+       8,
+       18
+      ],
+      "dtype": "uint8",
+      "rows": 3300,
+      "bytes": 475722,
+      "sha256": "9414712f136f21a4e7a345f1ad41a560a9c50ef623c57a64e954606194b24a73",
+      "sha256_recorded": "9414712f136f21a4e7a345f1ad41a560a9c50ef623c57a64e954606194b24a73",
+      "sha256_matches_recorded": true
+     }
+    },
+    "obs_rows_match_decisions": true,
+    "obs_sha256_all_match_recorded": true,
+    "labels": {
+     "path": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed19-shard/labels.jsonl",
+     "rows": 3300,
+     "rows_match_decisions": true,
+     "sha256": "b89668107460c87a870e0e95077bbeea33735137302a2f3fe4a82fc94210a095",
+     "sha256_recorded": "b89668107460c87a870e0e95077bbeea33735137302a2f3fe4a82fc94210a095"
+    },
+    "work_labels": {
+     "path": ".tmp_v410_s1c/work/d1-s0d1-n3300-seed19-shard/labels.jsonl",
+     "present": true,
+     "rows": 3301,
+     "kinds": {
+      "report": 1,
+      "decision": 3300
+     },
+     "decision_rows": 3300,
+     "report_rows": 1,
+     "sha256": "c545f905883dd22e7698652717aad0197f3c19323de538f80c6d102340c30538",
+     "bytes": 13402027,
+     "decisions_beyond_stored": 0,
+     "kept": true
+    },
+    "alignment": {
+     "method": "hash-checkpoint",
+     "decisions": 3300,
+     "boundaries": 6600,
+     "checkpoints_equal": 6600,
+     "checkpoints_mismatched": 0
+    },
+    "channel_a": {
+     "decisions": 3300,
+     "decisions_requested": 3300,
+     "stopped_early": false,
+     "stop_reason": "max_frames",
+     "stage_clear": false,
+     "deaths_observed": 0,
+     "frames_committed": 13200,
+     "labels_sha256": "c545f905883dd22e7698652717aad0197f3c19323de538f80c6d102340c30538",
+     "exit_code": 0
+    },
+    "load": {
+     "samples": 3300,
+     "expected_samples": 3300,
+     "samples_match": true,
+     "obs_spec_version": "obs-v3",
+     "obs_spec_digest": "ef2fbd15385f26f425db2bfe855d105ee009023acb08c26916e811963553a105",
+     "digest_matches_frozen": true,
+     "unresolved": 0,
+     "play_shape": [
+      3300,
+      4,
+      112,
+      96
+     ],
+     "hud_shape": [
+      3300,
+      56,
+      160
+     ],
+     "act_hist_shape": [
+      3300,
+      8,
+      18
+     ],
+     "frames": [
+      0,
+      13200
+     ],
+     "decisions": 3300
+    },
+    "teacher_fps": 46.242,
+    "env_fps": 111.743
+   },
+   {
+    "shard": "d1-s0d1-n3300-seed20-shard",
+    "stage": 0,
+    "seed": 20,
+    "start_mode": "shard",
+    "collected_in": "s1c",
+    "decisions_requested": 3300,
+    "decisions": 3274,
+    "frames": [
+     0,
+     13096
+    ],
+    "frames_from_decisions": 13096,
+    "status": "ok",
+    "exit_code": 0,
+    "exit_code_source": "run_record",
+    "wall_s": 403.332,
+    "stop_reason": "stage_changed",
+    "stage_clear": true,
+    "deaths_observed": 0,
+    "transition_trim": false,
+    "obs_spec_version": "obs-v3",
+    "obs_spec_digest": "ef2fbd15385f26f425db2bfe855d105ee009023acb08c26916e811963553a105",
+    "obs": {
+     "play96x112": {
+      "path": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed20-shard/obs/play96x112.npy",
+      "shape": [
+       3274,
+       4,
+       112,
+       96
+      ],
+      "dtype": "uint8",
+      "rows": 3274,
+      "bytes": 140808714,
+      "sha256": "3d494ca960b4bcd3f81c95fcf23b741f240c882c4abb165ce61b3d56228d4569",
+      "sha256_recorded": "3d494ca960b4bcd3f81c95fcf23b741f240c882c4abb165ce61b3d56228d4569",
+      "sha256_matches_recorded": true
+     },
+     "hud": {
+      "path": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed20-shard/obs/hud.npy",
+      "shape": [
+       3274,
+       56,
+       160
+      ],
+      "dtype": "uint8",
+      "rows": 3274,
+      "bytes": 29335562,
+      "sha256": "fcbc19ce44425ab57b35df44f6b85ab39c2001236f9eeab85f3b94d7951faa48",
+      "sha256_recorded": "fcbc19ce44425ab57b35df44f6b85ab39c2001236f9eeab85f3b94d7951faa48",
+      "sha256_matches_recorded": true
+     },
+     "act_hist": {
+      "path": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed20-shard/obs/act_hist.npy",
+      "shape": [
+       3274,
+       8,
+       18
+      ],
+      "dtype": "uint8",
+      "rows": 3274,
+      "bytes": 471978,
+      "sha256": "5da763c702f57210b99b4b11cb86ac7b69ca64cce1ee3c4eb91017eb2fdbe824",
+      "sha256_recorded": "5da763c702f57210b99b4b11cb86ac7b69ca64cce1ee3c4eb91017eb2fdbe824",
+      "sha256_matches_recorded": true
+     }
+    },
+    "obs_rows_match_decisions": true,
+    "obs_sha256_all_match_recorded": true,
+    "labels": {
+     "path": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed20-shard/labels.jsonl",
+     "rows": 3274,
+     "rows_match_decisions": true,
+     "sha256": "12416a378065711d7df07afc83b513df2bbac39e37971ed7937fa7681c1e2c8e",
+     "sha256_recorded": "12416a378065711d7df07afc83b513df2bbac39e37971ed7937fa7681c1e2c8e"
+    },
+    "work_labels": {
+     "path": ".tmp_v410_s1c/work/d1-s0d1-n3300-seed20-shard/labels.jsonl",
+     "present": true,
+     "rows": 3276,
+     "kinds": {
+      "report": 1,
+      "decision": 3275
+     },
+     "decision_rows": 3275,
+     "report_rows": 1,
+     "sha256": "007d3f17fd549efc48a1c68e9addf6194f5c6cb08c24515cab9e12a3dc2d0cba",
+     "bytes": 13294336,
+     "decisions_beyond_stored": 1,
+     "kept": true
+    },
+    "alignment": {
+     "method": "hash-checkpoint",
+     "decisions": 3274,
+     "boundaries": 6548,
+     "checkpoints_equal": 6548,
+     "checkpoints_mismatched": 0
+    },
+    "channel_a": {
+     "decisions": 3275,
+     "decisions_requested": 3300,
+     "stopped_early": true,
+     "stop_reason": "stage_changed",
+     "stage_clear": true,
+     "deaths_observed": 0,
+     "frames_committed": 13100,
+     "labels_sha256": "007d3f17fd549efc48a1c68e9addf6194f5c6cb08c24515cab9e12a3dc2d0cba",
+     "exit_code": 0
+    },
+    "load": {
+     "samples": 3274,
+     "expected_samples": 3274,
+     "samples_match": true,
+     "obs_spec_version": "obs-v3",
+     "obs_spec_digest": "ef2fbd15385f26f425db2bfe855d105ee009023acb08c26916e811963553a105",
+     "digest_matches_frozen": true,
+     "unresolved": 0,
+     "play_shape": [
+      3274,
+      4,
+      112,
+      96
+     ],
+     "hud_shape": [
+      3274,
+      56,
+      160
+     ],
+     "act_hist_shape": [
+      3274,
+      8,
+      18
+     ],
+     "frames": [
+      0,
+      13096
+     ],
+     "decisions": 3274
+    },
+    "teacher_fps": 46.488,
+    "env_fps": 111.958
+   }
+  ],
+  "totals": {
+   "shards": 12,
+   "decisions": 39518,
+   "frames_from_decisions": 158072,
+   "frames_stage_frames": 158072,
+   "stage_clear": 5,
+   "deaths_observed": 0,
+   "trimmed": 0,
+   "checkpoints_equal": 79036,
+   "checkpoints_total": 79036,
+   "work_label_rows": 39535,
+   "obs_sha256_all_match_recorded": true,
+   "obs_rows_match_decisions": true,
+   "labels_rows_match_decisions": true
+  }
+ },
+ "obs_planes_sha256": {
+  "d1-s0d1-n3300-seed9-shard": {
+   "play96x112": "77580b50684327be4417757b516779c375500e0fbcda6a693a197ce230342972",
+   "hud": "1aff2a1f1e9051927aff92a0f76ec7a52e966b4b4a265ab68fdd2a5ce1c65b0c",
+   "act_hist": "c1259480c376581d80d4bab5d8b09adebc32227f21cf9e040048543e227be00b"
+  },
+  "d1-s0d1-n3300-seed10-shard": {
+   "play96x112": "7625377a802867b5443aeb11d06628256b87a506ec6917e30fbf839ba093a3e9",
+   "hud": "4460b807cd730fff0c49bc44f7f24b1b55ca28682761b940c2294870ee138019",
+   "act_hist": "44cb1aabe90b55da68022d0d3d3266e28565d0adeae186230169026f633aa7ee"
+  },
+  "d1-s0d1-n3300-seed11-shard": {
+   "play96x112": "ef5d5e7cc8530886adc18915d9c3b8430fe875b3d44aa985d371bdf4fb0557a8",
+   "hud": "78066f0c60df47d3e887679a97ffbc0d452c76be125ac0358cbf7a04236e43d2",
+   "act_hist": "755b8b51b9888e8a09bdd89fb8948619242c81a5cee57cac0c7404f0c22c4a24"
+  },
+  "d1-s0d1-n3300-seed12-shard": {
+   "play96x112": "9946291c300273297e8f496d6610e393a0aef88dd34456b3410baeff41912f2c",
+   "hud": "3385f8ea1d18aa98210c0af1572dea13b828a0f4182a6eb7ea4443834868a1f3",
+   "act_hist": "5b3188d4f38e693efc5bbbc196507d1e7d98c60082fce86f33d615e217e32c3b"
+  },
+  "d1-s0d1-n3300-seed13-shard": {
+   "play96x112": "aac84a385aab64f62caf78f7a6b1bcc0182ba34225759367a9aef101745cc84f",
+   "hud": "b98efbaa168cac1e51a13e8624d4111934b829a150bee5296d371cbc61028210",
+   "act_hist": "de7a6f8c0e6c22a1bd02bea9b438704a1273ed9fd33221b3c093eff7a99081c1"
+  },
+  "d1-s0d1-n3300-seed14-shard": {
+   "play96x112": "f76c12e4c0f9000e89210caf357c1c3d2293133258a89d1d10f31349163692a6",
+   "hud": "a043ff7c6605c9d06145562245c3ea6b6ccc1ea66a1ec389a5407a88fdc3534d",
+   "act_hist": "6bffdf30022b23d66e35b31bf07f2ed3bd7b76642e02df787c7e41806c2aa1d3"
+  },
+  "d1-s0d1-n3300-seed15-shard": {
+   "play96x112": "6ee1e713e185dc32c65dc017ac6c1d14e4dd78013763774715213661d6b1e239",
+   "hud": "79527a539a603e94486fd724711a1471e3d29c0ccc7aab727b82a777b27a839c",
+   "act_hist": "8d6502ca67565d9a7cc64572d11934ff52219235bb359f27f40fb855ddf7ea9b"
+  },
+  "d1-s0d1-n3300-seed16-shard": {
+   "play96x112": "48dfcc0d405df11fd1c3335b399ff63cfbd67a2f64b53f85aee08a6a3ffcedfb",
+   "hud": "a6b88a4523be773651fccae27be214a02845ee00b49de20d51ac0b7cb706a693",
+   "act_hist": "94dbe48a8368aff7624e949fd5b891e475b6d095b6a4846311ab6b4fbc45a3ca"
+  },
+  "d1-s0d1-n3300-seed17-shard": {
+   "play96x112": "5f3adc91ea03b81c8003f7ef365b56fa338a1c3a41d0fa2b19bb35d21383945c",
+   "hud": "582aeeba8c38cbf8fcea3fae417d94654158d0639d98ee85ee559057b0f7edab",
+   "act_hist": "cadc49549151e2079ab7482046d1b9bfbc92dc788802f1b2aa98ac996d270f39"
+  },
+  "d1-s0d1-n3300-seed18-shard": {
+   "play96x112": "baac53fa92c64408e3a6247ef8afc8d45c7bcaf252e99b86919068a2e4ba7bd3",
+   "hud": "f4b61a0b2034dcae9159df7afa81a9cb6bde3ca3d46bfe2864759dd73b3c96de",
+   "act_hist": "cb0d20a40c4885443a792e7d1b2e11d8947a34dcde59064e22e284d1067bcad0"
+  },
+  "d1-s0d1-n3300-seed19-shard": {
+   "play96x112": "6803941291c4824d7ba1ea57e754b432031b33b7912ce65b9d338350f1d8524e",
+   "hud": "880649f3c034e2972f2afe93f320760b33a0caef4edd1d19016d43151074f5b3",
+   "act_hist": "9414712f136f21a4e7a345f1ad41a560a9c50ef623c57a64e954606194b24a73"
+  },
+  "d1-s0d1-n3300-seed20-shard": {
+   "play96x112": "3d494ca960b4bcd3f81c95fcf23b741f240c882c4abb165ce61b3d56228d4569",
+   "hud": "fcbc19ce44425ab57b35df44f6b85ab39c2001236f9eeab85f3b94d7951faa48",
+   "act_hist": "5da763c702f57210b99b4b11cb86ac7b69ca64cce1ee3c4eb91017eb2fdbe824"
+  }
+ },
+ "work_labels_kept": {
+  "d1-s0d1-n3300-seed9-shard": {
+   "path": ".tmp_v410_s1c/work/d1-s0d1-n3300-seed9-shard/labels.jsonl",
+   "rows": 3301,
+   "decision_rows": 3300,
+   "sha256": "6fe4dafca75f32261e32bd5edf2fb216633041c7d6203e46a67d930499676cb2",
+   "kept": true
+  },
+  "d1-s0d1-n3300-seed10-shard": {
+   "path": ".tmp_v410_s1c/work/d1-s0d1-n3300-seed10-shard/labels.jsonl",
+   "rows": 3301,
+   "decision_rows": 3300,
+   "sha256": "24b9ef25728d4c23c5ed19cfdc96849f8baa1198c32119b8029f0a471823975e",
+   "kept": true
+  },
+  "d1-s0d1-n3300-seed11-shard": {
+   "path": ".tmp_v410_s1c/work/d1-s0d1-n3300-seed11-shard/labels.jsonl",
+   "rows": 3301,
+   "decision_rows": 3300,
+   "sha256": "32cd6f895706dcb3fdf890da8d1e327a7f6079d8328b31e29098a7eaa3b6a2bd",
+   "kept": true
+  },
+  "d1-s0d1-n3300-seed12-shard": {
+   "path": ".tmp_v410_s1c/work/d1-s0d1-n3300-seed12-shard/labels.jsonl",
+   "rows": 3300,
+   "decision_rows": 3299,
+   "sha256": "d5027f48b0ad617390187993da438cb89a19f43e5320e9b6003a65a075f915f1",
+   "kept": true
+  },
+  "d1-s0d1-n3300-seed13-shard": {
+   "path": ".tmp_v410_s1c/work/d1-s0d1-n3300-seed13-shard/labels.jsonl",
+   "rows": 3276,
+   "decision_rows": 3275,
+   "sha256": "1700ddec90cbf323b89c6281bdd4fda24f912ca0e45f96ec714616da5bd17ff1",
+   "kept": true
+  },
+  "d1-s0d1-n3300-seed14-shard": {
+   "path": ".tmp_v410_s1c/work/d1-s0d1-n3300-seed14-shard/labels.jsonl",
+   "rows": 3301,
+   "decision_rows": 3300,
+   "sha256": "bdf276a868fcf00f717ebfbf051e8ff60927769b9bf4b537ffc3f36e699ab4a1",
+   "kept": true
+  },
+  "d1-s0d1-n3300-seed15-shard": {
+   "path": ".tmp_v410_s1c/work/d1-s0d1-n3300-seed15-shard/labels.jsonl",
+   "rows": 3301,
+   "decision_rows": 3300,
+   "sha256": "5da62af2608b8930bea81c7201e4d1d27d449f745ed46d0fd7f19723f127dd8e",
+   "kept": true
+  },
+  "d1-s0d1-n3300-seed16-shard": {
+   "path": ".tmp_v410_s1c/work/d1-s0d1-n3300-seed16-shard/labels.jsonl",
+   "rows": 3301,
+   "decision_rows": 3300,
+   "sha256": "8e4bd7ee94310aa3075c042936cc40ca710ea8095b074e2f9d12545ba1d68c28",
+   "kept": true
+  },
+  "d1-s0d1-n3300-seed17-shard": {
+   "path": ".tmp_v410_s1c/work/d1-s0d1-n3300-seed17-shard/labels.jsonl",
+   "rows": 3276,
+   "decision_rows": 3275,
+   "sha256": "13b0d14e6f009d056c8e6d8d6691c9119156a1261ce00fbc7e29574b32b95834",
+   "kept": true
+  },
+  "d1-s0d1-n3300-seed18-shard": {
+   "path": ".tmp_v410_s1c/work/d1-s0d1-n3300-seed18-shard/labels.jsonl",
+   "rows": 3300,
+   "decision_rows": 3299,
+   "sha256": "aeb8f5aac48888c6767c8e80eb5e8b1af5bb6f3b41e298682caf878e38b0c8a3",
+   "kept": true
+  },
+  "d1-s0d1-n3300-seed19-shard": {
+   "path": ".tmp_v410_s1c/work/d1-s0d1-n3300-seed19-shard/labels.jsonl",
+   "rows": 3301,
+   "decision_rows": 3300,
+   "sha256": "c545f905883dd22e7698652717aad0197f3c19323de538f80c6d102340c30538",
+   "kept": true
+  },
+  "d1-s0d1-n3300-seed20-shard": {
+   "path": ".tmp_v410_s1c/work/d1-s0d1-n3300-seed20-shard/labels.jsonl",
+   "rows": 3276,
+   "decision_rows": 3275,
+   "sha256": "007d3f17fd549efc48a1c68e9addf6194f5c6cb08c24515cab9e12a3dc2d0cba",
+   "kept": true
+  }
+ },
+ "relabel": {
+  "manifest": "Document/Update/Alpha/v4.1.0/evidence/WP03/s1c_relabel.json",
+  "shards_processed": 12,
+  "decisions": 39518,
+  "work_decisions": 39523,
+  "trimmed_decisions": 5,
+  "alive": 39330,
+  "dead": 0,
+  "unknown": 188,
+  "model_mismatch": 188,
+  "horizon_missing": 39518,
+  "s1_partial": {
+   "status": "shortfall",
+   "passed": false,
+   "decisions": 39518,
+   "unique_seeds": 12,
+   "shortfall_decisions": 10482,
+   "shortfall_seeds": 8,
+   "audit": ".tmp_v410_s1c/relabel/s1c_partial_audit.json"
+  }
+ },
+ "deaths": {
+  "shards_with_deaths": [],
+  "shards_not_clearing": [
+   "d1-s0d1-n3300-seed9-shard",
+   "d1-s0d1-n3300-seed10-shard",
+   "d1-s0d1-n3300-seed11-shard",
+   "d1-s0d1-n3300-seed14-shard",
+   "d1-s0d1-n3300-seed15-shard",
+   "d1-s0d1-n3300-seed16-shard",
+   "d1-s0d1-n3300-seed19-shard"
+  ],
+  "note": "a death is recorded as it happened; no decision is padded, repeated or invented to reach a target"
+ },
+ "commands": [
+  {
+   "name": "smoke_probe",
+   "log": ".tmp_v410_s1c/logs/smoke_probe.log",
+   "log_present": true,
+   "argv": [
+    "env",
+    "-u",
+    "DISPLAY",
+    "/root/v400-venv/bin/python",
+    "tools/rl/v400_d1_collect.py",
+    "--phase",
+    "probe",
+    "--stages",
+    "0",
+    "--seeds",
+    "9",
+    "--probe-cap-frames",
+    "16000",
+    "--work-dir",
+    ".tmp_v410_s1c",
+    "--out-dir",
+    ".tmp_v410_s1c/d1",
+    "--data-root-prefix",
+    "/root/v400-data/s1c",
+    "--engine",
+    "/root/Touhou_RL/third_party/th08-rl/build/rl_v3",
+    "--expected-sha",
+    "691bfd77b7eca3361aa8bb7af0977556a70cc73a070b29a2447222ba7a568ef6"
+   ],
+   "exit_code": 0,
+   "start_utc": "2026-11-12T19:11:21Z",
+   "end_utc": "2026-11-12T19:14:59Z"
+  },
+  {
+   "name": "smoke_plan",
+   "log": ".tmp_v410_s1c/logs/smoke_plan.log",
+   "log_present": true,
+   "argv": [
+    "env",
+    "-u",
+    "DISPLAY",
+    "/root/v400-venv/bin/python",
+    "tools/rl/v400_d1_collect.py",
+    "--phase",
+    "plan",
+    "--plan-name",
+    "smoke",
+    "--stages",
+    "0",
+    "--seeds",
+    "9",
+    "--decisions-per-shard",
+    "3300",
+    "--plan-limit-per-stage",
+    "1",
+    "--work-dir",
+    ".tmp_v410_s1c",
+    "--out-dir",
+    ".tmp_v410_s1c/d1",
+    "--data-root-prefix",
+    "/root/v400-data/s1c",
+    "--engine",
+    "/root/Touhou_RL/third_party/th08-rl/build/rl_v3",
+    "--expected-sha",
+    "691bfd77b7eca3361aa8bb7af0977556a70cc73a070b29a2447222ba7a568ef6"
+   ],
+   "exit_code": 0,
+   "start_utc": "2026-11-12T19:15:04Z",
+   "end_utc": "2026-11-12T19:15:13Z"
+  },
+  {
+   "name": "smoke_run",
+   "log": ".tmp_v410_s1c/logs/smoke_run.log",
+   "log_present": true,
+   "argv": [
+    "env",
+    "-u",
+    "DISPLAY",
+    "/root/v400-venv/bin/python",
+    "tools/rl/v400_d1_collect.py",
+    "--phase",
+    "run",
+    "--plan-name",
+    "smoke",
+    "--workers",
+    "1",
+    "--work-dir",
+    ".tmp_v410_s1c",
+    "--out-dir",
+    ".tmp_v410_s1c/d1",
+    "--data-root-prefix",
+    "/root/v400-data/s1c",
+    "--engine",
+    "/root/Touhou_RL/third_party/th08-rl/build/rl_v3",
+    "--expected-sha",
+    "691bfd77b7eca3361aa8bb7af0977556a70cc73a070b29a2447222ba7a568ef6"
+   ],
+   "exit_code": 0,
+   "start_utc": "2026-11-12T19:15:18Z",
+   "end_utc": "2026-11-12T19:20:43Z"
+  },
+  {
+   "name": "main_probe",
+   "log": ".tmp_v410_s1c/logs/main_probe.log",
+   "log_present": true,
+   "argv": [
+    "env",
+    "-u",
+    "DISPLAY",
+    "/root/v400-venv/bin/python",
+    "tools/rl/v400_d1_collect.py",
+    "--phase",
+    "probe",
+    "--stages",
+    "0",
+    "--seeds",
+    "9-20",
+    "--probe-cap-frames",
+    "16000",
+    "--work-dir",
+    ".tmp_v410_s1c",
+    "--out-dir",
+    ".tmp_v410_s1c/d1",
+    "--data-root-prefix",
+    "/root/v400-data/s1c",
+    "--engine",
+    "/root/Touhou_RL/third_party/th08-rl/build/rl_v3",
+    "--expected-sha",
+    "691bfd77b7eca3361aa8bb7af0977556a70cc73a070b29a2447222ba7a568ef6"
+   ],
+   "exit_code": 0,
+   "start_utc": "2026-11-12T19:21:26Z",
+   "end_utc": "2026-11-12T19:24:52Z"
+  },
+  {
+   "name": "main_plan",
+   "log": ".tmp_v410_s1c/logs/main_plan.log",
+   "log_present": true,
+   "argv": [
+    "env",
+    "-u",
+    "DISPLAY",
+    "/root/v400-venv/bin/python",
+    "tools/rl/v400_d1_collect.py",
+    "--phase",
+    "plan",
+    "--plan-name",
+    "s1c",
+    "--stages",
+    "0",
+    "--seeds",
+    "9-20",
+    "--decisions-per-shard",
+    "3300",
+    "--plan-limit-per-stage",
+    "12",
+    "--work-dir",
+    ".tmp_v410_s1c",
+    "--out-dir",
+    ".tmp_v410_s1c/d1",
+    "--data-root-prefix",
+    "/root/v400-data/s1c",
+    "--engine",
+    "/root/Touhou_RL/third_party/th08-rl/build/rl_v3",
+    "--expected-sha",
+    "691bfd77b7eca3361aa8bb7af0977556a70cc73a070b29a2447222ba7a568ef6"
+   ],
+   "exit_code": 0,
+   "start_utc": "2026-11-12T19:24:56Z",
+   "end_utc": "2026-11-12T19:25:01Z"
+  },
+  {
+   "name": "main_run",
+   "log": ".tmp_v410_s1c/logs/main_run.log",
+   "log_present": true,
+   "argv": [
+    "env",
+    "-u",
+    "DISPLAY",
+    "/root/v400-venv/bin/python",
+    "tools/rl/v400_d1_collect.py",
+    "--phase",
+    "run",
+    "--plan-name",
+    "s1c",
+    "--workers",
+    "4",
+    "--work-dir",
+    ".tmp_v410_s1c",
+    "--out-dir",
+    ".tmp_v410_s1c/d1",
+    "--data-root-prefix",
+    "/root/v400-data/s1c",
+    "--engine",
+    "/root/Touhou_RL/third_party/th08-rl/build/rl_v3",
+    "--expected-sha",
+    "691bfd77b7eca3361aa8bb7af0977556a70cc73a070b29a2447222ba7a568ef6"
+   ],
+   "exit_code": 0,
+   "start_utc": "2026-11-12T19:25:04Z",
+   "end_utc": "2026-11-12T19:49:51Z"
+  }
+ ],
+ "not_claimed": [
+  "not a training run",
+  "not D410-MULTI (stage 0 only)",
+  "not the WP03.1b dev-seed shards: seeds 1000-1011 stay dev-only",
+  "the 8 existing shards were collected in WP03.1a with the same engine and obs-v3 contract; they were re-verified, never re-collected"
+ ],
+ "new_shards": [
+  "d1-s0d1-n3300-seed9-shard",
+  "d1-s0d1-n3300-seed10-shard",
+  "d1-s0d1-n3300-seed11-shard",
+  "d1-s0d1-n3300-seed12-shard",
+  "d1-s0d1-n3300-seed13-shard",
+  "d1-s0d1-n3300-seed14-shard",
+  "d1-s0d1-n3300-seed15-shard",
+  "d1-s0d1-n3300-seed16-shard",
+  "d1-s0d1-n3300-seed17-shard",
+  "d1-s0d1-n3300-seed18-shard",
+  "d1-s0d1-n3300-seed19-shard",
+  "d1-s0d1-n3300-seed20-shard"
+ ]
+}

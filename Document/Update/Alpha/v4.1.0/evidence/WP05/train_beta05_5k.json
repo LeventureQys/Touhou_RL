@@ -1,0 +1,4642 @@
+{
+  "schema": "v410-wp05.8-beta05-5k-evidence/1",
+  "kind": "dagger-train-beta05-5k-steps",
+  "wp": "WP05.8",
+  "version": "4.1.0",
+  "generated_at": "2026-11-13T06:01:54Z",
+  "eval_generated_at": "2026-11-13T06:35:43Z",
+  "tool": "python -m touhou_rl.v410.dagger.labels (WP05.2) + python -m touhou_rl.v410.dagger.train (WP05.3) + tools/rl/v410_student_eval.py",
+  "argv": [
+    "train",
+    "--steps",
+    "5000",
+    "--batch-size",
+    "128",
+    "--seed",
+    "0",
+    "--s1-share",
+    "0.2",
+    "--device",
+    "auto",
+    "--shard-seeds",
+    "2025-2039",
+    "--shards-root",
+    ".tmp_v410_wp05_round2/shards",
+    "--labels-dir",
+    ".tmp_v410_wp05_train_beta05_5k/labels",
+    "--workdir",
+    ".tmp_v410_wp05_train_beta05_5k",
+    "--out",
+    ".tmp_v410_wp05_train_beta05_5k/train_run.json"
+  ],
+  "exit_code": 0,
+  "purpose": "controlled 5x-budget re-run of WP05.7: same 15 complete beta=0.5 round-2 DAgger shards (52,500 decisions), same mix/optimiser/seed/GPU, but 5,000 steps instead of 1,000, to test whether the 1,000-step 0/20 / mean 1,339.95 dev result was simply undertraining; the 20 dev episodes are descriptive only and are not G410-2",
+  "inputs": {
+    "shards_root": ".tmp_v410_wp05_round2/shards",
+    "complete_shard_seeds": [
+      2025,
+      2026,
+      2027,
+      2028,
+      2029,
+      2030,
+      2031,
+      2032,
+      2033,
+      2034,
+      2035,
+      2036,
+      2037,
+      2038,
+      2039
+    ],
+    "shard_count": 15,
+    "labels_dir": ".tmp_v410_wp05_train_beta05_5k/labels",
+    "s1_audit": "Document/Update/Alpha/v4.1.0/evidence/WP03/s1c_full_audit.json",
+    "s1_train_seeds": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14
+    ],
+    "val_read": false,
+    "test_read": false,
+    "confirm_split_read": false,
+    "collection_evidence": [
+      "evidence/WP05/round2.json",
+      "evidence/WP05/ROUND2.md"
+    ],
+    "reference_beta05_1k": "evidence/WP05/train_beta05.json",
+    "reference_beta1_50k": "evidence/WP05/train_50k.json"
+  },
+  "conversion": {
+    "tool": "python -m touhou_rl.v410.dagger.labels (unmodified)",
+    "shards_converted": 15,
+    "exit_codes": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "tolerance": 8.0,
+    "horizon": 32,
+    "labels_sha256_verified": true,
+    "obs_sha256_verified": true,
+    "seconds_per_shard": {
+      "min": 6,
+      "max": 8
+    },
+    "log": ".tmp_v410_wp05_train_beta05_5k/logs/convert_exit_codes.txt",
+    "verification": ".tmp_v410_wp05_train_beta05_5k/verify_labels.json"
+  },
+  "shards": [
+    {
+      "shard": "dagger-s0d1seed2025",
+      "complete": true,
+      "beta": 0.5,
+      "stop_reason": "decisions",
+      "rollout_checkpoint_sha256": "6ebe4ea91d81d9333bfa1ccc065fc3515bb25b1d3b90a2684cdaa8a0a69b8086",
+      "decisions": 3500,
+      "frames": 7000,
+      "rows": 3500,
+      "labels_bytes": 19659331,
+      "labels_sha256": "170775f26cc469678b48c5e067878c2f8c95ffeb732939d3418e2223ce072912",
+      "labels_sha_verified": true,
+      "obs_sha_verified": true,
+      "alive": 3494,
+      "dead": 0,
+      "unknown": 6,
+      "model_mismatch": 6,
+      "injected": 1730,
+      "agreement": 2804,
+      "disagreement": 696,
+      "verified_candidates": 3500,
+      "candidate_grid": 63000,
+      "tolerance": null,
+      "horizon": null,
+      "ok": true
+    },
+    {
+      "shard": "dagger-s0d1seed2026",
+      "complete": true,
+      "beta": 0.5,
+      "stop_reason": "decisions",
+      "rollout_checkpoint_sha256": "6ebe4ea91d81d9333bfa1ccc065fc3515bb25b1d3b90a2684cdaa8a0a69b8086",
+      "decisions": 3500,
+      "frames": 7000,
+      "rows": 3500,
+      "labels_bytes": 19660083,
+      "labels_sha256": "d4bdc39f23893bc94a5f730d7f5eac1bd69aadc438026a0571c1ee9af9e0650d",
+      "labels_sha_verified": true,
+      "obs_sha_verified": true,
+      "alive": 3451,
+      "dead": 2,
+      "unknown": 47,
+      "model_mismatch": 47,
+      "injected": 1759,
+      "agreement": 2776,
+      "disagreement": 724,
+      "verified_candidates": 3500,
+      "candidate_grid": 63000,
+      "tolerance": null,
+      "horizon": null,
+      "ok": true
+    },
+    {
+      "shard": "dagger-s0d1seed2027",
+      "complete": true,
+      "beta": 0.5,
+      "stop_reason": "decisions",
+      "rollout_checkpoint_sha256": "6ebe4ea91d81d9333bfa1ccc065fc3515bb25b1d3b90a2684cdaa8a0a69b8086",
+      "decisions": 3500,
+      "frames": 7000,
+      "rows": 3500,
+      "labels_bytes": 19655110,
+      "labels_sha256": "8800fcd0da79ee26c92892da77ab4015c7aaa1f946c75d2ac9b9cd7dc0767e92",
+      "labels_sha_verified": true,
+      "obs_sha_verified": true,
+      "alive": 3482,
+      "dead": 0,
+      "unknown": 18,
+      "model_mismatch": 18,
+      "injected": 1754,
+      "agreement": 2703,
+      "disagreement": 797,
+      "verified_candidates": 3500,
+      "candidate_grid": 63000,
+      "tolerance": null,
+      "horizon": null,
+      "ok": true
+    },
+    {
+      "shard": "dagger-s0d1seed2028",
+      "complete": true,
+      "beta": 0.5,
+      "stop_reason": "decisions",
+      "rollout_checkpoint_sha256": "6ebe4ea91d81d9333bfa1ccc065fc3515bb25b1d3b90a2684cdaa8a0a69b8086",
+      "decisions": 3500,
+      "frames": 7000,
+      "rows": 3500,
+      "labels_bytes": 19661164,
+      "labels_sha256": "f9bf46fdd42f030b76f2c4f978a05a054b01c03000427b49b5638fc12d0dc7b7",
+      "labels_sha_verified": true,
+      "obs_sha_verified": true,
+      "alive": 3490,
+      "dead": 0,
+      "unknown": 10,
+      "model_mismatch": 10,
+      "injected": 1787,
+      "agreement": 2703,
+      "disagreement": 797,
+      "verified_candidates": 3500,
+      "candidate_grid": 63000,
+      "tolerance": null,
+      "horizon": null,
+      "ok": true
+    },
+    {
+      "shard": "dagger-s0d1seed2029",
+      "complete": true,
+      "beta": 0.5,
+      "stop_reason": "decisions",
+      "rollout_checkpoint_sha256": "6ebe4ea91d81d9333bfa1ccc065fc3515bb25b1d3b90a2684cdaa8a0a69b8086",
+      "decisions": 3500,
+      "frames": 7000,
+      "rows": 3500,
+      "labels_bytes": 19650787,
+      "labels_sha256": "b9365376073e10d3b398cb8de1dd2ee2604fbf075af770d9ade9ea836954087d",
+      "labels_sha_verified": true,
+      "obs_sha_verified": true,
+      "alive": 3490,
+      "dead": 0,
+      "unknown": 10,
+      "model_mismatch": 10,
+      "injected": 1758,
+      "agreement": 2805,
+      "disagreement": 695,
+      "verified_candidates": 3500,
+      "candidate_grid": 63000,
+      "tolerance": null,
+      "horizon": null,
+      "ok": true
+    },
+    {
+      "shard": "dagger-s0d1seed2030",
+      "complete": true,
+      "beta": 0.5,
+      "stop_reason": "decisions",
+      "rollout_checkpoint_sha256": "6ebe4ea91d81d9333bfa1ccc065fc3515bb25b1d3b90a2684cdaa8a0a69b8086",
+      "decisions": 3500,
+      "frames": 7000,
+      "rows": 3500,
+      "labels_bytes": 19668479,
+      "labels_sha256": "d5221680e2e112754097aad35e0e316f1b1cb8aa5bb89f43787e25cfec47f3b0",
+      "labels_sha_verified": true,
+      "obs_sha_verified": true,
+      "alive": 3452,
+      "dead": 5,
+      "unknown": 43,
+      "model_mismatch": 43,
+      "injected": 1739,
+      "agreement": 2763,
+      "disagreement": 737,
+      "verified_candidates": 3500,
+      "candidate_grid": 63000,
+      "tolerance": null,
+      "horizon": null,
+      "ok": true
+    },
+    {
+      "shard": "dagger-s0d1seed2031",
+      "complete": true,
+      "beta": 0.5,
+      "stop_reason": "decisions",
+      "rollout_checkpoint_sha256": "6ebe4ea91d81d9333bfa1ccc065fc3515bb25b1d3b90a2684cdaa8a0a69b8086",
+      "decisions": 3500,
+      "frames": 7000,
+      "rows": 3500,
+      "labels_bytes": 19657051,
+      "labels_sha256": "a44029cff2d581449dcc02cd32c59c5d520db379b374989158056ce5981d3daf",
+      "labels_sha_verified": true,
+      "obs_sha_verified": true,
+      "alive": 3493,
+      "dead": 0,
+      "unknown": 7,
+      "model_mismatch": 7,
+      "injected": 1751,
+      "agreement": 2872,
+      "disagreement": 628,
+      "verified_candidates": 3500,
+      "candidate_grid": 63000,
+      "tolerance": null,
+      "horizon": null,
+      "ok": true
+    },
+    {
+      "shard": "dagger-s0d1seed2032",
+      "complete": true,
+      "beta": 0.5,
+      "stop_reason": "decisions",
+      "rollout_checkpoint_sha256": "6ebe4ea91d81d9333bfa1ccc065fc3515bb25b1d3b90a2684cdaa8a0a69b8086",
+      "decisions": 3500,
+      "frames": 7000,
+      "rows": 3500,
+      "labels_bytes": 19662714,
+      "labels_sha256": "c8c853e41a942fe9eb8ebe5e0ba94bea581e0b39aa3dd599ab54ce3dd988c7f4",
+      "labels_sha_verified": true,
+      "obs_sha_verified": true,
+      "alive": 3489,
+      "dead": 0,
+      "unknown": 11,
+      "model_mismatch": 11,
+      "injected": 1764,
+      "agreement": 2704,
+      "disagreement": 796,
+      "verified_candidates": 3500,
+      "candidate_grid": 63000,
+      "tolerance": null,
+      "horizon": null,
+      "ok": true
+    },
+    {
+      "shard": "dagger-s0d1seed2033",
+      "complete": true,
+      "beta": 0.5,
+      "stop_reason": "decisions",
+      "rollout_checkpoint_sha256": "6ebe4ea91d81d9333bfa1ccc065fc3515bb25b1d3b90a2684cdaa8a0a69b8086",
+      "decisions": 3500,
+      "frames": 7000,
+      "rows": 3500,
+      "labels_bytes": 19640071,
+      "labels_sha256": "868339ba5ed67bf93925ec10dc751cd3eb3c7a874ace17223b5d23b922cb5132",
+      "labels_sha_verified": true,
+      "obs_sha_verified": true,
+      "alive": 3466,
+      "dead": 3,
+      "unknown": 31,
+      "model_mismatch": 31,
+      "injected": 1721,
+      "agreement": 2890,
+      "disagreement": 610,
+      "verified_candidates": 3500,
+      "candidate_grid": 63000,
+      "tolerance": null,
+      "horizon": null,
+      "ok": true
+    },
+    {
+      "shard": "dagger-s0d1seed2034",
+      "complete": true,
+      "beta": 0.5,
+      "stop_reason": "decisions",
+      "rollout_checkpoint_sha256": "6ebe4ea91d81d9333bfa1ccc065fc3515bb25b1d3b90a2684cdaa8a0a69b8086",
+      "decisions": 3500,
+      "frames": 7000,
+      "rows": 3500,
+      "labels_bytes": 19651722,
+      "labels_sha256": "e00db162a6970e6445617e43bcbfacbfd02bfecd9e01475c0a6c28deff2e67ae",
+      "labels_sha_verified": true,
+      "obs_sha_verified": true,
+      "alive": 3491,
+      "dead": 0,
+      "unknown": 9,
+      "model_mismatch": 9,
+      "injected": 1730,
+      "agreement": 2809,
+      "disagreement": 691,
+      "verified_candidates": 3500,
+      "candidate_grid": 63000,
+      "tolerance": null,
+      "horizon": null,
+      "ok": true
+    },
+    {
+      "shard": "dagger-s0d1seed2035",
+      "complete": true,
+      "beta": 0.5,
+      "stop_reason": "decisions",
+      "rollout_checkpoint_sha256": "6ebe4ea91d81d9333bfa1ccc065fc3515bb25b1d3b90a2684cdaa8a0a69b8086",
+      "decisions": 3500,
+      "frames": 7000,
+      "rows": 3500,
+      "labels_bytes": 19648493,
+      "labels_sha256": "609f84bf4177de55056d5729535a9a57cd9776b43db3436cf89a6b0694039c6f",
+      "labels_sha_verified": true,
+      "obs_sha_verified": true,
+      "alive": 3426,
+      "dead": 3,
+      "unknown": 71,
+      "model_mismatch": 71,
+      "injected": 1826,
+      "agreement": 2905,
+      "disagreement": 595,
+      "verified_candidates": 3500,
+      "candidate_grid": 63000,
+      "tolerance": null,
+      "horizon": null,
+      "ok": true
+    },
+    {
+      "shard": "dagger-s0d1seed2036",
+      "complete": true,
+      "beta": 0.5,
+      "stop_reason": "decisions",
+      "rollout_checkpoint_sha256": "6ebe4ea91d81d9333bfa1ccc065fc3515bb25b1d3b90a2684cdaa8a0a69b8086",
+      "decisions": 3500,
+      "frames": 7000,
+      "rows": 3500,
+      "labels_bytes": 19759383,
+      "labels_sha256": "2b06fc3bdb928e7d184a7db1a7a03c2808caabe99f9117bcc572e1020454b8b3",
+      "labels_sha_verified": true,
+      "obs_sha_verified": true,
+      "alive": 3491,
+      "dead": 2,
+      "unknown": 7,
+      "model_mismatch": 7,
+      "injected": 1765,
+      "agreement": 2734,
+      "disagreement": 766,
+      "verified_candidates": 3500,
+      "candidate_grid": 63000,
+      "tolerance": null,
+      "horizon": null,
+      "ok": true
+    },
+    {
+      "shard": "dagger-s0d1seed2037",
+      "complete": true,
+      "beta": 0.5,
+      "stop_reason": "decisions",
+      "rollout_checkpoint_sha256": "6ebe4ea91d81d9333bfa1ccc065fc3515bb25b1d3b90a2684cdaa8a0a69b8086",
+      "decisions": 3500,
+      "frames": 7000,
+      "rows": 3500,
+      "labels_bytes": 19659678,
+      "labels_sha256": "f45bee9ae53276747a1c15ad1ae411771a7f704cfa6070bf54eef6eb658bb73f",
+      "labels_sha_verified": true,
+      "obs_sha_verified": true,
+      "alive": 3458,
+      "dead": 3,
+      "unknown": 39,
+      "model_mismatch": 39,
+      "injected": 1746,
+      "agreement": 2904,
+      "disagreement": 596,
+      "verified_candidates": 3500,
+      "candidate_grid": 63000,
+      "tolerance": null,
+      "horizon": null,
+      "ok": true
+    },
+    {
+      "shard": "dagger-s0d1seed2038",
+      "complete": true,
+      "beta": 0.5,
+      "stop_reason": "decisions",
+      "rollout_checkpoint_sha256": "6ebe4ea91d81d9333bfa1ccc065fc3515bb25b1d3b90a2684cdaa8a0a69b8086",
+      "decisions": 3500,
+      "frames": 7000,
+      "rows": 3500,
+      "labels_bytes": 19673178,
+      "labels_sha256": "414a20cd6d48a5d49dcb386631eee3738ef32645a376fff3fc0ebee4ea56c6e2",
+      "labels_sha_verified": true,
+      "obs_sha_verified": true,
+      "alive": 3401,
+      "dead": 3,
+      "unknown": 96,
+      "model_mismatch": 96,
+      "injected": 1755,
+      "agreement": 2695,
+      "disagreement": 805,
+      "verified_candidates": 3500,
+      "candidate_grid": 63000,
+      "tolerance": null,
+      "horizon": null,
+      "ok": true
+    },
+    {
+      "shard": "dagger-s0d1seed2039",
+      "complete": true,
+      "beta": 0.5,
+      "stop_reason": "decisions",
+      "rollout_checkpoint_sha256": "6ebe4ea91d81d9333bfa1ccc065fc3515bb25b1d3b90a2684cdaa8a0a69b8086",
+      "decisions": 3500,
+      "frames": 7000,
+      "rows": 3500,
+      "labels_bytes": 19662178,
+      "labels_sha256": "e50fb7aa1661761b5bd598989752737f73b1a7da1e9b8aefec56c3e8efaef8f5",
+      "labels_sha_verified": true,
+      "obs_sha_verified": true,
+      "alive": 3494,
+      "dead": 0,
+      "unknown": 6,
+      "model_mismatch": 6,
+      "injected": 1710,
+      "agreement": 2752,
+      "disagreement": 748,
+      "verified_candidates": 3500,
+      "candidate_grid": 63000,
+      "tolerance": null,
+      "horizon": null,
+      "ok": true
+    }
+  ],
+  "decisions": 52500,
+  "frames": 105000,
+  "labels": {
+    "schema": "v410-wp05-dagger-labels-aggregate/1",
+    "totals": {
+      "decisions": 52500,
+      "frames": 105000,
+      "rows": 52500,
+      "alive": 52068,
+      "dead": 21,
+      "unknown": 411,
+      "model_mismatch": 411,
+      "injected": 26295,
+      "agreement": 41819,
+      "disagreement": 10681,
+      "verified_candidates": 52500,
+      "candidate_grid": 945000
+    },
+    "aggregate": {
+      "decisions": 52500,
+      "frames": 105000,
+      "label_rows": 52500,
+      "query_coverage": 0.05555555555555555,
+      "injection_rate": 0.5008571428571429,
+      "agreement_rate": 0.7965523809523809
+    },
+    "note": "per-shard label diagnostics live in .tmp_v410_wp05_train_beta05_5k/train_run.json and the per-shard labels_v410.summary.json files; verify_labels.py re-hashed every labels_v410.jsonl"
+  },
+  "data": {
+    "s1_train": {
+      "source": "s1_train",
+      "samples": 46397,
+      "seeds": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14
+      ],
+      "shards": [
+        "d1-s0d1-n3371-seed1-shard",
+        "d1-s0d1-n3371-seed2-shard",
+        "d1-s0d1-n3371-seed3-shard",
+        "d1-s0d1-n3371-seed4-shard",
+        "d1-s0d1-n3371-seed5-shard",
+        "d1-s0d1-n3371-seed6-shard",
+        "d1-s0d1-n3371-seed7-shard",
+        "d1-s0d1-n3371-seed8-shard",
+        "d1-s0d1-n3300-seed9-shard",
+        "d1-s0d1-n3300-seed10-shard",
+        "d1-s0d1-n3300-seed11-shard",
+        "d1-s0d1-n3300-seed12-shard",
+        "d1-s0d1-n3300-seed13-shard",
+        "d1-s0d1-n3300-seed14-shard"
+      ],
+      "target_counts": {
+        "0": 20394,
+        "1": 1081,
+        "2": 4049,
+        "3": 4660,
+        "4": 974,
+        "5": 567,
+        "6": 3165,
+        "7": 3300,
+        "8": 520,
+        "10": 126,
+        "11": 2834,
+        "12": 3192,
+        "13": 328,
+        "14": 78,
+        "15": 535,
+        "16": 385,
+        "17": 209
+      },
+      "majority_baseline_top1": 0.43955428152682285,
+      "label_diagnostics": {
+        "per_shard": [
+          {
+            "source": "s1_train",
+            "shard": "d1-s0d1-n3371-seed1-shard",
+            "seed": 1,
+            "rows": 3370,
+            "rows_with_target": 3370,
+            "rows_without_target": 0,
+            "chosen_verified_rows": 3370,
+            "verified_candidates": 3370,
+            "dead_candidates": 0,
+            "unknown_candidates": 57290,
+            "target_rule": "chosen_plan.first_action as a one-hot cross entropy",
+            "unknown_role": "diagnostic only (never a negative label, never a loss weight)"
+          },
+          {
+            "source": "s1_train",
+            "shard": "d1-s0d1-n3371-seed2-shard",
+            "seed": 2,
+            "rows": 3322,
+            "rows_with_target": 3322,
+            "rows_without_target": 0,
+            "chosen_verified_rows": 3322,
+            "verified_candidates": 3322,
+            "dead_candidates": 0,
+            "unknown_candidates": 56474,
+            "target_rule": "chosen_plan.first_action as a one-hot cross entropy",
+            "unknown_role": "diagnostic only (never a negative label, never a loss weight)"
+          },
+          {
+            "source": "s1_train",
+            "shard": "d1-s0d1-n3371-seed3-shard",
+            "seed": 3,
+            "rows": 3346,
+            "rows_with_target": 3346,
+            "rows_without_target": 0,
+            "chosen_verified_rows": 3346,
+            "verified_candidates": 3346,
+            "dead_candidates": 0,
+            "unknown_candidates": 56882,
+            "target_rule": "chosen_plan.first_action as a one-hot cross entropy",
+            "unknown_role": "diagnostic only (never a negative label, never a loss weight)"
+          },
+          {
+            "source": "s1_train",
+            "shard": "d1-s0d1-n3371-seed4-shard",
+            "seed": 4,
+            "rows": 3274,
+            "rows_with_target": 3274,
+            "rows_without_target": 0,
+            "chosen_verified_rows": 3274,
+            "verified_candidates": 3274,
+            "dead_candidates": 0,
+            "unknown_candidates": 55658,
+            "target_rule": "chosen_plan.first_action as a one-hot cross entropy",
+            "unknown_role": "diagnostic only (never a negative label, never a loss weight)"
+          },
+          {
+            "source": "s1_train",
+            "shard": "d1-s0d1-n3371-seed5-shard",
+            "seed": 5,
+            "rows": 3371,
+            "rows_with_target": 3371,
+            "rows_without_target": 0,
+            "chosen_verified_rows": 3371,
+            "verified_candidates": 3371,
+            "dead_candidates": 0,
+            "unknown_candidates": 57307,
+            "target_rule": "chosen_plan.first_action as a one-hot cross entropy",
+            "unknown_role": "diagnostic only (never a negative label, never a loss weight)"
+          },
+          {
+            "source": "s1_train",
+            "shard": "d1-s0d1-n3371-seed6-shard",
+            "seed": 6,
+            "rows": 3274,
+            "rows_with_target": 3274,
+            "rows_without_target": 0,
+            "chosen_verified_rows": 3274,
+            "verified_candidates": 3274,
+            "dead_candidates": 0,
+            "unknown_candidates": 55658,
+            "target_rule": "chosen_plan.first_action as a one-hot cross entropy",
+            "unknown_role": "diagnostic only (never a negative label, never a loss weight)"
+          },
+          {
+            "source": "s1_train",
+            "shard": "d1-s0d1-n3371-seed7-shard",
+            "seed": 7,
+            "rows": 3346,
+            "rows_with_target": 3346,
+            "rows_without_target": 0,
+            "chosen_verified_rows": 3346,
+            "verified_candidates": 3346,
+            "dead_candidates": 0,
+            "unknown_candidates": 56882,
+            "target_rule": "chosen_plan.first_action as a one-hot cross entropy",
+            "unknown_role": "diagnostic only (never a negative label, never a loss weight)"
+          },
+          {
+            "source": "s1_train",
+            "shard": "d1-s0d1-n3371-seed8-shard",
+            "seed": 8,
+            "rows": 3322,
+            "rows_with_target": 3322,
+            "rows_without_target": 0,
+            "chosen_verified_rows": 3322,
+            "verified_candidates": 3322,
+            "dead_candidates": 0,
+            "unknown_candidates": 56474,
+            "target_rule": "chosen_plan.first_action as a one-hot cross entropy",
+            "unknown_role": "diagnostic only (never a negative label, never a loss weight)"
+          },
+          {
+            "source": "s1_train",
+            "shard": "d1-s0d1-n3300-seed9-shard",
+            "seed": 9,
+            "rows": 3300,
+            "rows_with_target": 3300,
+            "rows_without_target": 0,
+            "chosen_verified_rows": 3300,
+            "verified_candidates": 3300,
+            "dead_candidates": 0,
+            "unknown_candidates": 56100,
+            "target_rule": "chosen_plan.first_action as a one-hot cross entropy",
+            "unknown_role": "diagnostic only (never a negative label, never a loss weight)"
+          },
+          {
+            "source": "s1_train",
+            "shard": "d1-s0d1-n3300-seed10-shard",
+            "seed": 10,
+            "rows": 3300,
+            "rows_with_target": 3300,
+            "rows_without_target": 0,
+            "chosen_verified_rows": 3300,
+            "verified_candidates": 3300,
+            "dead_candidates": 0,
+            "unknown_candidates": 56100,
+            "target_rule": "chosen_plan.first_action as a one-hot cross entropy",
+            "unknown_role": "diagnostic only (never a negative label, never a loss weight)"
+          },
+          {
+            "source": "s1_train",
+            "shard": "d1-s0d1-n3300-seed11-shard",
+            "seed": 11,
+            "rows": 3300,
+            "rows_with_target": 3300,
+            "rows_without_target": 0,
+            "chosen_verified_rows": 3300,
+            "verified_candidates": 3300,
+            "dead_candidates": 0,
+            "unknown_candidates": 56100,
+            "target_rule": "chosen_plan.first_action as a one-hot cross entropy",
+            "unknown_role": "diagnostic only (never a negative label, never a loss weight)"
+          },
+          {
+            "source": "s1_train",
+            "shard": "d1-s0d1-n3300-seed12-shard",
+            "seed": 12,
+            "rows": 3298,
+            "rows_with_target": 3298,
+            "rows_without_target": 0,
+            "chosen_verified_rows": 3298,
+            "verified_candidates": 3298,
+            "dead_candidates": 0,
+            "unknown_candidates": 56066,
+            "target_rule": "chosen_plan.first_action as a one-hot cross entropy",
+            "unknown_role": "diagnostic only (never a negative label, never a loss weight)"
+          },
+          {
+            "source": "s1_train",
+            "shard": "d1-s0d1-n3300-seed13-shard",
+            "seed": 13,
+            "rows": 3274,
+            "rows_with_target": 3274,
+            "rows_without_target": 0,
+            "chosen_verified_rows": 3274,
+            "verified_candidates": 3274,
+            "dead_candidates": 0,
+            "unknown_candidates": 55658,
+            "target_rule": "chosen_plan.first_action as a one-hot cross entropy",
+            "unknown_role": "diagnostic only (never a negative label, never a loss weight)"
+          },
+          {
+            "source": "s1_train",
+            "shard": "d1-s0d1-n3300-seed14-shard",
+            "seed": 14,
+            "rows": 3300,
+            "rows_with_target": 3300,
+            "rows_without_target": 0,
+            "chosen_verified_rows": 3300,
+            "verified_candidates": 3300,
+            "dead_candidates": 0,
+            "unknown_candidates": 56100,
+            "target_rule": "chosen_plan.first_action as a one-hot cross entropy",
+            "unknown_role": "diagnostic only (never a negative label, never a loss weight)"
+          }
+        ],
+        "rows": 46397,
+        "rows_with_target": 46397,
+        "rows_without_target": 0,
+        "unknown_candidates": 788749,
+        "dead_candidates": 0,
+        "verified_candidates": 46397,
+        "chosen_verified_rows": 46397,
+        "note": "unknown candidates are diagnostics only: the target is the chosen one-hot action, never an unknown negative"
+      }
+    },
+    "dagger": {
+      "source": "dagger",
+      "samples": 52500,
+      "seeds": [
+        2025,
+        2026,
+        2027,
+        2028,
+        2029,
+        2030,
+        2031,
+        2032,
+        2033,
+        2034,
+        2035,
+        2036,
+        2037,
+        2038,
+        2039
+      ],
+      "shards": [
+        "dagger-s0d1seed2025",
+        "dagger-s0d1seed2026",
+        "dagger-s0d1seed2027",
+        "dagger-s0d1seed2028",
+        "dagger-s0d1seed2029",
+        "dagger-s0d1seed2030",
+        "dagger-s0d1seed2031",
+        "dagger-s0d1seed2032",
+        "dagger-s0d1seed2033",
+        "dagger-s0d1seed2034",
+        "dagger-s0d1seed2035",
+        "dagger-s0d1seed2036",
+        "dagger-s0d1seed2037",
+        "dagger-s0d1seed2038",
+        "dagger-s0d1seed2039"
+      ],
+      "target_counts": {
+        "0": 34732,
+        "1": 410,
+        "2": 1696,
+        "3": 5447,
+        "4": 425,
+        "5": 473,
+        "6": 1714,
+        "7": 5419,
+        "8": 365,
+        "10": 40,
+        "11": 573,
+        "12": 447,
+        "13": 127,
+        "14": 56,
+        "15": 363,
+        "16": 131,
+        "17": 82
+      },
+      "majority_baseline_top1": 0.6615619047619048,
+      "label_diagnostics": {
+        "per_shard": [
+          {
+            "source": "dagger",
+            "shard": "dagger-s0d1seed2025",
+            "seed": 2025,
+            "rows": 3500,
+            "rows_with_target": 3500,
+            "rows_without_target": 0,
+            "chosen_verified_rows": 3500,
+            "verified_candidates": 3500,
+            "dead_candidates": 0,
+            "unknown_candidates": 59500,
+            "target_rule": "chosen_plan.first_action as a one-hot cross entropy",
+            "unknown_role": "diagnostic only (never a negative label, never a loss weight)"
+          },
+          {
+            "source": "dagger",
+            "shard": "dagger-s0d1seed2026",
+            "seed": 2026,
+            "rows": 3500,
+            "rows_with_target": 3500,
+            "rows_without_target": 0,
+            "chosen_verified_rows": 3500,
+            "verified_candidates": 3500,
+            "dead_candidates": 2,
+            "unknown_candidates": 59500,
+            "target_rule": "chosen_plan.first_action as a one-hot cross entropy",
+            "unknown_role": "diagnostic only (never a negative label, never a loss weight)"
+          },
+          {
+            "source": "dagger",
+            "shard": "dagger-s0d1seed2027",
+            "seed": 2027,
+            "rows": 3500,
+            "rows_with_target": 3500,
+            "rows_without_target": 0,
+            "chosen_verified_rows": 3500,
+            "verified_candidates": 3500,
+            "dead_candidates": 0,
+            "unknown_candidates": 59500,
+            "target_rule": "chosen_plan.first_action as a one-hot cross entropy",
+            "unknown_role": "diagnostic only (never a negative label, never a loss weight)"
+          },
+          {
+            "source": "dagger",
+            "shard": "dagger-s0d1seed2028",
+            "seed": 2028,
+            "rows": 3500,
+            "rows_with_target": 3500,
+            "rows_without_target": 0,
+            "chosen_verified_rows": 3500,
+            "verified_candidates": 3500,
+            "dead_candidates": 0,
+            "unknown_candidates": 59500,
+            "target_rule": "chosen_plan.first_action as a one-hot cross entropy",
+            "unknown_role": "diagnostic only (never a negative label, never a loss weight)"
+          },
+          {
+            "source": "dagger",
+            "shard": "dagger-s0d1seed2029",
+            "seed": 2029,
+            "rows": 3500,
+            "rows_with_target": 3500,
+            "rows_without_target": 0,
+            "chosen_verified_rows": 3500,
+            "verified_candidates": 3500,
+            "dead_candidates": 0,
+            "unknown_candidates": 59500,
+            "target_rule": "chosen_plan.first_action as a one-hot cross entropy",
+            "unknown_role": "diagnostic only (never a negative label, never a loss weight)"
+          },
+          {
+            "source": "dagger",
+            "shard": "dagger-s0d1seed2030",
+            "seed": 2030,
+            "rows": 3500,
+            "rows_with_target": 3500,
+            "rows_without_target": 0,
+            "chosen_verified_rows": 3500,
+            "verified_candidates": 3500,
+            "dead_candidates": 5,
+            "unknown_candidates": 59500,
+            "target_rule": "chosen_plan.first_action as a one-hot cross entropy",
+            "unknown_role": "diagnostic only (never a negative label, never a loss weight)"
+          },
+          {
+            "source": "dagger",
+            "shard": "dagger-s0d1seed2031",
+            "seed": 2031,
+            "rows": 3500,
+            "rows_with_target": 3500,
+            "rows_without_target": 0,
+            "chosen_verified_rows": 3500,
+            "verified_candidates": 3500,
+            "dead_candidates": 0,
+            "unknown_candidates": 59500,
+            "target_rule": "chosen_plan.first_action as a one-hot cross entropy",
+            "unknown_role": "diagnostic only (never a negative label, never a loss weight)"
+          },
+          {
+            "source": "dagger",
+            "shard": "dagger-s0d1seed2032",
+            "seed": 2032,
+            "rows": 3500,
+            "rows_with_target": 3500,
+            "rows_without_target": 0,
+            "chosen_verified_rows": 3500,
+            "verified_candidates": 3500,
+            "dead_candidates": 0,
+            "unknown_candidates": 59500,
+            "target_rule": "chosen_plan.first_action as a one-hot cross entropy",
+            "unknown_role": "diagnostic only (never a negative label, never a loss weight)"
+          },
+          {
+            "source": "dagger",
+            "shard": "dagger-s0d1seed2033",
+            "seed": 2033,
+            "rows": 3500,
+            "rows_with_target": 3500,
+            "rows_without_target": 0,
+            "chosen_verified_rows": 3500,
+            "verified_candidates": 3500,
+            "dead_candidates": 3,
+            "unknown_candidates": 59500,
+            "target_rule": "chosen_plan.first_action as a one-hot cross entropy",
+            "unknown_role": "diagnostic only (never a negative label, never a loss weight)"
+          },
+          {
+            "source": "dagger",
+            "shard": "dagger-s0d1seed2034",
+            "seed": 2034,
+            "rows": 3500,
+            "rows_with_target": 3500,
+            "rows_without_target": 0,
+            "chosen_verified_rows": 3500,
+            "verified_candidates": 3500,
+            "dead_candidates": 0,
+            "unknown_candidates": 59500,
+            "target_rule": "chosen_plan.first_action as a one-hot cross entropy",
+            "unknown_role": "diagnostic only (never a negative label, never a loss weight)"
+          },
+          {
+            "source": "dagger",
+            "shard": "dagger-s0d1seed2035",
+            "seed": 2035,
+            "rows": 3500,
+            "rows_with_target": 3500,
+            "rows_without_target": 0,
+            "chosen_verified_rows": 3500,
+            "verified_candidates": 3500,
+            "dead_candidates": 3,
+            "unknown_candidates": 59500,
+            "target_rule": "chosen_plan.first_action as a one-hot cross entropy",
+            "unknown_role": "diagnostic only (never a negative label, never a loss weight)"
+          },
+          {
+            "source": "dagger",
+            "shard": "dagger-s0d1seed2036",
+            "seed": 2036,
+            "rows": 3500,
+            "rows_with_target": 3500,
+            "rows_without_target": 0,
+            "chosen_verified_rows": 3500,
+            "verified_candidates": 3500,
+            "dead_candidates": 2,
+            "unknown_candidates": 59500,
+            "target_rule": "chosen_plan.first_action as a one-hot cross entropy",
+            "unknown_role": "diagnostic only (never a negative label, never a loss weight)"
+          },
+          {
+            "source": "dagger",
+            "shard": "dagger-s0d1seed2037",
+            "seed": 2037,
+            "rows": 3500,
+            "rows_with_target": 3500,
+            "rows_without_target": 0,
+            "chosen_verified_rows": 3500,
+            "verified_candidates": 3500,
+            "dead_candidates": 3,
+            "unknown_candidates": 59500,
+            "target_rule": "chosen_plan.first_action as a one-hot cross entropy",
+            "unknown_role": "diagnostic only (never a negative label, never a loss weight)"
+          },
+          {
+            "source": "dagger",
+            "shard": "dagger-s0d1seed2038",
+            "seed": 2038,
+            "rows": 3500,
+            "rows_with_target": 3500,
+            "rows_without_target": 0,
+            "chosen_verified_rows": 3500,
+            "verified_candidates": 3500,
+            "dead_candidates": 3,
+            "unknown_candidates": 59500,
+            "target_rule": "chosen_plan.first_action as a one-hot cross entropy",
+            "unknown_role": "diagnostic only (never a negative label, never a loss weight)"
+          },
+          {
+            "source": "dagger",
+            "shard": "dagger-s0d1seed2039",
+            "seed": 2039,
+            "rows": 3500,
+            "rows_with_target": 3500,
+            "rows_without_target": 0,
+            "chosen_verified_rows": 3500,
+            "verified_candidates": 3500,
+            "dead_candidates": 0,
+            "unknown_candidates": 59500,
+            "target_rule": "chosen_plan.first_action as a one-hot cross entropy",
+            "unknown_role": "diagnostic only (never a negative label, never a loss weight)"
+          }
+        ],
+        "rows": 52500,
+        "rows_with_target": 52500,
+        "rows_without_target": 0,
+        "unknown_candidates": 892500,
+        "dead_candidates": 21,
+        "verified_candidates": 52500,
+        "chosen_verified_rows": 52500,
+        "note": "unknown candidates are diagnostics only: the target is the chosen one-hot action, never an unknown negative"
+      }
+    },
+    "split": {
+      "train_seeds": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14
+      ],
+      "val_seeds": [
+        15,
+        16,
+        17
+      ],
+      "test_seeds": [
+        18,
+        19,
+        20
+      ],
+      "train_only": true,
+      "val_read": false,
+      "test_read": false
+    }
+  },
+  "mix": {
+    "nominal": {
+      "s1": 0.2,
+      "dagger": 0.8
+    },
+    "rule": "per-step cumulative allocation floor((step+1)*steps*batch*share) - floor(step*steps*batch*share) S1 rows; per-sample loss weight 1.0; the batch order is shuffled per step, so the mix is the only source signal",
+    "realized": {
+      "steps": 5000,
+      "batch_size": 128,
+      "samples": 640000,
+      "s1_samples": 128000,
+      "dagger_samples": 512000,
+      "s1_share": 0.2,
+      "dagger_share": 0.8,
+      "s1_rows_per_step": {
+        "25": 2000,
+        "26": 3000
+      },
+      "sample_weight": 1.0,
+      "s1_stream_epochs": 3,
+      "dagger_stream_epochs": 10
+    },
+    "dataset": {
+      "s1_rows": 46397,
+      "dagger_rows": 52500
+    }
+  },
+  "model": {
+    "arm": "B0",
+    "class": "touhou_rl.v410.student.diagnostics.ProbeNet",
+    "config": {
+      "play_width": 24,
+      "hud_width": 16,
+      "hist_hidden": 64,
+      "readout": 128,
+      "trunk": 128,
+      "groups": 8
+    },
+    "parameters": 731802,
+    "pinned_parameters": 731802
+  },
+  "budget": {
+    "steps": 5000,
+    "batch_size": 128,
+    "optimizer": "AdamW",
+    "lr": 0.0003,
+    "weight_decay": 0.0001,
+    "grad_clip": 5.0,
+    "seed": 0,
+    "epochs": 1,
+    "steps_per_epoch": 5000
+  },
+  "train": {
+    "metrics": {
+      "loss": 0.6585620161533355,
+      "top1": 0.7992578125,
+      "macro_recall": 0.27325591373739283,
+      "macro_recall_classes": 17,
+      "samples": 640000,
+      "steps": 5000,
+      "loss_first_step": 2.9003374576568604,
+      "loss_last_step": 0.4223081171512604,
+      "loss_first_100": 1.486359747648239,
+      "loss_last_100": 0.4468457281589508,
+      "per_source": {
+        "s1": {
+          "samples": 128000,
+          "loss": 1.2832217236161232,
+          "top1": 0.6150625,
+          "macro_recall": 0.23501739614859682,
+          "majority_baseline_top1": 0.4393828125,
+          "per_class_recall": {
+            "0": 0.9152575523194822,
+            "1": 0.06966666666666667,
+            "2": 0.3707543796925277,
+            "3": 0.5648926237161531,
+            "4": 0.032173587729143284,
+            "5": 0.07692307692307693,
+            "6": 0.2950556384077091,
+            "7": 0.621920508047739,
+            "8": 0.13086074177746676,
+            "10": 0.011461318051575931,
+            "11": 0.37928827444956476,
+            "12": 0.4441921199046213,
+            "13": 0.0066815144766146995,
+            "14": 0.0,
+            "15": 0.06621621621621622,
+            "16": 0.004651162790697674,
+            "17": 0.00530035335689046
+          }
+        },
+        "dagger": {
+          "samples": 512000,
+          "loss": 0.5023970913868397,
+          "top1": 0.845306640625,
+          "macro_recall": 0.27222498322164307,
+          "majority_baseline_top1": 0.6615859375,
+          "per_class_recall": {
+            "0": 0.9716412975449618,
+            "1": 0.17067067067067068,
+            "2": 0.33174065561872507,
+            "3": 0.8157112206873188,
+            "4": 0.14375605033881897,
+            "5": 0.3136787340125732,
+            "6": 0.36868293267789704,
+            "7": 0.8149633862513955,
+            "8": 0.2238429172510519,
+            "10": 0.0,
+            "11": 0.18055058991776904,
+            "12": 0.1783016708628977,
+            "13": 0.004025764895330112,
+            "14": 0.001838235294117647,
+            "15": 0.07477426636568849,
+            "16": 0.033646322378716745,
+            "17": 0.0
+          }
+        }
+      },
+      "blocks": [
+        {
+          "steps": [
+            1,
+            100
+          ],
+          "count": 100,
+          "loss": 1.486359747648239,
+          "per_source": {
+            "s1": {
+              "samples": 2560,
+              "loss": 2.132593663036823,
+              "top1": 0.428125,
+              "macro_recall": 0.06102700547259577
+            },
+            "dagger": {
+              "samples": 10240,
+              "loss": 1.3248012766242028,
+              "top1": 0.64921875,
+              "macro_recall": 0.06054566692090509
+            }
+          }
+        },
+        {
+          "steps": [
+            101,
+            200
+          ],
+          "count": 100,
+          "loss": 1.061237069964409,
+          "per_source": {
+            "s1": {
+              "samples": 2560,
+              "loss": 1.8578505143523216,
+              "top1": 0.448046875,
+              "macro_recall": 0.08766635803678946
+            },
+            "dagger": {
+              "samples": 10240,
+              "loss": 0.8620837055146694,
+              "top1": 0.7501953125,
+              "macro_recall": 0.11502203536218666
+            }
+          }
+        },
+        {
+          "steps": [
+            201,
+            300
+          ],
+          "count": 100,
+          "loss": 0.9548317384719849,
+          "per_source": {
+            "s1": {
+              "samples": 2560,
+              "loss": 1.6776913814246655,
+              "top1": 0.487890625,
+              "macro_recall": 0.10732780176095083
+            },
+            "dagger": {
+              "samples": 10240,
+              "loss": 0.7741168227046729,
+              "top1": 0.7734375,
+              "macro_recall": 0.13455823913807727
+            }
+          }
+        },
+        {
+          "steps": [
+            301,
+            400
+          ],
+          "count": 100,
+          "loss": 0.9607542556524277,
+          "per_source": {
+            "s1": {
+              "samples": 2560,
+              "loss": 1.6298592425882816,
+              "top1": 0.494921875,
+              "macro_recall": 0.12313937596646989
+            },
+            "dagger": {
+              "samples": 10240,
+              "loss": 0.7934780076146126,
+              "top1": 0.7646484375,
+              "macro_recall": 0.13889855141724172
+            }
+          }
+        },
+        {
+          "steps": [
+            401,
+            500
+          ],
+          "count": 100,
+          "loss": 0.8968531739711761,
+          "per_source": {
+            "s1": {
+              "samples": 2560,
+              "loss": 1.572896457463503,
+              "top1": 0.5078125,
+              "macro_recall": 0.12809564209270494
+            },
+            "dagger": {
+              "samples": 10240,
+              "loss": 0.7278423551470041,
+              "top1": 0.7849609375,
+              "macro_recall": 0.14616468422159967
+            }
+          }
+        },
+        {
+          "steps": [
+            501,
+            600
+          ],
+          "count": 100,
+          "loss": 0.8660474783182144,
+          "per_source": {
+            "s1": {
+              "samples": 2560,
+              "loss": 1.5797529324889183,
+              "top1": 0.49921875,
+              "macro_recall": 0.12880286551555883
+            },
+            "dagger": {
+              "samples": 10240,
+              "loss": 0.6876211121678353,
+              "top1": 0.79033203125,
+              "macro_recall": 0.15149618641570414
+            }
+          }
+        },
+        {
+          "steps": [
+            601,
+            700
+          ],
+          "count": 100,
+          "loss": 0.8434101951122284,
+          "per_source": {
+            "s1": {
+              "samples": 2560,
+              "loss": 1.539896296709776,
+              "top1": 0.50859375,
+              "macro_recall": 0.13626829846949762
+            },
+            "dagger": {
+              "samples": 10240,
+              "loss": 0.6692886702716351,
+              "top1": 0.7990234375,
+              "macro_recall": 0.15771454163021925
+            }
+          }
+        },
+        {
+          "steps": [
+            701,
+            800
+          ],
+          "count": 100,
+          "loss": 0.8303282922506332,
+          "per_source": {
+            "s1": {
+              "samples": 2560,
+              "loss": 1.5378908894956111,
+              "top1": 0.51796875,
+              "macro_recall": 0.138632448857595
+            },
+            "dagger": {
+              "samples": 10240,
+              "loss": 0.6534376461058855,
+              "top1": 0.80400390625,
+              "macro_recall": 0.16352742195728304
+            }
+          }
+        },
+        {
+          "steps": [
+            801,
+            900
+          ],
+          "count": 100,
+          "loss": 0.8349845057725906,
+          "per_source": {
+            "s1": {
+              "samples": 2560,
+              "loss": 1.5717961825430393,
+              "top1": 0.502734375,
+              "macro_recall": 0.1422566179440523
+            },
+            "dagger": {
+              "samples": 10240,
+              "loss": 0.6507815912365913,
+              "top1": 0.80712890625,
+              "macro_recall": 0.16441057894873853
+            }
+          }
+        },
+        {
+          "steps": [
+            901,
+            1000
+          ],
+          "count": 100,
+          "loss": 0.8294899225234985,
+          "per_source": {
+            "s1": {
+              "samples": 2560,
+              "loss": 1.5260430440306663,
+              "top1": 0.528125,
+              "macro_recall": 0.15424823751710362
+            },
+            "dagger": {
+              "samples": 10240,
+              "loss": 0.6553516566753388,
+              "top1": 0.80126953125,
+              "macro_recall": 0.1729193996213772
+            }
+          }
+        },
+        {
+          "steps": [
+            1001,
+            1100
+          ],
+          "count": 100,
+          "loss": 0.7869551277160645,
+          "per_source": {
+            "s1": {
+              "samples": 2560,
+              "loss": 1.4396226659417153,
+              "top1": 0.544921875,
+              "macro_recall": 0.17241301863626465
+            },
+            "dagger": {
+              "samples": 10240,
+              "loss": 0.6237882390618325,
+              "top1": 0.8095703125,
+              "macro_recall": 0.18001777569216992
+            }
+          }
+        },
+        {
+          "steps": [
+            1101,
+            1200
+          ],
+          "count": 100,
+          "loss": 0.7627476054430008,
+          "per_source": {
+            "s1": {
+              "samples": 2560,
+              "loss": 1.436361986398697,
+              "top1": 0.55,
+              "macro_recall": 0.1677339456945777
+            },
+            "dagger": {
+              "samples": 10240,
+              "loss": 0.5943440120667219,
+              "top1": 0.8203125,
+              "macro_recall": 0.1924656771804449
+            }
+          }
+        },
+        {
+          "steps": [
+            1201,
+            1300
+          ],
+          "count": 100,
+          "loss": 0.7492701572179794,
+          "per_source": {
+            "s1": {
+              "samples": 2560,
+              "loss": 1.4150485381484033,
+              "top1": 0.554296875,
+              "macro_recall": 0.18502130286457225
+            },
+            "dagger": {
+              "samples": 10240,
+              "loss": 0.5828255571424961,
+              "top1": 0.82080078125,
+              "macro_recall": 0.19470521623307424
+            }
+          }
+        },
+        {
+          "steps": [
+            1301,
+            1400
+          ],
+          "count": 100,
+          "loss": 0.7353016927838325,
+          "per_source": {
+            "s1": {
+              "samples": 2560,
+              "loss": 1.3913900293409824,
+              "top1": 0.573828125,
+              "macro_recall": 0.18222291974279733
+            },
+            "dagger": {
+              "samples": 10240,
+              "loss": 0.5712796127423644,
+              "top1": 0.82744140625,
+              "macro_recall": 0.20412349350533562
+            }
+          }
+        },
+        {
+          "steps": [
+            1401,
+            1500
+          ],
+          "count": 100,
+          "loss": 0.7478550559282303,
+          "per_source": {
+            "s1": {
+              "samples": 2560,
+              "loss": 1.3837414167821407,
+              "top1": 0.581640625,
+              "macro_recall": 0.1917026748356617
+            },
+            "dagger": {
+              "samples": 10240,
+              "loss": 0.588883462920785,
+              "top1": 0.82060546875,
+              "macro_recall": 0.1997353807277617
+            }
+          }
+        },
+        {
+          "steps": [
+            1501,
+            1600
+          ],
+          "count": 100,
+          "loss": 0.7131985020637512,
+          "per_source": {
+            "s1": {
+              "samples": 2560,
+              "loss": 1.323207188397646,
+              "top1": 0.60078125,
+              "macro_recall": 0.2180648796753233
+            },
+            "dagger": {
+              "samples": 10240,
+              "loss": 0.5606963347643614,
+              "top1": 0.8275390625,
+              "macro_recall": 0.21268506337084758
+            }
+          }
+        },
+        {
+          "steps": [
+            1601,
+            1700
+          ],
+          "count": 100,
+          "loss": 0.6924510332942009,
+          "per_source": {
+            "s1": {
+              "samples": 2560,
+              "loss": 1.3518149137496949,
+              "top1": 0.59765625,
+              "macro_recall": 0.21316240799418415
+            },
+            "dagger": {
+              "samples": 10240,
+              "loss": 0.5276100626215339,
+              "top1": 0.83642578125,
+              "macro_recall": 0.2214031941703394
+            }
+          }
+        },
+        {
+          "steps": [
+            1701,
+            1800
+          ],
+          "count": 100,
+          "loss": 0.6816741248965263,
+          "per_source": {
+            "s1": {
+              "samples": 2560,
+              "loss": 1.3119814977049828,
+              "top1": 0.61171875,
+              "macro_recall": 0.2200744119210953
+            },
+            "dagger": {
+              "samples": 10240,
+              "loss": 0.5240972731262445,
+              "top1": 0.83916015625,
+              "macro_recall": 0.23843913605909303
+            }
+          }
+        },
+        {
+          "steps": [
+            1801,
+            1900
+          ],
+          "count": 100,
+          "loss": 0.6863276827335357,
+          "per_source": {
+            "s1": {
+              "samples": 2560,
+              "loss": 1.2958231747150422,
+              "top1": 0.608984375,
+              "macro_recall": 0.23707684379930374
+            },
+            "dagger": {
+              "samples": 10240,
+              "loss": 0.5339538065716625,
+              "top1": 0.8333984375,
+              "macro_recall": 0.21996654636277424
+            }
+          }
+        },
+        {
+          "steps": [
+            1901,
+            2000
+          ],
+          "count": 100,
+          "loss": 0.6663445746898651,
+          "per_source": {
+            "s1": {
+              "samples": 2560,
+              "loss": 1.2393511444330216,
+              "top1": 0.6328125,
+              "macro_recall": 0.22718082362642308
+            },
+            "dagger": {
+              "samples": 10240,
+              "loss": 0.5230929248034955,
+              "top1": 0.83818359375,
+              "macro_recall": 0.23331863481491918
+            }
+          }
+        },
+        {
+          "steps": [
+            2001,
+            2100
+          ],
+          "count": 100,
+          "loss": 0.6557071277499199,
+          "per_source": {
+            "s1": {
+              "samples": 2560,
+              "loss": 1.2657105311751367,
+              "top1": 0.61328125,
+              "macro_recall": 0.23936949203705726
+            },
+            "dagger": {
+              "samples": 10240,
+              "loss": 0.503206274844706,
+              "top1": 0.842578125,
+              "macro_recall": 0.24184739803571098
+            }
+          }
+        },
+        {
+          "steps": [
+            2101,
+            2200
+          ],
+          "count": 100,
+          "loss": 0.6180927413702011,
+          "per_source": {
+            "s1": {
+              "samples": 2560,
+              "loss": 1.2367247641086578,
+              "top1": 0.634375,
+              "macro_recall": 0.24401470568195424
+            },
+            "dagger": {
+              "samples": 10240,
+              "loss": 0.46343472618609666,
+              "top1": 0.8564453125,
+              "macro_recall": 0.2745458174120265
+            }
+          }
+        },
+        {
+          "steps": [
+            2201,
+            2300
+          ],
+          "count": 100,
+          "loss": 0.6499322032928467,
+          "per_source": {
+            "s1": {
+              "samples": 2560,
+              "loss": 1.2249052431434393,
+              "top1": 0.634765625,
+              "macro_recall": 0.24499349771136125
+            },
+            "dagger": {
+              "samples": 10240,
+              "loss": 0.5061889400705695,
+              "top1": 0.84326171875,
+              "macro_recall": 0.25110949527811777
+            }
+          }
+        },
+        {
+          "steps": [
+            2301,
+            2400
+          ],
+          "count": 100,
+          "loss": 0.6407343056797982,
+          "per_source": {
+            "s1": {
+              "samples": 2560,
+              "loss": 1.216686848551035,
+              "top1": 0.638671875,
+              "macro_recall": 0.25914368210491867
+            },
+            "dagger": {
+              "samples": 10240,
+              "loss": 0.49674616008996964,
+              "top1": 0.8431640625,
+              "macro_recall": 0.26013151565953563
+            }
+          }
+        },
+        {
+          "steps": [
+            2401,
+            2500
+          ],
+          "count": 100,
+          "loss": 0.6145956239104271,
+          "per_source": {
+            "s1": {
+              "samples": 2560,
+              "loss": 1.1784322924911976,
+              "top1": 0.651171875,
+              "macro_recall": 0.2731991839223806
+            },
+            "dagger": {
+              "samples": 10240,
+              "loss": 0.4736364493146539,
+              "top1": 0.85029296875,
+              "macro_recall": 0.25155824016111067
+            }
+          }
+        },
+        {
+          "steps": [
+            2501,
+            2600
+          ],
+          "count": 100,
+          "loss": 0.6093314960598946,
+          "per_source": {
+            "s1": {
+              "samples": 2560,
+              "loss": 1.2023087054491044,
+              "top1": 0.65,
+              "macro_recall": 0.2689642801496323
+            },
+            "dagger": {
+              "samples": 10240,
+              "loss": 0.46108718384057285,
+              "top1": 0.85615234375,
+              "macro_recall": 0.2760296561292387
+            }
+          }
+        },
+        {
+          "steps": [
+            2601,
+            2700
+          ],
+          "count": 100,
+          "loss": 0.5765590387582779,
+          "per_source": {
+            "s1": {
+              "samples": 2560,
+              "loss": 1.18670037612319,
+              "top1": 0.6609375,
+              "macro_recall": 0.2724494996282986
+            },
+            "dagger": {
+              "samples": 10240,
+              "loss": 0.42402370031923053,
+              "top1": 0.864453125,
+              "macro_recall": 0.29038306813436743
+            }
+          }
+        },
+        {
+          "steps": [
+            2701,
+            2800
+          ],
+          "count": 100,
+          "loss": 0.5907186383008957,
+          "per_source": {
+            "s1": {
+              "samples": 2560,
+              "loss": 1.1821413882076741,
+              "top1": 0.65078125,
+              "macro_recall": 0.26823294432466405
+            },
+            "dagger": {
+              "samples": 10240,
+              "loss": 0.4428629532456398,
+              "top1": 0.860546875,
+              "macro_recall": 0.29080169271153444
+            }
+          }
+        },
+        {
+          "steps": [
+            2801,
+            2900
+          ],
+          "count": 100,
+          "loss": 0.6038288640975952,
+          "per_source": {
+            "s1": {
+              "samples": 2560,
+              "loss": 1.1593010179698466,
+              "top1": 0.658203125,
+              "macro_recall": 0.27664312220259896
+            },
+            "dagger": {
+              "samples": 10240,
+              "loss": 0.46496081836521624,
+              "top1": 0.85185546875,
+              "macro_recall": 0.2806133396218977
+            }
+          }
+        },
+        {
+          "steps": [
+            2901,
+            3000
+          ],
+          "count": 100,
+          "loss": 0.5902311599254608,
+          "per_source": {
+            "s1": {
+              "samples": 2560,
+              "loss": 1.18534776866436,
+              "top1": 0.653125,
+              "macro_recall": 0.2627178124494479
+            },
+            "dagger": {
+              "samples": 10240,
+              "loss": 0.44145199917256833,
+              "top1": 0.8619140625,
+              "macro_recall": 0.29396360747660244
+            }
+          }
+        },
+        {
+          "steps": [
+            3001,
+            3100
+          ],
+          "count": 100,
+          "loss": 0.5854104435443879,
+          "per_source": {
+            "s1": {
+              "samples": 2560,
+              "loss": 1.1931284036487342,
+              "top1": 0.65,
+              "macro_recall": 0.26215315431535363
+            },
+            "dagger": {
+              "samples": 10240,
+              "loss": 0.4334809482097626,
+              "top1": 0.858984375,
+              "macro_recall": 0.28785423189447124
+            }
+          }
+        },
+        {
+          "steps": [
+            3101,
+            3200
+          ],
+          "count": 100,
+          "loss": 0.5569194704294205,
+          "per_source": {
+            "s1": {
+              "samples": 2560,
+              "loss": 1.1677992027252913,
+              "top1": 0.653125,
+              "macro_recall": 0.2774909144612341
+            },
+            "dagger": {
+              "samples": 10240,
+              "loss": 0.4041995253413916,
+              "top1": 0.87041015625,
+              "macro_recall": 0.3234218030284877
+            }
+          }
+        },
+        {
+          "steps": [
+            3201,
+            3300
+          ],
+          "count": 100,
+          "loss": 0.5447194239497185,
+          "per_source": {
+            "s1": {
+              "samples": 2560,
+              "loss": 1.1557289976626635,
+              "top1": 0.655859375,
+              "macro_recall": 0.26126662733412986
+            },
+            "dagger": {
+              "samples": 10240,
+              "loss": 0.39196702260524036,
+              "top1": 0.87646484375,
+              "macro_recall": 0.32628818003619403
+            }
+          }
+        },
+        {
+          "steps": [
+            3301,
+            3400
+          ],
+          "count": 100,
+          "loss": 0.5583663761615754,
+          "per_source": {
+            "s1": {
+              "samples": 2560,
+              "loss": 1.1851459514349698,
+              "top1": 0.648828125,
+              "macro_recall": 0.2722083077528401
+            },
+            "dagger": {
+              "samples": 10240,
+              "loss": 0.40167147424072025,
+              "top1": 0.872265625,
+              "macro_recall": 0.3355704118474647
+            }
+          }
+        },
+        {
+          "steps": [
+            3401,
+            3500
+          ],
+          "count": 100,
+          "loss": 0.5572539740800857,
+          "per_source": {
+            "s1": {
+              "samples": 2560,
+              "loss": 1.114603740349412,
+              "top1": 0.684375,
+              "macro_recall": 0.27935671460796613
+            },
+            "dagger": {
+              "samples": 10240,
+              "loss": 0.41791652552783487,
+              "top1": 0.86455078125,
+              "macro_recall": 0.3044081036534848
+            }
+          }
+        },
+        {
+          "steps": [
+            3501,
+            3600
+          ],
+          "count": 100,
+          "loss": 0.5335446506738662,
+          "per_source": {
+            "s1": {
+              "samples": 2560,
+              "loss": 1.1060290165245532,
+              "top1": 0.675390625,
+              "macro_recall": 0.2885246809910543
+            },
+            "dagger": {
+              "samples": 10240,
+              "loss": 0.39042354505509136,
+              "top1": 0.87158203125,
+              "macro_recall": 0.31789400707698134
+            }
+          }
+        },
+        {
+          "steps": [
+            3601,
+            3700
+          ],
+          "count": 100,
+          "loss": 0.5047558376193046,
+          "per_source": {
+            "s1": {
+              "samples": 2560,
+              "loss": 1.0968439389020204,
+              "top1": 0.6734375,
+              "macro_recall": 0.28519881273719466
+            },
+            "dagger": {
+              "samples": 10240,
+              "loss": 0.35673380009829997,
+              "top1": 0.88779296875,
+              "macro_recall": 0.3712940458663617
+            }
+          }
+        },
+        {
+          "steps": [
+            3701,
+            3800
+          ],
+          "count": 100,
+          "loss": 0.501235913336277,
+          "per_source": {
+            "s1": {
+              "samples": 2560,
+              "loss": 1.065284003317356,
+              "top1": 0.678125,
+              "macro_recall": 0.29217200100756563
+            },
+            "dagger": {
+              "samples": 10240,
+              "loss": 0.3602238856256008,
+              "top1": 0.882421875,
+              "macro_recall": 0.35240409565882624
+            }
+          }
+        },
+        {
+          "steps": [
+            3801,
+            3900
+          ],
+          "count": 100,
+          "loss": 0.5033855789899826,
+          "per_source": {
+            "s1": {
+              "samples": 2560,
+              "loss": 1.0950676508247852,
+              "top1": 0.68046875,
+              "macro_recall": 0.305119184501502
+            },
+            "dagger": {
+              "samples": 10240,
+              "loss": 0.3554650520905852,
+              "top1": 0.8857421875,
+              "macro_recall": 0.35889670136188484
+            }
+          }
+        },
+        {
+          "steps": [
+            3901,
+            4000
+          ],
+          "count": 100,
+          "loss": 0.5023446643352508,
+          "per_source": {
+            "s1": {
+              "samples": 2560,
+              "loss": 1.0846545357257127,
+              "top1": 0.6828125,
+              "macro_recall": 0.3052242934373205
+            },
+            "dagger": {
+              "samples": 10240,
+              "loss": 0.3567671894095838,
+              "top1": 0.8849609375,
+              "macro_recall": 0.3546428950792559
+            }
+          }
+        },
+        {
+          "steps": [
+            4001,
+            4100
+          ],
+          "count": 100,
+          "loss": 0.5107703149318695,
+          "per_source": {
+            "s1": {
+              "samples": 2560,
+              "loss": 1.086878065764904,
+              "top1": 0.6890625,
+              "macro_recall": 0.3032133118024888
+            },
+            "dagger": {
+              "samples": 10240,
+              "loss": 0.36674337554723024,
+              "top1": 0.88251953125,
+              "macro_recall": 0.3597227848005537
+            }
+          }
+        },
+        {
+          "steps": [
+            4101,
+            4200
+          ],
+          "count": 100,
+          "loss": 0.46558934450149536,
+          "per_source": {
+            "s1": {
+              "samples": 2560,
+              "loss": 1.0955825626850129,
+              "top1": 0.676953125,
+              "macro_recall": 0.30058383740760386
+            },
+            "dagger": {
+              "samples": 10240,
+              "loss": 0.30809103325009346,
+              "top1": 0.90087890625,
+              "macro_recall": 0.4123483791630877
+            }
+          }
+        },
+        {
+          "steps": [
+            4201,
+            4300
+          ],
+          "count": 100,
+          "loss": 0.46006057649850846,
+          "per_source": {
+            "s1": {
+              "samples": 2560,
+              "loss": 1.0490541059523821,
+              "top1": 0.6796875,
+              "macro_recall": 0.2940732998946913
+            },
+            "dagger": {
+              "samples": 10240,
+              "loss": 0.312812186870724,
+              "top1": 0.90048828125,
+              "macro_recall": 0.39564075759568573
+            }
+          }
+        },
+        {
+          "steps": [
+            4301,
+            4400
+          ],
+          "count": 100,
+          "loss": 0.47839793682098386,
+          "per_source": {
+            "s1": {
+              "samples": 2560,
+              "loss": 1.0420353554189206,
+              "top1": 0.69609375,
+              "macro_recall": 0.3092447799465402
+            },
+            "dagger": {
+              "samples": 10240,
+              "loss": 0.3374885722063482,
+              "top1": 0.89306640625,
+              "macro_recall": 0.3975858988047434
+            }
+          }
+        },
+        {
+          "steps": [
+            4401,
+            4500
+          ],
+          "count": 100,
+          "loss": 0.46458523511886596,
+          "per_source": {
+            "s1": {
+              "samples": 2560,
+              "loss": 1.0400630004704,
+              "top1": 0.69296875,
+              "macro_recall": 0.30755912134479
+            },
+            "dagger": {
+              "samples": 10240,
+              "loss": 0.32071578605100515,
+              "top1": 0.8953125,
+              "macro_recall": 0.39615051066890133
+            }
+          }
+        },
+        {
+          "steps": [
+            4501,
+            4600
+          ],
+          "count": 100,
+          "loss": 0.4966726925969124,
+          "per_source": {
+            "s1": {
+              "samples": 2560,
+              "loss": 1.0994191970676184,
+              "top1": 0.66640625,
+              "macro_recall": 0.2998383549551616
+            },
+            "dagger": {
+              "samples": 10240,
+              "loss": 0.3459860661998391,
+              "top1": 0.884765625,
+              "macro_recall": 0.37571871781308935
+            }
+          }
+        },
+        {
+          "steps": [
+            4601,
+            4700
+          ],
+          "count": 100,
+          "loss": 0.4316828563809395,
+          "per_source": {
+            "s1": {
+              "samples": 2560,
+              "loss": 1.0432902421802281,
+              "top1": 0.68984375,
+              "macro_recall": 0.30849487880038373
+            },
+            "dagger": {
+              "samples": 10240,
+              "loss": 0.27878100499510766,
+              "top1": 0.910546875,
+              "macro_recall": 0.4274333594325797
+            }
+          }
+        },
+        {
+          "steps": [
+            4701,
+            4800
+          ],
+          "count": 100,
+          "loss": 0.4481939035654068,
+          "per_source": {
+            "s1": {
+              "samples": 2560,
+              "loss": 1.0893453206866979,
+              "top1": 0.67890625,
+              "macro_recall": 0.31787564363006965
+            },
+            "dagger": {
+              "samples": 10240,
+              "loss": 0.2879060461185873,
+              "top1": 0.905859375,
+              "macro_recall": 0.4209056103005802
+            }
+          }
+        },
+        {
+          "steps": [
+            4801,
+            4900
+          ],
+          "count": 100,
+          "loss": 0.44121300041675565,
+          "per_source": {
+            "s1": {
+              "samples": 2560,
+              "loss": 1.0368762705475092,
+              "top1": 0.69140625,
+              "macro_recall": 0.34526271489891797
+            },
+            "dagger": {
+              "samples": 10240,
+              "loss": 0.29229717804118993,
+              "top1": 0.90361328125,
+              "macro_recall": 0.4459776924700537
+            }
+          }
+        },
+        {
+          "steps": [
+            4901,
+            5000
+          ],
+          "count": 100,
+          "loss": 0.4468457281589508,
+          "per_source": {
+            "s1": {
+              "samples": 2560,
+              "loss": 1.0613845232874155,
+              "top1": 0.683984375,
+              "macro_recall": 0.32621225251781116
+            },
+            "dagger": {
+              "samples": 10240,
+              "loss": 0.2932110165245831,
+              "top1": 0.90478515625,
+              "macro_recall": 0.4119119513210606
+            }
+          }
+        }
+      ],
+      "confusion_matrix": [
+        [
+          380601,
+          267,
+          2043,
+          4377,
+          137,
+          432,
+          1913,
+          3893,
+          100,
+          0,
+          111,
+          507,
+          520,
+          4,
+          0,
+          65,
+          2,
+          1
+        ],
+        [
+          3060,
+          891,
+          507,
+          888,
+          94,
+          60,
+          272,
+          787,
+          240,
+          0,
+          4,
+          80,
+          102,
+          1,
+          0,
+          4,
+          6,
+          0
+        ],
+        [
+          8992,
+          236,
+          9633,
+          5545,
+          102,
+          41,
+          817,
+          1499,
+          38,
+          0,
+          12,
+          309,
+          478,
+          1,
+          0,
+          18,
+          0,
+          1
+        ],
+        [
+          9629,
+          202,
+          1852,
+          50602,
+          182,
+          92,
+          677,
+          2222,
+          33,
+          0,
+          21,
+          152,
+          308,
+          3,
+          0,
+          10,
+          1,
+          0
+        ],
+        [
+          3484,
+          113,
+          375,
+          990,
+          680,
+          249,
+          329,
+          360,
+          46,
+          0,
+          2,
+          55,
+          105,
+          2,
+          0,
+          10,
+          5,
+          0
+        ],
+        [
+          2947,
+          65,
+          164,
+          386,
+          132,
+          1567,
+          342,
+          433,
+          32,
+          0,
+          1,
+          34,
+          61,
+          1,
+          0,
+          4,
+          4,
+          0
+        ],
+        [
+          8055,
+          87,
+          800,
+          1767,
+          58,
+          208,
+          8722,
+          5028,
+          119,
+          0,
+          10,
+          231,
+          251,
+          2,
+          0,
+          57,
+          3,
+          0
+        ],
+        [
+          7822,
+          173,
+          466,
+          2374,
+          80,
+          128,
+          1614,
+          48750,
+          294,
+          0,
+          22,
+          99,
+          126,
+          0,
+          0,
+          29,
+          5,
+          0
+        ],
+        [
+          1450,
+          203,
+          114,
+          241,
+          62,
+          56,
+          243,
+          1559,
+          985,
+          0,
+          1,
+          40,
+          34,
+          0,
+          0,
+          5,
+          1,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          360,
+          49,
+          47,
+          119,
+          21,
+          14,
+          34,
+          57,
+          13,
+          0,
+          4,
+          11,
+          7,
+          0,
+          0,
+          3,
+          0,
+          0
+        ],
+        [
+          5536,
+          133,
+          1011,
+          1143,
+          64,
+          50,
+          515,
+          723,
+          17,
+          0,
+          3,
+          3973,
+          220,
+          1,
+          0,
+          16,
+          1,
+          0
+        ],
+        [
+          5106,
+          123,
+          861,
+          1023,
+          126,
+          92,
+          442,
+          485,
+          41,
+          0,
+          3,
+          165,
+          4691,
+          2,
+          0,
+          12,
+          4,
+          0
+        ],
+        [
+          998,
+          73,
+          119,
+          364,
+          142,
+          62,
+          106,
+          169,
+          20,
+          0,
+          0,
+          30,
+          43,
+          11,
+          0,
+          2,
+          1,
+          0
+        ],
+        [
+          338,
+          26,
+          49,
+          97,
+          53,
+          89,
+          38,
+          53,
+          7,
+          0,
+          0,
+          3,
+          9,
+          0,
+          1,
+          1,
+          0,
+          0
+        ],
+        [
+          2565,
+          37,
+          168,
+          541,
+          57,
+          80,
+          458,
+          593,
+          41,
+          0,
+          1,
+          51,
+          69,
+          0,
+          0,
+          363,
+          0,
+          0
+        ],
+        [
+          1284,
+          101,
+          112,
+          180,
+          57,
+          104,
+          144,
+          206,
+          38,
+          0,
+          0,
+          25,
+          40,
+          1,
+          0,
+          13,
+          48,
+          0
+        ],
+        [
+          578,
+          86,
+          115,
+          116,
+          35,
+          26,
+          86,
+          202,
+          89,
+          0,
+          0,
+          12,
+          13,
+          3,
+          0,
+          2,
+          3,
+          3
+        ]
+      ],
+      "confusion_matrix_orientation": "rows = target action, columns = predicted action",
+      "majority_baseline_top1": 0.6171453125,
+      "per_class_recall": {
+        "0": 0.9636127026404336,
+        "1": 0.12735849056603774,
+        "2": 0.3474857513887887,
+        "3": 0.7668596368926742,
+        "4": 0.09992652461425422,
+        "5": 0.25384739996760086,
+        "6": 0.3434128671548941,
+        "7": 0.78651866670969,
+        "8": 0.197236684020825,
+        "10": 0.005412719891745603,
+        "11": 0.2963598388781143,
+        "12": 0.3560261080752884,
+        "13": 0.0051401869158878505,
+        "14": 0.0013089005235602095,
+        "15": 0.0722531847133758,
+        "16": 0.020399490012749683,
+        "17": 0.002191380569758948
+      },
+      "label_rule": {
+        "target": "one_hot(chosen_plan.first_action) cross entropy (B0)",
+        "unknown_used_as_negative": false,
+        "rows_without_target": {
+          "s1": 0,
+          "dagger": 0
+        },
+        "note": "chosen one-hot CE only; the other 17 logits appear solely in the softmax denominator"
+      }
+    },
+    "grad_norm": {
+      "preclip_mean": 1.9439881067768456,
+      "preclip_max": 5.060403290880104,
+      "postclip_mean": 1.9439760259299972,
+      "postclip_max": 4.999999056637446,
+      "clip": 5.0
+    },
+    "throughput": {
+      "steps": 5000,
+      "samples_seen": 640000,
+      "train_seconds": 423.0488,
+      "samples_per_second": 1512.83,
+      "steps_per_second": 11.82,
+      "data_seconds": 174.7127,
+      "data_fraction": 0.413,
+      "median_step_seconds": 0.0725,
+      "max_step_seconds": 1.4085,
+      "first_step_seconds": 1.4085
+    },
+    "gpu": {
+      "device": "cuda",
+      "cuda": true,
+      "device_name": "NVIDIA GeForce RTX 4070 SUPER",
+      "max_memory_allocated_mib": 252.11,
+      "max_memory_reserved_mib": 434.0,
+      "total_memory_mib": 12281.5,
+      "peak_memory_note": "torch.cuda.max_memory_{allocated,reserved} over this run; reset immediately before the first step"
+    },
+    "elapsed_seconds": 461.3748,
+    "curve": [
+      {
+        "steps": [
+          1,
+          100
+        ],
+        "loss": 1.486359747648239,
+        "per_source": {
+          "s1": {
+            "samples": 2560,
+            "loss": 2.132593663036823,
+            "top1": 0.428125,
+            "macro_recall": 0.06102700547259577
+          },
+          "dagger": {
+            "samples": 10240,
+            "loss": 1.3248012766242028,
+            "top1": 0.64921875,
+            "macro_recall": 0.06054566692090509
+          }
+        }
+      },
+      {
+        "steps": [
+          101,
+          200
+        ],
+        "loss": 1.061237069964409,
+        "per_source": {
+          "s1": {
+            "samples": 2560,
+            "loss": 1.8578505143523216,
+            "top1": 0.448046875,
+            "macro_recall": 0.08766635803678946
+          },
+          "dagger": {
+            "samples": 10240,
+            "loss": 0.8620837055146694,
+            "top1": 0.7501953125,
+            "macro_recall": 0.11502203536218666
+          }
+        }
+      },
+      {
+        "steps": [
+          201,
+          300
+        ],
+        "loss": 0.9548317384719849,
+        "per_source": {
+          "s1": {
+            "samples": 2560,
+            "loss": 1.6776913814246655,
+            "top1": 0.487890625,
+            "macro_recall": 0.10732780176095083
+          },
+          "dagger": {
+            "samples": 10240,
+            "loss": 0.7741168227046729,
+            "top1": 0.7734375,
+            "macro_recall": 0.13455823913807727
+          }
+        }
+      },
+      {
+        "steps": [
+          301,
+          400
+        ],
+        "loss": 0.9607542556524277,
+        "per_source": {
+          "s1": {
+            "samples": 2560,
+            "loss": 1.6298592425882816,
+            "top1": 0.494921875,
+            "macro_recall": 0.12313937596646989
+          },
+          "dagger": {
+            "samples": 10240,
+            "loss": 0.7934780076146126,
+            "top1": 0.7646484375,
+            "macro_recall": 0.13889855141724172
+          }
+        }
+      },
+      {
+        "steps": [
+          401,
+          500
+        ],
+        "loss": 0.8968531739711761,
+        "per_source": {
+          "s1": {
+            "samples": 2560,
+            "loss": 1.572896457463503,
+            "top1": 0.5078125,
+            "macro_recall": 0.12809564209270494
+          },
+          "dagger": {
+            "samples": 10240,
+            "loss": 0.7278423551470041,
+            "top1": 0.7849609375,
+            "macro_recall": 0.14616468422159967
+          }
+        }
+      },
+      {
+        "steps": [
+          501,
+          600
+        ],
+        "loss": 0.8660474783182144,
+        "per_source": {
+          "s1": {
+            "samples": 2560,
+            "loss": 1.5797529324889183,
+            "top1": 0.49921875,
+            "macro_recall": 0.12880286551555883
+          },
+          "dagger": {
+            "samples": 10240,
+            "loss": 0.6876211121678353,
+            "top1": 0.79033203125,
+            "macro_recall": 0.15149618641570414
+          }
+        }
+      },
+      {
+        "steps": [
+          601,
+          700
+        ],
+        "loss": 0.8434101951122284,
+        "per_source": {
+          "s1": {
+            "samples": 2560,
+            "loss": 1.539896296709776,
+            "top1": 0.50859375,
+            "macro_recall": 0.13626829846949762
+          },
+          "dagger": {
+            "samples": 10240,
+            "loss": 0.6692886702716351,
+            "top1": 0.7990234375,
+            "macro_recall": 0.15771454163021925
+          }
+        }
+      },
+      {
+        "steps": [
+          701,
+          800
+        ],
+        "loss": 0.8303282922506332,
+        "per_source": {
+          "s1": {
+            "samples": 2560,
+            "loss": 1.5378908894956111,
+            "top1": 0.51796875,
+            "macro_recall": 0.138632448857595
+          },
+          "dagger": {
+            "samples": 10240,
+            "loss": 0.6534376461058855,
+            "top1": 0.80400390625,
+            "macro_recall": 0.16352742195728304
+          }
+        }
+      },
+      {
+        "steps": [
+          801,
+          900
+        ],
+        "loss": 0.8349845057725906,
+        "per_source": {
+          "s1": {
+            "samples": 2560,
+            "loss": 1.5717961825430393,
+            "top1": 0.502734375,
+            "macro_recall": 0.1422566179440523
+          },
+          "dagger": {
+            "samples": 10240,
+            "loss": 0.6507815912365913,
+            "top1": 0.80712890625,
+            "macro_recall": 0.16441057894873853
+          }
+        }
+      },
+      {
+        "steps": [
+          901,
+          1000
+        ],
+        "loss": 0.8294899225234985,
+        "per_source": {
+          "s1": {
+            "samples": 2560,
+            "loss": 1.5260430440306663,
+            "top1": 0.528125,
+            "macro_recall": 0.15424823751710362
+          },
+          "dagger": {
+            "samples": 10240,
+            "loss": 0.6553516566753388,
+            "top1": 0.80126953125,
+            "macro_recall": 0.1729193996213772
+          }
+        }
+      },
+      {
+        "steps": [
+          1001,
+          1100
+        ],
+        "loss": 0.7869551277160645,
+        "per_source": {
+          "s1": {
+            "samples": 2560,
+            "loss": 1.4396226659417153,
+            "top1": 0.544921875,
+            "macro_recall": 0.17241301863626465
+          },
+          "dagger": {
+            "samples": 10240,
+            "loss": 0.6237882390618325,
+            "top1": 0.8095703125,
+            "macro_recall": 0.18001777569216992
+          }
+        }
+      },
+      {
+        "steps": [
+          1101,
+          1200
+        ],
+        "loss": 0.7627476054430008,
+        "per_source": {
+          "s1": {
+            "samples": 2560,
+            "loss": 1.436361986398697,
+            "top1": 0.55,
+            "macro_recall": 0.1677339456945777
+          },
+          "dagger": {
+            "samples": 10240,
+            "loss": 0.5943440120667219,
+            "top1": 0.8203125,
+            "macro_recall": 0.1924656771804449
+          }
+        }
+      },
+      {
+        "steps": [
+          1201,
+          1300
+        ],
+        "loss": 0.7492701572179794,
+        "per_source": {
+          "s1": {
+            "samples": 2560,
+            "loss": 1.4150485381484033,
+            "top1": 0.554296875,
+            "macro_recall": 0.18502130286457225
+          },
+          "dagger": {
+            "samples": 10240,
+            "loss": 0.5828255571424961,
+            "top1": 0.82080078125,
+            "macro_recall": 0.19470521623307424
+          }
+        }
+      },
+      {
+        "steps": [
+          1301,
+          1400
+        ],
+        "loss": 0.7353016927838325,
+        "per_source": {
+          "s1": {
+            "samples": 2560,
+            "loss": 1.3913900293409824,
+            "top1": 0.573828125,
+            "macro_recall": 0.18222291974279733
+          },
+          "dagger": {
+            "samples": 10240,
+            "loss": 0.5712796127423644,
+            "top1": 0.82744140625,
+            "macro_recall": 0.20412349350533562
+          }
+        }
+      },
+      {
+        "steps": [
+          1401,
+          1500
+        ],
+        "loss": 0.7478550559282303,
+        "per_source": {
+          "s1": {
+            "samples": 2560,
+            "loss": 1.3837414167821407,
+            "top1": 0.581640625,
+            "macro_recall": 0.1917026748356617
+          },
+          "dagger": {
+            "samples": 10240,
+            "loss": 0.588883462920785,
+            "top1": 0.82060546875,
+            "macro_recall": 0.1997353807277617
+          }
+        }
+      },
+      {
+        "steps": [
+          1501,
+          1600
+        ],
+        "loss": 0.7131985020637512,
+        "per_source": {
+          "s1": {
+            "samples": 2560,
+            "loss": 1.323207188397646,
+            "top1": 0.60078125,
+            "macro_recall": 0.2180648796753233
+          },
+          "dagger": {
+            "samples": 10240,
+            "loss": 0.5606963347643614,
+            "top1": 0.8275390625,
+            "macro_recall": 0.21268506337084758
+          }
+        }
+      },
+      {
+        "steps": [
+          1601,
+          1700
+        ],
+        "loss": 0.6924510332942009,
+        "per_source": {
+          "s1": {
+            "samples": 2560,
+            "loss": 1.3518149137496949,
+            "top1": 0.59765625,
+            "macro_recall": 0.21316240799418415
+          },
+          "dagger": {
+            "samples": 10240,
+            "loss": 0.5276100626215339,
+            "top1": 0.83642578125,
+            "macro_recall": 0.2214031941703394
+          }
+        }
+      },
+      {
+        "steps": [
+          1701,
+          1800
+        ],
+        "loss": 0.6816741248965263,
+        "per_source": {
+          "s1": {
+            "samples": 2560,
+            "loss": 1.3119814977049828,
+            "top1": 0.61171875,
+            "macro_recall": 0.2200744119210953
+          },
+          "dagger": {
+            "samples": 10240,
+            "loss": 0.5240972731262445,
+            "top1": 0.83916015625,
+            "macro_recall": 0.23843913605909303
+          }
+        }
+      },
+      {
+        "steps": [
+          1801,
+          1900
+        ],
+        "loss": 0.6863276827335357,
+        "per_source": {
+          "s1": {
+            "samples": 2560,
+            "loss": 1.2958231747150422,
+            "top1": 0.608984375,
+            "macro_recall": 0.23707684379930374
+          },
+          "dagger": {
+            "samples": 10240,
+            "loss": 0.5339538065716625,
+            "top1": 0.8333984375,
+            "macro_recall": 0.21996654636277424
+          }
+        }
+      },
+      {
+        "steps": [
+          1901,
+          2000
+        ],
+        "loss": 0.6663445746898651,
+        "per_source": {
+          "s1": {
+            "samples": 2560,
+            "loss": 1.2393511444330216,
+            "top1": 0.6328125,
+            "macro_recall": 0.22718082362642308
+          },
+          "dagger": {
+            "samples": 10240,
+            "loss": 0.5230929248034955,
+            "top1": 0.83818359375,
+            "macro_recall": 0.23331863481491918
+          }
+        }
+      },
+      {
+        "steps": [
+          2001,
+          2100
+        ],
+        "loss": 0.6557071277499199,
+        "per_source": {
+          "s1": {
+            "samples": 2560,
+            "loss": 1.2657105311751367,
+            "top1": 0.61328125,
+            "macro_recall": 0.23936949203705726
+          },
+          "dagger": {
+            "samples": 10240,
+            "loss": 0.503206274844706,
+            "top1": 0.842578125,
+            "macro_recall": 0.24184739803571098
+          }
+        }
+      },
+      {
+        "steps": [
+          2101,
+          2200
+        ],
+        "loss": 0.6180927413702011,
+        "per_source": {
+          "s1": {
+            "samples": 2560,
+            "loss": 1.2367247641086578,
+            "top1": 0.634375,
+            "macro_recall": 0.24401470568195424
+          },
+          "dagger": {
+            "samples": 10240,
+            "loss": 0.46343472618609666,
+            "top1": 0.8564453125,
+            "macro_recall": 0.2745458174120265
+          }
+        }
+      },
+      {
+        "steps": [
+          2201,
+          2300
+        ],
+        "loss": 0.6499322032928467,
+        "per_source": {
+          "s1": {
+            "samples": 2560,
+            "loss": 1.2249052431434393,
+            "top1": 0.634765625,
+            "macro_recall": 0.24499349771136125
+          },
+          "dagger": {
+            "samples": 10240,
+            "loss": 0.5061889400705695,
+            "top1": 0.84326171875,
+            "macro_recall": 0.25110949527811777
+          }
+        }
+      },
+      {
+        "steps": [
+          2301,
+          2400
+        ],
+        "loss": 0.6407343056797982,
+        "per_source": {
+          "s1": {
+            "samples": 2560,
+            "loss": 1.216686848551035,
+            "top1": 0.638671875,
+            "macro_recall": 0.25914368210491867
+          },
+          "dagger": {
+            "samples": 10240,
+            "loss": 0.49674616008996964,
+            "top1": 0.8431640625,
+            "macro_recall": 0.26013151565953563
+          }
+        }
+      },
+      {
+        "steps": [
+          2401,
+          2500
+        ],
+        "loss": 0.6145956239104271,
+        "per_source": {
+          "s1": {
+            "samples": 2560,
+            "loss": 1.1784322924911976,
+            "top1": 0.651171875,
+            "macro_recall": 0.2731991839223806
+          },
+          "dagger": {
+            "samples": 10240,
+            "loss": 0.4736364493146539,
+            "top1": 0.85029296875,
+            "macro_recall": 0.25155824016111067
+          }
+        }
+      },
+      {
+        "steps": [
+          2501,
+          2600
+        ],
+        "loss": 0.6093314960598946,
+        "per_source": {
+          "s1": {
+            "samples": 2560,
+            "loss": 1.2023087054491044,
+            "top1": 0.65,
+            "macro_recall": 0.2689642801496323
+          },
+          "dagger": {
+            "samples": 10240,
+            "loss": 0.46108718384057285,
+            "top1": 0.85615234375,
+            "macro_recall": 0.2760296561292387
+          }
+        }
+      },
+      {
+        "steps": [
+          2601,
+          2700
+        ],
+        "loss": 0.5765590387582779,
+        "per_source": {
+          "s1": {
+            "samples": 2560,
+            "loss": 1.18670037612319,
+            "top1": 0.6609375,
+            "macro_recall": 0.2724494996282986
+          },
+          "dagger": {
+            "samples": 10240,
+            "loss": 0.42402370031923053,
+            "top1": 0.864453125,
+            "macro_recall": 0.29038306813436743
+          }
+        }
+      },
+      {
+        "steps": [
+          2701,
+          2800
+        ],
+        "loss": 0.5907186383008957,
+        "per_source": {
+          "s1": {
+            "samples": 2560,
+            "loss": 1.1821413882076741,
+            "top1": 0.65078125,
+            "macro_recall": 0.26823294432466405
+          },
+          "dagger": {
+            "samples": 10240,
+            "loss": 0.4428629532456398,
+            "top1": 0.860546875,
+            "macro_recall": 0.29080169271153444
+          }
+        }
+      },
+      {
+        "steps": [
+          2801,
+          2900
+        ],
+        "loss": 0.6038288640975952,
+        "per_source": {
+          "s1": {
+            "samples": 2560,
+            "loss": 1.1593010179698466,
+            "top1": 0.658203125,
+            "macro_recall": 0.27664312220259896
+          },
+          "dagger": {
+            "samples": 10240,
+            "loss": 0.46496081836521624,
+            "top1": 0.85185546875,
+            "macro_recall": 0.2806133396218977
+          }
+        }
+      },
+      {
+        "steps": [
+          2901,
+          3000
+        ],
+        "loss": 0.5902311599254608,
+        "per_source": {
+          "s1": {
+            "samples": 2560,
+            "loss": 1.18534776866436,
+            "top1": 0.653125,
+            "macro_recall": 0.2627178124494479
+          },
+          "dagger": {
+            "samples": 10240,
+            "loss": 0.44145199917256833,
+            "top1": 0.8619140625,
+            "macro_recall": 0.29396360747660244
+          }
+        }
+      },
+      {
+        "steps": [
+          3001,
+          3100
+        ],
+        "loss": 0.5854104435443879,
+        "per_source": {
+          "s1": {
+            "samples": 2560,
+            "loss": 1.1931284036487342,
+            "top1": 0.65,
+            "macro_recall": 0.26215315431535363
+          },
+          "dagger": {
+            "samples": 10240,
+            "loss": 0.4334809482097626,
+            "top1": 0.858984375,
+            "macro_recall": 0.28785423189447124
+          }
+        }
+      },
+      {
+        "steps": [
+          3101,
+          3200
+        ],
+        "loss": 0.5569194704294205,
+        "per_source": {
+          "s1": {
+            "samples": 2560,
+            "loss": 1.1677992027252913,
+            "top1": 0.653125,
+            "macro_recall": 0.2774909144612341
+          },
+          "dagger": {
+            "samples": 10240,
+            "loss": 0.4041995253413916,
+            "top1": 0.87041015625,
+            "macro_recall": 0.3234218030284877
+          }
+        }
+      },
+      {
+        "steps": [
+          3201,
+          3300
+        ],
+        "loss": 0.5447194239497185,
+        "per_source": {
+          "s1": {
+            "samples": 2560,
+            "loss": 1.1557289976626635,
+            "top1": 0.655859375,
+            "macro_recall": 0.26126662733412986
+          },
+          "dagger": {
+            "samples": 10240,
+            "loss": 0.39196702260524036,
+            "top1": 0.87646484375,
+            "macro_recall": 0.32628818003619403
+          }
+        }
+      },
+      {
+        "steps": [
+          3301,
+          3400
+        ],
+        "loss": 0.5583663761615754,
+        "per_source": {
+          "s1": {
+            "samples": 2560,
+            "loss": 1.1851459514349698,
+            "top1": 0.648828125,
+            "macro_recall": 0.2722083077528401
+          },
+          "dagger": {
+            "samples": 10240,
+            "loss": 0.40167147424072025,
+            "top1": 0.872265625,
+            "macro_recall": 0.3355704118474647
+          }
+        }
+      },
+      {
+        "steps": [
+          3401,
+          3500
+        ],
+        "loss": 0.5572539740800857,
+        "per_source": {
+          "s1": {
+            "samples": 2560,
+            "loss": 1.114603740349412,
+            "top1": 0.684375,
+            "macro_recall": 0.27935671460796613
+          },
+          "dagger": {
+            "samples": 10240,
+            "loss": 0.41791652552783487,
+            "top1": 0.86455078125,
+            "macro_recall": 0.3044081036534848
+          }
+        }
+      },
+      {
+        "steps": [
+          3501,
+          3600
+        ],
+        "loss": 0.5335446506738662,
+        "per_source": {
+          "s1": {
+            "samples": 2560,
+            "loss": 1.1060290165245532,
+            "top1": 0.675390625,
+            "macro_recall": 0.2885246809910543
+          },
+          "dagger": {
+            "samples": 10240,
+            "loss": 0.39042354505509136,
+            "top1": 0.87158203125,
+            "macro_recall": 0.31789400707698134
+          }
+        }
+      },
+      {
+        "steps": [
+          3601,
+          3700
+        ],
+        "loss": 0.5047558376193046,
+        "per_source": {
+          "s1": {
+            "samples": 2560,
+            "loss": 1.0968439389020204,
+            "top1": 0.6734375,
+            "macro_recall": 0.28519881273719466
+          },
+          "dagger": {
+            "samples": 10240,
+            "loss": 0.35673380009829997,
+            "top1": 0.88779296875,
+            "macro_recall": 0.3712940458663617
+          }
+        }
+      },
+      {
+        "steps": [
+          3701,
+          3800
+        ],
+        "loss": 0.501235913336277,
+        "per_source": {
+          "s1": {
+            "samples": 2560,
+            "loss": 1.065284003317356,
+            "top1": 0.678125,
+            "macro_recall": 0.29217200100756563
+          },
+          "dagger": {
+            "samples": 10240,
+            "loss": 0.3602238856256008,
+            "top1": 0.882421875,
+            "macro_recall": 0.35240409565882624
+          }
+        }
+      },
+      {
+        "steps": [
+          3801,
+          3900
+        ],
+        "loss": 0.5033855789899826,
+        "per_source": {
+          "s1": {
+            "samples": 2560,
+            "loss": 1.0950676508247852,
+            "top1": 0.68046875,
+            "macro_recall": 0.305119184501502
+          },
+          "dagger": {
+            "samples": 10240,
+            "loss": 0.3554650520905852,
+            "top1": 0.8857421875,
+            "macro_recall": 0.35889670136188484
+          }
+        }
+      },
+      {
+        "steps": [
+          3901,
+          4000
+        ],
+        "loss": 0.5023446643352508,
+        "per_source": {
+          "s1": {
+            "samples": 2560,
+            "loss": 1.0846545357257127,
+            "top1": 0.6828125,
+            "macro_recall": 0.3052242934373205
+          },
+          "dagger": {
+            "samples": 10240,
+            "loss": 0.3567671894095838,
+            "top1": 0.8849609375,
+            "macro_recall": 0.3546428950792559
+          }
+        }
+      },
+      {
+        "steps": [
+          4001,
+          4100
+        ],
+        "loss": 0.5107703149318695,
+        "per_source": {
+          "s1": {
+            "samples": 2560,
+            "loss": 1.086878065764904,
+            "top1": 0.6890625,
+            "macro_recall": 0.3032133118024888
+          },
+          "dagger": {
+            "samples": 10240,
+            "loss": 0.36674337554723024,
+            "top1": 0.88251953125,
+            "macro_recall": 0.3597227848005537
+          }
+        }
+      },
+      {
+        "steps": [
+          4101,
+          4200
+        ],
+        "loss": 0.46558934450149536,
+        "per_source": {
+          "s1": {
+            "samples": 2560,
+            "loss": 1.0955825626850129,
+            "top1": 0.676953125,
+            "macro_recall": 0.30058383740760386
+          },
+          "dagger": {
+            "samples": 10240,
+            "loss": 0.30809103325009346,
+            "top1": 0.90087890625,
+            "macro_recall": 0.4123483791630877
+          }
+        }
+      },
+      {
+        "steps": [
+          4201,
+          4300
+        ],
+        "loss": 0.46006057649850846,
+        "per_source": {
+          "s1": {
+            "samples": 2560,
+            "loss": 1.0490541059523821,
+            "top1": 0.6796875,
+            "macro_recall": 0.2940732998946913
+          },
+          "dagger": {
+            "samples": 10240,
+            "loss": 0.312812186870724,
+            "top1": 0.90048828125,
+            "macro_recall": 0.39564075759568573
+          }
+        }
+      },
+      {
+        "steps": [
+          4301,
+          4400
+        ],
+        "loss": 0.47839793682098386,
+        "per_source": {
+          "s1": {
+            "samples": 2560,
+            "loss": 1.0420353554189206,
+            "top1": 0.69609375,
+            "macro_recall": 0.3092447799465402
+          },
+          "dagger": {
+            "samples": 10240,
+            "loss": 0.3374885722063482,
+            "top1": 0.89306640625,
+            "macro_recall": 0.3975858988047434
+          }
+        }
+      },
+      {
+        "steps": [
+          4401,
+          4500
+        ],
+        "loss": 0.46458523511886596,
+        "per_source": {
+          "s1": {
+            "samples": 2560,
+            "loss": 1.0400630004704,
+            "top1": 0.69296875,
+            "macro_recall": 0.30755912134479
+          },
+          "dagger": {
+            "samples": 10240,
+            "loss": 0.32071578605100515,
+            "top1": 0.8953125,
+            "macro_recall": 0.39615051066890133
+          }
+        }
+      },
+      {
+        "steps": [
+          4501,
+          4600
+        ],
+        "loss": 0.4966726925969124,
+        "per_source": {
+          "s1": {
+            "samples": 2560,
+            "loss": 1.0994191970676184,
+            "top1": 0.66640625,
+            "macro_recall": 0.2998383549551616
+          },
+          "dagger": {
+            "samples": 10240,
+            "loss": 0.3459860661998391,
+            "top1": 0.884765625,
+            "macro_recall": 0.37571871781308935
+          }
+        }
+      },
+      {
+        "steps": [
+          4601,
+          4700
+        ],
+        "loss": 0.4316828563809395,
+        "per_source": {
+          "s1": {
+            "samples": 2560,
+            "loss": 1.0432902421802281,
+            "top1": 0.68984375,
+            "macro_recall": 0.30849487880038373
+          },
+          "dagger": {
+            "samples": 10240,
+            "loss": 0.27878100499510766,
+            "top1": 0.910546875,
+            "macro_recall": 0.4274333594325797
+          }
+        }
+      },
+      {
+        "steps": [
+          4701,
+          4800
+        ],
+        "loss": 0.4481939035654068,
+        "per_source": {
+          "s1": {
+            "samples": 2560,
+            "loss": 1.0893453206866979,
+            "top1": 0.67890625,
+            "macro_recall": 0.31787564363006965
+          },
+          "dagger": {
+            "samples": 10240,
+            "loss": 0.2879060461185873,
+            "top1": 0.905859375,
+            "macro_recall": 0.4209056103005802
+          }
+        }
+      },
+      {
+        "steps": [
+          4801,
+          4900
+        ],
+        "loss": 0.44121300041675565,
+        "per_source": {
+          "s1": {
+            "samples": 2560,
+            "loss": 1.0368762705475092,
+            "top1": 0.69140625,
+            "macro_recall": 0.34526271489891797
+          },
+          "dagger": {
+            "samples": 10240,
+            "loss": 0.29229717804118993,
+            "top1": 0.90361328125,
+            "macro_recall": 0.4459776924700537
+          }
+        }
+      },
+      {
+        "steps": [
+          4901,
+          5000
+        ],
+        "loss": 0.4468457281589508,
+        "per_source": {
+          "s1": {
+            "samples": 2560,
+            "loss": 1.0613845232874155,
+            "top1": 0.683984375,
+            "macro_recall": 0.32621225251781116
+          },
+          "dagger": {
+            "samples": 10240,
+            "loss": 0.2932110165245831,
+            "top1": 0.90478515625,
+            "macro_recall": 0.4119119513210606
+          }
+        }
+      }
+    ]
+  },
+  "checkpoint": {
+    "path": ".tmp_v410_wp05_train_beta05_5k/b0_s0_dagger_step5000.pt",
+    "bytes": 2941187,
+    "sha256": "692fdc61dc473ff10657d2a0b1a37434d3b24561fedb9798a41a38086bdbd120",
+    "schema": "v410-wp04-bc-arm-checkpoint/1",
+    "arm": "B0",
+    "parameters": 731802,
+    "format": "torch.save (schema v410-wp04-bc-arm-checkpoint/1)",
+    "in_repo": false
+  },
+  "rollout_checkpoint": {
+    "sha256": "6ebe4ea91d81d9333bfa1ccc065fc3515bb25b1d3b90a2684cdaa8a0a69b8086",
+    "note": "the checkpoint the beta=0.5 round-2 shards were rolled out from; it equals the WP05.5 50k B0 step-1000 checkpoint, so the data was collected by the beta=1.0 50k student"
+  },
+  "commands": [
+    {
+      "step": "enumerate complete round-2 shards",
+      "command": "/root/v400-venv/bin/python .tmp_v410_wp05_train_beta05_5k/logs/enumerate_shards.py",
+      "exit_code": 0,
+      "result": "15/15 complete=true, 3,500 decisions / 7,000 frames each, beta=0.5, stage 0, difficulty normal, stop_reason decisions",
+      "log": ".tmp_v410_wp05_train_beta05_5k/logs/enumerate_shards.log"
+    },
+    {
+      "step": "convert 15 shards with the WP05.2 CLI",
+      "command": "bash .tmp_v410_wp05_train_beta05_5k/logs/convert_labels.sh -> /root/v400-venv/bin/python -m touhou_rl.v410.dagger.labels --shard .tmp_v410_wp05_round2/shards/dagger-s0d1seed<seed> --out .tmp_v410_wp05_train_beta05_5k/labels/dagger-s0d1seed<seed> --tolerance 8.0",
+      "exit_code": 0,
+      "exit_codes_per_shard": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "log": ".tmp_v410_wp05_train_beta05_5k/logs/convert_exit_codes.txt"
+    },
+    {
+      "step": "independently verify converted labels (rows + SHA-256 + counts)",
+      "command": "/root/v400-venv/bin/python .tmp_v410_wp05_train_beta05_5k/logs/verify_labels.py",
+      "exit_code": 0,
+      "log": ".tmp_v410_wp05_train_beta05_5k/logs/verify_labels.log"
+    },
+    {
+      "step": "train B0, 5,000 steps (everything else identical to WP05.7)",
+      "command": "bash .tmp_v410_wp05_train_beta05_5k/logs/run_train.sh -> /root/v400-venv/bin/python -m touhou_rl.v410.dagger.train train --steps 5000 --batch-size 128 --seed 0 --s1-share 0.2 --device auto --shard-seeds 2025-2039 --shards-root .tmp_v410_wp05_round2/shards --labels-dir .tmp_v410_wp05_train_beta05_5k/labels --workdir .tmp_v410_wp05_train_beta05_5k --out .tmp_v410_wp05_train_beta05_5k/train_run.json",
+      "exit_code": 0,
+      "wall_seconds": 478,
+      "payload_elapsed_seconds": 461.3748,
+      "log": ".tmp_v410_wp05_train_beta05_5k/logs/train.log"
+    },
+    {
+      "step": "dev wiring dry run (60 frames, 1 seed; not evidence)",
+      "command": "xvfb-run -a -s '-screen 0 1024x768x24' /root/v400-venv/bin/python tools/rl/v410_student_eval.py --engine /root/Touhou_RL/third_party/th08-rl/build/rl_v3/th08-modern --data-dir /root/v400-data/game --checkpoint .tmp_v410_wp05_train_beta05_5k/b0_s0_dagger_step5000.pt --seeds 1000 --max-frames 60 --stop-on-death --out .tmp_v410_wp05_train_beta05_5k/dryrun_eval.json",
+      "exit_code": 0
+    },
+    {
+      "step": "20 dev episodes after the G410-1 chunk4 teacher batch exited",
+      "command": "bash .tmp_v410_wp05_train_beta05_5k/logs/run_eval.sh -> xvfb-run -a -s '-screen 0 1024x768x24' /root/v400-venv/bin/python tools/rl/v410_student_eval.py --engine /root/Touhou_RL/third_party/th08-rl/build/rl_v3/th08-modern --data-dir /root/v400-data/game --checkpoint .tmp_v410_wp05_train_beta05_5k/b0_s0_dagger_step5000.pt --seeds 1000-1019 --stage 0 --difficulty normal --max-frames 19887 --stop-on-death --out .tmp_v410_wp05_train_beta05_5k/eval_dev20.json",
+      "exit_code": 0,
+      "wall_seconds": 465,
+      "log": ".tmp_v410_wp05_train_beta05_5k/logs/eval_dev20.log",
+      "waited_for_teacher_seconds": 1500,
+      "waited_for": "G410-1 chunk4 (tools/rl/v410_teacher_fast20.py, seeds 61375-61399) to exit; polled every 60 s, cap 2400 s; the teacher process was never signalled"
+    },
+    {
+      "step": "build this evidence file",
+      "command": "/root/v400-venv/bin/python .tmp_v410_wp05_train_beta05_5k/logs/build_evidence_5k.py",
+      "exit_code": 0
+    }
+  ],
+  "dev_eval": {
+    "source": ".tmp_v410_wp05_train_beta05_5k/eval_dev20.json",
+    "schema": "v410-student-eval-smoke/1",
+    "kind": "dev-smoke",
+    "engine": {
+      "path": "/root/Touhou_RL/third_party/th08-rl/build/rl_v3/th08-modern",
+      "sha256": "691bfd77b7eca3361aa8bb7af0977556a70cc73a070b29a2447222ba7a568ef6",
+      "role": "env (pixels + state)"
+    },
+    "suite": {
+      "name": "S1N",
+      "stage": 0,
+      "stage_argument_semantics": "RESET stage is 0-based; S1N = stage 0",
+      "difficulty": "normal",
+      "max_frames": 19887,
+      "stop_on_death": true,
+      "obs_window": "consecutive",
+      "window_alignment": {
+        "mode": "consecutive",
+        "frames_per_decision": 2,
+        "renders_per_decision": 2,
+        "stack_span_frames": 4,
+        "matches_training_obs": true,
+        "training_window": "the D410-S1 shards store frames[t-3..t], four consecutive game frames; one decision = two frames = two renders, so the stack is consecutive"
+      }
+    },
+    "seed_policy": {
+      "allowed": "1000-1099 (dev)",
+      "refused": [
+        "60000-60199 (confirm)",
+        "1-20 (D410-S1 corpus: train 1-14 / val 15-17 / test 18-20)"
+      ],
+      "seeds_requested": [
+        1000,
+        1001,
+        1002,
+        1003,
+        1004,
+        1005,
+        1006,
+        1007,
+        1008,
+        1009,
+        1010,
+        1011,
+        1012,
+        1013,
+        1014,
+        1015,
+        1016,
+        1017,
+        1018,
+        1019
+      ],
+      "all_dev": true
+    },
+    "seeds": [
+      1000,
+      1001,
+      1002,
+      1003,
+      1004,
+      1005,
+      1006,
+      1007,
+      1008,
+      1009,
+      1010,
+      1011,
+      1012,
+      1013,
+      1014,
+      1015,
+      1016,
+      1017,
+      1018,
+      1019
+    ],
+    "n": 20,
+    "n_measured": 20,
+    "clears": 0,
+    "clear_rate": 0.0,
+    "stop_reasons": {
+      "death_stop": 20
+    },
+    "frames": {
+      "values": [
+        1615,
+        1532,
+        1530,
+        1548,
+        1548,
+        1610,
+        1553,
+        1593,
+        1574,
+        1867,
+        1770,
+        1531,
+        2151,
+        2213,
+        1676,
+        1928,
+        1784,
+        1601,
+        1549,
+        1609
+      ],
+      "mean": 1689.1,
+      "median": 1605.0,
+      "min": 1530,
+      "max": 2213,
+      "sd_sample": 204.37759172668612,
+      "sd_as_reported": 204.37759172668612
+    },
+    "actions": {
+      "decisions": 16896,
+      "histogram": [
+        10618,
+        125,
+        502,
+        2048,
+        124,
+        114,
+        557,
+        2379,
+        65,
+        0,
+        0,
+        157,
+        137,
+        2,
+        0,
+        53,
+        15,
+        0
+      ],
+      "share": [
+        0.628433,
+        0.007398,
+        0.029711,
+        0.121212,
+        0.007339,
+        0.006747,
+        0.032966,
+        0.140803,
+        0.003847,
+        0.0,
+        0.0,
+        0.009292,
+        0.008108,
+        0.000118,
+        0.0,
+        0.003137,
+        0.000888,
+        0.0
+      ],
+      "labels": [
+        "idle",
+        "N",
+        "NE",
+        "E",
+        "SE",
+        "S",
+        "SW",
+        "W",
+        "NW",
+        "focus-idle",
+        "focus-N",
+        "focus-NE",
+        "focus-E",
+        "focus-SE",
+        "focus-S",
+        "focus-SW",
+        "focus-W",
+        "focus-NW"
+      ],
+      "idle_share": 0.6284327651515151,
+      "idle_share_by_episode_mean": 0.6317297030066238,
+      "unique_actions_mean": 12.5,
+      "idle_definition": "candidate 0 = focus 0 + move 0 (no direction held)",
+      "note": "pooled over the arm's episodes; descriptive only"
+    },
+    "idle_share": 0.6284327651515151,
+    "idle_share_by_episode_mean": 0.6317297030066238,
+    "unique_actions_mean": 12.5,
+    "deaths_mean": 1.0,
+    "per_seed": [
+      {
+        "seed": 1000,
+        "frames": 1615,
+        "deaths": 1.0,
+        "stop_reason": "death_stop",
+        "stage_clear": false,
+        "score": 13543,
+        "steps": 808,
+        "action0_share": 0.613861,
+        "unique_actions": 12,
+        "error": null
+      },
+      {
+        "seed": 1001,
+        "frames": 1532,
+        "deaths": 1.0,
+        "stop_reason": "death_stop",
+        "stage_clear": false,
+        "score": 10829,
+        "steps": 766,
+        "action0_share": 0.652742,
+        "unique_actions": 10,
+        "error": null
+      },
+      {
+        "seed": 1002,
+        "frames": 1530,
+        "deaths": 1.0,
+        "stop_reason": "death_stop",
+        "stage_clear": false,
+        "score": 10794,
+        "steps": 765,
+        "action0_share": 0.661438,
+        "unique_actions": 13,
+        "error": null
+      },
+      {
+        "seed": 1003,
+        "frames": 1548,
+        "deaths": 1.0,
+        "stop_reason": "death_stop",
+        "stage_clear": false,
+        "score": 11444,
+        "steps": 774,
+        "action0_share": 0.657623,
+        "unique_actions": 13,
+        "error": null
+      },
+      {
+        "seed": 1004,
+        "frames": 1548,
+        "deaths": 1.0,
+        "stop_reason": "death_stop",
+        "stage_clear": false,
+        "score": 11434,
+        "steps": 774,
+        "action0_share": 0.655039,
+        "unique_actions": 13,
+        "error": null
+      },
+      {
+        "seed": 1005,
+        "frames": 1610,
+        "deaths": 1.0,
+        "stop_reason": "death_stop",
+        "stage_clear": false,
+        "score": 12882,
+        "steps": 805,
+        "action0_share": 0.639752,
+        "unique_actions": 13,
+        "error": null
+      },
+      {
+        "seed": 1006,
+        "frames": 1553,
+        "deaths": 1.0,
+        "stop_reason": "death_stop",
+        "stage_clear": false,
+        "score": 11814,
+        "steps": 777,
+        "action0_share": 0.656371,
+        "unique_actions": 13,
+        "error": null
+      },
+      {
+        "seed": 1007,
+        "frames": 1593,
+        "deaths": 1.0,
+        "stop_reason": "death_stop",
+        "stage_clear": false,
+        "score": 12607,
+        "steps": 797,
+        "action0_share": 0.641154,
+        "unique_actions": 13,
+        "error": null
+      },
+      {
+        "seed": 1008,
+        "frames": 1574,
+        "deaths": 1.0,
+        "stop_reason": "death_stop",
+        "stage_clear": false,
+        "score": 12926,
+        "steps": 787,
+        "action0_share": 0.631512,
+        "unique_actions": 11,
+        "error": null
+      },
+      {
+        "seed": 1009,
+        "frames": 1867,
+        "deaths": 1.0,
+        "stop_reason": "death_stop",
+        "stage_clear": false,
+        "score": 17006,
+        "steps": 934,
+        "action0_share": 0.614561,
+        "unique_actions": 13,
+        "error": null
+      },
+      {
+        "seed": 1010,
+        "frames": 1770,
+        "deaths": 1.0,
+        "stop_reason": "death_stop",
+        "stage_clear": false,
+        "score": 14542,
+        "steps": 885,
+        "action0_share": 0.60791,
+        "unique_actions": 11,
+        "error": null
+      },
+      {
+        "seed": 1011,
+        "frames": 1531,
+        "deaths": 1.0,
+        "stop_reason": "death_stop",
+        "stage_clear": false,
+        "score": 11138,
+        "steps": 766,
+        "action0_share": 0.651436,
+        "unique_actions": 10,
+        "error": null
+      },
+      {
+        "seed": 1012,
+        "frames": 2151,
+        "deaths": 1.0,
+        "stop_reason": "death_stop",
+        "stage_clear": false,
+        "score": 18583,
+        "steps": 1076,
+        "action0_share": 0.545539,
+        "unique_actions": 14,
+        "error": null
+      },
+      {
+        "seed": 1013,
+        "frames": 2213,
+        "deaths": 1.0,
+        "stop_reason": "death_stop",
+        "stage_clear": false,
+        "score": 26418,
+        "steps": 1107,
+        "action0_share": 0.570912,
+        "unique_actions": 13,
+        "error": null
+      },
+      {
+        "seed": 1014,
+        "frames": 1676,
+        "deaths": 1.0,
+        "stop_reason": "death_stop",
+        "stage_clear": false,
+        "score": 13976,
+        "steps": 838,
+        "action0_share": 0.656325,
+        "unique_actions": 13,
+        "error": null
+      },
+      {
+        "seed": 1015,
+        "frames": 1928,
+        "deaths": 1.0,
+        "stop_reason": "death_stop",
+        "stage_clear": false,
+        "score": 17512,
+        "steps": 964,
+        "action0_share": 0.614108,
+        "unique_actions": 13,
+        "error": null
+      },
+      {
+        "seed": 1016,
+        "frames": 1784,
+        "deaths": 1.0,
+        "stop_reason": "death_stop",
+        "stage_clear": false,
+        "score": 22164,
+        "steps": 892,
+        "action0_share": 0.609865,
+        "unique_actions": 13,
+        "error": null
+      },
+      {
+        "seed": 1017,
+        "frames": 1601,
+        "deaths": 1.0,
+        "stop_reason": "death_stop",
+        "stage_clear": false,
+        "score": 12514,
+        "steps": 801,
+        "action0_share": 0.656679,
+        "unique_actions": 13,
+        "error": null
+      },
+      {
+        "seed": 1018,
+        "frames": 1549,
+        "deaths": 1.0,
+        "stop_reason": "death_stop",
+        "stage_clear": false,
+        "score": 11514,
+        "steps": 775,
+        "action0_share": 0.656774,
+        "unique_actions": 13,
+        "error": null
+      },
+      {
+        "seed": 1019,
+        "frames": 1609,
+        "deaths": 1.0,
+        "stop_reason": "death_stop",
+        "stage_clear": false,
+        "score": 12872,
+        "steps": 805,
+        "action0_share": 0.640994,
+        "unique_actions": 13,
+        "error": null
+      }
+    ],
+    "episode_wall_seconds_total": 451.42900000000003,
+    "episode_wall_seconds": [
+      21.492,
+      21.544,
+      21.627,
+      21.51,
+      22.027,
+      22.203,
+      21.305,
+      22.197,
+      21.353,
+      24.101,
+      23.151,
+      20.88,
+      27.096,
+      27.92,
+      21.957,
+      24.904,
+      22.476,
+      21.346,
+      21.068,
+      21.272
+    ],
+    "driver_wall_seconds": 465,
+    "waited_for_teacher_seconds": 1500,
+    "verdict": {
+      "what_this_is": "smoke: the v410 checkpoint ran in the real engine under the S1N dev ruler",
+      "is_a_gate": false,
+      "is_a_development_score": false,
+      "is_a_pass_rate": false,
+      "is_a_four_arm_comparison": false,
+      "conclusion_allowed": false
+    },
+    "not_a_gate": true,
+    "not_a_development_score": true,
+    "not_g410_2": true
+  },
+  "teacher_gate": {
+    "what": "G410-1 chunk4 teacher batch (tools/rl/v410_teacher_fast20.py, seeds 61375-61399, engine rl_laser) that the dev episodes had to wait for",
+    "started_at": "2026-11-13T13:51:16+08:00",
+    "finished_at": "2026-11-13T14:26:59+08:00",
+    "exit_code": 0,
+    "per_seed_jsonl_files": 25,
+    "evals_started_after": "the wait loop polls `pgrep -f v410_teacher_fast20` every 60 s and only proceeds once the teacher process is gone",
+    "waited_seconds": 1500,
+    "poll_seconds": 60,
+    "wait_cap_seconds": 2400,
+    "timeout_hit": false,
+    "teacher_never_signalled": true,
+    "note": "the teacher batch is not this work package's evidence: it is only the reason the 20 episodes were scheduled after it, so that they would not be CPU-starved the way the WP05.7 attempt-1 eval was"
+  },
+  "verification": {
+    "fail_closed": [
+      {
+        "check": "eval_dev20.json exit_code == 0",
+        "result": true
+      },
+      {
+        "check": "exactly 20 episodes, seeds exactly 1000-1019",
+        "result": true
+      },
+      {
+        "check": "every episode error == null",
+        "result": true
+      },
+      {
+        "check": "eval header checkpoint sha256 == train checkpoint sha256",
+        "result": true
+      },
+      {
+        "check": "every episode checkpoint_sha256 == that checkpoint",
+        "result": true
+      },
+      {
+        "check": "every episode engine_sha256 == eval header engine sha256",
+        "result": true
+      },
+      {
+        "check": "recomputed frames mean/median match the evaluator (1e-6)",
+        "result": true
+      },
+      {
+        "check": "recomputed idle share matches the evaluator exactly",
+        "result": true
+      },
+      {
+        "check": "train metrics steps == 5,000 and samples == 640,000",
+        "result": true
+      },
+      {
+        "check": "15 shards, 52,500 decisions, 52,500 label rows, 105,000 frames",
+        "result": true
+      },
+      {
+        "check": "newline-separated label rows, labels/obs SHA-256 verified per shard (verify_labels.py re-hashed every labels_v410.jsonl)",
+        "result": true
+      },
+      {
+        "check": "the first 1,000 steps replay the WP05.7 run's logged losses exactly",
+        "result": true
+      }
+    ],
+    "source": ".tmp_v410_wp05_train_beta05_5k/logs/build_evidence_5k.py",
+    "note": "the builder aborts with exit 3 on any disagreement, so a partial or stale eval JSON cannot be promoted into this file"
+  },
+  "comparison": {
+    "rule": "descriptive side-by-side only: the beta=0.5 1k arm shares this run's shards, labels, mix, optimiser, seed and dev suite, so the only controlled change is 5x budget (128,000 -> 640,000 samples); the beta=1.0 50k arm differs in the injection coefficient and the rollout student. No interval, no significance test, no gate, no decision rule",
+    "beta05_1k": {
+      "checkpoint": "a11ba0b74547515023d98145c915e0afb7d5eaafc3bea8d9d11b2429ede25d5b",
+      "decisions": 52500,
+      "train": {
+        "steps": 1000,
+        "samples": 128000,
+        "loss": 0.956429641366005,
+        "top1": 0.71640625,
+        "macro_recall": 0.14058721302740232,
+        "throughput_sps": 776.27,
+        "elapsed_seconds": 193.7904
+      },
+      "dev": {
+        "clears": 0,
+        "n": 20,
+        "mean": 1339.95,
+        "median": 1321.0,
+        "idle_share": 0.7106617921360889,
+        "unique_actions_mean": 6.7,
+        "episode_wall_seconds_total": 382.404
+      },
+      "evidence": [
+        "evidence/WP05/train_beta05.json",
+        "evidence/WP05/EVAL_BETA05.md"
+      ]
+    },
+    "beta1_50k": {
+      "checkpoint": "6ebe4ea91d81d9333bfa1ccc065fc3515bb25b1d3b90a2684cdaa8a0a69b8086",
+      "decisions": 52500,
+      "shards": 15,
+      "train": {
+        "steps": 1000,
+        "samples": 128000,
+        "loss": 0.8336316267251969,
+        "top1": 0.757921875,
+        "macro_recall": 0.20809347262650604,
+        "throughput_sps": 2112.13,
+        "elapsed_seconds": 69.0228
+      },
+      "dev": {
+        "clears": 0,
+        "n": 20,
+        "mean": 1643.25,
+        "median": 1580.5,
+        "idle_share": 0.7206132879045997,
+        "unique_actions_mean": 8.8,
+        "episode_wall_seconds_total": 467.164,
+        "source": ".tmp_v410_wp05_train50k/eval_dev20.json (run directory)"
+      },
+      "evidence": [
+        "evidence/WP05/train_50k.json",
+        "evidence/WP05/EVAL_50K.md"
+      ]
+    },
+    "deltas_vs_beta05_1k": {
+      "clear_rate": {
+        "wp05_8": 0.0,
+        "reference": 0.0
+      },
+      "mean_frames": {
+        "wp05_8": 1689.1,
+        "reference": 1339.95,
+        "delta": 349.14999999999986,
+        "delta_pct": 26.05694242322474
+      },
+      "median_frames": {
+        "wp05_8": 1605.0,
+        "reference": 1321.0,
+        "delta": 284.0
+      },
+      "idle_share": {
+        "wp05_8": 0.6284327651515151,
+        "reference": 0.7106617921360889,
+        "delta_pp": -8.222902698457379
+      },
+      "unique_actions_mean": {
+        "wp05_8": 12.5,
+        "reference": 6.7
+      },
+      "train_loss": {
+        "wp05_8": 0.6585620161533355,
+        "reference": 0.956429641366005
+      },
+      "train_top1": {
+        "wp05_8": 0.7992578125,
+        "reference": 0.71640625
+      },
+      "train_macro_recall": {
+        "wp05_8": 0.27325591373739283,
+        "reference": 0.14058721302740232
+      },
+      "train_samples": {
+        "wp05_8": 640000,
+        "reference": 128000,
+        "ratio": 5.0
+      },
+      "reference_checkpoint": "a11ba0b74547515023d98145c915e0afb7d5eaafc3bea8d9d11b2429ede25d5b",
+      "reference_decisions": 52500
+    },
+    "deltas_vs_beta1_50k": {
+      "clear_rate": {
+        "wp05_8": 0.0,
+        "reference": 0.0
+      },
+      "mean_frames": {
+        "wp05_8": 1689.1,
+        "reference": 1643.25,
+        "delta": 45.84999999999991,
+        "delta_pct": 2.790202342917992
+      },
+      "median_frames": {
+        "wp05_8": 1605.0,
+        "reference": 1580.5,
+        "delta": 24.5
+      },
+      "idle_share": {
+        "wp05_8": 0.6284327651515151,
+        "reference": 0.7206132879045997,
+        "delta_pp": -9.218052275308452
+      },
+      "unique_actions_mean": {
+        "wp05_8": 12.5,
+        "reference": 8.8
+      },
+      "train_loss": {
+        "wp05_8": 0.6585620161533355,
+        "reference": 0.8336316267251969
+      },
+      "train_top1": {
+        "wp05_8": 0.7992578125,
+        "reference": 0.757921875
+      },
+      "train_macro_recall": {
+        "wp05_8": 0.27325591373739283,
+        "reference": 0.20809347262650604
+      },
+      "train_samples": {
+        "wp05_8": 640000,
+        "reference": 128000,
+        "ratio": 5.0
+      },
+      "reference_checkpoint": "6ebe4ea91d81d9333bfa1ccc065fc3515bb25b1d3b90a2684cdaa8a0a69b8086",
+      "reference_decisions": 52500
+    },
+    "confounds": [
+      "the only deliberate change versus the 1k arm is the step budget: 1,000 -> 5,000 steps (128,000 -> 640,000 samples over the same 46,397 S1 rows and 52,500 DAgger rows); data, mix, seed, optimiser and dev suite are identical",
+      "one training seed (0) and one checkpoint per arm: no variance estimate",
+      "the beta=1.0 50k arm was collected at injection_rate 1.0 and rolled out from the round-1 baseline 3bc0ec44..., while the beta=0.5 shards were rolled out from 6ebe4ea9... at injection_rate 0.500857, so the beta=1.0 contrast is not a controlled budget comparison",
+      "this run trained while the G410-1 chunk4 teacher batch (6 concurrent teacher instances) shared the same host, exactly as the 1k arm did"
+    ]
+  },
+  "scope": {
+    "purpose": "WP05.8 controlled budget follow-up to WP05.7: B0 behaviour cloning on the same 15 complete beta=0.5 round-2 DAgger shards, 5,000 steps instead of 1,000, plus the 20 descriptive dev episodes",
+    "beta_0.5_round": true,
+    "round": 2,
+    "steps": 5000,
+    "budget_increase_vs_wp05_7": 5,
+    "g410_2": false,
+    "new_collection": false,
+    "game_launched": true,
+    "game_launched_note": "only by tools/rl/v410_student_eval.py for the 20 dev episodes; no collection rollout was run",
+    "test_split_read": false,
+    "val_split_read": false,
+    "train_split_only": true,
+    "confirm_split_read": false,
+    "dev_episodes": 20,
+    "dev_seed_range": "1000-1019"
+  },
+  "tool_payload_note": "touhou_rl/v410/dagger/train.py embeds a generic WP05.3 smoke scope/not_claimed block in train_run.json (it still says '1,000 steps', 'not a beta=0.5 round'). That text is stale for this run; it is preserved verbatim under raw_tool_payload_scope below and is NOT relied on for any claim here.",
+  "raw_tool_payload_scope": {
+    "scope": {
+      "purpose": "WP05.3 DAgger-labelled B0 smoke (1,000 steps)",
+      "formal_50k": false,
+      "beta_0.5_round": false,
+      "g410_2": false,
+      "new_collection": false,
+      "game_launched": false,
+      "test_split_read": false,
+      "val_split_read": false,
+      "train_split_only": true
+    },
+    "not_claimed": [
+      "not the 50k-decision first DAgger round: this smoke trains 1,000 steps on the six completed shards (21,000 decisions, ~42 % of the 50k target)",
+      "not a β=0.5 round: every shard here used β=1.0 (full teacher injection)",
+      "not G410-2: no confirm-split run, no 20-episode protocol, no four-arm matrix",
+      "not a development score: the offline metrics are in-sample on the exact train batches this run consumed, so they are optimisation diagnostics, not held-out skill",
+      "no new data collection and no engine run: the game is never launched by this module; the two dev episodes are a separate evaluator invocation",
+      "one model arm (B0), one seed (0), one fixed step budget (1,000): no variance estimate and no convergence claim",
+      "rows without a chosen plan are excluded, and unknown candidates are never negative labels; that rule is not a learned preference over unknowns"
+    ]
+  },
+  "not_claimed": [
+    "G410-2 (the v4.1.0 acceptance gate) -- not measured, not attempted",
+    "the confirm split 60000-60199 -- never read",
+    "any significance test, confidence interval or pass/fail gate on the 20 dev episodes: the contrast with the 1k and beta=1.0 arms is descriptive",
+    "that 5,000 steps fixes, improves or is sufficient for S1N clearance: 0/20 clears on every arm in the comparison",
+    "that beta=0.5 data is better or worse than beta=1.0: the two arms differ in the injection coefficient and the rollout student as well as in budget",
+    "any RL/PPO training: B0 is behaviour cloning with chosen one-hot CE",
+    "that more steps would keep helping: only 1,000 and 5,000 steps were measured",
+    "any held-out offline accuracy: every offline metric is in-sample on the exact train batches the run consumed",
+    "any new data collection, seed confirmation or teacher re-run"
+  ],
+  "deterministic_continuation": {
+    "claim": "with the same seed, data and mix, the 5,000-step run replays the WP05.7 1,000-step run exactly for its first 1,000 steps, so the only difference between the two checkpoints is the extra 4,000 steps",
+    "reference_log": ".tmp_v410_wp05_train_beta05/logs/train.log (WP05.7, read-only)",
+    "compared_logged_steps": 11,
+    "max_abs_loss_diff": 0.0,
+    "identical": true,
+    "first_step_loss_wp05_8": 2.9003,
+    "first_step_loss_wp05_7": 2.9003,
+    "step_1000_loss_wp05_8": 0.6633,
+    "step_1000_loss_wp05_7": 0.6633,
+    "note": "the trainer logs step 1 and then every 100th step, so 11 points inside the first 1,000 steps are comparable; all 11 are bit-identical"
+  },
+  "limits": [
+    "one arm (B0), one training seed (0), one budget pair (1k vs 5k): no variance estimate, so a single 20-episode contrast cannot separate budget from noise",
+    "52,500 round-2 decisions (105 % of the 50,000 target) but still one DAgger round; 5,000 steps reuse the same 46,397 S1 / 52,500 DAgger rows, so the extra budget is repetition, not new data",
+    "offline metrics are in-sample train-batch metrics, not held-out accuracy",
+    "dev episodes are the 20 dev seeds only (1000-1019); G410-2 is not measured",
+    "wall times are not comparable with the beta=1.0 runs: a G410-1 teacher chunk4 batch (6 concurrent teacher instances) ran on the same 20-core host during training",
+    "the dev episodes started only after the chunk4 teacher batch exited, so the eval wall time is comparable with the WP05.7 attempt-2 eval, not with the contended attempt-1"
+  ]
+}

@@ -1,0 +1,315 @@
+{
+  "schema": "v410-boundary-evidence/1",
+  "wp": "WP01.2a",
+  "title": "information boundary, strict feedback and termination semantics",
+  "generated_at": "2026-11-13T00:31:00+08:00",
+  "environment": {
+    "python": "3.12.10",
+    "numpy": "2.5.4",
+    "torch": "2.14.1+cu132",
+    "os": "Windows"
+  },
+  "activity": {
+    "game_launched": false,
+    "trained": false,
+    "collected_data": false,
+    "touched_sealed_assets": false,
+    "git_commit": false,
+    "note": "pure numpy module and pytest slice; no engine, no checkpoint, no shard"
+  },
+  "commands": [
+    {
+      "cmd": "$env:PYTHONPATH='D:\\WorkShop\\Touhou_RL'; python -m pytest -p no:cacheprovider --basetemp .tmp_v410_wp012_pytest -q tests/test_v410_boundary.py",
+      "exit_code": 0,
+      "output": "151 passed in 0.24s"
+    },
+    {
+      "cmd": "python -m compileall -q touhou_rl/v410",
+      "exit_code": 0,
+      "output": "no output (syntax ok)"
+    }
+  ],
+  "pytest": {
+    "target": "tests/test_v410_boundary.py",
+    "collected": 151,
+    "passed": 151,
+    "failed": 0,
+    "skipped": 0,
+    "error": 0,
+    "xfail": 0,
+    "duration_s": 0.24,
+    "duration_range_s": "0.24-0.30 across reruns",
+    "exit_code": 0,
+    "counts_kind": "test cases, not game outcomes",
+    "rerun_command": "$env:PYTHONPATH='D:\\WorkShop\\Touhou_RL'; python -m pytest -p no:cacheprovider --basetemp .tmp_v410_wp012_pytest -q tests/test_v410_boundary.py"
+  },
+  "input_shapes": {
+    "play": {"shape": [4, 112, 96], "dtype": "uint8", "order": "oldest-first t-3,t-2,t-1,t"},
+    "play_norm": {"shape": [4, 112, 96], "dtype": "float32", "recipe": "uint8 / 255.0"},
+    "hud": {"shape": [56, 160], "dtype": "uint8"},
+    "act_hist": {"shape": [8, 18], "dtype": "uint8", "encoding": "one-hot, oldest-first, current action excluded"},
+    "policy_move_logits": {"shape": [18], "dtype": "float64", "note": "18 move/focus logits, interface stub"},
+    "policy_bomb_logit": {"shape": [1], "dtype": "float64", "note": "binary bomb logit, interface stub"},
+    "fixture_source": "numpy.random.default_rng(20241113), synthetic pixels; no game frame and no D1 shard was read",
+    "privileged_keys_in_fixtures": "all 17 PRIVILEGED_KEYS are forged with two different value sets to test invariance"
+  },
+  "checks": [
+    {
+      "id": "B01",
+      "check": "observation_keys_exact",
+      "constraint": "strict_observation returns exactly play, play_norm, hud, act_hist",
+      "tests": [
+        "test_strict_observation_returns_exactly_the_four_keys",
+        "test_strict_observation_carries_no_privileged_key",
+        "test_privileged_keys_cover_the_required_set"
+      ],
+      "cases": 3,
+      "status": "enforced"
+    },
+    {
+      "id": "B02",
+      "check": "observation_input_contract",
+      "constraint": "non-array, wrong dtype or wrong shape raises ProtocolError through encode_observation",
+      "tests": [
+        "test_strict_observation_rejects_non_arrays",
+        "test_strict_observation_rejects_wrong_shape_or_dtype"
+      ],
+      "cases": 6,
+      "status": "enforced"
+    },
+    {
+      "id": "B03",
+      "check": "privileged_keys_forbidden",
+      "constraint": "every privileged key, at any depth and in any letter case, raises ProtocolError",
+      "tests": [
+        "test_assert_no_privilege_rejects_every_privileged_key",
+        "test_assert_no_privilege_rejects_non_mapping",
+        "test_assert_no_privilege_accepts_and_returns_clean_mapping",
+        "test_feedback_unchanged_by_external_referee_state",
+        "test_classify_termination_rejects_privileged_fields"
+      ],
+      "cases": 57,
+      "status": "enforced"
+    },
+    {
+      "id": "B04",
+      "check": "policy_array_only_inputs",
+      "constraint": "StrictPixelPolicy.logits accepts arrays only; logits_from_observation accepts exactly the four pixel keys",
+      "tests": [
+        "test_policy_output_contract",
+        "test_policy_accepts_encoded_observation",
+        "test_policy_rejects_wrong_encoded_dtypes"
+      ],
+      "cases": 3,
+      "status": "enforced"
+    },
+    {
+      "id": "B05",
+      "check": "policy_determinism",
+      "constraint": "identical pixels/history give bit-identical move logits and bomb logit; no RNG, no globals, no instance state; unaffected by forged referee state",
+      "tests": [
+        "test_policy_is_bitwise_deterministic",
+        "test_policy_is_bitwise_invariant_to_forged_referee_state",
+        "test_policy_has_no_instance_state",
+        "test_policy_is_sensitive_to_pixel_changes"
+      ],
+      "cases": 22,
+      "status": "enforced"
+    },
+    {
+      "id": "B06",
+      "check": "feedback_pixel_fields_only",
+      "constraint": "strict_feedback reads only death_visible, stage_clear_visible, game_over_visible, menu_visible, paused_visible, resource_delta, frame",
+      "tests": [
+        "test_feedback_returns_exactly_the_four_keys",
+        "test_feedback_pixel_events_change_the_signal",
+        "test_feedback_resource_delta_changes_reward",
+        "test_feedback_sample_selection_follows_pixels_not_referee"
+      ],
+      "cases": 4,
+      "status": "enforced"
+    },
+    {
+      "id": "B07",
+      "check": "feedback_unknown_field_policy",
+      "constraint": "privileged keys raise ProtocolError; ordinary unknown keys are ignored and appended to the optional record list; invalid types raise ProtocolError",
+      "tests": [
+        "test_feedback_ignores_and_records_unknown_keys",
+        "test_feedback_rejects_invalid_events",
+        "test_feedback_rejects_non_list_record"
+      ],
+      "cases": 14,
+      "status": "enforced"
+    },
+    {
+      "id": "B08",
+      "check": "termination_precedence",
+      "constraint": "precedence game_over > stage_clear > first_death > cap; a terminal event always overrides cap; invalid events/frame/cap raise ProtocolError",
+      "tests": [
+        "test_classify_termination_returns_each_type",
+        "test_classify_termination_precedence",
+        "test_terminal_event_beats_cap",
+        "test_classify_termination_rejects_invalid_arguments"
+      ],
+      "cases": 16,
+      "status": "enforced"
+    },
+    {
+      "id": "B09",
+      "check": "menu_pause_not_alive",
+      "constraint": "a menu/pause frame without terminal evidence raises ProtocolError and is never reported as survival or cap; explicit terminal evidence still wins",
+      "tests": ["test_menu_pause_is_never_alive"],
+      "cases": 2,
+      "status": "enforced"
+    },
+    {
+      "id": "B10",
+      "check": "cap_requires_no_event",
+      "constraint": "cap is returned only when no terminal pixel event is visible and frame >= cap; below cap with no event the classifier returns None",
+      "tests": ["test_classify_termination_cap_rule"],
+      "cases": 1,
+      "status": "enforced"
+    },
+    {
+      "id": "B11",
+      "check": "resource_suite_separation",
+      "constraint": "standard = S1N/RUNN natural starts; practice = PSN practice start points only; cross-use, duplicates, empty selection and unknown names raise ProtocolError",
+      "tests": [
+        "test_validate_resources_accepts_valid_pairings",
+        "test_validate_resources_rejects_cross_use",
+        "test_validate_resources_normalises_sequence_input"
+      ],
+      "cases": 21,
+      "status": "enforced"
+    },
+    {
+      "id": "B12",
+      "check": "inputs_not_mutated",
+      "constraint": "no function mutates its inputs; returned observation arrays are copies that never alias the caller buffers",
+      "tests": ["test_inputs_are_not_mutated"],
+      "cases": 1,
+      "status": "enforced"
+    },
+    {
+      "id": "B13",
+      "check": "no_engine_activity",
+      "constraint": "the module launches no game, trains nothing, collects nothing and opens no sealed asset; it imports only stdlib, numpy and touhou_rl.v410 adapters/protocol",
+      "tests": ["module scope, verified by inspection of touhou_rl/v410/boundary.py imports"],
+      "cases": 0,
+      "status": "design constraint"
+    },
+    {
+      "id": "B14",
+      "check": "boundary_report_honesty",
+      "constraint": "boundary_report() is JSON-serialisable, carries design constraints only and states capability_claim=false for the stub",
+      "tests": ["test_boundary_report_is_json_ready_and_honest"],
+      "cases": 1,
+      "status": "enforced"
+    }
+  ],
+  "case_total_reconciliation": {
+    "pytest_passed": 151,
+    "sum_of_check_cases": 151,
+    "note": "cases are attributed once; B13 is a design constraint with zero test cases, so the sum equals the pytest pass count"
+  },
+  "privileged_keys": [
+    "bombs",
+    "deaths",
+    "engine_done",
+    "engine_reward",
+    "engine_score",
+    "future_danger",
+    "game_over",
+    "lives",
+    "referee_input",
+    "referee_state",
+    "rng_state",
+    "seed_state",
+    "snapshot_start",
+    "stage",
+    "teacher_logits",
+    "teacher_margin",
+    "verified_mask"
+  ],
+  "required_privileged_keys": [
+    "deaths",
+    "lives",
+    "bombs",
+    "stage",
+    "game_over",
+    "teacher_margin",
+    "future_danger",
+    "verified_mask",
+    "snapshot_start",
+    "engine_reward",
+    "engine_done",
+    "referee_state"
+  ],
+  "pixel_event_fields": [
+    "death_visible",
+    "stage_clear_visible",
+    "game_over_visible",
+    "menu_visible",
+    "paused_visible",
+    "resource_delta",
+    "frame"
+  ],
+  "termination": {
+    "types": ["first_death", "stage_clear", "game_over", "cap"],
+    "precedence": ["game_over", "stage_clear", "first_death", "cap"],
+    "cap_rule": "cap only when no terminal pixel event is visible and frame >= cap",
+    "menu_pause_rule": "menu/pause frames are not alive: without terminal evidence they raise ProtocolError and are never reported as survival or cap",
+    "no_termination": null,
+    "privileged_evidence": "refused",
+    "precedence_rationale": [
+      "game_over is unconditional: a failed run must not be masked by a stale clear banner",
+      "stage_clear outranks a visible death animation on the same frame, because recording a cleared stage as a death would fabricate a failure",
+      "first_death ends an episode while resources remain",
+      "cap is a budget artefact and never overrides an observed event"
+    ]
+  },
+  "resources": {
+    "standard": ["S1N", "RUNN"],
+    "practice": ["PSN"],
+    "standard_used_by": ["S1N", "RUNN"],
+    "practice_used_by": ["PSN practice start points"],
+    "cross_use": "rejected",
+    "contract": "practice start points are not comparable with standard natural starts; results from the two suites are never pooled"
+  },
+  "policy_stub": {
+    "class": "StrictPixelPolicy",
+    "policy_id": "strict-pixel-stub/1",
+    "kind": "deterministic fixed linear projection (splitmix64-derived constant weights)",
+    "status": "interface stub, not a capability claim",
+    "capability_claim": false,
+    "trained": false,
+    "learned": false,
+    "rng": "none",
+    "reads": ["play_norm", "hud", "act_hist"],
+    "outputs": {"move_logits": 18, "bomb_logit": 1},
+    "forbidden": "all PRIVILEGED_KEYS; logits_from_observation rejects any privileged key",
+    "instance_state": "empty (vars(StrictPixelPolicy()) == {})",
+    "statement": "the stub exists to test the boundary interface; its determinism and privilege-blindness are properties of the code, not evidence of policy capability"
+  },
+  "corrections": [
+    {
+      "what": "test-only reshape bug",
+      "detail": "the first pytest run collected 151 cases and reported 150 passed / 1 failed because test_policy_rejects_wrong_encoded_dtypes used play_norm.reshape(4,112,95) on a 43008-element array; the test now slices [:, :, :95]",
+      "after_fix": "151 passed, exit 0"
+    }
+  ],
+  "not_claimed": [
+    "does not claim policy capability, convergence, win rate or sample efficiency",
+    "does not claim CPU/GPU parity",
+    "does not claim any engine, retail or real-time behaviour",
+    "does not claim that the pixel boundary is sufficient for learning, only that privileged fields are excluded",
+    "no game run, no training run and no data collection backs these numbers; the 151 cases are synthetic unit tests"
+  ],
+  "limitations": [
+    "StrictPixelPolicy is an interface stub with fixed weights and no training; it produces logits but says nothing about their quality",
+    "the feedback and termination rules are design decisions encoded here; they have not been validated against engine telemetry (none was collected)",
+    "strict_feedback assumes resource_delta and the *_visible flags are already measured from pixels by an external harness that this WP does not implement",
+    "menu/pause handling is fail-closed (ProtocolError) rather than a resume policy; the caller must handle frozen frames",
+    "resource suite validation checks names only; it cannot verify the actual in-game resources of a session"
+  ]
+}

@@ -1,0 +1,2399 @@
+{
+  "schema": "v410-relabel-manifest/1",
+  "generated_at": "2026-11-12T19:50:42+00:00",
+  "tool": {
+    "module": "tools/rl/v410_relabel_d1.py",
+    "version": "4.1.0",
+    "python": "3.10.12",
+    "numpy": "2.2.6",
+    "command": [
+      "tools/rl/v410_relabel_d1.py",
+      "--d1-root",
+      ".tmp_v410_s1c/d1",
+      "--work-root",
+      ".tmp_v410_s1c/work",
+      "--out",
+      ".tmp_v410_s1c/relabel",
+      "--manifest",
+      "Document/Update/Alpha/v4.1.0/evidence/WP03/s1c_relabel.json",
+      "--s1-audit",
+      ".tmp_v410_s1c/relabel/s1c_partial_audit.json",
+      "--quiet"
+    ]
+  },
+  "inputs": {
+    "d1_root": ".tmp_v410_s1c/d1",
+    "work_root": ".tmp_v410_s1c/work",
+    "out_dir": ".tmp_v410_s1c/relabel",
+    "shards_dir": ".tmp_v410_s1c/d1/shards"
+  },
+  "source": {
+    "shard_dirs_seen": 12,
+    "shards_with_work_labels": 12,
+    "shards_processed": 12,
+    "shards_failed": [],
+    "shard_dirs_without_work_labels": 0
+  },
+  "rule": {
+    "converter": "touhou_rl.v410.teacher_calibration.convert_teacher_row_calibrated",
+    "label_schema": "v410-teacher-label-calibrated/1",
+    "tolerance": 8.0,
+    "tolerance_source": "touhou_rl.v410.teacher_calibration.MODEL_MATCH_TOLERANCE",
+    "calibration_rule": "smallest grid threshold with coverage >= 0.99 of died=false verified plans, capped at 16.0 px",
+    "coverage_target": 0.99,
+    "error_grid": [
+      0.001,
+      0.5,
+      1.0,
+      2.0,
+      4.0,
+      8.0,
+      16.0
+    ],
+    "error_grid_cap": 16.0,
+    "tolerance_provenance": "/mnt/d/WorkShop/Touhou_RL/.tmp_v410_wp02_audit/teacher1000.jsonl (sha256=a1d6923efd8398619632d086bd854677e27cfd501158d2aeaafb37c9ca2f434b, died_false_plans=3251, covered=3226, coverage=0.992310, mismatch_count=25, rule='smallest grid threshold with coverage >= 0.99 of died=false verified plans, capped at 16.0 px')",
+    "tolerance_status": "computed",
+    "decision_frames": 4,
+    "decision_frames_source": "work_report.committed_frames_per_decision",
+    "horizon": 32,
+    "horizon_source": "work_report.config.horizon"
+  },
+  "shards": [
+    {
+      "shard": "d1-s0d1-n3300-seed10-shard",
+      "stage": 0,
+      "stage_source": "work_report.stage",
+      "shard_label_stage": [
+        0
+      ],
+      "seed": 10,
+      "difficulty": 1,
+      "team": 0,
+      "mode": "fast",
+      "stop_reason": "max_frames",
+      "decisions": 3300,
+      "work_decisions": 3300,
+      "shard_decisions": 3300,
+      "work_label_rows": 3301,
+      "work_label_rows_includes_report": true,
+      "obs": {
+        "dir": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed10-shard/obs",
+        "rows": 3300,
+        "shape": [
+          3300,
+          4,
+          112,
+          96
+        ],
+        "planes": {
+          "play96x112": {
+            "path": "obs/play96x112.npy",
+            "file": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed10-shard/obs/play96x112.npy",
+            "shape": [
+              3300,
+              4,
+              112,
+              96
+            ],
+            "dtype": "uint8",
+            "bytes": 141926922,
+            "sha256": "7625377a802867b5443aeb11d06628256b87a506ec6917e30fbf839ba093a3e9",
+            "sha256_matches_shard_json": true
+          },
+          "hud": {
+            "path": "obs/hud.npy",
+            "file": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed10-shard/obs/hud.npy",
+            "shape": [
+              3300,
+              56,
+              160
+            ],
+            "dtype": "uint8",
+            "bytes": 29568522,
+            "sha256": "4460b807cd730fff0c49bc44f7f24b1b55ca28682761b940c2294870ee138019",
+            "sha256_matches_shard_json": true
+          },
+          "act_hist": {
+            "path": "obs/act_hist.npy",
+            "file": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed10-shard/obs/act_hist.npy",
+            "shape": [
+              3300,
+              8,
+              18
+            ],
+            "dtype": "uint8",
+            "bytes": 475722,
+            "sha256": "44cb1aabe90b55da68022d0d3d3266e28565d0adeae186230169026f633aa7ee",
+            "sha256_matches_shard_json": true
+          }
+        },
+        "obs_length_matches_shard_decisions": true,
+        "copied": false
+      },
+      "inputs": {
+        "shard_dir": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed10-shard",
+        "work_dir": ".tmp_v410_s1c/work/d1-s0d1-n3300-seed10-shard",
+        "shard_labels": {
+          "path": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed10-shard/labels.jsonl",
+          "sha256": "011f6c1cc3db232ca296177b9afc445a4922e94b1d5513f4e5746350cff622a0",
+          "rows": 3300,
+          "blank_lines": 0
+        },
+        "work_labels": {
+          "path": ".tmp_v410_s1c/work/d1-s0d1-n3300-seed10-shard/labels.jsonl",
+          "sha256": "24b9ef25728d4c23c5ed19cfdc96849f8baa1198c32119b8029f0a471823975e",
+          "rows": 3301,
+          "blank_lines": 0
+        }
+      },
+      "integrity": {
+        "shard_json": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed10-shard/shard.json",
+        "labels_sha256_matches": true,
+        "obs_sha256_matches": {
+          "play96x112": true,
+          "hud": true,
+          "act_hist": true
+        },
+        "decision_count_matches": true
+      },
+      "alignment": {
+        "by": [
+          "decision",
+          "hash_pre",
+          "decision_frame"
+        ],
+        "verified_pairs": 3300,
+        "trimmed_decisions": 0,
+        "trimmed": [],
+        "trim_reason": "none"
+      },
+      "rule": {
+        "tolerance": 8.0,
+        "tolerance_source": "touhou_rl.v410.teacher_calibration.MODEL_MATCH_TOLERANCE",
+        "decision_frames": 4,
+        "decision_frames_source": "work_report.committed_frames_per_decision",
+        "horizon": 32,
+        "horizon_source": "work_report.config.horizon",
+        "label_schema": "v410-teacher-label-calibrated/1",
+        "survival_statuses": [
+          "verified_alive",
+          "verified_dead",
+          "unknown"
+        ]
+      },
+      "labels_output": {
+        "path": ".tmp_v410_s1c/relabel/d1-s0d1-n3300-seed10-shard/labels_v410.jsonl",
+        "sha256": "98663c38fd102cb4131ba3f820b7adabe39e9eedc192a1a59e364d93bfbb39aa",
+        "rows": 3300,
+        "bytes": 12224781,
+        "written": true
+      },
+      "counts": {
+        "decisions": 3300,
+        "verified_plans_total": 3300,
+        "alive": 3290,
+        "dead": 0,
+        "unknown": 10,
+        "model_mismatch": 10,
+        "incomplete": 0,
+        "horizon_missing": 3300,
+        "moving_alive": 1848,
+        "idle_alive": 1442,
+        "died_true_plans": 0,
+        "died_false_plans": 3300,
+        "model_match_true": 3290,
+        "model_match_false": 10,
+        "model_match_missing": 0,
+        "conservative_alive": 657,
+        "conservative_dead": 0,
+        "conservative_unknown": 2643,
+        "decision_alive": 3290,
+        "decision_dead": 0,
+        "decision_unknown": 10,
+        "query_verified": 3300,
+        "query_unknown": 56100,
+        "decisions_with_verified_query": 3300
+      },
+      "alive": 3290,
+      "dead": 0,
+      "unknown": 10,
+      "model_mismatch": 10,
+      "horizon_missing": 3300,
+      "report": {
+        "status": "ok",
+        "stop_reason": "max_frames",
+        "mode": "fast",
+        "decisions": 3300,
+        "survival_frames": 13200,
+        "frames_committed": 13200,
+        "deaths_observed": 0,
+        "stage_clear": false,
+        "stages_visited": [
+          0
+        ],
+        "stage_transitions": []
+      }
+    },
+    {
+      "shard": "d1-s0d1-n3300-seed11-shard",
+      "stage": 0,
+      "stage_source": "work_report.stage",
+      "shard_label_stage": [
+        0
+      ],
+      "seed": 11,
+      "difficulty": 1,
+      "team": 0,
+      "mode": "fast",
+      "stop_reason": "max_frames",
+      "decisions": 3300,
+      "work_decisions": 3300,
+      "shard_decisions": 3300,
+      "work_label_rows": 3301,
+      "work_label_rows_includes_report": true,
+      "obs": {
+        "dir": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed11-shard/obs",
+        "rows": 3300,
+        "shape": [
+          3300,
+          4,
+          112,
+          96
+        ],
+        "planes": {
+          "play96x112": {
+            "path": "obs/play96x112.npy",
+            "file": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed11-shard/obs/play96x112.npy",
+            "shape": [
+              3300,
+              4,
+              112,
+              96
+            ],
+            "dtype": "uint8",
+            "bytes": 141926922,
+            "sha256": "ef5d5e7cc8530886adc18915d9c3b8430fe875b3d44aa985d371bdf4fb0557a8",
+            "sha256_matches_shard_json": true
+          },
+          "hud": {
+            "path": "obs/hud.npy",
+            "file": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed11-shard/obs/hud.npy",
+            "shape": [
+              3300,
+              56,
+              160
+            ],
+            "dtype": "uint8",
+            "bytes": 29568522,
+            "sha256": "78066f0c60df47d3e887679a97ffbc0d452c76be125ac0358cbf7a04236e43d2",
+            "sha256_matches_shard_json": true
+          },
+          "act_hist": {
+            "path": "obs/act_hist.npy",
+            "file": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed11-shard/obs/act_hist.npy",
+            "shape": [
+              3300,
+              8,
+              18
+            ],
+            "dtype": "uint8",
+            "bytes": 475722,
+            "sha256": "755b8b51b9888e8a09bdd89fb8948619242c81a5cee57cac0c7404f0c22c4a24",
+            "sha256_matches_shard_json": true
+          }
+        },
+        "obs_length_matches_shard_decisions": true,
+        "copied": false
+      },
+      "inputs": {
+        "shard_dir": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed11-shard",
+        "work_dir": ".tmp_v410_s1c/work/d1-s0d1-n3300-seed11-shard",
+        "shard_labels": {
+          "path": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed11-shard/labels.jsonl",
+          "sha256": "bc663759e3746742ee3e677ba716c286fe1633da04fdbf8047291d0977db149a",
+          "rows": 3300,
+          "blank_lines": 0
+        },
+        "work_labels": {
+          "path": ".tmp_v410_s1c/work/d1-s0d1-n3300-seed11-shard/labels.jsonl",
+          "sha256": "32cd6f895706dcb3fdf890da8d1e327a7f6079d8328b31e29098a7eaa3b6a2bd",
+          "rows": 3301,
+          "blank_lines": 0
+        }
+      },
+      "integrity": {
+        "shard_json": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed11-shard/shard.json",
+        "labels_sha256_matches": true,
+        "obs_sha256_matches": {
+          "play96x112": true,
+          "hud": true,
+          "act_hist": true
+        },
+        "decision_count_matches": true
+      },
+      "alignment": {
+        "by": [
+          "decision",
+          "hash_pre",
+          "decision_frame"
+        ],
+        "verified_pairs": 3300,
+        "trimmed_decisions": 0,
+        "trimmed": [],
+        "trim_reason": "none"
+      },
+      "rule": {
+        "tolerance": 8.0,
+        "tolerance_source": "touhou_rl.v410.teacher_calibration.MODEL_MATCH_TOLERANCE",
+        "decision_frames": 4,
+        "decision_frames_source": "work_report.committed_frames_per_decision",
+        "horizon": 32,
+        "horizon_source": "work_report.config.horizon",
+        "label_schema": "v410-teacher-label-calibrated/1",
+        "survival_statuses": [
+          "verified_alive",
+          "verified_dead",
+          "unknown"
+        ]
+      },
+      "labels_output": {
+        "path": ".tmp_v410_s1c/relabel/d1-s0d1-n3300-seed11-shard/labels_v410.jsonl",
+        "sha256": "c06a6482c65b27cc0e0f6a413ef485a62bbc05788e78416726fde46121c303a0",
+        "rows": 3300,
+        "bytes": 12228664,
+        "written": true
+      },
+      "counts": {
+        "decisions": 3300,
+        "verified_plans_total": 3300,
+        "alive": 3293,
+        "dead": 0,
+        "unknown": 7,
+        "model_mismatch": 7,
+        "incomplete": 0,
+        "horizon_missing": 3300,
+        "moving_alive": 1815,
+        "idle_alive": 1478,
+        "died_true_plans": 0,
+        "died_false_plans": 3300,
+        "model_match_true": 3293,
+        "model_match_false": 7,
+        "model_match_missing": 0,
+        "conservative_alive": 684,
+        "conservative_dead": 0,
+        "conservative_unknown": 2616,
+        "decision_alive": 3293,
+        "decision_dead": 0,
+        "decision_unknown": 7,
+        "query_verified": 3300,
+        "query_unknown": 56100,
+        "decisions_with_verified_query": 3300
+      },
+      "alive": 3293,
+      "dead": 0,
+      "unknown": 7,
+      "model_mismatch": 7,
+      "horizon_missing": 3300,
+      "report": {
+        "status": "ok",
+        "stop_reason": "max_frames",
+        "mode": "fast",
+        "decisions": 3300,
+        "survival_frames": 13200,
+        "frames_committed": 13200,
+        "deaths_observed": 0,
+        "stage_clear": false,
+        "stages_visited": [
+          0
+        ],
+        "stage_transitions": []
+      }
+    },
+    {
+      "shard": "d1-s0d1-n3300-seed12-shard",
+      "stage": 0,
+      "stage_source": "work_report.stage",
+      "shard_label_stage": [
+        0
+      ],
+      "seed": 12,
+      "difficulty": 1,
+      "team": 0,
+      "mode": "fast",
+      "stop_reason": "stage_changed",
+      "decisions": 3298,
+      "work_decisions": 3299,
+      "shard_decisions": 3298,
+      "work_label_rows": 3300,
+      "work_label_rows_includes_report": true,
+      "obs": {
+        "dir": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed12-shard/obs",
+        "rows": 3298,
+        "shape": [
+          3298,
+          4,
+          112,
+          96
+        ],
+        "planes": {
+          "play96x112": {
+            "path": "obs/play96x112.npy",
+            "file": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed12-shard/obs/play96x112.npy",
+            "shape": [
+              3298,
+              4,
+              112,
+              96
+            ],
+            "dtype": "uint8",
+            "bytes": 141840906,
+            "sha256": "9946291c300273297e8f496d6610e393a0aef88dd34456b3410baeff41912f2c",
+            "sha256_matches_shard_json": true
+          },
+          "hud": {
+            "path": "obs/hud.npy",
+            "file": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed12-shard/obs/hud.npy",
+            "shape": [
+              3298,
+              56,
+              160
+            ],
+            "dtype": "uint8",
+            "bytes": 29550602,
+            "sha256": "3385f8ea1d18aa98210c0af1572dea13b828a0f4182a6eb7ea4443834868a1f3",
+            "sha256_matches_shard_json": true
+          },
+          "act_hist": {
+            "path": "obs/act_hist.npy",
+            "file": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed12-shard/obs/act_hist.npy",
+            "shape": [
+              3298,
+              8,
+              18
+            ],
+            "dtype": "uint8",
+            "bytes": 475434,
+            "sha256": "5b3188d4f38e693efc5bbbc196507d1e7d98c60082fce86f33d615e217e32c3b",
+            "sha256_matches_shard_json": true
+          }
+        },
+        "obs_length_matches_shard_decisions": true,
+        "copied": false
+      },
+      "inputs": {
+        "shard_dir": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed12-shard",
+        "work_dir": ".tmp_v410_s1c/work/d1-s0d1-n3300-seed12-shard",
+        "shard_labels": {
+          "path": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed12-shard/labels.jsonl",
+          "sha256": "f79f8ab6cef1ca4ac5c9489e4eeca6f70b55a97d4de847bca66a923b0033d028",
+          "rows": 3298,
+          "blank_lines": 0
+        },
+        "work_labels": {
+          "path": ".tmp_v410_s1c/work/d1-s0d1-n3300-seed12-shard/labels.jsonl",
+          "sha256": "d5027f48b0ad617390187993da438cb89a19f43e5320e9b6003a65a075f915f1",
+          "rows": 3300,
+          "blank_lines": 0
+        }
+      },
+      "integrity": {
+        "shard_json": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed12-shard/shard.json",
+        "labels_sha256_matches": true,
+        "obs_sha256_matches": {
+          "play96x112": true,
+          "hud": true,
+          "act_hist": true
+        },
+        "decision_count_matches": true
+      },
+      "alignment": {
+        "by": [
+          "decision",
+          "hash_pre",
+          "decision_frame"
+        ],
+        "verified_pairs": 3298,
+        "trimmed_decisions": 1,
+        "trimmed": [
+          {
+            "decision": 3298,
+            "work_line": 3300,
+            "frame": 13196,
+            "decision_frame": 13192,
+            "reason": "stage_transition_trim"
+          }
+        ],
+        "trim_reason": "stage_transition_trim"
+      },
+      "rule": {
+        "tolerance": 8.0,
+        "tolerance_source": "touhou_rl.v410.teacher_calibration.MODEL_MATCH_TOLERANCE",
+        "decision_frames": 4,
+        "decision_frames_source": "work_report.committed_frames_per_decision",
+        "horizon": 32,
+        "horizon_source": "work_report.config.horizon",
+        "label_schema": "v410-teacher-label-calibrated/1",
+        "survival_statuses": [
+          "verified_alive",
+          "verified_dead",
+          "unknown"
+        ]
+      },
+      "labels_output": {
+        "path": ".tmp_v410_s1c/relabel/d1-s0d1-n3300-seed12-shard/labels_v410.jsonl",
+        "sha256": "15dcdf848c4cd429544d0c6872c4960888ee0f6e76fa50e93127de2723b08f1a",
+        "rows": 3298,
+        "bytes": 12217628,
+        "written": true
+      },
+      "counts": {
+        "decisions": 3298,
+        "verified_plans_total": 3298,
+        "alive": 3278,
+        "dead": 0,
+        "unknown": 20,
+        "model_mismatch": 20,
+        "incomplete": 0,
+        "horizon_missing": 3298,
+        "moving_alive": 1870,
+        "idle_alive": 1408,
+        "died_true_plans": 0,
+        "died_false_plans": 3298,
+        "model_match_true": 3278,
+        "model_match_false": 20,
+        "model_match_missing": 0,
+        "conservative_alive": 650,
+        "conservative_dead": 0,
+        "conservative_unknown": 2648,
+        "decision_alive": 3278,
+        "decision_dead": 0,
+        "decision_unknown": 20,
+        "query_verified": 3298,
+        "query_unknown": 56066,
+        "decisions_with_verified_query": 3298
+      },
+      "alive": 3278,
+      "dead": 0,
+      "unknown": 20,
+      "model_mismatch": 20,
+      "horizon_missing": 3298,
+      "report": {
+        "status": "ok",
+        "stop_reason": "stage_changed",
+        "mode": "fast",
+        "decisions": 3299,
+        "survival_frames": 13196,
+        "frames_committed": 13196,
+        "deaths_observed": 0,
+        "stage_clear": true,
+        "stages_visited": [
+          0,
+          1
+        ],
+        "stage_transitions": [
+          {
+            "decision": 3298,
+            "frame": 13196,
+            "from_stage": 0,
+            "to_stage": 1,
+            "frames_in_stage": 13196,
+            "deaths_in_stage": 0,
+            "bombs_spent_in_stage": 0.0
+          }
+        ]
+      }
+    },
+    {
+      "shard": "d1-s0d1-n3300-seed13-shard",
+      "stage": 0,
+      "stage_source": "work_report.stage",
+      "shard_label_stage": [
+        0
+      ],
+      "seed": 13,
+      "difficulty": 1,
+      "team": 0,
+      "mode": "fast",
+      "stop_reason": "stage_changed",
+      "decisions": 3274,
+      "work_decisions": 3275,
+      "shard_decisions": 3274,
+      "work_label_rows": 3276,
+      "work_label_rows_includes_report": true,
+      "obs": {
+        "dir": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed13-shard/obs",
+        "rows": 3274,
+        "shape": [
+          3274,
+          4,
+          112,
+          96
+        ],
+        "planes": {
+          "play96x112": {
+            "path": "obs/play96x112.npy",
+            "file": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed13-shard/obs/play96x112.npy",
+            "shape": [
+              3274,
+              4,
+              112,
+              96
+            ],
+            "dtype": "uint8",
+            "bytes": 140808714,
+            "sha256": "aac84a385aab64f62caf78f7a6b1bcc0182ba34225759367a9aef101745cc84f",
+            "sha256_matches_shard_json": true
+          },
+          "hud": {
+            "path": "obs/hud.npy",
+            "file": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed13-shard/obs/hud.npy",
+            "shape": [
+              3274,
+              56,
+              160
+            ],
+            "dtype": "uint8",
+            "bytes": 29335562,
+            "sha256": "b98efbaa168cac1e51a13e8624d4111934b829a150bee5296d371cbc61028210",
+            "sha256_matches_shard_json": true
+          },
+          "act_hist": {
+            "path": "obs/act_hist.npy",
+            "file": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed13-shard/obs/act_hist.npy",
+            "shape": [
+              3274,
+              8,
+              18
+            ],
+            "dtype": "uint8",
+            "bytes": 471978,
+            "sha256": "de7a6f8c0e6c22a1bd02bea9b438704a1273ed9fd33221b3c093eff7a99081c1",
+            "sha256_matches_shard_json": true
+          }
+        },
+        "obs_length_matches_shard_decisions": true,
+        "copied": false
+      },
+      "inputs": {
+        "shard_dir": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed13-shard",
+        "work_dir": ".tmp_v410_s1c/work/d1-s0d1-n3300-seed13-shard",
+        "shard_labels": {
+          "path": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed13-shard/labels.jsonl",
+          "sha256": "30ed45a2974c206da6e6180b10e2f1aaefbbe696169dea2b0f5bbb54d69470cb",
+          "rows": 3274,
+          "blank_lines": 0
+        },
+        "work_labels": {
+          "path": ".tmp_v410_s1c/work/d1-s0d1-n3300-seed13-shard/labels.jsonl",
+          "sha256": "1700ddec90cbf323b89c6281bdd4fda24f912ca0e45f96ec714616da5bd17ff1",
+          "rows": 3276,
+          "blank_lines": 0
+        }
+      },
+      "integrity": {
+        "shard_json": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed13-shard/shard.json",
+        "labels_sha256_matches": true,
+        "obs_sha256_matches": {
+          "play96x112": true,
+          "hud": true,
+          "act_hist": true
+        },
+        "decision_count_matches": true
+      },
+      "alignment": {
+        "by": [
+          "decision",
+          "hash_pre",
+          "decision_frame"
+        ],
+        "verified_pairs": 3274,
+        "trimmed_decisions": 1,
+        "trimmed": [
+          {
+            "decision": 3274,
+            "work_line": 3276,
+            "frame": 13100,
+            "decision_frame": 13096,
+            "reason": "stage_transition_trim"
+          }
+        ],
+        "trim_reason": "stage_transition_trim"
+      },
+      "rule": {
+        "tolerance": 8.0,
+        "tolerance_source": "touhou_rl.v410.teacher_calibration.MODEL_MATCH_TOLERANCE",
+        "decision_frames": 4,
+        "decision_frames_source": "work_report.committed_frames_per_decision",
+        "horizon": 32,
+        "horizon_source": "work_report.config.horizon",
+        "label_schema": "v410-teacher-label-calibrated/1",
+        "survival_statuses": [
+          "verified_alive",
+          "verified_dead",
+          "unknown"
+        ]
+      },
+      "labels_output": {
+        "path": ".tmp_v410_s1c/relabel/d1-s0d1-n3300-seed13-shard/labels_v410.jsonl",
+        "sha256": "da10f196f757ab4a07e6fccac8fb35ae8e4952612a4c164fe5af9f0a97d2aa88",
+        "rows": 3274,
+        "bytes": 12129270,
+        "written": true
+      },
+      "counts": {
+        "decisions": 3274,
+        "verified_plans_total": 3274,
+        "alive": 3249,
+        "dead": 0,
+        "unknown": 25,
+        "model_mismatch": 25,
+        "incomplete": 0,
+        "horizon_missing": 3274,
+        "moving_alive": 1789,
+        "idle_alive": 1460,
+        "died_true_plans": 0,
+        "died_false_plans": 3274,
+        "model_match_true": 3249,
+        "model_match_false": 25,
+        "model_match_missing": 0,
+        "conservative_alive": 666,
+        "conservative_dead": 0,
+        "conservative_unknown": 2608,
+        "decision_alive": 3249,
+        "decision_dead": 0,
+        "decision_unknown": 25,
+        "query_verified": 3274,
+        "query_unknown": 55658,
+        "decisions_with_verified_query": 3274
+      },
+      "alive": 3249,
+      "dead": 0,
+      "unknown": 25,
+      "model_mismatch": 25,
+      "horizon_missing": 3274,
+      "report": {
+        "status": "ok",
+        "stop_reason": "stage_changed",
+        "mode": "fast",
+        "decisions": 3275,
+        "survival_frames": 13100,
+        "frames_committed": 13100,
+        "deaths_observed": 0,
+        "stage_clear": true,
+        "stages_visited": [
+          0,
+          1
+        ],
+        "stage_transitions": [
+          {
+            "decision": 3274,
+            "frame": 13100,
+            "from_stage": 0,
+            "to_stage": 1,
+            "frames_in_stage": 13100,
+            "deaths_in_stage": 0,
+            "bombs_spent_in_stage": 0.0
+          }
+        ]
+      }
+    },
+    {
+      "shard": "d1-s0d1-n3300-seed14-shard",
+      "stage": 0,
+      "stage_source": "work_report.stage",
+      "shard_label_stage": [
+        0
+      ],
+      "seed": 14,
+      "difficulty": 1,
+      "team": 0,
+      "mode": "fast",
+      "stop_reason": "max_frames",
+      "decisions": 3300,
+      "work_decisions": 3300,
+      "shard_decisions": 3300,
+      "work_label_rows": 3301,
+      "work_label_rows_includes_report": true,
+      "obs": {
+        "dir": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed14-shard/obs",
+        "rows": 3300,
+        "shape": [
+          3300,
+          4,
+          112,
+          96
+        ],
+        "planes": {
+          "play96x112": {
+            "path": "obs/play96x112.npy",
+            "file": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed14-shard/obs/play96x112.npy",
+            "shape": [
+              3300,
+              4,
+              112,
+              96
+            ],
+            "dtype": "uint8",
+            "bytes": 141926922,
+            "sha256": "f76c12e4c0f9000e89210caf357c1c3d2293133258a89d1d10f31349163692a6",
+            "sha256_matches_shard_json": true
+          },
+          "hud": {
+            "path": "obs/hud.npy",
+            "file": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed14-shard/obs/hud.npy",
+            "shape": [
+              3300,
+              56,
+              160
+            ],
+            "dtype": "uint8",
+            "bytes": 29568522,
+            "sha256": "a043ff7c6605c9d06145562245c3ea6b6ccc1ea66a1ec389a5407a88fdc3534d",
+            "sha256_matches_shard_json": true
+          },
+          "act_hist": {
+            "path": "obs/act_hist.npy",
+            "file": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed14-shard/obs/act_hist.npy",
+            "shape": [
+              3300,
+              8,
+              18
+            ],
+            "dtype": "uint8",
+            "bytes": 475722,
+            "sha256": "6bffdf30022b23d66e35b31bf07f2ed3bd7b76642e02df787c7e41806c2aa1d3",
+            "sha256_matches_shard_json": true
+          }
+        },
+        "obs_length_matches_shard_decisions": true,
+        "copied": false
+      },
+      "inputs": {
+        "shard_dir": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed14-shard",
+        "work_dir": ".tmp_v410_s1c/work/d1-s0d1-n3300-seed14-shard",
+        "shard_labels": {
+          "path": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed14-shard/labels.jsonl",
+          "sha256": "9dfa34f9f3e74fcd5209e746788dfd7a2db1085ce7280c1de18ad2384f1a56a5",
+          "rows": 3300,
+          "blank_lines": 0
+        },
+        "work_labels": {
+          "path": ".tmp_v410_s1c/work/d1-s0d1-n3300-seed14-shard/labels.jsonl",
+          "sha256": "bdf276a868fcf00f717ebfbf051e8ff60927769b9bf4b537ffc3f36e699ab4a1",
+          "rows": 3301,
+          "blank_lines": 0
+        }
+      },
+      "integrity": {
+        "shard_json": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed14-shard/shard.json",
+        "labels_sha256_matches": true,
+        "obs_sha256_matches": {
+          "play96x112": true,
+          "hud": true,
+          "act_hist": true
+        },
+        "decision_count_matches": true
+      },
+      "alignment": {
+        "by": [
+          "decision",
+          "hash_pre",
+          "decision_frame"
+        ],
+        "verified_pairs": 3300,
+        "trimmed_decisions": 0,
+        "trimmed": [],
+        "trim_reason": "none"
+      },
+      "rule": {
+        "tolerance": 8.0,
+        "tolerance_source": "touhou_rl.v410.teacher_calibration.MODEL_MATCH_TOLERANCE",
+        "decision_frames": 4,
+        "decision_frames_source": "work_report.committed_frames_per_decision",
+        "horizon": 32,
+        "horizon_source": "work_report.config.horizon",
+        "label_schema": "v410-teacher-label-calibrated/1",
+        "survival_statuses": [
+          "verified_alive",
+          "verified_dead",
+          "unknown"
+        ]
+      },
+      "labels_output": {
+        "path": ".tmp_v410_s1c/relabel/d1-s0d1-n3300-seed14-shard/labels_v410.jsonl",
+        "sha256": "c3ef7c7b5d16ca36a155779a35a1b6abf35b7bbd893b63ce2387c18e4c4c3129",
+        "rows": 3300,
+        "bytes": 12229066,
+        "written": true
+      },
+      "counts": {
+        "decisions": 3300,
+        "verified_plans_total": 3300,
+        "alive": 3289,
+        "dead": 0,
+        "unknown": 11,
+        "model_mismatch": 11,
+        "incomplete": 0,
+        "horizon_missing": 3300,
+        "moving_alive": 1826,
+        "idle_alive": 1463,
+        "died_true_plans": 0,
+        "died_false_plans": 3300,
+        "model_match_true": 3289,
+        "model_match_false": 11,
+        "model_match_missing": 0,
+        "conservative_alive": 703,
+        "conservative_dead": 0,
+        "conservative_unknown": 2597,
+        "decision_alive": 3289,
+        "decision_dead": 0,
+        "decision_unknown": 11,
+        "query_verified": 3300,
+        "query_unknown": 56100,
+        "decisions_with_verified_query": 3300
+      },
+      "alive": 3289,
+      "dead": 0,
+      "unknown": 11,
+      "model_mismatch": 11,
+      "horizon_missing": 3300,
+      "report": {
+        "status": "ok",
+        "stop_reason": "max_frames",
+        "mode": "fast",
+        "decisions": 3300,
+        "survival_frames": 13200,
+        "frames_committed": 13200,
+        "deaths_observed": 0,
+        "stage_clear": false,
+        "stages_visited": [
+          0
+        ],
+        "stage_transitions": []
+      }
+    },
+    {
+      "shard": "d1-s0d1-n3300-seed15-shard",
+      "stage": 0,
+      "stage_source": "work_report.stage",
+      "shard_label_stage": [
+        0
+      ],
+      "seed": 15,
+      "difficulty": 1,
+      "team": 0,
+      "mode": "fast",
+      "stop_reason": "max_frames",
+      "decisions": 3300,
+      "work_decisions": 3300,
+      "shard_decisions": 3300,
+      "work_label_rows": 3301,
+      "work_label_rows_includes_report": true,
+      "obs": {
+        "dir": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed15-shard/obs",
+        "rows": 3300,
+        "shape": [
+          3300,
+          4,
+          112,
+          96
+        ],
+        "planes": {
+          "play96x112": {
+            "path": "obs/play96x112.npy",
+            "file": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed15-shard/obs/play96x112.npy",
+            "shape": [
+              3300,
+              4,
+              112,
+              96
+            ],
+            "dtype": "uint8",
+            "bytes": 141926922,
+            "sha256": "6ee1e713e185dc32c65dc017ac6c1d14e4dd78013763774715213661d6b1e239",
+            "sha256_matches_shard_json": true
+          },
+          "hud": {
+            "path": "obs/hud.npy",
+            "file": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed15-shard/obs/hud.npy",
+            "shape": [
+              3300,
+              56,
+              160
+            ],
+            "dtype": "uint8",
+            "bytes": 29568522,
+            "sha256": "79527a539a603e94486fd724711a1471e3d29c0ccc7aab727b82a777b27a839c",
+            "sha256_matches_shard_json": true
+          },
+          "act_hist": {
+            "path": "obs/act_hist.npy",
+            "file": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed15-shard/obs/act_hist.npy",
+            "shape": [
+              3300,
+              8,
+              18
+            ],
+            "dtype": "uint8",
+            "bytes": 475722,
+            "sha256": "8d6502ca67565d9a7cc64572d11934ff52219235bb359f27f40fb855ddf7ea9b",
+            "sha256_matches_shard_json": true
+          }
+        },
+        "obs_length_matches_shard_decisions": true,
+        "copied": false
+      },
+      "inputs": {
+        "shard_dir": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed15-shard",
+        "work_dir": ".tmp_v410_s1c/work/d1-s0d1-n3300-seed15-shard",
+        "shard_labels": {
+          "path": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed15-shard/labels.jsonl",
+          "sha256": "8a78867bb5c6fbc2389abc7f3d7e2c93bc136c5d4e71c94f5e26f102f63af8b9",
+          "rows": 3300,
+          "blank_lines": 0
+        },
+        "work_labels": {
+          "path": ".tmp_v410_s1c/work/d1-s0d1-n3300-seed15-shard/labels.jsonl",
+          "sha256": "5da62af2608b8930bea81c7201e4d1d27d449f745ed46d0fd7f19723f127dd8e",
+          "rows": 3301,
+          "blank_lines": 0
+        }
+      },
+      "integrity": {
+        "shard_json": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed15-shard/shard.json",
+        "labels_sha256_matches": true,
+        "obs_sha256_matches": {
+          "play96x112": true,
+          "hud": true,
+          "act_hist": true
+        },
+        "decision_count_matches": true
+      },
+      "alignment": {
+        "by": [
+          "decision",
+          "hash_pre",
+          "decision_frame"
+        ],
+        "verified_pairs": 3300,
+        "trimmed_decisions": 0,
+        "trimmed": [],
+        "trim_reason": "none"
+      },
+      "rule": {
+        "tolerance": 8.0,
+        "tolerance_source": "touhou_rl.v410.teacher_calibration.MODEL_MATCH_TOLERANCE",
+        "decision_frames": 4,
+        "decision_frames_source": "work_report.committed_frames_per_decision",
+        "horizon": 32,
+        "horizon_source": "work_report.config.horizon",
+        "label_schema": "v410-teacher-label-calibrated/1",
+        "survival_statuses": [
+          "verified_alive",
+          "verified_dead",
+          "unknown"
+        ]
+      },
+      "labels_output": {
+        "path": ".tmp_v410_s1c/relabel/d1-s0d1-n3300-seed15-shard/labels_v410.jsonl",
+        "sha256": "1889ec654d56ff2ddb3cd1e2e1064b880d8f32b80640edd76ad211fb6018d813",
+        "rows": 3300,
+        "bytes": 12223807,
+        "written": true
+      },
+      "counts": {
+        "decisions": 3300,
+        "verified_plans_total": 3300,
+        "alive": 3288,
+        "dead": 0,
+        "unknown": 12,
+        "model_mismatch": 12,
+        "incomplete": 0,
+        "horizon_missing": 3300,
+        "moving_alive": 1850,
+        "idle_alive": 1438,
+        "died_true_plans": 0,
+        "died_false_plans": 3300,
+        "model_match_true": 3288,
+        "model_match_false": 12,
+        "model_match_missing": 0,
+        "conservative_alive": 658,
+        "conservative_dead": 0,
+        "conservative_unknown": 2642,
+        "decision_alive": 3288,
+        "decision_dead": 0,
+        "decision_unknown": 12,
+        "query_verified": 3300,
+        "query_unknown": 56100,
+        "decisions_with_verified_query": 3300
+      },
+      "alive": 3288,
+      "dead": 0,
+      "unknown": 12,
+      "model_mismatch": 12,
+      "horizon_missing": 3300,
+      "report": {
+        "status": "ok",
+        "stop_reason": "max_frames",
+        "mode": "fast",
+        "decisions": 3300,
+        "survival_frames": 13200,
+        "frames_committed": 13200,
+        "deaths_observed": 0,
+        "stage_clear": false,
+        "stages_visited": [
+          0
+        ],
+        "stage_transitions": []
+      }
+    },
+    {
+      "shard": "d1-s0d1-n3300-seed16-shard",
+      "stage": 0,
+      "stage_source": "work_report.stage",
+      "shard_label_stage": [
+        0
+      ],
+      "seed": 16,
+      "difficulty": 1,
+      "team": 0,
+      "mode": "fast",
+      "stop_reason": "max_frames",
+      "decisions": 3300,
+      "work_decisions": 3300,
+      "shard_decisions": 3300,
+      "work_label_rows": 3301,
+      "work_label_rows_includes_report": true,
+      "obs": {
+        "dir": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed16-shard/obs",
+        "rows": 3300,
+        "shape": [
+          3300,
+          4,
+          112,
+          96
+        ],
+        "planes": {
+          "play96x112": {
+            "path": "obs/play96x112.npy",
+            "file": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed16-shard/obs/play96x112.npy",
+            "shape": [
+              3300,
+              4,
+              112,
+              96
+            ],
+            "dtype": "uint8",
+            "bytes": 141926922,
+            "sha256": "48dfcc0d405df11fd1c3335b399ff63cfbd67a2f64b53f85aee08a6a3ffcedfb",
+            "sha256_matches_shard_json": true
+          },
+          "hud": {
+            "path": "obs/hud.npy",
+            "file": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed16-shard/obs/hud.npy",
+            "shape": [
+              3300,
+              56,
+              160
+            ],
+            "dtype": "uint8",
+            "bytes": 29568522,
+            "sha256": "a6b88a4523be773651fccae27be214a02845ee00b49de20d51ac0b7cb706a693",
+            "sha256_matches_shard_json": true
+          },
+          "act_hist": {
+            "path": "obs/act_hist.npy",
+            "file": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed16-shard/obs/act_hist.npy",
+            "shape": [
+              3300,
+              8,
+              18
+            ],
+            "dtype": "uint8",
+            "bytes": 475722,
+            "sha256": "94dbe48a8368aff7624e949fd5b891e475b6d095b6a4846311ab6b4fbc45a3ca",
+            "sha256_matches_shard_json": true
+          }
+        },
+        "obs_length_matches_shard_decisions": true,
+        "copied": false
+      },
+      "inputs": {
+        "shard_dir": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed16-shard",
+        "work_dir": ".tmp_v410_s1c/work/d1-s0d1-n3300-seed16-shard",
+        "shard_labels": {
+          "path": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed16-shard/labels.jsonl",
+          "sha256": "95e35d1c714a7217ba2d1d7f736e27facea6fe1e01589acdbc1152c34efe3b06",
+          "rows": 3300,
+          "blank_lines": 0
+        },
+        "work_labels": {
+          "path": ".tmp_v410_s1c/work/d1-s0d1-n3300-seed16-shard/labels.jsonl",
+          "sha256": "8e4bd7ee94310aa3075c042936cc40ca710ea8095b074e2f9d12545ba1d68c28",
+          "rows": 3301,
+          "blank_lines": 0
+        }
+      },
+      "integrity": {
+        "shard_json": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed16-shard/shard.json",
+        "labels_sha256_matches": true,
+        "obs_sha256_matches": {
+          "play96x112": true,
+          "hud": true,
+          "act_hist": true
+        },
+        "decision_count_matches": true
+      },
+      "alignment": {
+        "by": [
+          "decision",
+          "hash_pre",
+          "decision_frame"
+        ],
+        "verified_pairs": 3300,
+        "trimmed_decisions": 0,
+        "trimmed": [],
+        "trim_reason": "none"
+      },
+      "rule": {
+        "tolerance": 8.0,
+        "tolerance_source": "touhou_rl.v410.teacher_calibration.MODEL_MATCH_TOLERANCE",
+        "decision_frames": 4,
+        "decision_frames_source": "work_report.committed_frames_per_decision",
+        "horizon": 32,
+        "horizon_source": "work_report.config.horizon",
+        "label_schema": "v410-teacher-label-calibrated/1",
+        "survival_statuses": [
+          "verified_alive",
+          "verified_dead",
+          "unknown"
+        ]
+      },
+      "labels_output": {
+        "path": ".tmp_v410_s1c/relabel/d1-s0d1-n3300-seed16-shard/labels_v410.jsonl",
+        "sha256": "151d92f5394d9d5cb1701e8cc813e4fed9fd1fae0a4e8d3628402e7bcd948e8a",
+        "rows": 3300,
+        "bytes": 12228450,
+        "written": true
+      },
+      "counts": {
+        "decisions": 3300,
+        "verified_plans_total": 3300,
+        "alive": 3277,
+        "dead": 0,
+        "unknown": 23,
+        "model_mismatch": 23,
+        "incomplete": 0,
+        "horizon_missing": 3300,
+        "moving_alive": 1879,
+        "idle_alive": 1398,
+        "died_true_plans": 0,
+        "died_false_plans": 3300,
+        "model_match_true": 3277,
+        "model_match_false": 23,
+        "model_match_missing": 0,
+        "conservative_alive": 661,
+        "conservative_dead": 0,
+        "conservative_unknown": 2639,
+        "decision_alive": 3277,
+        "decision_dead": 0,
+        "decision_unknown": 23,
+        "query_verified": 3300,
+        "query_unknown": 56100,
+        "decisions_with_verified_query": 3300
+      },
+      "alive": 3277,
+      "dead": 0,
+      "unknown": 23,
+      "model_mismatch": 23,
+      "horizon_missing": 3300,
+      "report": {
+        "status": "ok",
+        "stop_reason": "max_frames",
+        "mode": "fast",
+        "decisions": 3300,
+        "survival_frames": 13200,
+        "frames_committed": 13200,
+        "deaths_observed": 0,
+        "stage_clear": false,
+        "stages_visited": [
+          0
+        ],
+        "stage_transitions": []
+      }
+    },
+    {
+      "shard": "d1-s0d1-n3300-seed17-shard",
+      "stage": 0,
+      "stage_source": "work_report.stage",
+      "shard_label_stage": [
+        0
+      ],
+      "seed": 17,
+      "difficulty": 1,
+      "team": 0,
+      "mode": "fast",
+      "stop_reason": "stage_changed",
+      "decisions": 3274,
+      "work_decisions": 3275,
+      "shard_decisions": 3274,
+      "work_label_rows": 3276,
+      "work_label_rows_includes_report": true,
+      "obs": {
+        "dir": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed17-shard/obs",
+        "rows": 3274,
+        "shape": [
+          3274,
+          4,
+          112,
+          96
+        ],
+        "planes": {
+          "play96x112": {
+            "path": "obs/play96x112.npy",
+            "file": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed17-shard/obs/play96x112.npy",
+            "shape": [
+              3274,
+              4,
+              112,
+              96
+            ],
+            "dtype": "uint8",
+            "bytes": 140808714,
+            "sha256": "5f3adc91ea03b81c8003f7ef365b56fa338a1c3a41d0fa2b19bb35d21383945c",
+            "sha256_matches_shard_json": true
+          },
+          "hud": {
+            "path": "obs/hud.npy",
+            "file": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed17-shard/obs/hud.npy",
+            "shape": [
+              3274,
+              56,
+              160
+            ],
+            "dtype": "uint8",
+            "bytes": 29335562,
+            "sha256": "582aeeba8c38cbf8fcea3fae417d94654158d0639d98ee85ee559057b0f7edab",
+            "sha256_matches_shard_json": true
+          },
+          "act_hist": {
+            "path": "obs/act_hist.npy",
+            "file": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed17-shard/obs/act_hist.npy",
+            "shape": [
+              3274,
+              8,
+              18
+            ],
+            "dtype": "uint8",
+            "bytes": 471978,
+            "sha256": "cadc49549151e2079ab7482046d1b9bfbc92dc788802f1b2aa98ac996d270f39",
+            "sha256_matches_shard_json": true
+          }
+        },
+        "obs_length_matches_shard_decisions": true,
+        "copied": false
+      },
+      "inputs": {
+        "shard_dir": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed17-shard",
+        "work_dir": ".tmp_v410_s1c/work/d1-s0d1-n3300-seed17-shard",
+        "shard_labels": {
+          "path": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed17-shard/labels.jsonl",
+          "sha256": "fbdebdc39d4cf367299ec670a0d3988c190f988b77b9178ff569615051b8ceae",
+          "rows": 3274,
+          "blank_lines": 0
+        },
+        "work_labels": {
+          "path": ".tmp_v410_s1c/work/d1-s0d1-n3300-seed17-shard/labels.jsonl",
+          "sha256": "13b0d14e6f009d056c8e6d8d6691c9119156a1261ce00fbc7e29574b32b95834",
+          "rows": 3276,
+          "blank_lines": 0
+        }
+      },
+      "integrity": {
+        "shard_json": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed17-shard/shard.json",
+        "labels_sha256_matches": true,
+        "obs_sha256_matches": {
+          "play96x112": true,
+          "hud": true,
+          "act_hist": true
+        },
+        "decision_count_matches": true
+      },
+      "alignment": {
+        "by": [
+          "decision",
+          "hash_pre",
+          "decision_frame"
+        ],
+        "verified_pairs": 3274,
+        "trimmed_decisions": 1,
+        "trimmed": [
+          {
+            "decision": 3274,
+            "work_line": 3276,
+            "frame": 13100,
+            "decision_frame": 13096,
+            "reason": "stage_transition_trim"
+          }
+        ],
+        "trim_reason": "stage_transition_trim"
+      },
+      "rule": {
+        "tolerance": 8.0,
+        "tolerance_source": "touhou_rl.v410.teacher_calibration.MODEL_MATCH_TOLERANCE",
+        "decision_frames": 4,
+        "decision_frames_source": "work_report.committed_frames_per_decision",
+        "horizon": 32,
+        "horizon_source": "work_report.config.horizon",
+        "label_schema": "v410-teacher-label-calibrated/1",
+        "survival_statuses": [
+          "verified_alive",
+          "verified_dead",
+          "unknown"
+        ]
+      },
+      "labels_output": {
+        "path": ".tmp_v410_s1c/relabel/d1-s0d1-n3300-seed17-shard/labels_v410.jsonl",
+        "sha256": "074c3f7179d0f72fbf1f3aef6cb558f14d3c8e3b0cc53aaaf6d09d9d21447d16",
+        "rows": 3274,
+        "bytes": 12128109,
+        "written": true
+      },
+      "counts": {
+        "decisions": 3274,
+        "verified_plans_total": 3274,
+        "alive": 3257,
+        "dead": 0,
+        "unknown": 17,
+        "model_mismatch": 17,
+        "incomplete": 0,
+        "horizon_missing": 3274,
+        "moving_alive": 1744,
+        "idle_alive": 1513,
+        "died_true_plans": 0,
+        "died_false_plans": 3274,
+        "model_match_true": 3257,
+        "model_match_false": 17,
+        "model_match_missing": 0,
+        "conservative_alive": 798,
+        "conservative_dead": 0,
+        "conservative_unknown": 2476,
+        "decision_alive": 3257,
+        "decision_dead": 0,
+        "decision_unknown": 17,
+        "query_verified": 3274,
+        "query_unknown": 55658,
+        "decisions_with_verified_query": 3274
+      },
+      "alive": 3257,
+      "dead": 0,
+      "unknown": 17,
+      "model_mismatch": 17,
+      "horizon_missing": 3274,
+      "report": {
+        "status": "ok",
+        "stop_reason": "stage_changed",
+        "mode": "fast",
+        "decisions": 3275,
+        "survival_frames": 13100,
+        "frames_committed": 13100,
+        "deaths_observed": 0,
+        "stage_clear": true,
+        "stages_visited": [
+          0,
+          1
+        ],
+        "stage_transitions": [
+          {
+            "decision": 3274,
+            "frame": 13100,
+            "from_stage": 0,
+            "to_stage": 1,
+            "frames_in_stage": 13100,
+            "deaths_in_stage": 0,
+            "bombs_spent_in_stage": 0.0
+          }
+        ]
+      }
+    },
+    {
+      "shard": "d1-s0d1-n3300-seed18-shard",
+      "stage": 0,
+      "stage_source": "work_report.stage",
+      "shard_label_stage": [
+        0
+      ],
+      "seed": 18,
+      "difficulty": 1,
+      "team": 0,
+      "mode": "fast",
+      "stop_reason": "stage_changed",
+      "decisions": 3298,
+      "work_decisions": 3299,
+      "shard_decisions": 3298,
+      "work_label_rows": 3300,
+      "work_label_rows_includes_report": true,
+      "obs": {
+        "dir": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed18-shard/obs",
+        "rows": 3298,
+        "shape": [
+          3298,
+          4,
+          112,
+          96
+        ],
+        "planes": {
+          "play96x112": {
+            "path": "obs/play96x112.npy",
+            "file": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed18-shard/obs/play96x112.npy",
+            "shape": [
+              3298,
+              4,
+              112,
+              96
+            ],
+            "dtype": "uint8",
+            "bytes": 141840906,
+            "sha256": "baac53fa92c64408e3a6247ef8afc8d45c7bcaf252e99b86919068a2e4ba7bd3",
+            "sha256_matches_shard_json": true
+          },
+          "hud": {
+            "path": "obs/hud.npy",
+            "file": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed18-shard/obs/hud.npy",
+            "shape": [
+              3298,
+              56,
+              160
+            ],
+            "dtype": "uint8",
+            "bytes": 29550602,
+            "sha256": "f4b61a0b2034dcae9159df7afa81a9cb6bde3ca3d46bfe2864759dd73b3c96de",
+            "sha256_matches_shard_json": true
+          },
+          "act_hist": {
+            "path": "obs/act_hist.npy",
+            "file": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed18-shard/obs/act_hist.npy",
+            "shape": [
+              3298,
+              8,
+              18
+            ],
+            "dtype": "uint8",
+            "bytes": 475434,
+            "sha256": "cb0d20a40c4885443a792e7d1b2e11d8947a34dcde59064e22e284d1067bcad0",
+            "sha256_matches_shard_json": true
+          }
+        },
+        "obs_length_matches_shard_decisions": true,
+        "copied": false
+      },
+      "inputs": {
+        "shard_dir": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed18-shard",
+        "work_dir": ".tmp_v410_s1c/work/d1-s0d1-n3300-seed18-shard",
+        "shard_labels": {
+          "path": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed18-shard/labels.jsonl",
+          "sha256": "ef437bb0402f64301fec1789b7a726939fdeb1240ae0bcfd08f13f43a05baa54",
+          "rows": 3298,
+          "blank_lines": 0
+        },
+        "work_labels": {
+          "path": ".tmp_v410_s1c/work/d1-s0d1-n3300-seed18-shard/labels.jsonl",
+          "sha256": "aeb8f5aac48888c6767c8e80eb5e8b1af5bb6f3b41e298682caf878e38b0c8a3",
+          "rows": 3300,
+          "blank_lines": 0
+        }
+      },
+      "integrity": {
+        "shard_json": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed18-shard/shard.json",
+        "labels_sha256_matches": true,
+        "obs_sha256_matches": {
+          "play96x112": true,
+          "hud": true,
+          "act_hist": true
+        },
+        "decision_count_matches": true
+      },
+      "alignment": {
+        "by": [
+          "decision",
+          "hash_pre",
+          "decision_frame"
+        ],
+        "verified_pairs": 3298,
+        "trimmed_decisions": 1,
+        "trimmed": [
+          {
+            "decision": 3298,
+            "work_line": 3300,
+            "frame": 13196,
+            "decision_frame": 13192,
+            "reason": "stage_transition_trim"
+          }
+        ],
+        "trim_reason": "stage_transition_trim"
+      },
+      "rule": {
+        "tolerance": 8.0,
+        "tolerance_source": "touhou_rl.v410.teacher_calibration.MODEL_MATCH_TOLERANCE",
+        "decision_frames": 4,
+        "decision_frames_source": "work_report.committed_frames_per_decision",
+        "horizon": 32,
+        "horizon_source": "work_report.config.horizon",
+        "label_schema": "v410-teacher-label-calibrated/1",
+        "survival_statuses": [
+          "verified_alive",
+          "verified_dead",
+          "unknown"
+        ]
+      },
+      "labels_output": {
+        "path": ".tmp_v410_s1c/relabel/d1-s0d1-n3300-seed18-shard/labels_v410.jsonl",
+        "sha256": "abd983168922eff4e6393837b1709464a111888cdd6cda2c561d7c7e6f77716a",
+        "rows": 3298,
+        "bytes": 12216299,
+        "written": true
+      },
+      "counts": {
+        "decisions": 3298,
+        "verified_plans_total": 3298,
+        "alive": 3277,
+        "dead": 0,
+        "unknown": 21,
+        "model_mismatch": 21,
+        "incomplete": 0,
+        "horizon_missing": 3298,
+        "moving_alive": 1826,
+        "idle_alive": 1451,
+        "died_true_plans": 0,
+        "died_false_plans": 3298,
+        "model_match_true": 3277,
+        "model_match_false": 21,
+        "model_match_missing": 0,
+        "conservative_alive": 659,
+        "conservative_dead": 0,
+        "conservative_unknown": 2639,
+        "decision_alive": 3277,
+        "decision_dead": 0,
+        "decision_unknown": 21,
+        "query_verified": 3298,
+        "query_unknown": 56066,
+        "decisions_with_verified_query": 3298
+      },
+      "alive": 3277,
+      "dead": 0,
+      "unknown": 21,
+      "model_mismatch": 21,
+      "horizon_missing": 3298,
+      "report": {
+        "status": "ok",
+        "stop_reason": "stage_changed",
+        "mode": "fast",
+        "decisions": 3299,
+        "survival_frames": 13196,
+        "frames_committed": 13196,
+        "deaths_observed": 0,
+        "stage_clear": true,
+        "stages_visited": [
+          0,
+          1
+        ],
+        "stage_transitions": [
+          {
+            "decision": 3298,
+            "frame": 13196,
+            "from_stage": 0,
+            "to_stage": 1,
+            "frames_in_stage": 13196,
+            "deaths_in_stage": 0,
+            "bombs_spent_in_stage": 0.0
+          }
+        ]
+      }
+    },
+    {
+      "shard": "d1-s0d1-n3300-seed19-shard",
+      "stage": 0,
+      "stage_source": "work_report.stage",
+      "shard_label_stage": [
+        0
+      ],
+      "seed": 19,
+      "difficulty": 1,
+      "team": 0,
+      "mode": "fast",
+      "stop_reason": "max_frames",
+      "decisions": 3300,
+      "work_decisions": 3300,
+      "shard_decisions": 3300,
+      "work_label_rows": 3301,
+      "work_label_rows_includes_report": true,
+      "obs": {
+        "dir": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed19-shard/obs",
+        "rows": 3300,
+        "shape": [
+          3300,
+          4,
+          112,
+          96
+        ],
+        "planes": {
+          "play96x112": {
+            "path": "obs/play96x112.npy",
+            "file": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed19-shard/obs/play96x112.npy",
+            "shape": [
+              3300,
+              4,
+              112,
+              96
+            ],
+            "dtype": "uint8",
+            "bytes": 141926922,
+            "sha256": "6803941291c4824d7ba1ea57e754b432031b33b7912ce65b9d338350f1d8524e",
+            "sha256_matches_shard_json": true
+          },
+          "hud": {
+            "path": "obs/hud.npy",
+            "file": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed19-shard/obs/hud.npy",
+            "shape": [
+              3300,
+              56,
+              160
+            ],
+            "dtype": "uint8",
+            "bytes": 29568522,
+            "sha256": "880649f3c034e2972f2afe93f320760b33a0caef4edd1d19016d43151074f5b3",
+            "sha256_matches_shard_json": true
+          },
+          "act_hist": {
+            "path": "obs/act_hist.npy",
+            "file": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed19-shard/obs/act_hist.npy",
+            "shape": [
+              3300,
+              8,
+              18
+            ],
+            "dtype": "uint8",
+            "bytes": 475722,
+            "sha256": "9414712f136f21a4e7a345f1ad41a560a9c50ef623c57a64e954606194b24a73",
+            "sha256_matches_shard_json": true
+          }
+        },
+        "obs_length_matches_shard_decisions": true,
+        "copied": false
+      },
+      "inputs": {
+        "shard_dir": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed19-shard",
+        "work_dir": ".tmp_v410_s1c/work/d1-s0d1-n3300-seed19-shard",
+        "shard_labels": {
+          "path": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed19-shard/labels.jsonl",
+          "sha256": "b89668107460c87a870e0e95077bbeea33735137302a2f3fe4a82fc94210a095",
+          "rows": 3300,
+          "blank_lines": 0
+        },
+        "work_labels": {
+          "path": ".tmp_v410_s1c/work/d1-s0d1-n3300-seed19-shard/labels.jsonl",
+          "sha256": "c545f905883dd22e7698652717aad0197f3c19323de538f80c6d102340c30538",
+          "rows": 3301,
+          "blank_lines": 0
+        }
+      },
+      "integrity": {
+        "shard_json": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed19-shard/shard.json",
+        "labels_sha256_matches": true,
+        "obs_sha256_matches": {
+          "play96x112": true,
+          "hud": true,
+          "act_hist": true
+        },
+        "decision_count_matches": true
+      },
+      "alignment": {
+        "by": [
+          "decision",
+          "hash_pre",
+          "decision_frame"
+        ],
+        "verified_pairs": 3300,
+        "trimmed_decisions": 0,
+        "trimmed": [],
+        "trim_reason": "none"
+      },
+      "rule": {
+        "tolerance": 8.0,
+        "tolerance_source": "touhou_rl.v410.teacher_calibration.MODEL_MATCH_TOLERANCE",
+        "decision_frames": 4,
+        "decision_frames_source": "work_report.committed_frames_per_decision",
+        "horizon": 32,
+        "horizon_source": "work_report.config.horizon",
+        "label_schema": "v410-teacher-label-calibrated/1",
+        "survival_statuses": [
+          "verified_alive",
+          "verified_dead",
+          "unknown"
+        ]
+      },
+      "labels_output": {
+        "path": ".tmp_v410_s1c/relabel/d1-s0d1-n3300-seed19-shard/labels_v410.jsonl",
+        "sha256": "02aba9be52facb7c4b0af16f5657586b58c846d5df52c2aaa701d72b1c82a26b",
+        "rows": 3300,
+        "bytes": 12223017,
+        "written": true
+      },
+      "counts": {
+        "decisions": 3300,
+        "verified_plans_total": 3300,
+        "alive": 3285,
+        "dead": 0,
+        "unknown": 15,
+        "model_mismatch": 15,
+        "incomplete": 0,
+        "horizon_missing": 3300,
+        "moving_alive": 1850,
+        "idle_alive": 1435,
+        "died_true_plans": 0,
+        "died_false_plans": 3300,
+        "model_match_true": 3285,
+        "model_match_false": 15,
+        "model_match_missing": 0,
+        "conservative_alive": 656,
+        "conservative_dead": 0,
+        "conservative_unknown": 2644,
+        "decision_alive": 3285,
+        "decision_dead": 0,
+        "decision_unknown": 15,
+        "query_verified": 3300,
+        "query_unknown": 56100,
+        "decisions_with_verified_query": 3300
+      },
+      "alive": 3285,
+      "dead": 0,
+      "unknown": 15,
+      "model_mismatch": 15,
+      "horizon_missing": 3300,
+      "report": {
+        "status": "ok",
+        "stop_reason": "max_frames",
+        "mode": "fast",
+        "decisions": 3300,
+        "survival_frames": 13200,
+        "frames_committed": 13200,
+        "deaths_observed": 0,
+        "stage_clear": false,
+        "stages_visited": [
+          0
+        ],
+        "stage_transitions": []
+      }
+    },
+    {
+      "shard": "d1-s0d1-n3300-seed20-shard",
+      "stage": 0,
+      "stage_source": "work_report.stage",
+      "shard_label_stage": [
+        0
+      ],
+      "seed": 20,
+      "difficulty": 1,
+      "team": 0,
+      "mode": "fast",
+      "stop_reason": "stage_changed",
+      "decisions": 3274,
+      "work_decisions": 3275,
+      "shard_decisions": 3274,
+      "work_label_rows": 3276,
+      "work_label_rows_includes_report": true,
+      "obs": {
+        "dir": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed20-shard/obs",
+        "rows": 3274,
+        "shape": [
+          3274,
+          4,
+          112,
+          96
+        ],
+        "planes": {
+          "play96x112": {
+            "path": "obs/play96x112.npy",
+            "file": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed20-shard/obs/play96x112.npy",
+            "shape": [
+              3274,
+              4,
+              112,
+              96
+            ],
+            "dtype": "uint8",
+            "bytes": 140808714,
+            "sha256": "3d494ca960b4bcd3f81c95fcf23b741f240c882c4abb165ce61b3d56228d4569",
+            "sha256_matches_shard_json": true
+          },
+          "hud": {
+            "path": "obs/hud.npy",
+            "file": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed20-shard/obs/hud.npy",
+            "shape": [
+              3274,
+              56,
+              160
+            ],
+            "dtype": "uint8",
+            "bytes": 29335562,
+            "sha256": "fcbc19ce44425ab57b35df44f6b85ab39c2001236f9eeab85f3b94d7951faa48",
+            "sha256_matches_shard_json": true
+          },
+          "act_hist": {
+            "path": "obs/act_hist.npy",
+            "file": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed20-shard/obs/act_hist.npy",
+            "shape": [
+              3274,
+              8,
+              18
+            ],
+            "dtype": "uint8",
+            "bytes": 471978,
+            "sha256": "5da763c702f57210b99b4b11cb86ac7b69ca64cce1ee3c4eb91017eb2fdbe824",
+            "sha256_matches_shard_json": true
+          }
+        },
+        "obs_length_matches_shard_decisions": true,
+        "copied": false
+      },
+      "inputs": {
+        "shard_dir": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed20-shard",
+        "work_dir": ".tmp_v410_s1c/work/d1-s0d1-n3300-seed20-shard",
+        "shard_labels": {
+          "path": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed20-shard/labels.jsonl",
+          "sha256": "12416a378065711d7df07afc83b513df2bbac39e37971ed7937fa7681c1e2c8e",
+          "rows": 3274,
+          "blank_lines": 0
+        },
+        "work_labels": {
+          "path": ".tmp_v410_s1c/work/d1-s0d1-n3300-seed20-shard/labels.jsonl",
+          "sha256": "007d3f17fd549efc48a1c68e9addf6194f5c6cb08c24515cab9e12a3dc2d0cba",
+          "rows": 3276,
+          "blank_lines": 0
+        }
+      },
+      "integrity": {
+        "shard_json": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed20-shard/shard.json",
+        "labels_sha256_matches": true,
+        "obs_sha256_matches": {
+          "play96x112": true,
+          "hud": true,
+          "act_hist": true
+        },
+        "decision_count_matches": true
+      },
+      "alignment": {
+        "by": [
+          "decision",
+          "hash_pre",
+          "decision_frame"
+        ],
+        "verified_pairs": 3274,
+        "trimmed_decisions": 1,
+        "trimmed": [
+          {
+            "decision": 3274,
+            "work_line": 3276,
+            "frame": 13100,
+            "decision_frame": 13096,
+            "reason": "stage_transition_trim"
+          }
+        ],
+        "trim_reason": "stage_transition_trim"
+      },
+      "rule": {
+        "tolerance": 8.0,
+        "tolerance_source": "touhou_rl.v410.teacher_calibration.MODEL_MATCH_TOLERANCE",
+        "decision_frames": 4,
+        "decision_frames_source": "work_report.committed_frames_per_decision",
+        "horizon": 32,
+        "horizon_source": "work_report.config.horizon",
+        "label_schema": "v410-teacher-label-calibrated/1",
+        "survival_statuses": [
+          "verified_alive",
+          "verified_dead",
+          "unknown"
+        ]
+      },
+      "labels_output": {
+        "path": ".tmp_v410_s1c/relabel/d1-s0d1-n3300-seed20-shard/labels_v410.jsonl",
+        "sha256": "413fcedc4a094ea1f19bd8d1002a6b3cc8e3af89c96023ef0dc19f84ecb67726",
+        "rows": 3274,
+        "bytes": 12131731,
+        "written": true
+      },
+      "counts": {
+        "decisions": 3274,
+        "verified_plans_total": 3274,
+        "alive": 3260,
+        "dead": 0,
+        "unknown": 14,
+        "model_mismatch": 14,
+        "incomplete": 0,
+        "horizon_missing": 3274,
+        "moving_alive": 1745,
+        "idle_alive": 1515,
+        "died_true_plans": 0,
+        "died_false_plans": 3274,
+        "model_match_true": 3260,
+        "model_match_false": 14,
+        "model_match_missing": 0,
+        "conservative_alive": 790,
+        "conservative_dead": 0,
+        "conservative_unknown": 2484,
+        "decision_alive": 3260,
+        "decision_dead": 0,
+        "decision_unknown": 14,
+        "query_verified": 3274,
+        "query_unknown": 55658,
+        "decisions_with_verified_query": 3274
+      },
+      "alive": 3260,
+      "dead": 0,
+      "unknown": 14,
+      "model_mismatch": 14,
+      "horizon_missing": 3274,
+      "report": {
+        "status": "ok",
+        "stop_reason": "stage_changed",
+        "mode": "fast",
+        "decisions": 3275,
+        "survival_frames": 13100,
+        "frames_committed": 13100,
+        "deaths_observed": 0,
+        "stage_clear": true,
+        "stages_visited": [
+          0,
+          1
+        ],
+        "stage_transitions": [
+          {
+            "decision": 3274,
+            "frame": 13100,
+            "from_stage": 0,
+            "to_stage": 1,
+            "frames_in_stage": 13100,
+            "deaths_in_stage": 0,
+            "bombs_spent_in_stage": 0.0
+          }
+        ]
+      }
+    },
+    {
+      "shard": "d1-s0d1-n3300-seed9-shard",
+      "stage": 0,
+      "stage_source": "work_report.stage",
+      "shard_label_stage": [
+        0
+      ],
+      "seed": 9,
+      "difficulty": 1,
+      "team": 0,
+      "mode": "fast",
+      "stop_reason": "max_frames",
+      "decisions": 3300,
+      "work_decisions": 3300,
+      "shard_decisions": 3300,
+      "work_label_rows": 3301,
+      "work_label_rows_includes_report": true,
+      "obs": {
+        "dir": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed9-shard/obs",
+        "rows": 3300,
+        "shape": [
+          3300,
+          4,
+          112,
+          96
+        ],
+        "planes": {
+          "play96x112": {
+            "path": "obs/play96x112.npy",
+            "file": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed9-shard/obs/play96x112.npy",
+            "shape": [
+              3300,
+              4,
+              112,
+              96
+            ],
+            "dtype": "uint8",
+            "bytes": 141926922,
+            "sha256": "77580b50684327be4417757b516779c375500e0fbcda6a693a197ce230342972",
+            "sha256_matches_shard_json": true
+          },
+          "hud": {
+            "path": "obs/hud.npy",
+            "file": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed9-shard/obs/hud.npy",
+            "shape": [
+              3300,
+              56,
+              160
+            ],
+            "dtype": "uint8",
+            "bytes": 29568522,
+            "sha256": "1aff2a1f1e9051927aff92a0f76ec7a52e966b4b4a265ab68fdd2a5ce1c65b0c",
+            "sha256_matches_shard_json": true
+          },
+          "act_hist": {
+            "path": "obs/act_hist.npy",
+            "file": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed9-shard/obs/act_hist.npy",
+            "shape": [
+              3300,
+              8,
+              18
+            ],
+            "dtype": "uint8",
+            "bytes": 475722,
+            "sha256": "c1259480c376581d80d4bab5d8b09adebc32227f21cf9e040048543e227be00b",
+            "sha256_matches_shard_json": true
+          }
+        },
+        "obs_length_matches_shard_decisions": true,
+        "copied": false
+      },
+      "inputs": {
+        "shard_dir": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed9-shard",
+        "work_dir": ".tmp_v410_s1c/work/d1-s0d1-n3300-seed9-shard",
+        "shard_labels": {
+          "path": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed9-shard/labels.jsonl",
+          "sha256": "7d58b03d0f311d008cb2f5feaed303434d94281c6f2815626c4c21c6f912ab4d",
+          "rows": 3300,
+          "blank_lines": 0
+        },
+        "work_labels": {
+          "path": ".tmp_v410_s1c/work/d1-s0d1-n3300-seed9-shard/labels.jsonl",
+          "sha256": "6fe4dafca75f32261e32bd5edf2fb216633041c7d6203e46a67d930499676cb2",
+          "rows": 3301,
+          "blank_lines": 0
+        }
+      },
+      "integrity": {
+        "shard_json": ".tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed9-shard/shard.json",
+        "labels_sha256_matches": true,
+        "obs_sha256_matches": {
+          "play96x112": true,
+          "hud": true,
+          "act_hist": true
+        },
+        "decision_count_matches": true
+      },
+      "alignment": {
+        "by": [
+          "decision",
+          "hash_pre",
+          "decision_frame"
+        ],
+        "verified_pairs": 3300,
+        "trimmed_decisions": 0,
+        "trimmed": [],
+        "trim_reason": "none"
+      },
+      "rule": {
+        "tolerance": 8.0,
+        "tolerance_source": "touhou_rl.v410.teacher_calibration.MODEL_MATCH_TOLERANCE",
+        "decision_frames": 4,
+        "decision_frames_source": "work_report.committed_frames_per_decision",
+        "horizon": 32,
+        "horizon_source": "work_report.config.horizon",
+        "label_schema": "v410-teacher-label-calibrated/1",
+        "survival_statuses": [
+          "verified_alive",
+          "verified_dead",
+          "unknown"
+        ]
+      },
+      "labels_output": {
+        "path": ".tmp_v410_s1c/relabel/d1-s0d1-n3300-seed9-shard/labels_v410.jsonl",
+        "sha256": "1d8bc05c601d8d2fbd71dd332248605d1facafebb67c52a26766b6733045ecfe",
+        "rows": 3300,
+        "bytes": 12219032,
+        "written": true
+      },
+      "counts": {
+        "decisions": 3300,
+        "verified_plans_total": 3300,
+        "alive": 3287,
+        "dead": 0,
+        "unknown": 13,
+        "model_mismatch": 13,
+        "incomplete": 0,
+        "horizon_missing": 3300,
+        "moving_alive": 1803,
+        "idle_alive": 1484,
+        "died_true_plans": 0,
+        "died_false_plans": 3300,
+        "model_match_true": 3287,
+        "model_match_false": 13,
+        "model_match_missing": 0,
+        "conservative_alive": 707,
+        "conservative_dead": 0,
+        "conservative_unknown": 2593,
+        "decision_alive": 3287,
+        "decision_dead": 0,
+        "decision_unknown": 13,
+        "query_verified": 3300,
+        "query_unknown": 56100,
+        "decisions_with_verified_query": 3300
+      },
+      "alive": 3287,
+      "dead": 0,
+      "unknown": 13,
+      "model_mismatch": 13,
+      "horizon_missing": 3300,
+      "report": {
+        "status": "ok",
+        "stop_reason": "max_frames",
+        "mode": "fast",
+        "decisions": 3300,
+        "survival_frames": 13200,
+        "frames_committed": 13200,
+        "deaths_observed": 0,
+        "stage_clear": false,
+        "stages_visited": [
+          0
+        ],
+        "stage_transitions": []
+      }
+    }
+  ],
+  "totals": {
+    "shards_processed": 12,
+    "decisions": 39518,
+    "work_decisions": 39523,
+    "trimmed_decisions": 5,
+    "verified_plans_total": 39518,
+    "alive": 39330,
+    "dead": 0,
+    "unknown": 188,
+    "model_mismatch": 188,
+    "incomplete": 0,
+    "horizon_missing": 39518,
+    "moving_alive": 21845,
+    "idle_alive": 17485,
+    "decision_alive": 39330,
+    "decision_dead": 0,
+    "decision_unknown": 188,
+    "conservative_alive": 8289,
+    "conservative_dead": 0,
+    "conservative_unknown": 31229,
+    "died_true_plans": 0,
+    "died_false_plans": 39518,
+    "frames_from_obs_decisions": 158072,
+    "frames_from_report_survival": 158092
+  },
+  "stages": {
+    "0": {
+      "shards": [
+        "d1-s0d1-n3300-seed10-shard",
+        "d1-s0d1-n3300-seed11-shard",
+        "d1-s0d1-n3300-seed12-shard",
+        "d1-s0d1-n3300-seed13-shard",
+        "d1-s0d1-n3300-seed14-shard",
+        "d1-s0d1-n3300-seed15-shard",
+        "d1-s0d1-n3300-seed16-shard",
+        "d1-s0d1-n3300-seed17-shard",
+        "d1-s0d1-n3300-seed18-shard",
+        "d1-s0d1-n3300-seed19-shard",
+        "d1-s0d1-n3300-seed20-shard",
+        "d1-s0d1-n3300-seed9-shard"
+      ],
+      "decisions": 39518,
+      "work_decisions": 39523,
+      "seeds": [
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20
+      ],
+      "shard_count": 12
+    }
+  },
+  "s1_partial": {
+    "status": "shortfall",
+    "passed": false,
+    "decisions": 39518,
+    "unique_seeds": 12,
+    "shortfall_decisions": 10482,
+    "shortfall_seeds": 8,
+    "audit": ".tmp_v410_s1c/relabel/s1c_partial_audit.json"
+  },
+  "multi_partial": {
+    "schema": "v410-multi-partial/1",
+    "scope": "D410-MULTI",
+    "scope_shards": "all processed shards (stage 0 and stage 1)",
+    "passed": false,
+    "status": "shortfall",
+    "thresholds": {
+      "target_frames": 2000000,
+      "min_frames_per_stage": 150000,
+      "target_stages": 8
+    },
+    "metrics": {
+      "shards": 12,
+      "stages_present": 1,
+      "decisions": 39518,
+      "work_decisions": 39523,
+      "frames_from_obs_decisions": 158072,
+      "frames_from_report_survival": 158092
+    },
+    "per_stage": [
+      {
+        "stage": 0,
+        "shards": 12,
+        "decisions": 39518,
+        "frames_from_obs_decisions": 158072,
+        "min_frames": 150000,
+        "shortfall_frames": 0
+      }
+    ],
+    "shortfall_frames": 1841928,
+    "shortfall_stages": 7,
+    "checks": [
+      {
+        "name": "stages_ge_target",
+        "ok": false,
+        "detail": "1 stage(s) < 8",
+        "severity": "coverage"
+      },
+      {
+        "name": "total_frames_ge_target",
+        "ok": false,
+        "detail": "158072 < 2000000",
+        "severity": "coverage"
+      },
+      {
+        "name": "stage_0_frames_ge_min",
+        "ok": true,
+        "detail": "158072  >= 150000",
+        "severity": "coverage"
+      }
+    ],
+    "reasons": [
+      "1 stage(s) < 8",
+      "158072 < 2000000"
+    ]
+  },
+  "not_claimed": [
+    "not a dataset: this is a re-label of existing D1 observations, no obs was copied, no run was launched, nothing was trained or collected",
+    "not D410-S1: the stage-0 slice is 39518 aligned decision(s) over 12 seed(s), below 50,000 / 20",
+    "not D410-MULTI: the whole 15-shard slice is 2 stages and far below 2,000,000 frames / 150,000 per stage",
+    "not a new teacher run: the labels come from the existing work JSONL verified detail, converted under the WP02.4 calibrated rule",
+    "verified_alive is the calibrated model-consistency verdict, not a survival guarantee; unknown is never a negative sample"
+  ],
+  "limits": [
+    "only 12 of the D1 shard directories kept a work labels.jsonl; the other shards cannot be re-labelled from work-level verified detail",
+    "the work JSONL is the only surviving copy of the per-plan verified detail for these observations: the D1 shard labels.jsonl keeps only verified_mask/count",
+    "the slice covers stage(s) [0] and difficulty [1]; it is not a multi-stage or multi-difficulty dataset",
+    "trailing stage-transition decisions have no observation row and are trimmed (recorded per shard, never silently dropped)",
+    "the observations were recorded before commit while the work row frame is after it; alignment is keyed on hash_pre + decision_frame, and every label row carries its obs row index and decision_frame",
+    "D1 shard labels.jsonl records stage=0 for every shard; the work report stage is what this manifest trusts",
+    "obs sha256 values are verified against shard.json where it recorded them"
+  ]
+}

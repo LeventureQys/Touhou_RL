@@ -1,0 +1,73 @@
+{
+  "schema": "v410-wp00-protocol/1",
+  "created_at": "2026-11-13T00:00:04+08:00",
+  "spec": {
+    "path": "Document/Update/Alpha/v4.1.0/README.md",
+    "sha256": "8fc51064e5e54e7cdf6e0b924dcaefd0b3020d148ceeaf5bc0deb9294ae4876c"
+  },
+  "source": {
+    "windows_head": "ca1ae8bee4d6fd43cc932e4b84970a2d0130864a",
+    "wsl_head": "d55c26a6c465b26f11e26ba4fc1bdb888e8b130b"
+  },
+  "environment": {
+    "python": "3.12.10",
+    "torch": "2.14.1+cu132",
+    "cuda_available": true,
+    "gpu": "NVIDIA GeForce RTX 4070 SUPER"
+  },
+  "commands": [
+    {
+      "name": "pytest",
+      "argv": ["python", "-m", "pytest", "-p", "no:cacheprovider", "--basetemp", ".tmp_v410_wp00_pytest", "-q", "tests/test_v410_evidence.py"],
+      "cwd": "D:\\WorkShop\\Touhou_RL",
+      "exit_code": 0,
+      "statistics": "11 passed",
+      "stdout_path": ".tmp_v410_wp00_audit/pytest_final.txt"
+    },
+    {
+      "name": "compileall",
+      "argv": ["python", "-m", "compileall", "-q", "touhou_rl", "tools/rl/v410.py"],
+      "cwd": "D:\\WorkShop\\Touhou_RL",
+      "exit_code": 0,
+      "note": "syntax only; not a test pass",
+      "stdout_path": ".tmp_v410_wp00_audit/compileall_final.txt"
+    },
+    {
+      "name": "help",
+      "argv": ["python", "tools/rl/v410.py", "--help"],
+      "cwd": "D:\\WorkShop\\Touhou_RL",
+      "exit_code": 0,
+      "stdout_path": ".tmp_v410_wp00_audit/help_final.txt"
+    },
+    {
+      "name": "preflight",
+      "argv": ["python", "tools/rl/v410.py", "preflight", "--config", "configs/v410/local.json", "--out", "Document/Update/Alpha/v4.1.0/evidence/WP00"],
+      "cwd": "D:\\WorkShop\\Touhou_RL",
+      "exit_code": 0,
+      "game_launched": false,
+      "stdout_path": ".tmp_v410_wp00_audit/preflight_final.txt"
+    },
+    {
+      "name": "status",
+      "argv": ["python", "tools/rl/v410.py", "status", "--state", "Document/Update/Alpha/v4.1.0/state.json"],
+      "cwd": "D:\\WorkShop\\Touhou_RL",
+      "exit_code": 0,
+      "stdout_path": ".tmp_v410_wp00_audit/status_final.txt"
+    },
+    {
+      "name": "check_wp00",
+      "argv": ["python", "tools/rl/v410.py", "check", "--wp", "WP00", "--evidence", "Document/Update/Alpha/v4.1.0/evidence/WP00"],
+      "cwd": "D:\\WorkShop\\Touhou_RL",
+      "exit_code": 0,
+      "stdout_path": ".tmp_v410_wp00_audit/check_final.txt",
+      "note": "check requires assets.json and resummed.json; warnings are recorded, not silently dropped"
+    }
+  ],
+  "game_launched": false,
+  "training_launched": false,
+  "notes": [
+    "preflight does not launch the game; it only probes the machine and writes preflight.json/preflight.md.",
+    "The v410 code is new; v400 modules and historical evidence were read-only in this slice.",
+    "The stopped execution agent produced only touhou_rl/v410/__init__.py before interruption; the remaining WP00 entry points were written by the main agent as the minimal necessary handling in AGENTS.md §6."
+  ]
+}

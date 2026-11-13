@@ -1,0 +1,347 @@
+{
+  "schema": "v410-dagger-smoke/1",
+  "wp": "WP05.0",
+  "title": "v410 B0 / obs-v3 DAgger beta-mixing pipeline smoke",
+  "status": "ok",
+  "problems": [],
+  "pipeline_smoke_only": true,
+  "config": {
+    "checkpoint": ".tmp_v410_wp04_arms/b0_seed0_last.pt",
+    "seeds": [
+      2000,
+      2001
+    ],
+    "beta": 0.5,
+    "decisions": 300,
+    "max_frames": 1200,
+    "stage": 0,
+    "difficulty": "normal",
+    "difficulty_index": 1,
+    "team": 0,
+    "mode": "fast",
+    "rng_seed": 0,
+    "stop_on_death": true,
+    "trim_transition": true,
+    "keep_labelled_segment": false,
+    "device": "cpu",
+    "engine": "/root/Touhou_RL/third_party/th08-rl/build/rl_v3/th08-modern",
+    "data_dir": "/root/v400-data/game",
+    "shard_root": ".tmp_v410_wp05_smoke",
+    "work_dir": ".tmp_v410_wp05_smoke/logs",
+    "argv": [
+      "--checkpoint",
+      ".tmp_v410_wp04_arms/b0_seed0_last.pt",
+      "--seeds",
+      "2000,2001",
+      "--beta",
+      "0.5",
+      "--decisions",
+      "300",
+      "--max-frames",
+      "1200",
+      "--stage",
+      "0",
+      "--difficulty",
+      "normal",
+      "--stop-on-death",
+      "--shard-root",
+      ".tmp_v410_wp05_smoke",
+      "--work-dir",
+      ".tmp_v410_wp05_smoke/logs",
+      "--out",
+      "Document/Update/Alpha/v4.1.0/evidence/WP05/dagger_smoke.json"
+    ]
+  },
+  "checkpoint": {
+    "schema": "v410-wp04-bc-arm-checkpoint/1",
+    "arm": "B0",
+    "model_class": "touhou_rl.v410.student.diagnostics.ProbeNet",
+    "model_config": {
+      "play_width": 24,
+      "hud_width": 16,
+      "hist_hidden": 64,
+      "readout": 128,
+      "trunk": 128,
+      "groups": 8
+    },
+    "parameters": 731802,
+    "train_seed": 0,
+    "epochs": 20,
+    "path": ".tmp_v410_wp04_arms/b0_seed0_last.pt",
+    "sha256": "3bc0ec4461701bebb2ffc551d61dffff77f15cd486125baf9db6eaafc741b3a6",
+    "family": "probe",
+    "obs_spec_version": "obs-v3",
+    "obs_spec_digest": "ef2fbd15385f26f425db2bfe855d105ee009023acb08c26916e811963553a105"
+  },
+  "engine": {
+    "binary": "/root/Touhou_RL/third_party/th08-rl/build/rl_v3/th08-modern",
+    "sha256": "691bfd77b7eca3361aa8bb7af0977556a70cc73a070b29a2447222ba7a568ef6"
+  },
+  "obs": {
+    "spec_version": "obs-v3",
+    "spec_digest": "ef2fbd15385f26f425db2bfe855d105ee009023acb08c26916e811963553a105",
+    "shapes": {
+      "play96x112": [
+        4,
+        112,
+        96
+      ],
+      "hud": [
+        1,
+        56,
+        160
+      ],
+      "act_hist": [
+        8,
+        18
+      ]
+    },
+    "dtype": "uint8",
+    "decision_frames": 2,
+    "frame_stack": 4
+  },
+  "episodes": [
+    {
+      "schema": "v410-dagger-episode/1",
+      "status": "ok",
+      "shard": "dagger-s0d1seed2000",
+      "seed": 2000,
+      "stage": 0,
+      "difficulty": "normal",
+      "decisions": 300,
+      "frames": 600,
+      "renders": 601,
+      "pixels_warmup_frames": 0,
+      "stop_reason": "decisions",
+      "stage_clear": false,
+      "injection": {
+        "decisions": 300,
+        "beta": 0.5,
+        "injections": 148,
+        "injection_rate": 0.493333,
+        "teacher_available": 300,
+        "teacher_available_rate": 1.0,
+        "injection_rate_over_available": 0.493333,
+        "agreement": 172,
+        "agreement_rate": 0.573333,
+        "disagreement": 128,
+        "disagreement_rate": 0.426667,
+        "disagreement_rate_over_available": 0.426667,
+        "mean_draw": 0.494012,
+        "min_draw": 0.00167,
+        "max_draw": 0.993931,
+        "distinct_student_actions": 7,
+        "distinct_teacher_actions": 8,
+        "distinct_executed_actions": 8,
+        "checkpoint": ".tmp_v410_wp04_arms/b0_seed0_last.pt",
+        "checkpoint_sha256": "3bc0ec4461701bebb2ffc551d61dffff77f15cd486125baf9db6eaafc741b3a6",
+        "alignment": {
+          "method": "hash-checkpoint",
+          "boundaries": 600,
+          "checkpoints_equal": 600,
+          "checkpoints_mismatched": 0,
+          "all_equal": true
+        },
+        "seed": 2000
+      },
+      "alignment": {
+        "method": "hash-checkpoint",
+        "decisions": 300,
+        "boundaries": 600,
+        "checkpoints_equal": 600,
+        "checkpoints_mismatched": 0,
+        "first_mismatch": null,
+        "all_equal": true,
+        "alignment_rate": 1.0
+      },
+      "beta": 0.5,
+      "rng_seed": 2000,
+      "draw_sequence_sha256": "e8e603fe4693e450e985c9fa7b3f99d61ad3ab1fc754263130ec266eba68fcd2",
+      "checkpoint_sha256": "3bc0ec4461701bebb2ffc551d61dffff77f15cd486125baf9db6eaafc741b3a6",
+      "engine_sha256": "691bfd77b7eca3361aa8bb7af0977556a70cc73a070b29a2447222ba7a568ef6",
+      "files": {
+        "shard": "dagger-s0d1seed2000",
+        "path": ".tmp_v410_wp05_smoke/shards/dagger-s0d1seed2000",
+        "shard_json": ".tmp_v410_wp05_smoke/shards/dagger-s0d1seed2000/shard.json",
+        "labels": ".tmp_v410_wp05_smoke/shards/dagger-s0d1seed2000/labels.jsonl",
+        "shard_json_sha256": "856be084b0718b2385116eff13ade645fb29f4ecc5c457c29bba08136c0db284",
+        "labels_sha256": "1fd1d74fcd1b9c11431d65e26bc141aea3563a7ed0086e4b994596426f249fa8",
+        "obs_sha256": {
+          "play96x112": "9c8439e64cc0fbbe249344bb39d2e6e2308dc32491095989953d83b787b7e7f1",
+          "hud": "9e689c76f54e65b4ef9e8fbc6931ade238a430b7c59a2f97b0a2ef355d377f6a",
+          "act_hist": "427cb3e1fb7616a06d66cf183c1bb385770563689f9c600929e0038577014f45"
+        },
+        "decisions": 300,
+        "frames": 600
+      },
+      "wall_s": 35.16,
+      "not_a_gate": true,
+      "exit_code": 0
+    },
+    {
+      "schema": "v410-dagger-episode/1",
+      "status": "ok",
+      "shard": "dagger-s0d1seed2001",
+      "seed": 2001,
+      "stage": 0,
+      "difficulty": "normal",
+      "decisions": 300,
+      "frames": 600,
+      "renders": 601,
+      "pixels_warmup_frames": 0,
+      "stop_reason": "decisions",
+      "stage_clear": false,
+      "injection": {
+        "decisions": 300,
+        "beta": 0.5,
+        "injections": 129,
+        "injection_rate": 0.43,
+        "teacher_available": 300,
+        "teacher_available_rate": 1.0,
+        "injection_rate_over_available": 0.43,
+        "agreement": 120,
+        "agreement_rate": 0.4,
+        "disagreement": 180,
+        "disagreement_rate": 0.6,
+        "disagreement_rate_over_available": 0.6,
+        "mean_draw": 0.53583,
+        "min_draw": 0.007033,
+        "max_draw": 0.998483,
+        "distinct_student_actions": 7,
+        "distinct_teacher_actions": 8,
+        "distinct_executed_actions": 8,
+        "checkpoint": ".tmp_v410_wp04_arms/b0_seed0_last.pt",
+        "checkpoint_sha256": "3bc0ec4461701bebb2ffc551d61dffff77f15cd486125baf9db6eaafc741b3a6",
+        "alignment": {
+          "method": "hash-checkpoint",
+          "boundaries": 600,
+          "checkpoints_equal": 600,
+          "checkpoints_mismatched": 0,
+          "all_equal": true
+        },
+        "seed": 2001
+      },
+      "alignment": {
+        "method": "hash-checkpoint",
+        "decisions": 300,
+        "boundaries": 600,
+        "checkpoints_equal": 600,
+        "checkpoints_mismatched": 0,
+        "first_mismatch": null,
+        "all_equal": true,
+        "alignment_rate": 1.0
+      },
+      "beta": 0.5,
+      "rng_seed": 2001,
+      "draw_sequence_sha256": "1611632345c8dd2f6ac966542940aeeb33283a42f39b729617fc6958e8452f9b",
+      "checkpoint_sha256": "3bc0ec4461701bebb2ffc551d61dffff77f15cd486125baf9db6eaafc741b3a6",
+      "engine_sha256": "691bfd77b7eca3361aa8bb7af0977556a70cc73a070b29a2447222ba7a568ef6",
+      "files": {
+        "shard": "dagger-s0d1seed2001",
+        "path": ".tmp_v410_wp05_smoke/shards/dagger-s0d1seed2001",
+        "shard_json": ".tmp_v410_wp05_smoke/shards/dagger-s0d1seed2001/shard.json",
+        "labels": ".tmp_v410_wp05_smoke/shards/dagger-s0d1seed2001/labels.jsonl",
+        "shard_json_sha256": "6f63a7a33027b57773c9a5b8f3fb509408ad4b380c11f906ee1a0bdafe928438",
+        "labels_sha256": "46f9c46709207dc6c3c5825ded0267e627ff5f19994dc834e6825e2aa3050dc2",
+        "obs_sha256": {
+          "play96x112": "e9acd559b5b95dca7e0354fc7a5d7bef56e1118659084c5d8b70e35a97c09e32",
+          "hud": "1c5edd3d23e90d9878da13242d5dde3114d76938628ff6ffb0502493b7be1b95",
+          "act_hist": "7c2efd6a3c3a762b910599f5490c073f43abe7e41d87ca8e8dfdda0131c7c847"
+        },
+        "decisions": 300,
+        "frames": 600
+      },
+      "wall_s": 51.57,
+      "not_a_gate": true,
+      "exit_code": 0
+    }
+  ],
+  "totals": {
+    "episodes_planned": 2,
+    "episodes_with_shard": 2,
+    "episodes_failed": 0,
+    "decisions": 600,
+    "frames": 1200,
+    "injections": 277,
+    "injection_rate": 0.461667,
+    "teacher_available": 600,
+    "agreement": 292,
+    "disagreement": 308,
+    "disagreement_rate": 0.513333,
+    "disagreement_rate_over_available": 0.513333,
+    "hash_checkpoints": 1200,
+    "hash_checkpoints_equal": 1200,
+    "hash_checkpoints_mismatched": 0,
+    "hash_alignment_rate": 1.0,
+    "beta": 0.5
+  },
+  "alignment": {
+    "method": "hash-checkpoint",
+    "checkpoints": 1200,
+    "checkpoints_equal": 1200,
+    "checkpoints_mismatched": 0,
+    "all_equal": true,
+    "per_episode": [
+      {
+        "seed": 2000,
+        "shard": "dagger-s0d1seed2000",
+        "boundaries": 600,
+        "checkpoints_equal": 600,
+        "all_equal": true
+      },
+      {
+        "seed": 2001,
+        "shard": "dagger-s0d1seed2001",
+        "boundaries": 600,
+        "checkpoints_equal": 600,
+        "all_equal": true
+      }
+    ]
+  },
+  "outputs": {
+    "shard_root": ".tmp_v410_wp05_smoke",
+    "shards": [
+      {
+        "seed": 2000,
+        "shard": "dagger-s0d1seed2000",
+        "path": ".tmp_v410_wp05_smoke/shards/dagger-s0d1seed2000",
+        "shard_json": ".tmp_v410_wp05_smoke/shards/dagger-s0d1seed2000/shard.json",
+        "labels": ".tmp_v410_wp05_smoke/shards/dagger-s0d1seed2000/labels.jsonl",
+        "shard_json_sha256": "856be084b0718b2385116eff13ade645fb29f4ecc5c457c29bba08136c0db284",
+        "labels_sha256": "1fd1d74fcd1b9c11431d65e26bc141aea3563a7ed0086e4b994596426f249fa8",
+        "obs_sha256": {
+          "play96x112": "9c8439e64cc0fbbe249344bb39d2e6e2308dc32491095989953d83b787b7e7f1",
+          "hud": "9e689c76f54e65b4ef9e8fbc6931ade238a430b7c59a2f97b0a2ef355d377f6a",
+          "act_hist": "427cb3e1fb7616a06d66cf183c1bb385770563689f9c600929e0038577014f45"
+        }
+      },
+      {
+        "seed": 2001,
+        "shard": "dagger-s0d1seed2001",
+        "path": ".tmp_v410_wp05_smoke/shards/dagger-s0d1seed2001",
+        "shard_json": ".tmp_v410_wp05_smoke/shards/dagger-s0d1seed2001/shard.json",
+        "labels": ".tmp_v410_wp05_smoke/shards/dagger-s0d1seed2001/labels.jsonl",
+        "shard_json_sha256": "6f63a7a33027b57773c9a5b8f3fb509408ad4b380c11f906ee1a0bdafe928438",
+        "labels_sha256": "46f9c46709207dc6c3c5825ded0267e627ff5f19994dc834e6825e2aa3050dc2",
+        "obs_sha256": {
+          "play96x112": "e9acd559b5b95dca7e0354fc7a5d7bef56e1118659084c5d8b70e35a97c09e32",
+          "hud": "1c5edd3d23e90d9878da13242d5dde3114d76938628ff6ffb0502493b7be1b95",
+          "act_hist": "7c2efd6a3c3a762b910599f5490c073f43abe7e41d87ca8e8dfdda0131c7c847"
+        }
+      }
+    ],
+    "work_dir": ".tmp_v410_wp05_smoke/logs"
+  },
+  "started_at": "2026-11-12T21:22:49Z",
+  "wall_s": 86.77,
+  "exit_code": 0,
+  "not_claimed": [
+    "G410-2 (the v4.1.0 acceptance gate) -- not measured, not attempted",
+    "any training run (no learner is updated by this tool)",
+    "the 50k-decision first DAgger round (this smoke collects <=600)",
+    "a clear rate, a death rate or an arm comparison (2 episodes, smoke seeds)",
+    "student quality: B0 is the WP04.2 baseline, not a candidate",
+    "the calibrated survival_status channel (deferred to the v410 relabel stage)",
+    "confirm-split behaviour: seeds 60000-60199 are never read"
+  ]
+}

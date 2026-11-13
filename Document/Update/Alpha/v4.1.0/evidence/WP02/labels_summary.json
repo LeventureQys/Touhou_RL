@@ -1,0 +1,477 @@
+{
+  "schema": "v410-teacher-label-summary/1",
+  "generated_at": "2026-11-12T17:23:07+00:00",
+  "tool": {
+    "module": "touhou_rl.v410.teacher_labels",
+    "version": "4.1.0",
+    "python": "3.12.10",
+    "command": [
+      "python",
+      "-m",
+      "touhou_rl.v410.teacher_labels",
+      "--input",
+      ".tmp_v410_wp02_audit/teacher1000.jsonl",
+      "--summary",
+      "Document/Update/Alpha/v4.1.0/evidence/WP02/labels_summary.json",
+      "--sample",
+      "Document/Update/Alpha/v4.1.0/evidence/WP02/labels_seed1000_sample.jsonl",
+      "--sample-limit",
+      "100"
+    ]
+  },
+  "source": {
+    "path": ".tmp_v410_wp02_audit\\teacher1000.jsonl",
+    "sha256": "a1d6923efd8398619632d086bd854677e27cfd501158d2aeaafb37c9ca2f434b",
+    "bytes": 11931643,
+    "report_rows": 1,
+    "decisions": 3251,
+    "skipped": 0
+  },
+  "report": {
+    "status": "ok",
+    "stop_reason": "stage_changed",
+    "mode": "fast",
+    "stage": 0,
+    "difficulty": 1,
+    "seed": 1000,
+    "decisions": 3251,
+    "requested_decisions": 10000,
+    "decisions_per_decision_frames": 2,
+    "committed_frames_per_decision": 4,
+    "frames_committed": 13004,
+    "survival_frames": 13004,
+    "stage_clear": true,
+    "deaths_observed": 0,
+    "config": {
+      "horizon": 32,
+      "beam": 24,
+      "verify_k": 1,
+      "durations": [
+        1,
+        2
+      ]
+    }
+  },
+  "labels": {
+    "schema": "v410-teacher-label-summary/1",
+    "decisions": 3251,
+    "report_rows": 1,
+    "skipped": 0,
+    "verified_plans_total": 3251,
+    "query": {
+      "statuses": [
+        "verified",
+        "unknown"
+      ],
+      "candidates_per_decision": 18,
+      "entries": 58518,
+      "verified": 3251,
+      "unknown": 55267,
+      "verified_fraction": 0.055556,
+      "note": "an entry is 'verified' only when verification returned a plan with that first action; every other candidate stays 'unknown' and is never 'dead'"
+    },
+    "survival": {
+      "statuses": [
+        "verified_alive",
+        "verified_dead",
+        "unknown"
+      ],
+      "total": 3251,
+      "verified_alive": 795,
+      "verified_dead": 0,
+      "unknown": 2456,
+      "fractions": {
+        "verified_alive": 0.24454,
+        "verified_dead": 0.0,
+        "unknown": 0.75546
+      },
+      "note": "counted per verified plan, not per decision: one decision can carry several verified plans (verify_k>1) and each keeps its own verdict"
+    },
+    "horizon_missing": {
+      "decisions": 3251,
+      "fraction": 1.0,
+      "note": "a decision whose row has no verification_horizon; recorded as missing, never as a pass, but it does not block verified_alive by itself"
+    },
+    "frames_per_decision": {
+      "values": [
+        2
+      ],
+      "source": "report.committed_frames_per_decision/report.decisions_per_decision_frames"
+    },
+    "per_first_action": [
+      {
+        "action": 0,
+        "verified_plans": 1532,
+        "verified_alive": 795,
+        "verified_dead": 0,
+        "unknown": 737
+      },
+      {
+        "action": 1,
+        "verified_plans": 69,
+        "verified_alive": 0,
+        "verified_dead": 0,
+        "unknown": 69
+      },
+      {
+        "action": 2,
+        "verified_plans": 290,
+        "verified_alive": 0,
+        "verified_dead": 0,
+        "unknown": 290
+      },
+      {
+        "action": 3,
+        "verified_plans": 326,
+        "verified_alive": 0,
+        "verified_dead": 0,
+        "unknown": 326
+      },
+      {
+        "action": 4,
+        "verified_plans": 71,
+        "verified_alive": 0,
+        "verified_dead": 0,
+        "unknown": 71
+      },
+      {
+        "action": 5,
+        "verified_plans": 34,
+        "verified_alive": 0,
+        "verified_dead": 0,
+        "unknown": 34
+      },
+      {
+        "action": 6,
+        "verified_plans": 212,
+        "verified_alive": 0,
+        "verified_dead": 0,
+        "unknown": 212
+      },
+      {
+        "action": 7,
+        "verified_plans": 208,
+        "verified_alive": 0,
+        "verified_dead": 0,
+        "unknown": 208
+      },
+      {
+        "action": 8,
+        "verified_plans": 42,
+        "verified_alive": 0,
+        "verified_dead": 0,
+        "unknown": 42
+      },
+      {
+        "action": 9,
+        "verified_plans": 0,
+        "verified_alive": 0,
+        "verified_dead": 0,
+        "unknown": 0
+      },
+      {
+        "action": 10,
+        "verified_plans": 8,
+        "verified_alive": 0,
+        "verified_dead": 0,
+        "unknown": 8
+      },
+      {
+        "action": 11,
+        "verified_plans": 179,
+        "verified_alive": 0,
+        "verified_dead": 0,
+        "unknown": 179
+      },
+      {
+        "action": 12,
+        "verified_plans": 198,
+        "verified_alive": 0,
+        "verified_dead": 0,
+        "unknown": 198
+      },
+      {
+        "action": 13,
+        "verified_plans": 16,
+        "verified_alive": 0,
+        "verified_dead": 0,
+        "unknown": 16
+      },
+      {
+        "action": 14,
+        "verified_plans": 3,
+        "verified_alive": 0,
+        "verified_dead": 0,
+        "unknown": 3
+      },
+      {
+        "action": 15,
+        "verified_plans": 35,
+        "verified_alive": 0,
+        "verified_dead": 0,
+        "unknown": 35
+      },
+      {
+        "action": 16,
+        "verified_plans": 16,
+        "verified_alive": 0,
+        "verified_dead": 0,
+        "unknown": 16
+      },
+      {
+        "action": 17,
+        "verified_plans": 12,
+        "verified_alive": 0,
+        "verified_dead": 0,
+        "unknown": 12
+      }
+    ],
+    "mask_mismatch_decisions": 0,
+    "decisions_without_verified_plans": 0,
+    "post_verify_scores_present": 0,
+    "plan_signals": {
+      "died_true": 0,
+      "died_false": 3251,
+      "trajectory_matches_true": 795,
+      "trajectory_matches_false": 2456,
+      "trajectory_matches_missing": 0,
+      "note": "died=False alone is not survival: only the plans that also advanced duration*frames_per_decision frames with trajectory_matches=True become verified_alive, so died_false can be larger than verified_alive"
+    },
+    "error_count": 0
+  },
+  "counts": {
+    "decisions": 3251,
+    "report_rows": 1,
+    "skipped": 0,
+    "written": 0,
+    "alive": 795,
+    "dead": 0,
+    "unknown": 2456,
+    "horizon_missing": 3251,
+    "verified_plans_total": 3251,
+    "query_verified": 3251,
+    "query_unknown": 55267,
+    "mask_mismatch_decisions": 0,
+    "decisions_without_verified_plans": 0,
+    "post_verify_scores_present": 0,
+    "died_true_plans": 0,
+    "died_false_plans": 3251,
+    "trajectory_matches_true": 795,
+    "trajectory_matches_false": 2456,
+    "trajectory_matches_missing": 0,
+    "frames_per_decision_source": "report.committed_frames_per_decision/report.decisions_per_decision_frames",
+    "error_count": 0,
+    "frames_per_decision_values": [
+      2
+    ],
+    "per_first_action": {
+      "0": {
+        "verified_plans": 1532,
+        "verified_alive": 795,
+        "verified_dead": 0,
+        "unknown": 737
+      },
+      "1": {
+        "verified_plans": 69,
+        "verified_alive": 0,
+        "verified_dead": 0,
+        "unknown": 69
+      },
+      "2": {
+        "verified_plans": 290,
+        "verified_alive": 0,
+        "verified_dead": 0,
+        "unknown": 290
+      },
+      "3": {
+        "verified_plans": 326,
+        "verified_alive": 0,
+        "verified_dead": 0,
+        "unknown": 326
+      },
+      "4": {
+        "verified_plans": 71,
+        "verified_alive": 0,
+        "verified_dead": 0,
+        "unknown": 71
+      },
+      "5": {
+        "verified_plans": 34,
+        "verified_alive": 0,
+        "verified_dead": 0,
+        "unknown": 34
+      },
+      "6": {
+        "verified_plans": 212,
+        "verified_alive": 0,
+        "verified_dead": 0,
+        "unknown": 212
+      },
+      "7": {
+        "verified_plans": 208,
+        "verified_alive": 0,
+        "verified_dead": 0,
+        "unknown": 208
+      },
+      "8": {
+        "verified_plans": 42,
+        "verified_alive": 0,
+        "verified_dead": 0,
+        "unknown": 42
+      },
+      "9": {
+        "verified_plans": 0,
+        "verified_alive": 0,
+        "verified_dead": 0,
+        "unknown": 0
+      },
+      "10": {
+        "verified_plans": 8,
+        "verified_alive": 0,
+        "verified_dead": 0,
+        "unknown": 8
+      },
+      "11": {
+        "verified_plans": 179,
+        "verified_alive": 0,
+        "verified_dead": 0,
+        "unknown": 179
+      },
+      "12": {
+        "verified_plans": 198,
+        "verified_alive": 0,
+        "verified_dead": 0,
+        "unknown": 198
+      },
+      "13": {
+        "verified_plans": 16,
+        "verified_alive": 0,
+        "verified_dead": 0,
+        "unknown": 16
+      },
+      "14": {
+        "verified_plans": 3,
+        "verified_alive": 0,
+        "verified_dead": 0,
+        "unknown": 3
+      },
+      "15": {
+        "verified_plans": 35,
+        "verified_alive": 0,
+        "verified_dead": 0,
+        "unknown": 35
+      },
+      "16": {
+        "verified_plans": 16,
+        "verified_alive": 0,
+        "verified_dead": 0,
+        "unknown": 16
+      },
+      "17": {
+        "verified_plans": 12,
+        "verified_alive": 0,
+        "verified_dead": 0,
+        "unknown": 12
+      }
+    },
+    "errors": [],
+    "source": ".tmp_v410_wp02_audit\\teacher1000.jsonl",
+    "report": {
+      "status": "ok",
+      "stop_reason": "stage_changed",
+      "mode": "fast",
+      "stage": 0,
+      "difficulty": 1,
+      "seed": 1000,
+      "decisions": 3251,
+      "requested_decisions": 10000,
+      "decisions_per_decision_frames": 2,
+      "committed_frames_per_decision": 4,
+      "frames_committed": 13004,
+      "survival_frames": 13004,
+      "stage_clear": true,
+      "deaths_observed": 0,
+      "config": {
+        "horizon": 32,
+        "beam": 24,
+        "verify_k": 1,
+        "durations": [
+          1,
+          2
+        ]
+      }
+    }
+  },
+  "sample": {
+    "path": "Document\\Update\\Alpha\\v4.1.0\\evidence\\WP02\\labels_seed1000_sample.jsonl",
+    "rows": 100,
+    "limit": 100,
+    "sha256": "74792575588c9a6df47ec474ad0b6be2e4c4bbcd155f0910700833d45926612d",
+    "classes": {
+      "alive": 50,
+      "dead": 0,
+      "unknown": 50
+    },
+    "selection": "deterministic: equal quota per decision-level survival class present in the stream, unused quota filled in class order, rows sorted by decision"
+  },
+  "consistency": {
+    "report_decisions": 3251,
+    "converted_decisions": 3251,
+    "decisions_match_report": true,
+    "report_deaths_observed": 0,
+    "verified_dead_plans": 0,
+    "deaths_match_report": true
+  },
+  "diagnostics": {
+    "alive_first_actions": [
+      0
+    ],
+    "alive_only_for_action_0": true,
+    "alive_equals_trajectory_matches_true": true,
+    "note": "checked derivations only: which first actions ever earned verified_alive, and whether every verified_alive plan is exactly a trajectory_matches=True plan"
+  },
+  "d1_contract_delta": {
+    "reference": "Document/Update/Alpha/v4.1.0/evidence/WP02/audit.json (WP02.1), which measured the D1 rows this contract replaces",
+    "d1_dropped_verified_fields": [
+      "died",
+      "events",
+      "frames_advanced",
+      "max_position_error",
+      "trajectory_matches"
+    ],
+    "d1_could_recheck_survival": false,
+    "added_label_fields": [
+      "query_status",
+      "survival_status",
+      "verified",
+      "raw_geo_score",
+      "post_verify_scores",
+      "source_horizon",
+      "horizon_missing",
+      "frames_per_decision",
+      "verified_mask_means"
+    ],
+    "fix": "the verified list is carried verbatim (died/death_frame/frames_advanced/trajectory_matches stay checkable) and survival_status is derived from it fail-closed, instead of being inferred from verified_mask"
+  },
+  "score_semantics": {
+    "row_field": "geo_score",
+    "is_post_verification": true,
+    "unverified_discount_code_default": 5.0,
+    "unverified_discount_source": "touhou_rl/v400/teacher/config.py Weights.unverified_discount, applied by decide.py before the row is written",
+    "post_verify_scores_present": 0,
+    "note": "geo_score already carries the verified plan scores and the discount on unverified candidates; post_verify_scores is emitted only when a row states that discount itself, so it stays null here and no per-row assumption is made"
+  },
+  "not_claimed": [
+    "not a G410-1 result: this is the WP02.3 label contract and an offline conversion of one existing teacher JSONL; no gate, threshold or release check is evaluated or satisfied here",
+    "not a new dataset: the input is the existing seed 1000 / mode fast / stage 0 teacher JSONL; nothing was launched, recorded, trained or collected",
+    "not a capability conclusion: no win rate, survival rate, teacher strength or policy quality is claimed from these label counts",
+    "not a rewrite of D1: .tmp_v400_d1 shards, the v4.0 writer and the WP02.1 audit are untouched; this file only defines what a new label row must carry"
+  ],
+  "limits": [
+    "survival_status is decided per verified plan, never per first action: two plans with the same first_action stay two plans with two verdicts",
+    "verified_alive needs trajectory_matches=True and frames_advanced >= duration*frames_per_decision; rows that fail either are 'unknown', which is strictly weaker than the engine's died flag, not a contradiction of it",
+    "query_status='unknown' means verification never asked about that candidate; it is not a death and not a survival",
+    "the source run used verify_k=1, so most decisions carry a single verified plan and the multi-plan path is covered by synthetic tests, not by this sample",
+    "the source run observed 0 deaths, so verified_dead=0 here is a property of this sample, not evidence that the label contract cannot express death"
+  ]
+}

@@ -1,0 +1,368 @@
+{
+  "schema": "v410-wp00-assets/1",
+  "created_at": "2026-11-13T00:00:04+08:00",
+  "note": "WP00.1 asset audit: every required object has verified/missing/invalid. Windows paths are checked by tools/rl/v410.py check --wp WP00; WSL paths carry probe='wsl' and are verified by preflight. This file is evidence, not a claim that any G410 capability gate passed.",
+  "assets": [
+    {
+      "id": "spec_v410",
+      "kind": "evidence",
+      "status": "verified",
+      "path": "Document/Update/Alpha/v4.1.0/README.md",
+      "sha256": "8fc51064e5e54e7cdf6e0b924dcaefd0b3020d148ceeaf5bc0deb9294ae4876c",
+      "note": "v4.1.0 唯一实施规格；877 行。"
+    },
+    {
+      "id": "windows_checkout",
+      "kind": "evidence",
+      "status": "verified",
+      "path": "D:\\WorkShop\\Touhou_RL",
+      "sha256": "84cbdd034c7c841acab561eff560cdbac53597e69f528fd4a6c2d355c5e6963c",
+      "sha256_kind": "git HEAD file digest; commit is the identity",
+      "commit": "ca1ae8bee4d6fd43cc932e4b84970a2d0130864a",
+      "warnings": ["工作树不干净：21 tracked modified + 513 untracked；只登记，不清理。"]
+    },
+    {
+      "id": "wsl_checkout",
+      "kind": "evidence",
+      "status": "verified",
+      "path": "/root/Touhou_RL",
+      "sha256": "d0b9bc196ed57cfc840dc6f93ea2c593294dc41623ef5591de651fdbb67ee56a",
+      "sha256_kind": "digest of the commit string",
+      "commit": "d55c26a6c465b26f11e26ba4fc1bdb888e8b130b",
+      "probe": "wsl",
+      "warnings": ["WSL 检出 HEAD 与 Windows 检出不同（d55c26a vs ca1ae8b）；两份分开登记。"]
+    },
+    {
+      "id": "engine_rl_v3",
+      "kind": "environment",
+      "status": "verified",
+      "path": "/root/Touhou_RL/third_party/th08-rl/build/rl_v3/th08-modern",
+      "sha256": "691bfd77b7eca3361aa8bb7af0977556a70cc73a070b29a2447222ba7a568ef6",
+      "size_bytes": 4836008,
+      "probe": "wsl",
+      "note": "WP00/WP01 默认研究引擎；SHA 与 P3 快照一致。"
+    },
+    {
+      "id": "engine_rl_laser",
+      "kind": "environment",
+      "status": "verified",
+      "path": "/root/Touhou_RL/third_party/th08-rl/build/rl_laser/th08-modern",
+      "sha256": "1462829ba756bab49aae0878686988687dbaa109ea1750729d1202b555340d2f",
+      "probe": "wsl",
+      "note": "G1 教师 v2h 使用的激光判定窗构建；不能悄悄替换 rl_v3。"
+    },
+    {
+      "id": "retail_original",
+      "kind": "environment",
+      "status": "verified",
+      "path": "third_party/th08/resources/th08.exe",
+      "sha256": "330fbdbf58a710829d65277b4f312cfbb38d5448b3df523e79350b879213d924",
+      "size_bytes": 840704,
+      "note": "零售原件；不注入、不 patch、不写内存。"
+    },
+    {
+      "id": "d1_dataset",
+      "kind": "evidence",
+      "status": "verified",
+      "path": ".tmp_v400_d1/d1",
+      "sha256": "cf564f405702cfa76a13b37a7f083ca81166da876128b669e4d2f881893a709e",
+      "sha256_kind": "manifest.json digest",
+      "shards": 137,
+      "decisions": 469216,
+      "frames": 1876864,
+      "size_gb_measured": 26.0,
+      "warnings": [
+        "manifest 有 147 条：137 条与磁盘分片一一对应，另 10 条 -iNNN 为重复/隔离条目，磁盘上不存在；469216/1876864 只按 137 条计。",
+        "顶层 report.full.json/report.full.md 是 smoke 结果（8 片/16000 帧），不是完整 gate；完整 gate 在 work/gate.full.json。",
+        "WSL /root/v400-data/d1 是 175 条/约 495MB 的陈旧镜像，不是 canonical。"
+      ]
+    },
+    {
+      "id": "d1_full_gate",
+      "kind": "evidence",
+      "status": "verified",
+      "path": ".tmp_v400_d1/work/gate.full.json",
+      "sha256": "b866961a3dd3f9c3a9ed5d3c89ea533aad1bbc06adb8046fbf359f3261557435",
+      "note": "137 片、469216 决策、1876864 帧、HASH alignment 1.0、load gate passed（469216 samples）、planned_missing=0。"
+    },
+    {
+      "id": "v3_bc1",
+      "kind": "evidence",
+      "status": "verified",
+      "path": ".tmp_v400_p3v3/checkpoint-v3-bc1.pt",
+      "sha256": "47308386756f1997ac63d97cdb9a9699fffe502a50fb4722d16123de0325a404",
+      "size_bytes": 10478427
+    },
+    {
+      "id": "v3_bc2",
+      "kind": "evidence",
+      "status": "verified",
+      "path": ".tmp_v400_p3v3/checkpoint-v3-bc2.pt",
+      "sha256": "bedc427acc151e538d405197f3eedac81e65b97b6fe803126f3608596c62d05e",
+      "size_bytes": 10479387
+    },
+    {
+      "id": "v3_full",
+      "kind": "evidence",
+      "status": "verified",
+      "path": ".tmp_v400_p3v3/checkpoint-v3-full.pt",
+      "sha256": "3dac241429924c558ec32433c3d2d4b629c0439d37e363c5b9e8061be8d4fe7f",
+      "size_bytes": 10484221
+    },
+    {
+      "id": "m1",
+      "kind": "evidence",
+      "status": "verified",
+      "path": ".tmp_v400_obsv2/arms/m1/checkpoint.pt",
+      "sha256": "a3904a738e736cb14af1048bec5df87c35801e7f4fde97fbb34aa0eafd62c80a",
+      "size_bytes": 847477,
+      "note": "历史最好像素学生（S1N 20 局均值 2248.8 帧）的 checkpoint；不是 G410-2 通过证据。"
+    },
+    {
+      "id": "human_reference",
+      "kind": "evidence",
+      "status": "verified",
+      "path": "Document/Update/Alpha/v4.0.0/bench/human_reference.json",
+      "sha256": "fb4ba91fe05af73de31ccdec79b09fb1800a814b671254e6b5aaf5e58298efb3",
+      "note": "人类参考；Normal 一周目 141592 帧、1 死、3 bomb（逐面 records 见 20-基准与评测）。"
+    },
+    {
+      "id": "g1_s1n_runs",
+      "kind": "evidence",
+      "status": "verified",
+      "path": ".tmp_v400_laser/s1n/round1-v2h/runs.jsonl",
+      "sha256": "abea27812dd9fd57e8e35263a16863119ccb21bc1f8b64df0c7cc965b11993fd",
+      "resummed": {"rows": 20, "frames_sum": 270640, "frames_mean": 13532.0, "clear": 20, "deaths_sum": 0},
+      "note": "G1 S1N 原始逐局；重算与 G1 报告一致（20/20、13532 均值、0 死）。"
+    },
+    {
+      "id": "g1_psn_runs",
+      "kind": "evidence",
+      "status": "verified",
+      "path": ".tmp_v400_laser/runs/round1-v2h/runs.jsonl",
+      "sha256": "d522dd1ec1c91e8c2d6235e78e5fd62579a729cc00ff67e43060e6abd3ecf75b",
+      "resummed": {"rows": 8, "clear": 4, "deaths_sum": 4},
+      "note": "G1 PSN 原始逐面；重算 4/8 过面、4 死、均值恰 0.500。"
+    },
+    {
+      "id": "python_env",
+      "kind": "environment",
+      "status": "verified",
+      "path": "C:\\Users\\a5935\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+      "sha256": "1797d76060deb4458ec9ff28ede889136d69f3ebbaf99e4c16b160469d287986",
+      "sha256_kind": "digest of the environment tuple (python/torch/cuda/gpu), not the executable",
+      "note": "Python 3.12.10，torch 2.14.1+cu132，CUDA=True，RTX 4070 SUPER。"
+    },
+    {
+      "id": "engine_rl",
+      "kind": "environment",
+      "status": "verified",
+      "path": "/root/Touhou_RL/third_party/th08-rl/build/rl/th08-modern",
+      "sha256": "591c521df161cb9e5d5a5168d88207390ae4a3eb49b2d1c653f4ad775a25d3eb",
+      "probe": "wsl",
+      "note": "人类参考记录使用的引擎；与 rl_v3 不同，不能混用。"
+    },
+    {
+      "id": "canonical_build",
+      "kind": "evidence",
+      "status": "verified",
+      "path": "third_party/th08/build/th08.exe",
+      "sha256": "cdd23bca0c724941866efda5da280be67eb6cdd935f83548045c2a8e037f1ddf",
+      "size_bytes": 898048,
+      "note": "canonical 构建；不得替换。"
+    },
+    {
+      "id": "fence_build",
+      "kind": "evidence",
+      "status": "verified",
+      "path": "third_party/th08/build_fence/th08.exe",
+      "sha256": "bc1894fed48beac739f628836629b8b1b1c1b63dbe0097239c2762cb4c8d8565",
+      "size_bytes": 905728
+    },
+    {
+      "id": "fence_map",
+      "kind": "evidence",
+      "status": "verified",
+      "path": "third_party/th08/build_fence/th08.map",
+      "sha256": "ce7b6672f9488909a5f700e6a52900c65358a4201b0de5e62ee904f8a752bb54"
+    },
+    {
+      "id": "game_data_th08",
+      "kind": "environment",
+      "status": "verified",
+      "path": "third_party/th08/build/play/th08.dat",
+      "sha256": "9d7edf43b8ddd347cbb641836f6b5050745dd936f688daebbf9382ca557043bb",
+      "size_bytes": 46838025
+    },
+    {
+      "id": "game_data_thbgm",
+      "kind": "environment",
+      "status": "verified",
+      "path": "third_party/th08/build/play/thbgm.dat",
+      "sha256": "2c2ef05f9ff6f43f752dae5da519a2477372c3f8875b7b44996a8f69fdad4d89",
+      "size_bytes": 449961024
+    },
+    {
+      "id": "d0_dataset",
+      "kind": "evidence",
+      "status": "verified",
+      "path": ".tmp_v400_d0/d0",
+      "sha256": "2c935ad5f9557e6c062bef1b6e56f54a7a7dcad23d2d79c4e97b172189270616",
+      "sha256_kind": "summary.json digest",
+      "shards": 16,
+      "decisions": 53512,
+      "frames": 214048,
+      "size_gb_measured": 1.39,
+      "note": "D0 采集；16/16 分片，53512 决策、214048 帧。"
+    },
+    {
+      "id": "d0_summary",
+      "kind": "evidence",
+      "status": "verified",
+      "path": ".tmp_v400_d0/summary.json",
+      "sha256": "2c935ad5f9557e6c062bef1b6e56f54a7a7dcad23d2d79c4e97b172189270616"
+    },
+    {
+      "id": "v3_train_bc1",
+      "kind": "evidence",
+      "status": "verified",
+      "path": ".tmp_v400_p3v3/train-bc1.json",
+      "sha256": "1602adeacc5078e7cab84d67f6aca33cc4bb154120a9404873520c527a230188"
+    },
+    {
+      "id": "v3_train_bc2",
+      "kind": "evidence",
+      "status": "verified",
+      "path": ".tmp_v400_p3v3/train-bc2.json",
+      "sha256": "d777d98d01809b410083905e3973928abcc30c96a2ab0ad3b2a9a4daa8e04f87"
+    },
+    {
+      "id": "v3_train_full",
+      "kind": "evidence",
+      "status": "verified",
+      "path": ".tmp_v400_p3v3/train-full.json",
+      "sha256": "d0bbe88a3ec3c799250f992f5c9902f7434dd0c5cfd3f42e06a34437802d89a0"
+    },
+    {
+      "id": "v3_split_bc1",
+      "kind": "evidence",
+      "status": "verified",
+      "path": ".tmp_v400_p3v3/split-bc1.json",
+      "sha256": "cac35607edeb0cac268951d39da6e85e4ef2910d2ee90b3841b3a1fe5c740a66"
+    },
+    {
+      "id": "v3_split_bc2",
+      "kind": "evidence",
+      "status": "verified",
+      "path": ".tmp_v400_p3v3/split-bc2.json",
+      "sha256": "c0b9afc7838959126262f6080e55405bb0d313da29d26eeccf32ff8609a321c6"
+    },
+    {
+      "id": "v3_split_full",
+      "kind": "evidence",
+      "status": "verified",
+      "path": ".tmp_v400_p3v3/split-full.json",
+      "sha256": "e023fe49940613ee116c53f45571990141c2895963dd424c20eb3e204be42495"
+    },
+    {
+      "id": "m1_episodes",
+      "kind": "evidence",
+      "status": "verified",
+      "path": ".tmp_v400_power/m1/episodes.jsonl",
+      "sha256": "436328b2ab9ae66c509b5709f739625cfc875c343cb846fd77403818d06edb2d",
+      "note": "m1 的 20 局 S1N 逐局记录；均值 2248.8 帧，见 m1_summary。"
+    },
+    {
+      "id": "m1_summary",
+      "kind": "evidence",
+      "status": "verified",
+      "path": ".tmp_v400_power/m1/summary.json",
+      "sha256": "09e38c117731fb3b12994bc6f7c4b7402cb85ef9d046b5722d1206727c180d07"
+    },
+    {
+      "id": "v3_bench",
+      "kind": "evidence",
+      "status": "verified",
+      "path": ".tmp_v400_p3v3/bench.json",
+      "sha256": "02f3b9055738801821fd4a4a8ccd4929f4b0f34025284f102fc3545e65c3dc8a",
+      "note": "v3 模型本机 bench：GPU train ~2246 samples/s（batch 32），用于 WP00/WP01 的性能预算。"
+    },
+    {
+      "id": "v3_regress",
+      "kind": "evidence",
+      "status": "verified",
+      "path": ".tmp_v400_p3v3/regress_full.txt",
+      "sha256": "86dd8460fd09cd56308676f92c5c4670ea3ea98b32acb670c84eb7a8b9332e8e"
+    },
+    {
+      "id": "v3_eval_s1n_episodes",
+      "kind": "evidence",
+      "status": "verified",
+      "path": ".tmp_v400_p3v3/eval-s1n/episodes.jsonl",
+      "sha256": "a80010a98f8161ea5e8dd869b020d8ceedda7d946323e4c38e549d763b59c41a"
+    },
+    {
+      "id": "v3_eval_s1n_summary",
+      "kind": "evidence",
+      "status": "verified",
+      "path": ".tmp_v400_p3v3/eval-s1n/summary.json",
+      "sha256": "3bdcf6148b5558356435c24f5b4cd6eca55f75af77154bb8e4d96af39d330dff"
+    },
+    {
+      "id": "v3_eval_full_episodes",
+      "kind": "evidence",
+      "status": "verified",
+      "path": ".tmp_v400_p3v3/eval-full/episodes.jsonl",
+      "sha256": "48d255e84c6cbe04de82ce09f51357b662d9b8d161db4d24c1d2409b8da51fff"
+    },
+    {
+      "id": "v3_eval_full_summary",
+      "kind": "evidence",
+      "status": "verified",
+      "path": ".tmp_v400_p3v3/eval-full/summary.json",
+      "sha256": "535780da8a5a87ce18303fff0b77eee85468c393d85c08ad5d0d503a926b71a6"
+    },
+    {
+      "id": "g0_trace_journal",
+      "kind": "evidence",
+      "status": "verified",
+      "path": ".tmp_v400_trace_batch/journal.jsonl",
+      "sha256": "c8eab3fd0c46f9605657856d2da5e32e9403bce439ac24606a3adce71f662e7a",
+      "warnings": ["raw journal has 109 rows: 90 ok, 19 failed; P3 snapshot says 90/108 identical with 18 failed. One row/attempt discrepancy must be reconciled before G410-0 closes."],
+      "note": "G0.1 零售 trace 批跑原始 journal；19 份失败均为导航期 PermissionError（前台/权限），与 P3 快照同源。"
+    },
+    {
+      "id": "wp00_exposure",
+      "kind": "evidence",
+      "status": "verified",
+      "path": "Document/Update/Alpha/v4.1.0/evidence/WP00/exposure.json",
+      "sha256": "911b215201d5b69e026513dfda1a65c1829a4c22a4172cfa24009c194da3c4d3",
+      "note": "WP00.2 seed exposure/lineage audit: probe test seeds 15-16 are training-exposed in m1 and v3; 60000-60199 unused but lacks a trainer guard."
+    },
+    {
+      "id": "g0_report",
+      "kind": "evidence",
+      "status": "verified",
+      "path": "Document/Update/Alpha/v4.0.0/gates/G0-报告.md",
+      "sha256": "31f20c207de540e5a42a2c1b441b5d9ddc01f1c605f1d543e6d3bd562717f496",
+      "note": "G0 整体 NOT PASS；G0.1 90/108 identical，18 份前台权限失败。"
+    }
+  ],
+  "resummed_conclusions": [
+    {
+      "id": "d1_full_gate",
+      "result": "137 shards / 469216 decisions / 1876864 frames; hash alignment 1.0; load gate passed; planned_missing 0",
+      "source": ".tmp_v400_d1/work/gate.full.json"
+    },
+    {
+      "id": "g1_s1n",
+      "result": "20/20 clear; 270640 frames total; mean 13532.0; 0 deaths",
+      "source": ".tmp_v400_laser/s1n/round1-v2h/runs.jsonl"
+    },
+    {
+      "id": "g1_psn",
+      "result": "4/8 clear; 4 deaths total; mean 0.500; each face n=1",
+      "source": ".tmp_v400_laser/runs/round1-v2h/runs.jsonl"
+    }
+  ]
+}

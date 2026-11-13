@@ -1,0 +1,2830 @@
+{
+  "schema": "v410-wp05-dagger-train-beta05-20k/1",
+  "kind": "dagger-train-beta05-20k-steps",
+  "wp": "WP05.9",
+  "version": "4.1.0",
+  "generated_at": "2026-11-13T07:05:02Z",
+  "eval_generated_at": "2026-11-13T07:00:55Z",
+  "train_generated_at": "2026-11-13T06:50:43Z",
+  "tool": "python -m touhou_rl.v410.dagger.labels (WP05.2) + python -m touhou_rl.v410.dagger.train (WP05.3) + tools/rl/v410_student_eval.py",
+  "argv": [
+    "train",
+    "--steps",
+    "20000",
+    "--batch-size",
+    "128",
+    "--seed",
+    "0",
+    "--s1-share",
+    "0.2",
+    "--device",
+    "auto",
+    "--shard-seeds",
+    "2025-2039",
+    "--shards-root",
+    ".tmp_v410_wp05_round2/shards",
+    "--labels-dir",
+    ".tmp_v410_wp05_train_beta05_20k/labels",
+    "--workdir",
+    ".tmp_v410_wp05_train_beta05_20k",
+    "--out",
+    ".tmp_v410_wp05_train_beta05_20k/train_run.json"
+  ],
+  "exit_code": 0,
+  "purpose": "WP05.9 controlled budget scaling of the WP05.8 beta=0.5 arm: the same 15 complete beta=0.5 round-2 DAgger shards (52,500 decisions, labels verified byte-identical to the 5k conversion), the same mix / optimiser / training seed / model / dev suite, but 20,000 steps instead of 5,000 (2,560,000 samples). It tests whether the replicated 0/20 dev result is still explained by training budget, or whether it is an action-collapse / state-coverage limit that extra steps do not fix. The 20 dev episodes are descriptive only: this is not G410-2 and no gate is evaluated",
+  "inputs": {
+    "shard_root": ".tmp_v410_wp05_round2/shards",
+    "shard_seeds": "2025-2039",
+    "shards_complete": 15,
+    "read_only": true,
+    "data_collected": false,
+    "new_rollouts": false,
+    "confirm_seeds_touched": false,
+    "engine": {
+      "path": "/root/Touhou_RL/third_party/th08-rl/build/rl_v3/th08-modern",
+      "sha256": "691bfd77b7eca3361aa8bb7af0977556a70cc73a070b29a2447222ba7a568ef6",
+      "role": "env (pixels + state)"
+    },
+    "reference_rollout_checkpoint_sha256": "6ebe4ea91d81d9333bfa1ccc065fc3515bb25b1d3b90a2684cdaa8a0a69b8086",
+    "rollout_checkpoint_note": "all 15 shards were rolled out from the same beta=0.5 D1 student checkpoint"
+  },
+  "conversion": {
+    "cli": "python -m touhou_rl.v410.dagger.labels (WP05.2, unmodified)",
+    "tolerance": 8.0,
+    "shards": 15,
+    "exit_codes": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "parity_with_5k": {
+      "reference_labels_dir": ".tmp_v410_wp05_train_beta05_5k/labels",
+      "shards_byte_identical": 15,
+      "shards_compared": 15,
+      "reference_missing": 0,
+      "note": "byte-identical labels prove the 20k run differs from the 5k run only in --steps"
+    },
+    "aggregate": {
+      "decisions": 52500,
+      "frames": 105000,
+      "label_rows": 52500,
+      "query_coverage": 0.05555555555555555,
+      "injection_rate": 0.5008571428571429,
+      "agreement_rate": 0.7965523809523809
+    },
+    "note": "re-converted from the shards rather than reusing the 5k labels; all 15 outputs are byte-identical to the 5k conversion, which is what makes 'only --steps changed' a verified claim"
+  },
+  "shards": [
+    {
+      "shard": "dagger-s0d1seed2025",
+      "complete": true,
+      "beta": 0.5,
+      "stop_reason": "decisions",
+      "rollout_checkpoint_sha256": "6ebe4ea91d81d9333bfa1ccc065fc3515bb25b1d3b90a2684cdaa8a0a69b8086",
+      "decisions": 3500,
+      "frames": 7000,
+      "rows": 3500,
+      "labels_bytes": 19659331,
+      "labels_sha256": "170775f26cc469678b48c5e067878c2f8c95ffeb732939d3418e2223ce072912",
+      "labels_sha256_equals_5k": true,
+      "reference_5k_sha256": "170775f26cc469678b48c5e067878c2f8c95ffeb732939d3418e2223ce072912",
+      "labels_sha_verified": true,
+      "obs_sha_verified": true,
+      "alive": 3494,
+      "dead": 0,
+      "unknown": 6,
+      "model_mismatch": 6,
+      "injected": 1730,
+      "agreement": 2804,
+      "disagreement": 696,
+      "verified_candidates": 3500,
+      "candidate_grid": 63000,
+      "tolerance": null,
+      "horizon": null,
+      "ok": true
+    },
+    {
+      "shard": "dagger-s0d1seed2026",
+      "complete": true,
+      "beta": 0.5,
+      "stop_reason": "decisions",
+      "rollout_checkpoint_sha256": "6ebe4ea91d81d9333bfa1ccc065fc3515bb25b1d3b90a2684cdaa8a0a69b8086",
+      "decisions": 3500,
+      "frames": 7000,
+      "rows": 3500,
+      "labels_bytes": 19660083,
+      "labels_sha256": "d4bdc39f23893bc94a5f730d7f5eac1bd69aadc438026a0571c1ee9af9e0650d",
+      "labels_sha256_equals_5k": true,
+      "reference_5k_sha256": "d4bdc39f23893bc94a5f730d7f5eac1bd69aadc438026a0571c1ee9af9e0650d",
+      "labels_sha_verified": true,
+      "obs_sha_verified": true,
+      "alive": 3451,
+      "dead": 2,
+      "unknown": 47,
+      "model_mismatch": 47,
+      "injected": 1759,
+      "agreement": 2776,
+      "disagreement": 724,
+      "verified_candidates": 3500,
+      "candidate_grid": 63000,
+      "tolerance": null,
+      "horizon": null,
+      "ok": true
+    },
+    {
+      "shard": "dagger-s0d1seed2027",
+      "complete": true,
+      "beta": 0.5,
+      "stop_reason": "decisions",
+      "rollout_checkpoint_sha256": "6ebe4ea91d81d9333bfa1ccc065fc3515bb25b1d3b90a2684cdaa8a0a69b8086",
+      "decisions": 3500,
+      "frames": 7000,
+      "rows": 3500,
+      "labels_bytes": 19655110,
+      "labels_sha256": "8800fcd0da79ee26c92892da77ab4015c7aaa1f946c75d2ac9b9cd7dc0767e92",
+      "labels_sha256_equals_5k": true,
+      "reference_5k_sha256": "8800fcd0da79ee26c92892da77ab4015c7aaa1f946c75d2ac9b9cd7dc0767e92",
+      "labels_sha_verified": true,
+      "obs_sha_verified": true,
+      "alive": 3482,
+      "dead": 0,
+      "unknown": 18,
+      "model_mismatch": 18,
+      "injected": 1754,
+      "agreement": 2703,
+      "disagreement": 797,
+      "verified_candidates": 3500,
+      "candidate_grid": 63000,
+      "tolerance": null,
+      "horizon": null,
+      "ok": true
+    },
+    {
+      "shard": "dagger-s0d1seed2028",
+      "complete": true,
+      "beta": 0.5,
+      "stop_reason": "decisions",
+      "rollout_checkpoint_sha256": "6ebe4ea91d81d9333bfa1ccc065fc3515bb25b1d3b90a2684cdaa8a0a69b8086",
+      "decisions": 3500,
+      "frames": 7000,
+      "rows": 3500,
+      "labels_bytes": 19661164,
+      "labels_sha256": "f9bf46fdd42f030b76f2c4f978a05a054b01c03000427b49b5638fc12d0dc7b7",
+      "labels_sha256_equals_5k": true,
+      "reference_5k_sha256": "f9bf46fdd42f030b76f2c4f978a05a054b01c03000427b49b5638fc12d0dc7b7",
+      "labels_sha_verified": true,
+      "obs_sha_verified": true,
+      "alive": 3490,
+      "dead": 0,
+      "unknown": 10,
+      "model_mismatch": 10,
+      "injected": 1787,
+      "agreement": 2703,
+      "disagreement": 797,
+      "verified_candidates": 3500,
+      "candidate_grid": 63000,
+      "tolerance": null,
+      "horizon": null,
+      "ok": true
+    },
+    {
+      "shard": "dagger-s0d1seed2029",
+      "complete": true,
+      "beta": 0.5,
+      "stop_reason": "decisions",
+      "rollout_checkpoint_sha256": "6ebe4ea91d81d9333bfa1ccc065fc3515bb25b1d3b90a2684cdaa8a0a69b8086",
+      "decisions": 3500,
+      "frames": 7000,
+      "rows": 3500,
+      "labels_bytes": 19650787,
+      "labels_sha256": "b9365376073e10d3b398cb8de1dd2ee2604fbf075af770d9ade9ea836954087d",
+      "labels_sha256_equals_5k": true,
+      "reference_5k_sha256": "b9365376073e10d3b398cb8de1dd2ee2604fbf075af770d9ade9ea836954087d",
+      "labels_sha_verified": true,
+      "obs_sha_verified": true,
+      "alive": 3490,
+      "dead": 0,
+      "unknown": 10,
+      "model_mismatch": 10,
+      "injected": 1758,
+      "agreement": 2805,
+      "disagreement": 695,
+      "verified_candidates": 3500,
+      "candidate_grid": 63000,
+      "tolerance": null,
+      "horizon": null,
+      "ok": true
+    },
+    {
+      "shard": "dagger-s0d1seed2030",
+      "complete": true,
+      "beta": 0.5,
+      "stop_reason": "decisions",
+      "rollout_checkpoint_sha256": "6ebe4ea91d81d9333bfa1ccc065fc3515bb25b1d3b90a2684cdaa8a0a69b8086",
+      "decisions": 3500,
+      "frames": 7000,
+      "rows": 3500,
+      "labels_bytes": 19668479,
+      "labels_sha256": "d5221680e2e112754097aad35e0e316f1b1cb8aa5bb89f43787e25cfec47f3b0",
+      "labels_sha256_equals_5k": true,
+      "reference_5k_sha256": "d5221680e2e112754097aad35e0e316f1b1cb8aa5bb89f43787e25cfec47f3b0",
+      "labels_sha_verified": true,
+      "obs_sha_verified": true,
+      "alive": 3452,
+      "dead": 5,
+      "unknown": 43,
+      "model_mismatch": 43,
+      "injected": 1739,
+      "agreement": 2763,
+      "disagreement": 737,
+      "verified_candidates": 3500,
+      "candidate_grid": 63000,
+      "tolerance": null,
+      "horizon": null,
+      "ok": true
+    },
+    {
+      "shard": "dagger-s0d1seed2031",
+      "complete": true,
+      "beta": 0.5,
+      "stop_reason": "decisions",
+      "rollout_checkpoint_sha256": "6ebe4ea91d81d9333bfa1ccc065fc3515bb25b1d3b90a2684cdaa8a0a69b8086",
+      "decisions": 3500,
+      "frames": 7000,
+      "rows": 3500,
+      "labels_bytes": 19657051,
+      "labels_sha256": "a44029cff2d581449dcc02cd32c59c5d520db379b374989158056ce5981d3daf",
+      "labels_sha256_equals_5k": true,
+      "reference_5k_sha256": "a44029cff2d581449dcc02cd32c59c5d520db379b374989158056ce5981d3daf",
+      "labels_sha_verified": true,
+      "obs_sha_verified": true,
+      "alive": 3493,
+      "dead": 0,
+      "unknown": 7,
+      "model_mismatch": 7,
+      "injected": 1751,
+      "agreement": 2872,
+      "disagreement": 628,
+      "verified_candidates": 3500,
+      "candidate_grid": 63000,
+      "tolerance": null,
+      "horizon": null,
+      "ok": true
+    },
+    {
+      "shard": "dagger-s0d1seed2032",
+      "complete": true,
+      "beta": 0.5,
+      "stop_reason": "decisions",
+      "rollout_checkpoint_sha256": "6ebe4ea91d81d9333bfa1ccc065fc3515bb25b1d3b90a2684cdaa8a0a69b8086",
+      "decisions": 3500,
+      "frames": 7000,
+      "rows": 3500,
+      "labels_bytes": 19662714,
+      "labels_sha256": "c8c853e41a942fe9eb8ebe5e0ba94bea581e0b39aa3dd599ab54ce3dd988c7f4",
+      "labels_sha256_equals_5k": true,
+      "reference_5k_sha256": "c8c853e41a942fe9eb8ebe5e0ba94bea581e0b39aa3dd599ab54ce3dd988c7f4",
+      "labels_sha_verified": true,
+      "obs_sha_verified": true,
+      "alive": 3489,
+      "dead": 0,
+      "unknown": 11,
+      "model_mismatch": 11,
+      "injected": 1764,
+      "agreement": 2704,
+      "disagreement": 796,
+      "verified_candidates": 3500,
+      "candidate_grid": 63000,
+      "tolerance": null,
+      "horizon": null,
+      "ok": true
+    },
+    {
+      "shard": "dagger-s0d1seed2033",
+      "complete": true,
+      "beta": 0.5,
+      "stop_reason": "decisions",
+      "rollout_checkpoint_sha256": "6ebe4ea91d81d9333bfa1ccc065fc3515bb25b1d3b90a2684cdaa8a0a69b8086",
+      "decisions": 3500,
+      "frames": 7000,
+      "rows": 3500,
+      "labels_bytes": 19640071,
+      "labels_sha256": "868339ba5ed67bf93925ec10dc751cd3eb3c7a874ace17223b5d23b922cb5132",
+      "labels_sha256_equals_5k": true,
+      "reference_5k_sha256": "868339ba5ed67bf93925ec10dc751cd3eb3c7a874ace17223b5d23b922cb5132",
+      "labels_sha_verified": true,
+      "obs_sha_verified": true,
+      "alive": 3466,
+      "dead": 3,
+      "unknown": 31,
+      "model_mismatch": 31,
+      "injected": 1721,
+      "agreement": 2890,
+      "disagreement": 610,
+      "verified_candidates": 3500,
+      "candidate_grid": 63000,
+      "tolerance": null,
+      "horizon": null,
+      "ok": true
+    },
+    {
+      "shard": "dagger-s0d1seed2034",
+      "complete": true,
+      "beta": 0.5,
+      "stop_reason": "decisions",
+      "rollout_checkpoint_sha256": "6ebe4ea91d81d9333bfa1ccc065fc3515bb25b1d3b90a2684cdaa8a0a69b8086",
+      "decisions": 3500,
+      "frames": 7000,
+      "rows": 3500,
+      "labels_bytes": 19651722,
+      "labels_sha256": "e00db162a6970e6445617e43bcbfacbfd02bfecd9e01475c0a6c28deff2e67ae",
+      "labels_sha256_equals_5k": true,
+      "reference_5k_sha256": "e00db162a6970e6445617e43bcbfacbfd02bfecd9e01475c0a6c28deff2e67ae",
+      "labels_sha_verified": true,
+      "obs_sha_verified": true,
+      "alive": 3491,
+      "dead": 0,
+      "unknown": 9,
+      "model_mismatch": 9,
+      "injected": 1730,
+      "agreement": 2809,
+      "disagreement": 691,
+      "verified_candidates": 3500,
+      "candidate_grid": 63000,
+      "tolerance": null,
+      "horizon": null,
+      "ok": true
+    },
+    {
+      "shard": "dagger-s0d1seed2035",
+      "complete": true,
+      "beta": 0.5,
+      "stop_reason": "decisions",
+      "rollout_checkpoint_sha256": "6ebe4ea91d81d9333bfa1ccc065fc3515bb25b1d3b90a2684cdaa8a0a69b8086",
+      "decisions": 3500,
+      "frames": 7000,
+      "rows": 3500,
+      "labels_bytes": 19648493,
+      "labels_sha256": "609f84bf4177de55056d5729535a9a57cd9776b43db3436cf89a6b0694039c6f",
+      "labels_sha256_equals_5k": true,
+      "reference_5k_sha256": "609f84bf4177de55056d5729535a9a57cd9776b43db3436cf89a6b0694039c6f",
+      "labels_sha_verified": true,
+      "obs_sha_verified": true,
+      "alive": 3426,
+      "dead": 3,
+      "unknown": 71,
+      "model_mismatch": 71,
+      "injected": 1826,
+      "agreement": 2905,
+      "disagreement": 595,
+      "verified_candidates": 3500,
+      "candidate_grid": 63000,
+      "tolerance": null,
+      "horizon": null,
+      "ok": true
+    },
+    {
+      "shard": "dagger-s0d1seed2036",
+      "complete": true,
+      "beta": 0.5,
+      "stop_reason": "decisions",
+      "rollout_checkpoint_sha256": "6ebe4ea91d81d9333bfa1ccc065fc3515bb25b1d3b90a2684cdaa8a0a69b8086",
+      "decisions": 3500,
+      "frames": 7000,
+      "rows": 3500,
+      "labels_bytes": 19759383,
+      "labels_sha256": "2b06fc3bdb928e7d184a7db1a7a03c2808caabe99f9117bcc572e1020454b8b3",
+      "labels_sha256_equals_5k": true,
+      "reference_5k_sha256": "2b06fc3bdb928e7d184a7db1a7a03c2808caabe99f9117bcc572e1020454b8b3",
+      "labels_sha_verified": true,
+      "obs_sha_verified": true,
+      "alive": 3491,
+      "dead": 2,
+      "unknown": 7,
+      "model_mismatch": 7,
+      "injected": 1765,
+      "agreement": 2734,
+      "disagreement": 766,
+      "verified_candidates": 3500,
+      "candidate_grid": 63000,
+      "tolerance": null,
+      "horizon": null,
+      "ok": true
+    },
+    {
+      "shard": "dagger-s0d1seed2037",
+      "complete": true,
+      "beta": 0.5,
+      "stop_reason": "decisions",
+      "rollout_checkpoint_sha256": "6ebe4ea91d81d9333bfa1ccc065fc3515bb25b1d3b90a2684cdaa8a0a69b8086",
+      "decisions": 3500,
+      "frames": 7000,
+      "rows": 3500,
+      "labels_bytes": 19659678,
+      "labels_sha256": "f45bee9ae53276747a1c15ad1ae411771a7f704cfa6070bf54eef6eb658bb73f",
+      "labels_sha256_equals_5k": true,
+      "reference_5k_sha256": "f45bee9ae53276747a1c15ad1ae411771a7f704cfa6070bf54eef6eb658bb73f",
+      "labels_sha_verified": true,
+      "obs_sha_verified": true,
+      "alive": 3458,
+      "dead": 3,
+      "unknown": 39,
+      "model_mismatch": 39,
+      "injected": 1746,
+      "agreement": 2904,
+      "disagreement": 596,
+      "verified_candidates": 3500,
+      "candidate_grid": 63000,
+      "tolerance": null,
+      "horizon": null,
+      "ok": true
+    },
+    {
+      "shard": "dagger-s0d1seed2038",
+      "complete": true,
+      "beta": 0.5,
+      "stop_reason": "decisions",
+      "rollout_checkpoint_sha256": "6ebe4ea91d81d9333bfa1ccc065fc3515bb25b1d3b90a2684cdaa8a0a69b8086",
+      "decisions": 3500,
+      "frames": 7000,
+      "rows": 3500,
+      "labels_bytes": 19673178,
+      "labels_sha256": "414a20cd6d48a5d49dcb386631eee3738ef32645a376fff3fc0ebee4ea56c6e2",
+      "labels_sha256_equals_5k": true,
+      "reference_5k_sha256": "414a20cd6d48a5d49dcb386631eee3738ef32645a376fff3fc0ebee4ea56c6e2",
+      "labels_sha_verified": true,
+      "obs_sha_verified": true,
+      "alive": 3401,
+      "dead": 3,
+      "unknown": 96,
+      "model_mismatch": 96,
+      "injected": 1755,
+      "agreement": 2695,
+      "disagreement": 805,
+      "verified_candidates": 3500,
+      "candidate_grid": 63000,
+      "tolerance": null,
+      "horizon": null,
+      "ok": true
+    },
+    {
+      "shard": "dagger-s0d1seed2039",
+      "complete": true,
+      "beta": 0.5,
+      "stop_reason": "decisions",
+      "rollout_checkpoint_sha256": "6ebe4ea91d81d9333bfa1ccc065fc3515bb25b1d3b90a2684cdaa8a0a69b8086",
+      "decisions": 3500,
+      "frames": 7000,
+      "rows": 3500,
+      "labels_bytes": 19662178,
+      "labels_sha256": "e50fb7aa1661761b5bd598989752737f73b1a7da1e9b8aefec56c3e8efaef8f5",
+      "labels_sha256_equals_5k": true,
+      "reference_5k_sha256": "e50fb7aa1661761b5bd598989752737f73b1a7da1e9b8aefec56c3e8efaef8f5",
+      "labels_sha_verified": true,
+      "obs_sha_verified": true,
+      "alive": 3494,
+      "dead": 0,
+      "unknown": 6,
+      "model_mismatch": 6,
+      "injected": 1710,
+      "agreement": 2752,
+      "disagreement": 748,
+      "verified_candidates": 3500,
+      "candidate_grid": 63000,
+      "tolerance": null,
+      "horizon": null,
+      "ok": true
+    }
+  ],
+  "decisions": 52500,
+  "frames": 105000,
+  "labels": {
+    "shards": 15,
+    "decisions": 52500,
+    "frames": 105000,
+    "alive": 52068,
+    "dead": 21,
+    "unknown": 411,
+    "model_mismatch": 411,
+    "injected": 26295,
+    "agreement": 41819,
+    "disagreement": 10681,
+    "verified_candidates": 52500,
+    "candidate_grid": 945000,
+    "candidate_coverage": 0.05555555555555555,
+    "agreement_rate": 1.5903783989351588,
+    "tolerance": [
+      8.0
+    ],
+    "horizon": [
+      32
+    ]
+  },
+  "data": {
+    "s1_train": {
+      "source": "s1_train",
+      "samples": 46397,
+      "seeds": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14
+      ],
+      "shards": [
+        "d1-s0d1-n3371-seed1-shard",
+        "d1-s0d1-n3371-seed2-shard",
+        "d1-s0d1-n3371-seed3-shard",
+        "d1-s0d1-n3371-seed4-shard",
+        "d1-s0d1-n3371-seed5-shard",
+        "d1-s0d1-n3371-seed6-shard",
+        "d1-s0d1-n3371-seed7-shard",
+        "d1-s0d1-n3371-seed8-shard",
+        "d1-s0d1-n3300-seed9-shard",
+        "d1-s0d1-n3300-seed10-shard",
+        "d1-s0d1-n3300-seed11-shard",
+        "d1-s0d1-n3300-seed12-shard",
+        "d1-s0d1-n3300-seed13-shard",
+        "d1-s0d1-n3300-seed14-shard"
+      ],
+      "target_counts": {
+        "0": 20394,
+        "1": 1081,
+        "2": 4049,
+        "3": 4660,
+        "4": 974,
+        "5": 567,
+        "6": 3165,
+        "7": 3300,
+        "8": 520,
+        "10": 126,
+        "11": 2834,
+        "12": 3192,
+        "13": 328,
+        "14": 78,
+        "15": 535,
+        "16": 385,
+        "17": 209
+      },
+      "majority_baseline_top1": 0.43955428152682285,
+      "label_diagnostics": {
+        "per_shard": [
+          {
+            "source": "s1_train",
+            "shard": "d1-s0d1-n3371-seed1-shard",
+            "seed": 1,
+            "rows": 3370,
+            "rows_with_target": 3370,
+            "rows_without_target": 0,
+            "chosen_verified_rows": 3370,
+            "verified_candidates": 3370,
+            "dead_candidates": 0,
+            "unknown_candidates": 57290,
+            "target_rule": "chosen_plan.first_action as a one-hot cross entropy",
+            "unknown_role": "diagnostic only (never a negative label, never a loss weight)"
+          },
+          {
+            "source": "s1_train",
+            "shard": "d1-s0d1-n3371-seed2-shard",
+            "seed": 2,
+            "rows": 3322,
+            "rows_with_target": 3322,
+            "rows_without_target": 0,
+            "chosen_verified_rows": 3322,
+            "verified_candidates": 3322,
+            "dead_candidates": 0,
+            "unknown_candidates": 56474,
+            "target_rule": "chosen_plan.first_action as a one-hot cross entropy",
+            "unknown_role": "diagnostic only (never a negative label, never a loss weight)"
+          },
+          {
+            "source": "s1_train",
+            "shard": "d1-s0d1-n3371-seed3-shard",
+            "seed": 3,
+            "rows": 3346,
+            "rows_with_target": 3346,
+            "rows_without_target": 0,
+            "chosen_verified_rows": 3346,
+            "verified_candidates": 3346,
+            "dead_candidates": 0,
+            "unknown_candidates": 56882,
+            "target_rule": "chosen_plan.first_action as a one-hot cross entropy",
+            "unknown_role": "diagnostic only (never a negative label, never a loss weight)"
+          },
+          {
+            "source": "s1_train",
+            "shard": "d1-s0d1-n3371-seed4-shard",
+            "seed": 4,
+            "rows": 3274,
+            "rows_with_target": 3274,
+            "rows_without_target": 0,
+            "chosen_verified_rows": 3274,
+            "verified_candidates": 3274,
+            "dead_candidates": 0,
+            "unknown_candidates": 55658,
+            "target_rule": "chosen_plan.first_action as a one-hot cross entropy",
+            "unknown_role": "diagnostic only (never a negative label, never a loss weight)"
+          },
+          {
+            "source": "s1_train",
+            "shard": "d1-s0d1-n3371-seed5-shard",
+            "seed": 5,
+            "rows": 3371,
+            "rows_with_target": 3371,
+            "rows_without_target": 0,
+            "chosen_verified_rows": 3371,
+            "verified_candidates": 3371,
+            "dead_candidates": 0,
+            "unknown_candidates": 57307,
+            "target_rule": "chosen_plan.first_action as a one-hot cross entropy",
+            "unknown_role": "diagnostic only (never a negative label, never a loss weight)"
+          },
+          {
+            "source": "s1_train",
+            "shard": "d1-s0d1-n3371-seed6-shard",
+            "seed": 6,
+            "rows": 3274,
+            "rows_with_target": 3274,
+            "rows_without_target": 0,
+            "chosen_verified_rows": 3274,
+            "verified_candidates": 3274,
+            "dead_candidates": 0,
+            "unknown_candidates": 55658,
+            "target_rule": "chosen_plan.first_action as a one-hot cross entropy",
+            "unknown_role": "diagnostic only (never a negative label, never a loss weight)"
+          },
+          {
+            "source": "s1_train",
+            "shard": "d1-s0d1-n3371-seed7-shard",
+            "seed": 7,
+            "rows": 3346,
+            "rows_with_target": 3346,
+            "rows_without_target": 0,
+            "chosen_verified_rows": 3346,
+            "verified_candidates": 3346,
+            "dead_candidates": 0,
+            "unknown_candidates": 56882,
+            "target_rule": "chosen_plan.first_action as a one-hot cross entropy",
+            "unknown_role": "diagnostic only (never a negative label, never a loss weight)"
+          },
+          {
+            "source": "s1_train",
+            "shard": "d1-s0d1-n3371-seed8-shard",
+            "seed": 8,
+            "rows": 3322,
+            "rows_with_target": 3322,
+            "rows_without_target": 0,
+            "chosen_verified_rows": 3322,
+            "verified_candidates": 3322,
+            "dead_candidates": 0,
+            "unknown_candidates": 56474,
+            "target_rule": "chosen_plan.first_action as a one-hot cross entropy",
+            "unknown_role": "diagnostic only (never a negative label, never a loss weight)"
+          },
+          {
+            "source": "s1_train",
+            "shard": "d1-s0d1-n3300-seed9-shard",
+            "seed": 9,
+            "rows": 3300,
+            "rows_with_target": 3300,
+            "rows_without_target": 0,
+            "chosen_verified_rows": 3300,
+            "verified_candidates": 3300,
+            "dead_candidates": 0,
+            "unknown_candidates": 56100,
+            "target_rule": "chosen_plan.first_action as a one-hot cross entropy",
+            "unknown_role": "diagnostic only (never a negative label, never a loss weight)"
+          },
+          {
+            "source": "s1_train",
+            "shard": "d1-s0d1-n3300-seed10-shard",
+            "seed": 10,
+            "rows": 3300,
+            "rows_with_target": 3300,
+            "rows_without_target": 0,
+            "chosen_verified_rows": 3300,
+            "verified_candidates": 3300,
+            "dead_candidates": 0,
+            "unknown_candidates": 56100,
+            "target_rule": "chosen_plan.first_action as a one-hot cross entropy",
+            "unknown_role": "diagnostic only (never a negative label, never a loss weight)"
+          },
+          {
+            "source": "s1_train",
+            "shard": "d1-s0d1-n3300-seed11-shard",
+            "seed": 11,
+            "rows": 3300,
+            "rows_with_target": 3300,
+            "rows_without_target": 0,
+            "chosen_verified_rows": 3300,
+            "verified_candidates": 3300,
+            "dead_candidates": 0,
+            "unknown_candidates": 56100,
+            "target_rule": "chosen_plan.first_action as a one-hot cross entropy",
+            "unknown_role": "diagnostic only (never a negative label, never a loss weight)"
+          },
+          {
+            "source": "s1_train",
+            "shard": "d1-s0d1-n3300-seed12-shard",
+            "seed": 12,
+            "rows": 3298,
+            "rows_with_target": 3298,
+            "rows_without_target": 0,
+            "chosen_verified_rows": 3298,
+            "verified_candidates": 3298,
+            "dead_candidates": 0,
+            "unknown_candidates": 56066,
+            "target_rule": "chosen_plan.first_action as a one-hot cross entropy",
+            "unknown_role": "diagnostic only (never a negative label, never a loss weight)"
+          },
+          {
+            "source": "s1_train",
+            "shard": "d1-s0d1-n3300-seed13-shard",
+            "seed": 13,
+            "rows": 3274,
+            "rows_with_target": 3274,
+            "rows_without_target": 0,
+            "chosen_verified_rows": 3274,
+            "verified_candidates": 3274,
+            "dead_candidates": 0,
+            "unknown_candidates": 55658,
+            "target_rule": "chosen_plan.first_action as a one-hot cross entropy",
+            "unknown_role": "diagnostic only (never a negative label, never a loss weight)"
+          },
+          {
+            "source": "s1_train",
+            "shard": "d1-s0d1-n3300-seed14-shard",
+            "seed": 14,
+            "rows": 3300,
+            "rows_with_target": 3300,
+            "rows_without_target": 0,
+            "chosen_verified_rows": 3300,
+            "verified_candidates": 3300,
+            "dead_candidates": 0,
+            "unknown_candidates": 56100,
+            "target_rule": "chosen_plan.first_action as a one-hot cross entropy",
+            "unknown_role": "diagnostic only (never a negative label, never a loss weight)"
+          }
+        ],
+        "rows": 46397,
+        "rows_with_target": 46397,
+        "rows_without_target": 0,
+        "unknown_candidates": 788749,
+        "dead_candidates": 0,
+        "verified_candidates": 46397,
+        "chosen_verified_rows": 46397,
+        "note": "unknown candidates are diagnostics only: the target is the chosen one-hot action, never an unknown negative"
+      }
+    },
+    "dagger": {
+      "source": "dagger",
+      "samples": 52500,
+      "seeds": [
+        2025,
+        2026,
+        2027,
+        2028,
+        2029,
+        2030,
+        2031,
+        2032,
+        2033,
+        2034,
+        2035,
+        2036,
+        2037,
+        2038,
+        2039
+      ],
+      "shards": [
+        "dagger-s0d1seed2025",
+        "dagger-s0d1seed2026",
+        "dagger-s0d1seed2027",
+        "dagger-s0d1seed2028",
+        "dagger-s0d1seed2029",
+        "dagger-s0d1seed2030",
+        "dagger-s0d1seed2031",
+        "dagger-s0d1seed2032",
+        "dagger-s0d1seed2033",
+        "dagger-s0d1seed2034",
+        "dagger-s0d1seed2035",
+        "dagger-s0d1seed2036",
+        "dagger-s0d1seed2037",
+        "dagger-s0d1seed2038",
+        "dagger-s0d1seed2039"
+      ],
+      "target_counts": {
+        "0": 34732,
+        "1": 410,
+        "2": 1696,
+        "3": 5447,
+        "4": 425,
+        "5": 473,
+        "6": 1714,
+        "7": 5419,
+        "8": 365,
+        "10": 40,
+        "11": 573,
+        "12": 447,
+        "13": 127,
+        "14": 56,
+        "15": 363,
+        "16": 131,
+        "17": 82
+      },
+      "majority_baseline_top1": 0.6615619047619048,
+      "label_diagnostics": {
+        "per_shard": [
+          {
+            "source": "dagger",
+            "shard": "dagger-s0d1seed2025",
+            "seed": 2025,
+            "rows": 3500,
+            "rows_with_target": 3500,
+            "rows_without_target": 0,
+            "chosen_verified_rows": 3500,
+            "verified_candidates": 3500,
+            "dead_candidates": 0,
+            "unknown_candidates": 59500,
+            "target_rule": "chosen_plan.first_action as a one-hot cross entropy",
+            "unknown_role": "diagnostic only (never a negative label, never a loss weight)"
+          },
+          {
+            "source": "dagger",
+            "shard": "dagger-s0d1seed2026",
+            "seed": 2026,
+            "rows": 3500,
+            "rows_with_target": 3500,
+            "rows_without_target": 0,
+            "chosen_verified_rows": 3500,
+            "verified_candidates": 3500,
+            "dead_candidates": 2,
+            "unknown_candidates": 59500,
+            "target_rule": "chosen_plan.first_action as a one-hot cross entropy",
+            "unknown_role": "diagnostic only (never a negative label, never a loss weight)"
+          },
+          {
+            "source": "dagger",
+            "shard": "dagger-s0d1seed2027",
+            "seed": 2027,
+            "rows": 3500,
+            "rows_with_target": 3500,
+            "rows_without_target": 0,
+            "chosen_verified_rows": 3500,
+            "verified_candidates": 3500,
+            "dead_candidates": 0,
+            "unknown_candidates": 59500,
+            "target_rule": "chosen_plan.first_action as a one-hot cross entropy",
+            "unknown_role": "diagnostic only (never a negative label, never a loss weight)"
+          },
+          {
+            "source": "dagger",
+            "shard": "dagger-s0d1seed2028",
+            "seed": 2028,
+            "rows": 3500,
+            "rows_with_target": 3500,
+            "rows_without_target": 0,
+            "chosen_verified_rows": 3500,
+            "verified_candidates": 3500,
+            "dead_candidates": 0,
+            "unknown_candidates": 59500,
+            "target_rule": "chosen_plan.first_action as a one-hot cross entropy",
+            "unknown_role": "diagnostic only (never a negative label, never a loss weight)"
+          },
+          {
+            "source": "dagger",
+            "shard": "dagger-s0d1seed2029",
+            "seed": 2029,
+            "rows": 3500,
+            "rows_with_target": 3500,
+            "rows_without_target": 0,
+            "chosen_verified_rows": 3500,
+            "verified_candidates": 3500,
+            "dead_candidates": 0,
+            "unknown_candidates": 59500,
+            "target_rule": "chosen_plan.first_action as a one-hot cross entropy",
+            "unknown_role": "diagnostic only (never a negative label, never a loss weight)"
+          },
+          {
+            "source": "dagger",
+            "shard": "dagger-s0d1seed2030",
+            "seed": 2030,
+            "rows": 3500,
+            "rows_with_target": 3500,
+            "rows_without_target": 0,
+            "chosen_verified_rows": 3500,
+            "verified_candidates": 3500,
+            "dead_candidates": 5,
+            "unknown_candidates": 59500,
+            "target_rule": "chosen_plan.first_action as a one-hot cross entropy",
+            "unknown_role": "diagnostic only (never a negative label, never a loss weight)"
+          },
+          {
+            "source": "dagger",
+            "shard": "dagger-s0d1seed2031",
+            "seed": 2031,
+            "rows": 3500,
+            "rows_with_target": 3500,
+            "rows_without_target": 0,
+            "chosen_verified_rows": 3500,
+            "verified_candidates": 3500,
+            "dead_candidates": 0,
+            "unknown_candidates": 59500,
+            "target_rule": "chosen_plan.first_action as a one-hot cross entropy",
+            "unknown_role": "diagnostic only (never a negative label, never a loss weight)"
+          },
+          {
+            "source": "dagger",
+            "shard": "dagger-s0d1seed2032",
+            "seed": 2032,
+            "rows": 3500,
+            "rows_with_target": 3500,
+            "rows_without_target": 0,
+            "chosen_verified_rows": 3500,
+            "verified_candidates": 3500,
+            "dead_candidates": 0,
+            "unknown_candidates": 59500,
+            "target_rule": "chosen_plan.first_action as a one-hot cross entropy",
+            "unknown_role": "diagnostic only (never a negative label, never a loss weight)"
+          },
+          {
+            "source": "dagger",
+            "shard": "dagger-s0d1seed2033",
+            "seed": 2033,
+            "rows": 3500,
+            "rows_with_target": 3500,
+            "rows_without_target": 0,
+            "chosen_verified_rows": 3500,
+            "verified_candidates": 3500,
+            "dead_candidates": 3,
+            "unknown_candidates": 59500,
+            "target_rule": "chosen_plan.first_action as a one-hot cross entropy",
+            "unknown_role": "diagnostic only (never a negative label, never a loss weight)"
+          },
+          {
+            "source": "dagger",
+            "shard": "dagger-s0d1seed2034",
+            "seed": 2034,
+            "rows": 3500,
+            "rows_with_target": 3500,
+            "rows_without_target": 0,
+            "chosen_verified_rows": 3500,
+            "verified_candidates": 3500,
+            "dead_candidates": 0,
+            "unknown_candidates": 59500,
+            "target_rule": "chosen_plan.first_action as a one-hot cross entropy",
+            "unknown_role": "diagnostic only (never a negative label, never a loss weight)"
+          },
+          {
+            "source": "dagger",
+            "shard": "dagger-s0d1seed2035",
+            "seed": 2035,
+            "rows": 3500,
+            "rows_with_target": 3500,
+            "rows_without_target": 0,
+            "chosen_verified_rows": 3500,
+            "verified_candidates": 3500,
+            "dead_candidates": 3,
+            "unknown_candidates": 59500,
+            "target_rule": "chosen_plan.first_action as a one-hot cross entropy",
+            "unknown_role": "diagnostic only (never a negative label, never a loss weight)"
+          },
+          {
+            "source": "dagger",
+            "shard": "dagger-s0d1seed2036",
+            "seed": 2036,
+            "rows": 3500,
+            "rows_with_target": 3500,
+            "rows_without_target": 0,
+            "chosen_verified_rows": 3500,
+            "verified_candidates": 3500,
+            "dead_candidates": 2,
+            "unknown_candidates": 59500,
+            "target_rule": "chosen_plan.first_action as a one-hot cross entropy",
+            "unknown_role": "diagnostic only (never a negative label, never a loss weight)"
+          },
+          {
+            "source": "dagger",
+            "shard": "dagger-s0d1seed2037",
+            "seed": 2037,
+            "rows": 3500,
+            "rows_with_target": 3500,
+            "rows_without_target": 0,
+            "chosen_verified_rows": 3500,
+            "verified_candidates": 3500,
+            "dead_candidates": 3,
+            "unknown_candidates": 59500,
+            "target_rule": "chosen_plan.first_action as a one-hot cross entropy",
+            "unknown_role": "diagnostic only (never a negative label, never a loss weight)"
+          },
+          {
+            "source": "dagger",
+            "shard": "dagger-s0d1seed2038",
+            "seed": 2038,
+            "rows": 3500,
+            "rows_with_target": 3500,
+            "rows_without_target": 0,
+            "chosen_verified_rows": 3500,
+            "verified_candidates": 3500,
+            "dead_candidates": 3,
+            "unknown_candidates": 59500,
+            "target_rule": "chosen_plan.first_action as a one-hot cross entropy",
+            "unknown_role": "diagnostic only (never a negative label, never a loss weight)"
+          },
+          {
+            "source": "dagger",
+            "shard": "dagger-s0d1seed2039",
+            "seed": 2039,
+            "rows": 3500,
+            "rows_with_target": 3500,
+            "rows_without_target": 0,
+            "chosen_verified_rows": 3500,
+            "verified_candidates": 3500,
+            "dead_candidates": 0,
+            "unknown_candidates": 59500,
+            "target_rule": "chosen_plan.first_action as a one-hot cross entropy",
+            "unknown_role": "diagnostic only (never a negative label, never a loss weight)"
+          }
+        ],
+        "rows": 52500,
+        "rows_with_target": 52500,
+        "rows_without_target": 0,
+        "unknown_candidates": 892500,
+        "dead_candidates": 21,
+        "verified_candidates": 52500,
+        "chosen_verified_rows": 52500,
+        "note": "unknown candidates are diagnostics only: the target is the chosen one-hot action, never an unknown negative"
+      }
+    },
+    "split": {
+      "train_seeds": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14
+      ],
+      "val_seeds": [
+        15,
+        16,
+        17
+      ],
+      "test_seeds": [
+        18,
+        19,
+        20
+      ],
+      "train_only": true,
+      "val_read": false,
+      "test_read": false
+    }
+  },
+  "mix": {
+    "nominal": {
+      "s1": 0.2,
+      "dagger": 0.8
+    },
+    "rule": "per-step cumulative allocation floor((step+1)*steps*batch*share) - floor(step*steps*batch*share) S1 rows; per-sample loss weight 1.0; the batch order is shuffled per step, so the mix is the only source signal",
+    "realized": {
+      "steps": 20000,
+      "batch_size": 128,
+      "samples": 2560000,
+      "s1_samples": 512000,
+      "dagger_samples": 2048000,
+      "s1_share": 0.2,
+      "dagger_share": 0.8,
+      "s1_rows_per_step": {
+        "25": 8000,
+        "26": 12000
+      },
+      "sample_weight": 1.0,
+      "s1_stream_epochs": 12,
+      "dagger_stream_epochs": 40
+    },
+    "dataset": {
+      "s1_rows": 46397,
+      "dagger_rows": 52500
+    }
+  },
+  "model": {
+    "arm": "B0",
+    "class": "touhou_rl.v410.student.diagnostics.ProbeNet",
+    "config": {
+      "play_width": 24,
+      "hud_width": 16,
+      "hist_hidden": 64,
+      "readout": 128,
+      "trunk": 128,
+      "groups": 8
+    },
+    "parameters": 731802,
+    "pinned_parameters": 731802
+  },
+  "budget": {
+    "steps": 20000,
+    "batch_size": 128,
+    "optimizer": "AdamW",
+    "lr": 0.0003,
+    "weight_decay": 0.0001,
+    "grad_clip": 5.0,
+    "seed": 0,
+    "epochs": 1,
+    "steps_per_epoch": 20000
+  },
+  "train": {
+    "metrics": {
+      "loss": 0.32447231749873606,
+      "top1": 0.90050625,
+      "macro_recall": 0.590400958243511,
+      "macro_recall_classes": 17,
+      "loss_first_100": 1.486359747648239,
+      "loss_last_100": 0.11032119449228048,
+      "majority_baseline_top1": 0.6171578125,
+      "per_class_recall": {
+        "0": 0.9800395462060201,
+        "1": 0.528153879217709,
+        "2": 0.704720929393513,
+        "3": 0.8952089001386857,
+        "4": 0.5001097694840835,
+        "5": 0.6351088804339027,
+        "6": 0.7070451039916689,
+        "7": 0.9094104212314533,
+        "8": 0.6002403966544799,
+        "10": 0.2990179478496444,
+        "11": 0.6392494777678305,
+        "12": 0.6447263473736184,
+        "13": 0.3358226371061844,
+        "14": 0.39114754098360655,
+        "15": 0.5165503489531406,
+        "16": 0.37027142551827313,
+        "17": 0.3799927378358751
+      },
+      "samples": 2560000,
+      "steps": 20000
+    },
+    "grad_norm": {
+      "preclip_mean": 2.530155056367091,
+      "preclip_max": 7.953848832031888,
+      "postclip_mean": 2.5232733255721964,
+      "postclip_max": 4.9999998004265045,
+      "clip": 5.0
+    },
+    "throughput": {
+      "steps": 20000,
+      "samples_seen": 2560000,
+      "train_seconds": 612.9695,
+      "samples_per_second": 4176.39,
+      "steps_per_second": 32.63,
+      "data_seconds": 237.3982,
+      "data_fraction": 0.3873,
+      "median_step_seconds": 0.0295,
+      "max_step_seconds": 0.6603,
+      "first_step_seconds": 0.6603
+    },
+    "gpu": {
+      "device": "cuda",
+      "cuda": true,
+      "device_name": "NVIDIA GeForce RTX 4070 SUPER",
+      "max_memory_allocated_mib": 252.11,
+      "max_memory_reserved_mib": 434.0,
+      "total_memory_mib": 12281.5,
+      "peak_memory_note": "torch.cuda.max_memory_{allocated,reserved} over this run; reset immediately before the first step"
+    },
+    "device": {
+      "device": "cuda",
+      "torch": "2.14.1+cu130",
+      "python": "3.10.12",
+      "platform": "Linux-6.18.58.1-microsoft-standard-WSL2-x86_64-with-glibc2.35",
+      "cuda_available": true,
+      "cudnn_enabled": true,
+      "cudnn_deterministic": true,
+      "cudnn_benchmark": false,
+      "deterministic_algorithms": false,
+      "threads": 10,
+      "device_name": "NVIDIA GeForce RTX 4070 SUPER",
+      "device_capability": "8.9",
+      "cuda_version": "13.0",
+      "requested": "auto",
+      "runtime_device": "cuda"
+    },
+    "elapsed_seconds": 625.8473,
+    "label_rule": {
+      "target": "one_hot(chosen_plan.first_action) cross entropy (B0)",
+      "unknown_used_as_negative": false,
+      "rows_without_target": {
+        "s1": 0,
+        "dagger": 0
+      },
+      "note": "chosen one-hot CE only; the other 17 logits appear solely in the softmax denominator"
+    }
+  },
+  "checkpoint": {
+    "path": ".tmp_v410_wp05_train_beta05_20k/b0_s0_dagger_step20000.pt",
+    "bytes": 2941293,
+    "sha256": "15ae1fd5b9a6e0cbbddfd668bb342444bdb44db123b5f7e56abf3c5e7215bd95",
+    "schema": "v410-wp04-bc-arm-checkpoint/1",
+    "arm": "B0",
+    "parameters": 731802,
+    "format": "torch.save (schema v410-wp04-bc-arm-checkpoint/1)",
+    "in_repo": false,
+    "recomputed_sha256": true
+  },
+  "rollout_checkpoint": {
+    "sha256": "6ebe4ea91d81d9333bfa1ccc065fc3515bb25b1d3b90a2684cdaa8a0a69b8086",
+    "note": "the D1 student that produced the 15 shards; recorded so the collection policy and the trained policy are not confused"
+  },
+  "commands": [
+    {
+      "step": "enumerate complete round-2 shards",
+      "command": "/root/v400-venv/bin/python .tmp_v410_wp05_train_beta05_20k/logs/enumerate_shards.py",
+      "exit_code": 0,
+      "result": "15/15 complete=true, 3,500 decisions / 7,000 frames each, beta=0.5, stage 0, difficulty normal, stop_reason decisions, 52,500 decisions / 105,000 frames total",
+      "log": ".tmp_v410_wp05_train_beta05_20k/logs/enumerate_shards.log"
+    },
+    {
+      "step": "convert 15 shards with the unmodified WP05.2 CLI",
+      "command": "bash .tmp_v410_wp05_train_beta05_20k/logs/convert_labels.sh -> /root/v400-venv/bin/python -m touhou_rl.v410.dagger.labels --shard .tmp_v410_wp05_round2/shards/dagger-s0d1seed<seed> --out .tmp_v410_wp05_train_beta05_20k/labels/dagger-s0d1seed<seed> --tolerance 8.0",
+      "exit_code": 0,
+      "exit_code_source": "derived from the 15 recorded per-shard exit codes (convert_labels.sh exits with their OR)",
+      "exit_codes_per_shard": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "wall_seconds_per_shard": [
+        4,
+        2,
+        3,
+        3,
+        2,
+        3,
+        3,
+        3,
+        2,
+        3,
+        3,
+        3,
+        3,
+        3,
+        2
+      ],
+      "log": ".tmp_v410_wp05_train_beta05_20k/logs/convert_exit_codes.txt"
+    },
+    {
+      "step": "independently verify converted labels (rows + SHA-256 + 5k parity)",
+      "command": "/root/v400-venv/bin/python .tmp_v410_wp05_train_beta05_20k/logs/verify_labels.py",
+      "exit_code": 0,
+      "log": ".tmp_v410_wp05_train_beta05_20k/logs/verify_labels.log",
+      "result": "VERIFY_LABELS_OK, 15/15 byte-identical to the 5k labels"
+    },
+    {
+      "step": "train B0, 20,000 steps (everything else identical to WP05.8)",
+      "command": "bash .tmp_v410_wp05_train_beta05_20k/logs/run_train.sh -> /root/v400-venv/bin/python -m touhou_rl.v410.dagger.train train --steps 20000 --batch-size 128 --seed 0 --s1-share 0.2 --device auto --shard-seeds 2025-2039 --shards-root .tmp_v410_wp05_round2/shards --labels-dir .tmp_v410_wp05_train_beta05_20k/labels --workdir .tmp_v410_wp05_train_beta05_20k --out .tmp_v410_wp05_train_beta05_20k/train_run.json",
+      "exit_code": 0,
+      "wall_seconds": 643,
+      "payload_elapsed_seconds": 625.8473,
+      "throughput": {
+        "steps": 20000,
+        "samples_seen": 2560000,
+        "train_seconds": 612.9695,
+        "samples_per_second": 4176.39,
+        "steps_per_second": 32.63,
+        "data_seconds": 237.3982,
+        "data_fraction": 0.3873,
+        "median_step_seconds": 0.0295,
+        "max_step_seconds": 0.6603,
+        "first_step_seconds": 0.6603
+      },
+      "log": ".tmp_v410_wp05_train_beta05_20k/logs/train.log",
+      "log_note": "the nvidia-smi header/footer lines in run_train.sh AND run_eval.sh lost their trailing character when the driver scripts were written, so both logged 'Format modifier is not recognized.'; both drivers still exited 0 and the authoritative GPU numbers are the train_run.json gpu block recorded below"
+    },
+    {
+      "step": "20 dev episodes (20,000-step checkpoint)",
+      "command": "bash .tmp_v410_wp05_train_beta05_20k/logs/run_eval.sh -> xvfb-run -a -s '-screen 0 1024x768x24' /root/v400-venv/bin/python tools/rl/v410_student_eval.py --engine /root/Touhou_RL/third_party/th08-rl/build/rl_v3/th08-modern --data-dir /root/v400-data/game --checkpoint .tmp_v410_wp05_train_beta05_20k/b0_s0_dagger_step20000.pt --seeds 1000-1019 --stage 0 --difficulty normal --max-frames 19887 --stop-on-death --out .tmp_v410_wp05_train_beta05_20k/eval_dev20.json",
+      "exit_code": 0,
+      "wall_seconds": 469,
+      "waited_for_teacher_seconds": 0,
+      "waited_for": "no G410-1 teacher batch was running, so the eval driver proceeded immediately",
+      "log": ".tmp_v410_wp05_train_beta05_20k/logs/eval_dev20.log"
+    },
+    {
+      "step": "build this evidence file (fail closed)",
+      "command": "/root/v400-venv/bin/python .tmp_v410_wp05_train_beta05_20k/logs/build_evidence_20k.py",
+      "exit_code": 0
+    }
+  ],
+  "dev_eval": {
+    "source": ".tmp_v410_wp05_train_beta05_20k/eval_dev20.json",
+    "schema": "v410-student-eval-smoke/1",
+    "kind": "dev-smoke",
+    "engine": {
+      "path": "/root/Touhou_RL/third_party/th08-rl/build/rl_v3/th08-modern",
+      "sha256": "691bfd77b7eca3361aa8bb7af0977556a70cc73a070b29a2447222ba7a568ef6",
+      "role": "env (pixels + state)"
+    },
+    "obs_spec": {
+      "version": "obs-v3",
+      "digest": "ef2fbd15385f26f425db2bfe855d105ee009023acb08c26916e811963553a105",
+      "play_shape": [
+        4,
+        112,
+        96
+      ],
+      "hud_shape": [
+        1,
+        56,
+        160
+      ],
+      "act_hist_shape": [
+        8,
+        18
+      ],
+      "decision_frames": 2,
+      "note": "frozen obs-v3: 4x112x96 playfield + 56x160 HUD + 8x18 action history; the checkpoint was trained on this contract"
+    },
+    "suite": {
+      "name": "S1N",
+      "stage": 0,
+      "stage_argument_semantics": "RESET stage is 0-based; S1N = stage 0",
+      "difficulty": "normal",
+      "max_frames": 19887,
+      "stop_on_death": true,
+      "obs_window": "consecutive",
+      "window_alignment": {
+        "mode": "consecutive",
+        "frames_per_decision": 2,
+        "renders_per_decision": 2,
+        "stack_span_frames": 4,
+        "matches_training_obs": true,
+        "training_window": "the D410-S1 shards store frames[t-3..t], four consecutive game frames; one decision = two frames = two renders, so the stack is consecutive"
+      }
+    },
+    "seed_policy": {
+      "allowed": "1000-1099 (dev)",
+      "refused": [
+        "60000-60199 (confirm)",
+        "1-20 (D410-S1 corpus: train 1-14 / val 15-17 / test 18-20)"
+      ],
+      "seeds_requested": [
+        1000,
+        1001,
+        1002,
+        1003,
+        1004,
+        1005,
+        1006,
+        1007,
+        1008,
+        1009,
+        1010,
+        1011,
+        1012,
+        1013,
+        1014,
+        1015,
+        1016,
+        1017,
+        1018,
+        1019
+      ],
+      "all_dev": true
+    },
+    "seeds": [
+      1000,
+      1001,
+      1002,
+      1003,
+      1004,
+      1005,
+      1006,
+      1007,
+      1008,
+      1009,
+      1010,
+      1011,
+      1012,
+      1013,
+      1014,
+      1015,
+      1016,
+      1017,
+      1018,
+      1019
+    ],
+    "n": 20,
+    "n_measured": 20,
+    "clears": 0,
+    "clear_rate": 0.0,
+    "wilson_95": {
+      "successes": 0,
+      "n": 20,
+      "rate": 0.0,
+      "low": 0.0,
+      "high": 0.16112515805281938,
+      "method": "Wilson score interval, 95%, descriptive only",
+      "basis": "all scheduled episodes; a failed episode counts as a non-clear",
+      "descriptive_only": true
+    },
+    "stop_reasons": {
+      "death_stop": 20
+    },
+    "frames": {
+      "values": [
+        1612,
+        1970,
+        1532,
+        1762,
+        1627,
+        1597,
+        1683,
+        1764,
+        1687,
+        1962,
+        1589,
+        1540,
+        1571,
+        1588,
+        1849,
+        1523,
+        1959,
+        1538,
+        1608,
+        2332
+      ],
+      "mean": 1714.65,
+      "median": 1619.5,
+      "min": 1523,
+      "max": 2332,
+      "sd_sample": 207.6693411728315
+    },
+    "actions": {
+      "decisions": 17151,
+      "histogram": [
+        10440,
+        67,
+        546,
+        2371,
+        71,
+        53,
+        555,
+        2543,
+        23,
+        0,
+        6,
+        162,
+        148,
+        40,
+        4,
+        103,
+        14,
+        5
+      ],
+      "share": [
+        0.608711,
+        0.003906,
+        0.031835,
+        0.138243,
+        0.00414,
+        0.00309,
+        0.03236,
+        0.148271,
+        0.001341,
+        0.0,
+        0.00035,
+        0.009446,
+        0.008629,
+        0.002332,
+        0.000233,
+        0.006005,
+        0.000816,
+        0.000292
+      ],
+      "labels": [
+        "idle",
+        "N",
+        "NE",
+        "E",
+        "SE",
+        "S",
+        "SW",
+        "W",
+        "NW",
+        "focus-idle",
+        "focus-N",
+        "focus-NE",
+        "focus-E",
+        "focus-SE",
+        "focus-S",
+        "focus-SW",
+        "focus-W",
+        "focus-NW"
+      ],
+      "idle_share": 0.6087108623403883,
+      "idle_share_by_episode_mean": 0.6114428142952227,
+      "unique_actions_mean": 12.45,
+      "idle_definition": "candidate 0 = focus 0 + move 0 (no direction held)",
+      "dominant_action_share": 0.6087108623403883,
+      "dominant_action_index": 0,
+      "entropy_bits": 1.8659937933421895,
+      "top3_action_share": 0.8952247682350883
+    },
+    "deaths_mean": 1.0,
+    "per_seed": [
+      {
+        "seed": 1000,
+        "frames": 1612,
+        "deaths": 1.0,
+        "stop_reason": "death_stop",
+        "stage_clear": false,
+        "score": 12471,
+        "steps": 806,
+        "action0_share": 0.60794,
+        "unique_actions": 15,
+        "error": null
+      },
+      {
+        "seed": 1001,
+        "frames": 1970,
+        "deaths": 1.0,
+        "stop_reason": "death_stop",
+        "stage_clear": false,
+        "score": 18920,
+        "steps": 985,
+        "action0_share": 0.640609,
+        "unique_actions": 14,
+        "error": null
+      },
+      {
+        "seed": 1002,
+        "frames": 1532,
+        "deaths": 1.0,
+        "stop_reason": "death_stop",
+        "stage_clear": false,
+        "score": 12124,
+        "steps": 766,
+        "action0_share": 0.650131,
+        "unique_actions": 11,
+        "error": null
+      },
+      {
+        "seed": 1003,
+        "frames": 1762,
+        "deaths": 1.0,
+        "stop_reason": "death_stop",
+        "stage_clear": false,
+        "score": 15428,
+        "steps": 881,
+        "action0_share": 0.629966,
+        "unique_actions": 12,
+        "error": null
+      },
+      {
+        "seed": 1004,
+        "frames": 1627,
+        "deaths": 1.0,
+        "stop_reason": "death_stop",
+        "stage_clear": false,
+        "score": 13677,
+        "steps": 814,
+        "action0_share": 0.603194,
+        "unique_actions": 11,
+        "error": null
+      },
+      {
+        "seed": 1005,
+        "frames": 1597,
+        "deaths": 1.0,
+        "stop_reason": "death_stop",
+        "stage_clear": false,
+        "score": 13187,
+        "steps": 799,
+        "action0_share": 0.629537,
+        "unique_actions": 12,
+        "error": null
+      },
+      {
+        "seed": 1006,
+        "frames": 1683,
+        "deaths": 1.0,
+        "stop_reason": "death_stop",
+        "stage_clear": false,
+        "score": 14616,
+        "steps": 842,
+        "action0_share": 0.615202,
+        "unique_actions": 12,
+        "error": null
+      },
+      {
+        "seed": 1007,
+        "frames": 1764,
+        "deaths": 1.0,
+        "stop_reason": "death_stop",
+        "stage_clear": false,
+        "score": 15495,
+        "steps": 882,
+        "action0_share": 0.642857,
+        "unique_actions": 13,
+        "error": null
+      },
+      {
+        "seed": 1008,
+        "frames": 1687,
+        "deaths": 1.0,
+        "stop_reason": "death_stop",
+        "stage_clear": false,
+        "score": 16245,
+        "steps": 844,
+        "action0_share": 0.554502,
+        "unique_actions": 12,
+        "error": null
+      },
+      {
+        "seed": 1009,
+        "frames": 1962,
+        "deaths": 1.0,
+        "stop_reason": "death_stop",
+        "stage_clear": false,
+        "score": 33718,
+        "steps": 981,
+        "action0_share": 0.570846,
+        "unique_actions": 15,
+        "error": null
+      },
+      {
+        "seed": 1010,
+        "frames": 1589,
+        "deaths": 1.0,
+        "stop_reason": "death_stop",
+        "stage_clear": false,
+        "score": 9669,
+        "steps": 795,
+        "action0_share": 0.628931,
+        "unique_actions": 13,
+        "error": null
+      },
+      {
+        "seed": 1011,
+        "frames": 1540,
+        "deaths": 1.0,
+        "stop_reason": "death_stop",
+        "stage_clear": false,
+        "score": 11983,
+        "steps": 770,
+        "action0_share": 0.6,
+        "unique_actions": 12,
+        "error": null
+      },
+      {
+        "seed": 1012,
+        "frames": 1571,
+        "deaths": 1.0,
+        "stop_reason": "death_stop",
+        "stage_clear": false,
+        "score": 11735,
+        "steps": 786,
+        "action0_share": 0.629771,
+        "unique_actions": 12,
+        "error": null
+      },
+      {
+        "seed": 1013,
+        "frames": 1588,
+        "deaths": 1.0,
+        "stop_reason": "death_stop",
+        "stage_clear": false,
+        "score": 13228,
+        "steps": 794,
+        "action0_share": 0.629723,
+        "unique_actions": 13,
+        "error": null
+      },
+      {
+        "seed": 1014,
+        "frames": 1849,
+        "deaths": 1.0,
+        "stop_reason": "death_stop",
+        "stage_clear": false,
+        "score": 17149,
+        "steps": 925,
+        "action0_share": 0.583784,
+        "unique_actions": 12,
+        "error": null
+      },
+      {
+        "seed": 1015,
+        "frames": 1523,
+        "deaths": 1.0,
+        "stop_reason": "death_stop",
+        "stage_clear": false,
+        "score": 10969,
+        "steps": 762,
+        "action0_share": 0.646982,
+        "unique_actions": 10,
+        "error": null
+      },
+      {
+        "seed": 1016,
+        "frames": 1959,
+        "deaths": 1.0,
+        "stop_reason": "death_stop",
+        "stage_clear": false,
+        "score": 18866,
+        "steps": 980,
+        "action0_share": 0.568367,
+        "unique_actions": 14,
+        "error": null
+      },
+      {
+        "seed": 1017,
+        "frames": 1538,
+        "deaths": 1.0,
+        "stop_reason": "death_stop",
+        "stage_clear": false,
+        "score": 11960,
+        "steps": 769,
+        "action0_share": 0.648895,
+        "unique_actions": 9,
+        "error": null
+      },
+      {
+        "seed": 1018,
+        "frames": 1608,
+        "deaths": 1.0,
+        "stop_reason": "death_stop",
+        "stage_clear": false,
+        "score": 12578,
+        "steps": 804,
+        "action0_share": 0.621891,
+        "unique_actions": 11,
+        "error": null
+      },
+      {
+        "seed": 1019,
+        "frames": 2332,
+        "deaths": 1.0,
+        "stop_reason": "death_stop",
+        "stage_clear": false,
+        "score": 32014,
+        "steps": 1166,
+        "action0_share": 0.525729,
+        "unique_actions": 16,
+        "error": null
+      }
+    ],
+    "episode_wall_seconds_total": 452.8660000000001,
+    "episode_wall_seconds_min": 20.652,
+    "episode_wall_seconds_max": 28.556,
+    "driver_wall_seconds": 469,
+    "verdict": {
+      "what_this_is": "smoke: the v410 checkpoint ran in the real engine under the S1N dev ruler",
+      "is_a_gate": false,
+      "is_a_development_score": false,
+      "is_a_pass_rate": false,
+      "is_a_four_arm_comparison": false,
+      "conclusion_allowed": false
+    },
+    "not_a_gate": true,
+    "not_a_development_score": true,
+    "not_g410_2": true
+  },
+  "budget_explanation": {
+    "question": "does the 0/20 dev result at 20,000 steps still look like a training-budget limitation, or is it an action-collapse / policy-quality limit that more budget does not fix?",
+    "short_answer": "training budget no longer explains 0/20. Going from 5,000 to 20,000 steps (4x samples) cut the train loss from 0.6586 to 0.3245 and raised macro-recall from 0.2733 to 0.5904 (x2.16), reaching DAgger-window top1 0.9926 / macro-recall 0.9703, yet dev clears stayed 0/20 and mean survival moved only +25.55 frames (+1.51 %). The policy is not collapsed onto one action (18-bin histogram, id 0 ('idle') holds 0.6087, entropy 1.8660 of 4.1699 bits, 12.45 distinct actions per episode); the remaining limit is state coverage from a single DAgger round plus a persistent passive/idle bias",
+    "offline_budget_evidence": {
+      "loss_by_budget": {
+        "1k": 0.956429641366005,
+        "5k": 0.6585620161533355,
+        "20k": 0.32447231749873606
+      },
+      "top1_by_budget": {
+        "1k": 0.71640625,
+        "5k": 0.7992578125,
+        "20k": 0.90050625
+      },
+      "macro_recall_by_budget": {
+        "1k": 0.14058721302740232,
+        "5k": 0.27325591373739283,
+        "20k": 0.590400958243511
+      },
+      "delta_20k_minus_5k": {
+        "loss": -0.3340896986545995,
+        "top1": 0.1012484374999999,
+        "macro_recall": 0.3171450445061182
+      },
+      "majority_baseline_top1": 0.6171578125,
+      "top1_above_majority": 0.28334843749999994,
+      "curve": [
+        {
+          "step": 1000,
+          "window_loss_last_500": 0.8408520787954329,
+          "cumulative_loss": 0.9564296379685402,
+          "window_dagger_top1_last_500": 0.8003515625000001,
+          "window_s1_top1_last_500": 0.511328125,
+          "window_dagger_macro_recall_last_500": 0.16201362571466443
+        },
+        {
+          "step": 5000,
+          "window_loss_last_500": 0.452921636223793,
+          "cumulative_loss": 0.6585620211541653,
+          "window_dagger_top1_last_500": 0.9019140625000001,
+          "window_s1_top1_last_500": 0.682109375,
+          "window_dagger_macro_recall_last_500": 0.41638946626747264
+        },
+        {
+          "step": 10000,
+          "window_loss_last_500": 0.23519254934787753,
+          "cumulative_loss": 0.48709535258188846,
+          "window_dagger_top1_last_500": 0.9759179687499999,
+          "window_s1_top1_last_500": 0.741015625,
+          "window_dagger_macro_recall_last_500": 0.8179072353263072
+        },
+        {
+          "step": 15000,
+          "window_loss_last_500": 0.1379514756128192,
+          "cumulative_loss": 0.3878826762333512,
+          "window_dagger_top1_last_500": 0.99140625,
+          "window_s1_top1_last_500": 0.8221874999999998,
+          "window_dagger_macro_recall_last_500": 0.9550707914323624
+        },
+        {
+          "step": 20000,
+          "window_loss_last_500": 0.1201940895393491,
+          "cumulative_loss": 0.32447232176121327,
+          "window_dagger_top1_last_500": 0.9925976562500001,
+          "window_s1_top1_last_500": 0.8403124999999999,
+          "window_dagger_macro_recall_last_500": 0.9702970435807436
+        }
+      ],
+      "curve_note": "window_loss_last_500 is the mean of the per-100-step block losses in the last 500 steps before the mark; cumulative_loss is the sample-weighted mean over all blocks up to the mark (it equals metrics.loss at 20,000)",
+      "stream_epochs": {
+        "s1": 12,
+        "dagger": 40,
+        "s1_rows": {
+          "25": 8000,
+          "26": 12000
+        },
+        "dataset_s1_rows": 46397,
+        "dataset_dagger_rows": 52500,
+        "note": "at 20,000 steps the same 46,397 S1 rows and 52,500 DAgger rows are replayed many times, so extra budget buys repetition, not new states"
+      }
+    },
+    "dev_evidence": {
+      "clears_by_budget": {
+        "1k": 0,
+        "5k": 0,
+        "20k": 0
+      },
+      "mean_frames_by_budget": {
+        "1k": 1339.95,
+        "5k": 1689.1,
+        "20k": 1714.65
+      },
+      "median_frames_by_budget": {
+        "1k": 1321.0,
+        "5k": 1605.0,
+        "20k": 1619.5
+      },
+      "idle_share_by_budget": {
+        "1k": 0.7106617921360889,
+        "5k": 0.6284327651515151,
+        "20k": 0.6087108623403883
+      },
+      "unique_actions_mean_by_budget": {
+        "1k": 6.7,
+        "5k": 12.5,
+        "20k": 12.45
+      },
+      "mean_frames_delta_vs_1k": 374.70000000000005,
+      "mean_frames_delta_vs_5k": 25.550000000000182,
+      "survival_ceiling": {
+        "cap_frames": 19887,
+        "best_episode_frames": 2332,
+        "best_episode_fraction_of_cap": 0.11726253331321969,
+        "note": "not one of 20 dev episodes reached even a quarter of the cap"
+      }
+    },
+    "action_collapse_evidence": {
+      "pooled_histogram": [
+        10440,
+        67,
+        546,
+        2371,
+        71,
+        53,
+        555,
+        2543,
+        23,
+        0,
+        6,
+        162,
+        148,
+        40,
+        4,
+        103,
+        14,
+        5
+      ],
+      "action_labels": [
+        "idle",
+        "N",
+        "NE",
+        "E",
+        "SE",
+        "S",
+        "SW",
+        "W",
+        "NW",
+        "focus-idle",
+        "focus-N",
+        "focus-NE",
+        "focus-E",
+        "focus-SE",
+        "focus-S",
+        "focus-SW",
+        "focus-W",
+        "focus-NW"
+      ],
+      "dominant_action_index": 0,
+      "dominant_action_label": "idle",
+      "dominant_action_share": 0.6087108623403883,
+      "top3_action_share": 0.8952247682350883,
+      "entropy_bits": 1.8659937933421895,
+      "max_entropy_bits": 4.169925001442312,
+      "idle_share": 0.6087108623403883,
+      "unique_actions_mean": 12.45,
+      "dominant_action_share_by_budget": {
+        "1k": 0.7106617921360889,
+        "5k": 0.6284327651515151,
+        "20k": 0.6087108623403883
+      },
+      "entropy_bits_by_budget": {
+        "1k": 1.2688987212810163,
+        "5k": 1.8410065875131185,
+        "20k": 1.8659937933421895
+      },
+      "idle_share_by_episode_mean": 0.6114428142952227,
+      "verdict": "no collapse to a single action: the pooled 18-bin histogram keeps 12.45 distinct actions per episode and 1.8660 bits of entropy (max 4.1699); but the distribution stays skewed to passive play -- idle (focus 0 + move 0) is 0.6087 of decisions and the east/west directions take most of the rest. 4x budget widened the repertoire only slightly (12.5 -> 12.45 actions per episode) and moved idle by -1.97 pp"
+    },
+    "conclusion": "0/20 is replicated at 20,000 steps, so it is not an undertraining artefact of the 1,000- or 5,000-step budgets. The budget axis is exhausted for dev: 4x steps bought a 1.5 % survival gain and no clears, while the same 4x cut the offline loss in half and more than doubled macro-recall. The binding constraints left are (a) state coverage -- one DAgger round of 52,500 decisions replayed ~40x cannot represent the states the policy itself visits, and (b) a persistent idle/passive action bias at decision time. More steps over the same rows are not the lever; a new collection round or a different objective (e.g. penalising idle, or on-policy correction) would be, and both are out of scope for WP05.9",
+    "what_would_settle_it": [
+      "a second DAgger collection round (new on-policy states) is out of scope for WP05.9: no data was collected here and this run does not authorise it",
+      "an offline held-out check on different seeds would separate 'memorised the train batches' from 'generalises'; the DAgger-window top1 of 0.9926 strongly suggests memorisation, which in-sample train metrics cannot by themselves distinguish",
+      "a training-seed sweep (seeds 1-2) would give a variance estimate; one seed cannot separate a poor seed from a poor recipe",
+      "an explicit action-distribution diagnostic (idle penalty / entropy bonus) would test whether the passive bias, rather than the state coverage, is the first thing to break"
+    ],
+    "offline_vs_dev_gap": {
+      "what_it_shows": "between 5,000 and 20,000 steps the offline fit improves enormously while dev survival barely moves: the step budget is no longer the binding constraint on dev",
+      "offline_5k_to_20k": {
+        "loss": {
+          "from": 0.6585620161533355,
+          "to": 0.32447231749873606,
+          "factor": 2.029640066770568
+        },
+        "top1": {
+          "from": 0.7992578125,
+          "to": 0.90050625,
+          "delta": 0.1012484374999999
+        },
+        "macro_recall": {
+          "from": 0.27325591373739283,
+          "to": 0.590400958243511,
+          "factor": 2.160615483736261
+        },
+        "dagger_window_top1_last_500": 0.9925976562500001,
+        "dagger_window_macro_recall_last_500": 0.9702970435807436,
+        "s1_window_top1_last_500": 0.8403124999999999,
+        "note": "by the last 500 steps the model reproduces the teacher's chosen action on the collected DAgger rows almost perfectly (top1 0.9926, macro-recall 0.9703), i.e. 4x budget bought memorisation of the same 52,500 rows"
+      },
+      "dev_5k_to_20k": {
+        "mean_frames": {
+          "from": 1689.1,
+          "to": 1714.65,
+          "delta": 25.550000000000182,
+          "delta_pct": 1.5126398673850088
+        },
+        "median_frames": {
+          "from": 1605.0,
+          "to": 1619.5,
+          "delta": 14.5
+        },
+        "clears": {
+          "from": 0,
+          "to": 0
+        },
+        "idle_share": {
+          "from": 0.6284327651515151,
+          "to": 0.6087108623403883,
+          "delta_pp": -1.9721902811126846
+        },
+        "unique_actions_mean": {
+          "from": 12.5,
+          "to": 12.45
+        }
+      },
+      "interpretation": "the divergence is the point: loss halved (x2.03) and macro-recall x2.16 while mean dev survival moved +25.55 frames (+1.51 %) and clears stayed at 0/20. Extra steps over the same single DAgger round perfect the imitation on collected states without teaching the policy what to do on its own states, where it still idles most of the time"
+    }
+  },
+  "comparison": {
+    "rule": "descriptive side-by-side only. The three beta=0.5 arms share the same 15 shards, the same 52,500 converted label rows (verified byte-identical), the same mix, optimiser, training seed 0, model and 20 dev seeds, so the only controlled change is the step budget 1,000 -> 5,000 -> 20,000. The beta=1.0 arm differs in the injection coefficient and is not a controlled budget comparison. No interval, no significance test, no gate, no decision rule",
+    "budget_is_the_only_change": {
+      "labels_byte_identical_to_5k": true,
+      "dataset_s1_rows": 46397,
+      "dataset_dagger_rows": 52500,
+      "steps": {
+        "1k": 1000,
+        "5k": 5000,
+        "20k": 20000
+      },
+      "samples": {
+        "1k": 128000,
+        "5k": 640000,
+        "20k": 2560000
+      },
+      "batch_size": 128,
+      "lr": 0.0003,
+      "weight_decay": 0.0001,
+      "grad_clip": 5.0,
+      "train_seed": 0,
+      "s1_share": 0.2,
+      "model_parameters": 731802,
+      "dev_seeds": "1000-1019",
+      "success": "SUCCESS on the controlled-change requirement"
+    },
+    "arms": {
+      "beta05_1k": {
+        "label": "beta=0.5, 15 shards (52,500 decisions), 1,000 steps",
+        "checkpoint": "a11ba0b74547515023d98145c915e0afb7d5eaafc3bea8d9d11b2429ede25d5b",
+        "decisions": 52500,
+        "budget_steps": 1000,
+        "train": {
+          "steps": 1000,
+          "samples": 128000,
+          "loss": 0.956429641366005,
+          "top1": 0.71640625,
+          "macro_recall": 0.14058721302740232,
+          "throughput_sps": 776.27,
+          "elapsed_seconds": 193.7904
+        },
+        "dev": {
+          "clears": 0,
+          "n": 20,
+          "mean_frames": 1339.95,
+          "median_frames": 1321.0,
+          "min_frames": 1101,
+          "max_frames": 1747,
+          "idle_share": 0.7106617921360889,
+          "idle_share_by_episode_mean": 0.7128780197960514,
+          "unique_actions_mean": 6.7,
+          "deaths_mean": 1.0,
+          "decisions": 13403,
+          "dominant_action_share": 0.7106617921360889,
+          "dominant_action_index": 0,
+          "entropy_bits": 1.2688987212810163,
+          "top3_action_share": 0.9813474595239872,
+          "stop_reasons": {
+            "death_stop": 20
+          }
+        },
+        "evidence": [
+          "evidence/WP05/train_beta05.json",
+          "evidence/WP05/EVAL_BETA05.md"
+        ]
+      },
+      "beta05_5k": {
+        "label": "beta=0.5, 15 shards (52,500 decisions), 5,000 steps",
+        "checkpoint": "692fdc61dc473ff10657d2a0b1a37434d3b24561fedb9798a41a38086bdbd120",
+        "decisions": 52500,
+        "budget_steps": 5000,
+        "train": {
+          "steps": 5000,
+          "samples": 640000,
+          "loss": 0.6585620161533355,
+          "top1": 0.7992578125,
+          "macro_recall": 0.27325591373739283,
+          "throughput_sps": 1512.83,
+          "elapsed_seconds": 461.3748
+        },
+        "dev": {
+          "clears": 0,
+          "n": 20,
+          "mean_frames": 1689.1,
+          "median_frames": 1605.0,
+          "min_frames": 1530,
+          "max_frames": 2213,
+          "idle_share": 0.6284327651515151,
+          "idle_share_by_episode_mean": 0.6317297030066238,
+          "unique_actions_mean": 12.5,
+          "deaths_mean": 1.0,
+          "decisions": 16896,
+          "dominant_action_share": 0.6284327651515151,
+          "dominant_action_index": 0,
+          "entropy_bits": 1.8410065875131185,
+          "top3_action_share": 0.8904474431818182,
+          "stop_reasons": {
+            "death_stop": 20
+          }
+        },
+        "evidence": [
+          "evidence/WP05/train_beta05_5k.json",
+          "evidence/WP05/EVAL_BETA05_5K.md"
+        ]
+      },
+      "beta05_20k": {
+        "label": "beta=0.5, 15 shards (52,500 decisions), 20,000 steps",
+        "checkpoint": "15ae1fd5b9a6e0cbbddfd668bb342444bdb44db123b5f7e56abf3c5e7215bd95",
+        "decisions": 52500,
+        "budget_steps": 20000,
+        "train": {
+          "loss": 0.32447231749873606,
+          "top1": 0.90050625,
+          "macro_recall": 0.590400958243511,
+          "macro_recall_classes": 17,
+          "loss_first_100": 1.486359747648239,
+          "loss_last_100": 0.11032119449228048,
+          "majority_baseline_top1": 0.6171578125,
+          "per_class_recall": {
+            "0": 0.9800395462060201,
+            "1": 0.528153879217709,
+            "2": 0.704720929393513,
+            "3": 0.8952089001386857,
+            "4": 0.5001097694840835,
+            "5": 0.6351088804339027,
+            "6": 0.7070451039916689,
+            "7": 0.9094104212314533,
+            "8": 0.6002403966544799,
+            "10": 0.2990179478496444,
+            "11": 0.6392494777678305,
+            "12": 0.6447263473736184,
+            "13": 0.3358226371061844,
+            "14": 0.39114754098360655,
+            "15": 0.5165503489531406,
+            "16": 0.37027142551827313,
+            "17": 0.3799927378358751
+          },
+          "samples": 2560000,
+          "steps": 20000,
+          "throughput_sps": 4176.39,
+          "elapsed_seconds": 625.8473
+        },
+        "dev": {
+          "clears": 0,
+          "n": 20,
+          "mean_frames": 1714.65,
+          "median_frames": 1619.5,
+          "min_frames": 1523,
+          "max_frames": 2332,
+          "idle_share": 0.6087108623403883,
+          "idle_share_by_episode_mean": 0.6114428142952227,
+          "unique_actions_mean": 12.45,
+          "deaths_mean": 1.0,
+          "decisions": 17151,
+          "dominant_action_share": 0.6087108623403883,
+          "dominant_action_index": 0,
+          "entropy_bits": 1.8659937933421895,
+          "top3_action_share": 0.8952247682350883,
+          "stop_reasons": {
+            "death_stop": 20
+          }
+        },
+        "evidence": [
+          "evidence/WP05/train_beta05_20k.json",
+          "evidence/WP05/EVAL_BETA05_20K.md"
+        ]
+      },
+      "beta1_50k": {
+        "label": "beta=1.0, 50k-decision collection, 1,000 steps",
+        "checkpoint": "6ebe4ea91d81d9333bfa1ccc065fc3515bb25b1d3b90a2684cdaa8a0a69b8086",
+        "decisions": 52500,
+        "budget_steps": 1000,
+        "injection_rate": 1.0,
+        "train": {
+          "steps": 1000,
+          "samples": 128000,
+          "loss": 0.8336316267251969,
+          "top1": 0.757921875,
+          "macro_recall": 0.20809347262650604,
+          "throughput_sps": 2112.13,
+          "elapsed_seconds": 69.0228
+        },
+        "dev": {
+          "clears": 0,
+          "n": 20,
+          "mean_frames": 1643.25,
+          "median_frames": 1580.5,
+          "min_frames": 1261,
+          "max_frames": 2371,
+          "idle_share": 0.720613,
+          "idle_share_by_episode_mean": 0.725544,
+          "unique_actions_mean": 8.8,
+          "deaths_mean": 1.0,
+          "decisions": 16436,
+          "dominant_action_share": 0.7206132879045997,
+          "dominant_action_index": 0,
+          "entropy_bits": 1.4289007196326375,
+          "top3_action_share": 0.9354465806765636,
+          "stop_reasons": {
+            "death_stop": 20
+          }
+        },
+        "evidence": [
+          "evidence/WP05/train_50k.json",
+          "evidence/WP05/EVAL_50K.md"
+        ]
+      }
+    },
+    "deltas_vs_beta05_1k": {
+      "clear_rate": {
+        "wp05_9": 0.0,
+        "reference": 0.0
+      },
+      "mean_frames": {
+        "wp05_9": 1714.65,
+        "reference": 1339.95,
+        "delta": 374.70000000000005,
+        "delta_pct": 27.963729989925003
+      },
+      "median_frames": {
+        "wp05_9": 1619.5,
+        "reference": 1321.0,
+        "delta": 298.5
+      },
+      "idle_share": {
+        "wp05_9": 0.6087108623403883,
+        "reference": 0.7106617921360889,
+        "delta_pp": -10.195092979570063
+      },
+      "unique_actions_mean": {
+        "wp05_9": 12.45,
+        "reference": 6.7
+      },
+      "train_loss": {
+        "wp05_9": 0.32447231749873606,
+        "reference": 0.956429641366005
+      },
+      "train_top1": {
+        "wp05_9": 0.90050625,
+        "reference": 0.71640625
+      },
+      "train_macro_recall": {
+        "wp05_9": 0.590400958243511,
+        "reference": 0.14058721302740232
+      },
+      "train_samples": {
+        "wp05_9": 2560000,
+        "reference": 128000,
+        "ratio": 20.0
+      },
+      "reference_checkpoint": "a11ba0b74547515023d98145c915e0afb7d5eaafc3bea8d9d11b2429ede25d5b",
+      "reference_decisions": 52500
+    },
+    "deltas_vs_beta05_5k": {
+      "clear_rate": {
+        "wp05_9": 0.0,
+        "reference": 0.0
+      },
+      "mean_frames": {
+        "wp05_9": 1714.65,
+        "reference": 1689.1,
+        "delta": 25.550000000000182,
+        "delta_pct": 1.5126398673850088
+      },
+      "median_frames": {
+        "wp05_9": 1619.5,
+        "reference": 1605.0,
+        "delta": 14.5
+      },
+      "idle_share": {
+        "wp05_9": 0.6087108623403883,
+        "reference": 0.6284327651515151,
+        "delta_pp": -1.9721902811126846
+      },
+      "unique_actions_mean": {
+        "wp05_9": 12.45,
+        "reference": 12.5
+      },
+      "train_loss": {
+        "wp05_9": 0.32447231749873606,
+        "reference": 0.6585620161533355
+      },
+      "train_top1": {
+        "wp05_9": 0.90050625,
+        "reference": 0.7992578125
+      },
+      "train_macro_recall": {
+        "wp05_9": 0.590400958243511,
+        "reference": 0.27325591373739283
+      },
+      "train_samples": {
+        "wp05_9": 2560000,
+        "reference": 640000,
+        "ratio": 4.0
+      },
+      "reference_checkpoint": "692fdc61dc473ff10657d2a0b1a37434d3b24561fedb9798a41a38086bdbd120",
+      "reference_decisions": 52500
+    },
+    "deltas_vs_beta1_50k": {
+      "clear_rate": {
+        "wp05_9": 0.0,
+        "reference": 0.0
+      },
+      "mean_frames": {
+        "wp05_9": 1714.65,
+        "reference": 1643.25,
+        "delta": 71.40000000000009,
+        "delta_pct": 4.3450479233226895
+      },
+      "median_frames": {
+        "wp05_9": 1619.5,
+        "reference": 1580.5,
+        "delta": 39.0
+      },
+      "idle_share": {
+        "wp05_9": 0.6087108623403883,
+        "reference": 0.720613,
+        "delta_pp": -11.190213765961165
+      },
+      "unique_actions_mean": {
+        "wp05_9": 12.45,
+        "reference": 8.8
+      },
+      "train_loss": {
+        "wp05_9": 0.32447231749873606,
+        "reference": 0.8336316267251969
+      },
+      "train_top1": {
+        "wp05_9": 0.90050625,
+        "reference": 0.757921875
+      },
+      "train_macro_recall": {
+        "wp05_9": 0.590400958243511,
+        "reference": 0.20809347262650604
+      },
+      "train_samples": {
+        "wp05_9": 2560000,
+        "reference": 128000,
+        "ratio": 20.0
+      },
+      "reference_checkpoint": "6ebe4ea91d81d9333bfa1ccc065fc3515bb25b1d3b90a2684cdaa8a0a69b8086",
+      "reference_decisions": 52500
+    },
+    "confounds": [
+      "one training seed (0) and one checkpoint per arm: no variance estimate",
+      "the 20k run reuses the 52,500 rows ~40 times (DAgger stream epochs 40) and 46,397 S1 rows 12 times, so the extra budget is repetition of the same states, not new coverage",
+      "the beta=1.0 50k arm used injection_rate 1.0 while the beta=0.5 shards used injection_rate 0.500857, so that contrast is descriptive only",
+      "offline metrics are in-sample train-batch metrics, not held-out accuracy",
+      "20k trained on an otherwise idle host; the 1k and 5k arms shared the host with a G410-1 teacher batch, so throughput/wall-clock is not comparable even though the samples/s differ by ~1.6x",
+      "the dev episodes are the 20 dev seeds only; G410-2 is not measured and no pass/fail threshold is defined or implied"
+    ]
+  },
+  "verification": {
+    "fail_closed": [
+      {
+        "check": "enumerate_shards.py exit_code == 0",
+        "result": true,
+        "detail": 0
+      },
+      {
+        "check": "enumerate log ends with ENUMERATE_OK",
+        "result": true
+      },
+      {
+        "check": "15/15 label conversions exit 0",
+        "result": true,
+        "detail": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "check": "no label conversion failures",
+        "result": true,
+        "detail": 0
+      },
+      {
+        "check": "15 shards, 52,500 decisions, 52,500 label rows, 105,000 frames",
+        "result": true,
+        "detail": {
+          "decisions": 52500,
+          "frames": 105000,
+          "label_rows": 52500,
+          "query_coverage": 0.05555555555555555,
+          "injection_rate": 0.5008571428571429,
+          "agreement_rate": 0.7965523809523809
+        }
+      },
+      {
+        "check": "all 15 labels byte-identical to the WP05.8 5k conversion (the only change is --steps)",
+        "result": true,
+        "detail": {
+          "reference_labels_dir": ".tmp_v410_wp05_train_beta05_5k/labels",
+          "shards_byte_identical": 15,
+          "shards_compared": 15,
+          "reference_missing": 0,
+          "note": "byte-identical labels prove the 20k run differs from the 5k run only in --steps"
+        }
+      },
+      {
+        "check": "train driver exit_code == 0",
+        "result": true,
+        "detail": 0
+      },
+      {
+        "check": "eval driver exit_code == 0",
+        "result": true,
+        "detail": 0
+      },
+      {
+        "check": "eval_dev20.json exit_code == 0",
+        "result": true,
+        "detail": 0
+      },
+      {
+        "check": "train metrics steps == 20,000",
+        "result": true,
+        "detail": 20000
+      },
+      {
+        "check": "train samples == 2,560,000 (20,000 x 128)",
+        "result": true,
+        "detail": 2560000
+      },
+      {
+        "check": "realized S1 share 20 % / DAgger 80 %",
+        "result": true,
+        "detail": {
+          "s1": 512000,
+          "dagger": 2048000,
+          "s1_share": 0.2
+        }
+      },
+      {
+        "check": "budget pinned: batch 128, lr 3e-4, wd 1e-4, clip 5, seed 0, AdamW",
+        "result": true,
+        "detail": {
+          "steps": 20000,
+          "batch_size": 128,
+          "optimizer": "AdamW",
+          "lr": 0.0003,
+          "weight_decay": 0.0001,
+          "grad_clip": 5.0,
+          "seed": 0,
+          "epochs": 1,
+          "steps_per_epoch": 20000
+        }
+      },
+      {
+        "check": "model is B0 ProbeNet with 731,802 parameters",
+        "result": true,
+        "detail": {
+          "arm": "B0",
+          "parameters": 731802
+        }
+      },
+      {
+        "check": "train touched the train split only (val/test unread)",
+        "result": true,
+        "detail": {
+          "train_seeds": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14
+          ],
+          "val_seeds": [
+            15,
+            16,
+            17
+          ],
+          "test_seeds": [
+            18,
+            19,
+            20
+          ],
+          "train_only": true,
+          "val_read": false,
+          "test_read": false
+        }
+      },
+      {
+        "check": "checkpoint file exists at the declared path",
+        "result": true,
+        "detail": "/mnt/d/WorkShop/Touhou_RL/.tmp_v410_wp05_train_beta05_20k/b0_s0_dagger_step20000.pt"
+      },
+      {
+        "check": "checkpoint sha256 matches the training payload",
+        "result": true,
+        "detail": {
+          "recomputed": "15ae1fd5b9a6e0cbbddfd668bb342444bdb44db123b5f7e56abf3c5e7215bd95",
+          "payload": "15ae1fd5b9a6e0cbbddfd668bb342444bdb44db123b5f7e56abf3c5e7215bd95"
+        }
+      },
+      {
+        "check": "checkpoint size matches the training payload",
+        "result": true,
+        "detail": {
+          "recomputed": 2941293,
+          "payload": 2941293
+        }
+      },
+      {
+        "check": "checkpoint path is the step20000 artifact",
+        "result": true,
+        "detail": ".tmp_v410_wp05_train_beta05_20k/b0_s0_dagger_step20000.pt"
+      },
+      {
+        "check": "eval header checkpoint sha256 == train checkpoint sha256",
+        "result": true,
+        "detail": {
+          "eval": "15ae1fd5b9a6e0cbbddfd668bb342444bdb44db123b5f7e56abf3c5e7215bd95",
+          "train": "15ae1fd5b9a6e0cbbddfd668bb342444bdb44db123b5f7e56abf3c5e7215bd95"
+        }
+      },
+      {
+        "check": "exactly 20 episodes, seeds exactly 1000-1019",
+        "result": true,
+        "detail": [
+          1000,
+          1001,
+          1002,
+          1003,
+          1004,
+          1005,
+          1006,
+          1007,
+          1008,
+          1009,
+          1010,
+          1011,
+          1012,
+          1013,
+          1014,
+          1015,
+          1016,
+          1017,
+          1018,
+          1019
+        ]
+      },
+      {
+        "check": "every episode error == null",
+        "result": true,
+        "detail": []
+      },
+      {
+        "check": "every episode checkpoint_sha256 == the trained checkpoint",
+        "result": true
+      },
+      {
+        "check": "every episode engine_sha256 == the eval header engine sha256",
+        "result": true
+      },
+      {
+        "check": "every episode is stage 0 / normal / cap 19887 / stop_on_death",
+        "result": true
+      },
+      {
+        "check": "engine sha256 is 691bfd77... (rl_v3)",
+        "result": true,
+        "detail": "691bfd77b7eca3361aa8bb7af0977556a70cc73a070b29a2447222ba7a568ef6"
+      },
+      {
+        "check": "dev seeds come from the 1000-1099 dev pool",
+        "result": true,
+        "detail": [
+          1000,
+          1001,
+          1002,
+          1003,
+          1004,
+          1005,
+          1006,
+          1007,
+          1008,
+          1009,
+          1010,
+          1011,
+          1012,
+          1013,
+          1014,
+          1015,
+          1016,
+          1017,
+          1018,
+          1019
+        ]
+      },
+      {
+        "check": "recomputed frames mean matches the evaluator (1e-9)",
+        "result": true,
+        "detail": {
+          "recomputed": 1714.65,
+          "tool": 1714.65
+        }
+      },
+      {
+        "check": "recomputed frames median matches the evaluator",
+        "result": true,
+        "detail": {
+          "recomputed": 1619.5,
+          "tool": 1619.5
+        }
+      },
+      {
+        "check": "recomputed frames min/max match the evaluator",
+        "result": true,
+        "detail": {
+          "min": 1523,
+          "max": 2332
+        }
+      },
+      {
+        "check": "recomputed idle share matches the evaluator (1e-9)",
+        "result": true,
+        "detail": {
+          "recomputed": 0.6087108623403883,
+          "tool": 0.6087108623403883
+        }
+      },
+      {
+        "check": "recomputed clear count matches the evaluator",
+        "result": true,
+        "detail": 0
+      },
+      {
+        "check": "every episode stopped on death (stop_reason death_stop)",
+        "result": true,
+        "detail": [
+          "death_stop"
+        ]
+      },
+      {
+        "check": "evaluator does not claim a gate / dev score / G410-2",
+        "result": true
+      },
+      {
+        "check": "reference 1k arm is the WP05.7 beta=0.5 1,000-step run",
+        "result": true
+      },
+      {
+        "check": "reference 5k arm is the WP05.8 beta=0.5 5,000-step run",
+        "result": true
+      },
+      {
+        "check": "reference beta=1 arm is the 1,000-step 50k-decision run",
+        "result": true
+      },
+      {
+        "check": "all four arms ran the same 20-seed dev suite (1000-1019)",
+        "result": true
+      },
+      {
+        "check": "loss curve covers all 200 blocks / 20,000 steps",
+        "result": true,
+        "detail": {
+          "blocks": 200,
+          "last_step": 20000
+        }
+      },
+      {
+        "check": "cumulative loss at 20,000 steps equals the reported run loss (1e-6)",
+        "result": true,
+        "detail": {
+          "cumulative": 0.32447232176121327,
+          "reported": 0.32447231749873606
+        }
+      }
+    ],
+    "source": ".tmp_v410_wp05_train_beta05_20k/logs/build_evidence_20k.py",
+    "note": "the builder exits 3 on any disagreement, so a partial, stale or mismatched eval JSON cannot be promoted into this file",
+    "independent_recomputation": [
+      "checkpoint sha256 and byte size re-hashed from disk",
+      "dev frames mean/median/min/max recomputed from the 20 episode records",
+      "dev idle share recomputed from the pooled action histogram",
+      "clear count recomputed from the per-episode stage_clear flags",
+      "loss curve cumulative value re-derived from the 200 per-100-step blocks",
+      "every labels_v410.jsonl re-hashed and compared with the 5k conversion"
+    ]
+  },
+  "scope": {
+    "purpose": "WP05.9 controlled budget scaling: B0 behaviour cloning on the same 15 complete beta=0.5 round-2 DAgger shards, 20,000 steps instead of 5,000, plus the 20 descriptive dev episodes",
+    "beta_0.5_round": true,
+    "round": 2,
+    "steps": 20000,
+    "budget_increase_vs_wp05_8": 4,
+    "budget_increase_vs_wp05_7": 20,
+    "g410_2": false,
+    "new_collection": false,
+    "data_collected": false,
+    "new_seeds_confirmed": false,
+    "game_launched": true,
+    "game_launched_note": "only by tools/rl/v410_student_eval.py for the 20 dev episodes; no collection rollout was run",
+    "test_split_read": false,
+    "val_split_read": false,
+    "train_split_only": true,
+    "confirm_split_read": false,
+    "dev_episodes": 20,
+    "dev_seed_range": "1000-1019",
+    "writes": [
+      "Document/Update/Alpha/v4.1.0/evidence/WP05/train_beta05_20k.json",
+      "Document/Update/Alpha/v4.1.0/evidence/WP05/EVAL_BETA05_20K.md",
+      ".tmp_v410_wp05_train_beta05_20k/ (run directory)"
+    ]
+  },
+  "not_claimed": [
+    "this is NOT G410-2: no confirm seeds were run and no gate is evaluated",
+    "this is NOT a pass rate, a development score, or a four-arm comparison verdict",
+    "the 20 dev episodes are descriptive only; no interval or significance test is attached",
+    "no data was collected, no new DAgger round was run, and no shard was regenerated",
+    "the offline metrics are in-sample train-batch metrics, not held-out accuracy",
+    "a single 0/20 at 20,000 steps does not prove the approach is dead, only that more steps over the same 52,500 rows do not clear stage 0",
+    "the beta=1.0 contrast in this file is descriptive; that arm is not a controlled budget comparison"
+  ],
+  "limits": [
+    "one arm (B0), one training seed (0), one budget triple (1k/5k/20k): no variance estimate, so budget cannot be fully separated from seed noise",
+    "52,500 round-2 decisions from a single DAgger round; at 20,000 steps the DAgger stream is replayed ~40x and the S1 stream 12x, so the extra budget is repetition rather than new state coverage",
+    "in-sample train metrics; there is no held-out offline evaluation",
+    "dev episodes are the 20 dev seeds only (1000-1019); G410-2 is not measured",
+    "wall time and samples/s are not comparable with the 1k/5k arms, which ran while a G410-1 teacher batch shared the 20-core host; the 20k run had the host to itself",
+    "the two nvidia-smi lines in run_train.sh and run_eval.sh logged a format error (a dropped trailing character in the driver scripts); both drivers exited 0 and GPU evidence therefore comes from the train_run.json gpu block, not from the log header"
+  ],
+  "deterministic_continuation": {
+    "replayable": true,
+    "why": "same 15 shards + same tolerance + same seeds/optimiser/device; the labels are byte-identical to the 5k run and the training seed is 0, so the first 5,000 steps of this run should reproduce the WP05.8 model",
+    "prefix_5k_replay": {
+      "blocks_compared": 50,
+      "max_abs_loss_diff": 0.0,
+      "exact_prefix_replay": true,
+      "note": "the first 50 blocks (steps 1-5,000) should be identical to the WP05.8 5k run because labels, seed, mix and device are identical; this is a determinism observation, not a build gate"
+    },
+    "not_replayable": [
+      "wall clock",
+      "GPU utilisation",
+      "any dev episode timing"
+    ]
+  }
+}

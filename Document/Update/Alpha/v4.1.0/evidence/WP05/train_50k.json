@@ -1,0 +1,2205 @@
+{
+  "schema": "v410-wp05-dagger-train-50k/1",
+  "kind": "dagger-train-50k",
+  "wp": "WP05.5",
+  "version": "4.1.0",
+  "generated_at": "2026-11-13T01:03:41Z",
+  "tool": "python -m touhou_rl.v410.dagger.train train (WP05.3 CLI, read-only use)",
+  "argv": [
+    "train",
+    "--steps",
+    "1000",
+    "--batch-size",
+    "128",
+    "--seed",
+    "0",
+    "--s1-share",
+    "0.2",
+    "--device",
+    "auto",
+    "--shard-seeds",
+    "2000-2010,2020-2023",
+    "--shards-root",
+    ".tmp_v410_wp05_round1/shards",
+    "--labels-dir",
+    ".tmp_v410_wp05_train50k/labels",
+    "--workdir",
+    ".tmp_v410_wp05_train50k",
+    "--out",
+    ".tmp_v410_wp05_train50k/train_run.json"
+  ],
+  "exit_code": 0,
+  "purpose": "retrain the WP05.3 B0 student under the identical fixed budget on all 15 complete DAgger shards (52,500 decisions >= 50k) and run the 20 dev episodes on the same S1N ruler; a controlled descriptive comparison with the 21k WP05.3 checkpoint, not G410-2",
+  "inputs": {
+    "shards_root": ".tmp_v410_wp05_round1/shards",
+    "complete_shard_seeds": [
+      2000,
+      2001,
+      2002,
+      2003,
+      2004,
+      2005,
+      2006,
+      2007,
+      2008,
+      2009,
+      2010,
+      2020,
+      2021,
+      2022,
+      2023
+    ],
+    "shard_count": 15,
+    "labels_dir": ".tmp_v410_wp05_train50k/labels",
+    "s1_audit": "Document/Update/Alpha/v4.1.0/evidence/WP03/s1c_full_audit.json",
+    "s1_train_seeds": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14
+    ],
+    "val_read": false,
+    "test_read": false,
+    "confirm_split_read": false,
+    "shard_selection": {
+      "acted_at": "2026-11-13T08:52+08:00",
+      "used": 15,
+      "note": "the 15 shards above were the complete batch when the conversion was enumerated (52,500 decisions >= 50,000). Shard dagger-s0d1seed2024 of batch B finished at 2026-11-13T08:53:54+08:00, after the labels and the seed list were fixed, so it is not part of this run; it would add 3,500 decisions (56,000 total) and is recorded here for transparency only",
+      "completed_during_run": [
+        {
+          "seed": 2024,
+          "decisions": 3500,
+          "frames": 7000,
+          "used": false
+        }
+      ]
+    }
+  },
+  "conversion": {
+    "cli": "python -m touhou_rl.v410.dagger.labels",
+    "tolerance": 8.0,
+    "horizon": 32,
+    "per_shard": [
+      {
+        "seed": 2000,
+        "exit_code": 0,
+        "seconds": 1.29
+      },
+      {
+        "seed": 2001,
+        "exit_code": 0,
+        "seconds": 1.25
+      },
+      {
+        "seed": 2002,
+        "exit_code": 0,
+        "seconds": 1.19
+      },
+      {
+        "seed": 2003,
+        "exit_code": 0,
+        "seconds": 1.27
+      },
+      {
+        "seed": 2004,
+        "exit_code": 0,
+        "seconds": 1.23
+      },
+      {
+        "seed": 2005,
+        "exit_code": 0,
+        "seconds": 1.17
+      },
+      {
+        "seed": 2006,
+        "exit_code": 0,
+        "seconds": 1.15
+      },
+      {
+        "seed": 2007,
+        "exit_code": 0,
+        "seconds": 1.15
+      },
+      {
+        "seed": 2008,
+        "exit_code": 0,
+        "seconds": 1.19
+      },
+      {
+        "seed": 2009,
+        "exit_code": 0,
+        "seconds": 1.15
+      },
+      {
+        "seed": 2010,
+        "exit_code": 0,
+        "seconds": 1.17
+      },
+      {
+        "seed": 2020,
+        "exit_code": 0,
+        "seconds": 1.2
+      },
+      {
+        "seed": 2021,
+        "exit_code": 0,
+        "seconds": 1.14
+      },
+      {
+        "seed": 2022,
+        "exit_code": 0,
+        "seconds": 1.19
+      },
+      {
+        "seed": 2023,
+        "exit_code": 0,
+        "seconds": 1.17
+      }
+    ],
+    "all_exit_zero": true,
+    "log": ".tmp_v410_wp05_train50k\\logs\\convert_summary.txt"
+  },
+  "shards": [
+    {
+      "shard": "dagger-s0d1seed2000",
+      "seed": 2000,
+      "decisions": 3500,
+      "frames": 7000,
+      "alive": 3492,
+      "dead": 0,
+      "unknown": 8,
+      "injected": 3500,
+      "agreement": 2333,
+      "disagreement": 1167,
+      "labels_sha256": "3494caa65470c2c9abcad4baeea234446ca789627eda69fad2b0fdc4f21b4cf2",
+      "labels_sha_verified": true,
+      "obs_sha_verified": true
+    },
+    {
+      "shard": "dagger-s0d1seed2001",
+      "seed": 2001,
+      "decisions": 3500,
+      "frames": 7000,
+      "alive": 3494,
+      "dead": 0,
+      "unknown": 6,
+      "injected": 3500,
+      "agreement": 2387,
+      "disagreement": 1113,
+      "labels_sha256": "196c7a97d39a557188e6b266a88bc79a650238e175623405a754e6dd35aaa104",
+      "labels_sha_verified": true,
+      "obs_sha_verified": true
+    },
+    {
+      "shard": "dagger-s0d1seed2002",
+      "seed": 2002,
+      "decisions": 3500,
+      "frames": 7000,
+      "alive": 3497,
+      "dead": 0,
+      "unknown": 3,
+      "injected": 3500,
+      "agreement": 2378,
+      "disagreement": 1122,
+      "labels_sha256": "f82d3954b03db78262558c7f592c808571f0b018c314ac59fe9525eab6510209",
+      "labels_sha_verified": true,
+      "obs_sha_verified": true
+    },
+    {
+      "shard": "dagger-s0d1seed2003",
+      "seed": 2003,
+      "decisions": 3500,
+      "frames": 7000,
+      "alive": 3492,
+      "dead": 0,
+      "unknown": 8,
+      "injected": 3500,
+      "agreement": 2409,
+      "disagreement": 1091,
+      "labels_sha256": "286b76dd37c4d422f23dc87079dc011204b40b409955a41b1af3114e3836db5e",
+      "labels_sha_verified": true,
+      "obs_sha_verified": true
+    },
+    {
+      "shard": "dagger-s0d1seed2004",
+      "seed": 2004,
+      "decisions": 3500,
+      "frames": 7000,
+      "alive": 3492,
+      "dead": 0,
+      "unknown": 8,
+      "injected": 3500,
+      "agreement": 2468,
+      "disagreement": 1032,
+      "labels_sha256": "1a9b09b9594b7f5192516919d279c57202c363fd9b407a25d6bf6abe4385e614",
+      "labels_sha_verified": true,
+      "obs_sha_verified": true
+    },
+    {
+      "shard": "dagger-s0d1seed2005",
+      "seed": 2005,
+      "decisions": 3500,
+      "frames": 7000,
+      "alive": 3496,
+      "dead": 0,
+      "unknown": 4,
+      "injected": 3500,
+      "agreement": 2469,
+      "disagreement": 1031,
+      "labels_sha256": "fcd9c162db4e191ec18d5a9b92cdbb12a8ca39853cf8513a84cea2aa8e5bb273",
+      "labels_sha_verified": true,
+      "obs_sha_verified": true
+    },
+    {
+      "shard": "dagger-s0d1seed2006",
+      "seed": 2006,
+      "decisions": 3500,
+      "frames": 7000,
+      "alive": 3491,
+      "dead": 0,
+      "unknown": 9,
+      "injected": 3500,
+      "agreement": 2462,
+      "disagreement": 1038,
+      "labels_sha256": "8cbd3cf4255dca221bd497fbbf6f500bf40dec9028dcb7765476a9080ede418c",
+      "labels_sha_verified": true,
+      "obs_sha_verified": true
+    },
+    {
+      "shard": "dagger-s0d1seed2007",
+      "seed": 2007,
+      "decisions": 3500,
+      "frames": 7000,
+      "alive": 3497,
+      "dead": 0,
+      "unknown": 3,
+      "injected": 3500,
+      "agreement": 2454,
+      "disagreement": 1046,
+      "labels_sha256": "aac97e5d3b40dfb3fcfced6e116a0f528b071fb7f218d72dbab21d66a3a4aaf0",
+      "labels_sha_verified": true,
+      "obs_sha_verified": true
+    },
+    {
+      "shard": "dagger-s0d1seed2008",
+      "seed": 2008,
+      "decisions": 3500,
+      "frames": 7000,
+      "alive": 3496,
+      "dead": 0,
+      "unknown": 4,
+      "injected": 3500,
+      "agreement": 2480,
+      "disagreement": 1020,
+      "labels_sha256": "e1be87c729d09acfc18fa6ed562af44d0b6419cf7c98d4fb42baa0cc3272fb7c",
+      "labels_sha_verified": true,
+      "obs_sha_verified": true
+    },
+    {
+      "shard": "dagger-s0d1seed2009",
+      "seed": 2009,
+      "decisions": 3500,
+      "frames": 7000,
+      "alive": 3492,
+      "dead": 0,
+      "unknown": 8,
+      "injected": 3500,
+      "agreement": 2375,
+      "disagreement": 1125,
+      "labels_sha256": "212613a2114243665bbce14b93d77016c5065f3e5531d5aa6bb26a1b5d087a08",
+      "labels_sha_verified": true,
+      "obs_sha_verified": true
+    },
+    {
+      "shard": "dagger-s0d1seed2010",
+      "seed": 2010,
+      "decisions": 3500,
+      "frames": 7000,
+      "alive": 3497,
+      "dead": 0,
+      "unknown": 3,
+      "injected": 3500,
+      "agreement": 2344,
+      "disagreement": 1156,
+      "labels_sha256": "41158a4af218eefa9b4c93f095b12a39c8e54e0c4b90e41485307e8e54b51e19",
+      "labels_sha_verified": true,
+      "obs_sha_verified": true
+    },
+    {
+      "shard": "dagger-s0d1seed2020",
+      "seed": 2020,
+      "decisions": 3500,
+      "frames": 7000,
+      "alive": 3495,
+      "dead": 0,
+      "unknown": 5,
+      "injected": 3500,
+      "agreement": 2385,
+      "disagreement": 1115,
+      "labels_sha256": "3fcc824c79b2ec5649d4113b6120ee2ff463b741f73c4cfc0ab07019530b80c7",
+      "labels_sha_verified": true,
+      "obs_sha_verified": true
+    },
+    {
+      "shard": "dagger-s0d1seed2021",
+      "seed": 2021,
+      "decisions": 3500,
+      "frames": 7000,
+      "alive": 3494,
+      "dead": 0,
+      "unknown": 6,
+      "injected": 3500,
+      "agreement": 2434,
+      "disagreement": 1066,
+      "labels_sha256": "2637e913636d39c567e3cb1fbe68d5b594e668e7584ecf856a7883f5e52477e0",
+      "labels_sha_verified": true,
+      "obs_sha_verified": true
+    },
+    {
+      "shard": "dagger-s0d1seed2022",
+      "seed": 2022,
+      "decisions": 3500,
+      "frames": 7000,
+      "alive": 3496,
+      "dead": 0,
+      "unknown": 4,
+      "injected": 3500,
+      "agreement": 2446,
+      "disagreement": 1054,
+      "labels_sha256": "c938ec2457e4953e27aa1eff82b5eb708f902973f5b140f5f4309fa156091975",
+      "labels_sha_verified": true,
+      "obs_sha_verified": true
+    },
+    {
+      "shard": "dagger-s0d1seed2023",
+      "seed": 2023,
+      "decisions": 3500,
+      "frames": 7000,
+      "alive": 3495,
+      "dead": 0,
+      "unknown": 5,
+      "injected": 3500,
+      "agreement": 2275,
+      "disagreement": 1225,
+      "labels_sha256": "55e9514727b1e139510efbac65d8f680ba49246ba0a15731318146687722b2e4",
+      "labels_sha_verified": true,
+      "obs_sha_verified": true
+    }
+  ],
+  "decisions": 52500,
+  "frames": 105000,
+  "labels": {
+    "schema": "v410-wp05-dagger-labels-aggregate/1",
+    "totals": {
+      "shards": 15,
+      "decisions": 52500,
+      "frames": 105000,
+      "alive": 52416,
+      "dead": 0,
+      "unknown": 84,
+      "model_mismatch": 84,
+      "injected": 52500,
+      "agreement": 36099,
+      "disagreement": 16401,
+      "verified_candidates": 52500,
+      "candidate_grid": 945000,
+      "candidate_coverage": 0.05555555555555555,
+      "agreement_rate": 0.6876,
+      "tolerance": [
+        8.0
+      ],
+      "horizon": [
+        32
+      ]
+    }
+  },
+  "data": {
+    "s1_train": {
+      "source": "s1_train",
+      "samples": 46397,
+      "seeds": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14
+      ],
+      "shards": [
+        "d1-s0d1-n3371-seed1-shard",
+        "d1-s0d1-n3371-seed2-shard",
+        "d1-s0d1-n3371-seed3-shard",
+        "d1-s0d1-n3371-seed4-shard",
+        "d1-s0d1-n3371-seed5-shard",
+        "d1-s0d1-n3371-seed6-shard",
+        "d1-s0d1-n3371-seed7-shard",
+        "d1-s0d1-n3371-seed8-shard",
+        "d1-s0d1-n3300-seed9-shard",
+        "d1-s0d1-n3300-seed10-shard",
+        "d1-s0d1-n3300-seed11-shard",
+        "d1-s0d1-n3300-seed12-shard",
+        "d1-s0d1-n3300-seed13-shard",
+        "d1-s0d1-n3300-seed14-shard"
+      ],
+      "target_counts": {
+        "0": 20394,
+        "1": 1081,
+        "2": 4049,
+        "3": 4660,
+        "4": 974,
+        "5": 567,
+        "6": 3165,
+        "7": 3300,
+        "8": 520,
+        "10": 126,
+        "11": 2834,
+        "12": 3192,
+        "13": 328,
+        "14": 78,
+        "15": 535,
+        "16": 385,
+        "17": 209
+      },
+      "majority_baseline_top1": 0.43955428152682285
+    },
+    "dagger": {
+      "source": "dagger",
+      "samples": 52500,
+      "seeds": [
+        2000,
+        2001,
+        2002,
+        2003,
+        2004,
+        2005,
+        2006,
+        2007,
+        2008,
+        2009,
+        2010,
+        2020,
+        2021,
+        2022,
+        2023
+      ],
+      "shards": [
+        "dagger-s0d1seed2000",
+        "dagger-s0d1seed2001",
+        "dagger-s0d1seed2002",
+        "dagger-s0d1seed2003",
+        "dagger-s0d1seed2004",
+        "dagger-s0d1seed2005",
+        "dagger-s0d1seed2006",
+        "dagger-s0d1seed2007",
+        "dagger-s0d1seed2008",
+        "dagger-s0d1seed2009",
+        "dagger-s0d1seed2010",
+        "dagger-s0d1seed2020",
+        "dagger-s0d1seed2021",
+        "dagger-s0d1seed2022",
+        "dagger-s0d1seed2023"
+      ],
+      "target_counts": {
+        "0": 36149,
+        "1": 440,
+        "2": 1430,
+        "3": 4723,
+        "4": 430,
+        "5": 350,
+        "6": 1620,
+        "7": 4622,
+        "8": 394,
+        "10": 37,
+        "11": 629,
+        "12": 606,
+        "13": 164,
+        "14": 55,
+        "15": 470,
+        "16": 305,
+        "17": 76
+      },
+      "majority_baseline_top1": 0.6885523809523809
+    },
+    "split": {
+      "train_seeds": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14
+      ],
+      "val_seeds": [
+        15,
+        16,
+        17
+      ],
+      "test_seeds": [
+        18,
+        19,
+        20
+      ],
+      "train_only": true,
+      "val_read": false,
+      "test_read": false
+    },
+    "note": "per-shard label diagnostics are kept in .tmp_v410_wp05_train50k/train_run.json"
+  },
+  "mix": {
+    "nominal": {
+      "s1": 0.2,
+      "dagger": 0.8
+    },
+    "rule": "per-step cumulative allocation floor((step+1)*steps*batch*share) - floor(step*steps*batch*share) S1 rows; per-sample loss weight 1.0; the batch order is shuffled per step, so the mix is the only source signal",
+    "realized": {
+      "steps": 1000,
+      "batch_size": 128,
+      "samples": 128000,
+      "s1_samples": 25600,
+      "dagger_samples": 102400,
+      "s1_share": 0.2,
+      "dagger_share": 0.8,
+      "s1_rows_per_step": {
+        "25": 400,
+        "26": 600
+      },
+      "sample_weight": 1.0,
+      "s1_stream_epochs": 1,
+      "dagger_stream_epochs": 2
+    },
+    "dataset": {
+      "s1_rows": 46397,
+      "dagger_rows": 52500
+    }
+  },
+  "model": {
+    "arm": "B0",
+    "class": "touhou_rl.v410.student.diagnostics.ProbeNet",
+    "config": {
+      "play_width": 24,
+      "hud_width": 16,
+      "hist_hidden": 64,
+      "readout": 128,
+      "trunk": 128,
+      "groups": 8
+    },
+    "parameters": 731802,
+    "pinned_parameters": 731802
+  },
+  "budget": {
+    "steps": 1000,
+    "batch_size": 128,
+    "optimizer": "AdamW",
+    "lr": 0.0003,
+    "weight_decay": 0.0001,
+    "grad_clip": 5.0,
+    "seed": 0,
+    "epochs": 1,
+    "steps_per_epoch": 1000
+  },
+  "train": {
+    "metrics": {
+      "loss": 0.8336316267251969,
+      "top1": 0.757921875,
+      "macro_recall": 0.20809347262650604,
+      "macro_recall_classes": 17,
+      "samples": 128000,
+      "steps": 1000,
+      "loss_first_step": 2.9041361808776855,
+      "loss_last_step": 0.5241942405700684,
+      "loss_first_100": 1.4550668036937713,
+      "loss_last_100": 0.6306872072815896,
+      "per_source": {
+        "s1": {
+          "samples": 25600,
+          "loss": 1.6632098614424466,
+          "top1": 0.496875,
+          "macro_recall": 0.12680882932728627,
+          "majority_baseline_top1": 0.4382421875,
+          "per_class_recall": {
+            "0": 0.9134503966485427,
+            "1": 0.006745362563237774,
+            "2": 0.09001343484102105,
+            "3": 0.3457653457653458,
+            "4": 0.00558659217877095,
+            "5": 0.009316770186335404,
+            "6": 0.07472903593839134,
+            "7": 0.4849480021893815,
+            "8": 0.020833333333333332,
+            "10": 0.0,
+            "11": 0.07532956685499058,
+            "12": 0.12903225806451613,
+            "13": 0.0,
+            "14": 0.0,
+            "15": 0.0,
+            "16": 0.0,
+            "17": 0.0
+          }
+        },
+        "dagger": {
+          "samples": 102400,
+          "loss": 0.6262370674870908,
+          "top1": 0.82318359375,
+          "macro_recall": 0.23843912103738496,
+          "majority_baseline_top1": 0.689052734375,
+          "per_class_recall": {
+            "0": 0.9751980611970125,
+            "1": 0.10785463071512309,
+            "2": 0.22746935832732515,
+            "3": 0.7094184027777778,
+            "4": 0.07894736842105263,
+            "5": 0.07111756168359942,
+            "6": 0.2612270714737508,
+            "7": 0.7365549493374902,
+            "8": 0.14434330299089726,
+            "10": 0.0,
+            "11": 0.08660130718954248,
+            "12": 0.0935374149659864,
+            "13": 0.134375,
+            "14": 0.0,
+            "15": 0.13557483731019523,
+            "16": 0.29124579124579125,
+            "17": 0.0
+          }
+        }
+      },
+      "blocks": [
+        {
+          "steps": [
+            1,
+            100
+          ],
+          "count": 100,
+          "loss": 1.4550668036937713,
+          "per_source": {
+            "s1": {
+              "samples": 2560,
+              "loss": 2.1250148341059685,
+              "top1": 0.428515625,
+              "macro_recall": 0.06134326100706762
+            },
+            "dagger": {
+              "samples": 10240,
+              "loss": 1.28757980838418,
+              "top1": 0.67509765625,
+              "macro_recall": 0.061975964375207436
+            }
+          }
+        },
+        {
+          "steps": [
+            101,
+            200
+          ],
+          "count": 100,
+          "loss": 1.0035753059387207,
+          "per_source": {
+            "s1": {
+              "samples": 2560,
+              "loss": 1.8596420399844646,
+              "top1": 0.44921875,
+              "macro_recall": 0.08632221201456666
+            },
+            "dagger": {
+              "samples": 10240,
+              "loss": 0.7895586211234331,
+              "top1": 0.7765625,
+              "macro_recall": 0.12269205662853973
+            }
+          }
+        },
+        {
+          "steps": [
+            201,
+            300
+          ],
+          "count": 100,
+          "loss": 0.8715965408086777,
+          "per_source": {
+            "s1": {
+              "samples": 2560,
+              "loss": 1.6848586685955524,
+              "top1": 0.487890625,
+              "macro_recall": 0.1065025581114567
+            },
+            "dagger": {
+              "samples": 10240,
+              "loss": 0.6682809997349978,
+              "top1": 0.80419921875,
+              "macro_recall": 0.14888574085338016
+            }
+          }
+        },
+        {
+          "steps": [
+            301,
+            400
+          ],
+          "count": 100,
+          "loss": 0.8362336349487305,
+          "per_source": {
+            "s1": {
+              "samples": 2560,
+              "loss": 1.6400291748344897,
+              "top1": 0.48984375,
+              "macro_recall": 0.11939780098104738
+            },
+            "dagger": {
+              "samples": 10240,
+              "loss": 0.6352847589179873,
+              "top1": 0.8130859375,
+              "macro_recall": 0.18563256736670208
+            }
+          }
+        },
+        {
+          "steps": [
+            401,
+            500
+          ],
+          "count": 100,
+          "loss": 0.7855151122808457,
+          "per_source": {
+            "s1": {
+              "samples": 2560,
+              "loss": 1.585377285629511,
+              "top1": 0.504296875,
+              "macro_recall": 0.1271036293521227
+            },
+            "dagger": {
+              "samples": 10240,
+              "loss": 0.5855495598167181,
+              "top1": 0.8271484375,
+              "macro_recall": 0.20103065224212757
+            }
+          }
+        },
+        {
+          "steps": [
+            501,
+            600
+          ],
+          "count": 100,
+          "loss": 0.7427218848466873,
+          "per_source": {
+            "s1": {
+              "samples": 2560,
+              "loss": 1.5942779920995236,
+              "top1": 0.501953125,
+              "macro_recall": 0.130150890601806
+            },
+            "dagger": {
+              "samples": 10240,
+              "loss": 0.5298328539356589,
+              "top1": 0.84462890625,
+              "macro_recall": 0.24503646531204804
+            }
+          }
+        },
+        {
+          "steps": [
+            601,
+            700
+          ],
+          "count": 100,
+          "loss": 0.6872369664907455,
+          "per_source": {
+            "s1": {
+              "samples": 2560,
+              "loss": 1.5448017209768294,
+              "top1": 0.523046875,
+              "macro_recall": 0.14558745849209231
+            },
+            "dagger": {
+              "samples": 10240,
+              "loss": 0.4728457799181342,
+              "top1": 0.8607421875,
+              "macro_recall": 0.2903343597080984
+            }
+          }
+        },
+        {
+          "steps": [
+            701,
+            800
+          ],
+          "count": 100,
+          "loss": 0.6619869104027748,
+          "per_source": {
+            "s1": {
+              "samples": 2560,
+              "loss": 1.5319538943469524,
+              "top1": 0.53125,
+              "macro_recall": 0.14904323324067068
+            },
+            "dagger": {
+              "samples": 10240,
+              "loss": 0.4444951552897692,
+              "top1": 0.86767578125,
+              "macro_recall": 0.3135438772986858
+            }
+          }
+        },
+        {
+          "steps": [
+            801,
+            900
+          ],
+          "count": 100,
+          "loss": 0.661695910692215,
+          "per_source": {
+            "s1": {
+              "samples": 2560,
+              "loss": 1.5617238007485867,
+              "top1": 0.519921875,
+              "macro_recall": 0.16285419715404165
+            },
+            "dagger": {
+              "samples": 10240,
+              "loss": 0.4366889363154769,
+              "top1": 0.8759765625,
+              "macro_recall": 0.37923293835205074
+            }
+          }
+        },
+        {
+          "steps": [
+            901,
+            1000
+          ],
+          "count": 100,
+          "loss": 0.6306872072815896,
+          "per_source": {
+            "s1": {
+              "samples": 2560,
+              "loss": 1.5044192031025887,
+              "top1": 0.5328125,
+              "macro_recall": 0.1747892755377567
+            },
+            "dagger": {
+              "samples": 10240,
+              "loss": 0.41225420143455266,
+              "top1": 0.88671875,
+              "macro_recall": 0.4313390790722164
+            }
+          }
+        }
+      ],
+      "confusion_matrix": [
+        [
+          79057,
+          11,
+          250,
+          987,
+          25,
+          21,
+          296,
+          889,
+          11,
+          0,
+          107,
+          47,
+          50,
+          4,
+          0,
+          2,
+          20,
+          1
+        ],
+        [
+          858,
+          96,
+          106,
+          167,
+          9,
+          1,
+          55,
+          118,
+          25,
+          0,
+          2,
+          2,
+          3,
+          0,
+          0,
+          2,
+          2,
+          0
+        ],
+        [
+          2648,
+          9,
+          832,
+          974,
+          11,
+          1,
+          105,
+          312,
+          2,
+          0,
+          5,
+          29,
+          77,
+          1,
+          0,
+          1,
+          0,
+          0
+        ],
+        [
+          3614,
+          1,
+          201,
+          7428,
+          40,
+          2,
+          105,
+          333,
+          3,
+          0,
+          17,
+          10,
+          32,
+          2,
+          0,
+          1,
+          1,
+          0
+        ],
+        [
+          833,
+          2,
+          57,
+          267,
+          69,
+          6,
+          36,
+          69,
+          4,
+          0,
+          2,
+          6,
+          16,
+          4,
+          0,
+          1,
+          1,
+          0
+        ],
+        [
+          717,
+          4,
+          25,
+          66,
+          12,
+          52,
+          47,
+          55,
+          4,
+          0,
+          3,
+          4,
+          3,
+          1,
+          0,
+          0,
+          18,
+          0
+        ],
+        [
+          2429,
+          9,
+          172,
+          354,
+          7,
+          3,
+          957,
+          893,
+          9,
+          0,
+          7,
+          19,
+          47,
+          1,
+          0,
+          0,
+          8,
+          0
+        ],
+        [
+          2599,
+          3,
+          74,
+          379,
+          9,
+          3,
+          141,
+          7501,
+          44,
+          0,
+          16,
+          8,
+          6,
+          0,
+          0,
+          4,
+          21,
+          0
+        ],
+        [
+          395,
+          7,
+          29,
+          38,
+          0,
+          0,
+          44,
+          416,
+          117,
+          0,
+          0,
+          2,
+          2,
+          0,
+          0,
+          1,
+          6,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          88,
+          0,
+          2,
+          35,
+          1,
+          0,
+          6,
+          7,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          1854,
+          10,
+          157,
+          222,
+          13,
+          2,
+          98,
+          164,
+          0,
+          0,
+          3,
+          226,
+          32,
+          1,
+          0,
+          21,
+          14,
+          0
+        ],
+        [
+          1912,
+          2,
+          147,
+          224,
+          25,
+          2,
+          124,
+          123,
+          4,
+          0,
+          3,
+          22,
+          338,
+          0,
+          0,
+          3,
+          14,
+          0
+        ],
+        [
+          258,
+          0,
+          18,
+          94,
+          6,
+          2,
+          36,
+          19,
+          1,
+          0,
+          0,
+          6,
+          2,
+          43,
+          0,
+          3,
+          4,
+          0
+        ],
+        [
+          82,
+          2,
+          8,
+          19,
+          0,
+          0,
+          6,
+          12,
+          0,
+          0,
+          1,
+          0,
+          1,
+          0,
+          0,
+          0,
+          22,
+          0
+        ],
+        [
+          735,
+          2,
+          35,
+          132,
+          4,
+          1,
+          39,
+          124,
+          5,
+          0,
+          2,
+          10,
+          1,
+          7,
+          0,
+          125,
+          3,
+          0
+        ],
+        [
+          368,
+          2,
+          26,
+          38,
+          8,
+          5,
+          44,
+          71,
+          20,
+          0,
+          2,
+          6,
+          3,
+          0,
+          0,
+          11,
+          173,
+          0
+        ],
+        [
+          156,
+          2,
+          6,
+          18,
+          2,
+          0,
+          8,
+          59,
+          13,
+          0,
+          0,
+          1,
+          0,
+          1,
+          0,
+          0,
+          3,
+          0
+        ]
+      ],
+      "confusion_matrix_orientation": "rows = target action, columns = predicted action",
+      "majority_baseline_top1": 0.638890625,
+      "per_class_recall": {
+        "0": 0.9667269925896941,
+        "1": 0.06639004149377593,
+        "2": 0.16616736568803675,
+        "3": 0.6300254452926208,
+        "4": 0.050254916241806266,
+        "5": 0.051434223541048464,
+        "6": 0.19471007121057987,
+        "7": 0.6940229459659512,
+        "8": 0.11069063386944182,
+        "10": 0.0,
+        "11": 0.08022719204827831,
+        "12": 0.11484879374787632,
+        "13": 0.08739837398373984,
+        "14": 0.0,
+        "15": 0.10204081632653061,
+        "16": 0.22265122265122264,
+        "17": 0.0
+      },
+      "label_rule": {
+        "target": "one_hot(chosen_plan.first_action) cross entropy (B0)",
+        "unknown_used_as_negative": false,
+        "rows_without_target": {
+          "s1": 0,
+          "dagger": 0
+        },
+        "note": "chosen one-hot CE only; the other 17 logits appear solely in the softmax denominator"
+      }
+    },
+    "grad_norm": {
+      "preclip_mean": 1.816828872924458,
+      "preclip_max": 4.512030818237798,
+      "postclip_mean": 1.816828872924458,
+      "postclip_max": 4.512030818237798,
+      "clip": 5.0
+    },
+    "throughput": {
+      "steps": 1000,
+      "samples_seen": 128000,
+      "train_seconds": 60.6024,
+      "samples_per_second": 2112.13,
+      "steps_per_second": 16.5,
+      "data_seconds": 33.749,
+      "data_fraction": 0.5569,
+      "median_step_seconds": 0.0598,
+      "max_step_seconds": 0.7157,
+      "first_step_seconds": 0.7157
+    },
+    "gpu": {
+      "device": "cuda",
+      "cuda": true,
+      "device_name": "NVIDIA GeForce RTX 4070 SUPER",
+      "max_memory_allocated_mib": 252.11,
+      "max_memory_reserved_mib": 434.0,
+      "total_memory_mib": 12281.5,
+      "peak_memory_note": "torch.cuda.max_memory_{allocated,reserved} over this run; reset immediately before the first step"
+    },
+    "elapsed_seconds": 69.0228
+  },
+  "checkpoint": {
+    "path": ".tmp_v410_wp05_train50k\\b0_s0_dagger_step1000.pt",
+    "bytes": 2941187,
+    "sha256": "6ebe4ea91d81d9333bfa1ccc065fc3515bb25b1d3b90a2684cdaa8a0a69b8086",
+    "schema": "v410-wp04-bc-arm-checkpoint/1",
+    "arm": "B0",
+    "parameters": 731802,
+    "format": "torch.save (schema v410-wp04-bc-arm-checkpoint/1)",
+    "in_repo": false
+  },
+  "commands": [
+    {
+      "step": "enumerate complete shards",
+      "command": "Get-ChildItem .tmp_v410_wp05_round1/shards -Directory | shard.json -> complete/decisions/frames",
+      "exit_code": 0,
+      "result": "15 complete=true shards, 3,500 decisions / 7,000 frames each"
+    },
+    {
+      "step": "convert 15 shards with the WP05.2 CLI",
+      "command": "python -m touhou_rl.v410.dagger.labels --shard .tmp_v410_wp05_round1/shards/dagger-s0d1seed<seed> --out .tmp_v410_wp05_train50k/labels/dagger-s0d1seed<seed> --tolerance 8.0",
+      "exit_code": 0,
+      "results": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "step": "train B0 (WP05.3 budget, 15 shards)",
+      "command": "python -m touhou_rl.v410.dagger.train train --steps 1000 --batch-size 128 --seed 0 --s1-share 0.2 --device auto --shard-seeds 2000-2010,2020-2023 --shards-root .tmp_v410_wp05_round1/shards --labels-dir .tmp_v410_wp05_train50k/labels --workdir .tmp_v410_wp05_train50k --out .tmp_v410_wp05_train50k/train_run.json",
+      "exit_code": 0,
+      "elapsed_seconds": 71.9,
+      "log": ".tmp_v410_wp05_train50k\\logs\\train.log"
+    },
+    {
+      "step": "dev dry run (wiring only)",
+      "command": "wsl xvfb-run ... v410_student_eval.py --checkpoint .tmp_v410_wp05_train50k/b0_s0_dagger_step1000.pt --seeds 1000 --max-frames 60 --stop-on-death --out .tmp_v410_wp05_train50k/dryrun_eval.json",
+      "exit_code": 0
+    },
+    {
+      "step": "20 dev episodes (real engine, seeds 1000-1019)",
+      "command": "bash .tmp_v410_wp05_train50k/logs/run_eval20.sh  ->  wsl xvfb-run -a -s \"-screen 0 1024x768x24\" /root/v400-venv/bin/python tools/rl/v410_student_eval.py --engine /root/Touhou_RL/third_party/th08-rl/build/rl_v3/th08-modern --data-dir /root/v400-data/game --checkpoint .tmp_v410_wp05_train50k/b0_s0_dagger_step1000.pt --seeds 1000-1019 --stage 0 --difficulty normal --max-frames 19887 --stop-on-death --out .tmp_v410_wp05_train50k/eval_dev20.json",
+      "exit_code": 0,
+      "log": ".tmp_v410_wp05_train50k\\logs\\eval_dev20.log"
+    }
+  ],
+  "dev_eval": {
+    "source": ".tmp_v410_wp05_train50k\\eval_dev20.json",
+    "schema": "v410-student-eval-smoke/1",
+    "engine": {
+      "path": "/root/Touhou_RL/third_party/th08-rl/build/rl_v3/th08-modern",
+      "sha256": "691bfd77b7eca3361aa8bb7af0977556a70cc73a070b29a2447222ba7a568ef6",
+      "role": "env (pixels + state)"
+    },
+    "suite": {
+      "name": "S1N",
+      "stage": 0,
+      "stage_argument_semantics": "RESET stage is 0-based; S1N = stage 0",
+      "difficulty": "normal",
+      "max_frames": 19887,
+      "stop_on_death": true,
+      "obs_window": "consecutive",
+      "window_alignment": {
+        "mode": "consecutive",
+        "frames_per_decision": 2,
+        "renders_per_decision": 2,
+        "stack_span_frames": 4,
+        "matches_training_obs": true,
+        "training_window": "the D410-S1 shards store frames[t-3..t], four consecutive game frames; one decision = two frames = two renders, so the stack is consecutive"
+      }
+    },
+    "seeds": [
+      1000,
+      1001,
+      1002,
+      1003,
+      1004,
+      1005,
+      1006,
+      1007,
+      1008,
+      1009,
+      1010,
+      1011,
+      1012,
+      1013,
+      1014,
+      1015,
+      1016,
+      1017,
+      1018,
+      1019
+    ],
+    "n": 20,
+    "summary": {
+      "n": 20,
+      "clears": 0,
+      "clear_rate": 0.0,
+      "frames_mean": 1643.25,
+      "frames_median": 1580.5,
+      "frames_min": 1261,
+      "frames_max": 2371,
+      "frames_sd": 315.635679,
+      "deaths_mean": 1.0,
+      "stop_reasons": {
+        "death_stop": 20
+      },
+      "errors": 0,
+      "decisions": 16436,
+      "idle_share_pooled": 0.720613,
+      "idle_share_by_episode_mean": 0.725544,
+      "unique_actions_mean": 8.8,
+      "actions_histogram": [
+        11844,
+        2,
+        404,
+        1609,
+        19,
+        7,
+        343,
+        1922,
+        3,
+        0,
+        0,
+        113,
+        104,
+        11,
+        0,
+        55,
+        0,
+        0
+      ],
+      "actions_labels": [
+        "idle",
+        "N",
+        "NE",
+        "E",
+        "SE",
+        "S",
+        "SW",
+        "W",
+        "NW",
+        "focus-idle",
+        "focus-N",
+        "focus-NE",
+        "focus-E",
+        "focus-SE",
+        "focus-S",
+        "focus-SW",
+        "focus-W",
+        "focus-NW"
+      ]
+    },
+    "episodes": [
+      {
+        "seed": 1000,
+        "frames": 1323,
+        "steps": 662,
+        "deaths": 1.0,
+        "score": 6858,
+        "stage_clear": false,
+        "stop_reason": "death_stop",
+        "wall_s": 19.819,
+        "error": null
+      },
+      {
+        "seed": 1001,
+        "frames": 1261,
+        "steps": 631,
+        "deaths": 1.0,
+        "score": 6217,
+        "stage_clear": false,
+        "stop_reason": "death_stop",
+        "wall_s": 19.192,
+        "error": null
+      },
+      {
+        "seed": 1002,
+        "frames": 1852,
+        "steps": 926,
+        "deaths": 1.0,
+        "score": 12531,
+        "stage_clear": false,
+        "stop_reason": "death_stop",
+        "wall_s": 26.065,
+        "error": null
+      },
+      {
+        "seed": 1003,
+        "frames": 1333,
+        "steps": 667,
+        "deaths": 1.0,
+        "score": 7087,
+        "stage_clear": false,
+        "stop_reason": "death_stop",
+        "wall_s": 20.308,
+        "error": null
+      },
+      {
+        "seed": 1004,
+        "frames": 1326,
+        "steps": 663,
+        "deaths": 1.0,
+        "score": 6888,
+        "stage_clear": false,
+        "stop_reason": "death_stop",
+        "wall_s": 20.209,
+        "error": null
+      },
+      {
+        "seed": 1005,
+        "frames": 1440,
+        "steps": 720,
+        "deaths": 1.0,
+        "score": 10428,
+        "stage_clear": false,
+        "stop_reason": "death_stop",
+        "wall_s": 21.217,
+        "error": null
+      },
+      {
+        "seed": 1006,
+        "frames": 1314,
+        "steps": 657,
+        "deaths": 1.0,
+        "score": 6817,
+        "stage_clear": false,
+        "stop_reason": "death_stop",
+        "wall_s": 19.858,
+        "error": null
+      },
+      {
+        "seed": 1007,
+        "frames": 1963,
+        "steps": 982,
+        "deaths": 1.0,
+        "score": 15499,
+        "stage_clear": false,
+        "stop_reason": "death_stop",
+        "wall_s": 26.499,
+        "error": null
+      },
+      {
+        "seed": 1008,
+        "frames": 1886,
+        "steps": 943,
+        "deaths": 1.0,
+        "score": 15606,
+        "stage_clear": false,
+        "stop_reason": "death_stop",
+        "wall_s": 25.428,
+        "error": null
+      },
+      {
+        "seed": 1009,
+        "frames": 1739,
+        "steps": 870,
+        "deaths": 1.0,
+        "score": 15186,
+        "stage_clear": false,
+        "stop_reason": "death_stop",
+        "wall_s": 24.237,
+        "error": null
+      },
+      {
+        "seed": 1010,
+        "frames": 1558,
+        "steps": 779,
+        "deaths": 1.0,
+        "score": 13328,
+        "stage_clear": false,
+        "stop_reason": "death_stop",
+        "wall_s": 22.415,
+        "error": null
+      },
+      {
+        "seed": 1011,
+        "frames": 1956,
+        "steps": 978,
+        "deaths": 1.0,
+        "score": 16374,
+        "stage_clear": false,
+        "stop_reason": "death_stop",
+        "wall_s": 26.289,
+        "error": null
+      },
+      {
+        "seed": 1012,
+        "frames": 1984,
+        "steps": 992,
+        "deaths": 1.0,
+        "score": 16995,
+        "stage_clear": false,
+        "stop_reason": "death_stop",
+        "wall_s": 27.012,
+        "error": null
+      },
+      {
+        "seed": 1013,
+        "frames": 1587,
+        "steps": 794,
+        "deaths": 1.0,
+        "score": 11679,
+        "stage_clear": false,
+        "stop_reason": "death_stop",
+        "wall_s": 22.93,
+        "error": null
+      },
+      {
+        "seed": 1014,
+        "frames": 1574,
+        "steps": 787,
+        "deaths": 1.0,
+        "score": 11513,
+        "stage_clear": false,
+        "stop_reason": "death_stop",
+        "wall_s": 22.388,
+        "error": null
+      },
+      {
+        "seed": 1015,
+        "frames": 1968,
+        "steps": 984,
+        "deaths": 1.0,
+        "score": 23984,
+        "stage_clear": false,
+        "stop_reason": "death_stop",
+        "wall_s": 27.182,
+        "error": null
+      },
+      {
+        "seed": 1016,
+        "frames": 1326,
+        "steps": 663,
+        "deaths": 1.0,
+        "score": 6888,
+        "stage_clear": false,
+        "stop_reason": "death_stop",
+        "wall_s": 20.223,
+        "error": null
+      },
+      {
+        "seed": 1017,
+        "frames": 1778,
+        "steps": 889,
+        "deaths": 1.0,
+        "score": 14646,
+        "stage_clear": false,
+        "stop_reason": "death_stop",
+        "wall_s": 24.764,
+        "error": null
+      },
+      {
+        "seed": 1018,
+        "frames": 2371,
+        "steps": 1186,
+        "deaths": 1.0,
+        "score": 24335,
+        "stage_clear": false,
+        "stop_reason": "death_stop",
+        "wall_s": 31.183,
+        "error": null
+      },
+      {
+        "seed": 1019,
+        "frames": 1326,
+        "steps": 663,
+        "deaths": 1.0,
+        "score": 6888,
+        "stage_clear": false,
+        "stop_reason": "death_stop",
+        "wall_s": 19.946,
+        "error": null
+      }
+    ],
+    "not_a_gate": true,
+    "not_a_development_score": true,
+    "not_g410_2": true,
+    "ci_reportable": false,
+    "note": "20 dev episodes on the real rl_v3 engine; clear_rate is not a pass rate and no interval is attached"
+  },
+  "comparison_21k": {
+    "reference": {
+      "source": "Document\\Update\\Alpha\\v4.1.0\\evidence\\WP05\\eval_dagger_20.json",
+      "checkpoint": {
+        "path": ".tmp_v410_wp05_train/b0_s0_dagger_step1000.pt",
+        "sha256": "e771314d736bf5bd4df0651cab9d9a9780aa067da3a7fbc892cd6ad5cec66824",
+        "schema": "v410-wp04-bc-arm-checkpoint/1",
+        "arm": "B0",
+        "family": "probe",
+        "model_class": "touhou_rl.v410.student.diagnostics.ProbeNet",
+        "model_config": {
+          "play_width": 24,
+          "hud_width": 16,
+          "hist_hidden": 64,
+          "readout": 128,
+          "trunk": 128,
+          "groups": 8
+        },
+        "parameters": 731802,
+        "parameters_pinned": 731802,
+        "bomb_head": false,
+        "bomb_aux_weight": 0.0,
+        "train_seed": 0,
+        "epochs": 1,
+        "last_epoch": 1,
+        "metrics": {
+          "train": {
+            "loss": 0.832415183365345,
+            "top1": 0.75490625,
+            "macro_recall": 0.20520753944431694,
+            "samples": 128000,
+            "steps": 1000
+          },
+          "val": {}
+        },
+        "role": "BC baseline (behaviour cloning), not an RL-trained policy"
+      },
+      "shards": [
+        {
+          "shard": "dagger-s0d1seed2000",
+          "seed": 2000,
+          "decisions": 3500,
+          "frames": 7000,
+          "alive": 3492,
+          "dead": 0,
+          "unknown": 8,
+          "injected": 3500,
+          "agreement": 2333,
+          "disagreement": 1167,
+          "labels_sha256": "3494caa65470c2c9abcad4baeea234446ca789627eda69fad2b0fdc4f21b4cf2",
+          "labels_sha_verified": true,
+          "obs_sha_verified": true
+        },
+        {
+          "shard": "dagger-s0d1seed2001",
+          "seed": 2001,
+          "decisions": 3500,
+          "frames": 7000,
+          "alive": 3494,
+          "dead": 0,
+          "unknown": 6,
+          "injected": 3500,
+          "agreement": 2387,
+          "disagreement": 1113,
+          "labels_sha256": "196c7a97d39a557188e6b266a88bc79a650238e175623405a754e6dd35aaa104",
+          "labels_sha_verified": true,
+          "obs_sha_verified": true
+        },
+        {
+          "shard": "dagger-s0d1seed2002",
+          "seed": 2002,
+          "decisions": 3500,
+          "frames": 7000,
+          "alive": 3497,
+          "dead": 0,
+          "unknown": 3,
+          "injected": 3500,
+          "agreement": 2378,
+          "disagreement": 1122,
+          "labels_sha256": "f82d3954b03db78262558c7f592c808571f0b018c314ac59fe9525eab6510209",
+          "labels_sha_verified": true,
+          "obs_sha_verified": true
+        },
+        {
+          "shard": "dagger-s0d1seed2003",
+          "seed": 2003,
+          "decisions": 3500,
+          "frames": 7000,
+          "alive": 3492,
+          "dead": 0,
+          "unknown": 8,
+          "injected": 3500,
+          "agreement": 2409,
+          "disagreement": 1091,
+          "labels_sha256": "286b76dd37c4d422f23dc87079dc011204b40b409955a41b1af3114e3836db5e",
+          "labels_sha_verified": true,
+          "obs_sha_verified": true
+        },
+        {
+          "shard": "dagger-s0d1seed2004",
+          "seed": 2004,
+          "decisions": 3500,
+          "frames": 7000,
+          "alive": 3492,
+          "dead": 0,
+          "unknown": 8,
+          "injected": 3500,
+          "agreement": 2468,
+          "disagreement": 1032,
+          "labels_sha256": "1a9b09b9594b7f5192516919d279c57202c363fd9b407a25d6bf6abe4385e614",
+          "labels_sha_verified": true,
+          "obs_sha_verified": true
+        },
+        {
+          "shard": "dagger-s0d1seed2005",
+          "seed": 2005,
+          "decisions": 3500,
+          "frames": 7000,
+          "alive": 3496,
+          "dead": 0,
+          "unknown": 4,
+          "injected": 3500,
+          "agreement": 2469,
+          "disagreement": 1031,
+          "labels_sha256": "fcd9c162db4e191ec18d5a9b92cdbb12a8ca39853cf8513a84cea2aa8e5bb273",
+          "labels_sha_verified": true,
+          "obs_sha_verified": true
+        }
+      ],
+      "decisions": 21000,
+      "frames": 42000,
+      "mix": {
+        "steps": 1000,
+        "batch_size": 128,
+        "samples": 128000,
+        "s1_samples": 25600,
+        "dagger_samples": 102400,
+        "s1_share": 0.2,
+        "dagger_share": 0.8,
+        "s1_rows_per_step": {
+          "25": 400,
+          "26": 600
+        },
+        "sample_weight": 1.0,
+        "s1_stream_epochs": 1,
+        "dagger_stream_epochs": 5
+      },
+      "train_metrics": {
+        "loss": 0.832415183365345,
+        "top1": 0.75490625,
+        "macro_recall": 0.20520753944431694,
+        "per_source": {
+          "s1": {
+            "samples": 25600,
+            "loss": 1.6730319502949715,
+            "top1": 0.4946875,
+            "macro_recall": 0.126455202323818,
+            "majority_baseline_top1": 0.4382421875
+          },
+          "dagger": {
+            "samples": 102400,
+            "loss": 0.6222609892301262,
+            "top1": 0.8199609375,
+            "macro_recall": 0.23334073727823038,
+            "majority_baseline_top1": 0.686015625
+          }
+        },
+        "loss_first_step": 2.90427303314209,
+        "loss_last_step": 0.5458821058273315
+      },
+      "throughput": {
+        "steps": 1000,
+        "samples_seen": 128000,
+        "train_seconds": 61.5425,
+        "samples_per_second": 2079.86,
+        "steps_per_second": 16.25,
+        "data_seconds": 32.9137,
+        "data_fraction": 0.5348,
+        "median_step_seconds": 0.0606,
+        "max_step_seconds": 0.6024,
+        "first_step_seconds": 0.6024
+      },
+      "dev_eval": {
+        "n": 20,
+        "clears": 0,
+        "clear_rate": 0.0,
+        "frames_mean": 1574.9,
+        "frames_median": 1375.0,
+        "frames_min": 743,
+        "frames_max": 4048,
+        "frames_sd": 669.539739789876,
+        "frames": [
+          1609,
+          1200,
+          1183,
+          1343,
+          2292,
+          1375,
+          1375,
+          1347,
+          1364,
+          1523,
+          2050,
+          743,
+          1375,
+          1189,
+          4048,
+          1348,
+          1805,
+          1557,
+          1191,
+          1581
+        ],
+        "idle_share_pooled": 0.7046839299314547,
+        "idle_share_by_episode_mean": 0.7108714053788024,
+        "unique_actions_mean": 7.85,
+        "stop_reasons": {
+          "death_stop": 20
+        }
+      }
+    },
+    "design": "same command, same budget (1,000 steps x batch 128, seed 0, S1 20 %/DAgger 80 %, AdamW 3e-4/wd 1e-4/clip 5.0), same S1 train split (seeds 1-14), same dev suite and the same 20 dev seeds; the only factor that changed is the DAgger corpus (6 shards/21,000 -> 15 shards/52,500 decisions)",
+    "budget_identical": {
+      "steps": [
+        1000,
+        1000
+      ],
+      "batch_size": [
+        128,
+        128
+      ],
+      "lr": [
+        0.0003,
+        0.0003
+      ],
+      "weight_decay": [
+        0.0001,
+        0.0001
+      ],
+      "grad_clip": [
+        5.0,
+        5.0
+      ],
+      "seed": [
+        0,
+        0
+      ],
+      "samples": [
+        128000,
+        128000
+      ],
+      "s1_samples": [
+        25600,
+        25600
+      ],
+      "dagger_samples": [
+        102400,
+        102400
+      ]
+    },
+    "train_metrics": {
+      "loss": {
+        "50k": 0.8336316267251969,
+        "21k": 0.832415183365345,
+        "delta": 0.001216
+      },
+      "top1": {
+        "50k": 0.757921875,
+        "21k": 0.75490625,
+        "delta": 0.003016
+      },
+      "macro_recall": {
+        "50k": 0.20809347262650604,
+        "21k": 0.20520753944431694,
+        "delta": 0.002886
+      },
+      "dagger_top1": {
+        "50k": 0.82318359375,
+        "21k": 0.8199609375,
+        "delta": 0.003223
+      },
+      "s1_top1": {
+        "50k": 0.496875,
+        "21k": 0.4946875,
+        "delta": 0.002188
+      }
+    },
+    "dev_eval": {
+      "clears": {
+        "50k": 0,
+        "21k": 0
+      },
+      "frames_mean": {
+        "50k": 1643.25,
+        "21k": 1574.9,
+        "delta": 68.35
+      },
+      "frames_median": {
+        "50k": 1580.5,
+        "21k": 1375.0,
+        "delta": 205.5
+      },
+      "idle_share_pooled": {
+        "50k": 0.720613,
+        "21k": 0.7046839299314547,
+        "delta_pp": 1.5929
+      },
+      "paired_by_seed": [
+        {
+          "seed": 1000,
+          "frames_50k": 1323,
+          "frames_21k": 1609,
+          "delta": -286
+        },
+        {
+          "seed": 1001,
+          "frames_50k": 1261,
+          "frames_21k": 1200,
+          "delta": 61
+        },
+        {
+          "seed": 1002,
+          "frames_50k": 1852,
+          "frames_21k": 1183,
+          "delta": 669
+        },
+        {
+          "seed": 1003,
+          "frames_50k": 1333,
+          "frames_21k": 1343,
+          "delta": -10
+        },
+        {
+          "seed": 1004,
+          "frames_50k": 1326,
+          "frames_21k": 2292,
+          "delta": -966
+        },
+        {
+          "seed": 1005,
+          "frames_50k": 1440,
+          "frames_21k": 1375,
+          "delta": 65
+        },
+        {
+          "seed": 1006,
+          "frames_50k": 1314,
+          "frames_21k": 1375,
+          "delta": -61
+        },
+        {
+          "seed": 1007,
+          "frames_50k": 1963,
+          "frames_21k": 1347,
+          "delta": 616
+        },
+        {
+          "seed": 1008,
+          "frames_50k": 1886,
+          "frames_21k": 1364,
+          "delta": 522
+        },
+        {
+          "seed": 1009,
+          "frames_50k": 1739,
+          "frames_21k": 1523,
+          "delta": 216
+        },
+        {
+          "seed": 1010,
+          "frames_50k": 1558,
+          "frames_21k": 2050,
+          "delta": -492
+        },
+        {
+          "seed": 1011,
+          "frames_50k": 1956,
+          "frames_21k": 743,
+          "delta": 1213
+        },
+        {
+          "seed": 1012,
+          "frames_50k": 1984,
+          "frames_21k": 1375,
+          "delta": 609
+        },
+        {
+          "seed": 1013,
+          "frames_50k": 1587,
+          "frames_21k": 1189,
+          "delta": 398
+        },
+        {
+          "seed": 1014,
+          "frames_50k": 1574,
+          "frames_21k": 4048,
+          "delta": -2474
+        },
+        {
+          "seed": 1015,
+          "frames_50k": 1968,
+          "frames_21k": 1348,
+          "delta": 620
+        },
+        {
+          "seed": 1016,
+          "frames_50k": 1326,
+          "frames_21k": 1805,
+          "delta": -479
+        },
+        {
+          "seed": 1017,
+          "frames_50k": 1778,
+          "frames_21k": 1557,
+          "delta": 221
+        },
+        {
+          "seed": 1018,
+          "frames_50k": 2371,
+          "frames_21k": 1191,
+          "delta": 1180
+        },
+        {
+          "seed": 1019,
+          "frames_50k": 1326,
+          "frames_21k": 1581,
+          "delta": -255
+        }
+      ],
+      "paired_summary": {
+        "mean_delta": 68.35,
+        "median_delta": 140.5,
+        "improved": 12,
+        "worse": 8,
+        "equal": 0,
+        "note": "descriptive paired frame-count differences on the same 20 dev seeds; no interval, no hypothesis test, no gate"
+      }
+    },
+    "not_a_gate": true,
+    "not_a_development_score": true,
+    "ci_reportable": false,
+    "note": "descriptive only: one checkpoint per corpus, one training seed, one budget; the offline metrics are in-sample and the corpora were drawn from different collection batches (batch B added seeds 2020-2023)"
+  },
+  "scope": {
+    "purpose": "WP05.5 50k first-round retrain (same budget as WP05.3) + 20 dev episodes",
+    "new_collection": false,
+    "game_launched": true,
+    "game_launched_by_trainer": false,
+    "eval_only_engine_use": true,
+    "beta_0.5_round": false,
+    "g410_2": false,
+    "confirm_split_read": false,
+    "val_split_read": false,
+    "test_split_read": false,
+    "train_split_only": true,
+    "steps": 1000
+  },
+  "not_claimed": [
+    "not G410-2: no confirm split (60000-60199 never read), no four-arm matrix, no pre-registered pass/fail rule, no gate",
+    "no new DAgger data was collected for this work package: the 15 shards are the existing WP05.1 completion batch (β=1.0, teacher fully injected)",
+    "no β=0.5 round and no multi-round DAgger loop was run",
+    "the offline metrics are in-sample metrics on the 128,000 training batches this run consumed, not held-out accuracy",
+    "the 50k-vs-21k difference is descriptive only: one training seed, one budget, two corpora from different collection batches, no interval and no test",
+    "no significance test, no confidence interval, no ranking and no effect estimate",
+    "the 20 dev episodes are a development measurement, not a clear-rate gate"
+  ],
+  "limits": [
+    "one arm (B0), one training seed (0), one fixed step budget (1,000 x 128): no seed variance and no convergence claim",
+    "DAgger corpus is 52,500 decisions from 15 β=1.0 shards; 0 verified_dead rows, so the death channel is still uncovered by real data",
+    "the seventh seed of batch B (2024) was still collecting and is not included; batch B shards are 2020-2023",
+    "S1 is still the 46,397-row train split only, read through the WP03 audit; val/test were never opened",
+    "the comparison changes corpus size and collection batch at once, so a frame delta cannot be attributed to data volume alone",
+    "20 dev episodes on seeds 1000-1019 only; the confirm split is never read",
+    "the model is still trained with the chosen one-hot CE only (no unknown negative, no class weight, no candidate mask)"
+  ]
+}

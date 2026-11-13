@@ -1,0 +1,37 @@
+{
+  "schema": "v410-wp00-resummed/1",
+  "created_at": "2026-11-13T00:00:04+08:00",
+  "note": "WP00 acceptance: at least one existing conclusion is re-summed from its raw records, independent of the historical report prose.",
+  "conclusions": [
+    {
+      "id": "d1_full_gate",
+      "source_sha256": "b866961a3dd3f9c3a9ed5d3c89ea533aad1bbc06adb8046fbf359f3261557435",
+      "source": ".tmp_v400_d1/work/gate.full.json",
+      "result": "137 shards; 469216 decisions; 1876864 frames; hash alignment 1.0 (938432/938432); load gate passed (469216 samples); planned_missing=0",
+      "method": "read the full gate JSON produced by tools/rl/v400_d1_collect.py --phase gate --plan-name full and compare its denominators with the manifest and the 137 on-disk shard directories",
+      "cross_check": {
+        "manifest_entries_matching_disk": 137,
+        "manifest_extra_entries_not_on_disk": 10,
+        "manifest_sha256": "cf564f405702cfa76a13b37a7f083ca81166da876128b669e4d2f881893a709e",
+        "shard_dirs": 137
+      }
+    },
+    {
+      "id": "g1_s1n",
+      "source_sha256": "abea27812dd9fd57e8e35263a16863119ccb21bc1f8b64df0c7cc965b11993fd",
+      "source": ".tmp_v400_laser/s1n/round1-v2h/runs.jsonl",
+      "result": "20 episodes; 20/20 stage_clear; 270640 frames total; mean 13532.0; 0 deaths",
+      "method": "parse the 20 raw JSONL rows; sum frames; count stage_clear and deaths",
+      "matches_history": true
+    },
+    {
+      "id": "g1_psn",
+      "source_sha256": "d522dd1ec1c91e8c2d6235e78e5fd62579a729cc00ff67e43060e6abd3ecf75b",
+      "source": ".tmp_v400_laser/runs/round1-v2h/runs.jsonl",
+      "result": "8 faces; 4/8 stage_clear; 4 deaths total; mean 0.500; each face n=1",
+      "method": "parse the 8 raw JSONL rows; count stage_clear and deaths",
+      "matches_history": true,
+      "caveat": "the 0.500 is exactly at the G1 threshold and has no variance estimate; it is not evidence for the new multi-face confirmation protocol"
+    }
+  ]
+}

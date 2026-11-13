@@ -1,0 +1,2892 @@
+{
+  "schema": "v410-wp05-classweight-controlled-profile/1",
+  "kind": "wp05-classweight-controlled-profile",
+  "wp": "WP05.12",
+  "version": "4.1.0",
+  "generated_at": "2026-11-13T07:50:49Z",
+  "title": "WP05.12 -- idle class-weight profile at the same 52.5k beta=0.5 data and the same 5,000-step budget",
+  "one_line": "same data / same budget / same seed as the WP05.8 5k arm, only the idle loss weight changed (idle weight 0.7129, effective idle share 44.00 %): 0/20 clears, frames mean 1693.30, idle 59.77 %",
+  "question": "IDLE_DIAG.md says 66.16 % of the teacher labels are idle, 67.38 % of those come from 18-way ties, and dev idle (60.87 %) already sits on the label prior (61.72 %).  Does down-weighting the idle class at a fixed budget move the closed loop, or is the idle prior not the binding constraint?",
+  "design": {
+    "controlled": true,
+    "fixed": [
+      "15 beta=0.5 round-2 shards (52,500 decisions)",
+      "the WP05.8 converted labels (byte-identical, SHA verified)",
+      "S1 20 % / DAgger 80 % mix",
+      "steps=5000, batch=128",
+      "AdamW lr 3e-4 / wd 1e-4 / clip 5.0",
+      "train seed 0",
+      "B0 ProbeNet, 731,802 parameters",
+      "chosen one-hot CE",
+      "the S1N dev suite, seeds 1000-1019"
+    ],
+    "changed": [
+      "--class-weight-mode idle-cap",
+      "--idle-target-share 0.44"
+    ],
+    "not_changed": [
+      "no resampling",
+      "no relabelling",
+      "no row dropped",
+      "no new data collection",
+      "no engine-side change"
+    ],
+    "read_only_inputs": [
+      ".tmp_v410_wp05_round2/shards/dagger-s0d1seed2025..2039",
+      ".tmp_v410_wp05_train_beta05_5k/labels (the WP05.8 conversion)",
+      "touhou_rl/v410/student/bc.py, s1_data.py",
+      "Document/Update/Alpha/v4.1.0/evidence/WP05/idle_diag.json",
+      "Document/Update/Alpha/v4.1.0/evidence/WP05/train_beta05_5k.json",
+      "Document/Update/Alpha/v4.1.0/evidence/WP05/train_beta05_20k.json"
+    ]
+  },
+  "commands": [
+    {
+      "step": "pytest (Windows, acceptance)",
+      "command": "python -m pytest -p no:cacheprovider --basetemp .tmp_v410_wp0512_pytest -q tests/test_v410_dagger_train.py",
+      "exit_code": 0,
+      "result": "51 passed (the 34 pre-WP05.12 tests + 17 new)"
+    },
+    {
+      "step": "compileall",
+      "command": "python -m compileall -q touhou_rl/v410/dagger",
+      "exit_code": 0
+    },
+    {
+      "step": "train (WSL2, CUDA, 5,000 steps, idle-cap)",
+      "command": "bash .tmp_v410_wp05_classweight/logs/run_train.sh",
+      "train_command": "/root/v400-venv/bin/python -m touhou_rl.v410.dagger.train train --steps 5000 --batch-size 128 --seed 0 --s1-share 0.2 --device auto --shard-seeds 2025-2039 --shards-root .tmp_v410_wp05_round2/shards --labels-dir .tmp_v410_wp05_train_beta05_5k/labels --workdir .tmp_v410_wp05_classweight --out .tmp_v410_wp05_classweight/train_run.json --class-weight-mode idle-cap --idle-target-share 0.44",
+      "exit_code": 0,
+      "wall_seconds": 282,
+      "log": ".tmp_v410_wp05_classweight/logs/train.log"
+    },
+    {
+      "step": "20 dev episodes (WSL2, xvfb, S1N)",
+      "command": "bash .tmp_v410_wp05_classweight/logs/run_eval.sh",
+      "eval_command": "xvfb-run -a -s '-screen 0 1024x768x24' /root/v400-venv/bin/python tools/rl/v410_student_eval.py --engine /root/Touhou_RL/third_party/th08-rl/build/rl_v3/th08-modern --data-dir /root/v400-data/game --checkpoint .tmp_v410_wp05_classweight/b0_s0_dagger_step5000.pt --seeds 1000-1019 --stage 0 --difficulty normal --max-frames 19887 --stop-on-death --out .tmp_v410_wp05_classweight/eval_dev20.json",
+      "exit_code": 0,
+      "wall_seconds": 1164,
+      "log": ".tmp_v410_wp05_classweight/logs/eval_dev20.log"
+    },
+    {
+      "step": "evidence build (this file)",
+      "command": "fail-closed joiner",
+      "exit_code": 0
+    }
+  ],
+  "class_weight": {
+    "mode": "idle-cap",
+    "applied": true,
+    "idle_action": 0,
+    "idle_label": "idle (candidate 0: focus 0 + move 0)",
+    "idle_target_share": 0.44,
+    "labels": [
+      "idle",
+      "N",
+      "NE",
+      "E",
+      "SE",
+      "S",
+      "SW",
+      "W",
+      "NW",
+      "focus-idle",
+      "focus-N",
+      "focus-NE",
+      "focus-E",
+      "focus-SE",
+      "focus-S",
+      "focus-SW",
+      "focus-W",
+      "focus-NW"
+    ],
+    "weights": [
+      0.71294272,
+      1.462753516,
+      1.462753516,
+      1.462753516,
+      1.462753516,
+      1.462753516,
+      1.462753516,
+      1.462753516,
+      1.462753516,
+      1.462753516,
+      1.462753516,
+      1.462753516,
+      1.462753516,
+      1.462753516,
+      1.462753516,
+      1.462753516,
+      1.462753516,
+      1.462753516
+    ],
+    "label_prior": [
+      0.61716,
+      0.010907,
+      0.043298,
+      0.103089,
+      0.010675,
+      0.009652,
+      0.039761,
+      0.0968,
+      0.007803,
+      0.0,
+      0.001153,
+      0.020948,
+      0.020571,
+      0.003349,
+      0.00119,
+      0.007838,
+      0.003656,
+      0.00215
+    ],
+    "implied_share": [
+      0.44,
+      0.015954842,
+      0.063333606,
+      0.150794398,
+      0.01561451,
+      0.01411812,
+      0.058160862,
+      0.141594973,
+      0.011414493,
+      0.0,
+      0.001686061,
+      0.030641374,
+      0.030090213,
+      0.004898941,
+      0.001740036,
+      0.011464495,
+      0.005347506,
+      0.00314557
+    ],
+    "counts": [
+      394983,
+      6981,
+      27710,
+      65977,
+      6832,
+      6177,
+      25447,
+      61952,
+      4994,
+      0,
+      738,
+      13407,
+      13165,
+      2143,
+      761,
+      5016,
+      2340,
+      1376
+    ],
+    "multipliers": [
+      0.487397714,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ],
+    "idle_prior": 0.6171603801148884,
+    "idle_weight": 0.7129427198779208,
+    "idle_implied_share": 0.44000000000000006,
+    "mean_sample_weight": 0.9999999999999999,
+    "normalisation": "weights = multipliers / sum_c(prior_c * multiplier_c), so sum_c(prior_c * weights_c) == 1: the mean per-sample loss weight is 1 and the loss scale is comparable to --class-weight-mode none",
+    "loss": "per-row chosen one-hot CE times weights[target], normalised by the batch's weight mass sum_i weights[target_i] (a weighted mean)",
+    "rules": {
+      "resampling": "none",
+      "relabelling": "none",
+      "row_order": "unchanged",
+      "rows_dropped": 0,
+      "note": "the class weight is a loss weight only; the streams, the shuffle, the batch composition and the labels are the pre-WP05.12 ones"
+    },
+    "prior_counts": {
+      "source": "expected class counts of the fixed-step stream: s1_quota * s1_frequency + dagger_quota * dagger_frequency",
+      "s1_samples": 128000,
+      "dagger_samples": 512000,
+      "mix_samples": 640000,
+      "s1_rows": 46397,
+      "dagger_rows": 52500,
+      "s1": [
+        20394,
+        1081,
+        4049,
+        4660,
+        974,
+        567,
+        3165,
+        3300,
+        520,
+        0,
+        126,
+        2834,
+        3192,
+        328,
+        78,
+        535,
+        385,
+        209
+      ],
+      "dagger": [
+        34732,
+        410,
+        1696,
+        5447,
+        425,
+        473,
+        1714,
+        5419,
+        365,
+        0,
+        40,
+        573,
+        447,
+        127,
+        56,
+        363,
+        131,
+        82
+      ],
+      "expected_mix": [
+        394982.6433,
+        6980.738,
+        27710.4155,
+        65977.2227,
+        6831.8322,
+        6177.1153,
+        25447.18,
+        61952.1893,
+        4994.1946,
+        0.0,
+        737.7039,
+        13406.5508,
+        13165.4009,
+        2143.4385,
+        761.3197,
+        5016.0718,
+        2339.6995,
+        1376.2842
+      ],
+      "mix_label_prior": [
+        0.61716,
+        0.010907,
+        0.043298,
+        0.103089,
+        0.010675,
+        0.009652,
+        0.039761,
+        0.0968,
+        0.007803,
+        0.0,
+        0.001153,
+        0.020948,
+        0.020571,
+        0.003349,
+        0.00119,
+        0.007838,
+        0.003656,
+        0.00215
+      ],
+      "note": "the loss sees weights[target], so this prior -- not a resampled count -- is what the class weight and the implied share describe"
+    },
+    "rows": [
+      {
+        "index": 0,
+        "label": "idle",
+        "count": 394983,
+        "prior": 0.61716,
+        "weight": 0.71294272,
+        "implied_share": 0.44
+      },
+      {
+        "index": 1,
+        "label": "N",
+        "count": 6981,
+        "prior": 0.010907,
+        "weight": 1.462753516,
+        "implied_share": 0.015954842
+      },
+      {
+        "index": 2,
+        "label": "NE",
+        "count": 27710,
+        "prior": 0.043298,
+        "weight": 1.462753516,
+        "implied_share": 0.063333606
+      },
+      {
+        "index": 3,
+        "label": "E",
+        "count": 65977,
+        "prior": 0.103089,
+        "weight": 1.462753516,
+        "implied_share": 0.150794398
+      },
+      {
+        "index": 4,
+        "label": "SE",
+        "count": 6832,
+        "prior": 0.010675,
+        "weight": 1.462753516,
+        "implied_share": 0.01561451
+      },
+      {
+        "index": 5,
+        "label": "S",
+        "count": 6177,
+        "prior": 0.009652,
+        "weight": 1.462753516,
+        "implied_share": 0.01411812
+      },
+      {
+        "index": 6,
+        "label": "SW",
+        "count": 25447,
+        "prior": 0.039761,
+        "weight": 1.462753516,
+        "implied_share": 0.058160862
+      },
+      {
+        "index": 7,
+        "label": "W",
+        "count": 61952,
+        "prior": 0.0968,
+        "weight": 1.462753516,
+        "implied_share": 0.141594973
+      },
+      {
+        "index": 8,
+        "label": "NW",
+        "count": 4994,
+        "prior": 0.007803,
+        "weight": 1.462753516,
+        "implied_share": 0.011414493
+      },
+      {
+        "index": 9,
+        "label": "focus-idle",
+        "count": 0,
+        "prior": 0.0,
+        "weight": 1.462753516,
+        "implied_share": 0.0
+      },
+      {
+        "index": 10,
+        "label": "focus-N",
+        "count": 738,
+        "prior": 0.001153,
+        "weight": 1.462753516,
+        "implied_share": 0.001686061
+      },
+      {
+        "index": 11,
+        "label": "focus-NE",
+        "count": 13407,
+        "prior": 0.020948,
+        "weight": 1.462753516,
+        "implied_share": 0.030641374
+      },
+      {
+        "index": 12,
+        "label": "focus-E",
+        "count": 13165,
+        "prior": 0.020571,
+        "weight": 1.462753516,
+        "implied_share": 0.030090213
+      },
+      {
+        "index": 13,
+        "label": "focus-SE",
+        "count": 2143,
+        "prior": 0.003349,
+        "weight": 1.462753516,
+        "implied_share": 0.004898941
+      },
+      {
+        "index": 14,
+        "label": "focus-S",
+        "count": 761,
+        "prior": 0.00119,
+        "weight": 1.462753516,
+        "implied_share": 0.001740036
+      },
+      {
+        "index": 15,
+        "label": "focus-SW",
+        "count": 5016,
+        "prior": 0.007838,
+        "weight": 1.462753516,
+        "implied_share": 0.011464495
+      },
+      {
+        "index": 16,
+        "label": "focus-W",
+        "count": 2340,
+        "prior": 0.003656,
+        "weight": 1.462753516,
+        "implied_share": 0.005347506
+      },
+      {
+        "index": 17,
+        "label": "focus-NW",
+        "count": 1376,
+        "prior": 0.00215,
+        "weight": 1.462753516,
+        "implied_share": 0.00314557
+      }
+    ]
+  },
+  "train": {
+    "metrics": {
+      "loss": 0.6568151838302613,
+      "top1": 0.79729375,
+      "macro_recall": 0.3141586468864799,
+      "macro_recall_classes": 17,
+      "samples": 640000,
+      "steps": 5000,
+      "loss_first_step": 2.9003376960754395,
+      "loss_last_step": 0.4311755299568176,
+      "loss_first_100": 1.4638863694667816,
+      "loss_last_100": 0.43607792794704436,
+      "per_source": {
+        "s1": {
+          "samples": 128000,
+          "loss": 1.2960310185551642,
+          "top1": 0.5994921875,
+          "macro_recall": 0.26478666107209736,
+          "majority_baseline_top1": 0.4393828125,
+          "per_class_recall": {
+            "0": 0.8001280204832774,
+            "1": 0.14266666666666666,
+            "2": 0.46755452270289594,
+            "3": 0.6325863678804855,
+            "4": 0.06808829031051253,
+            "5": 0.10897435897435898,
+            "6": 0.38786279683377306,
+            "7": 0.657396255337786,
+            "8": 0.15395381385584325,
+            "10": 0.014326647564469915,
+            "11": 0.4564772145417307,
+            "12": 0.4859770636993301,
+            "13": 0.017817371937639197,
+            "14": 0.0,
+            "15": 0.06013513513513514,
+            "16": 0.012093023255813953,
+            "17": 0.0353356890459364
+          }
+        },
+        "dagger": {
+          "samples": 512000,
+          "loss": 0.49701122724637387,
+          "top1": 0.846744140625,
+          "macro_recall": 0.3161031745057831,
+          "majority_baseline_top1": 0.6615859375,
+          "per_class_recall": {
+            "0": 0.9505803998441246,
+            "1": 0.2424924924924925,
+            "2": 0.38296842869239145,
+            "3": 0.8530884179621335,
+            "4": 0.21684414327202323,
+            "5": 0.4324734446130501,
+            "6": 0.441700137881422,
+            "7": 0.8476035497360405,
+            "8": 0.28106591865357644,
+            "10": 0.015384615384615385,
+            "11": 0.2357883446549875,
+            "12": 0.21652552071412223,
+            "13": 0.04589371980676329,
+            "14": 0.025735294117647058,
+            "15": 0.1252821670428894,
+            "16": 0.04538341158059468,
+            "17": 0.014943960149439602
+          }
+        }
+      },
+      "blocks": [
+        {
+          "steps": [
+            1,
+            100
+          ],
+          "count": 100,
+          "loss": 1.4638863694667816,
+          "per_source": {
+            "s1": {
+              "samples": 2560,
+              "loss": 2.0700576826930046,
+              "top1": 0.41328125,
+              "macro_recall": 0.0740533271832257
+            },
+            "dagger": {
+              "samples": 10240,
+              "loss": 1.312343555688858,
+              "top1": 0.668359375,
+              "macro_recall": 0.08386788646451263
+            }
+          },
+          "weighted_loss": 1.7712099003791808
+        },
+        {
+          "steps": [
+            101,
+            200
+          ],
+          "count": 100,
+          "loss": 1.0583344024419785,
+          "per_source": {
+            "s1": {
+              "samples": 2560,
+              "loss": 1.828976257145405,
+              "top1": 0.420703125,
+              "macro_recall": 0.09789809987231189
+            },
+            "dagger": {
+              "samples": 10240,
+              "loss": 0.8656739447265863,
+              "top1": 0.760546875,
+              "macro_recall": 0.13266909528909898
+            }
+          },
+          "weighted_loss": 1.358067317008972
+        },
+        {
+          "steps": [
+            201,
+            300
+          ],
+          "count": 100,
+          "loss": 0.96199902176857,
+          "per_source": {
+            "s1": {
+              "samples": 2560,
+              "loss": 1.691747672855854,
+              "top1": 0.453515625,
+              "macro_recall": 0.11848766675957266
+            },
+            "dagger": {
+              "samples": 10240,
+              "loss": 0.7795618537813425,
+              "top1": 0.7767578125,
+              "macro_recall": 0.14359066566265236
+            }
+          },
+          "weighted_loss": 1.2392370533943176
+        },
+        {
+          "steps": [
+            301,
+            400
+          ],
+          "count": 100,
+          "loss": 0.9704900068044663,
+          "per_source": {
+            "s1": {
+              "samples": 2560,
+              "loss": 1.654931715130806,
+              "top1": 0.4734375,
+              "macro_recall": 0.14086485292697248
+            },
+            "dagger": {
+              "samples": 10240,
+              "loss": 0.7993795923888684,
+              "top1": 0.76669921875,
+              "macro_recall": 0.14840179738241718
+            }
+          },
+          "weighted_loss": 1.2411580407619476
+        },
+        {
+          "steps": [
+            401,
+            500
+          ],
+          "count": 100,
+          "loss": 0.9011386412382126,
+          "per_source": {
+            "s1": {
+              "samples": 2560,
+              "loss": 1.600952110439539,
+              "top1": 0.48671875,
+              "macro_recall": 0.14584005013089588
+            },
+            "dagger": {
+              "samples": 10240,
+              "loss": 0.7261852767318487,
+              "top1": 0.78603515625,
+              "macro_recall": 0.15565431440117025
+            }
+          },
+          "weighted_loss": 1.1570699250698089
+        },
+        {
+          "steps": [
+            501,
+            600
+          ],
+          "count": 100,
+          "loss": 0.8699402737617493,
+          "per_source": {
+            "s1": {
+              "samples": 2560,
+              "loss": 1.6108579970896244,
+              "top1": 0.48125,
+              "macro_recall": 0.1577296419560609
+            },
+            "dagger": {
+              "samples": 10240,
+              "loss": 0.684710830077529,
+              "top1": 0.79248046875,
+              "macro_recall": 0.16567742854367137
+            }
+          },
+          "weighted_loss": 1.1192279261350633
+        },
+        {
+          "steps": [
+            601,
+            700
+          ],
+          "count": 100,
+          "loss": 0.8494111198186874,
+          "per_source": {
+            "s1": {
+              "samples": 2560,
+              "loss": 1.5722510159015655,
+              "top1": 0.483984375,
+              "macro_recall": 0.15332159211264956
+            },
+            "dagger": {
+              "samples": 10240,
+              "loss": 0.6687011420726776,
+              "top1": 0.7986328125,
+              "macro_recall": 0.17518554485680832
+            }
+          },
+          "weighted_loss": 1.0905356949567795
+        },
+        {
+          "steps": [
+            701,
+            800
+          ],
+          "count": 100,
+          "loss": 0.8309717440605163,
+          "per_source": {
+            "s1": {
+              "samples": 2560,
+              "loss": 1.5608706548810005,
+              "top1": 0.501953125,
+              "macro_recall": 0.16765994154996153
+            },
+            "dagger": {
+              "samples": 10240,
+              "loss": 0.6484970092773438,
+              "top1": 0.80556640625,
+              "macro_recall": 0.18368467602211225
+            }
+          },
+          "weighted_loss": 1.0727814191579819
+        },
+        {
+          "steps": [
+            801,
+            900
+          ],
+          "count": 100,
+          "loss": 0.8388691979646683,
+          "per_source": {
+            "s1": {
+              "samples": 2560,
+              "loss": 1.5928359605371951,
+              "top1": 0.49765625,
+              "macro_recall": 0.17675748352240694
+            },
+            "dagger": {
+              "samples": 10240,
+              "loss": 0.6503775082528591,
+              "top1": 0.80869140625,
+              "macro_recall": 0.19562698528548558
+            }
+          },
+          "weighted_loss": 1.0718184810876847
+        },
+        {
+          "steps": [
+            901,
+            1000
+          ],
+          "count": 100,
+          "loss": 0.8346187156438828,
+          "per_source": {
+            "s1": {
+              "samples": 2560,
+              "loss": 1.5505601234734059,
+              "top1": 0.51015625,
+              "macro_recall": 0.1861976125651034
+            },
+            "dagger": {
+              "samples": 10240,
+              "loss": 0.6556333512067795,
+              "top1": 0.79833984375,
+              "macro_recall": 0.1960864430961406
+            }
+          },
+          "weighted_loss": 1.064197103381157
+        },
+        {
+          "steps": [
+            1001,
+            1100
+          ],
+          "count": 100,
+          "loss": 0.7899231618642807,
+          "per_source": {
+            "s1": {
+              "samples": 2560,
+              "loss": 1.4682250924408435,
+              "top1": 0.5390625,
+              "macro_recall": 0.2076328165384502
+            },
+            "dagger": {
+              "samples": 10240,
+              "loss": 0.6203476753085851,
+              "top1": 0.81337890625,
+              "macro_recall": 0.21306348327397379
+            }
+          },
+          "weighted_loss": 1.0140882188081741
+        },
+        {
+          "steps": [
+            1101,
+            1200
+          ],
+          "count": 100,
+          "loss": 0.7645114582777023,
+          "per_source": {
+            "s1": {
+              "samples": 2560,
+              "loss": 1.4630175530910492,
+              "top1": 0.548046875,
+              "macro_recall": 0.21285006517560298
+            },
+            "dagger": {
+              "samples": 10240,
+              "loss": 0.5898849219083786,
+              "top1": 0.8224609375,
+              "macro_recall": 0.23011342576627072
+            }
+          },
+          "weighted_loss": 0.9795797264575958
+        },
+        {
+          "steps": [
+            1201,
+            1300
+          ],
+          "count": 100,
+          "loss": 0.7483438509702682,
+          "per_source": {
+            "s1": {
+              "samples": 2560,
+              "loss": 1.4238565638661385,
+              "top1": 0.5546875,
+              "macro_recall": 0.22462221221815026
+            },
+            "dagger": {
+              "samples": 10240,
+              "loss": 0.5794656608253718,
+              "top1": 0.82421875,
+              "macro_recall": 0.23360599454005684
+            }
+          },
+          "weighted_loss": 0.9598524475097656
+        },
+        {
+          "steps": [
+            1301,
+            1400
+          ],
+          "count": 100,
+          "loss": 0.7385928803682327,
+          "per_source": {
+            "s1": {
+              "samples": 2560,
+              "loss": 1.41919354647398,
+              "top1": 0.564453125,
+              "macro_recall": 0.22301934470830007
+            },
+            "dagger": {
+              "samples": 10240,
+              "loss": 0.568442701548338,
+              "top1": 0.82861328125,
+              "macro_recall": 0.24010618919123014
+            }
+          },
+          "weighted_loss": 0.9514591991901398
+        },
+        {
+          "steps": [
+            1401,
+            1500
+          ],
+          "count": 100,
+          "loss": 0.7541622531414032,
+          "per_source": {
+            "s1": {
+              "samples": 2560,
+              "loss": 1.399158314615488,
+              "top1": 0.564453125,
+              "macro_recall": 0.21638028557377406
+            },
+            "dagger": {
+              "samples": 10240,
+              "loss": 0.5929132275283336,
+              "top1": 0.81767578125,
+              "macro_recall": 0.23070093372599754
+            }
+          },
+          "weighted_loss": 0.9647493034601211
+        },
+        {
+          "steps": [
+            1501,
+            1600
+          ],
+          "count": 100,
+          "loss": 0.708958323597908,
+          "per_source": {
+            "s1": {
+              "samples": 2560,
+              "loss": 1.3323456197977066,
+              "top1": 0.587890625,
+              "macro_recall": 0.25084392760467
+            },
+            "dagger": {
+              "samples": 10240,
+              "loss": 0.5531115002930165,
+              "top1": 0.828515625,
+              "macro_recall": 0.24820923325315417
+            }
+          },
+          "weighted_loss": 0.9072458308935165
+        },
+        {
+          "steps": [
+            1601,
+            1700
+          ],
+          "count": 100,
+          "loss": 0.6929820173978806,
+          "per_source": {
+            "s1": {
+              "samples": 2560,
+              "loss": 1.3618842400610447,
+              "top1": 0.59609375,
+              "macro_recall": 0.24413229730120048
+            },
+            "dagger": {
+              "samples": 10240,
+              "loss": 0.5257564591243863,
+              "top1": 0.83359375,
+              "macro_recall": 0.2554552379942
+            }
+          },
+          "weighted_loss": 0.8911463248729706
+        },
+        {
+          "steps": [
+            1701,
+            1800
+          ],
+          "count": 100,
+          "loss": 0.6869805327057839,
+          "per_source": {
+            "s1": {
+              "samples": 2560,
+              "loss": 1.335525282472372,
+              "top1": 0.594140625,
+              "macro_recall": 0.24775307317894565
+            },
+            "dagger": {
+              "samples": 10240,
+              "loss": 0.5248443448916078,
+              "top1": 0.8359375,
+              "macro_recall": 0.27020793130607057
+            }
+          },
+          "weighted_loss": 0.8815759408473969
+        },
+        {
+          "steps": [
+            1801,
+            1900
+          ],
+          "count": 100,
+          "loss": 0.6857388263940811,
+          "per_source": {
+            "s1": {
+              "samples": 2560,
+              "loss": 1.3009843312203884,
+              "top1": 0.59765625,
+              "macro_recall": 0.2704604136332134
+            },
+            "dagger": {
+              "samples": 10240,
+              "loss": 0.5319274500012398,
+              "top1": 0.8330078125,
+              "macro_recall": 0.2531238202199799
+            }
+          },
+          "weighted_loss": 0.8741760838031769
+        },
+        {
+          "steps": [
+            1901,
+            2000
+          ],
+          "count": 100,
+          "loss": 0.667382053732872,
+          "per_source": {
+            "s1": {
+              "samples": 2560,
+              "loss": 1.2428994350135327,
+              "top1": 0.6203125,
+              "macro_recall": 0.2554771379745928
+            },
+            "dagger": {
+              "samples": 10240,
+              "loss": 0.5235026985406875,
+              "top1": 0.83515625,
+              "macro_recall": 0.2626906801367966
+            }
+          },
+          "weighted_loss": 0.8580046355724334
+        },
+        {
+          "steps": [
+            2001,
+            2100
+          ],
+          "count": 100,
+          "loss": 0.6545300275087357,
+          "per_source": {
+            "s1": {
+              "samples": 2560,
+              "loss": 1.268556972593069,
+              "top1": 0.609375,
+              "macro_recall": 0.27398496458767085
+            },
+            "dagger": {
+              "samples": 10240,
+              "loss": 0.5010232822969556,
+              "top1": 0.8404296875,
+              "macro_recall": 0.27762257034709864
+            }
+          },
+          "weighted_loss": 0.8382583123445511
+        },
+        {
+          "steps": [
+            2101,
+            2200
+          ],
+          "count": 100,
+          "loss": 0.6178210604190827,
+          "per_source": {
+            "s1": {
+              "samples": 2560,
+              "loss": 1.2385657995939254,
+              "top1": 0.61953125,
+              "macro_recall": 0.271386757365547
+            },
+            "dagger": {
+              "samples": 10240,
+              "loss": 0.4626348692923784,
+              "top1": 0.853515625,
+              "macro_recall": 0.3165534882752233
+            }
+          },
+          "weighted_loss": 0.791506410241127
+        },
+        {
+          "steps": [
+            2201,
+            2300
+          ],
+          "count": 100,
+          "loss": 0.648607277572155,
+          "per_source": {
+            "s1": {
+              "samples": 2560,
+              "loss": 1.2442859455943107,
+              "top1": 0.62265625,
+              "macro_recall": 0.2762620212454473
+            },
+            "dagger": {
+              "samples": 10240,
+              "loss": 0.4996876003220677,
+              "top1": 0.8419921875,
+              "macro_recall": 0.2907789487001616
+            }
+          },
+          "weighted_loss": 0.831019327044487
+        },
+        {
+          "steps": [
+            2301,
+            2400
+          ],
+          "count": 100,
+          "loss": 0.6363659226894378,
+          "per_source": {
+            "s1": {
+              "samples": 2560,
+              "loss": 1.2234739050269128,
+              "top1": 0.62109375,
+              "macro_recall": 0.29682476730119706
+            },
+            "dagger": {
+              "samples": 10240,
+              "loss": 0.4895889239385724,
+              "top1": 0.84033203125,
+              "macro_recall": 0.3010593053591666
+            }
+          },
+          "weighted_loss": 0.8178470981121063
+        },
+        {
+          "steps": [
+            2401,
+            2500
+          ],
+          "count": 100,
+          "loss": 0.6126452136039734,
+          "per_source": {
+            "s1": {
+              "samples": 2560,
+              "loss": 1.193499905616045,
+              "top1": 0.630859375,
+              "macro_recall": 0.29479799448265376
+            },
+            "dagger": {
+              "samples": 10240,
+              "loss": 0.4674315292388201,
+              "top1": 0.85166015625,
+              "macro_recall": 0.2874118918850076
+            }
+          },
+          "weighted_loss": 0.7832565495371818
+        },
+        {
+          "steps": [
+            2501,
+            2600
+          ],
+          "count": 100,
+          "loss": 0.6024845942854882,
+          "per_source": {
+            "s1": {
+              "samples": 2560,
+              "loss": 1.2004339858889579,
+              "top1": 0.632421875,
+              "macro_recall": 0.2905763004223284
+            },
+            "dagger": {
+              "samples": 10240,
+              "loss": 0.4529972422868013,
+              "top1": 0.8568359375,
+              "macro_recall": 0.3187238176980949
+            }
+          },
+          "weighted_loss": 0.773289994597435
+        },
+        {
+          "steps": [
+            2601,
+            2700
+          ],
+          "count": 100,
+          "loss": 0.5769758629798889,
+          "per_source": {
+            "s1": {
+              "samples": 2560,
+              "loss": 1.2192952424287795,
+              "top1": 0.6265625,
+              "macro_recall": 0.2946167463916087
+            },
+            "dagger": {
+              "samples": 10240,
+              "loss": 0.4163960011675954,
+              "top1": 0.8646484375,
+              "macro_recall": 0.32915601231093694
+            }
+          },
+          "weighted_loss": 0.7402331167459488
+        },
+        {
+          "steps": [
+            2701,
+            2800
+          ],
+          "count": 100,
+          "loss": 0.5858256182074547,
+          "per_source": {
+            "s1": {
+              "samples": 2560,
+              "loss": 1.1850044813007117,
+              "top1": 0.640625,
+              "macro_recall": 0.30049519465036223
+            },
+            "dagger": {
+              "samples": 10240,
+              "loss": 0.4360308967530727,
+              "top1": 0.859375,
+              "macro_recall": 0.32740132769459995
+            }
+          },
+          "weighted_loss": 0.7490699595212936
+        },
+        {
+          "steps": [
+            2801,
+            2900
+          ],
+          "count": 100,
+          "loss": 0.6054619380831718,
+          "per_source": {
+            "s1": {
+              "samples": 2560,
+              "loss": 1.1753326162695885,
+              "top1": 0.640625,
+              "macro_recall": 0.2993049323937322
+            },
+            "dagger": {
+              "samples": 10240,
+              "loss": 0.46299426071345806,
+              "top1": 0.8494140625,
+              "macro_recall": 0.32649257014947036
+            }
+          },
+          "weighted_loss": 0.7731334474682808
+        },
+        {
+          "steps": [
+            2901,
+            3000
+          ],
+          "count": 100,
+          "loss": 0.5885029655694961,
+          "per_source": {
+            "s1": {
+              "samples": 2560,
+              "loss": 1.2042976200580597,
+              "top1": 0.630859375,
+              "macro_recall": 0.28575585536208614
+            },
+            "dagger": {
+              "samples": 10240,
+              "loss": 0.4345542971044779,
+              "top1": 0.86123046875,
+              "macro_recall": 0.33390973115256295
+            }
+          },
+          "weighted_loss": 0.7527447980642319
+        },
+        {
+          "steps": [
+            3001,
+            3100
+          ],
+          "count": 100,
+          "loss": 0.5833419334888458,
+          "per_source": {
+            "s1": {
+              "samples": 2560,
+              "loss": 1.2034489769488572,
+              "top1": 0.63671875,
+              "macro_recall": 0.29872266129546104
+            },
+            "dagger": {
+              "samples": 10240,
+              "loss": 0.428315169736743,
+              "top1": 0.86357421875,
+              "macro_recall": 0.336989519079194
+            }
+          },
+          "weighted_loss": 0.7495286163687706
+        },
+        {
+          "steps": [
+            3101,
+            3200
+          ],
+          "count": 100,
+          "loss": 0.5472885575890541,
+          "per_source": {
+            "s1": {
+              "samples": 2560,
+              "loss": 1.173071337863803,
+              "top1": 0.6421875,
+              "macro_recall": 0.31372244936006893
+            },
+            "dagger": {
+              "samples": 10240,
+              "loss": 0.39084285851567985,
+              "top1": 0.87734375,
+              "macro_recall": 0.3852184218115059
+            }
+          },
+          "weighted_loss": 0.7045318573713303
+        },
+        {
+          "steps": [
+            3201,
+            3300
+          ],
+          "count": 100,
+          "loss": 0.5393742969632149,
+          "per_source": {
+            "s1": {
+              "samples": 2560,
+              "loss": 1.1725297953933478,
+              "top1": 0.646875,
+              "macro_recall": 0.30045901506764744
+            },
+            "dagger": {
+              "samples": 10240,
+              "loss": 0.38108540792018175,
+              "top1": 0.87666015625,
+              "macro_recall": 0.36553271182257585
+            }
+          },
+          "weighted_loss": 0.6908677873015404
+        },
+        {
+          "steps": [
+            3301,
+            3400
+          ],
+          "count": 100,
+          "loss": 0.5561325854063034,
+          "per_source": {
+            "s1": {
+              "samples": 2560,
+              "loss": 1.1953099645674228,
+              "top1": 0.631640625,
+              "macro_recall": 0.29937014137227014
+            },
+            "dagger": {
+              "samples": 10240,
+              "loss": 0.39633823502808807,
+              "top1": 0.8712890625,
+              "macro_recall": 0.381483679470215
+            }
+          },
+          "weighted_loss": 0.7077267932891845
+        },
+        {
+          "steps": [
+            3401,
+            3500
+          ],
+          "count": 100,
+          "loss": 0.5568994587659836,
+          "per_source": {
+            "s1": {
+              "samples": 2560,
+              "loss": 1.1326042540371417,
+              "top1": 0.66171875,
+              "macro_recall": 0.3087337620847511
+            },
+            "dagger": {
+              "samples": 10240,
+              "loss": 0.41297325380146505,
+              "top1": 0.86669921875,
+              "macro_recall": 0.3548804196150824
+            }
+          },
+          "weighted_loss": 0.7098072251677513
+        },
+        {
+          "steps": [
+            3501,
+            3600
+          ],
+          "count": 100,
+          "loss": 0.5346963784098625,
+          "per_source": {
+            "s1": {
+              "samples": 2560,
+              "loss": 1.1482483334839344,
+              "top1": 0.65546875,
+              "macro_recall": 0.3132975696944495
+            },
+            "dagger": {
+              "samples": 10240,
+              "loss": 0.38130838312208654,
+              "top1": 0.872265625,
+              "macro_recall": 0.3807373430295494
+            }
+          },
+          "weighted_loss": 0.6863363179564476
+        },
+        {
+          "steps": [
+            3601,
+            3700
+          ],
+          "count": 100,
+          "loss": 0.4994990885257721,
+          "per_source": {
+            "s1": {
+              "samples": 2560,
+              "loss": 1.111421538516879,
+              "top1": 0.65546875,
+              "macro_recall": 0.3281286481346815
+            },
+            "dagger": {
+              "samples": 10240,
+              "loss": 0.34651846839115025,
+              "top1": 0.890234375,
+              "macro_recall": 0.44606924650318464
+            }
+          },
+          "weighted_loss": 0.6377751493453979
+        },
+        {
+          "steps": [
+            3701,
+            3800
+          ],
+          "count": 100,
+          "loss": 0.4956222340464592,
+          "per_source": {
+            "s1": {
+              "samples": 2560,
+              "loss": 1.079517100378871,
+              "top1": 0.661328125,
+              "macro_recall": 0.3343241866263459
+            },
+            "dagger": {
+              "samples": 10240,
+              "loss": 0.3496485212817788,
+              "top1": 0.88818359375,
+              "macro_recall": 0.4113612935857704
+            }
+          },
+          "weighted_loss": 0.6283533012866974
+        },
+        {
+          "steps": [
+            3801,
+            3900
+          ],
+          "count": 100,
+          "loss": 0.4991908729076385,
+          "per_source": {
+            "s1": {
+              "samples": 2560,
+              "loss": 1.0943584855645896,
+              "top1": 0.66875,
+              "macro_recall": 0.3426629796397944
+            },
+            "dagger": {
+              "samples": 10240,
+              "loss": 0.3503989618271589,
+              "top1": 0.884765625,
+              "macro_recall": 0.4187701123544765
+            }
+          },
+          "weighted_loss": 0.635840892791748
+        },
+        {
+          "steps": [
+            3901,
+            4000
+          ],
+          "count": 100,
+          "loss": 0.4956102108955383,
+          "per_source": {
+            "s1": {
+              "samples": 2560,
+              "loss": 1.0817934904247521,
+              "top1": 0.6703125,
+              "macro_recall": 0.3475603075336004
+            },
+            "dagger": {
+              "samples": 10240,
+              "loss": 0.34906438961625097,
+              "top1": 0.88623046875,
+              "macro_recall": 0.42225894575574446
+            }
+          },
+          "weighted_loss": 0.6342880016565323
+        },
+        {
+          "steps": [
+            4001,
+            4100
+          ],
+          "count": 100,
+          "loss": 0.5106555530428887,
+          "per_source": {
+            "s1": {
+              "samples": 2560,
+              "loss": 1.11664280295372,
+              "top1": 0.658984375,
+              "macro_recall": 0.3264027230242618
+            },
+            "dagger": {
+              "samples": 10240,
+              "loss": 0.3591587306931615,
+              "top1": 0.88203125,
+              "macro_recall": 0.41954428737692473
+            }
+          },
+          "weighted_loss": 0.6574244764447212
+        },
+        {
+          "steps": [
+            4101,
+            4200
+          ],
+          "count": 100,
+          "loss": 0.4622869661450386,
+          "per_source": {
+            "s1": {
+              "samples": 2560,
+              "loss": 1.1084217865020036,
+              "top1": 0.66015625,
+              "macro_recall": 0.33538651199899044
+            },
+            "dagger": {
+              "samples": 10240,
+              "loss": 0.30075325835496186,
+              "top1": 0.90244140625,
+              "macro_recall": 0.4753245135068566
+            }
+          },
+          "weighted_loss": 0.5903913560509682
+        },
+        {
+          "steps": [
+            4201,
+            4300
+          ],
+          "count": 100,
+          "loss": 0.4529951760172844,
+          "per_source": {
+            "s1": {
+              "samples": 2560,
+              "loss": 1.0669709242880345,
+              "top1": 0.669140625,
+              "macro_recall": 0.3223070095160503
+            },
+            "dagger": {
+              "samples": 10240,
+              "loss": 0.299501240067184,
+              "top1": 0.90302734375,
+              "macro_recall": 0.46610852924142515
+            }
+          },
+          "weighted_loss": 0.5763581681251526
+        },
+        {
+          "steps": [
+            4301,
+            4400
+          ],
+          "count": 100,
+          "loss": 0.4671119248867035,
+          "per_source": {
+            "s1": {
+              "samples": 2560,
+              "loss": 1.0566893436014653,
+              "top1": 0.675,
+              "macro_recall": 0.3392322247666366
+            },
+            "dagger": {
+              "samples": 10240,
+              "loss": 0.3197175699286163,
+              "top1": 0.89404296875,
+              "macro_recall": 0.4399597137679484
+            }
+          },
+          "weighted_loss": 0.5930322676897049
+        },
+        {
+          "steps": [
+            4401,
+            4500
+          ],
+          "count": 100,
+          "loss": 0.4657194936275482,
+          "per_source": {
+            "s1": {
+              "samples": 2560,
+              "loss": 1.075591455027461,
+              "top1": 0.664453125,
+              "macro_recall": 0.3296293621850077
+            },
+            "dagger": {
+              "samples": 10240,
+              "loss": 0.3132515004836023,
+              "top1": 0.89599609375,
+              "macro_recall": 0.4541709446341471
+            }
+          },
+          "weighted_loss": 0.5918194329738617
+        },
+        {
+          "steps": [
+            4501,
+            4600
+          ],
+          "count": 100,
+          "loss": 0.49472479194402696,
+          "per_source": {
+            "s1": {
+              "samples": 2560,
+              "loss": 1.0983748275786638,
+              "top1": 0.65703125,
+              "macro_recall": 0.3323480437532988
+            },
+            "dagger": {
+              "samples": 10240,
+              "loss": 0.34381228126585484,
+              "top1": 0.88583984375,
+              "macro_recall": 0.4313805662028284
+            }
+          },
+          "weighted_loss": 0.6280000364780426
+        },
+        {
+          "steps": [
+            4601,
+            4700
+          ],
+          "count": 100,
+          "loss": 0.4275085037946701,
+          "per_source": {
+            "s1": {
+              "samples": 2560,
+              "loss": 1.046572520211339,
+              "top1": 0.6828125,
+              "macro_recall": 0.3458944635739164
+            },
+            "dagger": {
+              "samples": 10240,
+              "loss": 0.27274249168112874,
+              "top1": 0.91416015625,
+              "macro_recall": 0.5288585272199758
+            }
+          },
+          "weighted_loss": 0.5449690508842469
+        },
+        {
+          "steps": [
+            4701,
+            4800
+          ],
+          "count": 100,
+          "loss": 0.4413501381874084,
+          "per_source": {
+            "s1": {
+              "samples": 2560,
+              "loss": 1.1005766820162535,
+              "top1": 0.665234375,
+              "macro_recall": 0.35465773597106726
+            },
+            "dagger": {
+              "samples": 10240,
+              "loss": 0.2765434952452779,
+              "top1": 0.91015625,
+              "macro_recall": 0.5014351932269404
+            }
+          },
+          "weighted_loss": 0.5652220320701599
+        },
+        {
+          "steps": [
+            4801,
+            4900
+          ],
+          "count": 100,
+          "loss": 0.4282180443406105,
+          "per_source": {
+            "s1": {
+              "samples": 2560,
+              "loss": 1.0423017092049123,
+              "top1": 0.676171875,
+              "macro_recall": 0.37712742354064993
+            },
+            "dagger": {
+              "samples": 10240,
+              "loss": 0.27469712011516095,
+              "top1": 0.91005859375,
+              "macro_recall": 0.5344006239767114
+            }
+          },
+          "weighted_loss": 0.5399016720056534
+        },
+        {
+          "steps": [
+            4901,
+            5000
+          ],
+          "count": 100,
+          "loss": 0.43607792794704436,
+          "per_source": {
+            "s1": {
+              "samples": 2560,
+              "loss": 1.0632279556244613,
+              "top1": 0.67109375,
+              "macro_recall": 0.34233392194008094
+            },
+            "dagger": {
+              "samples": 10240,
+              "loss": 0.2792904179543257,
+              "top1": 0.90810546875,
+              "macro_recall": 0.4984383364379904
+            }
+          },
+          "weighted_loss": 0.5564140826463699
+        }
+      ],
+      "confusion_matrix": [
+        [
+          366992,
+          748,
+          4762,
+          7251,
+          556,
+          1109,
+          4281,
+          5935,
+          197,
+          0,
+          111,
+          1453,
+          1363,
+          6,
+          0,
+          198,
+          5,
+          6
+        ],
+        [
+          1567,
+          1397,
+          794,
+          962,
+          152,
+          69,
+          429,
+          876,
+          284,
+          0,
+          5,
+          226,
+          204,
+          2,
+          1,
+          18,
+          1,
+          9
+        ],
+        [
+          4907,
+          414,
+          11563,
+          6134,
+          188,
+          92,
+          1379,
+          1749,
+          61,
+          0,
+          12,
+          475,
+          702,
+          3,
+          1,
+          41,
+          0,
+          1
+        ],
+        [
+          5253,
+          297,
+          2573,
+          53458,
+          289,
+          162,
+          930,
+          2220,
+          46,
+          0,
+          21,
+          270,
+          428,
+          11,
+          1,
+          22,
+          3,
+          2
+        ],
+        [
+          1893,
+          204,
+          641,
+          1269,
+          1078,
+          338,
+          507,
+          418,
+          56,
+          0,
+          2,
+          160,
+          183,
+          18,
+          0,
+          17,
+          11,
+          10
+        ],
+        [
+          1662,
+          119,
+          269,
+          472,
+          229,
+          2165,
+          431,
+          539,
+          31,
+          0,
+          1,
+          113,
+          102,
+          7,
+          3,
+          26,
+          3,
+          1
+        ],
+        [
+          4066,
+          199,
+          1473,
+          2110,
+          141,
+          282,
+          10749,
+          5270,
+          138,
+          0,
+          10,
+          493,
+          375,
+          6,
+          0,
+          79,
+          5,
+          2
+        ],
+        [
+          4305,
+          263,
+          783,
+          2582,
+          117,
+          202,
+          2072,
+          50799,
+          360,
+          0,
+          23,
+          229,
+          180,
+          3,
+          1,
+          58,
+          4,
+          1
+        ],
+        [
+          761,
+          347,
+          186,
+          292,
+          72,
+          41,
+          363,
+          1539,
+          1222,
+          0,
+          1,
+          84,
+          61,
+          0,
+          0,
+          13,
+          5,
+          7
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          169,
+          101,
+          61,
+          146,
+          39,
+          20,
+          70,
+          60,
+          18,
+          0,
+          11,
+          19,
+          15,
+          0,
+          0,
+          4,
+          1,
+          5
+        ],
+        [
+          2911,
+          196,
+          1403,
+          1508,
+          104,
+          97,
+          941,
+          907,
+          46,
+          0,
+          4,
+          4885,
+          370,
+          1,
+          1,
+          29,
+          2,
+          1
+        ],
+        [
+          2826,
+          204,
+          1330,
+          1342,
+          167,
+          190,
+          843,
+          593,
+          67,
+          0,
+          3,
+          353,
+          5226,
+          2,
+          1,
+          23,
+          3,
+          3
+        ],
+        [
+          440,
+          106,
+          201,
+          456,
+          203,
+          92,
+          169,
+          185,
+          32,
+          0,
+          0,
+          74,
+          95,
+          73,
+          0,
+          13,
+          1,
+          0
+        ],
+        [
+          138,
+          33,
+          62,
+          142,
+          83,
+          123,
+          53,
+          49,
+          4,
+          0,
+          0,
+          19,
+          28,
+          3,
+          14,
+          10,
+          1,
+          2
+        ],
+        [
+          1500,
+          107,
+          337,
+          655,
+          106,
+          125,
+          629,
+          731,
+          58,
+          0,
+          2,
+          122,
+          103,
+          4,
+          2,
+          533,
+          6,
+          4
+        ],
+        [
+          660,
+          150,
+          156,
+          238,
+          146,
+          159,
+          210,
+          267,
+          72,
+          0,
+          0,
+          93,
+          107,
+          0,
+          0,
+          21,
+          71,
+          3
+        ],
+        [
+          279,
+          155,
+          135,
+          143,
+          58,
+          50,
+          99,
+          250,
+          68,
+          0,
+          0,
+          41,
+          41,
+          2,
+          0,
+          15,
+          1,
+          32
+        ]
+      ],
+      "confusion_matrix_orientation": "rows = target action, columns = predicted action",
+      "majority_baseline_top1": 0.6171453125,
+      "per_class_recall": {
+        "0": 0.9291571828960461,
+        "1": 0.19968553459119498,
+        "2": 0.41710554794026405,
+        "3": 0.8101415451762495,
+        "4": 0.15841293166789125,
+        "5": 0.35072088125708734,
+        "6": 0.4232223009685802,
+        "7": 0.8195766512858572,
+        "8": 0.2446936323588306,
+        "10": 0.014884979702300407,
+        "11": 0.36438907951663435,
+        "12": 0.3966302367941712,
+        "13": 0.03411214953271028,
+        "14": 0.01832460732984293,
+        "15": 0.10609076433121019,
+        "16": 0.030174245643858903,
+        "17": 0.02337472607742878
+      },
+      "sampled_label_counts": [
+        394973,
+        6996,
+        27722,
+        65986,
+        6805,
+        6173,
+        25398,
+        61982,
+        4994,
+        0,
+        739,
+        13406,
+        13176,
+        2140,
+        764,
+        5024,
+        2353,
+        1369
+      ],
+      "sampled_label_share": [
+        0.617145,
+        0.010931,
+        0.043316,
+        0.103103,
+        0.010633,
+        0.009645,
+        0.039684,
+        0.096847,
+        0.007803,
+        0.0,
+        0.001155,
+        0.020947,
+        0.020588,
+        0.003344,
+        0.001194,
+        0.00785,
+        0.003677,
+        0.002139
+      ],
+      "label_rule": {
+        "target": "one_hot(chosen_plan.first_action) cross entropy (B0)",
+        "unknown_used_as_negative": false,
+        "rows_without_target": {
+          "s1": 0,
+          "dagger": 0
+        },
+        "note": "chosen one-hot CE only; the other 17 logits appear solely in the softmax denominator"
+      },
+      "weighted_loss": {
+        "objective": "sum_i weights[target_i] * CE_i / sum_i weights[target_i] (the term this run optimised)",
+        "mean": 0.8389225620865822,
+        "first_step": 2.8965811729431152,
+        "last_step": 0.5622605681419373,
+        "first_100": 1.7712099003791808,
+        "last_100": 0.5564140826463699,
+        "unweighted_counterpart": "metrics.loss / loss_first_step / loss_last_step / loss_first_100 / loss_last_100 are the unweighted chosen one-hot CE, so they are comparable with --class-weight-mode none"
+      }
+    },
+    "grad_norm": {
+      "preclip_mean": 2.5110829983959,
+      "preclip_max": 4.988273981853942,
+      "postclip_mean": 2.5110829983959,
+      "postclip_max": 4.988273981853942,
+      "clip": 5.0
+    },
+    "throughput": {
+      "steps": 5000,
+      "samples_seen": 640000,
+      "train_seconds": 250.3625,
+      "samples_per_second": 2556.29,
+      "steps_per_second": 19.97,
+      "data_seconds": 110.9734,
+      "data_fraction": 0.4433,
+      "median_step_seconds": 0.0403,
+      "max_step_seconds": 1.1007,
+      "first_step_seconds": 1.1007
+    },
+    "gpu": {
+      "device": "cuda",
+      "cuda": true,
+      "device_name": "NVIDIA GeForce RTX 4070 SUPER",
+      "max_memory_allocated_mib": 252.11,
+      "max_memory_reserved_mib": 434.0,
+      "total_memory_mib": 12281.5,
+      "peak_memory_note": "torch.cuda.max_memory_{allocated,reserved} over this run; reset immediately before the first step"
+    },
+    "elapsed_seconds": 272.2449,
+    "budget": {
+      "steps": 5000,
+      "batch_size": 128,
+      "optimizer": "AdamW",
+      "lr": 0.0003,
+      "weight_decay": 0.0001,
+      "grad_clip": 5.0,
+      "seed": 0,
+      "epochs": 1,
+      "steps_per_epoch": 5000
+    },
+    "mix": {
+      "nominal": {
+        "s1": 0.2,
+        "dagger": 0.8
+      },
+      "rule": "per-step cumulative allocation floor((step+1)*steps*batch*share) - floor(step*steps*batch*share) S1 rows; per-class loss weights (class_weight.weights), no resampling; the batch order is shuffled per step, so the mix is the only source signal",
+      "realized": {
+        "steps": 5000,
+        "batch_size": 128,
+        "samples": 640000,
+        "s1_samples": 128000,
+        "dagger_samples": 512000,
+        "s1_share": 0.2,
+        "dagger_share": 0.8,
+        "s1_rows_per_step": {
+          "25": 2000,
+          "26": 3000
+        },
+        "sample_weight": "per-class",
+        "class_weight_mode": "idle-cap",
+        "s1_stream_epochs": 3,
+        "dagger_stream_epochs": 10
+      },
+      "dataset": {
+        "s1_rows": 46397,
+        "dagger_rows": 52500
+      }
+    },
+    "data": {
+      "dagger_rows": 52500,
+      "s1_rows": 46397,
+      "dagger_prior": {
+        "0": 34732,
+        "1": 410,
+        "2": 1696,
+        "3": 5447,
+        "4": 425,
+        "5": 473,
+        "6": 1714,
+        "7": 5419,
+        "8": 365,
+        "10": 40,
+        "11": 573,
+        "12": 447,
+        "13": 127,
+        "14": 56,
+        "15": 363,
+        "16": 131,
+        "17": 82
+      },
+      "s1_prior": {
+        "0": 20394,
+        "1": 1081,
+        "2": 4049,
+        "3": 4660,
+        "4": 974,
+        "5": 567,
+        "6": 3165,
+        "7": 3300,
+        "8": 520,
+        "10": 126,
+        "11": 2834,
+        "12": 3192,
+        "13": 328,
+        "14": 78,
+        "15": 535,
+        "16": 385,
+        "17": 209
+      },
+      "labels_totals": {
+        "shards": 15,
+        "decisions": 52500,
+        "frames": 105000,
+        "alive": 52068,
+        "dead": 21,
+        "unknown": 411,
+        "model_mismatch": 411,
+        "injected": 26295,
+        "agreement": 41819,
+        "disagreement": 10681,
+        "verified_candidates": 52500,
+        "candidate_grid": 945000,
+        "candidate_coverage": 0.05555555555555555,
+        "agreement_rate": 1.5903783989351588,
+        "tolerance": [
+          8.0
+        ],
+        "horizon": [
+          32
+        ]
+      }
+    },
+    "scope_as_written_by_the_tool": {
+      "purpose": "WP05.3 DAgger-labelled B0 smoke (1,000 steps)",
+      "formal_50k": false,
+      "beta_0.5_round": false,
+      "g410_2": false,
+      "new_collection": false,
+      "game_launched": false,
+      "test_split_read": false,
+      "val_split_read": false,
+      "train_split_only": true,
+      "class_weight_mode": "idle-cap",
+      "label_resampled": false,
+      "labels_changed": false
+    },
+    "not_claimed_as_written_by_the_tool": [
+      "not the 50k-decision first DAgger round: this smoke trains 1,000 steps on the six completed shards (21,000 decisions, ~42 % of the 50k target)",
+      "not a β=0.5 round: every shard here used β=1.0 (full teacher injection)",
+      "not G410-2: no confirm-split run, no 20-episode protocol, no four-arm matrix",
+      "not a development score: the offline metrics are in-sample on the exact train batches this run consumed, so they are optimisation diagnostics, not held-out skill",
+      "no new data collection and no engine run: the game is never launched by this module; the two dev episodes are a separate evaluator invocation",
+      "one model arm (B0), one seed (0), one fixed step budget (1,000): no variance estimate and no convergence claim",
+      "rows without a chosen plan are excluded, and unknown candidates are never negative labels; that rule is not a learned preference over unknowns",
+      "a class weight is a loss weight only: no row is resampled, relabelled, reordered or dropped, and it adds no data and no teacher signal"
+    ]
+  },
+  "checkpoint": {
+    "path": ".tmp_v410_wp05_classweight/b0_s0_dagger_step5000.pt",
+    "bytes": 2941699,
+    "sha256": "f447664c660933af9c2840dd2c8e43051e9757c2f520fa9706178c92b53a4919",
+    "schema": "v410-wp04-bc-arm-checkpoint/1",
+    "arm": "B0",
+    "parameters": 731802,
+    "format": "torch.save (schema v410-wp04-bc-arm-checkpoint/1)",
+    "in_repo": false,
+    "sha256_recomputed": "f447664c660933af9c2840dd2c8e43051e9757c2f520fa9706178c92b53a4919",
+    "sha_matches": true
+  },
+  "dev20": {
+    "source": ".tmp_v410_wp05_classweight/eval_dev20.json",
+    "suite": {
+      "name": "S1N",
+      "stage": 0,
+      "stage_argument_semantics": "RESET stage is 0-based; S1N = stage 0",
+      "difficulty": "normal",
+      "max_frames": 19887,
+      "stop_on_death": true,
+      "obs_window": "consecutive",
+      "window_alignment": {
+        "mode": "consecutive",
+        "frames_per_decision": 2,
+        "renders_per_decision": 2,
+        "stack_span_frames": 4,
+        "matches_training_obs": true,
+        "training_window": "the D410-S1 shards store frames[t-3..t], four consecutive game frames; one decision = two frames = two renders, so the stack is consecutive"
+      }
+    },
+    "seed_policy": {
+      "allowed": "1000-1099 (dev)",
+      "refused": [
+        "60000-60199 (confirm)",
+        "1-20 (D410-S1 corpus: train 1-14 / val 15-17 / test 18-20)"
+      ],
+      "seeds_requested": [
+        1000,
+        1001,
+        1002,
+        1003,
+        1004,
+        1005,
+        1006,
+        1007,
+        1008,
+        1009,
+        1010,
+        1011,
+        1012,
+        1013,
+        1014,
+        1015,
+        1016,
+        1017,
+        1018,
+        1019
+      ],
+      "all_dev": true
+    },
+    "engine": {
+      "path": "/root/Touhou_RL/third_party/th08-rl/build/rl_v3/th08-modern",
+      "sha256": "691bfd77b7eca3361aa8bb7af0977556a70cc73a070b29a2447222ba7a568ef6",
+      "role": "env (pixels + state)"
+    },
+    "seeds": [
+      1000,
+      1001,
+      1002,
+      1003,
+      1004,
+      1005,
+      1006,
+      1007,
+      1008,
+      1009,
+      1010,
+      1011,
+      1012,
+      1013,
+      1014,
+      1015,
+      1016,
+      1017,
+      1018,
+      1019
+    ],
+    "n": 20,
+    "clears": 0,
+    "clear_rate": 0.0,
+    "stop_reasons": {
+      "death_stop": 20
+    },
+    "frames": {
+      "n": 20,
+      "values": [
+        1538,
+        1945,
+        2011,
+        1812,
+        1631,
+        1776,
+        1862,
+        1607,
+        1945,
+        1549,
+        1520,
+        1613,
+        1608,
+        1546,
+        1538,
+        1535,
+        1535,
+        1945,
+        1550,
+        1800
+      ],
+      "mean": 1693.3,
+      "median": 1610.5,
+      "min": 1520,
+      "max": 2011,
+      "sd_sample": 172.9405
+    },
+    "deaths_mean": 1.0,
+    "actions": {
+      "labels": [
+        "idle",
+        "N",
+        "NE",
+        "E",
+        "SE",
+        "S",
+        "SW",
+        "W",
+        "NW",
+        "focus-idle",
+        "focus-N",
+        "focus-NE",
+        "focus-E",
+        "focus-SE",
+        "focus-S",
+        "focus-SW",
+        "focus-W",
+        "focus-NW"
+      ],
+      "decisions": 16938,
+      "histogram": [
+        10123,
+        22,
+        512,
+        2509,
+        39,
+        60,
+        521,
+        2796,
+        53,
+        0,
+        0,
+        130,
+        141,
+        2,
+        0,
+        26,
+        3,
+        1
+      ],
+      "share": [
+        0.59765,
+        0.001299,
+        0.030228,
+        0.148128,
+        0.002303,
+        0.003542,
+        0.030759,
+        0.165073,
+        0.003129,
+        0.0,
+        0.0,
+        0.007675,
+        0.008324,
+        0.000118,
+        0.0,
+        0.001535,
+        0.000177,
+        5.9e-05
+      ],
+      "idle_share": 0.5976502538670445,
+      "idle_share_by_episode_mean": 0.6015314365065891,
+      "unique_actions_mean": 10.2,
+      "idle_definition": "candidate 0 = focus 0 + move 0 (no direction held)",
+      "dominant_action_share": 0.59765,
+      "dominant_action_index": 0
+    },
+    "per_seed": [
+      {
+        "seed": 1000,
+        "frames": 1538,
+        "steps": 769,
+        "score": 11789,
+        "deaths": 1.0,
+        "stop_reason": "death_stop",
+        "stage_clear": false,
+        "action0_share": 0.641092,
+        "unique_actions": 8,
+        "error": null
+      },
+      {
+        "seed": 1001,
+        "frames": 1945,
+        "steps": 973,
+        "score": 18284,
+        "deaths": 1.0,
+        "stop_reason": "death_stop",
+        "stage_clear": false,
+        "action0_share": 0.516958,
+        "unique_actions": 12,
+        "error": null
+      },
+      {
+        "seed": 1002,
+        "frames": 2011,
+        "steps": 1006,
+        "score": 19959,
+        "deaths": 1.0,
+        "stop_reason": "death_stop",
+        "stage_clear": false,
+        "action0_share": 0.55169,
+        "unique_actions": 15,
+        "error": null
+      },
+      {
+        "seed": 1003,
+        "frames": 1812,
+        "steps": 906,
+        "score": 19481,
+        "deaths": 1.0,
+        "stop_reason": "death_stop",
+        "stage_clear": false,
+        "action0_share": 0.558499,
+        "unique_actions": 9,
+        "error": null
+      },
+      {
+        "seed": 1004,
+        "frames": 1631,
+        "steps": 816,
+        "score": 13749,
+        "deaths": 1.0,
+        "stop_reason": "death_stop",
+        "stage_clear": false,
+        "action0_share": 0.609069,
+        "unique_actions": 9,
+        "error": null
+      },
+      {
+        "seed": 1005,
+        "frames": 1776,
+        "steps": 888,
+        "score": 22108,
+        "deaths": 1.0,
+        "stop_reason": "death_stop",
+        "stage_clear": false,
+        "action0_share": 0.600225,
+        "unique_actions": 8,
+        "error": null
+      },
+      {
+        "seed": 1006,
+        "frames": 1862,
+        "steps": 931,
+        "score": 16681,
+        "deaths": 1.0,
+        "stop_reason": "death_stop",
+        "stage_clear": false,
+        "action0_share": 0.583244,
+        "unique_actions": 10,
+        "error": null
+      },
+      {
+        "seed": 1007,
+        "frames": 1607,
+        "steps": 804,
+        "score": 13372,
+        "deaths": 1.0,
+        "stop_reason": "death_stop",
+        "stage_clear": false,
+        "action0_share": 0.61194,
+        "unique_actions": 13,
+        "error": null
+      },
+      {
+        "seed": 1008,
+        "frames": 1945,
+        "steps": 973,
+        "score": 28681,
+        "deaths": 1.0,
+        "stop_reason": "death_stop",
+        "stage_clear": false,
+        "action0_share": 0.524152,
+        "unique_actions": 11,
+        "error": null
+      },
+      {
+        "seed": 1009,
+        "frames": 1549,
+        "steps": 775,
+        "score": 11587,
+        "deaths": 1.0,
+        "stop_reason": "death_stop",
+        "stage_clear": false,
+        "action0_share": 0.636129,
+        "unique_actions": 9,
+        "error": null
+      },
+      {
+        "seed": 1010,
+        "frames": 1520,
+        "steps": 760,
+        "score": 10860,
+        "deaths": 1.0,
+        "stop_reason": "death_stop",
+        "stage_clear": false,
+        "action0_share": 0.648684,
+        "unique_actions": 10,
+        "error": null
+      },
+      {
+        "seed": 1011,
+        "frames": 1613,
+        "steps": 807,
+        "score": 12853,
+        "deaths": 1.0,
+        "stop_reason": "death_stop",
+        "stage_clear": false,
+        "action0_share": 0.629492,
+        "unique_actions": 13,
+        "error": null
+      },
+      {
+        "seed": 1012,
+        "frames": 1608,
+        "steps": 804,
+        "score": 13153,
+        "deaths": 1.0,
+        "stop_reason": "death_stop",
+        "stage_clear": false,
+        "action0_share": 0.608209,
+        "unique_actions": 9,
+        "error": null
+      },
+      {
+        "seed": 1013,
+        "frames": 1546,
+        "steps": 773,
+        "score": 11899,
+        "deaths": 1.0,
+        "stop_reason": "death_stop",
+        "stage_clear": false,
+        "action0_share": 0.631307,
+        "unique_actions": 8,
+        "error": null
+      },
+      {
+        "seed": 1014,
+        "frames": 1538,
+        "steps": 769,
+        "score": 11829,
+        "deaths": 1.0,
+        "stop_reason": "death_stop",
+        "stage_clear": false,
+        "action0_share": 0.63459,
+        "unique_actions": 7,
+        "error": null
+      },
+      {
+        "seed": 1015,
+        "frames": 1535,
+        "steps": 768,
+        "score": 11749,
+        "deaths": 1.0,
+        "stop_reason": "death_stop",
+        "stage_clear": false,
+        "action0_share": 0.640625,
+        "unique_actions": 8,
+        "error": null
+      },
+      {
+        "seed": 1016,
+        "frames": 1535,
+        "steps": 768,
+        "score": 11749,
+        "deaths": 1.0,
+        "stop_reason": "death_stop",
+        "stage_clear": false,
+        "action0_share": 0.640625,
+        "unique_actions": 8,
+        "error": null
+      },
+      {
+        "seed": 1017,
+        "frames": 1945,
+        "steps": 973,
+        "score": 17338,
+        "deaths": 1.0,
+        "stop_reason": "death_stop",
+        "stage_clear": false,
+        "action0_share": 0.54779,
+        "unique_actions": 12,
+        "error": null
+      },
+      {
+        "seed": 1018,
+        "frames": 1550,
+        "steps": 775,
+        "score": 11083,
+        "deaths": 1.0,
+        "stop_reason": "death_stop",
+        "stage_clear": false,
+        "action0_share": 0.637419,
+        "unique_actions": 13,
+        "error": null
+      },
+      {
+        "seed": 1019,
+        "frames": 1800,
+        "steps": 900,
+        "score": 16061,
+        "deaths": 1.0,
+        "stop_reason": "death_stop",
+        "stage_clear": false,
+        "action0_share": 0.578889,
+        "unique_actions": 12,
+        "error": null
+      }
+    ],
+    "episode_wall_seconds": {
+      "n": 20,
+      "total": 1127.52,
+      "min": 49.694,
+      "max": 67.58
+    },
+    "wilson_95": {
+      "successes": 0,
+      "n": 20,
+      "rate": 0.0,
+      "low": 0.0,
+      "high": 0.16112515805281938,
+      "method": "Wilson score interval, 95%, descriptive only",
+      "basis": "all scheduled episodes; a failed episode counts as a non-clear",
+      "descriptive_only": true
+    },
+    "verdict": {
+      "what_this_is": "smoke: the v410 checkpoint ran in the real engine under the S1N dev ruler",
+      "is_a_gate": false,
+      "is_a_development_score": false,
+      "is_a_pass_rate": false,
+      "is_a_four_arm_comparison": false,
+      "conclusion_allowed": false
+    },
+    "not_a_gate": true,
+    "not_a_development_score": true,
+    "not_g410_2": true
+  },
+  "comparison": {
+    "basis": "the same 15 beta=0.5 round-2 shards, the same converted labels, the same 20 % / 80 % mix, the same optimiser/seed and the same 5,000-step budget; the single changed variable is the idle loss weight",
+    "arms": [
+      {
+        "arm": "beta0.5 5k, class weights none (WP05.8)",
+        "clears": 0,
+        "n": 20,
+        "frames_mean": 1689.1,
+        "frames_median": 1605.0,
+        "frames_min": 1530,
+        "frames_max": 2213,
+        "frames_sd": 204.37759172668612,
+        "idle_share": 0.6284327651515151,
+        "idle_share_by_episode_mean": 0.6317297030066238,
+        "unique_actions_mean": 12.5,
+        "dominant_action_share": null,
+        "loss": 0.6585620161533355,
+        "top1": 0.7992578125,
+        "macro_recall": 0.27325591373739283
+      },
+      {
+        "arm": "beta0.5 5k, idle-cap 0.44 (WP05.12, this run)",
+        "clears": 0,
+        "n": 20,
+        "frames_mean": 1693.3,
+        "frames_median": 1610.5,
+        "frames_min": 1520,
+        "frames_max": 2011,
+        "frames_sd": 172.9405,
+        "idle_share": 0.5976502538670445,
+        "idle_share_by_episode_mean": 0.6015314365065891,
+        "unique_actions_mean": 10.2,
+        "dominant_action_share": 0.59765,
+        "loss": 0.6568151838302613,
+        "top1": 0.79729375,
+        "macro_recall": 0.3141586468864799
+      },
+      {
+        "arm": "beta0.5 20k, class weights none (WP05.11)",
+        "clears": 0,
+        "n": 20,
+        "frames_mean": 1714.65,
+        "frames_median": 1619.5,
+        "frames_min": 1523,
+        "frames_max": 2332,
+        "frames_sd": 207.6693411728315,
+        "idle_share": 0.6087108623403883,
+        "idle_share_by_episode_mean": 0.6114428142952227,
+        "unique_actions_mean": 12.45,
+        "dominant_action_share": 0.6087108623403883,
+        "loss": 0.32447231749873606,
+        "top1": 0.90050625,
+        "macro_recall": 0.590400958243511
+      }
+    ],
+    "delta_vs_5k_none": {
+      "frames_mean": 4.2,
+      "frames_mean_pct": 0.25,
+      "frames_median": 5.5,
+      "idle_share_pp": -3.08,
+      "unique_actions_mean": -2.3,
+      "macro_recall": 0.0409,
+      "clears": "0/20 -> 0/20"
+    },
+    "delta_vs_20k_none": {
+      "frames_mean": -21.35,
+      "frames_mean_pct": -1.25,
+      "frames_median": -9.0,
+      "idle_share_pp": -1.11,
+      "unique_actions_mean": -2.25,
+      "clears": "0/20 -> 0/20"
+    },
+    "label_prior_reference": {
+      "source": "Document/Update/Alpha/v4.1.0/evidence/WP05/idle_diag.json",
+      "label_prior_idle_dagger": 0.661562,
+      "label_prior_idle_s1": 0.439554,
+      "label_prior_idle_mix": 0.61716,
+      "dev20_idle_5k": 0.6284327651515151,
+      "dev20_idle_20k": 0.6087108623403883,
+      "idle_target_share_used": 0.44
+    }
+  },
+  "contention": {
+    "observed": true,
+    "what": "round3 DAgger batchA (tools/rl/v410_dagger_collect.py, seeds 2040-2054, beta=0.5) was running for the whole train + dev window; it was only observed, never signalled or killed",
+    "recorded_in": [
+      "logs/train.log",
+      "logs/eval_dev20.log"
+    ],
+    "note": "the engine is stepped at a fixed frame budget, not in real time, so wall times and throughput absorb the contention but the episode frame counts do not depend on it"
+  },
+  "verification": {
+    "checks": [
+      [
+        "run schema is v410-wp05-dagger-train-run/1",
+        true
+      ],
+      [
+        "class_weight.mode == idle-cap and applied",
+        true
+      ],
+      [
+        "idle implied share == 0.44 (1e-6)",
+        true
+      ],
+      [
+        "weight table is 18-way, mean sample weight == 1",
+        true
+      ],
+      [
+        "budget is exactly 5,000 x 128 = 640,000 samples",
+        true
+      ],
+      [
+        "evaluated checkpoint SHA == the trained checkpoint SHA",
+        true
+      ],
+      [
+        "checkpoint file SHA recomputed from disk",
+        true
+      ],
+      [
+        "20 dev seeds are exactly 1000-1019",
+        true
+      ],
+      [
+        "episode action histogram sums to the decision count",
+        true
+      ],
+      [
+        "train and eval exit codes are 0",
+        true
+      ],
+      [
+        "no row was resampled: sampled_label_counts are recorded",
+        true
+      ]
+    ],
+    "fail_closed": true,
+    "note": "this builder raises instead of writing the file when any join above fails"
+  },
+  "limits": [
+    "one arm (B0), one training seed (0), one step budget (5,000): no variance estimate, no interval and no ranking",
+    "one weight setting (idle target 0.44): this is a single point on the weight axis, not a sweep; nothing here says 0.44 is optimal",
+    "offline loss/top1/macroR are in-sample train-batch metrics, not held-out accuracy",
+    "the comparison with the 5k none arm is controlled on data/mix/budget/seed, but both arms share one training seed, so a 20-episode delta cannot be separated from seed noise",
+    "the 20k none arm differs in budget as well, so its column is descriptive",
+    "a class weight cannot add a state the corpus never visited: if the idle prior comes from tied teacher scores on states the student loops in, a loss weight does not change those states",
+    "round3 DAgger collection ran concurrently (observed, never killed): wall times and throughput are not comparable across rounds",
+    "dev covers seeds 1000-1019 only; the confirm split 60000-60199 was never requested and G410-2 was not measured"
+  ],
+  "not_claimed": [
+    "not G410-2: no confirm split, no four-arm matrix, no pre-registered decision rule, no gate",
+    "not a development score and not a pass/fail result: 0/20 or any other clear count here is descriptive",
+    "not new data: no collection, no teacher rerun, no confirm seed, no engine change; the game was launched only by the evaluator for the 20 dev episodes",
+    "not a claim that the idle prior is irrelevant: it is a claim about one weight setting at one fixed budget",
+    "not a claim that 5,000 steps is enough: the clear count is reported as measured",
+    "no commit and no push; no file outside the WP05.12 whitelist was modified"
+  ]
+}

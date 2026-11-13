@@ -1,0 +1,156 @@
+{
+  "schema": "v410-wp00-exposure/1",
+  "created_at": "2026-11-13T00:05:53+08:00",
+  "wp": "WP00.2",
+  "status": "verified_with_warnings",
+  "note": "Seed exposure and training-lineage audit based on the D0/D1 manifests, the on-disk splits, the bench result rows and the experiment documents. No run was started for this audit.",
+  "sources": {
+    "d1_manifest": {"path": ".tmp_v400_d1/d1/manifest.json", "sha256": "cf564f405702cfa76a13b37a7f083ca81166da876128b669e4d2f881893a709e", "shards_on_disk": 137},
+    "v3_split_full": {"path": ".tmp_v400_p3v3/split-full.json", "sha256": "e023fe49940613ee116c53f45571990141c2895963dd424c20eb3e204be42495"},
+    "m1_split": {"path": ".tmp_v400_obsv2/arms/m1/split.json", "sha256": "0bc2e1eeecf1a94c29e2deb0209f062808d794dc1b9d0a22c1e741536be5e27d"},
+    "d0_summary": {"path": ".tmp_v400_d0/summary.json", "sha256": "2c935ad5f9557e6c062bef1b6e56f54a7a7dcad23d2d79c4e97b172189270616"},
+    "bench_results": {"path": "Document/Update/Alpha/v4.0.0/bench/results.jsonl", "sha256": "d67e06002282839891b2203d4d2516864716a5e761bf923925ca8c9f22fb587d", "rows": 55, "unique_seeds": "1000-1019"},
+    "confirm_guard": {"path": "touhou_rl/v400/bench/suites.py", "sha256": "4984869b1790080a69407efa3a0653602030104d9d62c458c7fbaf5c664f3f32", "CONFIRM_SEEDS": "60000-60199"},
+    "trainer": {"path": "touhou_rl/v400/student/train_v3.py", "sha256": "e866c4baf7dbfccc5eedf746633ff209a559f1a04bce77d712f05dbb22457619", "seed_range_assert": false}
+  },
+  "seed_ranges": [
+    {
+      "name": "training_data_seeds",
+      "range": "1-25",
+      "exposed_for_training": true,
+      "used_by": ["D0 (1-16)", "D1 (1-25)", "v3", "m1"],
+      "used_for_development": true,
+      "used_for_confirmation": false,
+      "note": "D1 uses 25 unique seeds across stages; D0 uses 1-16. These are training-range seeds, not confirmation seeds."
+    },
+    {
+      "name": "dagger_seeds",
+      "range": "2000-2010",
+      "exposed_for_training": true,
+      "used_by": ["m1 (DAgger shards)"],
+      "used_for_development": false,
+      "used_for_confirmation": false
+    },
+    {
+      "name": "dev_eval_seeds",
+      "range": "1000-1019",
+      "exposed_for_training": false,
+      "used_for_development": true,
+      "used_for_confirmation": false,
+      "used_by": ["G1 S1N 20 episodes", "P3 development evaluations", "WP7 dev20", "EXP-P3-009 power evaluation"],
+      "note": "Bench results contain only 1000-1019; no training split contains a 1000-1019 seed. These remain dev, never confirmation."
+    },
+    {
+      "name": "old_confirm_seeds",
+      "range": "60000-60199",
+      "exposed_for_training": false,
+      "used_for_any_run": false,
+      "used_for_confirmation": false,
+      "note": "Only defined in suites.CONFIRM_SEEDS and referenced by the bench runner's disclosure text; no training data, split or bench row uses this range. Training entrypoints do not yet assert against it (gap)."
+    },
+    {
+      "name": "v410_dev_seeds",
+      "range": "1000-1099",
+      "exposed_for_training": false,
+      "used_for_development": "1000-1019 used; 1020-1099 unused",
+      "used_for_confirmation": false
+    },
+    {
+      "name": "v410_confirm_seeds",
+      "range": "61000-61499",
+      "exposed_for_training": false,
+      "used_for_development": false,
+      "used_for_confirmation": false,
+      "note": "Not used anywhere in the audited evidence."
+    }
+  ],
+  "lineage": [
+    {
+      "model": "m1",
+      "checkpoint": ".tmp_v400_obsv2/arms/m1/checkpoint.pt",
+      "data": ["D0 seeds 1-16 (dual-s0d1seed1..16)", "DAgger seeds 2000-2010 (dagger-s0d1seed2000..2010)"],
+      "split_seed": 0,
+      "dev_seed_overlap": [],
+      "confirm_seed_overlap": [],
+      "clean_for_dev_1000_1019": true,
+      "clean_for_project_holdout": false,
+      "reason": "D0 seeds 15-16 are in m1's training split (dual-s0d1seed15/16 = train); those same episodes are the perception probe's test seeds."
+    },
+    {
+      "model": "v3 (bc1/bc2/full)",
+      "checkpoint": ".tmp_v400_p3v3/checkpoint-v3-*.pt",
+      "data": ["D1 137 shards, seeds 1-25"],
+      "split": {"train_shards": 96, "train_decisions": 332377, "val_shards": 21, "val_decisions": 70961, "test_shards": 20, "test_decisions": 65878},
+      "split_seed": 0,
+      "dev_seed_overlap": [],
+      "confirm_seed_overlap": [],
+      "clean_for_dev_1000_1019": true,
+      "clean_for_project_holdout": false,
+      "reason": "D1 stage-0 seeds 15 and 16 are in the train split (d1-s0d1-n3371-seed15/16-shard = train); the perception probe used those exact D0 episodes as its test seeds."
+    },
+    {
+      "model": "teacher v2h",
+      "checkpoint": "none (search teacher, no learned weights)",
+      "data": "engine search; no training seed",
+      "dev_seed_overlap": "1000-1019 used only for G1 development evaluation",
+      "confirm_seed_overlap": [],
+      "clean_for_dev_1000_1019": true,
+      "clean_for_project_holdout": true,
+      "reason": "No learned parameters; teacher actions are computed online."
+    },
+    {
+      "model": "perception probe (EXP-P3-010)",
+      "data": "D0 seeds 1-14 train, 15-16 test",
+      "clean_for_project_holdout": false,
+      "reason": "The local train/test split is clean, but seeds 15-16 are training data for m1 (D0) and v3 (D1 stage 0). The probe's holdout is local-only; it cannot be used as a project-wide clean holdout."
+    }
+  ],
+  "contaminations": [
+    {
+      "id": "probe_test_seeds_15_16",
+      "severity": "recorded",
+      "evidence": ["m1 split: dual-s0d1seed15/16 = train", "v3 split: d1-s0d1-n3371-seed15/16 = train"],
+      "effect": "EXP-P3-010's test seeds are not project-clean; its F1 numbers remain valid for the probe's own split but not as a clean-holdout claim.",
+      "action": "Do not use seeds 15-16 for G410-6 clean holdout; use pre-registered 1040-1099 or a new unexposed range."
+    },
+    {
+      "id": "dev_seeds_1000_1019",
+      "severity": "recorded",
+      "effect": "Dev-exposed by G1/P3/WP7; must never be used for final confirmation. No training overlap found.",
+      "action": "Keep as dev only; formal G410 confirmations use 61000+ ranges."
+    },
+    {
+      "id": "old_confirm_60000_60199",
+      "severity": "gap",
+      "effect": "No run/training use found, but train_v3.py has no seed-range assert; suites.CONFIRM_SEEDS is a bench-side definition only.",
+      "action": "Add a fail-closed guard in the v4.10 training/eval entrypoints before any formal confirmation run."
+    }
+  ],
+  "budget_audit": {
+    "gpu_h_known": 0.22,
+    "gpu_h_unknown": null,
+    "wall_h_known": 34.8,
+    "wall_h_note": "sum of the 15 rows in v4.0.0/budget.jsonl; several rows are explicitly lower bounds, so this is not a complete wall-clock total",
+    "disk_gb_known": 11.101,
+    "disk_gb_null_rows": 2,
+    "first_round_gpu_cap": 160,
+    "first_round_disk_cap_gb": 150,
+    "d05_gpu_cap": 400,
+    "d05_disk_cap_gb": 300,
+    "gpu_remaining_against_first_round_cap": 159.78,
+    "measured_dataset_disk_gb": {"d1": 26.0, "d0": 1.39, "v3_checkpoints": 0.042},
+    "windows_d_free_gb": 909,
+    "note": "Unknown spend is not zero: many experiments lack wall/disk entries. The 160 GPU-h / 150 GB figures are the v4.1.0 first-round caps, not new authorization."
+  },
+  "gaps": [
+    "No single run ledger covers every historical experiment; this audit uses manifests, splits, bench rows and experiment cards.",
+    "train_v3.py does not assert that a seed is outside 60000-60199; the v4.10 entrypoints must add this guard before formal confirmation.",
+    "D1 manifest has 10 extra -iNNN duplicate/quarantine entries not present on disk; they are excluded from the 137-shard totals.",
+    "The perception probe's test seeds are training-exposed; this is recorded, not hidden."
+  ],
+  "next_actions": [
+    "Add a fail-closed confirm-seed guard in the v4.10 training/eval entrypoints.",
+    "Use 1040-1099 or a new unexposed range for clean holdout; never 15-16.",
+    "Proceed to WP01 protocol consistency."
+  ]
+}

@@ -1,0 +1,940 @@
+{
+  "schema": "v410-wp06-contract/1",
+  "contract_version": "wp06.1-contract/1",
+  "work_package": "v4.1.0 WP06.1",
+  "generated_at": "2026-11-13T08:07:40+08:00",
+  "status": "contract_frozen_detector_not_implemented",
+  "scope": {
+    "did": [
+      "freeze 7 states, the explicit transition table and the visible vs engine anchor families",
+      "freeze death/stage/game_over/menu latency definitions and the 400/536/550 count conventions",
+      "freeze the per-frame label schema, trajectory/ancestor split isolation and the one-shot confirmation seal",
+      "implement a streaming state machine over per-frame pixel observations with resource attribution",
+      "write synthetic contract tests (no engine, no data, no training)"
+    ],
+    "did_not": [
+      "launch the game or any engine",
+      "collect data or open the confirmation set",
+      "train or tune any detector",
+      "implement the pixel event detector (WP06.2/WP06.3)",
+      "claim G410-3"
+    ],
+    "whitelist": [
+      "touhou_rl/v410/reward/__init__.py",
+      "touhou_rl/v410/reward/events.py",
+      "touhou_rl/v410/reward/state_machine.py",
+      "touhou_rl/v410/reward/labels.py",
+      "tests/test_v410_reward_events.py",
+      "tests/test_v410_reward_state_machine.py",
+      "Document/Update/Alpha/v4.1.0/evidence/WP06/CONTRACT.md",
+      "Document/Update/Alpha/v4.1.0/evidence/WP06/contract.json",
+      ".tmp_v410_wp06_contract/ (running directory, not committed)"
+    ]
+  },
+  "states": {
+    "schema": "v410-wp06-state-machine/1",
+    "version": "wp06.1-state-machine/1",
+    "states": [
+      "ALIVE",
+      "HIT_PENDING",
+      "RESPAWN",
+      "STAGE_TRANSITION",
+      "GAME_OVER",
+      "MENU",
+      "UNKNOWN"
+    ],
+    "state_priority": [
+      "UNKNOWN",
+      "GAME_OVER",
+      "MENU",
+      "STAGE_TRANSITION",
+      "RESPAWN",
+      "HIT_PENDING",
+      "ALIVE"
+    ],
+    "subphases": {
+      "RESPAWN": [
+        "dying"
+      ]
+    },
+    "transitions": [
+      {
+        "from": "ALIVE",
+        "to": "HIT_PENDING",
+        "trigger": "hit_visible",
+        "emits": [
+          "hit_pending"
+        ],
+        "note": "A hit/blink is a state, never a death and never a life loss."
+      },
+      {
+        "from": "HIT_PENDING",
+        "to": "ALIVE",
+        "trigger": "w_hit_expired",
+        "emits": [],
+        "note": "No death and no bomb inside the pending window: the hit was survived."
+      },
+      {
+        "from": "HIT_PENDING",
+        "to": "ALIVE",
+        "trigger": "bomb_confirmed_no_life_loss",
+        "emits": [
+          "bomb",
+          "death_bomb"
+        ],
+        "note": "Death-bomb: a bomb is consumed inside HIT_PENDING and lives do not drop."
+      },
+      {
+        "from": "HIT_PENDING",
+        "to": "RESPAWN",
+        "trigger": "death_visible",
+        "emits": [
+          "death"
+        ],
+        "note": "A death inside the pending window is still exactly one death."
+      },
+      {
+        "from": "HIT_PENDING",
+        "to": "GAME_OVER",
+        "trigger": "terminal_panel_visible",
+        "emits": [
+          "death",
+          "game_over"
+        ],
+        "note": "Last-life death inside the pending window plus the terminal panel."
+      },
+      {
+        "from": "RESPAWN",
+        "to": "ALIVE",
+        "trigger": "respawn_stable",
+        "emits": [
+          "respawn"
+        ],
+        "note": "Player reappears at the bottom and stays visible for K frames."
+      },
+      {
+        "from": "RESPAWN",
+        "to": "GAME_OVER",
+        "trigger": "terminal_panel_or_last_life_timeout",
+        "emits": [
+          "game_over"
+        ],
+        "note": "Terminal panel visible, or no respawn within T_terminal after a last-life death."
+      },
+      {
+        "from": "RESPAWN",
+        "to": "MENU",
+        "trigger": "menu_visible",
+        "emits": [
+          "menu_enter"
+        ],
+        "note": "A non-terminal menu appears while dying."
+      },
+      {
+        "from": "ALIVE",
+        "to": "RESPAWN",
+        "trigger": "death_visible_or_life_loss",
+        "emits": [
+          "death",
+          "life_loss"
+        ],
+        "note": "Death from visible evidence or from an attributed lives drop."
+      },
+      {
+        "from": "ALIVE",
+        "to": "GAME_OVER",
+        "trigger": "terminal_panel_visible",
+        "emits": [
+          "death",
+          "game_over"
+        ],
+        "note": "Last-life death plus terminal panel; both events are scored separately."
+      },
+      {
+        "from": "ALIVE",
+        "to": "STAGE_TRANSITION",
+        "trigger": "stage_visible",
+        "emits": [
+          "stage_clear_visible"
+        ],
+        "note": "Pixel-visible stage-clear onset; the engine bit/index are separate labels."
+      },
+      {
+        "from": "STAGE_TRANSITION",
+        "to": "ALIVE",
+        "trigger": "new_stage_stable",
+        "emits": [],
+        "note": "New stage is stable; the reset window opens so resource jumps are cause=reset."
+      },
+      {
+        "from": "STAGE_TRANSITION",
+        "to": "MENU",
+        "trigger": "menu_visible",
+        "emits": [
+          "menu_enter"
+        ],
+        "note": "Pause/title menu during the stage transition."
+      },
+      {
+        "from": "STAGE_TRANSITION",
+        "to": "RESPAWN",
+        "trigger": "death_visible",
+        "emits": [
+          "death"
+        ],
+        "note": "A death during the stage sequence stays in the death denominator."
+      },
+      {
+        "from": "STAGE_TRANSITION",
+        "to": "GAME_OVER",
+        "trigger": "terminal_panel_visible",
+        "emits": [
+          "death",
+          "game_over"
+        ],
+        "note": "Last-life death during the stage sequence."
+      },
+      {
+        "from": "ALIVE",
+        "to": "MENU",
+        "trigger": "menu_visible",
+        "emits": [
+          "menu_enter"
+        ],
+        "note": "Pause/title/options menu; the retry panel is GAME_OVER instead."
+      },
+      {
+        "from": "MENU",
+        "to": "ALIVE",
+        "trigger": "menu_closed",
+        "emits": [
+          "menu_exit"
+        ],
+        "note": "Menu closed or a new game started; a new game resets the resource baseline."
+      },
+      {
+        "from": "MENU",
+        "to": "STAGE_TRANSITION",
+        "trigger": "menu_closed_into_stage_transition",
+        "emits": [
+          "menu_exit"
+        ],
+        "note": "Pause closed while the stage sequence was running."
+      },
+      {
+        "from": "MENU",
+        "to": "GAME_OVER",
+        "trigger": "menu_closed_into_terminal_panel",
+        "emits": [
+          "menu_exit"
+        ],
+        "note": "Title menu closed back onto the terminal panel; the panel stays GAME_OVER."
+      },
+      {
+        "from": "MENU",
+        "to": "RESPAWN",
+        "trigger": "death_visible",
+        "emits": [
+          "death"
+        ],
+        "note": "A death during a menu interval stays in the death denominator."
+      },
+      {
+        "from": "MENU",
+        "to": "GAME_OVER",
+        "trigger": "terminal_panel_visible",
+        "emits": [
+          "death",
+          "game_over"
+        ],
+        "note": "Last-life death during a menu interval."
+      },
+      {
+        "from": "GAME_OVER",
+        "to": "ALIVE",
+        "trigger": "restart_detected",
+        "emits": [
+          "restart"
+        ],
+        "note": "Pixel-terminal-driven restart; logged for the 100-cycle restart gate."
+      },
+      {
+        "from": "GAME_OVER",
+        "to": "MENU",
+        "trigger": "title_menu_visible",
+        "emits": [
+          "menu_enter"
+        ],
+        "note": "Back to the title/options menu after the terminal panel."
+      },
+      {
+        "from": null,
+        "to": "UNKNOWN",
+        "trigger": "state_undecidable",
+        "emits": [
+          "unknown_start"
+        ],
+        "note": "Both HUD and player cues invalid; hold the last state without zero-filling."
+      },
+      {
+        "from": "UNKNOWN",
+        "to": null,
+        "trigger": "observations_recovered",
+        "emits": [
+          "unknown_end"
+        ],
+        "note": "Restore the last state; events during UNKNOWN stay in the denominator as unobservable."
+      }
+    ],
+    "config": {
+      "w_hit": 12,
+      "w_confirm": 35,
+      "respawn_stable_frames": 6,
+      "respawn_timeout_frames": 240,
+      "stage_end_confirm_frames": 5,
+      "menu_clear_frames": 2,
+      "alive_stable_frames": 3,
+      "reset_window_frames": 30,
+      "death_confirm_frames": 0,
+      "strict_frame_continuity": true,
+      "placeholder_fields": [
+        "w_hit",
+        "w_confirm"
+      ],
+      "frozen": false,
+      "note": "defaults are WP06.0 placeholders; freeze them on dev data before any gate"
+    },
+    "menu_kinds": [
+      "pause",
+      "title",
+      "options",
+      "retry"
+    ],
+    "resource_fields": [
+      "lives",
+      "bombs",
+      "score"
+    ],
+    "resource_causes": [
+      "death",
+      "extend",
+      "bomb",
+      "bomb_pickup",
+      "death_frame_stock_move",
+      "reset",
+      "score"
+    ],
+    "engine_oracle": {
+      "default": "forbidden",
+      "offline_only": true,
+      "use": "annotate offline_engine_frame and emit label-only stage_clear_engine",
+      "never": "decide a transition, fill an unknown field, or rescue a state"
+    },
+    "unknown_policy": {
+      "enter": "state itself undecidable (no signal / invalid observation)",
+      "partial_hud": "keep the state and set hud_unknown; do not enter UNKNOWN",
+      "no_zero_fill": "unknown readings are dropped and re-acquired silently",
+      "no_engine_correction": "engine truth cannot repair UNKNOWN at runtime"
+    }
+  },
+  "events": {
+    "schema": "v410-wp06-events/1",
+    "event_specs": [
+      {
+        "event": "death",
+        "anchor_kind": "visible",
+        "role": "scored",
+        "scored_class": "death",
+        "engine_bits": [
+          "0x0004"
+        ],
+        "primary_p95_max": 10,
+        "primary_max": null,
+        "secondary_p95_max": 30,
+        "secondary_max": 60,
+        "description": "Player death; anchor is the first frame a human can see the death (sprite vanish/dissolve or death effect), never the engine bit.",
+        "runtime_inputs": [
+          "player local patch",
+          "sprite-present/NCC/novelty",
+          "HUD lives",
+          "state history"
+        ]
+      },
+      {
+        "event": "bomb",
+        "anchor_kind": "visible",
+        "role": "scored",
+        "scored_class": "bomb",
+        "engine_bits": [
+          "0x0001"
+        ],
+        "primary_p95_max": 10,
+        "primary_max": null,
+        "secondary_p95_max": 0,
+        "secondary_max": null,
+        "description": "Bomb use; anchor is the first frame the bombs icon count decreases (proven same-frame with engine 0x1, 436/436 in the v4.0 corpus).",
+        "runtime_inputs": [
+          "HUD bomb icons",
+          "bomb activation effect"
+        ]
+      },
+      {
+        "event": "death_bomb",
+        "anchor_kind": "visible",
+        "role": "diagnostic",
+        "scored_class": "bomb",
+        "engine_bits": [
+          "0x0002",
+          "0x0001"
+        ],
+        "primary_p95_max": 10,
+        "primary_max": null,
+        "secondary_p95_max": null,
+        "secondary_max": null,
+        "description": "Bomb consumed inside HIT_PENDING with no lives decrement within W_confirm; a bomb subtype, never a death.",
+        "runtime_inputs": [
+          "HIT_PENDING",
+          "HUD bomb icons",
+          "HUD lives"
+        ]
+      },
+      {
+        "event": "stage_clear_visible",
+        "anchor_kind": "visible",
+        "role": "scored",
+        "scored_class": "stage_transition",
+        "engine_bits": [
+          "0x0080"
+        ],
+        "primary_p95_max": 10,
+        "primary_max": null,
+        "secondary_p95_max": null,
+        "secondary_max": null,
+        "description": "Stage-clear sequence first visible frame (boss death/white flash/panel/banner); the engine bit and stage index are separate labels.",
+        "runtime_inputs": [
+          "play64 vgrad",
+          "panel/banner templates",
+          "HUD reset cues"
+        ]
+      },
+      {
+        "event": "game_over",
+        "anchor_kind": "visible",
+        "role": "scored",
+        "scored_class": "game_over",
+        "engine_bits": [],
+        "primary_p95_max": 10,
+        "primary_max": null,
+        "secondary_p95_max": null,
+        "secondary_max": null,
+        "description": "Terminal game-over/continue/retry panel first visible frame; never the 60-static-frame rule (89-frame lag in the v4.0 corpus).",
+        "runtime_inputs": [
+          "terminal panel template",
+          "lives==0 history",
+          "player absence"
+        ]
+      },
+      {
+        "event": "menu_enter",
+        "anchor_kind": "visible",
+        "role": "scored",
+        "scored_class": "menu",
+        "engine_bits": [],
+        "primary_p95_max": 10,
+        "primary_max": null,
+        "secondary_p95_max": null,
+        "secondary_max": null,
+        "description": "Non-terminal pause/title/options menu first visible frame; the retry panel belongs to GAME_OVER and is not counted here.",
+        "runtime_inputs": [
+          "menu templates"
+        ]
+      },
+      {
+        "event": "life_loss",
+        "anchor_kind": "visible",
+        "role": "diagnostic",
+        "scored_class": null,
+        "engine_bits": [],
+        "primary_p95_max": null,
+        "primary_max": null,
+        "secondary_p95_max": null,
+        "secondary_max": null,
+        "description": "HUD lives decreased and was attributed to a death; diagnostic confirmation of the death event, never a second death.",
+        "runtime_inputs": [
+          "HUD lives"
+        ]
+      },
+      {
+        "event": "stage_clear_engine",
+        "anchor_kind": "engine",
+        "role": "label_only",
+        "scored_class": null,
+        "engine_bits": [
+          "0x0080"
+        ],
+        "primary_p95_max": null,
+        "primary_max": null,
+        "secondary_p95_max": null,
+        "secondary_max": null,
+        "description": "Engine stage-clear bit rising edge (level bit, ~79 frames in the v4.0 capture, stage index 77 frames later); offline label only.",
+        "runtime_inputs": []
+      },
+      {
+        "event": "menu_exit",
+        "anchor_kind": "visible",
+        "role": "diagnostic",
+        "scored_class": null,
+        "engine_bits": [],
+        "primary_p95_max": null,
+        "primary_max": null,
+        "secondary_p95_max": null,
+        "secondary_max": null,
+        "description": "Menu closed or new game started; closes the menu interval.",
+        "runtime_inputs": [
+          "menu templates"
+        ]
+      },
+      {
+        "event": "respawn",
+        "anchor_kind": "visible",
+        "role": "diagnostic",
+        "scored_class": null,
+        "engine_bits": [],
+        "primary_p95_max": null,
+        "primary_max": null,
+        "secondary_p95_max": null,
+        "secondary_max": null,
+        "description": "Player sprite reappears at the bottom after a death; ends RESPAWN.",
+        "runtime_inputs": [
+          "player local patch",
+          "position tracker",
+          "HUD lives"
+        ]
+      },
+      {
+        "event": "hit_pending",
+        "anchor_kind": "visible",
+        "role": "diagnostic",
+        "scored_class": null,
+        "engine_bits": [
+          "0x0002"
+        ],
+        "primary_p95_max": null,
+        "primary_max": null,
+        "secondary_p95_max": null,
+        "secondary_max": null,
+        "description": "Hit/blink/white-flash interval start; a state, not a death.",
+        "runtime_inputs": [
+          "local patch time series"
+        ]
+      },
+      {
+        "event": "resource_reset",
+        "anchor_kind": "visible",
+        "role": "diagnostic",
+        "scored_class": null,
+        "engine_bits": [],
+        "primary_p95_max": null,
+        "primary_max": null,
+        "secondary_p95_max": null,
+        "secondary_max": null,
+        "description": "Resource jump inside a stage-transition/restart window; attributed to reset and never to a death or a bomb.",
+        "runtime_inputs": [
+          "HUD lives/bombs/score",
+          "state machine reset window"
+        ]
+      },
+      {
+        "event": "resource_extend",
+        "anchor_kind": "visible",
+        "role": "diagnostic",
+        "scored_class": null,
+        "engine_bits": [],
+        "primary_p95_max": null,
+        "primary_max": null,
+        "secondary_p95_max": null,
+        "secondary_max": null,
+        "description": "Lives increased outside a reset window (1UP extend).",
+        "runtime_inputs": [
+          "HUD lives"
+        ]
+      },
+      {
+        "event": "bomb_stock_move",
+        "anchor_kind": "visible",
+        "role": "diagnostic",
+        "scored_class": null,
+        "engine_bits": [],
+        "primary_p95_max": null,
+        "primary_max": null,
+        "secondary_p95_max": null,
+        "secondary_max": null,
+        "description": "Bomb stock moved by death handling (death frame / dying); ambiguous with a bomb, so it is never counted as one.",
+        "runtime_inputs": [
+          "HUD bomb icons",
+          "death state"
+        ]
+      },
+      {
+        "event": "restart",
+        "anchor_kind": "visible",
+        "role": "diagnostic",
+        "scored_class": null,
+        "engine_bits": [],
+        "primary_p95_max": null,
+        "primary_max": null,
+        "secondary_p95_max": null,
+        "secondary_max": null,
+        "description": "Pixel-terminal-driven restart completed; restart cycle bookkeeping.",
+        "runtime_inputs": [
+          "terminal panel",
+          "new game cues"
+        ]
+      },
+      {
+        "event": "unknown_start",
+        "anchor_kind": "visible",
+        "role": "diagnostic",
+        "scored_class": null,
+        "engine_bits": [],
+        "primary_p95_max": null,
+        "primary_max": null,
+        "secondary_p95_max": null,
+        "secondary_max": null,
+        "description": "State became undecidable; intervals are reported, never zero-filled.",
+        "runtime_inputs": [
+          "observation validity"
+        ]
+      },
+      {
+        "event": "unknown_end",
+        "anchor_kind": "visible",
+        "role": "diagnostic",
+        "scored_class": null,
+        "engine_bits": [],
+        "primary_p95_max": null,
+        "primary_max": null,
+        "secondary_p95_max": null,
+        "secondary_max": null,
+        "description": "State became decidable again; the last state is restored, not guessed.",
+        "runtime_inputs": [
+          "observation validity"
+        ]
+      }
+    ],
+    "scored_classes": [
+      "death",
+      "bomb",
+      "stage_transition",
+      "game_over",
+      "menu"
+    ],
+    "death_evidence_classes": [
+      "sprite_vanish",
+      "death_effect",
+      "hud_lives_decrement",
+      "respawn_only"
+    ],
+    "visible_evidence": [
+      "sprite_vanish",
+      "death_effect",
+      "hud_lives_decrement",
+      "respawn_only",
+      "bomb_activation_effect",
+      "hud_bombs_decrement",
+      "hud_bombs_increment",
+      "hud_lives_increment",
+      "hud_score_change",
+      "player_blink",
+      "player_reappears",
+      "stage_sequence",
+      "terminal_panel",
+      "menu_panel",
+      "retry_panel",
+      "restart",
+      "respawn_timeout_last_life",
+      "state_signal_loss"
+    ],
+    "engine_evidence": [
+      "engine_death_bit",
+      "engine_dying_bit",
+      "engine_bomb_bit",
+      "engine_hit_bit",
+      "engine_stage_clear_bit",
+      "engine_stage_index",
+      "engine_game_over_flag"
+    ],
+    "engine_bits": {
+      "bomb_started": "0x0001",
+      "player_hit": "0x0002",
+      "player_death_committed": "0x0004",
+      "stage_clear": "0x0080",
+      "pause_recorded": "0x0100",
+      "player_dying_started": "0x0200",
+      "effect_spawned": "0x0400"
+    },
+    "anchors": {
+      "visible": "first frame a human can see the event; annotated blind and frozen",
+      "engine": "engine bit/index; offline labels only, never a runtime input",
+      "rule": "the two clocks are never merged; A is the primary G410-3 anchor"
+    },
+    "latency": {
+      "visible_p95_max": 10,
+      "engine_p95_max": 30,
+      "engine_max": 60,
+      "match_window": [
+        0,
+        10
+      ],
+      "before": 0,
+      "method": "nearest-rank ceil(0.95*n)-1; median/max/n reported; n=0 fails",
+      "confirmation_frames": "counted inside the latency, never subtracted"
+    },
+    "counts": {
+      "schema": "v410-wp06-events/1",
+      "scored_classes": [
+        "death",
+        "bomb",
+        "stage_transition",
+        "game_over",
+        "menu"
+      ],
+      "minimum_events_per_class": 400,
+      "recommended_events_per_class": 550,
+      "confidence_conventions": [
+        {
+          "id": "readme_95_one_sided",
+          "confidence": 0.95,
+          "target": 0.99,
+          "minimum_events": 400,
+          "description": "README WP06 item 6: one-sided 95% Wilson lower bound >= 99%.",
+          "z": 1.959963984540054,
+          "zero_failure_n": 381
+        },
+        {
+          "id": "strict_99_confidence",
+          "confidence": 0.99,
+          "target": 0.99,
+          "minimum_events": 536,
+          "description": "Stricter reading of the same sentence: 99%-confidence lower bound >= 99%; 400 zero-failure events are not enough.",
+          "z": 2.3263478740408408,
+          "zero_failure_n": 536
+        }
+      ],
+      "note": "400 zero-failure events clear the README one-sided 95% reading (LB 99.049%) but fail the 99%-confidence reading (LB 98.665%, n>=536 required); 550 is the recommendation."
+    },
+    "resource_causes": [
+      "death",
+      "extend",
+      "bomb",
+      "bomb_pickup",
+      "death_frame_stock_move",
+      "reset",
+      "score"
+    ],
+    "failure_modes": [
+      "prediction earlier than the visible anchor -> false positive",
+      "reset labelled as death -> rejected",
+      "death-frame bomb stock move labelled as bomb -> rejected",
+      "zero samples -> no pass, no 0%/100%",
+      "engine truth used at runtime -> forbidden"
+    ]
+  },
+  "labels": {
+    "schema": "v410-wp06-frame-label/1",
+    "required_fields": [
+      "frame",
+      "state",
+      "event",
+      "visible_anchor",
+      "engine_anchor",
+      "resource_li",
+      "resource_bo",
+      "resource_sc",
+      "provenance",
+      "trajectory_id",
+      "parent_trajectory_id",
+      "ancestor_id",
+      "split_group"
+    ],
+    "optional_fields": [
+      "anchor_version",
+      "evidence",
+      "confidence",
+      "hud_unknown",
+      "unobservable",
+      "unobservable_reason",
+      "score_settled",
+      "subphase"
+    ],
+    "states": [
+      "ALIVE",
+      "HIT_PENDING",
+      "RESPAWN",
+      "STAGE_TRANSITION",
+      "GAME_OVER",
+      "MENU",
+      "UNKNOWN"
+    ],
+    "splits": [
+      "train",
+      "dev",
+      "confirmation"
+    ],
+    "split_minimum_fractions": {
+      "train": 0.6,
+      "dev": 0.2,
+      "confirmation": 0.2
+    },
+    "split_rule": "the split unit is the original trajectory and all its ancestors (seed, RESET chain, restart lineage, replay derivation); the same ancestor in two splits fails closed",
+    "provenance_kinds": [
+      "annotation",
+      "pixel_detector",
+      "engine_offline",
+      "synthetic",
+      "mixed"
+    ],
+    "confirmation_forbidden_provenance": [
+      "synthetic",
+      "mixed"
+    ],
+    "seal": {
+      "schema": "v410-wp06-confirmation-seal/1",
+      "required_components": [
+        "touhou_rl/v410/reward/events.py",
+        "touhou_rl/v410/reward/state_machine.py",
+        "touhou_rl/v410/reward/labels.py"
+      ],
+      "one_shot": true,
+      "open_rule": "open_confirmation() succeeds once; a second call raises",
+      "synthetic_allowed": false
+    },
+    "counts": {
+      "minimum_events_per_class": 400,
+      "recommended_events_per_class": 550,
+      "zero_samples": "never a pass, never 0%/100%"
+    },
+    "no_zero_fill": "None means unknown and must be flagged, never written as 0"
+  },
+  "runtime_purity": {
+    "rule": "the runtime path reads pixels and HUD pixels only",
+    "engine_oracle": "EngineObservation is rejected unless allow_engine_oracle=True; it can annotate labels but never decide a transition or repair UNKNOWN",
+    "forbidden_inputs": [
+      "EVENTS",
+      "STATE",
+      "HUD",
+      "PLAYER",
+      "gameOverFlag",
+      "stage_clear bit",
+      "engine death bit"
+    ],
+    "test": "scramble/delete the truth file; predictions must be identical"
+  },
+  "tests": {
+    "files": [
+      "tests/test_v410_reward_events.py",
+      "tests/test_v410_reward_state_machine.py"
+    ],
+    "kind": "synthetic contract tests; no engine, no real frames",
+    "commands": [
+      "$env:PYTHONPATH='D:\\WorkShop\\Touhou_RL'",
+      "python -m pytest -p no:cacheprovider --basetemp .tmp_v410_wp061_pytest -q tests/test_v410_reward_events.py tests/test_v410_reward_state_machine.py",
+      "python -m compileall -q touhou_rl/v410/reward"
+    ]
+  },
+  "commands": [
+    "$env:PYTHONPATH='D:\\WorkShop\\Touhou_RL'",
+    "python -m pytest -p no:cacheprovider --basetemp .tmp_v410_wp061_pytest -q tests/test_v410_reward_events.py tests/test_v410_reward_state_machine.py",
+    "python -m compileall -q touhou_rl/v410/reward"
+  ],
+  "validation": {
+    "commands": [
+      {
+        "command": "$env:PYTHONPATH='D:\\WorkShop\\Touhou_RL'; python -m pytest -p no:cacheprovider --basetemp .tmp_v410_wp061_pytest -q tests/test_v410_reward_events.py tests/test_v410_reward_state_machine.py",
+        "exit_code": 0,
+        "result": "71 passed in 0.12s"
+      },
+      {
+        "command": "$env:PYTHONPATH='D:\\WorkShop\\Touhou_RL'; python -m compileall -q touhou_rl/v410/reward",
+        "exit_code": 0,
+        "result": "syntax check only; exit 0 does not mean the tests pass"
+      }
+    ],
+    "pytest": {
+      "passed": 71,
+      "failed": 0,
+      "skipped": 0,
+      "errors": 0,
+      "collected": 71,
+      "cacheprovider": false,
+      "basetemp": ".tmp_v410_wp061_pytest",
+      "per_file": {
+        "tests/test_v410_reward_events.py": 43,
+        "tests/test_v410_reward_state_machine.py": 28
+      },
+      "kind": "synthetic contract tests; no engine, no real frames, no training"
+    },
+    "compileall": {
+      "exit_code": 0,
+      "target": "touhou_rl/v410/reward"
+    },
+    "engine_started": false,
+    "data_collected": false,
+    "trained": false,
+    "game_launched": false,
+    "files_modified_outside_whitelist": [],
+    "whitelist_used": [
+      "touhou_rl/v410/reward/__init__.py",
+      "touhou_rl/v410/reward/events.py",
+      "touhou_rl/v410/reward/state_machine.py",
+      "touhou_rl/v410/reward/labels.py",
+      "tests/test_v410_reward_events.py",
+      "tests/test_v410_reward_state_machine.py",
+      "Document/Update/Alpha/v4.1.0/evidence/WP06/CONTRACT.md",
+      "Document/Update/Alpha/v4.1.0/evidence/WP06/contract.json",
+      ".tmp_v410_wp06_contract/ (running directory, not committed)"
+    ],
+    "python": "3.12.10",
+    "pytest_version": "9.1.1",
+    "working_directory": "D:\\WorkShop\\Touhou_RL",
+    "not_run": [
+      "engine",
+      "data collection",
+      "training",
+      "G410-3 confirmation"
+    ]
+  },
+  "not_claimed": [
+    "not G410-3 passed; no detector, no real continuous stream, no confirmation run",
+    "no data collected, no training, no game/engine started in this work package",
+    "no v400/v380/v390, tools/rl/v400_*, tests/test_v400_*, third_party, existing v410 files, tools/rl/v410*.py or existing tests/test_v410_* modified",
+    "no state/journal/budget/assets or other WP evidence modified",
+    "no commit/push, no deletion or overwrite of old files",
+    "synthetic tests do not prove the pixel event detector can reach 99%; they only freeze the contract the detector will be scored against",
+    "the W_hit/W_confirm defaults are placeholders, not measured gate constants",
+    "no claim that the visible anchor is the old vgrad onset; independent annotation is still required before any anchor_version is frozen",
+    "no claim that 400 events pass the 99%-confidence reading; n>=536 is required and 550 is only a recommendation"
+  ],
+  "limitations": [
+    "death observability via HUD alone caps at 342/530 (64.53%); last-life deaths need the pixel anchor",
+    "the v4.0 stage-clear pixel onset leads the engine bit by ~112 frames; the old [edge, edge+10] window is retired for G410-3",
+    "the v4.0 game-over static rule reports 89 frames late; the first-visible panel anchor is a separate detector problem",
+    "the player locator T2a baseline is 11.59 px; local-window death detection needs a better pixel locator",
+    "D1 frame_event_flags is a per-decision snapshot with death=0/bomb=0 in all 469,216 rows and cannot be event truth",
+    "menu truth has no engine bit; it needs input logs plus visible annotation",
+    "confirmation data does not exist yet; the seal only defines how it must be frozen and opened once"
+  ],
+  "next": {
+    "id": "WP06.2",
+    "objective": "full-resolution color HUD reader (template first, learned fallback) plus the player locator prerequisite for local-window events",
+    "must_not": "train on confirmation data, reuse old G2 windows/thresholds as G410-3, or rescore with a different confidence convention"
+  },
+  "component_sha256": {
+    "touhou_rl/v410/reward/__init__.py": "2f7c19a00db3af0e4a2b52230e345dfa2a404ddc0055e300185374cfb38b599e",
+    "touhou_rl/v410/reward/events.py": "7ed782b9722c353823345fd849e2dfc926577050c5cb0f16084d67951b9abf8b",
+    "touhou_rl/v410/reward/state_machine.py": "af3cdda39a3011ce4175fca17862728416c6b235b715acc0970238bee7b98ab5",
+    "touhou_rl/v410/reward/labels.py": "c37c9d725e30a2ef81afee3f6756b59557ae73e4eb61592bed692ef610b1db47",
+    "tests/test_v410_reward_events.py": "4e057b9a85b3139c0a03213e7621a31d8402a0c451358adb203727de221955a3",
+    "tests/test_v410_reward_state_machine.py": "87388c9d5a04d85fdad74a73f0656b21b1c5cc4a721a42389916843e875152a9"
+  }
+}

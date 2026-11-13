@@ -1,0 +1,2055 @@
+{
+ "schema": "v410-s1b-run/1",
+ "step": "WP03.1b",
+ "version": "4.1.0",
+ "generated_at": "2026-11-13T03:10:18+0800",
+ "collector": "tools/rl/v400_d1_collect.py (read-only, unmodified)",
+ "engine": {
+  "build_dir": "/root/Touhou_RL/third_party/th08-rl/build/rl_v3",
+  "binary": "/root/Touhou_RL/third_party/th08-rl/build/rl_v3/th08-modern",
+  "sha256": "691bfd77b7eca3361aa8bb7af0977556a70cc73a070b29a2447222ba7a568ef6"
+ },
+ "smoke": {
+  "seeds": [
+   1000
+  ],
+  "shards": [
+   {
+    "shard": "d1-s0d1-n3251-seed1000-shard",
+    "stage": 0,
+    "seed": 1000,
+    "start_mode": "shard",
+    "decisions_requested": 3251,
+    "frames_expected": 13004,
+    "shard_json": ".tmp_v410_s1b/d1/shards/d1-s0d1-n3251-seed1000-shard/shard.json",
+    "report": ".tmp_v410_s1b/reports/d1-s0d1-n3251-seed1000-shard.json",
+    "present": true,
+    "report_status": "ok",
+    "work_dir": ".tmp_v410_s1b/work/d1-s0d1-n3251-seed1000-shard",
+    "status": "ok",
+    "decisions": 3250,
+    "frames": [
+     0,
+     13000
+    ],
+    "frames_from_decisions": 13000,
+    "stop_reason": "stage_changed",
+    "stage_clear": true,
+    "deaths_observed": 0,
+    "complete": true,
+    "obs_spec_version": "obs-v3",
+    "obs_spec_digest": "ef2fbd15385f26f425db2bfe855d105ee009023acb08c26916e811963553a105",
+    "digest_matches_frozen": true,
+    "labels": {
+     "path": ".tmp_v410_s1b/d1/shards/d1-s0d1-n3251-seed1000-shard/labels.jsonl",
+     "rows": 3250,
+     "rows_match_decisions": true,
+     "sha256": "9dce0f959aa5f2098813c43e9233a046fb49ff5ffc123d11b0fd52ab05f4fa5c"
+    },
+    "obs": {
+     "play96x112": {
+      "path": ".tmp_v410_s1b/d1/shards/d1-s0d1-n3251-seed1000-shard/obs/play96x112.npy",
+      "shape": [
+       3250,
+       4,
+       112,
+       96
+      ],
+      "dtype": "|u1",
+      "rows": 3250,
+      "rows_match_decisions": true,
+      "bytes": 139776522,
+      "sha256": "1612e3d0c2bb6dfe3852eae3542abf7014f42475ce7c13e714da942bb8aec2af",
+      "sha256_source": "shard.json (written by the collector from the stored bytes)"
+     },
+     "hud": {
+      "path": ".tmp_v410_s1b/d1/shards/d1-s0d1-n3251-seed1000-shard/obs/hud.npy",
+      "shape": [
+       3250,
+       56,
+       160
+      ],
+      "dtype": "|u1",
+      "rows": 3250,
+      "rows_match_decisions": true,
+      "bytes": 29120522,
+      "sha256": "a97120bd40db946d7e481070f6f24219f38ab7b2bae31a400b10e1cdead3d5a6",
+      "sha256_source": "shard.json (written by the collector from the stored bytes)"
+     },
+     "act_hist": {
+      "path": ".tmp_v410_s1b/d1/shards/d1-s0d1-n3251-seed1000-shard/obs/act_hist.npy",
+      "shape": [
+       3250,
+       8,
+       18
+      ],
+      "dtype": "|u1",
+      "rows": 3250,
+      "rows_match_decisions": true,
+      "bytes": 468522,
+      "sha256": "8459a9624c9ce3ce3550d522e7b2aa5fadb9a5764b02087ef4b8d7931175a66a",
+      "sha256_source": "shard.json (written by the collector from the stored bytes)"
+     }
+    },
+    "obs_rows_match_decisions": true,
+    "work_labels": {
+     "path": ".tmp_v410_s1b/work/d1-s0d1-n3251-seed1000-shard/labels.jsonl",
+     "present": true,
+     "rows": 3252,
+     "kinds": {
+      "report": 1,
+      "decision": 3251
+     },
+     "decision_rows": 3251,
+     "report_rows": 1,
+     "sha256": "2915fc5cd6a054e277e055bd5fd4fd0a2d11ef90a62c11c728728e8dba8452b4",
+     "bytes": 13163365,
+     "kept": true,
+     "decisions_beyond_stored": 1
+    },
+    "alignment": {
+     "method": "hash-checkpoint",
+     "decisions": 3250,
+     "boundaries": 6500,
+     "checkpoints_equal": 6500,
+     "checkpoints_mismatched": 0,
+     "first_mismatch": null
+    },
+    "transition_trim": true,
+    "channel_a": {
+     "decisions": 3251,
+     "decisions_requested": 3251,
+     "stopped_early": false,
+     "stop_reason": "stage_changed",
+     "stage_clear": true,
+     "deaths_observed": 0,
+     "frames_committed": 13004,
+     "labels_sha256": "2915fc5cd6a054e277e055bd5fd4fd0a2d11ef90a62c11c728728e8dba8452b4",
+     "exit_code": 0
+    },
+    "teacher_fps": 76.888,
+    "env_fps": 110.112,
+    "wall_s": 287.836,
+    "load": {
+     "samples": 3250,
+     "expected_samples": 3250,
+     "samples_match": true,
+     "obs_spec_version": "obs-v3",
+     "obs_spec_digest": "ef2fbd15385f26f425db2bfe855d105ee009023acb08c26916e811963553a105",
+     "digest_matches_frozen": true,
+     "unresolved": 0,
+     "play_shape": [
+      3250,
+      4,
+      112,
+      96
+     ],
+     "hud_shape": [
+      3250,
+      56,
+      160
+     ],
+     "act_hist_shape": [
+      3250,
+      8,
+      18
+     ],
+     "frames": [
+      0,
+      13000
+     ],
+     "decisions": 3250
+    },
+    "trim_explained": true,
+    "collector_exit_code": 0
+   }
+  ],
+  "totals": {
+   "shards_planned": 1,
+   "shards_ok": 1,
+   "shards_missing": 0,
+   "decisions": 3250,
+   "frames": 13000,
+   "work_decisions": 3251,
+   "trimmed_decisions": 1,
+   "obs_bytes": 169365566,
+   "seeds": [
+    1000
+   ],
+   "work_labels_kept": 1,
+   "obs_rows_all_match": true,
+   "digest_all_frozen": true,
+   "hash_alignment_all_equal": true,
+   "load_gate_all_passed": true
+  },
+  "plan": ".tmp_v410_s1b/plan.smoke.json",
+  "run": ".tmp_v410_s1b/run.smoke.json"
+ },
+ "main": {
+  "seeds": [
+   1000,
+   1001,
+   1002,
+   1003,
+   1004,
+   1005,
+   1006,
+   1007,
+   1008,
+   1009,
+   1010,
+   1011
+  ],
+  "shards": [
+   {
+    "shard": "d1-s0d1-n3251-seed1000-shard",
+    "stage": 0,
+    "seed": 1000,
+    "start_mode": "shard",
+    "decisions_requested": 3251,
+    "frames_expected": 13004,
+    "shard_json": ".tmp_v410_s1b/d1/shards/d1-s0d1-n3251-seed1000-shard/shard.json",
+    "report": ".tmp_v410_s1b/reports/d1-s0d1-n3251-seed1000-shard.json",
+    "present": true,
+    "report_status": "ok",
+    "work_dir": ".tmp_v410_s1b/work/d1-s0d1-n3251-seed1000-shard",
+    "status": "ok",
+    "decisions": 3250,
+    "frames": [
+     0,
+     13000
+    ],
+    "frames_from_decisions": 13000,
+    "stop_reason": "stage_changed",
+    "stage_clear": true,
+    "deaths_observed": 0,
+    "complete": true,
+    "obs_spec_version": "obs-v3",
+    "obs_spec_digest": "ef2fbd15385f26f425db2bfe855d105ee009023acb08c26916e811963553a105",
+    "digest_matches_frozen": true,
+    "labels": {
+     "path": ".tmp_v410_s1b/d1/shards/d1-s0d1-n3251-seed1000-shard/labels.jsonl",
+     "rows": 3250,
+     "rows_match_decisions": true,
+     "sha256": "9dce0f959aa5f2098813c43e9233a046fb49ff5ffc123d11b0fd52ab05f4fa5c"
+    },
+    "obs": {
+     "play96x112": {
+      "path": ".tmp_v410_s1b/d1/shards/d1-s0d1-n3251-seed1000-shard/obs/play96x112.npy",
+      "shape": [
+       3250,
+       4,
+       112,
+       96
+      ],
+      "dtype": "|u1",
+      "rows": 3250,
+      "rows_match_decisions": true,
+      "bytes": 139776522,
+      "sha256": "1612e3d0c2bb6dfe3852eae3542abf7014f42475ce7c13e714da942bb8aec2af",
+      "sha256_source": "shard.json (written by the collector from the stored bytes)"
+     },
+     "hud": {
+      "path": ".tmp_v410_s1b/d1/shards/d1-s0d1-n3251-seed1000-shard/obs/hud.npy",
+      "shape": [
+       3250,
+       56,
+       160
+      ],
+      "dtype": "|u1",
+      "rows": 3250,
+      "rows_match_decisions": true,
+      "bytes": 29120522,
+      "sha256": "a97120bd40db946d7e481070f6f24219f38ab7b2bae31a400b10e1cdead3d5a6",
+      "sha256_source": "shard.json (written by the collector from the stored bytes)"
+     },
+     "act_hist": {
+      "path": ".tmp_v410_s1b/d1/shards/d1-s0d1-n3251-seed1000-shard/obs/act_hist.npy",
+      "shape": [
+       3250,
+       8,
+       18
+      ],
+      "dtype": "|u1",
+      "rows": 3250,
+      "rows_match_decisions": true,
+      "bytes": 468522,
+      "sha256": "8459a9624c9ce3ce3550d522e7b2aa5fadb9a5764b02087ef4b8d7931175a66a",
+      "sha256_source": "shard.json (written by the collector from the stored bytes)"
+     }
+    },
+    "obs_rows_match_decisions": true,
+    "work_labels": {
+     "path": ".tmp_v410_s1b/work/d1-s0d1-n3251-seed1000-shard/labels.jsonl",
+     "present": true,
+     "rows": 3252,
+     "kinds": {
+      "report": 1,
+      "decision": 3251
+     },
+     "decision_rows": 3251,
+     "report_rows": 1,
+     "sha256": "2915fc5cd6a054e277e055bd5fd4fd0a2d11ef90a62c11c728728e8dba8452b4",
+     "bytes": 13163365,
+     "kept": true,
+     "decisions_beyond_stored": 1
+    },
+    "alignment": {
+     "method": "hash-checkpoint",
+     "decisions": 3250,
+     "boundaries": 6500,
+     "checkpoints_equal": 6500,
+     "checkpoints_mismatched": 0,
+     "first_mismatch": null
+    },
+    "transition_trim": true,
+    "channel_a": {
+     "decisions": 3251,
+     "decisions_requested": 3251,
+     "stopped_early": false,
+     "stop_reason": "stage_changed",
+     "stage_clear": true,
+     "deaths_observed": 0,
+     "frames_committed": 13004,
+     "labels_sha256": "2915fc5cd6a054e277e055bd5fd4fd0a2d11ef90a62c11c728728e8dba8452b4",
+     "exit_code": 0
+    },
+    "teacher_fps": 76.888,
+    "env_fps": 110.112,
+    "wall_s": 287.836,
+    "load": {
+     "samples": 3250,
+     "expected_samples": 3250,
+     "samples_match": true,
+     "obs_spec_version": "obs-v3",
+     "obs_spec_digest": "ef2fbd15385f26f425db2bfe855d105ee009023acb08c26916e811963553a105",
+     "digest_matches_frozen": true,
+     "unresolved": 0,
+     "play_shape": [
+      3250,
+      4,
+      112,
+      96
+     ],
+     "hud_shape": [
+      3250,
+      56,
+      160
+     ],
+     "act_hist_shape": [
+      3250,
+      8,
+      18
+     ],
+     "frames": [
+      0,
+      13000
+     ],
+     "decisions": 3250
+    },
+    "trim_explained": true,
+    "reused_from_smoke": true,
+    "collector_exit_code": 0
+   },
+   {
+    "shard": "d1-s0d1-n3251-seed1001-shard",
+    "stage": 0,
+    "seed": 1001,
+    "start_mode": "shard",
+    "decisions_requested": 3251,
+    "frames_expected": 13004,
+    "shard_json": ".tmp_v410_s1b/d1/shards/d1-s0d1-n3251-seed1001-shard/shard.json",
+    "report": ".tmp_v410_s1b/reports/d1-s0d1-n3251-seed1001-shard.json",
+    "present": true,
+    "report_status": "ok",
+    "work_dir": ".tmp_v410_s1b/work/d1-s0d1-n3251-seed1001-shard",
+    "status": "ok",
+    "decisions": 3251,
+    "frames": [
+     0,
+     13004
+    ],
+    "frames_from_decisions": 13004,
+    "stop_reason": "max_frames",
+    "stage_clear": false,
+    "deaths_observed": 0,
+    "complete": true,
+    "obs_spec_version": "obs-v3",
+    "obs_spec_digest": "ef2fbd15385f26f425db2bfe855d105ee009023acb08c26916e811963553a105",
+    "digest_matches_frozen": true,
+    "labels": {
+     "path": ".tmp_v410_s1b/d1/shards/d1-s0d1-n3251-seed1001-shard/labels.jsonl",
+     "rows": 3251,
+     "rows_match_decisions": true,
+     "sha256": "8012a8ba3b788d1dceb9d1039c19f6a57a762d4e80382c3a22b972284a70795e"
+    },
+    "obs": {
+     "play96x112": {
+      "path": ".tmp_v410_s1b/d1/shards/d1-s0d1-n3251-seed1001-shard/obs/play96x112.npy",
+      "shape": [
+       3251,
+       4,
+       112,
+       96
+      ],
+      "dtype": "|u1",
+      "rows": 3251,
+      "rows_match_decisions": true,
+      "bytes": 139819530,
+      "sha256": "14d118b9cf8ac7c16efd868027189a914ca6d912f6954ee3d0e7aea91f759421",
+      "sha256_source": "shard.json (written by the collector from the stored bytes)"
+     },
+     "hud": {
+      "path": ".tmp_v410_s1b/d1/shards/d1-s0d1-n3251-seed1001-shard/obs/hud.npy",
+      "shape": [
+       3251,
+       56,
+       160
+      ],
+      "dtype": "|u1",
+      "rows": 3251,
+      "rows_match_decisions": true,
+      "bytes": 29129482,
+      "sha256": "7999d19c66ff3541ad455edde3e648a18d3353514c08ffffb3b717d370bc7f0d",
+      "sha256_source": "shard.json (written by the collector from the stored bytes)"
+     },
+     "act_hist": {
+      "path": ".tmp_v410_s1b/d1/shards/d1-s0d1-n3251-seed1001-shard/obs/act_hist.npy",
+      "shape": [
+       3251,
+       8,
+       18
+      ],
+      "dtype": "|u1",
+      "rows": 3251,
+      "rows_match_decisions": true,
+      "bytes": 468666,
+      "sha256": "4635cbcb5bd644ac5f653b4269b392b7b61172e11f468588a539ac6552b60b61",
+      "sha256_source": "shard.json (written by the collector from the stored bytes)"
+     }
+    },
+    "obs_rows_match_decisions": true,
+    "work_labels": {
+     "path": ".tmp_v410_s1b/work/d1-s0d1-n3251-seed1001-shard/labels.jsonl",
+     "present": true,
+     "rows": 3252,
+     "kinds": {
+      "report": 1,
+      "decision": 3251
+     },
+     "decision_rows": 3251,
+     "report_rows": 1,
+     "sha256": "003bf3afd09b62f83ee092074f44ac8e7bbb22c622bbb67263a3de01eeef13a4",
+     "bytes": 13240948,
+     "kept": true,
+     "decisions_beyond_stored": 0
+    },
+    "alignment": {
+     "method": "hash-checkpoint",
+     "decisions": 3251,
+     "boundaries": 6502,
+     "checkpoints_equal": 6502,
+     "checkpoints_mismatched": 0,
+     "first_mismatch": null
+    },
+    "transition_trim": false,
+    "channel_a": {
+     "decisions": 3251,
+     "decisions_requested": 3251,
+     "stopped_early": false,
+     "stop_reason": "max_frames",
+     "stage_clear": false,
+     "deaths_observed": 0,
+     "frames_committed": 13004,
+     "labels_sha256": "003bf3afd09b62f83ee092074f44ac8e7bbb22c622bbb67263a3de01eeef13a4",
+     "exit_code": 0
+    },
+    "teacher_fps": 39.179,
+    "env_fps": 105.311,
+    "wall_s": 456.508,
+    "load": {
+     "samples": 3251,
+     "expected_samples": 3251,
+     "samples_match": true,
+     "obs_spec_version": "obs-v3",
+     "obs_spec_digest": "ef2fbd15385f26f425db2bfe855d105ee009023acb08c26916e811963553a105",
+     "digest_matches_frozen": true,
+     "unresolved": 0,
+     "play_shape": [
+      3251,
+      4,
+      112,
+      96
+     ],
+     "hud_shape": [
+      3251,
+      56,
+      160
+     ],
+     "act_hist_shape": [
+      3251,
+      8,
+      18
+     ],
+     "frames": [
+      0,
+      13004
+     ],
+     "decisions": 3251
+    },
+    "trim_explained": true,
+    "collector_exit_code": 0
+   },
+   {
+    "shard": "d1-s0d1-n3251-seed1002-shard",
+    "stage": 0,
+    "seed": 1002,
+    "start_mode": "shard",
+    "decisions_requested": 3251,
+    "frames_expected": 13004,
+    "shard_json": ".tmp_v410_s1b/d1/shards/d1-s0d1-n3251-seed1002-shard/shard.json",
+    "report": ".tmp_v410_s1b/reports/d1-s0d1-n3251-seed1002-shard.json",
+    "present": true,
+    "report_status": "ok",
+    "work_dir": ".tmp_v410_s1b/work/d1-s0d1-n3251-seed1002-shard",
+    "status": "ok",
+    "decisions": 3251,
+    "frames": [
+     0,
+     13004
+    ],
+    "frames_from_decisions": 13004,
+    "stop_reason": "max_frames",
+    "stage_clear": false,
+    "deaths_observed": 0,
+    "complete": true,
+    "obs_spec_version": "obs-v3",
+    "obs_spec_digest": "ef2fbd15385f26f425db2bfe855d105ee009023acb08c26916e811963553a105",
+    "digest_matches_frozen": true,
+    "labels": {
+     "path": ".tmp_v410_s1b/d1/shards/d1-s0d1-n3251-seed1002-shard/labels.jsonl",
+     "rows": 3251,
+     "rows_match_decisions": true,
+     "sha256": "7c105eed8535bb014f25ddbfbd959017e4f4beb8a0988a6ed8526129008ee18e"
+    },
+    "obs": {
+     "play96x112": {
+      "path": ".tmp_v410_s1b/d1/shards/d1-s0d1-n3251-seed1002-shard/obs/play96x112.npy",
+      "shape": [
+       3251,
+       4,
+       112,
+       96
+      ],
+      "dtype": "|u1",
+      "rows": 3251,
+      "rows_match_decisions": true,
+      "bytes": 139819530,
+      "sha256": "76a5c981c94622c7fa3e39b07ec0c2b66bea38f901a35765d8b391862d47596e",
+      "sha256_source": "shard.json (written by the collector from the stored bytes)"
+     },
+     "hud": {
+      "path": ".tmp_v410_s1b/d1/shards/d1-s0d1-n3251-seed1002-shard/obs/hud.npy",
+      "shape": [
+       3251,
+       56,
+       160
+      ],
+      "dtype": "|u1",
+      "rows": 3251,
+      "rows_match_decisions": true,
+      "bytes": 29129482,
+      "sha256": "5d0887bdcbc3c3c5087979fe0be5f3f3c967f11b205f3bc9b8628c692f3b1cc6",
+      "sha256_source": "shard.json (written by the collector from the stored bytes)"
+     },
+     "act_hist": {
+      "path": ".tmp_v410_s1b/d1/shards/d1-s0d1-n3251-seed1002-shard/obs/act_hist.npy",
+      "shape": [
+       3251,
+       8,
+       18
+      ],
+      "dtype": "|u1",
+      "rows": 3251,
+      "rows_match_decisions": true,
+      "bytes": 468666,
+      "sha256": "25a7fc520e5214137120068bb2ecd75f8c7d02e2116820213c1783fc1b0060d7",
+      "sha256_source": "shard.json (written by the collector from the stored bytes)"
+     }
+    },
+    "obs_rows_match_decisions": true,
+    "work_labels": {
+     "path": ".tmp_v410_s1b/work/d1-s0d1-n3251-seed1002-shard/labels.jsonl",
+     "present": true,
+     "rows": 3252,
+     "kinds": {
+      "report": 1,
+      "decision": 3251
+     },
+     "decision_rows": 3251,
+     "report_rows": 1,
+     "sha256": "c9b5b7d14c09b7a82f94f05104127f3735e6ed89ad4d47d2a4fe7f57601dce3b",
+     "bytes": 13187373,
+     "kept": true,
+     "decisions_beyond_stored": 0
+    },
+    "alignment": {
+     "method": "hash-checkpoint",
+     "decisions": 3251,
+     "boundaries": 6502,
+     "checkpoints_equal": 6502,
+     "checkpoints_mismatched": 0,
+     "first_mismatch": null
+    },
+    "transition_trim": false,
+    "channel_a": {
+     "decisions": 3251,
+     "decisions_requested": 3251,
+     "stopped_early": false,
+     "stop_reason": "max_frames",
+     "stage_clear": false,
+     "deaths_observed": 0,
+     "frames_committed": 13004,
+     "labels_sha256": "c9b5b7d14c09b7a82f94f05104127f3735e6ed89ad4d47d2a4fe7f57601dce3b",
+     "exit_code": 0
+    },
+    "teacher_fps": 38.656,
+    "env_fps": 98.316,
+    "wall_s": 469.471,
+    "load": {
+     "samples": 3251,
+     "expected_samples": 3251,
+     "samples_match": true,
+     "obs_spec_version": "obs-v3",
+     "obs_spec_digest": "ef2fbd15385f26f425db2bfe855d105ee009023acb08c26916e811963553a105",
+     "digest_matches_frozen": true,
+     "unresolved": 0,
+     "play_shape": [
+      3251,
+      4,
+      112,
+      96
+     ],
+     "hud_shape": [
+      3251,
+      56,
+      160
+     ],
+     "act_hist_shape": [
+      3251,
+      8,
+      18
+     ],
+     "frames": [
+      0,
+      13004
+     ],
+     "decisions": 3251
+    },
+    "trim_explained": true,
+    "collector_exit_code": 0
+   },
+   {
+    "shard": "d1-s0d1-n3251-seed1003-shard",
+    "stage": 0,
+    "seed": 1003,
+    "start_mode": "shard",
+    "decisions_requested": 3251,
+    "frames_expected": 13004,
+    "shard_json": ".tmp_v410_s1b/d1/shards/d1-s0d1-n3251-seed1003-shard/shard.json",
+    "report": ".tmp_v410_s1b/reports/d1-s0d1-n3251-seed1003-shard.json",
+    "present": true,
+    "report_status": "ok",
+    "work_dir": ".tmp_v410_s1b/work/d1-s0d1-n3251-seed1003-shard",
+    "status": "ok",
+    "decisions": 3251,
+    "frames": [
+     0,
+     13004
+    ],
+    "frames_from_decisions": 13004,
+    "stop_reason": "max_frames",
+    "stage_clear": false,
+    "deaths_observed": 0,
+    "complete": true,
+    "obs_spec_version": "obs-v3",
+    "obs_spec_digest": "ef2fbd15385f26f425db2bfe855d105ee009023acb08c26916e811963553a105",
+    "digest_matches_frozen": true,
+    "labels": {
+     "path": ".tmp_v410_s1b/d1/shards/d1-s0d1-n3251-seed1003-shard/labels.jsonl",
+     "rows": 3251,
+     "rows_match_decisions": true,
+     "sha256": "1765d9c40d44227cee6749137d4dd86b48c768f0c2070a53089d5d11cc2e4029"
+    },
+    "obs": {
+     "play96x112": {
+      "path": ".tmp_v410_s1b/d1/shards/d1-s0d1-n3251-seed1003-shard/obs/play96x112.npy",
+      "shape": [
+       3251,
+       4,
+       112,
+       96
+      ],
+      "dtype": "|u1",
+      "rows": 3251,
+      "rows_match_decisions": true,
+      "bytes": 139819530,
+      "sha256": "7b5709032b6bf0d5e7c5a52de1896c2897509b09b3746c94bb000d5a3807f339",
+      "sha256_source": "shard.json (written by the collector from the stored bytes)"
+     },
+     "hud": {
+      "path": ".tmp_v410_s1b/d1/shards/d1-s0d1-n3251-seed1003-shard/obs/hud.npy",
+      "shape": [
+       3251,
+       56,
+       160
+      ],
+      "dtype": "|u1",
+      "rows": 3251,
+      "rows_match_decisions": true,
+      "bytes": 29129482,
+      "sha256": "2e8073f1ef86a1a3db811b0803b526ebeb61151a2cf21c4ebd2232fd7f20b0cf",
+      "sha256_source": "shard.json (written by the collector from the stored bytes)"
+     },
+     "act_hist": {
+      "path": ".tmp_v410_s1b/d1/shards/d1-s0d1-n3251-seed1003-shard/obs/act_hist.npy",
+      "shape": [
+       3251,
+       8,
+       18
+      ],
+      "dtype": "|u1",
+      "rows": 3251,
+      "rows_match_decisions": true,
+      "bytes": 468666,
+      "sha256": "989b1f1997347bbf5c217448a6119556e2b8924abe7a308756943446d6397d0c",
+      "sha256_source": "shard.json (written by the collector from the stored bytes)"
+     }
+    },
+    "obs_rows_match_decisions": true,
+    "work_labels": {
+     "path": ".tmp_v410_s1b/work/d1-s0d1-n3251-seed1003-shard/labels.jsonl",
+     "present": true,
+     "rows": 3252,
+     "kinds": {
+      "report": 1,
+      "decision": 3251
+     },
+     "decision_rows": 3251,
+     "report_rows": 1,
+     "sha256": "9b313a05d90a9df1bcac9ffdea86fa33130721b6d989670735eb7dfb97b43ccc",
+     "bytes": 13228911,
+     "kept": true,
+     "decisions_beyond_stored": 0
+    },
+    "alignment": {
+     "method": "hash-checkpoint",
+     "decisions": 3251,
+     "boundaries": 6502,
+     "checkpoints_equal": 6502,
+     "checkpoints_mismatched": 0,
+     "first_mismatch": null
+    },
+    "transition_trim": false,
+    "channel_a": {
+     "decisions": 3251,
+     "decisions_requested": 3251,
+     "stopped_early": false,
+     "stop_reason": "max_frames",
+     "stage_clear": false,
+     "deaths_observed": 0,
+     "frames_committed": 13004,
+     "labels_sha256": "9b313a05d90a9df1bcac9ffdea86fa33130721b6d989670735eb7dfb97b43ccc",
+     "exit_code": 0
+    },
+    "teacher_fps": 38.892,
+    "env_fps": 106.355,
+    "wall_s": 457.405,
+    "load": {
+     "samples": 3251,
+     "expected_samples": 3251,
+     "samples_match": true,
+     "obs_spec_version": "obs-v3",
+     "obs_spec_digest": "ef2fbd15385f26f425db2bfe855d105ee009023acb08c26916e811963553a105",
+     "digest_matches_frozen": true,
+     "unresolved": 0,
+     "play_shape": [
+      3251,
+      4,
+      112,
+      96
+     ],
+     "hud_shape": [
+      3251,
+      56,
+      160
+     ],
+     "act_hist_shape": [
+      3251,
+      8,
+      18
+     ],
+     "frames": [
+      0,
+      13004
+     ],
+     "decisions": 3251
+    },
+    "trim_explained": true,
+    "collector_exit_code": 0
+   },
+   {
+    "shard": "d1-s0d1-n3251-seed1004-shard",
+    "stage": 0,
+    "seed": 1004,
+    "start_mode": "shard",
+    "decisions_requested": 3251,
+    "frames_expected": 13004,
+    "shard_json": ".tmp_v410_s1b/d1/shards/d1-s0d1-n3251-seed1004-shard/shard.json",
+    "report": ".tmp_v410_s1b/reports/d1-s0d1-n3251-seed1004-shard.json",
+    "present": true,
+    "report_status": "ok",
+    "work_dir": ".tmp_v410_s1b/work/d1-s0d1-n3251-seed1004-shard",
+    "status": "ok",
+    "decisions": 3251,
+    "frames": [
+     0,
+     13004
+    ],
+    "frames_from_decisions": 13004,
+    "stop_reason": "max_frames",
+    "stage_clear": false,
+    "deaths_observed": 0,
+    "complete": true,
+    "obs_spec_version": "obs-v3",
+    "obs_spec_digest": "ef2fbd15385f26f425db2bfe855d105ee009023acb08c26916e811963553a105",
+    "digest_matches_frozen": true,
+    "labels": {
+     "path": ".tmp_v410_s1b/d1/shards/d1-s0d1-n3251-seed1004-shard/labels.jsonl",
+     "rows": 3251,
+     "rows_match_decisions": true,
+     "sha256": "622b18f6650a89344e7db7b2e36219c967edc7a7e8828c884dde113c9c00d4e8"
+    },
+    "obs": {
+     "play96x112": {
+      "path": ".tmp_v410_s1b/d1/shards/d1-s0d1-n3251-seed1004-shard/obs/play96x112.npy",
+      "shape": [
+       3251,
+       4,
+       112,
+       96
+      ],
+      "dtype": "|u1",
+      "rows": 3251,
+      "rows_match_decisions": true,
+      "bytes": 139819530,
+      "sha256": "75eb539a7740cb3e687c648e708aa81c36daeca13c7b97ebe4fd12013865ae16",
+      "sha256_source": "shard.json (written by the collector from the stored bytes)"
+     },
+     "hud": {
+      "path": ".tmp_v410_s1b/d1/shards/d1-s0d1-n3251-seed1004-shard/obs/hud.npy",
+      "shape": [
+       3251,
+       56,
+       160
+      ],
+      "dtype": "|u1",
+      "rows": 3251,
+      "rows_match_decisions": true,
+      "bytes": 29129482,
+      "sha256": "756e7ece8b5c15daaf65f7e83ed45676bc629620f154a1e456df19cdbfdbcd47",
+      "sha256_source": "shard.json (written by the collector from the stored bytes)"
+     },
+     "act_hist": {
+      "path": ".tmp_v410_s1b/d1/shards/d1-s0d1-n3251-seed1004-shard/obs/act_hist.npy",
+      "shape": [
+       3251,
+       8,
+       18
+      ],
+      "dtype": "|u1",
+      "rows": 3251,
+      "rows_match_decisions": true,
+      "bytes": 468666,
+      "sha256": "390f9f0d66aa35643eb4d6e9464b65a9b8992f1d7b129a0e499d8d341fdd9817",
+      "sha256_source": "shard.json (written by the collector from the stored bytes)"
+     }
+    },
+    "obs_rows_match_decisions": true,
+    "work_labels": {
+     "path": ".tmp_v410_s1b/work/d1-s0d1-n3251-seed1004-shard/labels.jsonl",
+     "present": true,
+     "rows": 3252,
+     "kinds": {
+      "report": 1,
+      "decision": 3251
+     },
+     "decision_rows": 3251,
+     "report_rows": 1,
+     "sha256": "023ef45d2cc51745ffd3e8da19d19e84fbf4401084f5bc9d6c292fece2d28afd",
+     "bytes": 13257212,
+     "kept": true,
+     "decisions_beyond_stored": 0
+    },
+    "alignment": {
+     "method": "hash-checkpoint",
+     "decisions": 3251,
+     "boundaries": 6502,
+     "checkpoints_equal": 6502,
+     "checkpoints_mismatched": 0,
+     "first_mismatch": null
+    },
+    "transition_trim": false,
+    "channel_a": {
+     "decisions": 3251,
+     "decisions_requested": 3251,
+     "stopped_early": false,
+     "stop_reason": "max_frames",
+     "stage_clear": false,
+     "deaths_observed": 0,
+     "frames_committed": 13004,
+     "labels_sha256": "023ef45d2cc51745ffd3e8da19d19e84fbf4401084f5bc9d6c292fece2d28afd",
+     "exit_code": 0
+    },
+    "teacher_fps": 38.425,
+    "env_fps": 97.089,
+    "wall_s": 473.229,
+    "load": {
+     "samples": 3251,
+     "expected_samples": 3251,
+     "samples_match": true,
+     "obs_spec_version": "obs-v3",
+     "obs_spec_digest": "ef2fbd15385f26f425db2bfe855d105ee009023acb08c26916e811963553a105",
+     "digest_matches_frozen": true,
+     "unresolved": 0,
+     "play_shape": [
+      3251,
+      4,
+      112,
+      96
+     ],
+     "hud_shape": [
+      3251,
+      56,
+      160
+     ],
+     "act_hist_shape": [
+      3251,
+      8,
+      18
+     ],
+     "frames": [
+      0,
+      13004
+     ],
+     "decisions": 3251
+    },
+    "trim_explained": true,
+    "collector_exit_code": 0
+   },
+   {
+    "shard": "d1-s0d1-n3251-seed1005-shard",
+    "stage": 0,
+    "seed": 1005,
+    "start_mode": "shard",
+    "decisions_requested": 3251,
+    "frames_expected": 13004,
+    "shard_json": ".tmp_v410_s1b/d1/shards/d1-s0d1-n3251-seed1005-shard/shard.json",
+    "report": ".tmp_v410_s1b/reports/d1-s0d1-n3251-seed1005-shard.json",
+    "present": true,
+    "report_status": "ok",
+    "work_dir": ".tmp_v410_s1b/work/d1-s0d1-n3251-seed1005-shard",
+    "status": "ok",
+    "decisions": 3251,
+    "frames": [
+     0,
+     13004
+    ],
+    "frames_from_decisions": 13004,
+    "stop_reason": "max_frames",
+    "stage_clear": false,
+    "deaths_observed": 0,
+    "complete": true,
+    "obs_spec_version": "obs-v3",
+    "obs_spec_digest": "ef2fbd15385f26f425db2bfe855d105ee009023acb08c26916e811963553a105",
+    "digest_matches_frozen": true,
+    "labels": {
+     "path": ".tmp_v410_s1b/d1/shards/d1-s0d1-n3251-seed1005-shard/labels.jsonl",
+     "rows": 3251,
+     "rows_match_decisions": true,
+     "sha256": "5cf4fdcb1d6f6d43f0ec9ca73f6a05c8250d198f3b3033649dad2e80c31496a6"
+    },
+    "obs": {
+     "play96x112": {
+      "path": ".tmp_v410_s1b/d1/shards/d1-s0d1-n3251-seed1005-shard/obs/play96x112.npy",
+      "shape": [
+       3251,
+       4,
+       112,
+       96
+      ],
+      "dtype": "|u1",
+      "rows": 3251,
+      "rows_match_decisions": true,
+      "bytes": 139819530,
+      "sha256": "8d6f2e31d9ec23fdf56c9c49d15432613fef6d6684b0d8c64527abec5921551c",
+      "sha256_source": "shard.json (written by the collector from the stored bytes)"
+     },
+     "hud": {
+      "path": ".tmp_v410_s1b/d1/shards/d1-s0d1-n3251-seed1005-shard/obs/hud.npy",
+      "shape": [
+       3251,
+       56,
+       160
+      ],
+      "dtype": "|u1",
+      "rows": 3251,
+      "rows_match_decisions": true,
+      "bytes": 29129482,
+      "sha256": "bb29e910fae09789ed98eb00303f1af0522ca60102acf0e03a8e8f080b686b50",
+      "sha256_source": "shard.json (written by the collector from the stored bytes)"
+     },
+     "act_hist": {
+      "path": ".tmp_v410_s1b/d1/shards/d1-s0d1-n3251-seed1005-shard/obs/act_hist.npy",
+      "shape": [
+       3251,
+       8,
+       18
+      ],
+      "dtype": "|u1",
+      "rows": 3251,
+      "rows_match_decisions": true,
+      "bytes": 468666,
+      "sha256": "a025d5277270aea4d7b7bbece65062950696b45531e7a5c43405f5bf7434cc9b",
+      "sha256_source": "shard.json (written by the collector from the stored bytes)"
+     }
+    },
+    "obs_rows_match_decisions": true,
+    "work_labels": {
+     "path": ".tmp_v410_s1b/work/d1-s0d1-n3251-seed1005-shard/labels.jsonl",
+     "present": true,
+     "rows": 3252,
+     "kinds": {
+      "report": 1,
+      "decision": 3251
+     },
+     "decision_rows": 3251,
+     "report_rows": 1,
+     "sha256": "8a9815840daa22b1d9a24392be71ba5dc842cf8ab3adbd8f98d8f32b148d3164",
+     "bytes": 13227188,
+     "kept": true,
+     "decisions_beyond_stored": 0
+    },
+    "alignment": {
+     "method": "hash-checkpoint",
+     "decisions": 3251,
+     "boundaries": 6502,
+     "checkpoints_equal": 6502,
+     "checkpoints_mismatched": 0,
+     "first_mismatch": null
+    },
+    "transition_trim": false,
+    "channel_a": {
+     "decisions": 3251,
+     "decisions_requested": 3251,
+     "stopped_early": false,
+     "stop_reason": "max_frames",
+     "stage_clear": false,
+     "deaths_observed": 0,
+     "frames_committed": 13004,
+     "labels_sha256": "8a9815840daa22b1d9a24392be71ba5dc842cf8ab3adbd8f98d8f32b148d3164",
+     "exit_code": 0
+    },
+    "teacher_fps": 39.116,
+    "env_fps": 103.036,
+    "wall_s": 459.764,
+    "load": {
+     "samples": 3251,
+     "expected_samples": 3251,
+     "samples_match": true,
+     "obs_spec_version": "obs-v3",
+     "obs_spec_digest": "ef2fbd15385f26f425db2bfe855d105ee009023acb08c26916e811963553a105",
+     "digest_matches_frozen": true,
+     "unresolved": 0,
+     "play_shape": [
+      3251,
+      4,
+      112,
+      96
+     ],
+     "hud_shape": [
+      3251,
+      56,
+      160
+     ],
+     "act_hist_shape": [
+      3251,
+      8,
+      18
+     ],
+     "frames": [
+      0,
+      13004
+     ],
+     "decisions": 3251
+    },
+    "trim_explained": true,
+    "collector_exit_code": 0
+   },
+   {
+    "shard": "d1-s0d1-n3251-seed1006-shard",
+    "stage": 0,
+    "seed": 1006,
+    "start_mode": "shard",
+    "decisions_requested": 3251,
+    "frames_expected": 13004,
+    "shard_json": ".tmp_v410_s1b/d1/shards/d1-s0d1-n3251-seed1006-shard/shard.json",
+    "report": ".tmp_v410_s1b/reports/d1-s0d1-n3251-seed1006-shard.json",
+    "present": true,
+    "report_status": "ok",
+    "work_dir": ".tmp_v410_s1b/work/d1-s0d1-n3251-seed1006-shard",
+    "status": "ok",
+    "decisions": 3251,
+    "frames": [
+     0,
+     13004
+    ],
+    "frames_from_decisions": 13004,
+    "stop_reason": "max_frames",
+    "stage_clear": false,
+    "deaths_observed": 0,
+    "complete": true,
+    "obs_spec_version": "obs-v3",
+    "obs_spec_digest": "ef2fbd15385f26f425db2bfe855d105ee009023acb08c26916e811963553a105",
+    "digest_matches_frozen": true,
+    "labels": {
+     "path": ".tmp_v410_s1b/d1/shards/d1-s0d1-n3251-seed1006-shard/labels.jsonl",
+     "rows": 3251,
+     "rows_match_decisions": true,
+     "sha256": "837a00b21b1ff7ec65a26d9495f4ea83b77d5ca75c02a97fea09c017e9ef6421"
+    },
+    "obs": {
+     "play96x112": {
+      "path": ".tmp_v410_s1b/d1/shards/d1-s0d1-n3251-seed1006-shard/obs/play96x112.npy",
+      "shape": [
+       3251,
+       4,
+       112,
+       96
+      ],
+      "dtype": "|u1",
+      "rows": 3251,
+      "rows_match_decisions": true,
+      "bytes": 139819530,
+      "sha256": "c81d40d1a8694e286cdb30f16a61ba02c63baecf8296b3bab186153283402625",
+      "sha256_source": "shard.json (written by the collector from the stored bytes)"
+     },
+     "hud": {
+      "path": ".tmp_v410_s1b/d1/shards/d1-s0d1-n3251-seed1006-shard/obs/hud.npy",
+      "shape": [
+       3251,
+       56,
+       160
+      ],
+      "dtype": "|u1",
+      "rows": 3251,
+      "rows_match_decisions": true,
+      "bytes": 29129482,
+      "sha256": "8c81f34b1a2f98d72ef49449da2f5f150460f1a3226e3824117e1b07bec3cc46",
+      "sha256_source": "shard.json (written by the collector from the stored bytes)"
+     },
+     "act_hist": {
+      "path": ".tmp_v410_s1b/d1/shards/d1-s0d1-n3251-seed1006-shard/obs/act_hist.npy",
+      "shape": [
+       3251,
+       8,
+       18
+      ],
+      "dtype": "|u1",
+      "rows": 3251,
+      "rows_match_decisions": true,
+      "bytes": 468666,
+      "sha256": "b71968cabded5dbde566dadad67060a5fd8165d792ee2d850793c44473d6c8e4",
+      "sha256_source": "shard.json (written by the collector from the stored bytes)"
+     }
+    },
+    "obs_rows_match_decisions": true,
+    "work_labels": {
+     "path": ".tmp_v410_s1b/work/d1-s0d1-n3251-seed1006-shard/labels.jsonl",
+     "present": true,
+     "rows": 3252,
+     "kinds": {
+      "report": 1,
+      "decision": 3251
+     },
+     "decision_rows": 3251,
+     "report_rows": 1,
+     "sha256": "43df39f39b26ea19027e384a26303f3a471c1431900d43e1ee6d04d7797a287c",
+     "bytes": 13215956,
+     "kept": true,
+     "decisions_beyond_stored": 0
+    },
+    "alignment": {
+     "method": "hash-checkpoint",
+     "decisions": 3251,
+     "boundaries": 6502,
+     "checkpoints_equal": 6502,
+     "checkpoints_mismatched": 0,
+     "first_mismatch": null
+    },
+    "transition_trim": false,
+    "channel_a": {
+     "decisions": 3251,
+     "decisions_requested": 3251,
+     "stopped_early": false,
+     "stop_reason": "max_frames",
+     "stage_clear": false,
+     "deaths_observed": 0,
+     "frames_committed": 13004,
+     "labels_sha256": "43df39f39b26ea19027e384a26303f3a471c1431900d43e1ee6d04d7797a287c",
+     "exit_code": 0
+    },
+    "teacher_fps": 38.578,
+    "env_fps": 96.129,
+    "wall_s": 473.418,
+    "load": {
+     "samples": 3251,
+     "expected_samples": 3251,
+     "samples_match": true,
+     "obs_spec_version": "obs-v3",
+     "obs_spec_digest": "ef2fbd15385f26f425db2bfe855d105ee009023acb08c26916e811963553a105",
+     "digest_matches_frozen": true,
+     "unresolved": 0,
+     "play_shape": [
+      3251,
+      4,
+      112,
+      96
+     ],
+     "hud_shape": [
+      3251,
+      56,
+      160
+     ],
+     "act_hist_shape": [
+      3251,
+      8,
+      18
+     ],
+     "frames": [
+      0,
+      13004
+     ],
+     "decisions": 3251
+    },
+    "trim_explained": true,
+    "collector_exit_code": 0
+   },
+   {
+    "shard": "d1-s0d1-n3251-seed1007-shard",
+    "stage": 0,
+    "seed": 1007,
+    "start_mode": "shard",
+    "decisions_requested": 3251,
+    "frames_expected": 13004,
+    "shard_json": ".tmp_v410_s1b/d1/shards/d1-s0d1-n3251-seed1007-shard/shard.json",
+    "report": ".tmp_v410_s1b/reports/d1-s0d1-n3251-seed1007-shard.json",
+    "present": true,
+    "report_status": "ok",
+    "work_dir": ".tmp_v410_s1b/work/d1-s0d1-n3251-seed1007-shard",
+    "status": "ok",
+    "decisions": 3251,
+    "frames": [
+     0,
+     13004
+    ],
+    "frames_from_decisions": 13004,
+    "stop_reason": "max_frames",
+    "stage_clear": false,
+    "deaths_observed": 0,
+    "complete": true,
+    "obs_spec_version": "obs-v3",
+    "obs_spec_digest": "ef2fbd15385f26f425db2bfe855d105ee009023acb08c26916e811963553a105",
+    "digest_matches_frozen": true,
+    "labels": {
+     "path": ".tmp_v410_s1b/d1/shards/d1-s0d1-n3251-seed1007-shard/labels.jsonl",
+     "rows": 3251,
+     "rows_match_decisions": true,
+     "sha256": "f17f98110d1d326354f4e131a7cfd4fca39732001641022a3cedf9aa850eee1a"
+    },
+    "obs": {
+     "play96x112": {
+      "path": ".tmp_v410_s1b/d1/shards/d1-s0d1-n3251-seed1007-shard/obs/play96x112.npy",
+      "shape": [
+       3251,
+       4,
+       112,
+       96
+      ],
+      "dtype": "|u1",
+      "rows": 3251,
+      "rows_match_decisions": true,
+      "bytes": 139819530,
+      "sha256": "5f752ff0f8bb75f011c84fa7c433035cc1aac5937eeec4b0d7c386eb44635b00",
+      "sha256_source": "shard.json (written by the collector from the stored bytes)"
+     },
+     "hud": {
+      "path": ".tmp_v410_s1b/d1/shards/d1-s0d1-n3251-seed1007-shard/obs/hud.npy",
+      "shape": [
+       3251,
+       56,
+       160
+      ],
+      "dtype": "|u1",
+      "rows": 3251,
+      "rows_match_decisions": true,
+      "bytes": 29129482,
+      "sha256": "bb11a1d80f9978fda95c66cb4a59e0ca5b2ab71ec1339e6edc682895dec739b0",
+      "sha256_source": "shard.json (written by the collector from the stored bytes)"
+     },
+     "act_hist": {
+      "path": ".tmp_v410_s1b/d1/shards/d1-s0d1-n3251-seed1007-shard/obs/act_hist.npy",
+      "shape": [
+       3251,
+       8,
+       18
+      ],
+      "dtype": "|u1",
+      "rows": 3251,
+      "rows_match_decisions": true,
+      "bytes": 468666,
+      "sha256": "bbff691e16e615fc9100ff30aac5f3d1d2b40a2eab671855ea3988b300175a8b",
+      "sha256_source": "shard.json (written by the collector from the stored bytes)"
+     }
+    },
+    "obs_rows_match_decisions": true,
+    "work_labels": {
+     "path": ".tmp_v410_s1b/work/d1-s0d1-n3251-seed1007-shard/labels.jsonl",
+     "present": true,
+     "rows": 3252,
+     "kinds": {
+      "report": 1,
+      "decision": 3251
+     },
+     "decision_rows": 3251,
+     "report_rows": 1,
+     "sha256": "b96e7d3504185f0b93d63c08bd52688cd6fb7e8fc1bb6a3126f361194e54d147",
+     "bytes": 13249090,
+     "kept": true,
+     "decisions_beyond_stored": 0
+    },
+    "alignment": {
+     "method": "hash-checkpoint",
+     "decisions": 3251,
+     "boundaries": 6502,
+     "checkpoints_equal": 6502,
+     "checkpoints_mismatched": 0,
+     "first_mismatch": null
+    },
+    "transition_trim": false,
+    "channel_a": {
+     "decisions": 3251,
+     "decisions_requested": 3251,
+     "stopped_early": false,
+     "stop_reason": "max_frames",
+     "stage_clear": false,
+     "deaths_observed": 0,
+     "frames_committed": 13004,
+     "labels_sha256": "b96e7d3504185f0b93d63c08bd52688cd6fb7e8fc1bb6a3126f361194e54d147",
+     "exit_code": 0
+    },
+    "teacher_fps": 38.462,
+    "env_fps": 103.314,
+    "wall_s": 464.817,
+    "load": {
+     "samples": 3251,
+     "expected_samples": 3251,
+     "samples_match": true,
+     "obs_spec_version": "obs-v3",
+     "obs_spec_digest": "ef2fbd15385f26f425db2bfe855d105ee009023acb08c26916e811963553a105",
+     "digest_matches_frozen": true,
+     "unresolved": 0,
+     "play_shape": [
+      3251,
+      4,
+      112,
+      96
+     ],
+     "hud_shape": [
+      3251,
+      56,
+      160
+     ],
+     "act_hist_shape": [
+      3251,
+      8,
+      18
+     ],
+     "frames": [
+      0,
+      13004
+     ],
+     "decisions": 3251
+    },
+    "trim_explained": true,
+    "collector_exit_code": 0
+   },
+   {
+    "shard": "d1-s0d1-n3251-seed1008-shard",
+    "stage": 0,
+    "seed": 1008,
+    "start_mode": "shard",
+    "decisions_requested": 3251,
+    "frames_expected": 13004,
+    "shard_json": ".tmp_v410_s1b/d1/shards/d1-s0d1-n3251-seed1008-shard/shard.json",
+    "report": ".tmp_v410_s1b/reports/d1-s0d1-n3251-seed1008-shard.json",
+    "present": true,
+    "report_status": "ok",
+    "work_dir": ".tmp_v410_s1b/work/d1-s0d1-n3251-seed1008-shard",
+    "status": "ok",
+    "decisions": 3251,
+    "frames": [
+     0,
+     13004
+    ],
+    "frames_from_decisions": 13004,
+    "stop_reason": "max_frames",
+    "stage_clear": false,
+    "deaths_observed": 0,
+    "complete": true,
+    "obs_spec_version": "obs-v3",
+    "obs_spec_digest": "ef2fbd15385f26f425db2bfe855d105ee009023acb08c26916e811963553a105",
+    "digest_matches_frozen": true,
+    "labels": {
+     "path": ".tmp_v410_s1b/d1/shards/d1-s0d1-n3251-seed1008-shard/labels.jsonl",
+     "rows": 3251,
+     "rows_match_decisions": true,
+     "sha256": "e237f6be620a5b058580cadb4b848148b990bb41291460cfd7a5a3b5e32bcb3d"
+    },
+    "obs": {
+     "play96x112": {
+      "path": ".tmp_v410_s1b/d1/shards/d1-s0d1-n3251-seed1008-shard/obs/play96x112.npy",
+      "shape": [
+       3251,
+       4,
+       112,
+       96
+      ],
+      "dtype": "|u1",
+      "rows": 3251,
+      "rows_match_decisions": true,
+      "bytes": 139819530,
+      "sha256": "ee135ca309ba6fab7faa4fc0ea2e176ba86ff64ac565790df0832530fdd52853",
+      "sha256_source": "shard.json (written by the collector from the stored bytes)"
+     },
+     "hud": {
+      "path": ".tmp_v410_s1b/d1/shards/d1-s0d1-n3251-seed1008-shard/obs/hud.npy",
+      "shape": [
+       3251,
+       56,
+       160
+      ],
+      "dtype": "|u1",
+      "rows": 3251,
+      "rows_match_decisions": true,
+      "bytes": 29129482,
+      "sha256": "c9eee9c63a01a06ee7b7c54d52feb09a3dedc3921bf167aaf9dc2b29bc146426",
+      "sha256_source": "shard.json (written by the collector from the stored bytes)"
+     },
+     "act_hist": {
+      "path": ".tmp_v410_s1b/d1/shards/d1-s0d1-n3251-seed1008-shard/obs/act_hist.npy",
+      "shape": [
+       3251,
+       8,
+       18
+      ],
+      "dtype": "|u1",
+      "rows": 3251,
+      "rows_match_decisions": true,
+      "bytes": 468666,
+      "sha256": "de3cfe8dc07e32b157c270f432303e3c9771c4df2ebe8777a454d8587e226a72",
+      "sha256_source": "shard.json (written by the collector from the stored bytes)"
+     }
+    },
+    "obs_rows_match_decisions": true,
+    "work_labels": {
+     "path": ".tmp_v410_s1b/work/d1-s0d1-n3251-seed1008-shard/labels.jsonl",
+     "present": true,
+     "rows": 3252,
+     "kinds": {
+      "report": 1,
+      "decision": 3251
+     },
+     "decision_rows": 3251,
+     "report_rows": 1,
+     "sha256": "84b38ad9fa98f58c25c26e42b0c1a154bcf1eabe8928240f7d4dd0c2109170fa",
+     "bytes": 13228641,
+     "kept": true,
+     "decisions_beyond_stored": 0
+    },
+    "alignment": {
+     "method": "hash-checkpoint",
+     "decisions": 3251,
+     "boundaries": 6502,
+     "checkpoints_equal": 6502,
+     "checkpoints_mismatched": 0,
+     "first_mismatch": null
+    },
+    "transition_trim": false,
+    "channel_a": {
+     "decisions": 3251,
+     "decisions_requested": 3251,
+     "stopped_early": false,
+     "stop_reason": "max_frames",
+     "stage_clear": false,
+     "deaths_observed": 0,
+     "frames_committed": 13004,
+     "labels_sha256": "84b38ad9fa98f58c25c26e42b0c1a154bcf1eabe8928240f7d4dd0c2109170fa",
+     "exit_code": 0
+    },
+    "teacher_fps": 38.702,
+    "env_fps": 102.945,
+    "wall_s": 463.093,
+    "load": {
+     "samples": 3251,
+     "expected_samples": 3251,
+     "samples_match": true,
+     "obs_spec_version": "obs-v3",
+     "obs_spec_digest": "ef2fbd15385f26f425db2bfe855d105ee009023acb08c26916e811963553a105",
+     "digest_matches_frozen": true,
+     "unresolved": 0,
+     "play_shape": [
+      3251,
+      4,
+      112,
+      96
+     ],
+     "hud_shape": [
+      3251,
+      56,
+      160
+     ],
+     "act_hist_shape": [
+      3251,
+      8,
+      18
+     ],
+     "frames": [
+      0,
+      13004
+     ],
+     "decisions": 3251
+    },
+    "trim_explained": true,
+    "collector_exit_code": 0
+   },
+   {
+    "shard": "d1-s0d1-n3251-seed1009-shard",
+    "stage": 0,
+    "seed": 1009,
+    "start_mode": "shard",
+    "decisions_requested": 3251,
+    "frames_expected": 13004,
+    "shard_json": ".tmp_v410_s1b/d1/shards/d1-s0d1-n3251-seed1009-shard/shard.json",
+    "report": ".tmp_v410_s1b/reports/d1-s0d1-n3251-seed1009-shard.json",
+    "present": true,
+    "report_status": "ok",
+    "work_dir": ".tmp_v410_s1b/work/d1-s0d1-n3251-seed1009-shard",
+    "status": "ok",
+    "decisions": 3251,
+    "frames": [
+     0,
+     13004
+    ],
+    "frames_from_decisions": 13004,
+    "stop_reason": "max_frames",
+    "stage_clear": false,
+    "deaths_observed": 0,
+    "complete": true,
+    "obs_spec_version": "obs-v3",
+    "obs_spec_digest": "ef2fbd15385f26f425db2bfe855d105ee009023acb08c26916e811963553a105",
+    "digest_matches_frozen": true,
+    "labels": {
+     "path": ".tmp_v410_s1b/d1/shards/d1-s0d1-n3251-seed1009-shard/labels.jsonl",
+     "rows": 3251,
+     "rows_match_decisions": true,
+     "sha256": "25cf74507cf004e0428519451cd260f98f8635bb91bf33f3a1302a9879919c36"
+    },
+    "obs": {
+     "play96x112": {
+      "path": ".tmp_v410_s1b/d1/shards/d1-s0d1-n3251-seed1009-shard/obs/play96x112.npy",
+      "shape": [
+       3251,
+       4,
+       112,
+       96
+      ],
+      "dtype": "|u1",
+      "rows": 3251,
+      "rows_match_decisions": true,
+      "bytes": 139819530,
+      "sha256": "e201b5b5dd0a4567b2fd790d6b79f0f8a90ae164c9dd009dd4f6d81977a601d3",
+      "sha256_source": "shard.json (written by the collector from the stored bytes)"
+     },
+     "hud": {
+      "path": ".tmp_v410_s1b/d1/shards/d1-s0d1-n3251-seed1009-shard/obs/hud.npy",
+      "shape": [
+       3251,
+       56,
+       160
+      ],
+      "dtype": "|u1",
+      "rows": 3251,
+      "rows_match_decisions": true,
+      "bytes": 29129482,
+      "sha256": "e6b480adf913b9ce5515498667642f68b1a6e4376338e6453b695ca7178bdc41",
+      "sha256_source": "shard.json (written by the collector from the stored bytes)"
+     },
+     "act_hist": {
+      "path": ".tmp_v410_s1b/d1/shards/d1-s0d1-n3251-seed1009-shard/obs/act_hist.npy",
+      "shape": [
+       3251,
+       8,
+       18
+      ],
+      "dtype": "|u1",
+      "rows": 3251,
+      "rows_match_decisions": true,
+      "bytes": 468666,
+      "sha256": "476cf9e459b1ac96d5329340d496d109f8bdf80f83b6a32df2ac9bb41a4c07f2",
+      "sha256_source": "shard.json (written by the collector from the stored bytes)"
+     }
+    },
+    "obs_rows_match_decisions": true,
+    "work_labels": {
+     "path": ".tmp_v410_s1b/work/d1-s0d1-n3251-seed1009-shard/labels.jsonl",
+     "present": true,
+     "rows": 3252,
+     "kinds": {
+      "report": 1,
+      "decision": 3251
+     },
+     "decision_rows": 3251,
+     "report_rows": 1,
+     "sha256": "2ae3db878b6bf513f4aa16cb6d62507f32749214e6f6ae9a09c1340928e02da0",
+     "bytes": 13235116,
+     "kept": true,
+     "decisions_beyond_stored": 0
+    },
+    "alignment": {
+     "method": "hash-checkpoint",
+     "decisions": 3251,
+     "boundaries": 6502,
+     "checkpoints_equal": 6502,
+     "checkpoints_mismatched": 0,
+     "first_mismatch": null
+    },
+    "transition_trim": false,
+    "channel_a": {
+     "decisions": 3251,
+     "decisions_requested": 3251,
+     "stopped_early": false,
+     "stop_reason": "max_frames",
+     "stage_clear": false,
+     "deaths_observed": 0,
+     "frames_committed": 13004,
+     "labels_sha256": "2ae3db878b6bf513f4aa16cb6d62507f32749214e6f6ae9a09c1340928e02da0",
+     "exit_code": 0
+    },
+    "teacher_fps": 44.981,
+    "env_fps": 108.568,
+    "wall_s": 409.865,
+    "load": {
+     "samples": 3251,
+     "expected_samples": 3251,
+     "samples_match": true,
+     "obs_spec_version": "obs-v3",
+     "obs_spec_digest": "ef2fbd15385f26f425db2bfe855d105ee009023acb08c26916e811963553a105",
+     "digest_matches_frozen": true,
+     "unresolved": 0,
+     "play_shape": [
+      3251,
+      4,
+      112,
+      96
+     ],
+     "hud_shape": [
+      3251,
+      56,
+      160
+     ],
+     "act_hist_shape": [
+      3251,
+      8,
+      18
+     ],
+     "frames": [
+      0,
+      13004
+     ],
+     "decisions": 3251
+    },
+    "trim_explained": true,
+    "collector_exit_code": 0
+   },
+   {
+    "shard": "d1-s0d1-n3251-seed1010-shard",
+    "stage": 0,
+    "seed": 1010,
+    "start_mode": "shard",
+    "decisions_requested": 3251,
+    "frames_expected": 13004,
+    "shard_json": ".tmp_v410_s1b/d1/shards/d1-s0d1-n3251-seed1010-shard/shard.json",
+    "report": ".tmp_v410_s1b/reports/d1-s0d1-n3251-seed1010-shard.json",
+    "present": true,
+    "report_status": "ok",
+    "work_dir": ".tmp_v410_s1b/work/d1-s0d1-n3251-seed1010-shard",
+    "status": "ok",
+    "decisions": 3251,
+    "frames": [
+     0,
+     13004
+    ],
+    "frames_from_decisions": 13004,
+    "stop_reason": "max_frames",
+    "stage_clear": false,
+    "deaths_observed": 0,
+    "complete": true,
+    "obs_spec_version": "obs-v3",
+    "obs_spec_digest": "ef2fbd15385f26f425db2bfe855d105ee009023acb08c26916e811963553a105",
+    "digest_matches_frozen": true,
+    "labels": {
+     "path": ".tmp_v410_s1b/d1/shards/d1-s0d1-n3251-seed1010-shard/labels.jsonl",
+     "rows": 3251,
+     "rows_match_decisions": true,
+     "sha256": "bad5d2fe02f9e4ccb7c14863a97da7243bdef5a9d5734c100368398ccf9d7c11"
+    },
+    "obs": {
+     "play96x112": {
+      "path": ".tmp_v410_s1b/d1/shards/d1-s0d1-n3251-seed1010-shard/obs/play96x112.npy",
+      "shape": [
+       3251,
+       4,
+       112,
+       96
+      ],
+      "dtype": "|u1",
+      "rows": 3251,
+      "rows_match_decisions": true,
+      "bytes": 139819530,
+      "sha256": "378611f367614e4e7139e64ea7fb2d255ae0fcfa3a220962289b2785392fe9ce",
+      "sha256_source": "shard.json (written by the collector from the stored bytes)"
+     },
+     "hud": {
+      "path": ".tmp_v410_s1b/d1/shards/d1-s0d1-n3251-seed1010-shard/obs/hud.npy",
+      "shape": [
+       3251,
+       56,
+       160
+      ],
+      "dtype": "|u1",
+      "rows": 3251,
+      "rows_match_decisions": true,
+      "bytes": 29129482,
+      "sha256": "f07493b5dc45c8fe8b4ffc1d59b5ad2c42f2b4e8ea60dcda03f4e10dc2e4adea",
+      "sha256_source": "shard.json (written by the collector from the stored bytes)"
+     },
+     "act_hist": {
+      "path": ".tmp_v410_s1b/d1/shards/d1-s0d1-n3251-seed1010-shard/obs/act_hist.npy",
+      "shape": [
+       3251,
+       8,
+       18
+      ],
+      "dtype": "|u1",
+      "rows": 3251,
+      "rows_match_decisions": true,
+      "bytes": 468666,
+      "sha256": "50aee3d6e25f3f5433de82f27d8950392305932bbb48bd6b320673e0649e7af9",
+      "sha256_source": "shard.json (written by the collector from the stored bytes)"
+     }
+    },
+    "obs_rows_match_decisions": true,
+    "work_labels": {
+     "path": ".tmp_v410_s1b/work/d1-s0d1-n3251-seed1010-shard/labels.jsonl",
+     "present": true,
+     "rows": 3252,
+     "kinds": {
+      "report": 1,
+      "decision": 3251
+     },
+     "decision_rows": 3251,
+     "report_rows": 1,
+     "sha256": "7c93ee3495713e5f336291539afb2469c951f49e85ab712358c1f6eb8c158ed3",
+     "bytes": 13224302,
+     "kept": true,
+     "decisions_beyond_stored": 0
+    },
+    "alignment": {
+     "method": "hash-checkpoint",
+     "decisions": 3251,
+     "boundaries": 6502,
+     "checkpoints_equal": 6502,
+     "checkpoints_mismatched": 0,
+     "first_mismatch": null
+    },
+    "transition_trim": false,
+    "channel_a": {
+     "decisions": 3251,
+     "decisions_requested": 3251,
+     "stopped_early": false,
+     "stop_reason": "max_frames",
+     "stage_clear": false,
+     "deaths_observed": 0,
+     "frames_committed": 13004,
+     "labels_sha256": "7c93ee3495713e5f336291539afb2469c951f49e85ab712358c1f6eb8c158ed3",
+     "exit_code": 0
+    },
+    "teacher_fps": 45.455,
+    "env_fps": 110.639,
+    "wall_s": 404.327,
+    "load": {
+     "samples": 3251,
+     "expected_samples": 3251,
+     "samples_match": true,
+     "obs_spec_version": "obs-v3",
+     "obs_spec_digest": "ef2fbd15385f26f425db2bfe855d105ee009023acb08c26916e811963553a105",
+     "digest_matches_frozen": true,
+     "unresolved": 0,
+     "play_shape": [
+      3251,
+      4,
+      112,
+      96
+     ],
+     "hud_shape": [
+      3251,
+      56,
+      160
+     ],
+     "act_hist_shape": [
+      3251,
+      8,
+      18
+     ],
+     "frames": [
+      0,
+      13004
+     ],
+     "decisions": 3251
+    },
+    "trim_explained": true,
+    "collector_exit_code": 0
+   },
+   {
+    "shard": "d1-s0d1-n3251-seed1011-shard",
+    "stage": 0,
+    "seed": 1011,
+    "start_mode": "shard",
+    "decisions_requested": 3251,
+    "frames_expected": 13004,
+    "shard_json": ".tmp_v410_s1b/d1/shards/d1-s0d1-n3251-seed1011-shard/shard.json",
+    "report": ".tmp_v410_s1b/reports/d1-s0d1-n3251-seed1011-shard.json",
+    "present": true,
+    "report_status": "ok",
+    "work_dir": ".tmp_v410_s1b/work/d1-s0d1-n3251-seed1011-shard",
+    "status": "ok",
+    "decisions": 3251,
+    "frames": [
+     0,
+     13004
+    ],
+    "frames_from_decisions": 13004,
+    "stop_reason": "max_frames",
+    "stage_clear": false,
+    "deaths_observed": 0,
+    "complete": true,
+    "obs_spec_version": "obs-v3",
+    "obs_spec_digest": "ef2fbd15385f26f425db2bfe855d105ee009023acb08c26916e811963553a105",
+    "digest_matches_frozen": true,
+    "labels": {
+     "path": ".tmp_v410_s1b/d1/shards/d1-s0d1-n3251-seed1011-shard/labels.jsonl",
+     "rows": 3251,
+     "rows_match_decisions": true,
+     "sha256": "8dc578f6329a4f2c7dd5040632a8a579e5aeca7cfac724400a10c14d10d23dff"
+    },
+    "obs": {
+     "play96x112": {
+      "path": ".tmp_v410_s1b/d1/shards/d1-s0d1-n3251-seed1011-shard/obs/play96x112.npy",
+      "shape": [
+       3251,
+       4,
+       112,
+       96
+      ],
+      "dtype": "|u1",
+      "rows": 3251,
+      "rows_match_decisions": true,
+      "bytes": 139819530,
+      "sha256": "d43840b378da8ec1944311df2d8ae14d5d06e6dc11ff843b119c79552b762fec",
+      "sha256_source": "shard.json (written by the collector from the stored bytes)"
+     },
+     "hud": {
+      "path": ".tmp_v410_s1b/d1/shards/d1-s0d1-n3251-seed1011-shard/obs/hud.npy",
+      "shape": [
+       3251,
+       56,
+       160
+      ],
+      "dtype": "|u1",
+      "rows": 3251,
+      "rows_match_decisions": true,
+      "bytes": 29129482,
+      "sha256": "9c7340ab80b1775a7afac9cd23719183f750700c063aa01f99c9e8551c32144f",
+      "sha256_source": "shard.json (written by the collector from the stored bytes)"
+     },
+     "act_hist": {
+      "path": ".tmp_v410_s1b/d1/shards/d1-s0d1-n3251-seed1011-shard/obs/act_hist.npy",
+      "shape": [
+       3251,
+       8,
+       18
+      ],
+      "dtype": "|u1",
+      "rows": 3251,
+      "rows_match_decisions": true,
+      "bytes": 468666,
+      "sha256": "ef4b6e8ac105c607577ea58206b179c98b7e68e09c63c43f27db4fb942523b2d",
+      "sha256_source": "shard.json (written by the collector from the stored bytes)"
+     }
+    },
+    "obs_rows_match_decisions": true,
+    "work_labels": {
+     "path": ".tmp_v410_s1b/work/d1-s0d1-n3251-seed1011-shard/labels.jsonl",
+     "present": true,
+     "rows": 3252,
+     "kinds": {
+      "report": 1,
+      "decision": 3251
+     },
+     "decision_rows": 3251,
+     "report_rows": 1,
+     "sha256": "a68f7e315bddb41c238fc23262d3513a41edc16852f2a98bdf830f86319cf1f7",
+     "bytes": 13209955,
+     "kept": true,
+     "decisions_beyond_stored": 0
+    },
+    "alignment": {
+     "method": "hash-checkpoint",
+     "decisions": 3251,
+     "boundaries": 6502,
+     "checkpoints_equal": 6502,
+     "checkpoints_mismatched": 0,
+     "first_mismatch": null
+    },
+    "transition_trim": false,
+    "channel_a": {
+     "decisions": 3251,
+     "decisions_requested": 3251,
+     "stopped_early": false,
+     "stop_reason": "max_frames",
+     "stage_clear": false,
+     "deaths_observed": 0,
+     "frames_committed": 13004,
+     "labels_sha256": "a68f7e315bddb41c238fc23262d3513a41edc16852f2a98bdf830f86319cf1f7",
+     "exit_code": 0
+    },
+    "teacher_fps": 45.882,
+    "env_fps": 103.172,
+    "wall_s": 410.168,
+    "load": {
+     "samples": 3251,
+     "expected_samples": 3251,
+     "samples_match": true,
+     "obs_spec_version": "obs-v3",
+     "obs_spec_digest": "ef2fbd15385f26f425db2bfe855d105ee009023acb08c26916e811963553a105",
+     "digest_matches_frozen": true,
+     "unresolved": 0,
+     "play_shape": [
+      3251,
+      4,
+      112,
+      96
+     ],
+     "hud_shape": [
+      3251,
+      56,
+      160
+     ],
+     "act_hist_shape": [
+      3251,
+      8,
+      18
+     ],
+     "frames": [
+      0,
+      13004
+     ],
+     "decisions": 3251
+    },
+    "trim_explained": true,
+    "collector_exit_code": 0
+   }
+  ],
+  "totals": {
+   "shards_planned": 12,
+   "shards_ok": 12,
+   "shards_missing": 0,
+   "decisions": 39011,
+   "frames": 156044,
+   "work_decisions": 39012,
+   "trimmed_decisions": 1,
+   "obs_bytes": 2032960024,
+   "seeds": [
+    1000,
+    1001,
+    1002,
+    1003,
+    1004,
+    1005,
+    1006,
+    1007,
+    1008,
+    1009,
+    1010,
+    1011
+   ],
+   "work_labels_kept": 12,
+   "obs_rows_all_match": true,
+   "digest_all_frozen": true,
+   "hash_alignment_all_equal": true,
+   "load_gate_all_passed": true
+  },
+  "plan": ".tmp_v410_s1b/plan.s1b.json",
+  "run": ".tmp_v410_s1b/run.s1b.json",
+  "failed": [],
+  "shards_run_now": 11,
+  "shards_reused_from_smoke": 1
+ },
+ "obs_contract": {
+  "obs_spec_version": "obs-v3",
+  "frozen_digest": "ef2fbd15385f26f425db2bfe855d105ee009023acb08c26916e811963553a105",
+  "planes": [
+   "play96x112",
+   "hud",
+   "act_hist"
+  ],
+  "frames_per_decision": 4,
+  "digest_all_frozen": true,
+  "obs_rows_all_match": true,
+  "note": "every new shard stores the frozen obs-v3 digest ef2fbd15...a105, the same digest as the 8 WP03.1a shards, and its play/hud/act_hist row count equals its decision count"
+ },
+ "work_labels": {
+  "policy": "tools/rl/v400_d1_collect.py never deletes the channel-A work labels: work/<key>/labels.jsonl keeps one report row plus one decision row per teacher decision, including the verified/verified_mask detail that the shard labels.jsonl does not keep",
+  "kept_shards": 12,
+  "planned_shards": 12,
+  "work_decisions": 39012,
+  "stored_decisions": 39011,
+  "trimmed_decisions": 1
+ },
+ "not_claimed": [
+  "no training: nothing was fitted, no checkpoint was written",
+  "no obs was copied into the evidence tree; the shards stay under .tmp_v410_s1b/d1",
+  "verified_alive from the calibrated relabel is a model-consistency verdict, not a survival guarantee"
+ ]
+}

@@ -1,0 +1,261 @@
+{
+  "schema": "v410-s1-partial-audit/1",
+  "scope": "D410-S1",
+  "generated_at": "2026-11-12T18:15:31+00:00",
+  "tool": {
+    "module": "tools/rl/v410_relabel_d1.py",
+    "version": "4.1.0",
+    "python": "3.12.10",
+    "numpy": "2.5.4",
+    "command": [
+      "tools/rl/v410_relabel_d1.py",
+      "--d1-root",
+      ".tmp_v400_d1/d1",
+      "--work-root",
+      ".tmp_v400_d1/work",
+      "--out",
+      ".tmp_v410_wp03_relabel",
+      "--manifest",
+      "Document/Update/Alpha/v4.1.0/evidence/WP03/relabel_manifest.json",
+      "--s1-audit",
+      "Document/Update/Alpha/v4.1.0/evidence/WP03/s1_partial_audit.json"
+    ]
+  },
+  "manifest": "Document/Update/Alpha/v4.1.0/evidence/WP03/relabel_manifest.json",
+  "selection": {
+    "rule": "stage == 0 as recorded by the work report; the D1 shard labels.jsonl records stage=0 for every shard (including the stage-1 runs), so it is recorded but never used to select",
+    "stage0_shards": [
+      "d1-s0d1-n3371-seed1-shard",
+      "d1-s0d1-n3371-seed2-shard",
+      "d1-s0d1-n3371-seed3-shard",
+      "d1-s0d1-n3371-seed4-shard",
+      "d1-s0d1-n3371-seed5-shard",
+      "d1-s0d1-n3371-seed6-shard",
+      "d1-s0d1-n3371-seed7-shard",
+      "d1-s0d1-n3371-seed8-shard"
+    ],
+    "stage0_shard_count": 8,
+    "excluded_shards": [
+      {
+        "shard": "d1-s1d1-n4000-seed2-shard",
+        "stage": 1
+      },
+      {
+        "shard": "d1-s1d1-n4000-seed3-shard",
+        "stage": 1
+      },
+      {
+        "shard": "d1-s1d1-n4000-seed4-shard",
+        "stage": 1
+      },
+      {
+        "shard": "d1-s1d1-n4000-seed5-shard",
+        "stage": 1
+      },
+      {
+        "shard": "d1-s1d1-n4000-seed6-shard",
+        "stage": 1
+      },
+      {
+        "shard": "d1-s1d1-n4000-seed7-shard",
+        "stage": 1
+      },
+      {
+        "shard": "d1-s1d1-n4000-seed8-shard",
+        "stage": 1
+      }
+    ]
+  },
+  "observations_present": true,
+  "observation_planes": [
+    "play96x112",
+    "hud",
+    "act_hist"
+  ],
+  "observation_rows": 26625,
+  "decisions": 26625,
+  "work_decisions": 26632,
+  "trimmed_decisions": 7,
+  "unique_seeds": 8,
+  "seeds": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8
+  ],
+  "failed_shards": [],
+  "alive": 26488,
+  "dead": 0,
+  "unknown": 137,
+  "survival_counts": {
+    "verified_alive": 26488,
+    "verified_dead": 0,
+    "unknown": 137
+  },
+  "model_mismatch": 137,
+  "incomplete": 0,
+  "horizon_missing": 26625,
+  "verified_plans_total": 26625,
+  "frames_from_obs_decisions": 106500,
+  "frames_from_report_survival": 106528,
+  "against_s1": {
+    "schema": "v410-s1-partial-coverage/1",
+    "scope": "D410-S1",
+    "passed": false,
+    "status": "shortfall",
+    "thresholds": {
+      "min_decisions": 50000,
+      "min_seeds": 20,
+      "min_decisions_per_seed": 1,
+      "observations_present_required": true,
+      "synthetic_padding_allowed": false
+    },
+    "metrics": {
+      "shards": 8,
+      "decisions": 26625,
+      "work_decisions": 26632,
+      "trimmed_decisions": 7,
+      "unique_seeds": 8,
+      "seeds": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "alive": 26488,
+      "dead": 0,
+      "unknown": 137,
+      "observations_present": true
+    },
+    "shortfall_decisions": 23375,
+    "shortfall_seeds": 12,
+    "checks": [
+      {
+        "name": "decisions_ge_min",
+        "ok": false,
+        "detail": "26625 < 50000",
+        "severity": "label"
+      },
+      {
+        "name": "unique_seeds_ge_min",
+        "ok": false,
+        "detail": "8 < 20",
+        "severity": "label"
+      },
+      {
+        "name": "observations_present",
+        "ok": true,
+        "detail": "every aligned decision has an observation row (26625 decision(s), 106500 frame(s) from 4-frame decisions)",
+        "severity": "observation"
+      },
+      {
+        "name": "seed_set_matches_s1_plan",
+        "ok": false,
+        "detail": "seeds are the D1 shard seeds [1, 2, 3, 4, 5, 6, 7, 8], not the D410-S1 plan seeds [1000, 1001, 1002, 1003, 1004, 1005, 1006, 1007, 1008, 1009, 1010, 1011, 1012, 1013, 1014, 1015, 1016, 1017, 1018, 1019]",
+        "severity": "plan"
+      }
+    ],
+    "reasons": [
+      "26625 < 50000",
+      "8 < 20",
+      "seeds are the D1 shard seeds [1, 2, 3, 4, 5, 6, 7, 8], not the D410-S1 plan seeds [1000, 1001, 1002, 1003, 1004, 1005, 1006, 1007, 1008, 1009, 1010, 1011, 1012, 1013, 1014, 1015, 1016, 1017, 1018, 1019]"
+    ],
+    "note": "this is a PARTIAL slice of D410-S1: the decisions exist with real observations, but the slice is below the 50,000-decision / 20-seed threshold, so it is reported as shortfall and must never be read as an S1 pass"
+  },
+  "multi_partial": {
+    "schema": "v410-multi-partial/1",
+    "scope": "D410-MULTI",
+    "scope_shards": "all processed shards (stage 0 and stage 1)",
+    "passed": false,
+    "status": "shortfall",
+    "thresholds": {
+      "target_frames": 2000000,
+      "min_frames_per_stage": 150000,
+      "target_stages": 8
+    },
+    "metrics": {
+      "shards": 15,
+      "stages_present": 2,
+      "decisions": 54625,
+      "work_decisions": 54632,
+      "frames_from_obs_decisions": 218500,
+      "frames_from_report_survival": 218528
+    },
+    "per_stage": [
+      {
+        "stage": 0,
+        "shards": 8,
+        "decisions": 26625,
+        "frames_from_obs_decisions": 106500,
+        "min_frames": 150000,
+        "shortfall_frames": 43500
+      },
+      {
+        "stage": 1,
+        "shards": 7,
+        "decisions": 28000,
+        "frames_from_obs_decisions": 112000,
+        "min_frames": 150000,
+        "shortfall_frames": 38000
+      }
+    ],
+    "shortfall_frames": 1781500,
+    "shortfall_stages": 6,
+    "checks": [
+      {
+        "name": "stages_ge_target",
+        "ok": false,
+        "detail": "2 stage(s) < 8",
+        "severity": "coverage"
+      },
+      {
+        "name": "total_frames_ge_target",
+        "ok": false,
+        "detail": "218500 < 2000000",
+        "severity": "coverage"
+      },
+      {
+        "name": "stage_0_frames_ge_min",
+        "ok": false,
+        "detail": "106500  < 150000",
+        "severity": "coverage"
+      },
+      {
+        "name": "stage_1_frames_ge_min",
+        "ok": false,
+        "detail": "112000  < 150000",
+        "severity": "coverage"
+      }
+    ],
+    "reasons": [
+      "2 stage(s) < 8",
+      "218500 < 2000000",
+      "106500  < 150000",
+      "112000  < 150000"
+    ]
+  },
+  "not_claimed": [
+    "not a dataset: this is a re-label of existing D1 observations, no obs was copied, no run was launched, nothing was trained or collected",
+    "not D410-S1: the stage-0 slice is 26625 aligned decision(s) over 8 seed(s), below 50,000 / 20",
+    "not D410-MULTI: the whole 15-shard slice is 2 stages and far below 2,000,000 frames / 150,000 per stage",
+    "not a new teacher run: the labels come from the existing work JSONL verified detail, converted under the WP02.4 calibrated rule",
+    "verified_alive is the calibrated model-consistency verdict, not a survival guarantee; unknown is never a negative sample"
+  ],
+  "limits": [
+    "only 15 of the D1 shard directories kept a work labels.jsonl; the other shards cannot be re-labelled from work-level verified detail",
+    "the work JSONL is the only surviving copy of the per-plan verified detail for these observations: the D1 shard labels.jsonl keeps only verified_mask/count",
+    "the slice covers stage(s) [0, 1] and difficulty [1]; it is not a multi-stage or multi-difficulty dataset",
+    "trailing stage-transition decisions have no observation row and are trimmed (recorded per shard, never silently dropped)",
+    "the observations were recorded before commit while the work row frame is after it; alignment is keyed on hash_pre + decision_frame, and every label row carries its obs row index and decision_frame",
+    "D1 shard labels.jsonl records stage=0 for every shard; the work report stage is what this manifest trusts",
+    "obs sha256 values are verified against shard.json where it recorded them"
+  ]
+}

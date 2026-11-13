@@ -1,0 +1,591 @@
+{
+  "schema": "v410-wp03-plan-evidence/1",
+  "generated_at": "2026-11-12T18:08:21+00:00",
+  "tool": {
+    "module": "touhou_rl.v410.dataset_plan",
+    "version": "4.1.0",
+    "python": "3.10.12",
+    "command": [
+      "python",
+      "-m",
+      "touhou_rl.v410.dataset_plan",
+      "--audit-dir",
+      "/tmp/v410_fast20",
+      "--audit-out",
+      "Document/Update/Alpha/v4.1.0/evidence/WP03/s1_label_audit.json",
+      "--plan-out",
+      "Document/Update/Alpha/v4.1.0/evidence/WP03/plan.json"
+    ]
+  },
+  "work_package": "WP03.0",
+  "s1_plan": {
+    "schema": "v410-dataset-plan/1",
+    "scope": "D410-S1",
+    "stage": 0,
+    "difficulty": "normal",
+    "team": 0,
+    "seeds": [
+      1000,
+      1001,
+      1002,
+      1003,
+      1004,
+      1005,
+      1006,
+      1007,
+      1008,
+      1009,
+      1010,
+      1011,
+      1012,
+      1013,
+      1014,
+      1015,
+      1016,
+      1017,
+      1018,
+      1019
+    ],
+    "seed_count": 20,
+    "start_modes": [
+      "shard"
+    ],
+    "min_decisions": 50000,
+    "min_seeds": 20,
+    "min_decisions_per_seed": 1,
+    "unique_decision_points": true,
+    "all_decisions_labelled": true,
+    "decision_frames": 2,
+    "obs_spec": "v410",
+    "obs_planes": [
+      {
+        "plane": "play",
+        "shape": [
+          112,
+          96
+        ],
+        "dtype": "uint8",
+        "frame_stack": 4,
+        "normalize": "float32 / 255.0"
+      },
+      {
+        "plane": "hud",
+        "shape": [
+          56,
+          160
+        ],
+        "dtype": "uint8",
+        "frame_stack": 4,
+        "normalize": "float32 / 255.0"
+      },
+      {
+        "plane": "action_history",
+        "shape": [
+          8
+        ],
+        "dtype": "int64",
+        "frame_stack": null,
+        "note": "last 8 executed actions, oldest-first, excluding the current action"
+      },
+      {
+        "plane": "bomb",
+        "shape": [],
+        "dtype": "uint8",
+        "frame_stack": null,
+        "note": "binary bomb channel of the current decision"
+      }
+    ],
+    "required_label_fields": [
+      "schema",
+      "source_run_id",
+      "trajectory_id",
+      "trajectory_parent",
+      "engine_sha",
+      "protocol_sha",
+      "obs_sha",
+      "teacher_config_sha",
+      "seed",
+      "stage",
+      "difficulty",
+      "team",
+      "frame",
+      "decision",
+      "decision_frames",
+      "start_mode",
+      "burn_in_frames",
+      "obs_available",
+      "frame_stack",
+      "chosen_first_action",
+      "action_history",
+      "bomb",
+      "verified",
+      "query_status",
+      "survival_status",
+      "died",
+      "death_frame",
+      "frames_advanced",
+      "max_position_error",
+      "duration",
+      "events",
+      "termination_type"
+    ],
+    "observations_required": true,
+    "labels_required": true,
+    "no_synthetic_padding": true,
+    "split": {
+      "train": 0.7,
+      "val": 0.15,
+      "test": 0.15,
+      "group_by": "trajectory_parent",
+      "note": "a complete trajectory is never cut across splits"
+    },
+    "acceptance": {
+      "min_total_decisions": 50000,
+      "min_unique_seeds": 20,
+      "min_decisions_per_seed": 1,
+      "duplicate_decision_keys_allowed": 0,
+      "synthetic_padding_allowed": false,
+      "observations_present_required": true,
+      "note": "label counts and observation bytes are separate checks; a label-only corpus is blocked, never passed"
+    },
+    "note": "D410-S1: 18-way move/focus actions, 2-frame decisions, 4-frame stacked observations, trajectory-grouped 70/15/15 split"
+  },
+  "multi_plan": {
+    "schema": "v410-dataset-plan/1",
+    "scope": "D410-MULTI",
+    "stages": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "stage_count": 8,
+    "difficulty": "normal",
+    "team": 0,
+    "total_frames_target": 2000000,
+    "min_total_frames": 2000000,
+    "min_frames_per_stage": 150000,
+    "frames_per_stage_target": 250000,
+    "target_stage_frames": {
+      "0": 250000,
+      "1": 250000,
+      "2": 250000,
+      "3": 250000,
+      "4": 250000,
+      "5": 250000,
+      "6": 250000,
+      "7": 250000
+    },
+    "stage_plan": [
+      {
+        "stage": 0,
+        "target_frames": 250000,
+        "min_frames": 150000
+      },
+      {
+        "stage": 1,
+        "target_frames": 250000,
+        "min_frames": 150000
+      },
+      {
+        "stage": 2,
+        "target_frames": 250000,
+        "min_frames": 150000
+      },
+      {
+        "stage": 3,
+        "target_frames": 250000,
+        "min_frames": 150000
+      },
+      {
+        "stage": 4,
+        "target_frames": 250000,
+        "min_frames": 150000
+      },
+      {
+        "stage": 5,
+        "target_frames": 250000,
+        "min_frames": 150000
+      },
+      {
+        "stage": 6,
+        "target_frames": 250000,
+        "min_frames": 150000
+      },
+      {
+        "stage": 7,
+        "target_frames": 250000,
+        "min_frames": 150000
+      }
+    ],
+    "start_modes": [
+      "midway",
+      "natural_late",
+      "student_failure"
+    ],
+    "start_mix": [
+      {
+        "start_mode": "midway",
+        "min_fraction": 0.5,
+        "note": "mid-run start; a distinct start point, not a new trajectory"
+      },
+      {
+        "start_mode": "natural_late",
+        "min_fraction": 0.3,
+        "note": "late segment of a real continuous trajectory"
+      },
+      {
+        "start_mode": "student_failure",
+        "min_fraction": 0.2,
+        "note": "pre-death student state; unavailable until a student trajectory exists, and its absence must be declared, never silently zeroed"
+      }
+    ],
+    "unique_trajectories_required": true,
+    "min_unique_trajectories": 8,
+    "unique_trajectory_rule": "trajectory ids are unique and are never counted twice; a complete trajectory cut into k slices is one trajectory, not k episodes",
+    "min_decisions": 50000,
+    "decision_frames": 2,
+    "obs_spec": "v410",
+    "obs_planes": [
+      {
+        "plane": "play",
+        "shape": [
+          112,
+          96
+        ],
+        "dtype": "uint8",
+        "frame_stack": 4,
+        "normalize": "float32 / 255.0"
+      },
+      {
+        "plane": "hud",
+        "shape": [
+          56,
+          160
+        ],
+        "dtype": "uint8",
+        "frame_stack": 4,
+        "normalize": "float32 / 255.0"
+      },
+      {
+        "plane": "action_history",
+        "shape": [
+          8
+        ],
+        "dtype": "int64",
+        "frame_stack": null,
+        "note": "last 8 executed actions, oldest-first, excluding the current action"
+      },
+      {
+        "plane": "bomb",
+        "shape": [],
+        "dtype": "uint8",
+        "frame_stack": null,
+        "note": "binary bomb channel of the current decision"
+      }
+    ],
+    "required_label_fields": [
+      "schema",
+      "source_run_id",
+      "trajectory_id",
+      "trajectory_parent",
+      "engine_sha",
+      "protocol_sha",
+      "obs_sha",
+      "teacher_config_sha",
+      "seed",
+      "stage",
+      "difficulty",
+      "team",
+      "frame",
+      "decision",
+      "decision_frames",
+      "start_mode",
+      "burn_in_frames",
+      "obs_available",
+      "frame_stack",
+      "chosen_first_action",
+      "action_history",
+      "bomb",
+      "verified",
+      "query_status",
+      "survival_status",
+      "died",
+      "death_frame",
+      "frames_advanced",
+      "max_position_error",
+      "duration",
+      "events",
+      "termination_type"
+    ],
+    "observations_required": true,
+    "labels_required": true,
+    "no_synthetic_padding": true,
+    "split": {
+      "train": 0.7,
+      "val": 0.15,
+      "test": 0.15,
+      "group_by": "trajectory_parent",
+      "note": "a complete trajectory is never cut across splits"
+    },
+    "acceptance": {
+      "min_total_frames": 2000000,
+      "min_frames_per_stage": 150000,
+      "required_stages": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "min_unique_trajectories": 8,
+      "duplicate_trajectory_ids_allowed": 0,
+      "duplicate_frames_allowed": 0,
+      "synthetic_padding_allowed": false,
+      "observations_present_required": true,
+      "labels_present_required": true,
+      "note": "a missing observation or label for any stage fails the dataset; frames are real committed frames, never padded"
+    },
+    "note": "D410-MULTI: eight stages, at least 2,000,000 real committed frames, at least 150,000 per stage; the 50/30/20 start mix is a target, and student_failure must be declared unavailable rather than zeroed"
+  },
+  "s1_coverage": {
+    "schema": "v410-s1-coverage/1",
+    "scope": "D410-S1",
+    "passed": false,
+    "status": "blocked_missing_observations",
+    "blocked": true,
+    "labels_cover_s1": true,
+    "observations_ok": false,
+    "thresholds": {
+      "min_decisions": 50000,
+      "min_seeds": 20,
+      "min_decisions_per_seed": 1,
+      "duplicate_decision_keys_allowed": 0,
+      "synthetic_padding_allowed": false,
+      "observations_present_required": true
+    },
+    "metrics": {
+      "total_decisions": 66412,
+      "unique_decisions": 66412,
+      "unique_seeds": 20,
+      "seed_count": 20,
+      "min_seed_decisions": 3251,
+      "synthetic_padding": false,
+      "duplicate_decision_keys": 0,
+      "duplicates_checked": true,
+      "observations_present": false
+    },
+    "checks": [
+      {
+        "name": "total_decisions_ge_min",
+        "ok": true,
+        "detail": "66412 >= 50000",
+        "severity": "label"
+      },
+      {
+        "name": "unique_seeds_ge_min",
+        "ok": true,
+        "detail": "20 >= 20",
+        "severity": "label"
+      },
+      {
+        "name": "every_seed_has_decisions",
+        "ok": true,
+        "detail": "all seeds have decisions > 0",
+        "severity": "label"
+      },
+      {
+        "name": "per_seed_total_matches_total_decisions",
+        "ok": true,
+        "detail": "66412 == 66412",
+        "severity": "invalid"
+      },
+      {
+        "name": "synthetic_padding_is_false",
+        "ok": true,
+        "detail": "synthetic_padding is false",
+        "severity": "integrity"
+      },
+      {
+        "name": "duplicate_decision_keys_zero",
+        "ok": true,
+        "detail": "0 duplicate key(s)",
+        "severity": "label"
+      },
+      {
+        "name": "unique_decisions_ge_min",
+        "ok": true,
+        "detail": "66412 >= 50000",
+        "severity": "label"
+      },
+      {
+        "name": "observations_present_is_true",
+        "ok": false,
+        "detail": "observations_present is missing or not explicitly true (False); labels alone cannot satisfy D410-S1",
+        "severity": "observation"
+      }
+    ],
+    "reasons": [
+      "observations_present_is_true: observations_present is missing or not explicitly true (False); labels alone cannot satisfy D410-S1"
+    ],
+    "note": "labels_cover_s1 is the label-side verdict; passed additionally requires observations_present is true and synthetic_padding is false"
+  },
+  "multi_coverage": {
+    "schema": "v410-multi-coverage/1",
+    "scope": "D410-MULTI",
+    "passed": false,
+    "status": "failed_total_frames",
+    "blocked": false,
+    "thresholds": {
+      "min_total_frames": 2000000,
+      "min_frames_per_stage": 150000,
+      "required_stages": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "min_unique_trajectories": 8,
+      "synthetic_padding_allowed": false,
+      "observations_present_required": true,
+      "labels_present_required": true
+    },
+    "metrics": {
+      "total_frames": 0,
+      "stage_frames_sum": 0,
+      "stages_present": [],
+      "stages_with_target": [],
+      "stages_below_min": [],
+      "missing_stages": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "unique_trajectories": 0,
+      "trajectory_rows": 0,
+      "stages_ok": false,
+      "trajectories_ok": false,
+      "stage_observation_errors": [],
+      "stage_label_errors": [],
+      "synthetic_padding": false,
+      "observations_present": false,
+      "labels_present": false
+    },
+    "checks": [
+      {
+        "name": "total_frames_ge_target",
+        "ok": false,
+        "detail": "0 >= 2000000",
+        "severity": "integrity"
+      },
+      {
+        "name": "all_stages_present",
+        "ok": false,
+        "detail": "missing stages: [0, 1, 2, 3, 4, 5, 6, 7]",
+        "severity": "integrity"
+      },
+      {
+        "name": "stages_covered",
+        "ok": false,
+        "detail": "0 of 8 stages have >= 150000 frames",
+        "severity": "integrity"
+      },
+      {
+        "name": "trajectory_ids_unique",
+        "ok": true,
+        "detail": "0 unique of 0",
+        "severity": "integrity"
+      },
+      {
+        "name": "unique_trajectories_ge_min",
+        "ok": false,
+        "detail": "0 >= 8",
+        "severity": "integrity"
+      },
+      {
+        "name": "synthetic_padding_is_false",
+        "ok": true,
+        "detail": "synthetic_padding is false",
+        "severity": "integrity"
+      },
+      {
+        "name": "observations_present_is_true",
+        "ok": false,
+        "detail": "observations_present=False; stage flags: ok",
+        "severity": "observation"
+      },
+      {
+        "name": "labels_present_is_true",
+        "ok": false,
+        "detail": "labels_present=False; stage flags: ok",
+        "severity": "label"
+      }
+    ],
+    "reasons": [
+      "total_frames_ge_target: 0 >= 2000000",
+      "all_stages_present: missing stages: [0, 1, 2, 3, 4, 5, 6, 7]",
+      "stages_covered: 0 of 8 stages have >= 150000 frames",
+      "unique_trajectories_ge_min: 0 >= 8",
+      "observations_present_is_true: observations_present=False; stage flags: ok",
+      "labels_present_is_true: labels_present=False; stage flags: ok"
+    ],
+    "note": "passed requires real frames, all eight stage floors, unique trajectories, no synthetic padding, and observations and labels for every stage"
+  },
+  "multi_coverage_probe": {
+    "schema": "v410-multi-coverage-manifest/1",
+    "total_frames": 0,
+    "stages": {},
+    "trajectories": [],
+    "observations_present": false,
+    "labels_present": false,
+    "synthetic_padding": false,
+    "data_status": "not_collected",
+    "note": "WP03.0 only pre-registers D410-MULTI; no multi-stage frames were collected in this work package, so the validator fails closed"
+  },
+  "s1_label_audit": {
+    "path": "Document/Update/Alpha/v4.1.0/evidence/WP03/s1_label_audit.json",
+    "sha256": "c5d2f92aa2f0eb290990883259b193b0183688867773323e4b8582b083e542e6",
+    "bytes": 19961,
+    "runs": 20,
+    "total_decisions": 66412,
+    "unique_seeds": 20,
+    "observations_present": false,
+    "status": "blocked_missing_observations"
+  },
+  "pytest": {
+    "command": "python -m pytest -p no:cacheprovider --basetemp .tmp_v410_wp03_pytest -q tests/test_v410_dataset_plan.py",
+    "note": "the WP03.0 pytest statistics are recorded in PLAN.md"
+  },
+  "not_claimed": [
+    "not a G410-1 pass: this writes plans and audits existing teacher labels; no dataset acceptance gate is satisfied",
+    "not a new dataset: no game run, collection, training or D1 rewrite happened",
+    "not D410-MULTI data: the multi validator is run against an explicit not_collected manifest and fails closed",
+    "not observation coverage: the S1 audit reports observations_present=false, so the dataset is blocked until WP03.1 collects real observation bytes"
+  ],
+  "limits": [
+    "the S1 label audit covers 20 fast teacher runs on stage 0 / normal; it is not a multi-stage or multi-difficulty coverage claim",
+    "the teacher JSONL has no play/HUD pixels, frame stack or action history, so label coverage is not observation coverage",
+    "the MULTI plan is pre-registration only; no frames exist yet"
+  ],
+  "next": [
+    "WP03.1: collect real observations (play 112x96, HUD 56x160, 4-frame stack, 8-action history) for the 20 S1 seeds, then re-run this audit",
+    "WP03.1: make the observation writer emit obs_sha per decision and per run, so observations_present can be proven rather than inferred",
+    "WP03.2: start the MULTI collection after S1 observations exist; the validator already rejects missing stages, short stages, duplicate trajectories, synthetic padding and missing obs/labels"
+  ]
+}

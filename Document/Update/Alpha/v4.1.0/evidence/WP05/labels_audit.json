@@ -1,0 +1,399 @@
+{
+  "schema": "v410-dagger-labels-audit/1",
+  "generated_at": "2026-11-12T21:47:15Z",
+  "command": [
+    "python",
+    "-m",
+    "touhou_rl.v410.dagger.labels",
+    "--shard",
+    ".tmp_v410_wp05_round1/shards/dagger-s0d1seed2000",
+    "--out",
+    ".tmp_v410_wp05_labels",
+    "--tolerance",
+    "8.0",
+    "--audit-json",
+    "Document/Update/Alpha/v4.1.0/evidence/WP05/labels_audit.json"
+  ],
+  "converter": {
+    "module": "touhou_rl.v410.dagger.labels",
+    "label_schema": "v410-dagger-labels-v410/1",
+    "raw_schema": "v410-dagger-label/1",
+    "decision_frames": 2,
+    "d1_work_row": false,
+    "label_rule": "WP02.4 calibrated rule: died=true -> verified_dead; died=false AND max_position_error <= tolerance AND frames_advanced >= max(horizon, duration*decision_frames) -> verified_alive; everything else -> unknown",
+    "negative_mask_rule": "negative_mask is the set of candidates whose verified plan the engine verified as dead; an unknown candidate is never a negative sample"
+  },
+  "source": {
+    "shard_dir": ".tmp_v410_wp05_round1\\shards\\dagger-s0d1seed2000",
+    "shard": "dagger-s0d1seed2000",
+    "shard_schema": "v410-dagger-shard/1",
+    "seed": 2000,
+    "rng_seed": 2000,
+    "stage": 0,
+    "difficulty": "normal",
+    "beta": 1.0,
+    "decisions": 3500,
+    "frames": 7000,
+    "labels": {
+      "path": ".tmp_v410_wp05_round1\\shards\\dagger-s0d1seed2000\\labels.jsonl",
+      "rows_declared": 3500,
+      "sha256": "129a1edcefc4789f0114c54ef6aa119c3df4b24d0fc384fb927a63d3b00be033",
+      "sha256_verified": true
+    },
+    "obs": {
+      "rows": 3500,
+      "files": {
+        "play96x112": {
+          "path": ".tmp_v410_wp05_round1\\shards\\dagger-s0d1seed2000\\obs\\play96x112.npy",
+          "shape": [
+            3500,
+            4,
+            112,
+            96
+          ],
+          "dtype": "uint8",
+          "sha256": "45a7bb7f64e6467b4f59bc7bbb2c676d9c9ba7249decc44e4efd48c0d000e347",
+          "sha256_verified": true
+        },
+        "hud": {
+          "path": ".tmp_v410_wp05_round1\\shards\\dagger-s0d1seed2000\\obs\\hud.npy",
+          "shape": [
+            3500,
+            1,
+            56,
+            160
+          ],
+          "dtype": "uint8",
+          "sha256": "a30c600db70cfd8991e2b1c158e30d5eeb809bc29863470a97fbb17b8b5ce488",
+          "sha256_verified": true
+        },
+        "act_hist": {
+          "path": ".tmp_v410_wp05_round1\\shards\\dagger-s0d1seed2000\\obs\\act_hist.npy",
+          "shape": [
+            3500,
+            8,
+            18
+          ],
+          "dtype": "uint8",
+          "sha256": "863371ba65f8b04b6bc1cb70b6882eba9dc42e680adab6598cf796119f9a9e36",
+          "sha256_verified": true
+        }
+      },
+      "sha256_verified": true
+    },
+    "teacher_horizon": 32,
+    "teacher": {
+      "beam": 24,
+      "child_hazards": {
+        "available": true,
+        "reason": "CHILD <h> HAZARDS accepted",
+        "reply": "OK frames=0 nb=1 nl=0 ne=1 bullets=1536:6:0:00000000:00000000:00000000:00000000:00000000:0:00000000:0 lasers= enemies=0:1000005d:41f00000:c1800000:00000000:0000"
+      },
+      "decision_frames": 2,
+      "executed_slots_per_decision": 1,
+      "horizon": 32,
+      "mode": "fast",
+      "note": "the v410 decision period is 2 frames = one teacher slot; the teacher's 2-slot plan is used for labelling, only its first slot is ever executed",
+      "replan_decisions": 2,
+      "unverified_discount": 5.0,
+      "verify_k": 1
+    },
+    "checkpoint": {
+      "arm": "B0",
+      "epochs": 20,
+      "family": "probe",
+      "model_class": "touhou_rl.v410.student.diagnostics.ProbeNet",
+      "model_config": {
+        "groups": 8,
+        "hist_hidden": 64,
+        "hud_width": 16,
+        "play_width": 24,
+        "readout": 128,
+        "trunk": 128
+      },
+      "obs_spec_digest": "ef2fbd15385f26f425db2bfe855d105ee009023acb08c26916e811963553a105",
+      "obs_spec_version": "obs-v3",
+      "parameters": 731802,
+      "path": ".tmp_v410_wp04_arms/b0_seed0_last.pt",
+      "schema": "v410-wp04-bc-arm-checkpoint/1",
+      "sha256": "3bc0ec4461701bebb2ffc551d61dffff77f15cd486125baf9db6eaafc741b3a6",
+      "train_seed": 0
+    },
+    "engine": {
+      "binary": "/root/Touhou_RL/third_party/th08-rl/build/rl_v3/th08-modern",
+      "sha256": "691bfd77b7eca3361aa8bb7af0977556a70cc73a070b29a2447222ba7a568ef6"
+    }
+  },
+  "calibration": {
+    "tolerance": 8.0,
+    "tolerance_source": "argument",
+    "module_tolerance": {
+      "value": 8.0,
+      "status": "computed",
+      "source": "D:\\WorkShop\\Touhou_RL\\.tmp_v410_wp02_audit\\teacher1000.jsonl (sha256=a1d6923efd8398619632d086bd854677e27cfd501158d2aeaafb37c9ca2f434b, died_false_plans=3251, covered=3226, coverage=0.992310, mismatch_count=25, rule='smallest grid threshold with coverage >= 0.99 of died=false verified plans, capped at 16.0 px')",
+      "rule": "smallest grid threshold with coverage >= 0.99 of died=false verified plans, capped at 16.0 px",
+      "coverage_target": 0.99,
+      "error_grid": [
+        0.001,
+        0.5,
+        1.0,
+        2.0,
+        4.0,
+        8.0,
+        16.0
+      ],
+      "cap": 16.0
+    },
+    "rule": "WP02.4 calibrated rule: died=true -> verified_dead; died=false AND max_position_error <= tolerance AND frames_advanced >= max(horizon, duration*decision_frames) -> verified_alive; everything else -> unknown",
+    "decision_frames": 2,
+    "horizon": 32,
+    "horizon_source": "shard.json:teacher.horizon",
+    "horizon_missing": false,
+    "default_horizon": 32,
+    "survival_reasons": [
+      "died_true",
+      "model_mismatch",
+      "incomplete_execution",
+      "model_match_frames_advanced_ge_required",
+      "horizon_missing"
+    ]
+  },
+  "counts": {
+    "decisions": 3500,
+    "written": 3500,
+    "verified_plans_total": 3500,
+    "alive": 3492,
+    "dead": 0,
+    "unknown": 8,
+    "model_mismatch": 8,
+    "incomplete": 0,
+    "horizon_missing_plans": 0,
+    "model_match_true": 3492,
+    "model_match_false": 8,
+    "model_match_missing": 0,
+    "died_true_plans": 0,
+    "died_false_plans": 3500,
+    "moving_alive": 1117,
+    "idle_alive": 2375,
+    "decision_alive": 3492,
+    "decision_dead": 0,
+    "decision_unknown": 8,
+    "rows_with_plan": 3500,
+    "rows_with_query": 3500,
+    "query_verified_candidates": 3500,
+    "query_unknown_candidates": 59500,
+    "alive_candidates": 3492,
+    "dead_candidates": 0,
+    "unknown_candidates": 59508,
+    "negative_candidates": 0,
+    "injected_decisions": 3500,
+    "teacher_executed": 3500,
+    "student_executed": 0,
+    "teacher_student_agreement": 2333,
+    "teacher_student_disagreement": 1167,
+    "bombs_executed": 0,
+    "per_first_action": {
+      "0": {
+        "verified_plans": 2375,
+        "verified_alive": 2375,
+        "verified_dead": 0,
+        "unknown": 0
+      },
+      "1": {
+        "verified_plans": 43,
+        "verified_alive": 43,
+        "verified_dead": 0,
+        "unknown": 0
+      },
+      "2": {
+        "verified_plans": 92,
+        "verified_alive": 90,
+        "verified_dead": 0,
+        "unknown": 2
+      },
+      "3": {
+        "verified_plans": 321,
+        "verified_alive": 321,
+        "verified_dead": 0,
+        "unknown": 0
+      },
+      "4": {
+        "verified_plans": 28,
+        "verified_alive": 28,
+        "verified_dead": 0,
+        "unknown": 0
+      },
+      "5": {
+        "verified_plans": 37,
+        "verified_alive": 36,
+        "verified_dead": 0,
+        "unknown": 1
+      },
+      "6": {
+        "verified_plans": 110,
+        "verified_alive": 109,
+        "verified_dead": 0,
+        "unknown": 1
+      },
+      "7": {
+        "verified_plans": 311,
+        "verified_alive": 311,
+        "verified_dead": 0,
+        "unknown": 0
+      },
+      "8": {
+        "verified_plans": 27,
+        "verified_alive": 26,
+        "verified_dead": 0,
+        "unknown": 1
+      },
+      "9": {
+        "verified_plans": 0,
+        "verified_alive": 0,
+        "verified_dead": 0,
+        "unknown": 0
+      },
+      "10": {
+        "verified_plans": 3,
+        "verified_alive": 3,
+        "verified_dead": 0,
+        "unknown": 0
+      },
+      "11": {
+        "verified_plans": 45,
+        "verified_alive": 44,
+        "verified_dead": 0,
+        "unknown": 1
+      },
+      "12": {
+        "verified_plans": 40,
+        "verified_alive": 40,
+        "verified_dead": 0,
+        "unknown": 0
+      },
+      "13": {
+        "verified_plans": 11,
+        "verified_alive": 10,
+        "verified_dead": 0,
+        "unknown": 1
+      },
+      "14": {
+        "verified_plans": 4,
+        "verified_alive": 4,
+        "verified_dead": 0,
+        "unknown": 0
+      },
+      "15": {
+        "verified_plans": 29,
+        "verified_alive": 28,
+        "verified_dead": 0,
+        "unknown": 1
+      },
+      "16": {
+        "verified_plans": 18,
+        "verified_alive": 18,
+        "verified_dead": 0,
+        "unknown": 0
+      },
+      "17": {
+        "verified_plans": 6,
+        "verified_alive": 6,
+        "verified_dead": 0,
+        "unknown": 0
+      }
+    }
+  },
+  "query": {
+    "verified_candidates": 3500,
+    "unknown_candidates": 59500,
+    "candidate_grid": 63000,
+    "candidate_coverage": 0.05555555555555555,
+    "rows_with_query": 3500,
+    "rows_with_query_rate": 1.0,
+    "rows_with_plan": 3500,
+    "rows_with_plan_rate": 1.0
+  },
+  "survival": {
+    "plans": 3500,
+    "alive": 3492,
+    "dead": 0,
+    "unknown": 8,
+    "model_mismatch": 8,
+    "incomplete": 0,
+    "horizon_missing_plans": 0,
+    "decisions_alive": 3492,
+    "decisions_dead": 0,
+    "decisions_unknown": 8,
+    "candidates_alive": 3492,
+    "candidates_dead": 0,
+    "candidates_unknown": 59508,
+    "candidates_negative": 0
+  },
+  "injection": {
+    "injected": 3500,
+    "teacher_executed": 3500,
+    "student_executed": 0,
+    "agreement": 2333,
+    "disagreement": 1167,
+    "bombs_executed": 0
+  },
+  "checks": {
+    "labels_rows": 3500,
+    "shard_decisions": 3500,
+    "obs_rows": 3500,
+    "labels_rows_declared": 3500,
+    "obs_sha256_verified": true,
+    "labels_sha256_verified": true,
+    "decision_aligned": 3500,
+    "obs_row_aligned": 3500,
+    "frame_aligned": 3500,
+    "seed_aligned": 3500,
+    "shard_name_aligned": 3500,
+    "stage_aligned": 3500,
+    "query_status_mask_inverse": 3500,
+    "query_status_plan_consistent": 3500,
+    "verified_first_action_in_mask": 3500,
+    "injection_executed_consistent": 3500,
+    "agreement_matches_candidates": 3500,
+    "agreement_mismatched": 0,
+    "chosen_plan_present": 3500,
+    "chosen_plan_matches_chosen": 3500,
+    "chosen_plan_mismatched": 0,
+    "teacher_unavailable_rows": 0,
+    "teacher_available_rows": 3500,
+    "bombs_executed": 0,
+    "raw_survival_present": 0,
+    "horizon_missing_rows": 0
+  },
+  "verification": {
+    "rows": 3500,
+    "bytes": 19661798,
+    "sha256": "3494caa65470c2c9abcad4baeea234446ca789627eda69fad2b0fdc4f21b4cf2",
+    "alive": 3492,
+    "dead": 0,
+    "unknown": 8,
+    "matches": true
+  },
+  "output": {
+    "labels": {
+      "path": ".tmp_v410_wp05_labels\\labels_v410.jsonl",
+      "rows": 3500,
+      "bytes": 19661798,
+      "sha256": "3494caa65470c2c9abcad4baeea234446ca789627eda69fad2b0fdc4f21b4cf2"
+    },
+    "summary": {
+      "path": ".tmp_v410_wp05_labels\\labels_v410.summary.json"
+    }
+  },
+  "errors": [],
+  "not_claimed": [
+    "G410-2 (the v4.1.0 acceptance gate) -- not measured, not attempted",
+    "any training run or learner update -- this stage only relabels rows",
+    "any new collection or engine run -- only the shard given on the CLI is read",
+    "a D1 work-row -- a DAgger row has no D1 model_match channel, so every row is tagged d1_work_row=false",
+    "a re-derivation of the WP02.4 tolerance -- the value and its provenance are recorded, never re-fitted here",
+    "student quality -- alive/dead are teacher-plan verdicts, not student skill",
+    "a clear rate or a death rate of a policy -- only the labelled rows exist here"
+  ],
+  "summary_schema": "v410-dagger-labels-v410-summary/1"
+}

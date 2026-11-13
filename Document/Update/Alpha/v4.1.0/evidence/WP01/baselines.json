@@ -1,0 +1,710 @@
+{
+  "schema": "v410-baselines/1",
+  "wp": "WP01.2b",
+  "generated_at": "2026-11-12T16:38:22+00:00",
+  "engine": {
+    "path": "/root/Touhou_RL/third_party/th08-rl/build/rl_v3/th08-modern",
+    "sha256": "691bfd77b7eca3361aa8bb7af0977556a70cc73a070b29a2447222ba7a568ef6"
+  },
+  "role": "shadow",
+  "privilege": "engine_state_readonly",
+  "boundary": {
+    "termination_source": "engine state: the game_over reply flag, F_DEATHS and F_STAGE of the 25-field state block",
+    "classifier": "touhou_rl.v410.boundary.classify_termination",
+    "classifier_input": "pixel-event names filled from engine-state evidence: game_over_visible / stage_clear_visible / death_visible; menu_visible and paused_visible are always false",
+    "precedence": [
+      "game_over",
+      "stage_clear",
+      "first_death",
+      "cap"
+    ],
+    "strict_pixel_evidence": false,
+    "note": "engine-state baseline, not a strict-pixel capability measurement; privileged=True is used only for termination and resource logging"
+  },
+  "config": {
+    "engine": "/root/Touhou_RL/third_party/th08-rl/build/rl_v3/th08-modern",
+    "data_dir": "/root/v400-data/game",
+    "seeds": [
+      1,
+      2,
+      3
+    ],
+    "policies": [
+      "random",
+      "still",
+      "fixed_east",
+      "fixed_west"
+    ],
+    "max_frames": 19887,
+    "stage": 0,
+    "difficulty": "normal",
+    "team": 0,
+    "decision_frames": 2,
+    "resources": "standard",
+    "role": "shadow",
+    "rng": "numpy.random.default_rng(seed * 1000 + 17); one stream per (policy, seed) episode",
+    "policies_desc": {
+      "random": "uniform candidate id in 0..17 per decision, bomb=0",
+      "still": "cand=0 (idle), bomb=0",
+      "fixed_east": "cand=3 (E), bomb=0",
+      "fixed_west": "cand=7 (W), bomb=0"
+    }
+  },
+  "host": {
+    "hostname": "ubuntu",
+    "python": "3.10.12",
+    "platform": "Linux-6.18.58.1-microsoft-standard-WSL2-x86_64-with-glibc2.35",
+    "numpy": "2.2.6"
+  },
+  "results": [
+    {
+      "policy": "random",
+      "seed": 1,
+      "max_frames": 19887,
+      "end": "first_death",
+      "end_frame": 1410,
+      "first_death_frame": 1410,
+      "stage_clear_frame": null,
+      "game_over_frame": null,
+      "terminal_events": [],
+      "frames": 1410,
+      "decisions": 705,
+      "engine_frame_start": 0,
+      "engine_frame_end": 1410,
+      "start": {
+        "stage": 0,
+        "deaths": 0.0,
+        "lives": 2.0,
+        "bombs": 3.0,
+        "score": 0
+      },
+      "final": {
+        "stage": 0,
+        "deaths": 1.0,
+        "lives": 2.0,
+        "bombs": 3.0,
+        "score": 7155
+      },
+      "deaths_delta": 1.0,
+      "cand_counts": {
+        "0": 31,
+        "1": 51,
+        "2": 34,
+        "3": 30,
+        "4": 43,
+        "5": 42,
+        "6": 37,
+        "7": 36,
+        "8": 43,
+        "9": 34,
+        "10": 39,
+        "11": 32,
+        "12": 45,
+        "13": 41,
+        "14": 42,
+        "15": 40,
+        "16": 40,
+        "17": 45
+      },
+      "reset_seconds": 0.424062,
+      "loop_seconds": 0.263061,
+      "wall_seconds": 0.68715,
+      "fps_frames": 5359.974,
+      "fps_decisions": 2679.987,
+      "anomalies": [],
+      "status": "ok"
+    },
+    {
+      "policy": "random",
+      "seed": 2,
+      "max_frames": 19887,
+      "end": "first_death",
+      "end_frame": 1806,
+      "first_death_frame": 1806,
+      "stage_clear_frame": null,
+      "game_over_frame": null,
+      "terminal_events": [],
+      "frames": 1806,
+      "decisions": 903,
+      "engine_frame_start": 0,
+      "engine_frame_end": 1806,
+      "start": {
+        "stage": 0,
+        "deaths": 0.0,
+        "lives": 2.0,
+        "bombs": 3.0,
+        "score": 0
+      },
+      "final": {
+        "stage": 0,
+        "deaths": 1.0,
+        "lives": 2.0,
+        "bombs": 3.0,
+        "score": 19252
+      },
+      "deaths_delta": 1.0,
+      "cand_counts": {
+        "0": 43,
+        "1": 44,
+        "2": 46,
+        "3": 55,
+        "4": 42,
+        "5": 42,
+        "6": 64,
+        "7": 62,
+        "8": 52,
+        "9": 54,
+        "10": 53,
+        "11": 49,
+        "12": 56,
+        "13": 43,
+        "14": 43,
+        "15": 54,
+        "16": 52,
+        "17": 49
+      },
+      "reset_seconds": 0.399942,
+      "loop_seconds": 0.330342,
+      "wall_seconds": 0.730309,
+      "fps_frames": 5467.061,
+      "fps_decisions": 2733.531,
+      "anomalies": [],
+      "status": "ok"
+    },
+    {
+      "policy": "random",
+      "seed": 3,
+      "max_frames": 19887,
+      "end": "first_death",
+      "end_frame": 782,
+      "first_death_frame": 782,
+      "stage_clear_frame": null,
+      "game_over_frame": null,
+      "terminal_events": [],
+      "frames": 782,
+      "decisions": 391,
+      "engine_frame_start": 0,
+      "engine_frame_end": 782,
+      "start": {
+        "stage": 0,
+        "deaths": 0.0,
+        "lives": 2.0,
+        "bombs": 3.0,
+        "score": 0
+      },
+      "final": {
+        "stage": 0,
+        "deaths": 1.0,
+        "lives": 2.0,
+        "bombs": 3.0,
+        "score": 1200
+      },
+      "deaths_delta": 1.0,
+      "cand_counts": {
+        "0": 16,
+        "1": 27,
+        "2": 27,
+        "3": 16,
+        "4": 27,
+        "5": 24,
+        "6": 25,
+        "7": 18,
+        "8": 22,
+        "9": 18,
+        "10": 21,
+        "11": 17,
+        "12": 22,
+        "13": 29,
+        "14": 19,
+        "15": 16,
+        "16": 18,
+        "17": 29
+      },
+      "reset_seconds": 0.390508,
+      "loop_seconds": 0.117596,
+      "wall_seconds": 0.508132,
+      "fps_frames": 6649.886,
+      "fps_decisions": 3324.943,
+      "anomalies": [],
+      "status": "ok"
+    },
+    {
+      "policy": "still",
+      "seed": 1,
+      "max_frames": 19887,
+      "end": "first_death",
+      "end_frame": 706,
+      "first_death_frame": 706,
+      "stage_clear_frame": null,
+      "game_over_frame": null,
+      "terminal_events": [],
+      "frames": 706,
+      "decisions": 353,
+      "engine_frame_start": 0,
+      "engine_frame_end": 706,
+      "start": {
+        "stage": 0,
+        "deaths": 0.0,
+        "lives": 2.0,
+        "bombs": 3.0,
+        "score": 0
+      },
+      "final": {
+        "stage": 0,
+        "deaths": 1.0,
+        "lives": 2.0,
+        "bombs": 3.0,
+        "score": 1450
+      },
+      "deaths_delta": 1.0,
+      "cand_counts": {
+        "0": 353
+      },
+      "reset_seconds": 0.395854,
+      "loop_seconds": 0.101139,
+      "wall_seconds": 0.497013,
+      "fps_frames": 6980.492,
+      "fps_decisions": 3490.246,
+      "anomalies": [],
+      "status": "ok"
+    },
+    {
+      "policy": "still",
+      "seed": 2,
+      "max_frames": 19887,
+      "end": "first_death",
+      "end_frame": 706,
+      "first_death_frame": 706,
+      "stage_clear_frame": null,
+      "game_over_frame": null,
+      "terminal_events": [],
+      "frames": 706,
+      "decisions": 353,
+      "engine_frame_start": 0,
+      "engine_frame_end": 706,
+      "start": {
+        "stage": 0,
+        "deaths": 0.0,
+        "lives": 2.0,
+        "bombs": 3.0,
+        "score": 0
+      },
+      "final": {
+        "stage": 0,
+        "deaths": 1.0,
+        "lives": 2.0,
+        "bombs": 3.0,
+        "score": 1450
+      },
+      "deaths_delta": 1.0,
+      "cand_counts": {
+        "0": 353
+      },
+      "reset_seconds": 0.390569,
+      "loop_seconds": 0.099894,
+      "wall_seconds": 0.490485,
+      "fps_frames": 7067.492,
+      "fps_decisions": 3533.746,
+      "anomalies": [],
+      "status": "ok"
+    },
+    {
+      "policy": "still",
+      "seed": 3,
+      "max_frames": 19887,
+      "end": "first_death",
+      "end_frame": 706,
+      "first_death_frame": 706,
+      "stage_clear_frame": null,
+      "game_over_frame": null,
+      "terminal_events": [],
+      "frames": 706,
+      "decisions": 353,
+      "engine_frame_start": 0,
+      "engine_frame_end": 706,
+      "start": {
+        "stage": 0,
+        "deaths": 0.0,
+        "lives": 2.0,
+        "bombs": 3.0,
+        "score": 0
+      },
+      "final": {
+        "stage": 0,
+        "deaths": 1.0,
+        "lives": 2.0,
+        "bombs": 3.0,
+        "score": 1450
+      },
+      "deaths_delta": 1.0,
+      "cand_counts": {
+        "0": 353
+      },
+      "reset_seconds": 0.392232,
+      "loop_seconds": 0.102668,
+      "wall_seconds": 0.494922,
+      "fps_frames": 6876.534,
+      "fps_decisions": 3438.267,
+      "anomalies": [],
+      "status": "ok"
+    },
+    {
+      "policy": "fixed_east",
+      "seed": 1,
+      "max_frames": 19887,
+      "end": "first_death",
+      "end_frame": 746,
+      "first_death_frame": 746,
+      "stage_clear_frame": null,
+      "game_over_frame": null,
+      "terminal_events": [],
+      "frames": 746,
+      "decisions": 373,
+      "engine_frame_start": 0,
+      "engine_frame_end": 746,
+      "start": {
+        "stage": 0,
+        "deaths": 0.0,
+        "lives": 2.0,
+        "bombs": 3.0,
+        "score": 0
+      },
+      "final": {
+        "stage": 0,
+        "deaths": 1.0,
+        "lives": 2.0,
+        "bombs": 3.0,
+        "score": 2060
+      },
+      "deaths_delta": 1.0,
+      "cand_counts": {
+        "3": 373
+      },
+      "reset_seconds": 0.390103,
+      "loop_seconds": 0.108694,
+      "wall_seconds": 0.498817,
+      "fps_frames": 6863.304,
+      "fps_decisions": 3431.652,
+      "anomalies": [],
+      "status": "ok"
+    },
+    {
+      "policy": "fixed_east",
+      "seed": 2,
+      "max_frames": 19887,
+      "end": "first_death",
+      "end_frame": 746,
+      "first_death_frame": 746,
+      "stage_clear_frame": null,
+      "game_over_frame": null,
+      "terminal_events": [],
+      "frames": 746,
+      "decisions": 373,
+      "engine_frame_start": 0,
+      "engine_frame_end": 746,
+      "start": {
+        "stage": 0,
+        "deaths": 0.0,
+        "lives": 2.0,
+        "bombs": 3.0,
+        "score": 0
+      },
+      "final": {
+        "stage": 0,
+        "deaths": 1.0,
+        "lives": 2.0,
+        "bombs": 3.0,
+        "score": 2060
+      },
+      "deaths_delta": 1.0,
+      "cand_counts": {
+        "3": 373
+      },
+      "reset_seconds": 0.390758,
+      "loop_seconds": 0.106376,
+      "wall_seconds": 0.497155,
+      "fps_frames": 7012.86,
+      "fps_decisions": 3506.43,
+      "anomalies": [],
+      "status": "ok"
+    },
+    {
+      "policy": "fixed_east",
+      "seed": 3,
+      "max_frames": 19887,
+      "end": "first_death",
+      "end_frame": 746,
+      "first_death_frame": 746,
+      "stage_clear_frame": null,
+      "game_over_frame": null,
+      "terminal_events": [],
+      "frames": 746,
+      "decisions": 373,
+      "engine_frame_start": 0,
+      "engine_frame_end": 746,
+      "start": {
+        "stage": 0,
+        "deaths": 0.0,
+        "lives": 2.0,
+        "bombs": 3.0,
+        "score": 0
+      },
+      "final": {
+        "stage": 0,
+        "deaths": 1.0,
+        "lives": 2.0,
+        "bombs": 3.0,
+        "score": 2060
+      },
+      "deaths_delta": 1.0,
+      "cand_counts": {
+        "3": 373
+      },
+      "reset_seconds": 0.388618,
+      "loop_seconds": 0.109394,
+      "wall_seconds": 0.498033,
+      "fps_frames": 6819.387,
+      "fps_decisions": 3409.693,
+      "anomalies": [],
+      "status": "ok"
+    },
+    {
+      "policy": "fixed_west",
+      "seed": 1,
+      "max_frames": 19887,
+      "end": "first_death",
+      "end_frame": 714,
+      "first_death_frame": 714,
+      "stage_clear_frame": null,
+      "game_over_frame": null,
+      "terminal_events": [],
+      "frames": 714,
+      "decisions": 357,
+      "engine_frame_start": 0,
+      "engine_frame_end": 714,
+      "start": {
+        "stage": 0,
+        "deaths": 0.0,
+        "lives": 2.0,
+        "bombs": 3.0,
+        "score": 0
+      },
+      "final": {
+        "stage": 0,
+        "deaths": 1.0,
+        "lives": 2.0,
+        "bombs": 3.0,
+        "score": 1976
+      },
+      "deaths_delta": 1.0,
+      "cand_counts": {
+        "7": 357
+      },
+      "reset_seconds": 0.398186,
+      "loop_seconds": 0.101759,
+      "wall_seconds": 0.499973,
+      "fps_frames": 7016.578,
+      "fps_decisions": 3508.289,
+      "anomalies": [],
+      "status": "ok"
+    },
+    {
+      "policy": "fixed_west",
+      "seed": 2,
+      "max_frames": 19887,
+      "end": "first_death",
+      "end_frame": 714,
+      "first_death_frame": 714,
+      "stage_clear_frame": null,
+      "game_over_frame": null,
+      "terminal_events": [],
+      "frames": 714,
+      "decisions": 357,
+      "engine_frame_start": 0,
+      "engine_frame_end": 714,
+      "start": {
+        "stage": 0,
+        "deaths": 0.0,
+        "lives": 2.0,
+        "bombs": 3.0,
+        "score": 0
+      },
+      "final": {
+        "stage": 0,
+        "deaths": 1.0,
+        "lives": 2.0,
+        "bombs": 3.0,
+        "score": 1976
+      },
+      "deaths_delta": 1.0,
+      "cand_counts": {
+        "7": 357
+      },
+      "reset_seconds": 0.39406,
+      "loop_seconds": 0.104474,
+      "wall_seconds": 0.498554,
+      "fps_frames": 6834.236,
+      "fps_decisions": 3417.118,
+      "anomalies": [],
+      "status": "ok"
+    },
+    {
+      "policy": "fixed_west",
+      "seed": 3,
+      "max_frames": 19887,
+      "end": "first_death",
+      "end_frame": 714,
+      "first_death_frame": 714,
+      "stage_clear_frame": null,
+      "game_over_frame": null,
+      "terminal_events": [],
+      "frames": 714,
+      "decisions": 357,
+      "engine_frame_start": 0,
+      "engine_frame_end": 714,
+      "start": {
+        "stage": 0,
+        "deaths": 0.0,
+        "lives": 2.0,
+        "bombs": 3.0,
+        "score": 0
+      },
+      "final": {
+        "stage": 0,
+        "deaths": 1.0,
+        "lives": 2.0,
+        "bombs": 3.0,
+        "score": 1976
+      },
+      "deaths_delta": 1.0,
+      "cand_counts": {
+        "7": 357
+      },
+      "reset_seconds": 0.387214,
+      "loop_seconds": 0.106909,
+      "wall_seconds": 0.494143,
+      "fps_frames": 6678.577,
+      "fps_decisions": 3339.289,
+      "anomalies": [],
+      "status": "ok"
+    }
+  ],
+  "summary": {
+    "random": {
+      "runs": 3,
+      "seeds": [
+        1,
+        2,
+        3
+      ],
+      "frames": {
+        "mean": 1332.667,
+        "median": 1410.0,
+        "min": 782,
+        "max": 1806
+      },
+      "ends": {
+        "first_death": 3
+      },
+      "decisions": 1999,
+      "decisions_per_second": 2811.537,
+      "frames_per_second": 5623.074,
+      "wall_seconds": 1.925591,
+      "mean_deaths": 1.0,
+      "status": "pass"
+    },
+    "still": {
+      "runs": 3,
+      "seeds": [
+        1,
+        2,
+        3
+      ],
+      "frames": {
+        "mean": 706.0,
+        "median": 706.0,
+        "min": 706,
+        "max": 706
+      },
+      "ends": {
+        "first_death": 3
+      },
+      "decisions": 1059,
+      "decisions_per_second": 3486.982,
+      "frames_per_second": 6973.965,
+      "wall_seconds": 1.48242,
+      "mean_deaths": 1.0,
+      "status": "pass"
+    },
+    "fixed_east": {
+      "runs": 3,
+      "seeds": [
+        1,
+        2,
+        3
+      ],
+      "frames": {
+        "mean": 746.0,
+        "median": 746.0,
+        "min": 746,
+        "max": 746
+      },
+      "ends": {
+        "first_death": 3
+      },
+      "decisions": 1119,
+      "decisions_per_second": 3448.765,
+      "frames_per_second": 6897.529,
+      "wall_seconds": 1.494005,
+      "mean_deaths": 1.0,
+      "status": "pass"
+    },
+    "fixed_west": {
+      "runs": 3,
+      "seeds": [
+        1,
+        2,
+        3
+      ],
+      "frames": {
+        "mean": 714.0,
+        "median": 714.0,
+        "min": 714,
+        "max": 714
+      },
+      "ends": {
+        "first_death": 3
+      },
+      "decisions": 1071,
+      "decisions_per_second": 3420.174,
+      "frames_per_second": 6840.347,
+      "wall_seconds": 1.49267,
+      "mean_deaths": 1.0,
+      "status": "pass"
+    },
+    "overall": {
+      "runs": 12,
+      "policies": 4,
+      "frames": {
+        "mean": 874.667,
+        "median": 730.0,
+        "min": 706,
+        "max": 1806
+      },
+      "ends": {
+        "first_death": 12
+      },
+      "decisions": 5248,
+      "decisions_per_second": 3176.167,
+      "frames_per_second": 6352.334,
+      "status": "pass"
+    }
+  },
+  "status": "pass",
+  "limitations": [
+    "engine-state baseline: termination is read from engine state (deaths/stage/game_over), not from pixels, so it is not a strict-pixel capability measurement",
+    "stage 0 on difficulty normal with standard resources only; other stages/difficulties/resources are not covered",
+    "one decision period of two frames and bomb=0 only; the 36-action student action space is not exercised",
+    "a baseline floor is not a capability gate: no minimum survival requirement is asserted or implied by these numbers"
+  ]
+}

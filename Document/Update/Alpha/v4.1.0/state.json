@@ -1,0 +1,70 @@
+{
+  "schema": "v410-execution-state/1",
+  "spec": "Document/Update/Alpha/v4.1.0/README.md",
+  "spec_sha256": "8fc51064e5e54e7cdf6e0b924dcaefd0b3020d148ceeaf5bc0deb9294ae4876c",
+  "project_objective": "active",
+  "active_wp": "WP05",
+  "source_commit": "ca1ae8bee4d6fd43cc932e4b84970a2d0130864a",
+  "runtime_config_sha256": "d320e985a1a8ef2c628a9a202315c74b9e161e1c8589b7cbae48a55fe7b06f0e",
+  "protocol_sha256": "dbc8b9fb06a156f9942c4995fa84c34d3325ca384dc82e57ab62536e5d38d5b1",
+  "gates": {
+    "G410-0": "passed",
+    "G410-1": "in_progress",
+    "G410-2": "not_started",
+    "G410-3": "not_started",
+    "G410-4": "not_started",
+    "G410-5": "not_started",
+    "G410-6": "not_started",
+    "G410-7": "not_started"
+  },
+  "work_packages": {
+    "WP00": "passed",
+    "WP01": "passed",
+    "WP02": "in_progress",
+    "WP03": "in_progress",
+    "WP04": "in_progress",
+    "WP05": "in_progress",
+    "WP06": "in_progress",
+    "WP07": "not_started",
+    "WP08": "not_started",
+    "WP09": "not_started",
+    "WP10": "not_started",
+    "WP11": "not_started",
+    "WP12": "not_started"
+  },
+  "running_jobs": [
+    {
+      "id": "WP05.10",
+      "kind": "daemon_collection",
+      "status": "running",
+      "started_at": "2026-11-13T15:13:00+08:00",
+      "evidence": ".tmp_v410_wp05_round3",
+      "note": "round3 DAgger 20k student seeds2040-2054"
+    },
+    {
+      "id": "WP05.13",
+      "kind": "train_eval",
+      "status": "running",
+      "started_at": "2026-11-13T15:51:00+08:00",
+      "evidence": "Document/Update/Alpha/v4.1.0/evidence/WP05/train_tiebreak.json",
+      "note": "tie-nonidle target experiment, 5k steps, eval waits round3"
+    }
+  ],
+  "evidence_index": "Document/Update/Alpha/v4.1.0/evidence/WP05/STATUS.md",
+  "budget": {
+    "authorized_remaining_gpu_h": 160,
+    "authorized_remaining_disk_gb": 150,
+    "spent_gpu_h": 0.22,
+    "spent_wall_h": null,
+    "human_minutes": null,
+    "note": "160 GPU-h / 150 GB 是 v4.1.0 首轮自设上限；D-05 历史授权为 400 GPU-h / 300 GB；spent_gpu_h=0.22 来自 v4.0.0/budget.jsonl 的 P3 汇总，其余未知消耗记 null，不冒充零。"
+  },
+  "blockers": [],
+  "next_actions": [
+    "WP05.6 beta=0.5 DAgger round 2",
+    "WP06.2 full HUD / player localization",
+    "WP04.6 four-arm seed1/2 pre-registered",
+    "G410-1 formal 100-seed/PSN confirmation"
+  ],
+  "updated_at": "2026-11-13T15:51:00+08:00"
+}

@@ -1,0 +1,309 @@
+{
+  "schema": "v410-wp011a-parity/1",
+  "generated_at": "2026-11-12T16:20:17+00:00",
+  "checkpoint": {
+    "path": "D:\\WorkShop\\Touhou_RL\\.tmp_v400_p3v3\\checkpoint-v3-bc1.pt",
+    "sha256": "47308386756f1997ac63d97cdb9a9699fffe502a50fb4722d16123de0325a404",
+    "bytes": 10478427,
+    "schema": "v400-student-checkpoint-3",
+    "arch": "v3",
+    "obs_spec_version": "obs-v3",
+    "parameters": 2602490,
+    "canonical_architecture": true
+  },
+  "model_inputs": {
+    "play": "play_norm float32 (B,4,112,96), uint8 / 255.0",
+    "hud": "uint8 (B,56,160) / 255.0 -> float32 (B,1,56,160)",
+    "act_hist": "uint8 (B,8,18) -> float32 (B,8,18)",
+    "source": "model_v3.HudEncoder / ActionHistoryEncoder, train_v3.batch_tensors"
+  },
+  "tolerances": {
+    "cpu_offline_vs_online": 1e-05,
+    "cpu_vs_cuda": 0.0001
+  },
+  "sample": {
+    "dir": "D:\\WorkShop\\Touhou_RL\\.tmp_v400_d1\\d1\\shards\\d1-s0d1-n3371-seed1-shard\\obs",
+    "rows": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "row_count": 4,
+    "batch_sizes": [
+      1,
+      4
+    ],
+    "shape": {
+      "play": [
+        4,
+        112,
+        96
+      ],
+      "hud": [
+        56,
+        160
+      ],
+      "act_hist": [
+        8,
+        18
+      ]
+    },
+    "sha256": {
+      "play": "ff9cda704d2aa1a5beacdbd3071875ae5edeb52c57a2f16371e1cab01b5070e0",
+      "hud": "c8a165990256e30201fa7b20fb9ab4aaa85455f51dc9b4109a12abfbbd1c5a0c",
+      "act_hist": "e6f85f6f986cd852fb62e972f4be97abc77f35f693dd8ca51cff9e10522b91a6"
+    },
+    "source": {
+      "play": "D:\\WorkShop\\Touhou_RL\\.tmp_v400_d1\\d1\\shards\\d1-s0d1-n3371-seed1-shard\\obs\\play96x112.npy",
+      "hud": "D:\\WorkShop\\Touhou_RL\\.tmp_v400_d1\\d1\\shards\\d1-s0d1-n3371-seed1-shard\\obs\\hud.npy",
+      "act_hist": "D:\\WorkShop\\Touhou_RL\\.tmp_v400_d1\\d1\\shards\\d1-s0d1-n3371-seed1-shard\\obs\\act_hist.npy"
+    }
+  },
+  "checks": {
+    "offline_vs_online_batch1": {
+      "schema": "v410-wp011a-parity/1",
+      "check": "offline_vs_online",
+      "checkpoint": "D:\\WorkShop\\Touhou_RL\\.tmp_v400_p3v3\\checkpoint-v3-bc1.pt",
+      "checkpoint_sha256": "47308386756f1997ac63d97cdb9a9699fffe502a50fb4722d16123de0325a404",
+      "checkpoint_parameters": 2602490,
+      "checkpoint_arch": "v3",
+      "device": "cpu",
+      "batch_size": 1,
+      "online_batch_size": 1,
+      "tolerance": 1e-05,
+      "max_abs": 0.0,
+      "max_abs_per_row": [
+        0.0
+      ],
+      "mean_abs": 0.0,
+      "argmax_match": 1,
+      "argmax_total": 1,
+      "argmax_all_equal": true,
+      "offline_argmax": [
+        7
+      ],
+      "online_argmax": [
+        7
+      ],
+      "play_uint8_equal": true,
+      "play_norm_exact": true,
+      "inputs_unchanged": true,
+      "input_sha256": {
+        "play": "2ac803a8f2c4f66b711781e33f59a0be5ead420558cd8c15058d072b027201b8",
+        "hud": "18c6929fbce912a1617611b8ddcd8cab9ed1d0a7c6e34150c9e3725025a7d001",
+        "act_hist": "81c611f35bff79491538b2f7cf201c7597a661a5c549633541c62bdc8af1613f"
+      },
+      "rnn": {
+        "present": false,
+        "modules": [],
+        "note": "StudentV3 has no RNN/LSTM/GRU module; 无 RNN 状态可检查"
+      },
+      "offline_seconds": 0.011151600003358908,
+      "online_seconds": 0.004821399998036213,
+      "seconds": 0.016350299993064255,
+      "passed": true
+    },
+    "offline_vs_online_batchN": {
+      "schema": "v410-wp011a-parity/1",
+      "check": "offline_vs_online",
+      "checkpoint": "D:\\WorkShop\\Touhou_RL\\.tmp_v400_p3v3\\checkpoint-v3-bc1.pt",
+      "checkpoint_sha256": "47308386756f1997ac63d97cdb9a9699fffe502a50fb4722d16123de0325a404",
+      "checkpoint_parameters": 2602490,
+      "checkpoint_arch": "v3",
+      "device": "cpu",
+      "batch_size": 4,
+      "online_batch_size": 1,
+      "tolerance": 1e-05,
+      "max_abs": 1.1920928955078125e-07,
+      "max_abs_per_row": [
+        1.1920928955078125e-07,
+        1.1920928955078125e-07,
+        5.960464477539063e-08,
+        1.1920928955078125e-07
+      ],
+      "mean_abs": 3.5907660844713973e-08,
+      "argmax_match": 4,
+      "argmax_total": 4,
+      "argmax_all_equal": true,
+      "offline_argmax": [
+        7,
+        7,
+        7,
+        7
+      ],
+      "online_argmax": [
+        7,
+        7,
+        7,
+        7
+      ],
+      "play_uint8_equal": true,
+      "play_norm_exact": true,
+      "inputs_unchanged": true,
+      "input_sha256": {
+        "play": "470385cce45d4d4079bbdb036252550d033246c550c125bee295abe5acb08d19",
+        "hud": "5d4d860c5bb95e3a098f476092ab3cd386c148805b8036980c3c0d9553ec32d2",
+        "act_hist": "dc6bc2a5d856a81e523dd122905d20fb821866b07dca428cd313ff009b170cc2"
+      },
+      "rnn": {
+        "present": false,
+        "modules": [],
+        "note": "StudentV3 has no RNN/LSTM/GRU module; 无 RNN 状态可检查"
+      },
+      "offline_seconds": 0.014423300002817996,
+      "online_seconds": 0.01906139998754952,
+      "seconds": 0.03426450000551995,
+      "passed": true
+    },
+    "cpu_vs_cuda_batch1": {
+      "schema": "v410-wp011a-parity/1",
+      "check": "cpu_gpu_parity",
+      "skipped": false,
+      "checkpoint": "D:\\WorkShop\\Touhou_RL\\.tmp_v400_p3v3\\checkpoint-v3-bc1.pt",
+      "checkpoint_sha256": "47308386756f1997ac63d97cdb9a9699fffe502a50fb4722d16123de0325a404",
+      "checkpoint_parameters": 2602490,
+      "batch_size": 1,
+      "cpu_device": "cpu",
+      "gpu_device": "cuda",
+      "gpu_name": "NVIDIA GeForce RTX 4070 SUPER",
+      "torch": "2.14.1+cu132",
+      "cuda_version": "13.2",
+      "cudnn_version": 92400,
+      "tolerance": 0.0001,
+      "max_abs": 2.384185791015625e-07,
+      "mean_abs": 5.132622149517374e-08,
+      "argmax_match": 1,
+      "argmax_total": 1,
+      "argmax_all_equal": true,
+      "cpu_argmax": [
+        7
+      ],
+      "gpu_argmax": [
+        7
+      ],
+      "weights_identical": true,
+      "weights_max_abs_diff": 0.0,
+      "cpu_parameter_devices": [
+        "cpu"
+      ],
+      "gpu_parameter_devices": [
+        "cuda:0"
+      ],
+      "cpu_input_devices": {
+        "play": "cpu",
+        "hud": "cpu",
+        "act_hist": "cpu"
+      },
+      "gpu_input_devices": {
+        "play": "cuda:0",
+        "hud": "cuda:0",
+        "act_hist": "cuda:0"
+      },
+      "cpu_input_dtypes": {
+        "play": "torch.float32",
+        "hud": "torch.float32",
+        "act_hist": "torch.float32"
+      },
+      "devices_ok": true,
+      "rnn": {
+        "present": false,
+        "modules": [],
+        "note": "StudentV3 has no RNN/LSTM/GRU module; 无 RNN 状态可检查"
+      },
+      "seconds": 0.4120804000122007,
+      "passed": true
+    },
+    "cpu_vs_cuda_batchN": {
+      "schema": "v410-wp011a-parity/1",
+      "check": "cpu_gpu_parity",
+      "skipped": false,
+      "checkpoint": "D:\\WorkShop\\Touhou_RL\\.tmp_v400_p3v3\\checkpoint-v3-bc1.pt",
+      "checkpoint_sha256": "47308386756f1997ac63d97cdb9a9699fffe502a50fb4722d16123de0325a404",
+      "checkpoint_parameters": 2602490,
+      "batch_size": 4,
+      "cpu_device": "cpu",
+      "gpu_device": "cuda",
+      "gpu_name": "NVIDIA GeForce RTX 4070 SUPER",
+      "torch": "2.14.1+cu132",
+      "cuda_version": "13.2",
+      "cudnn_version": 92400,
+      "tolerance": 0.0001,
+      "max_abs": 1.1920928955078125e-07,
+      "mean_abs": 3.570069750935545e-08,
+      "argmax_match": 4,
+      "argmax_total": 4,
+      "argmax_all_equal": true,
+      "cpu_argmax": [
+        7,
+        7,
+        7,
+        7
+      ],
+      "gpu_argmax": [
+        7,
+        7,
+        7,
+        7
+      ],
+      "weights_identical": true,
+      "weights_max_abs_diff": 0.0,
+      "cpu_parameter_devices": [
+        "cpu"
+      ],
+      "gpu_parameter_devices": [
+        "cuda:0"
+      ],
+      "cpu_input_devices": {
+        "play": "cpu",
+        "hud": "cpu",
+        "act_hist": "cpu"
+      },
+      "gpu_input_devices": {
+        "play": "cuda:0",
+        "hud": "cuda:0",
+        "act_hist": "cuda:0"
+      },
+      "cpu_input_dtypes": {
+        "play": "torch.float32",
+        "hud": "torch.float32",
+        "act_hist": "torch.float32"
+      },
+      "devices_ok": true,
+      "rnn": {
+        "present": false,
+        "modules": [],
+        "note": "StudentV3 has no RNN/LSTM/GRU module; 无 RNN 状态可检查"
+      },
+      "seconds": 0.10028530001000036,
+      "passed": true
+    }
+  },
+  "cuda_skipped": false,
+  "skip_reason": null,
+  "rnn": {
+    "present": false,
+    "modules": [],
+    "note": "StudentV3 has no RNN/LSTM/GRU module; 无 RNN 状态可检查"
+  },
+  "environment": {
+    "python": "3.12.10",
+    "numpy": "2.5.4",
+    "torch": "2.14.1+cu132",
+    "cuda_available": true,
+    "cuda_version": "13.2",
+    "cudnn_version": 92400,
+    "gpu": "NVIDIA GeForce RTX 4070 SUPER",
+    "platform": "Windows-11-10.0.26300-SP0"
+  },
+  "limitations": [
+    "only the selected rows of one D1 shard were used; this is not the full D1 dataset",
+    "no game launch, no training, no data collection",
+    "one frozen checkpoint (v3-bc1) only",
+    "StudentV3 has no RNN/LSTM/GRU; 无 RNN 状态可检查"
+  ],
+  "seconds": 0.8813422000093851,
+  "passed": true,
+  "command": "python -m touhou_rl.v410.parity --checkpoint D:\\WorkShop\\Touhou_RL\\.tmp_v400_p3v3\\checkpoint-v3-bc1.pt --obs-dir D:\\WorkShop\\Touhou_RL\\.tmp_v400_d1\\d1\\shards\\d1-s0d1-n3371-seed1-shard\\obs --rows 0,1,2,3 --cuda-device cuda --out D:\\WorkShop\\Touhou_RL\\Document\\Update\\Alpha\\v4.1.0\\evidence\\WP01\\parity.json",
+  "report_path": "D:\\WorkShop\\Touhou_RL\\Document\\Update\\Alpha\\v4.1.0\\evidence\\WP01\\parity.json"
+}
