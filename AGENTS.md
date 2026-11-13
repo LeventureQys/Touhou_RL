@@ -203,3 +203,50 @@ python -m compileall -q touhou_rl
 - 任何“完成”“通过”“修复”“达标”表述都必须能指向实际文件、命令、退出码、测试统计或原始实验产物。
 - 遇到环境限制时，优先实现可验证的最小真实切片；若最小切片仍不能达标，必须明确说明它不构成最终能力。
 - 主代理负责独立复核子代理的范围、命令和统计，不得只照录子代理口头结论。
+
+---
+
+## 8. 工程资产与外部同步（本机专用，必读）
+
+### 8.1 资产不在 Git、不上传
+
+本项目的**引擎、数据集、checkpoint、运行目录**都是本机资产，**不会上传到 GitHub/远端**：
+
+- `.tmp_*`（D1/S1/DAgger/训练/评测）全部被 `.gitignore` 忽略；
+- `/root/v400-data`（WSL 游戏数据/教师实例）不在 Git；
+- `third_party/th08-rl`（rl_v3/rl_laser 构建）被 `.gitignore` 忽略；
+- 只有代码、配置、测试、`Document` 文档可同步/上传；资产不随 Git 走。
+
+**权威清单**：[`ASSET_SYNC.md`](ASSET_SYNC.md)，关键文件校验：[`ASSET_SYNC.sha256`](ASSET_SYNC.sha256)。
+资产索引（WP00）：`Document/Update/Alpha/v4.1.0/evidence/WP00/assets.json`。
+
+当前关键事实（详见 `ASSET_SYNC.md`）：
+
+- Windows：`D:\WorkShop\Touhou_RL`，分支 `v400`；
+- WSL：`/root/Touhou_RL` + `/root/v400-data`；rl_v3 SHA `691bfd77…`，rl_laser SHA `1462829b…`；
+- 数据：`.tmp_v400_d1`（28.8GB，D1 canonical）、`.tmp_v410_s1c`（2.34GB，S1 66,143）、`.tmp_v410_wp05_round1/2/3`（DAgger 56k/52.5k/尚未完成的 14k）；
+- 学生最好也只是 20 dev **0/20**；G410-0 passed，G410-1 教师 100/100 但 8px/数据腿未结，G410-2…G410-7 未通过。
+
+### 8.2 资产操作红线
+
+- **不得删除、移动、覆盖** `.tmp_v400_d1`、`.tmp_v410_s1c`、`.tmp_v410_wp05_round*`、`.tmp_*train*`、`/root/v400-data`、引擎二进制、checkpoint；
+- 不得把它们 `git add`、上传、塞进 issue/PR；不得用下载的假资产替代；
+- 新增/移动/删除任何资产，必须同步更新 `ASSET_SYNC.md` 与 `ASSET_SYNC.sha256`；
+- 外部代码只能写自己的新路径，不得改 `state.json`/`journal.jsonl`/`budget.jsonl`/既有证据。
+
+### 8.3 外部写代码、远端运行
+
+用户可能在外部编辑器写代码、在远端运行。同步规则：
+
+1. **只同步代码/文档**（`touhou_rl/`、`tools/`、`tests/`、`configs/`、`Document/`）；不要把 `.tmp_*`、引擎、数据、checkpoint 打包上传。
+2. 远端若没有资产，只能跑不需要引擎/数据的单测；需要引擎/数据/checkpoint 的实验会失败——这是**资产缺失**，不是代码失败；不得用 mock/fake 冒充真实结果。
+3. 远端要跑真实实验，必须把对应资产挂载/复制到相同路径（见 `ASSET_SYNC.md` §7），并用 `sha256sum -c ASSET_SYNC.sha256` 校验关键文件。
+4. 若远端资产不在相同路径，外部代码应显式传入路径，不要硬编码本机路径；不得默认“资产一定存在”。
+5. 远端产生的新资产必须写回本机路径 + SHA，并更新 `ASSET_SYNC.md`；不能只留在远端。
+6. 认证/网络：Git remote 只用于代码/文档；资产传输由用户显式决定，代理不得自行上传。
+
+### 8.4 当前暂停状态
+
+- 目标已 **paused**（第 102 轮）；不要自动恢复 WP05 采集/训练，除非用户明确要求 resume。
+- 暂停时 round3 保留 4 shards（seeds 2040–2043，14,000 decisions）；不要删除。
+- G410-0 **passed**；G410-1 teacher 100/100 但 8px/数据腿未结；G410-2…G410-7 未通过。
