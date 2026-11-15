@@ -131,3 +131,36 @@ python .tmp_v430_triage\verify_o2_corpus.py .tmp_v430_o2/o2-strided
 
 下一步的唯一入口是 `W12_HANDOFF.md §3.1 第 4 项`：查清 BC 为什么连平凡基线都赢不了。
 在它解决之前，往上盖任何东西都会塌。
+
+## 9 发布记录
+
+| 项 | 值 |
+| --- | --- |
+| 提交 | `9d81825826ffa881bab2bdcb6ee9c8be5e394c75`（短 `9d81825`） |
+| 分支 / 远端 | `v400` → `origin/v400`（`github.com/LeventureQys/Touhou_RL`） |
+| 父提交 | `6eb76f2` |
+| 提交内容 | **132 个文件，全部为新增（`A`），0 删除** |
+| 推送结果 | `6eb76f2..9d81825  v400 -> v400`，exit 0，无 force |
+| 校验 | `origin/v400 == HEAD`；`rev-list --left-right --count` = `0 0` |
+
+**提交范围（严格白名单，共 132 个文件）**：
+
+| 路径 | 文件数 |
+| --- | ---: |
+| `touhou_rl/v430/` | 14 |
+| `tests/test_v430_*.py` | 10 |
+| `configs/v430/` | 3 |
+| `tools/rl/v430.py` | 1 |
+| `Document/Update/Alpha/v4.3.0/` | 104 |
+
+**本次提交刻意**未**包含以下内容（它们在本会话开始前就已存在于工作区，与 v4.3.0 无关）：
+- **3,493 条 `Document/**` 的删除**（若提交等于永久删除 3,319 个旧文档）
+- **21 条无关修改**，含 `Document/Update/Alpha/v4.1.0/state.json`、`journal.jsonl`、
+  `third_party/th08` 子模块指针
+- `refs/` 的 PDF、`tests/test_v410_*.py` 等其余 341 条未跟踪文件、根目录 `.tmp_*`
+
+**因此：`git add -A` 在本仓库是被禁止的**——它会连带提交上述删除。
+提交后工作区仍保有那 3,493 条未暂存删除与 21 条修改，未被触碰。
+
+**资产未上传**：五批 O2 语料（2.35 GiB）、私有 data 目录、引擎二进制均在 `.tmp_*` 下，
+被 `.gitignore` 忽略，**没有进入本次提交**（符合 AGENTS.md §8.1）。
