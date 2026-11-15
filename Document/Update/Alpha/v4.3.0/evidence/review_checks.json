@@ -1,0 +1,276 @@
+{
+  "schema": "v430-roadmap-review/1",
+  "review_date": "2026-11-15",
+  "timezone": "Asia/Shanghai",
+  "scope": "local evidence arithmetic and roadmap QA only",
+  "command": "python Document/Update/Alpha/v4.3.0/evidence/verify_review.py --write",
+  "verification_exit_code": 0,
+  "git_head": "05c46131c89f7a296a8d6c400537935fe2a4a52b",
+  "tracked_diff": {
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": "warning: unable to access 'C:\\Users\\Administrator/.config/git/ignore': Permission denied\nwarning: unable to access 'C:\\Users\\Administrator/.config/git/ignore': Permission denied"
+  },
+  "parsed_evidence_json": 89,
+  "parsed_ledgers": {
+    "journal.jsonl": 149,
+    "budget.jsonl": 14
+  },
+  "remeasure_rows": [
+    {
+      "arm": "D2",
+      "suite": "diag",
+      "episodes": 20,
+      "successes": 0,
+      "frames_mean": 1757.5,
+      "frames_max": 2455,
+      "stop_reasons": {
+        "death_stop": 20
+      }
+    },
+    {
+      "arm": "D2",
+      "suite": "s1n",
+      "episodes": 20,
+      "successes": 0,
+      "frames_mean": 3010.3,
+      "frames_max": 3616,
+      "stop_reasons": {
+        "game_over": 20
+      }
+    },
+    {
+      "arm": "D3",
+      "suite": "diag",
+      "episodes": 20,
+      "successes": 0,
+      "frames_mean": 1707.5,
+      "frames_max": 2253,
+      "stop_reasons": {
+        "death_stop": 20
+      }
+    },
+    {
+      "arm": "D3",
+      "suite": "s1n",
+      "episodes": 20,
+      "successes": 0,
+      "frames_mean": 2943.85,
+      "frames_max": 3914,
+      "stop_reasons": {
+        "game_over": 20
+      }
+    },
+    {
+      "arm": "R3",
+      "suite": "diag",
+      "episodes": 20,
+      "successes": 0,
+      "frames_mean": 1597.9,
+      "frames_max": 2337,
+      "stop_reasons": {
+        "death_stop": 20
+      }
+    },
+    {
+      "arm": "R3",
+      "suite": "s1n",
+      "episodes": 20,
+      "successes": 0,
+      "frames_mean": 2765.1,
+      "frames_max": 3578,
+      "stop_reasons": {
+        "game_over": 20
+      }
+    },
+    {
+      "arm": "R0",
+      "suite": "diag",
+      "episodes": 20,
+      "successes": 0,
+      "frames_mean": 1650.4,
+      "frames_max": 2308,
+      "stop_reasons": {
+        "death_stop": 20
+      }
+    },
+    {
+      "arm": "R0",
+      "suite": "s1n",
+      "episodes": 20,
+      "successes": 0,
+      "frames_mean": 2824.35,
+      "frames_max": 3478,
+      "stop_reasons": {
+        "game_over": 20
+      }
+    }
+  ],
+  "standard_s1n_episode_records": 80,
+  "first_death_episode_records": 80,
+  "pooled_independent_confirmation_n": null,
+  "independence_note": "Same dev seeds across arms; do not pool two protocols or models as one binomial sample",
+  "a1_recount": {
+    "states": 200,
+    "arms": 3600,
+    "proper_0_lt_size_lt_18": 184,
+    "multimember_1_lt_size_lt_18": 178,
+    "horizon_frames": 120
+  },
+  "setloss_recount": [
+    {
+      "suite": "diag",
+      "episodes": 20,
+      "frames_mean": 1139.9,
+      "successes_reported": 0
+    },
+    {
+      "suite": "s1n",
+      "episodes": 20,
+      "frames_mean": 2110.95,
+      "successes_reported": 0
+    }
+  ],
+  "local_availability": {
+    "touhou_rl/v420": false,
+    "configs/v420": false,
+    "tools/rl/v420.py": false,
+    "tools/rl/v420_eval_shoot.py": false,
+    ".tmp_v420_data": false,
+    "touhou_rl/v410": false,
+    "tests/test_v420*.py count": 0
+  },
+  "old_gate_snapshot": {
+    "G420-0": "passed",
+    "G420-1": "failed_valid",
+    "G420-2": "failed_valid",
+    "G420-3": "failed_valid",
+    "G420-R": "in_progress",
+    "G420-4": "failed_valid",
+    "G420-5": "not_started"
+  },
+  "document_files": [
+    "EXECUTION_PLAN.md",
+    "README.md",
+    "TACTICAL_LEARNING.md",
+    "V420_REVIEW.md"
+  ],
+  "local_links_checked": 28,
+  "missing_local_links": [],
+  "source_sha256": {
+    "Document/Update/Alpha/v4.2.0/evidence/PREFLIGHT/b0_seed1000_rep2.json": "f25c57e8c43761f085d730b268ec81f4b3620fdb69c7b243bf9da146e023b222",
+    "Document/Update/Alpha/v4.2.0/evidence/PREFLIGHT/b0_seed1000_rep3.json": "fe63310bff2ec273a961ad18d5058ed3ede3c7dac438bc3395cc997955de5152",
+    "Document/Update/Alpha/v4.2.0/evidence/PREFLIGHT/b0_seed1000_smoke.json": "eed4bcdfbf46661c18e5a97b73b4447e584a5b282899e953d66901c5def71668",
+    "Document/Update/Alpha/v4.2.0/evidence/PREFLIGHT/replay/seed10_500.json": "2e44b1d3a2359e76c6a3ae4ccbca2f6740f1403628bfe8419cc7361e51064653",
+    "Document/Update/Alpha/v4.2.0/evidence/PREFLIGHT/replay/seed10_rep1.json": "393b65e54ed85eb0965b1f2f218db6fa9caeed0be3cd27f3943f28405c6517c2",
+    "Document/Update/Alpha/v4.2.0/evidence/PREFLIGHT/replay/seed10_rep2.json": "3eaf373c3967fec9ff1ca837e7c7d514cef51cd60dac893f04cab35f21fd8161",
+    "Document/Update/Alpha/v4.2.0/evidence/PREFLIGHT/replay/seed11_rep1.json": "53f32131663fa4dbf87a52ab02f42430e4786f2dba4fddd96281200426f3923f",
+    "Document/Update/Alpha/v4.2.0/evidence/PREFLIGHT/replay/seed11_rep2.json": "9bb131e561c815e322d29d5db95cea089f04a7459423d7ea762fd131590095f3",
+    "Document/Update/Alpha/v4.2.0/evidence/PREFLIGHT/replay/seed12_rep1.json": "dd67f30b39ed567c9d0201f2196608c645f9df0c5c88f962271692accd9efc4a",
+    "Document/Update/Alpha/v4.2.0/evidence/PREFLIGHT/replay/seed12_rep2.json": "0593c97a4751d25919c77ad88d1e9065bcc2a708d955aca59d40e8ba93f03b2b",
+    "Document/Update/Alpha/v4.2.0/evidence/T00/assets_verify.json": "66a6beb0fbeda86fb41b692cd4443999d1739341cf77350dcadf878d0a7129dc",
+    "Document/Update/Alpha/v4.2.0/evidence/T01/audit-assets.json": "932dd89f3d1313d475c58d6b1a36e2efb86a432d7171cbf4e163e233536116c3",
+    "Document/Update/Alpha/v4.2.0/evidence/T01/audit-time-offline.json": "e4f8999f15f34c854e49475a80f8af2b91a9f21b7df0d525fb920f87bcb6207f",
+    "Document/Update/Alpha/v4.2.0/evidence/T01/evaluate-dryrun.json": "2ac8935aeb8b97fb65501fee90791f71306667b87064168e54806eb069b88900",
+    "Document/Update/Alpha/v4.2.0/evidence/T01/summarize-baseline.json": "9b49e765c55a224731dd7d444e801cc24541023f675783f36d95a5535b92ec53",
+    "Document/Update/Alpha/v4.2.0/evidence/T02/b0_dev3_rep1.json": "61466b3e1173014dcc8758b2376c2f3a6df847bbe4f3e48e3206d96ce20bb1e7",
+    "Document/Update/Alpha/v4.2.0/evidence/T02/b0_dev3_rep2.json": "4de8c4e6c7f772ad0eb52f21d71e55d489b2dd7be2cfa277dcf11ba693378799",
+    "Document/Update/Alpha/v4.2.0/evidence/T02/beta20k_dev3_rep1.json": "a17ba99d1c01eba61c63e3acc2015c6550d34bc28705e5e0de0f0f1661510166",
+    "Document/Update/Alpha/v4.2.0/evidence/T02/beta20k_dev3_rep2.json": "dbdf4a75b0f6e1ed8ab31b3e118dcc6f565c3de502f1df3aef6fe8939496e7e2",
+    "Document/Update/Alpha/v4.2.0/evidence/T02/g420_0_readjudicated.json": "e6e04a34c3a84d4b562b169afb3207be41093050791ee61e89fecc7cdf2f205b",
+    "Document/Update/Alpha/v4.2.0/evidence/T02/legacy_reproduce.json": "4428aae0f515e9d029f14608decf8f500ea7512b47ef7ce6ca6e962978a4a57e",
+    "Document/Update/Alpha/v4.2.0/evidence/T02c/rebuild_2f.json": "4b7ab61464213c666003c6c91fc820a23a4908d99b7d9ddd622cc74ae413279e",
+    "Document/Update/Alpha/v4.2.0/evidence/T02d/reslot_2f.json": "5211a721f674b920b4fef6c0093817dce3ce02df950c5586b2b1f6ee1c68a2c4",
+    "Document/Update/Alpha/v4.2.0/evidence/T02d/reslot_seed10.json": "c48aeef3d03003e372c373f04e99250bde1826f7a12f8e64346b583904684b9c",
+    "Document/Update/Alpha/v4.2.0/evidence/T02d/reslot_seed11.json": "12c25dee4a4b5e721258fe122440a23739aeb2bc143b384a3e754ff9e06dca32",
+    "Document/Update/Alpha/v4.2.0/evidence/T02d/reslot_seed12.json": "78f63f68300dfd2b8fba96f88ae07c9517fb4b1f76180aaced8a7374b72d3940",
+    "Document/Update/Alpha/v4.2.0/evidence/T03/counterfactual_pilot.json": "3eb62bc876a5458ae370557a61f3e4f05dcadbaec502dc0caa233f2fef0517d9",
+    "Document/Update/Alpha/v4.2.0/evidence/T03/fork_fa_d100.json": "6a2c3baed0075c04aba9ae4a2d26341f348e14d7ba96f06b93118b68dc5425d7",
+    "Document/Update/Alpha/v4.2.0/evidence/T03/fork_fa_d200.json": "293637f91182eac46d27cac70e0231600a6d6e46965eb2522d9e350542b7ca8f",
+    "Document/Update/Alpha/v4.2.0/evidence/T03/fork_fa_d400.json": "367362b1a71c045f05710b965abf995148112bd2995ace5265eab3a97bb999e0",
+    "Document/Update/Alpha/v4.2.0/evidence/T03/fork_fb_d100.json": "d4431f65ea2ed840205b913bca889f29d38d01734ddabf37aec2668d0b3fc840",
+    "Document/Update/Alpha/v4.2.0/evidence/T03/fork_fb_d200.json": "3be10dac955ecabc210fd22ed2e36667063f3efa26ea11f21ac6c0885df345fa",
+    "Document/Update/Alpha/v4.2.0/evidence/T03/fork_fb_d400.json": "a4aaba0a6a28775782cebf71d3b354f4aab82a01465f55ea8ac8e20c597fe1f8",
+    "Document/Update/Alpha/v4.2.0/evidence/T03/student_continuation.json": "78b0b5b41d9cd5cf9af53d973710eaf19cf405e3c098a0a0ce25d5b36be6c538",
+    "Document/Update/Alpha/v4.2.0/evidence/T03/student_r1_cpu.json": "c2a81c62117ac52da61c091af86b0ddd398811986da0ad2952f99f01967eb445",
+    "Document/Update/Alpha/v4.2.0/evidence/T03/student_r1_cuda.json": "710d35f39a6b5ee37037925597a40d846f052a8d06ab3ddc2719a92fdba1a741",
+    "Document/Update/Alpha/v4.2.0/evidence/T03/student_r2_cpu.json": "f3c09a512651c8fe956e8bd5a57b3ea5dbf30e48f74462613b8f0768b94912a9",
+    "Document/Update/Alpha/v4.2.0/evidence/T03/student_r2_cuda.json": "a98d56544858c1818acff4d0f1366e26d15acf1a9bdff3b57f47a7010220958a",
+    "Document/Update/Alpha/v4.2.0/evidence/T03/summary.json": "5c8113f62ba66f62ce481630baf4eb88da532203feac6755972628eb26693a19",
+    "Document/Update/Alpha/v4.2.0/evidence/T03/teacher2f_cost2f_fast-2f-d1650.json": "eab77aaa88909426beb6dfd96e32eb11016cca26d4bad9443b7f35efad2f2558",
+    "Document/Update/Alpha/v4.2.0/evidence/T03/teacher2f_cost2f_fast-2f-r1.json": "329c39c90fd035c12bc937958d99616898876a2f10b30bd9fab59363885c1310",
+    "Document/Update/Alpha/v4.2.0/evidence/T03/teacher2f_cost2f_fast-2f-r2.json": "03eccc792780cfebc72f899a101fb8e960e911a39163958b040460af22985978",
+    "Document/Update/Alpha/v4.2.0/evidence/T03/teacher2f_cost2f_fast-4f-r1.json": "c7df91449e6df018cea094d36b554509210098e94be242b760511c684adaa293",
+    "Document/Update/Alpha/v4.2.0/evidence/T03/teacher2f_cost2f_fast-4f-r2.json": "35fb94b60e464814538add5d74a20824ab264195a46c35bd82481e9d4020d14a",
+    "Document/Update/Alpha/v4.2.0/evidence/T03/teacher2f_cost2f_smoke-fast-fast-2f.json": "c9adb2e2bbcf403d9a2f6d708fdff68c1e4a639d7b9dd32f10e80c21a37a6c8f",
+    "Document/Update/Alpha/v4.2.0/evidence/T03/teacher2f_cost2f_smoke-noprobe-2f.json": "0753886396c0a26b3dc57abc6fd016bd7abb7b6ff5a6fa9ed67af7e085d86a36",
+    "Document/Update/Alpha/v4.2.0/evidence/T03/teacher2f_cost2f_v2h-2f-d1650.json": "884c663684cc9b9ccc23128b33593569f4c73e69326a29d349a0dce8b1ef88f4",
+    "Document/Update/Alpha/v4.2.0/evidence/T03/teacher2f_cost2f_v2h-2f-r1.json": "9fd42cd37ddfd13a3ecbbb8b2b3763762059aaff3b87212537756f0ad035c737",
+    "Document/Update/Alpha/v4.2.0/evidence/T03/teacher2f_cost2f_v2h-2f-r2.json": "a0a637c9dcf0d790940b1862ad0fff1fb49d89f7fe6429b7b18830e4ad3751f0",
+    "Document/Update/Alpha/v4.2.0/evidence/T03/teacher2f_cost2f_v2h-4f-r1.json": "a9a9dcc1d5604afbbd18edf9dad053fbc047b07b55b110a016ef6e9e39449e55",
+    "Document/Update/Alpha/v4.2.0/evidence/T03/teacher2f_cost2f_v3b-2f-smoke.json": "160d1c8c7972516e1963bb0f7acd842b8a37570d0cd5891f3fdf93974323505c",
+    "Document/Update/Alpha/v4.2.0/evidence/T03/teacher2f_readonly.json": "1734c74e780cf907a89a0ffd6401d2b9fa511b6ebf683409a86396739a985032",
+    "Document/Update/Alpha/v4.2.0/evidence/T03/teacher2f_summary.json": "6ed362ad9bac0a65908f9048a583c5cfcb568b85631b272814af9664b6db3d41",
+    "Document/Update/Alpha/v4.2.0/evidence/T03/teacher2f_verify.json": "9901ac9252e814eb9012fcbbeedc654d2638835b2965869ab53ddf41892d4b1c",
+    "Document/Update/Alpha/v4.2.0/evidence/T03/thr_r1_env_f1.json": "6b7479d038c8d9a5d78f3780db30bf6ee156805678006277c5a221873e5ca1b8",
+    "Document/Update/Alpha/v4.2.0/evidence/T03/thr_r1_shadow_b4.json": "73b5e16dacae43dc09442a19a9023e7aba7d606d6c016308284574baac09bf1e",
+    "Document/Update/Alpha/v4.2.0/evidence/T03/thr_r1_shadow_f1.json": "8114c49102d4e2fda17483b350ee3c0d4a8e51b612fd5fca00accd23d8be981d",
+    "Document/Update/Alpha/v4.2.0/evidence/T03/thr_r1_shadow_runs.json": "4b7a6d66188279c3cf4c6ac01b48b9e40a548eda2d372d3ad2473c379b10135c",
+    "Document/Update/Alpha/v4.2.0/evidence/T03/thr_r1_shadow_runsfull.json": "63ce12970d8538427c485077eb1dc566ddd38a1b8df3bcbd81d96ecb73230914",
+    "Document/Update/Alpha/v4.2.0/evidence/T03/thr_r2_env_f1.json": "d8f5fc320617c5aca88980cdc7358485b8513c11ef900b41e00b552b40a81144",
+    "Document/Update/Alpha/v4.2.0/evidence/T03/thr_r2_shadow_b4.json": "01fcc1620859cc0c6a47a4865cef3c32fee5c3d9fdb213185b5dc5fc0724d21c",
+    "Document/Update/Alpha/v4.2.0/evidence/T03/thr_r2_shadow_f1.json": "23452ba23e646878278f49db6cedf16a0893fb8e5ea4b3fbf79b5acf9d736196",
+    "Document/Update/Alpha/v4.2.0/evidence/T03/thr_r2_shadow_runs.json": "9e854585ff8840156d9680f34f67215a2b7d34fccf72fb1e24c140886ef07491",
+    "Document/Update/Alpha/v4.2.0/evidence/T03/thr_r2_shadow_runsfull.json": "7a6ea57385d8b272b48e6278fbaac9d9343209d12c8ecf28f5c9a6399676646a",
+    "Document/Update/Alpha/v4.2.0/evidence/T04/dataset_2f.json": "d8a910291d6b6cfd96399ae814f013d64f33853cd8f1344c14c18e67461b72f0",
+    "Document/Update/Alpha/v4.2.0/evidence/T04/dev_eval.json": "261efed74428efe88685c6ac743ec62d53ee61808cf82085ec5e4e851c1005a9",
+    "Document/Update/Alpha/v4.2.0/evidence/T04/train_controlled.json": "9ec09c2817880c38729c3781dca2849a563a93f4d5c0f95166748b65eb06d3a9",
+    "Document/Update/Alpha/v4.2.0/evidence/T04/verified_set_idle.json": "d3c712e2fb04fd115d80f1bcb908a7015587b58865ef135380ad9ad1e6ffc539",
+    "Document/Update/Alpha/v4.2.0/evidence/T05/dagger_d1.json": "a7849f9984171dba78dddb4dd31a7bd41580bc25201d53ff53d9ef34956d56ae",
+    "Document/Update/Alpha/v4.2.0/evidence/T05/dagger_d2.json": "7048fde911c334e799b185f0e3c074b7488a6df6bb43cbbcd407111009bb9e23",
+    "Document/Update/Alpha/v4.2.0/evidence/T05/dagger_d3.json": "e662fd22739f62b4550c76b8bff25eb28b4474aba85fa8c73603ad5f7bd58dfa",
+    "Document/Update/Alpha/v4.2.0/evidence/T06/advnorm_off.json": "d7a9205c4e78a2c229a40e67a13ec75d1c2554681ee72cb5f9b65daca49d8a8c",
+    "Document/Update/Alpha/v4.2.0/evidence/T06/budget_200k.json": "103294660b11b18fffd67b3afdc5d074da96ca6700300d753610ccd2a43804a8",
+    "Document/Update/Alpha/v4.2.0/evidence/T06/discount_revision.json": "dc9d9b8b536298ff75099f38d13d169fa578e679074ea5b67d83727a14e0766a",
+    "Document/Update/Alpha/v4.2.0/evidence/T06/r2_collapse.json": "5a16b299de508ac36d0299c88b27aaf1ec0eb3d88a4a409d8d3d20e26467bd46",
+    "Document/Update/Alpha/v4.2.0/evidence/T06/r2_kl_p3.json": "339f227c3f53feec59adc382b183992deeca4916b2dd120d50b56e990a23c77b",
+    "Document/Update/Alpha/v4.2.0/evidence/T06/reward_r3.json": "500e809e7a95e31f728a9be655d71752f49ffdfca8cca2c141af8ee9fa4d1538",
+    "Document/Update/Alpha/v4.2.0/evidence/T06/reward_r4.json": "faf4790f72d9a10c2d9f320d3379ab332f69cc38c064e522c12ed89724500041",
+    "Document/Update/Alpha/v4.2.0/evidence/T06/rl_audit.json": "fbee3c352e256a2aa20851a0b3b58ee38ce6c62ae51ee06ae3386c469239ad30",
+    "Document/Update/Alpha/v4.2.0/evidence/T06/rl_kl_anchor.json": "b769fc2d6d364768fee4f51165edc21b7085dba17b40c80424804dc978bf4c85",
+    "Document/Update/Alpha/v4.2.0/evidence/T06/rl_pilot.json": "22d64309dd28f803678fa53699533acf2c60c814703f4b9e816110c6c44d3fac",
+    "Document/Update/Alpha/v4.2.0/evidence/T06/rl_pilot2.json": "09b6821b8a674aa0e4464fe3cd45352c6777ba759f698e529ab74ed3826a3966",
+    "Document/Update/Alpha/v4.2.0/evidence/T08/a1_safe_set_full.json": "41d4bd0c863e1480344e7516c28259f4129e62e17dcb4afb7e5c70c7467ba6f0",
+    "Document/Update/Alpha/v4.2.0/evidence/T08/a1_safe_set_pilot.json": "e859c6c3f521ec5d8a1d3a0e11e7446d0866d5f32d7b2587a9281b46f0ec5bfc",
+    "Document/Update/Alpha/v4.2.0/evidence/T08/a1_setsup_train.json": "a9d2ae0f9d325ca310a1ac3186a37a8282460b13bfefe584990d4f4d630182bb",
+    "Document/Update/Alpha/v4.2.0/evidence/T08/clear_reachability.json": "dfe51e73928f7503422d2b956b0e916a34d937d24e50fb76cc4ab037be8c62bb",
+    "Document/Update/Alpha/v4.2.0/evidence/T08/clear_remeasure.json": "bcedeae3bed1f530eeeac0ea2577e26418a10dde16023aecb1a4564b27dda4e2",
+    "Document/Update/Alpha/v4.2.0/evidence/T08/eval_shoot_pulse.json": "e1d6afec2a03a3b6b26d77ece9fa2f6b3fdc67541bfb3a98d4498d50b7b89c30",
+    "Document/Update/Alpha/v4.2.0/evidence/T08/setloss_form.json": "973cf935c0a23451f4ce6be9e1a0741dada93dad35631a9f4cdd63ec111c45ba",
+    "Document/Update/Alpha/v4.2.0/README.md": "5cbe94b6b508f253acdc11600bf207c133f5d14685a69fa417cdd23b03ef3e17",
+    "Document/Update/Alpha/v4.2.0/PROGRESS.md": "7b49f049c098c51c12267d36dc699c62a739e91afe2d086d3a3a45c1032347dc",
+    "Document/Update/Alpha/v4.2.0/ROUTE_CONCLUSION.md": "6f0d7f8173fc9a3106a9b411b33e84467c13e1ba8c35d606a9693fb63ba3e70e",
+    "Document/Update/Alpha/v4.2.0/state.json": "99e22af942b2c3eb89eed274fbfd38981a928954a6d9d17b8d359849989a6039",
+    "Document/Update/Alpha/v4.2.0/journal.jsonl": "835b9e18d22095a78761dd0773245b39d355cb1c61cdadc33bf6202002fdae38",
+    "Document/Update/Alpha/v4.2.0/budget.jsonl": "01d8bd048b982bf19a2123c21265dac751cb79cf6a7e3e0550543784ddea4b16",
+    "AGENTS.md": "bf75049b60bab2e8d687bb3b8968f952e76cc70710e6f58ead3c2feceb9174fd",
+    "ASSET_SYNC.md": "5988c92677afffbeb8fb387a096e0218fb2805fd08824421efc433b7686601cb",
+    "ASSET_SYNC.sha256": "1ceea5da5616a967e33f897624031a20523aefba485dee6ed33d5d254454afd8",
+    "touhou_rl/v400/gym/actions.py": "94794f654d5d6619fd9ccb52547063d9f1948c3c1e1474ac0e97a97e2fbfd60c",
+    "touhou_rl/v400/student/obs_spec.py": "217ff34e8b16dfab56d22f3b88a277fbe3d572259b38ade4db66c28c59b3949a",
+    "touhou_rl/v400/student/obs_spec_v3.py": "642dadfc88c8e26ba194399fc3c65f5c2c566f9618dde97336bf4d1eae7f167b"
+  },
+  "not_performed": [
+    "game or engine execution",
+    "training",
+    "Windows deployment",
+    "historical pytest rerun",
+    "asset-host verification",
+    "formal confirmation"
+  ],
+  "limitations": [
+    "Historical JSON may describe experiments that were invalid or incomplete",
+    "Checking recorded outcomes does not re-execute the original experiment",
+    "Remote assets were not enumerated; local absence is not remote absence"
+  ]
+}

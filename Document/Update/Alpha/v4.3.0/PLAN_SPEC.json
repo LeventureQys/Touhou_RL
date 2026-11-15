@@ -1,0 +1,948 @@
+{
+  "schema": "v430-training-plan/2",
+  "revision": "v430-plan-r2",
+  "date": "2026-11-15",
+  "timezone": "Asia/Shanghai",
+  "scope": "planning_only",
+  "implementation_available": false,
+  "execution_started": false,
+  "training_authorized_by_this_document": false,
+  "legacy_wp05_status": "paused",
+  "capability_status": "not_run",
+  "parameter_policy": "initial development values; freeze run-specific config and SHA before execution",
+  "documents": [
+    "README.md",
+    "V420_REVIEW.md",
+    "TACTICAL_LEARNING.md",
+    "EXECUTION_PLAN.md",
+    "TRAINING_PLAN.md",
+    "DEVELOPMENT_GUIDE.md"
+  ],
+  "modes": {
+    "D-state": {
+      "actor": "privileged diagnostic",
+      "critic": "training privileged",
+      "deployable": false
+    },
+    "D-pixel": {
+      "actor": "pixels and executed-key history",
+      "recurrent": false,
+      "deployable": false
+    },
+    "D-pixel-memory": {
+      "actor": "pixels and executed-key history",
+      "recurrent": true,
+      "deployable": false
+    },
+    "R2-AC": {
+      "actor": "pixels and executed-key history",
+      "critic": "detached actor history and privileged state; independent parameters",
+      "feedback": "engine",
+      "deployable_actor_candidate": true
+    },
+    "R0": {
+      "actor": "frozen pixel actor",
+      "updates": false
+    },
+    "R1": {
+      "actor": "pixels and executed-key history",
+      "critic": "pixel",
+      "feedback": "pixel",
+      "reset": "pixel",
+      "curriculum": "pixel or preregistered external rules",
+      "judge_access": false
+    },
+    "R2": {
+      "actor": "same initialization and interface as R1",
+      "critic": "same pixel critic as R1",
+      "feedback": "engine",
+      "reset": "same pixel controller as R1",
+      "clock": "same external clock as R1",
+      "changed_factor": "feedback and terminal labels only"
+    },
+    "DEPLOY": {
+      "actor": "frozen pixels and executed-key history",
+      "critic_loaded": false,
+      "teacher_loaded": false,
+      "privileged_inputs": false
+    }
+  },
+  "strategies": [
+    {
+      "id": "S01",
+      "name": "local_dodge",
+      "micro_train": 1,
+      "micro_dev": 3
+    },
+    {
+      "id": "S02",
+      "name": "region_escape",
+      "micro_train": 2,
+      "micro_dev": 5
+    },
+    {
+      "id": "S03",
+      "name": "lure_reposition",
+      "micro_train": 1,
+      "micro_dev": 3
+    },
+    {
+      "id": "S04",
+      "name": "preemptive_clear",
+      "micro_train": 1,
+      "micro_dev": 4
+    },
+    {
+      "id": "S05",
+      "name": "collect_power",
+      "micro_train": 2,
+      "micro_dev": 6
+    },
+    {
+      "id": "S06",
+      "name": "boss_damage",
+      "micro_train": 1,
+      "micro_dev": 3
+    },
+    {
+      "id": "S07",
+      "name": "bomb_management",
+      "micro_train": 1,
+      "micro_dev": 3
+    },
+    {
+      "id": "S08",
+      "name": "respawn_recovery",
+      "micro_train": 1,
+      "micro_dev": 3
+    }
+  ],
+  "power": {
+    "protocol": "POWER-01",
+    "subtypes": [
+      {
+        "id": "P1",
+        "name": "opportunistic_intercept",
+        "events": 6
+      },
+      {
+        "id": "P2",
+        "name": "safe_window_collection",
+        "events": 6
+      },
+      {
+        "id": "P3",
+        "name": "power_recovery",
+        "events": 6
+      },
+      {
+        "id": "P4",
+        "name": "clear_then_collect",
+        "events": 6
+      },
+      {
+        "id": "P5",
+        "name": "abandon_collection",
+        "events": 6
+      }
+    ],
+    "min_ancestors": 10,
+    "comparison_seconds": [
+      5,
+      15
+    ],
+    "validate_own_path": [
+      "approach",
+      "pickup_or_wait",
+      "exit",
+      "next_threat"
+    ],
+    "main_reward_for_raw_pickup": 0,
+    "report": [
+      "power",
+      "firepower_threshold_time",
+      "threat_kills",
+      "enemy_fire",
+      "effective_damage",
+      "deaths",
+      "bombs",
+      "task_completion"
+    ],
+    "advancement": "preregistered held-out completion non-degradation and risk checks, plus an improvement in one preregistered downstream metric; not a capability gate"
+  },
+  "datasets": {
+    "CONTRACT": {
+      "success_sources": 3,
+      "failure_sources": 3,
+      "repeats_per_source": 2
+    },
+    "TACT-30": {
+      "categories": {
+        "preemptive_clear": 10,
+        "region_escape": 10,
+        "lure_reposition": 10
+      },
+      "min_ancestors": 10,
+      "pilot_events": 5,
+      "start_offsets_seconds": [
+        0.5,
+        1,
+        2,
+        4
+      ],
+      "optional_extension_seconds": 8,
+      "branch_horizon_seconds": 15,
+      "repeat_events": 10
+    },
+    "POWER-30": {
+      "events": 30,
+      "min_ancestors": 10,
+      "pilot_events": 5
+    },
+    "BRANCH-32": {
+      "states": 32,
+      "independent_ancestors_claimed": false,
+      "unknown_is_death": false,
+      "legacy_candidate_count": 18,
+      "new_action_count": 72
+    },
+    "MICRO-10": {
+      "events": 10,
+      "duration_seconds": [
+        3,
+        10
+      ],
+      "min_training_successes": 9
+    },
+    "MICRO-DEV-30": {
+      "events": 30,
+      "disjoint_training_ancestors": true
+    },
+    "BOOTSTRAP": {
+      "target_min_train_ancestors": 50,
+      "target_min_dev_ancestors": 20
+    },
+    "CONFIRM": {
+      "episodes": 100,
+      "used_for_training_or_selection": false
+    },
+    "ADAPT-HOLDOUT": {
+      "min_clean_families": 2,
+      "all_components_in_lineage": true
+    },
+    "reserved_training_exclusion": {
+      "seed_min": 60000,
+      "seed_max": 60199,
+      "read_sealed_results": false
+    }
+  },
+  "observation": {
+    "variants": [
+      "O0_frozen_obs_v3",
+      "O1_old_play_full_hud",
+      "O2_candidate",
+      "O-G_clean_general"
+    ],
+    "selected_for_formal_run": null,
+    "source_rgb_wh": [
+      640,
+      480
+    ],
+    "O2": {
+      "storage_dtype": "uint8",
+      "global_rgb_chw": [
+        3,
+        240,
+        320
+      ],
+      "play_gray_chw": [
+        4,
+        224,
+        192
+      ],
+      "hud_gray_chw": [
+        1,
+        448,
+        160
+      ],
+      "executed_key_history_shape": [
+        8,
+        7
+      ],
+      "key_order": [
+        "left",
+        "right",
+        "up",
+        "down",
+        "focus",
+        "shoot",
+        "bomb"
+      ],
+      "history_valid_shape": [
+        8
+      ],
+      "elapsed_capture_s": true,
+      "play_crop_xywh": [
+        32,
+        16,
+        384,
+        448
+      ],
+      "hud_crop_xywh": [
+        480,
+        16,
+        160,
+        448
+      ],
+      "gray_rule": "(77*R+151*G+28*B)>>8",
+      "downsample_rule": "2x2 mean; uint32 sum then floor division by 4",
+      "play_temporal_spacing": "consecutive genuine captured game frames",
+      "normalization": "divide by 255 in minibatch",
+      "image_bytes_per_decision": 474112,
+      "forbidden_actor_fields": [
+        "engine_frame",
+        "seed",
+        "script_id",
+        "stage_truth",
+        "enemy_table",
+        "resource_truth",
+        "teacher_action",
+        "future_tape"
+      ]
+    },
+    "strict_transfer": "generic full-frame visual localization; no target HUD truth or manual target semantic coordinates",
+    "O_G": {
+      "storage_dtype": "uint8",
+      "global_rgb_chw": [
+        3,
+        240,
+        320
+      ],
+      "full_gray_chw": [
+        4,
+        240,
+        320
+      ],
+      "fixed_game_specific_crops": false,
+      "resize": "preserve aspect ratio, center letterbox, freeze interpolation and padding in digest",
+      "key_and_clock_history": "same public interface as O2",
+      "actor_fusion_features": 288,
+      "source_training_required": true,
+      "separate_digest_and_model": true,
+      "extra_source_training_budget": "estimate at ST00; allocate separately before ST07",
+      "feedback": "full native-resolution frame; source-only semantic training before STRICT target review"
+    }
+  },
+  "action": {
+    "heads": {
+      "move": 9,
+      "focus": 2,
+      "shoot": 2,
+      "bomb": 2
+    },
+    "joint_count": 72,
+    "factorization": "independent categorical heads; summed log-probability and entropy",
+    "hold_game_frames": 2,
+    "forced_shoot": false,
+    "truth_action_mask": false,
+    "actual_key_history": true,
+    "owner_exclusive": true,
+    "session_actor_loss_mask": 0,
+    "state_machine_semantics": "requested action and emitted masks both logged; compile identically in sampling and evaluation"
+  },
+  "model": {
+    "candidate": "three-stream spatial CNN plus GRU",
+    "hidden_size": 256,
+    "parameter_range_millions": [
+      1,
+      3
+    ],
+    "parameter_range_is_gate": false,
+    "normalization": "GroupNorm or LayerNorm; no mutable batch statistics",
+    "activation": "SiLU",
+    "encoder_candidate": {
+      "global": {
+        "convs": [
+          [
+            3,
+            16,
+            5,
+            2
+          ],
+          [
+            16,
+            32,
+            3,
+            2
+          ],
+          [
+            32,
+            32,
+            3,
+            2
+          ]
+        ],
+        "adaptive_pool_hw": [
+          6,
+          8
+        ],
+        "project_features": 128
+      },
+      "play": {
+        "convs": [
+          [
+            4,
+            32,
+            5,
+            2
+          ],
+          [
+            32,
+            64,
+            3,
+            2
+          ],
+          [
+            64,
+            64,
+            3,
+            2
+          ]
+        ],
+        "adaptive_pool_hw": [
+          14,
+          12
+        ],
+        "project_features": 128
+      },
+      "hud": {
+        "convs": [
+          [
+            1,
+            16,
+            3,
+            1
+          ],
+          [
+            16,
+            32,
+            3,
+            2
+          ],
+          [
+            32,
+            32,
+            3,
+            2
+          ]
+        ],
+        "adaptive_pool_hw": [
+          28,
+          10
+        ],
+        "project_features": 64
+      },
+      "history": {
+        "flattened_features": 65,
+        "project_features": 32
+      },
+      "fusion_features": 352,
+      "fusion_projection": 256,
+      "conv_padding": "kernel_size//2",
+      "conv_norm_groups": 4
+    },
+    "action_heads_input": 256,
+    "auxiliary_heads": [
+      "player",
+      "visible_entities",
+      "motion_and_danger",
+      "visible_resources",
+      "tactical_goal",
+      "future_outcome"
+    ],
+    "parameter_scope": "actor encoder, memory and action heads; critic and auxiliary heads counted separately"
+  },
+  "pretrain": {
+    "max_updates": 5000,
+    "check_updates": [
+      500,
+      1500,
+      3000,
+      5000
+    ],
+    "optimizer": "AdamW",
+    "learning_rate": 0.0001,
+    "weight_decay": 0.0001,
+    "sequences_per_batch": 8,
+    "loss_steps_per_sequence": 64,
+    "select_by": "held-out perception and closed-loop diagnostics",
+    "new_environment_frames": 0
+  },
+  "bc": {
+    "max_updates": 5000,
+    "conditional_new_run_max_updates": 20000,
+    "check_updates": [
+      500,
+      1500,
+      3000,
+      5000
+    ],
+    "optimizer": "AdamW",
+    "learning_rate": 0.0001,
+    "weight_decay": 0.0001,
+    "sequences_per_batch": 8,
+    "loss_steps_per_sequence": 64,
+    "select_by": "held-out closed-loop behavior",
+    "missing_action_labels": "mask"
+  },
+  "micro": {
+    "arms": [
+      "D-state",
+      "D-pixel",
+      "D-pixel-memory"
+    ],
+    "train_seeds": [
+      0,
+      1,
+      2
+    ],
+    "frames_per_arm_seed": 100000,
+    "total_new_frames": 900000
+  },
+  "curriculum": {
+    "offline_tactical_content_shares": {
+      "ordinary_output_navigation": 0.3,
+      "before_threat_formation": 0.3,
+      "student_failure_recovery": 0.2,
+      "success_suffix_transition": 0.2
+    },
+    "early_frame_shares": {
+      "natural": 0.3,
+      "frontier": 0.4,
+      "student_failure": 0.2,
+      "retention": 0.1
+    },
+    "late_frame_shares": {
+      "natural": 0.7,
+      "frontier": 0.1,
+      "student_failure": 0.1,
+      "retention": 0.1
+    },
+    "aggregation_decision_shares": {
+      "current_student": 0.5,
+      "recent_history": 0.3,
+      "fixed_success_bc": 0.2
+    },
+    "min_dev_starts": 20,
+    "min_dev_success_rate": 0.8,
+    "min_positive_train_seeds": 2,
+    "student_execution_teacher_beta": 0,
+    "suffix_seconds": [
+      3,
+      10
+    ],
+    "extended_suffix_seconds": [
+      10,
+      30
+    ],
+    "handoff": "actual student terminal state and resources, not independent teacher resets"
+  },
+  "ppo": {
+    "train_seeds": [
+      0,
+      1,
+      2
+    ],
+    "num_envs": 4,
+    "mechanism_num_envs": 2,
+    "rollout_decisions_per_env": 512,
+    "hidden_size": 256,
+    "burn_in_decisions": 64,
+    "loss_unroll_decisions": 64,
+    "sequences_per_minibatch": 8,
+    "effective_minibatch_steps": 512,
+    "epochs": 4,
+    "actor_learning_rate": 0.00003,
+    "critic_learning_rate": 0.0003,
+    "clip_ratio": 0.2,
+    "max_grad_norm": 0.5,
+    "gamma_time_constant_seconds": 200,
+    "reference_hz": 60,
+    "lambda_at_two_frames": 0.97,
+    "entropy_coefficient": 0.001,
+    "value_coefficient": 0.5,
+    "auxiliary_coefficients": {
+      "bc": 0.1,
+      "tactical": 0.05,
+      "perception": 0.05
+    },
+    "bc_anchor_kl_coefficient": 0,
+    "optional_dev_anchor_coefficient": 0.01,
+    "sampling_temperature": 1,
+    "mean_kl_epoch_stop": 0.02,
+    "zero_update_tolerance": 0.00001,
+    "critic_warmup_updates": 1000,
+    "critic_check_interval": 200,
+    "critic_warmup_actor_logit_max_change": 0.000001,
+    "duration_source_R2_AC": "observed engine elapsed frames",
+    "duration_source_R1_R2": "shared external capture/controller timing only",
+    "off_policy_demos_in_ppo_ratio": false,
+    "privileged_value_gradient_to_actor": false,
+    "main_reward": {
+      "clear": 1,
+      "game_over": -1,
+      "preregistered_task_cap_failure": -1,
+      "nonfinal_death_terminal": false,
+      "raw_pickup": 0,
+      "raw_kill": 0,
+      "per_step_survival": 0
+    },
+    "shaping": "optional frozen potential; separate development experiment; terminal potential zero",
+    "cumulative_frame_tiers_per_seed": [
+      1000000,
+      5000000,
+      20000000
+    ]
+  },
+  "evaluation": {
+    "first_wave": {
+      "checkpoint_interval_frames": 100000,
+      "checkpoints_per_seed": 10,
+      "early_checkpoints": 9,
+      "episodes_each_early_checkpoint": 5,
+      "episodes_at_1m": 20,
+      "train_seeds": 3,
+      "development_episodes": 195,
+      "max_confirm_candidates": 1,
+      "confirm_episodes": 100,
+      "s1_frame_cap_candidate": 19887,
+      "s1_total_worst_case_frames": 5866665,
+      "cap_must_be_validated_by_real_clear": true
+    },
+    "candidate_nomination": {
+      "natural_s1_dev_episodes": 20,
+      "min_successes": 10
+    },
+    "formal": {
+      "episodes": 100,
+      "min_successes": 50,
+      "wilson_confidence": 0.95,
+      "wilson_min_lower_bound": 0.35,
+      "invalid_policy": "invalidate full batch; preserve records; fresh batch after repair"
+    },
+    "windows": {
+      "min_sessions": 20,
+      "min_point_estimate_retention": 0.7,
+      "target_hz": 60,
+      "p95_ms_initial": 33.3,
+      "late_fraction_max": 0.01
+    },
+    "feedback": {
+      "precision_recall_lower_bound": 0.99,
+      "confidence": 0.95,
+      "min_true_events_each": 400,
+      "min_predicted_events_each": 400,
+      "resource_accuracy": 0.995,
+      "death_visible_p95_frames": 10,
+      "death_engine_p95_frames": 30,
+      "death_engine_max_frames": 60,
+      "long_stream_hours": 10,
+      "false_events_per_hour_max": 1,
+      "reset_trials": 100,
+      "min_reset_successes": 99
+    },
+    "improvement": {
+      "min_train_seeds": 3,
+      "paired_tasks_per_seed": 100,
+      "min_R1_R0_gain_pp": 15,
+      "paired_difference_lower_bound_greater_than": 0,
+      "min_fraction_of_positive_R2_gain": 0.7
+    },
+    "adaptation": {
+      "clean_families": 2,
+      "trainable_arms": [
+        "A",
+        "S",
+        "A-ad"
+      ],
+      "frozen_arm": "Z",
+      "train_seeds": 3,
+      "cumulative_frame_tiers": [
+        1000000,
+        5000000,
+        20000000
+      ],
+      "total_at_20m": 360000000,
+      "final_noninferiority_margin_pp": 5,
+      "multiple_comparisons": "Holm; preserve original G410-6 interval rules"
+    },
+    "new_capability_gates": {
+      "G410-0": "not_run_for_v430",
+      "G410-1": "not_run_for_v430",
+      "G410-2": "not_run_for_v430",
+      "G410-3": "not_run_for_v430",
+      "G410-4": "not_run_for_v430",
+      "G410-5": "not_run_for_v430",
+      "G410-6": "not_run_for_v430",
+      "G410-7": "not_run_for_v430"
+    }
+  },
+  "budgets": {
+    "scope": "first wave only; minimum of this plan and remaining authorized allowance",
+    "bootstrap_new_frames": 300000,
+    "micro_new_frames": 900000,
+    "main_new_frames": 3000000,
+    "allocated_training_frames": 4200000,
+    "training_frame_cap": 12000000,
+    "evaluation_frame_cap": 8000000,
+    "counterfactual_outer_frame_cap": 1500000,
+    "teacher_internal_frame_cap": 64000000,
+    "prefix_restore_frame_cap": 10000000,
+    "gpu_active_hours": 48,
+    "host_active_wall_hours": 96,
+    "new_persistent_gib": 40,
+    "stop_new_persistent_tasks_gib": 32,
+    "stop_new_long_tasks_resource_fraction": 0.8,
+    "windows_hours": 8,
+    "unknown_prior_consumption_is_zero": false,
+    "branch_wall_seconds": 300,
+    "branch_parallelism": 2,
+    "historical_effective_fps_for_estimate": 49.4,
+    "replace_with_measured_throughput": true,
+    "future_increment_1m_to_5m_across_3_seeds": 12000000,
+    "automatic_budget_extension": false,
+    "automatic_asset_deletion": false
+  },
+  "phases": [
+    {
+      "id": "ST00",
+      "work_packages": [
+        "W00",
+        "W09"
+      ],
+      "name": "identity and lineage audit",
+      "status": "not_run"
+    },
+    {
+      "id": "ST01",
+      "work_packages": [
+        "W01",
+        "W02",
+        "W06"
+      ],
+      "name": "real control and tactical mechanism",
+      "status": "not_run"
+    },
+    {
+      "id": "ST02",
+      "work_packages": [
+        "W02",
+        "W03"
+      ],
+      "name": "perception BC and micro-learning",
+      "status": "not_run"
+    },
+    {
+      "id": "ST03",
+      "work_packages": [
+        "W04"
+      ],
+      "name": "R2-AC connected curriculum",
+      "status": "not_run"
+    },
+    {
+      "id": "ST04",
+      "work_packages": [
+        "W04",
+        "W06"
+      ],
+      "name": "natural S1 and Windows confirmation",
+      "status": "not_run"
+    },
+    {
+      "id": "ST05",
+      "work_packages": [
+        "W05",
+        "W08"
+      ],
+      "name": "pixel feedback and matched improvement",
+      "status": "not_run"
+    },
+    {
+      "id": "ST06",
+      "work_packages": [
+        "W07"
+      ],
+      "name": "natural full game",
+      "status": "not_run"
+    },
+    {
+      "id": "ST07",
+      "work_packages": [
+        "W09",
+        "W10"
+      ],
+      "name": "clean held-out adaptation",
+      "status": "not_run"
+    },
+    {
+      "id": "ST08",
+      "work_packages": [
+        "W11"
+      ],
+      "name": "second game STRICT",
+      "status": "not_run"
+    },
+    {
+      "id": "ST09",
+      "work_packages": [
+        "W12"
+      ],
+      "name": "complete gate settlement",
+      "status": "not_run"
+    }
+  ],
+  "future_cli": {
+    "entry": "tools/rl/v430.py",
+    "implemented": false,
+    "subcommands": [
+      "audit",
+      "validate-contract",
+      "validate-splits",
+      "tactical-pilot",
+      "power-pilot",
+      "prepare-data",
+      "pretrain",
+      "behavior-clone",
+      "micro-learn",
+      "train",
+      "evaluate",
+      "confirm",
+      "windows-eval",
+      "feedback-eval",
+      "adapt",
+      "settle"
+    ],
+    "optional_subcommands": [
+      "plan"
+    ],
+    "exit_codes": {
+      "0": "requested execution completed or requested gate passed; not automatic capability success",
+      "2": "invalid inputs protocol or environment",
+      "3": "valid measurement failed requested gate",
+      "4": "incomplete due to resources or interruption"
+    },
+    "result_fields": [
+      "execution_status",
+      "protocol_validity",
+      "research_result",
+      "capability_gate"
+    ],
+    "config_owners": {
+      "W00": [
+        "assets.json"
+      ],
+      "W01": [
+        "contracts.json"
+      ],
+      "W02": [
+        "tactical_pilot.json",
+        "power_pilot.json"
+      ],
+      "W03": [
+        "bootstrap.json",
+        "perception.json",
+        "bc.json",
+        "micro.json"
+      ],
+      "W04": [
+        "s1.json",
+        "s1-dev.json",
+        "s1-confirm.json"
+      ],
+      "W05": [
+        "feedback.json"
+      ],
+      "W06": [
+        "windows.json"
+      ],
+      "W07": [
+        "fullrun.json",
+        "fullrun-confirm.json"
+      ],
+      "W08": [
+        "pixel_improvement.json"
+      ],
+      "W09": [
+        "splits.json"
+      ],
+      "W10": [
+        "adapt.json"
+      ],
+      "W11": [
+        "transfer.json"
+      ],
+      "W12": []
+    },
+    "test_owners": {
+      "W00": [],
+      "W01": [
+        "contracts",
+        "actions",
+        "session"
+      ],
+      "W02": [
+        "observation",
+        "tactics",
+        "power"
+      ],
+      "W03": [
+        "data",
+        "sequence",
+        "models"
+      ],
+      "W04": [
+        "ppo",
+        "curriculum",
+        "teacher"
+      ],
+      "W05": [
+        "feedback"
+      ],
+      "W06": [
+        "deploy"
+      ],
+      "W07": [
+        "fullrun"
+      ],
+      "W08": [
+        "privilege"
+      ],
+      "W09": [
+        "splits"
+      ],
+      "W10": [
+        "adapt"
+      ],
+      "W11": [
+        "transfer"
+      ],
+      "W12": [
+        "settle"
+      ]
+    },
+    "shared_entry_owner": "one assigned integrator; serialized edits",
+    "root_package_owner": "W01",
+    "settlement_module": "touhou_rl/v430/settle.py"
+  },
+  "invariants": [
+    "no resumption of legacy paused WP05",
+    "no modification of old evidence, engine ABI or registered assets",
+    "no capability claim from planning, synthetic tests or micro success",
+    "no privileged actor input or R1 judge feedback",
+    "no pooling repeated seeds, adjacent frames or candidate branches as independent episodes",
+    "unknown branch outcome is not death; finite-horizon survival is not proven viability",
+    "all new data and checkpoint paths immutable; update asset inventory only for actual new assets",
+    "no business implementation or experiments have run under this document"
+  ]
+}
