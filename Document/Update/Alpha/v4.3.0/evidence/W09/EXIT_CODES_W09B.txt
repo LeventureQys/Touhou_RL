@@ -1,0 +1,141 @@
+# W09B 验收命令与真实退出码
+
+工作包：v4.3.0 **W09B — 把 `validate_splits` 纯函数接进 CLI 并产出正式证据**
+记录时间：本文件生成时（Asia/Shanghai）。主机：Windows `D:\WorkShop\Touhou_RL`，Python 3.12.10，
+`PYTHONPATH=D:\WorkShop\Touhou_RL`。
+范围：**只接线 CLI、只补测试、只写证据**；未启动引擎，未训练，未评测，未读任何 `.tmp_*` 像素载荷，
+未打开 sealed 资产，未改动 `touhou_rl/v430/**`、`configs/**`、`registries/**`。
+
+---
+
+## 1 五条验收命令（逐条真实执行）
+
+```powershell
+$env:PYTHONPATH='D:\WorkShop\Touhou_RL'
+
+# 1) 正式证据（新增子命令）
+python tools/rl/v430.py validate-splits --config configs/v430/splits.json `
+  --out Document/Update/Alpha/v4.3.0/evidence/W09/splits-001.json
+
+# 2) --help 回归
+python tools/rl/v430.py --help
+
+# 3) audit 回归（journal 已知漂移 → 预期 3）
+python tools/rl/v430.py audit --config configs/v430/assets.json --out .tmp_w09b_audit.json
+
+# 4) validate-contract 回归（预期 0）
+python tools/rl/v430.py validate-contract --config configs/v430/contracts.json --out .tmp_w09b_contract.json
+
+# 5) 测试：73 条既有 + 4 条新增
+python -m pytest -p no:cacheprovider --basetemp .tmp_v430_pytest_w09b -q tests/test_v430_splits.py
+```
+
+| # | 命令 | 真实退出码 | 关键输出 |
+| --- | --- | --- | --- |
+| 1 | `validate-splits --config configs/v430/splits.json --out …/W09/splits-001.json` | **0** | `mode strict \| problems 0 \| splits 5 \| sha 9160cf841de1 \| gate passed \| exit 0` |
+| 2 | `--help` | **0** | 子命令列表中新增 `validate-splits  frozen split registry / task lineage validation (W09)` |
+| 3 | `audit --config configs/v430/assets.json --out .tmp_w09b_audit.json` | **3** | `checks 53 \| verified 51 \| unhashed 1 \| mismatch 1 \| missing 0 \| unreachable 0 \| wsl up \| gate NOT met`；`unmet: sync:Document/Update/Alpha/v4.2.0/journal.jsonl` |
+| 4 | `validate-contract --config configs/v430/contracts.json --out .tmp_w09b_contract.json` | **0** | `checks 173 \| failed 0 \| groups 13 \| gate passed \| exit 0` |
+| 5 | `pytest … tests/test_v430_splits.py` | **0** | `77 passed in 0.70s`（73 既有 + 4 新增；0 failed / 0 skipped / 0 error） |
+
+补充回归（未在被要求的五条内，但为确认没有改坏既有 CLI 测试）：
+
+| 命令 | 退出码 | 输出 |
+| --- | --- | --- |
+| `pytest … tests/test_v430_{actions,contracts,observation,sequence,session,splits}.py` | **0** | `425 passed in 2.21s` |
+
+---
+
+## 2 退出码语义（本子命令，严格按 EXECUTION_PLAN §4）
+
+| 情形 | 退出码 | 实测 |
+| --- | --- | --- |
+| `validate_splits` 返回 `passed=True` 且 `problems == []` | **0** | 命令 1：**0** |
+| 调用成功但 `passed=False`（有效测量未达请求门） | **3** | 见 §2.1：**3** |
+| 输入/配置无法解析、schema 不符、`--out` 已存在、内部无法构造合法结果 | **2** | 见 §2.2 / §2.3：**2** |
+| 其它程序错误 | 非 0 且非上述 | `main()` 的兜底分支返回 **1**（未触发） |
+
+### 2.1 `passed=False` → 3（有效测量未达门）
+
+构造：复制真实配置 `configs/v430/splits.json`，把 `splits.dev.ancestor_ids[0]`
+（`model_selection|v420-dev-panel|dev-seed-1000|th08-stage1-normal-team0`）追加进
+`splits.train.ancestor_ids`。注册表仍然全部可解析且 sha256 仍然匹配，所以这是一次**有效测量**，
+只是被谱系规则拒绝：
+
+```text
+validate-splits: mode strict | problems 2 | splits 5 | sha 151cae489939 | gate NOT met | exit 3
+problem A_MULTI_SPLIT: ancestor …dev-seed-1000… is assigned to several splits ['train', 'dev']
+problem X_TRAIN_OVERLAP: ancestor group th08-stage1-normal-team0|dev-seed-1000 appears in both 'dev' and 'train'
+真实退出码 = 3
+```
+
+同一份配置用纯函数自己的口径仍是 2：`lineage.exit_code_for(validate_splits(bad_config)) == 2`
+（断言写在 `test_cli_validate_splits_exit_3_when_registry_is_rejected` 里）。
+CLI 把纯函数的判定保留在 `research_result.status="fail"` + `research_result.lineage_exit_code=2`，
+而进程退出码按计划表取 **3**；这不是放宽规则，只是把"有效测量未达门"与"输入无效"分开。
+
+### 2.2 `--out` 已存在 → 2 且不覆盖
+
+```text
+$ Set-Content .tmp_v430_w09b_cli/exists.json '{"sentinel":1}'
+$ python tools/rl/v430.py validate-splits --config configs/v430/splits.json --out .tmp_v430_w09b_cli/exists.json
+v430: refusing to overwrite existing output: .tmp_v430_w09b_cli\exists.json
+真实退出码 = 2   （文件字节前后完全一致，测试逐字节断言）
+```
+
+### 2.3 配置缺失/不可解析 → 2
+
+`--config configs/v430/does-not-exist.json` → 真实退出码 **2**，且**不生成** `--out` 文件
+（`test_cli_validate_splits_missing_config_is_exit_2`）。配置 JSON 不能解析或 `schema` 不是
+`v430-splits/1` 走同一条 fail-closed 路径。
+
+---
+
+## 3 正式证据身份（`splits-001.json`）
+
+| 项 | 值 |
+| --- | --- |
+| 路径 | `Document/Update/Alpha/v4.3.0/evidence/W09/splits-001.json` |
+| `schema` | `v430-validate-splits/1`（CLI 文档；内嵌的纯函数报告是 `v430-splits-validation/1`） |
+| `command` / `command_class` | `validate-splits` / **`data`**（已注册枚举值，非自造） |
+| `capability_gate` | **`not_run`**（谱系校验不是能力测量） |
+| `split_mode` | `strict` |
+| `split_registry_sha` | **`9160cf841de1cab1c99d2b6646ffaac27322c3c537e3de316405293dad28636f`** |
+| `digest_scope` / `split_registry_sha_scope` | `text/lf-normalized` |
+| `split_registry_sha_canonicalization` | `json/sorted-keys-compact-utf8-lf` |
+| `execution_status` / `exit_code` | `ok` / `0` |
+| `research_result.passed` / `problem_count` | `true` / `0` |
+| `research_result.degradations` | `[]` |
+| 文件大小 / 原始 sha256 | `17,134 B` / `8aac168eb839311d16f152b3c0ba45dcefb965b9bd75f0bb9cd8e0c30b2eecd5`（LF-only，683 个 `\n`，0 个 CRLF） |
+
+`split_registry_sha` 与 `W09.md` / `EXIT_CODES_W09.txt` 记录的当前有效身份**完全一致**，
+说明 CLI 记录的确实是纯函数对同一份冻结配置算出的摘要，而不是另算一份。
+
+---
+
+## 4 `audit` 回归前后统计（必须一致）
+
+| 统计项 | 变更前（`evidence/W00/audit-001.json`） | 变更后（`.tmp_w09b_audit.json`） | 结论 |
+| --- | ---: | ---: | --- |
+| `statistics.denominator` | 53 | 53 | 一致 |
+| `statistics.verified` | 51 | 51 | 一致 |
+| `statistics.present_unhashed` | 1 | 1 | 一致 |
+| `statistics.mismatch` | 1 | 1 | 一致 |
+| `statistics.missing` | 0 | 0 | 一致 |
+| `statistics.unreachable` | 0 | 0 | 一致 |
+| `statistics.unmet` | 1 | 1 | 一致 |
+| `unmet_ids` | `['sync:Document/Update/Alpha/v4.2.0/journal.jsonl']` | 同左 | 一致 |
+| 退出码 | 3 | **3** | 一致 |
+
+`validate-contract` 变更后仍是 **173 checks / 0 failed / 13 groups / exit 0**。
+即 `audit` 与 `validate-contract` 的行为没有被本次接线改动。
+
+---
+
+## 5 未触碰 / 未执行
+
+- 未修改 `touhou_rl/v430/**`（含 `data/lineage.py`：**一条规则都没改**）、`configs/**`、`registries/**`、
+  `evidence/{W00,W01,W02,W03}/**`、`evidence/W09/W09.md`、`evidence/W09/EXIT_CODES_W09.txt`、
+  其它 `tests/test_v430_*.py`、`ASSET_SYNC.*`。
+- 未删除/移动/`git add`/commit/上传任何文件；`--out` 相关的 `.tmp_*` 临时产物均在 `.gitignore` 覆盖范围内。
+- 未启动引擎/游戏，未训练，未评测，未打开 sealed 资产。

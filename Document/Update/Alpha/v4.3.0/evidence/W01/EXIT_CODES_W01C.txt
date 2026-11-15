@@ -1,0 +1,135 @@
+# W01c acceptance runs (captured by the executor; no edits after this point)
+timestamp_utc: 2026-11-15T03:13:20Z .. 2026-11-15T03:40:10Z
+timestamp_local: 2026-11-15T11:13:20+08:00 .. 2026-11-15T11:40:10+08:00
+host_os: Microsoft Windows NT 10.0.26300.0 / WSL Ubuntu
+engine: /root/Touhou_RL/third_party/th08-rl/build/rl_v3/th08-modern
+engine_sha256: 691bfd77b7eca3361aa8bb7af0977556a70cc73a070b29a2447222ba7a568ef6
+python: /root/v400-venv/bin/python 3.10.12 (torch 2.14.1+cu130, numpy 2.2.6)
+env role: xvfb-run -a -s "-screen 0 1024x768x24"
+cwd: /mnt/d/WorkShop/Touhou_RL
+private data dirs: .tmp_v420_data/T08/w01c-* (cp -a from .tmp_v420_data/T06/engine-data-gamesrc)
+concurrency: my engines = 1 at a time (serial); another task's v4.2.0 A1 expand held 3 engines
+
+## CMD1: bash .tmp_v430_replay/00_verify.sh
+engine sha256 / shard sha256 x3 / venv / reference JSON sha256 / disk
+exit_code: 0
+
+## CMD2: bash .tmp_v430_replay/00_setup_data.sh w01c-pos1 w01c-neg1
+copied: 474M -> w01c-pos1 (4.7 s), 474M -> w01c-neg1 (4.5 s)
+exit_code: 0
+
+## CMD3: bash .tmp_v430_replay/10_tape_run.sh pos-r1 ... (ATTEMPT 1, ABORTED)
+started_utc=2026-11-15T03:14:04Z  wall_s=0.002
+stderr: tee: .../runs/step1_pos_r1.log: No such file or directory
+NO ENGINE STARTED: the shell could not open the log redirect, so the xvfb-run line
+never executed. This is a harness/path bug in my own wrapper (missing `runs/` dir),
+not an engine or recipe failure. Fixed by mkdir -p in 10_tape_run.sh.
+exit_code: 1
+
+## CMD4: bash .tmp_v430_replay/10_tape_run.sh pos-r1 ... (ATTEMPT 2)   [S1 首跑]
+started_utc=2026-11-15T03:14:15Z finished_utc=2026-11-15T03:16:22Z wall_s=125.946
+stage_clear=true frames=13195 score=2631430 deaths=0.0 stop_reason=stage_clear
+action_sequence_sha256=5e9d66c4f5685da9f0ea56f3105656b7210721124f8b74a12813b49089995cd3
+exit_code: 0
+
+## CMD5: bash .tmp_v430_replay/10_tape_run.sh neg-r1 ... (period 1000000007)  [F1 首跑]
+started_utc=2026-11-15T03:16:37Z finished_utc=2026-11-15T03:19:00Z wall_s=143.032
+stage_clear=false stop_reason=game_over frames=15564 score=163945 deaths=3.0
+action_sequence_sha256=77455bef1d3097277f80875c08ea656fff4dc3d840d680e5fcc1b67caea6c4bb
+exit_code: 0
+
+## CMD6: bash .tmp_v430_replay/31_shard_tape_run.sh s10 ... (seed10, pulse 48)  [S2 首跑]
+started_utc=2026-11-15T03:19:32Z finished_utc=2026-11-15T03:21:42Z wall_s=129.816
+stage_clear=true frames=13291 score=2868224 deaths=0.0
+action_sequence_sha256=3cb366a00cca975bced3fbc3434c74bb32ed256e16501c8461170920567fea64
+note: shard sha256 pin bypassed (classification evidence); see w01c/pin_bypass_addendum_seed10_pass1.json
+exit_code: 0
+
+## CMD7: bash .tmp_v430_replay/31_shard_tape_run.sh s11 ... (seed11, pulse 48)  [S3 首跑]
+started_utc=2026-11-15T03:22:02Z finished_utc=2026-11-15T03:24:10Z wall_s=127.401
+stage_clear=true frames=13291 score=2768761 deaths=0.0
+action_sequence_sha256=19be3bc67d7de57e35c20fc55cb03eedce1535b7e4fadcdfb333ef8e5f204f90
+note: shard sha256 pin bypassed (classification evidence)
+exit_code: 0
+
+## CMD8: bash .tmp_v430_replay/10_tape_run.sh pos-r2 ... (period 48)  [S1 重复]
+started_utc=2026-11-15T03:24:18Z finished_utc=2026-11-15T03:26:23Z wall_s=124.570
+stage_clear=true frames=13195 score=2631430 deaths=0.0 -> identical to CMD4
+exit_code: 0
+
+## CMD9: bash .tmp_v430_replay/31_shard_tape_run.sh s10-nopulse ... (seed10, no pulse)  [F2 首跑]
+started_utc=2026-11-15T03:26:31Z finished_utc=2026-11-15T03:27:22Z wall_s=51.317
+stage_clear=false stop_reason=game_over frames=4615 score=69461 deaths=3.0
+action_sequence_sha256=a9f3d28b795cf125474aa7779e86ffda7782148ff8015fa977e2a3d785c68c49
+exit_code: 0
+
+## CMD10: bash .tmp_v430_replay/31_shard_tape_run.sh s11-nopulse ... (seed11, no pulse)  [F3 首跑]
+started_utc=2026-11-15T03:27:27Z finished_utc=2026-11-15T03:29:39Z wall_s=131.899
+stage_clear=false stop_reason=game_over frames=13944 score=135116 deaths=3.0
+action_sequence_sha256=4026e703521562f7da5c66fab138255008e135b44d1adfa61a1d3b6fa5ca1227
+exit_code: 0
+
+## CMD11: bash .tmp_v430_replay/10_tape_run.sh neg-r2 ... (period 1000000007)  [F1 重复]
+started_utc=2026-11-15T03:29:46Z finished_utc=2026-11-15T03:32:10Z wall_s=144.007
+stage_clear=false stop_reason=game_over frames=15564 score=163945 deaths=3.0 -> identical to CMD5
+exit_code: 0
+
+## CMD12: bash .tmp_v430_replay/00_setup_data.sh w01c-s10b w01c-s10nb w01c-s11b w01c-s11nb
+copied: 4 x 474M (4.9 / 4.8 / 4.7 / 3.8 s)
+exit_code: 0
+
+## CMD13: bash .tmp_v430_replay/31_shard_tape_run.sh s10-r2 ... (seed10, pulse 48)  [S2 重复]
+started_utc=2026-11-15T03:32:39Z finished_utc=2026-11-15T03:34:47Z wall_s=127.978
+stage_clear=true frames=13291 score=2868224 deaths=0.0 -> identical to CMD6
+exit_code: 0
+
+## CMD14: bash .tmp_v430_replay/31_shard_tape_run.sh s10-nopulse-r2 ...  [F2 重复]
+started_utc=2026-11-15T03:34:50Z finished_utc=2026-11-15T03:35:41Z wall_s=51.588
+stage_clear=false stop_reason=game_over frames=4615 score=69461 deaths=3.0 -> identical to CMD9
+exit_code: 0
+
+## CMD15: bash .tmp_v430_replay/31_shard_tape_run.sh s11-nopulse-r2 ...  [F3 重复]
+started_utc=2026-11-15T03:35:44Z finished_utc=2026-11-15T03:37:53Z wall_s=129.357
+stage_clear=false stop_reason=game_over frames=13944 score=135116 deaths=3.0 -> identical to CMD10
+exit_code: 0
+
+## CMD16: bash .tmp_v430_replay/31_shard_tape_run.sh s11-r2 ... (seed11, pulse 48)  [S3 重复]
+started_utc=2026-11-15T03:37:55Z finished_utc=2026-11-15T03:39:59Z wall_s=123.858
+stage_clear=true frames=13291 score=2768761 deaths=0.0 -> identical to CMD7
+exit_code: 0
+
+## CMD17: bash .tmp_v430_replay/40_publish_runs.sh
+copied 12 run JSON + 12 .status into Document/Update/Alpha/v4.3.0/evidence/W01/w01c/
+wrote RUN_SHA256.txt
+exit_code: 0
+
+## CMD18: bash .tmp_v430_replay/45_identity.sh
+wrote IDENTITY_SHA256.txt (instrument / v410 ruler / v420 rl.py / engine / 3 shards / driver scripts)
+exit_code: 0
+
+## CMD19: /root/v400-venv/bin/python .tmp_v430_replay/50_report.py --json .../CONTRACT_INVENTORY.json
+6 sources x 2 replays; reproducible=6/6; success_sources=3 failure_sources=3
+total wrapper wall 1410.769 s
+exit_code: 0
+
+## Tooling noise (no engine started, not a measurement)
+Three earlier attempts to run one-liners through `wsl -d Ubuntu -- bash -c "..."` failed
+with PowerShell quoting errors (exit_code 1, `/bin/bash: -c: line 1: unexpected EOF`).
+They were superseded by script files under .tmp_v430_replay/; no engine process was
+started by any of them and no record was produced.
+
+## CMD20: /root/v400-venv/bin/python .tmp_v430_replay/60_verify.py
+re-verifies the published records: engine identity, the instrument's own
+validate_tape_record on all 12 files, both frozen v4.2.0 reference records,
+6 x determinism, distinct-tape counting, totals, all .status exit=0
+output:
+56/56 checks passed
+ALL_PASS
+exit_code: 0
+
+## summary
+verify=0 setup=0 pos_r1=0 neg_r1=0 s10=0 s11=0 pos_r2=0 s10_nopulse=0 s11_nopulse=0
+neg_r2=0 s10_r2=0 s10_nopulse_r2=0 s11_nopulse_r2=0 s11_r2=0 publish=0 identity=0 report=0
+self_verify=0 (56/56 ALL_PASS)
+aborted_pos_r1_attempt1=1 (harness path bug, no engine)
+runs=12  exit0=12  cost_contention=0  timeouts=0

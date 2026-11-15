@@ -1,0 +1,1385 @@
+{
+ "schema": "v430-task-families/1",
+ "frozen_at": "2026-11-15T11:34:26+08:00",
+ "timezone": "Asia/Shanghai",
+ "work_package": "v4.3.0 W09",
+ "scope": "TH08 1.00d, team 0 (Border Team), the families that actually appear on this host. Families are keyed by (stage_index, difficulty, team).",
+ "status_legend": {
+  "touched_by_training": "at least one pretraining source fitted on this family",
+  "instrument_only": "appears only as a retail replay fixture replayed to verify the harness trace; nothing was fitted on it",
+  "measurement_only": "appears only in a timing/length measurement",
+  "untouched": "no record of any kind",
+  "unknown": "records are insufficient to decide"
+ },
+ "evidence_sources": {
+  "d1_manifest": {
+   "path": ".tmp_v400_d1/d1/manifest.json",
+   "digest_scope": "text/lf-normalized",
+   "sha256": "cf564f405702cfa76a13b37a7f083ca81166da876128b669e4d2f881893a709e"
+  },
+  "d1_plan": {
+   "path": ".tmp_v400_d1/plan.full.json",
+   "digest_scope": "text/lf-normalized",
+   "sha256": "3d90c642762c434f77a57c156e95b360a5d320b9887fee18d78617d66076de5b"
+  },
+  "replay_fixtures": {
+   "path": "third_party/th08/config/replay-fixtures.json",
+   "digest_scope": "text/lf-normalized",
+   "sha256": "0aaef96d389bf85ad1c77734ddcddbf1a2d80d7119b86f9f1a892ebfec959eaf"
+  }
+ },
+ "instrument_corpus": {
+  "path": "third_party/th08/config/replay-fixtures.json",
+  "digest_scope": "text/lf-normalized",
+  "sha256": "0aaef96d389bf85ad1c77734ddcddbf1a2d80d7119b86f9f1a892ebfec959eaf",
+  "fixtures": 108,
+  "difficulty_counts": {
+   "Easy": 24,
+   "Normal": 24,
+   "Hard": 24,
+   "Lunatic": 24,
+   "Extra": 12
+  },
+  "stage_coverage": {
+   "Easy": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "Normal": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "Hard": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "Lunatic": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "Extra": [
+    8
+   ]
+  },
+  "shot_types": [
+   0,
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11
+  ],
+  "fits_any_model": false,
+  "note": "the corpus covers every (difficulty, stage) pair of the main game, so a family can be instrument-exposed without ever being train-exposed"
+ },
+ "families": [
+  {
+   "family_id": "th08-stage1-normal-team0",
+   "game": "th08",
+   "stage_index": 0,
+   "stage_name": "Stage 1",
+   "route_family": "single",
+   "difficulty": "normal",
+   "difficulty_index": 1,
+   "team": 0,
+   "team_name": "Border Team",
+   "status": "touched_by_training",
+   "retail_replay_fixture_ids": [
+    "normal-0-a",
+    "normal-0-b",
+    "normal-1-a",
+    "normal-1-b",
+    "normal-10-a",
+    "normal-10-b",
+    "normal-11-a",
+    "normal-11-b",
+    "normal-2-a",
+    "normal-2-b",
+    "normal-3-a",
+    "normal-3-b",
+    "normal-4-a",
+    "normal-4-b",
+    "normal-5-a",
+    "normal-5-b",
+    "normal-6-a",
+    "normal-6-b",
+    "normal-7-a",
+    "normal-7-b",
+    "normal-8-a",
+    "normal-8-b",
+    "normal-9-a",
+    "normal-9-b"
+   ],
+   "touched_by": [
+    "teacher_query",
+    "bc_dataset",
+    "dagger_round",
+    "policy_rl",
+    "model_selection",
+    "hyperparameter_selection"
+   ],
+   "training_evidence": [
+    {
+     "source_kind": "teacher_query",
+     "source_id": "d1-teacher-fast",
+     "evidence_path": ".tmp_v400_d1/d1/manifest.json",
+     "record": "canonical D1: one ancestor per shard, all difficulty=1, stages 0-7"
+    },
+    {
+     "source_kind": "teacher_query",
+     "source_id": "d1-s1c",
+     "evidence_path": ".tmp_v410_s1c/d1/manifest.json",
+     "record": "D410-S1: 12 shards, stage 0, difficulty=1, seeds 9-20"
+    },
+    {
+     "source_kind": "teacher_query",
+     "source_id": "d0-fast",
+     "evidence_path": ".tmp_v400_d0/summary.json",
+     "record": "D0: 16 shards, stage 0, difficulty=1, seeds 1-16"
+    },
+    {
+     "source_kind": "dagger_round",
+     "source_id": "v410-wp05-round3",
+     "evidence_path": ".tmp_v410_wp05_round3/shards",
+     "record": "DAgger round 3: 15 shards stage 0, difficulty=1, seeds 2040-2054"
+    },
+    {
+     "source_kind": "bc_dataset",
+     "source_id": "v420-a0-a1-2f",
+     "evidence_path": ".tmp_v420_data/T04/dataset/index.json",
+     "record": "v4.2.0 2-frame corpus rebuilt from D410-S1 shards (n3300), stage 0, difficulty=1, seeds 10-12"
+    },
+    {
+     "source_kind": "policy_rl",
+     "source_id": "v420-t06-r3",
+     "evidence_path": "configs/v420/rl-engine-r3-pilot1m.json",
+     "record": "rollout stage 0 / difficulty normal / team 0, train_seeds 3000-3004"
+    }
+   ],
+   "note": "Normal difficulty is the only difficulty any fitting source used (D1 manifest: 147/147 shards difficulty=1)."
+  },
+  {
+   "family_id": "th08-stage2-normal-team0",
+   "game": "th08",
+   "stage_index": 1,
+   "stage_name": "Stage 2",
+   "route_family": "single",
+   "difficulty": "normal",
+   "difficulty_index": 1,
+   "team": 0,
+   "team_name": "Border Team",
+   "status": "touched_by_training",
+   "retail_replay_fixture_ids": [
+    "normal-0-a",
+    "normal-0-b",
+    "normal-1-a",
+    "normal-1-b",
+    "normal-10-a",
+    "normal-10-b",
+    "normal-11-a",
+    "normal-11-b",
+    "normal-2-a",
+    "normal-2-b",
+    "normal-3-a",
+    "normal-3-b",
+    "normal-4-a",
+    "normal-4-b",
+    "normal-5-a",
+    "normal-5-b",
+    "normal-6-a",
+    "normal-6-b",
+    "normal-7-a",
+    "normal-7-b",
+    "normal-8-a",
+    "normal-8-b",
+    "normal-9-a",
+    "normal-9-b"
+   ],
+   "touched_by": [
+    "teacher_query",
+    "bc_dataset",
+    "dagger_round",
+    "policy_rl",
+    "model_selection",
+    "hyperparameter_selection"
+   ],
+   "training_evidence": [
+    {
+     "source_kind": "teacher_query",
+     "source_id": "d1-teacher-fast",
+     "evidence_path": ".tmp_v400_d1/d1/manifest.json",
+     "record": "canonical D1: one ancestor per shard, all difficulty=1, stages 0-7"
+    },
+    {
+     "source_kind": "teacher_query",
+     "source_id": "d1-s1c",
+     "evidence_path": ".tmp_v410_s1c/d1/manifest.json",
+     "record": "D410-S1: 12 shards, stage 0, difficulty=1, seeds 9-20"
+    },
+    {
+     "source_kind": "teacher_query",
+     "source_id": "d0-fast",
+     "evidence_path": ".tmp_v400_d0/summary.json",
+     "record": "D0: 16 shards, stage 0, difficulty=1, seeds 1-16"
+    },
+    {
+     "source_kind": "dagger_round",
+     "source_id": "v410-wp05-round3",
+     "evidence_path": ".tmp_v410_wp05_round3/shards",
+     "record": "DAgger round 3: 15 shards stage 0, difficulty=1, seeds 2040-2054"
+    },
+    {
+     "source_kind": "bc_dataset",
+     "source_id": "v420-a0-a1-2f",
+     "evidence_path": ".tmp_v420_data/T04/dataset/index.json",
+     "record": "v4.2.0 2-frame corpus rebuilt from D410-S1 shards (n3300), stage 0, difficulty=1, seeds 10-12"
+    },
+    {
+     "source_kind": "policy_rl",
+     "source_id": "v420-t06-r3",
+     "evidence_path": "configs/v420/rl-engine-r3-pilot1m.json",
+     "record": "rollout stage 0 / difficulty normal / team 0, train_seeds 3000-3004"
+    }
+   ],
+   "note": "Normal difficulty is the only difficulty any fitting source used (D1 manifest: 147/147 shards difficulty=1)."
+  },
+  {
+   "family_id": "th08-stage3-normal-team0",
+   "game": "th08",
+   "stage_index": 2,
+   "stage_name": "Stage 3",
+   "route_family": "single",
+   "difficulty": "normal",
+   "difficulty_index": 1,
+   "team": 0,
+   "team_name": "Border Team",
+   "status": "touched_by_training",
+   "retail_replay_fixture_ids": [
+    "normal-0-a",
+    "normal-0-b",
+    "normal-1-a",
+    "normal-1-b",
+    "normal-10-a",
+    "normal-10-b",
+    "normal-11-a",
+    "normal-11-b",
+    "normal-2-a",
+    "normal-2-b",
+    "normal-3-a",
+    "normal-3-b",
+    "normal-4-a",
+    "normal-4-b",
+    "normal-5-a",
+    "normal-5-b",
+    "normal-6-a",
+    "normal-6-b",
+    "normal-7-a",
+    "normal-7-b",
+    "normal-8-a",
+    "normal-8-b",
+    "normal-9-a",
+    "normal-9-b"
+   ],
+   "touched_by": [
+    "teacher_query",
+    "bc_dataset",
+    "dagger_round",
+    "policy_rl",
+    "model_selection",
+    "hyperparameter_selection"
+   ],
+   "training_evidence": [
+    {
+     "source_kind": "teacher_query",
+     "source_id": "d1-teacher-fast",
+     "evidence_path": ".tmp_v400_d1/d1/manifest.json",
+     "record": "canonical D1: one ancestor per shard, all difficulty=1, stages 0-7"
+    },
+    {
+     "source_kind": "teacher_query",
+     "source_id": "d1-s1c",
+     "evidence_path": ".tmp_v410_s1c/d1/manifest.json",
+     "record": "D410-S1: 12 shards, stage 0, difficulty=1, seeds 9-20"
+    },
+    {
+     "source_kind": "teacher_query",
+     "source_id": "d0-fast",
+     "evidence_path": ".tmp_v400_d0/summary.json",
+     "record": "D0: 16 shards, stage 0, difficulty=1, seeds 1-16"
+    },
+    {
+     "source_kind": "dagger_round",
+     "source_id": "v410-wp05-round3",
+     "evidence_path": ".tmp_v410_wp05_round3/shards",
+     "record": "DAgger round 3: 15 shards stage 0, difficulty=1, seeds 2040-2054"
+    },
+    {
+     "source_kind": "bc_dataset",
+     "source_id": "v420-a0-a1-2f",
+     "evidence_path": ".tmp_v420_data/T04/dataset/index.json",
+     "record": "v4.2.0 2-frame corpus rebuilt from D410-S1 shards (n3300), stage 0, difficulty=1, seeds 10-12"
+    },
+    {
+     "source_kind": "policy_rl",
+     "source_id": "v420-t06-r3",
+     "evidence_path": "configs/v420/rl-engine-r3-pilot1m.json",
+     "record": "rollout stage 0 / difficulty normal / team 0, train_seeds 3000-3004"
+    }
+   ],
+   "note": "Normal difficulty is the only difficulty any fitting source used (D1 manifest: 147/147 shards difficulty=1)."
+  },
+  {
+   "family_id": "th08-stage4a-normal-team0",
+   "game": "th08",
+   "stage_index": 3,
+   "stage_name": "Stage 4A",
+   "route_family": "A",
+   "difficulty": "normal",
+   "difficulty_index": 1,
+   "team": 0,
+   "team_name": "Border Team",
+   "status": "touched_by_training",
+   "retail_replay_fixture_ids": [
+    "normal-1-a",
+    "normal-1-b",
+    "normal-2-a",
+    "normal-2-b",
+    "normal-6-a",
+    "normal-6-b",
+    "normal-7-a",
+    "normal-7-b",
+    "normal-8-a",
+    "normal-8-b",
+    "normal-9-a",
+    "normal-9-b"
+   ],
+   "touched_by": [
+    "teacher_query",
+    "bc_dataset",
+    "dagger_round",
+    "policy_rl",
+    "model_selection",
+    "hyperparameter_selection"
+   ],
+   "training_evidence": [
+    {
+     "source_kind": "teacher_query",
+     "source_id": "d1-teacher-fast",
+     "evidence_path": ".tmp_v400_d1/d1/manifest.json",
+     "record": "canonical D1: one ancestor per shard, all difficulty=1, stages 0-7"
+    },
+    {
+     "source_kind": "teacher_query",
+     "source_id": "d1-s1c",
+     "evidence_path": ".tmp_v410_s1c/d1/manifest.json",
+     "record": "D410-S1: 12 shards, stage 0, difficulty=1, seeds 9-20"
+    },
+    {
+     "source_kind": "teacher_query",
+     "source_id": "d0-fast",
+     "evidence_path": ".tmp_v400_d0/summary.json",
+     "record": "D0: 16 shards, stage 0, difficulty=1, seeds 1-16"
+    },
+    {
+     "source_kind": "dagger_round",
+     "source_id": "v410-wp05-round3",
+     "evidence_path": ".tmp_v410_wp05_round3/shards",
+     "record": "DAgger round 3: 15 shards stage 0, difficulty=1, seeds 2040-2054"
+    },
+    {
+     "source_kind": "bc_dataset",
+     "source_id": "v420-a0-a1-2f",
+     "evidence_path": ".tmp_v420_data/T04/dataset/index.json",
+     "record": "v4.2.0 2-frame corpus rebuilt from D410-S1 shards (n3300), stage 0, difficulty=1, seeds 10-12"
+    },
+    {
+     "source_kind": "policy_rl",
+     "source_id": "v420-t06-r3",
+     "evidence_path": "configs/v420/rl-engine-r3-pilot1m.json",
+     "record": "rollout stage 0 / difficulty normal / team 0, train_seeds 3000-3004"
+    }
+   ],
+   "note": "Normal difficulty is the only difficulty any fitting source used (D1 manifest: 147/147 shards difficulty=1)."
+  },
+  {
+   "family_id": "th08-stage4b-normal-team0",
+   "game": "th08",
+   "stage_index": 4,
+   "stage_name": "Stage 4B",
+   "route_family": "B",
+   "difficulty": "normal",
+   "difficulty_index": 1,
+   "team": 0,
+   "team_name": "Border Team",
+   "status": "touched_by_training",
+   "retail_replay_fixture_ids": [
+    "normal-0-a",
+    "normal-0-b",
+    "normal-10-a",
+    "normal-10-b",
+    "normal-11-a",
+    "normal-11-b",
+    "normal-3-a",
+    "normal-3-b",
+    "normal-4-a",
+    "normal-4-b",
+    "normal-5-a",
+    "normal-5-b"
+   ],
+   "touched_by": [
+    "teacher_query",
+    "bc_dataset",
+    "dagger_round",
+    "policy_rl",
+    "model_selection",
+    "hyperparameter_selection"
+   ],
+   "training_evidence": [
+    {
+     "source_kind": "teacher_query",
+     "source_id": "d1-teacher-fast",
+     "evidence_path": ".tmp_v400_d1/d1/manifest.json",
+     "record": "canonical D1: one ancestor per shard, all difficulty=1, stages 0-7"
+    },
+    {
+     "source_kind": "teacher_query",
+     "source_id": "d1-s1c",
+     "evidence_path": ".tmp_v410_s1c/d1/manifest.json",
+     "record": "D410-S1: 12 shards, stage 0, difficulty=1, seeds 9-20"
+    },
+    {
+     "source_kind": "teacher_query",
+     "source_id": "d0-fast",
+     "evidence_path": ".tmp_v400_d0/summary.json",
+     "record": "D0: 16 shards, stage 0, difficulty=1, seeds 1-16"
+    },
+    {
+     "source_kind": "dagger_round",
+     "source_id": "v410-wp05-round3",
+     "evidence_path": ".tmp_v410_wp05_round3/shards",
+     "record": "DAgger round 3: 15 shards stage 0, difficulty=1, seeds 2040-2054"
+    },
+    {
+     "source_kind": "bc_dataset",
+     "source_id": "v420-a0-a1-2f",
+     "evidence_path": ".tmp_v420_data/T04/dataset/index.json",
+     "record": "v4.2.0 2-frame corpus rebuilt from D410-S1 shards (n3300), stage 0, difficulty=1, seeds 10-12"
+    },
+    {
+     "source_kind": "policy_rl",
+     "source_id": "v420-t06-r3",
+     "evidence_path": "configs/v420/rl-engine-r3-pilot1m.json",
+     "record": "rollout stage 0 / difficulty normal / team 0, train_seeds 3000-3004"
+    }
+   ],
+   "note": "Normal difficulty is the only difficulty any fitting source used (D1 manifest: 147/147 shards difficulty=1)."
+  },
+  {
+   "family_id": "th08-stage5-normal-team0",
+   "game": "th08",
+   "stage_index": 5,
+   "stage_name": "Stage 5",
+   "route_family": "single",
+   "difficulty": "normal",
+   "difficulty_index": 1,
+   "team": 0,
+   "team_name": "Border Team",
+   "status": "touched_by_training",
+   "retail_replay_fixture_ids": [
+    "normal-0-a",
+    "normal-0-b",
+    "normal-1-a",
+    "normal-1-b",
+    "normal-10-a",
+    "normal-10-b",
+    "normal-11-a",
+    "normal-11-b",
+    "normal-2-a",
+    "normal-2-b",
+    "normal-3-a",
+    "normal-3-b",
+    "normal-4-a",
+    "normal-4-b",
+    "normal-5-a",
+    "normal-5-b",
+    "normal-6-a",
+    "normal-6-b",
+    "normal-7-a",
+    "normal-7-b",
+    "normal-8-a",
+    "normal-8-b",
+    "normal-9-a",
+    "normal-9-b"
+   ],
+   "touched_by": [
+    "teacher_query",
+    "bc_dataset",
+    "dagger_round",
+    "policy_rl",
+    "model_selection",
+    "hyperparameter_selection"
+   ],
+   "training_evidence": [
+    {
+     "source_kind": "teacher_query",
+     "source_id": "d1-teacher-fast",
+     "evidence_path": ".tmp_v400_d1/d1/manifest.json",
+     "record": "canonical D1: one ancestor per shard, all difficulty=1, stages 0-7"
+    },
+    {
+     "source_kind": "teacher_query",
+     "source_id": "d1-s1c",
+     "evidence_path": ".tmp_v410_s1c/d1/manifest.json",
+     "record": "D410-S1: 12 shards, stage 0, difficulty=1, seeds 9-20"
+    },
+    {
+     "source_kind": "teacher_query",
+     "source_id": "d0-fast",
+     "evidence_path": ".tmp_v400_d0/summary.json",
+     "record": "D0: 16 shards, stage 0, difficulty=1, seeds 1-16"
+    },
+    {
+     "source_kind": "dagger_round",
+     "source_id": "v410-wp05-round3",
+     "evidence_path": ".tmp_v410_wp05_round3/shards",
+     "record": "DAgger round 3: 15 shards stage 0, difficulty=1, seeds 2040-2054"
+    },
+    {
+     "source_kind": "bc_dataset",
+     "source_id": "v420-a0-a1-2f",
+     "evidence_path": ".tmp_v420_data/T04/dataset/index.json",
+     "record": "v4.2.0 2-frame corpus rebuilt from D410-S1 shards (n3300), stage 0, difficulty=1, seeds 10-12"
+    },
+    {
+     "source_kind": "policy_rl",
+     "source_id": "v420-t06-r3",
+     "evidence_path": "configs/v420/rl-engine-r3-pilot1m.json",
+     "record": "rollout stage 0 / difficulty normal / team 0, train_seeds 3000-3004"
+    }
+   ],
+   "note": "Normal difficulty is the only difficulty any fitting source used (D1 manifest: 147/147 shards difficulty=1)."
+  },
+  {
+   "family_id": "th08-stage6a-normal-team0",
+   "game": "th08",
+   "stage_index": 6,
+   "stage_name": "Stage 6A",
+   "route_family": "A",
+   "difficulty": "normal",
+   "difficulty_index": 1,
+   "team": 0,
+   "team_name": "Border Team",
+   "status": "touched_by_training",
+   "retail_replay_fixture_ids": [
+    "normal-0-a",
+    "normal-1-a",
+    "normal-10-a",
+    "normal-11-a",
+    "normal-2-a",
+    "normal-3-a",
+    "normal-4-a",
+    "normal-5-a",
+    "normal-6-a",
+    "normal-7-a",
+    "normal-8-a",
+    "normal-9-a"
+   ],
+   "touched_by": [
+    "teacher_query",
+    "bc_dataset",
+    "dagger_round",
+    "policy_rl",
+    "model_selection",
+    "hyperparameter_selection"
+   ],
+   "training_evidence": [
+    {
+     "source_kind": "teacher_query",
+     "source_id": "d1-teacher-fast",
+     "evidence_path": ".tmp_v400_d1/d1/manifest.json",
+     "record": "canonical D1: one ancestor per shard, all difficulty=1, stages 0-7"
+    },
+    {
+     "source_kind": "teacher_query",
+     "source_id": "d1-s1c",
+     "evidence_path": ".tmp_v410_s1c/d1/manifest.json",
+     "record": "D410-S1: 12 shards, stage 0, difficulty=1, seeds 9-20"
+    },
+    {
+     "source_kind": "teacher_query",
+     "source_id": "d0-fast",
+     "evidence_path": ".tmp_v400_d0/summary.json",
+     "record": "D0: 16 shards, stage 0, difficulty=1, seeds 1-16"
+    },
+    {
+     "source_kind": "dagger_round",
+     "source_id": "v410-wp05-round3",
+     "evidence_path": ".tmp_v410_wp05_round3/shards",
+     "record": "DAgger round 3: 15 shards stage 0, difficulty=1, seeds 2040-2054"
+    },
+    {
+     "source_kind": "bc_dataset",
+     "source_id": "v420-a0-a1-2f",
+     "evidence_path": ".tmp_v420_data/T04/dataset/index.json",
+     "record": "v4.2.0 2-frame corpus rebuilt from D410-S1 shards (n3300), stage 0, difficulty=1, seeds 10-12"
+    },
+    {
+     "source_kind": "policy_rl",
+     "source_id": "v420-t06-r3",
+     "evidence_path": "configs/v420/rl-engine-r3-pilot1m.json",
+     "record": "rollout stage 0 / difficulty normal / team 0, train_seeds 3000-3004"
+    }
+   ],
+   "note": "Normal difficulty is the only difficulty any fitting source used (D1 manifest: 147/147 shards difficulty=1)."
+  },
+  {
+   "family_id": "th08-stage6b-normal-team0",
+   "game": "th08",
+   "stage_index": 7,
+   "stage_name": "Stage 6B",
+   "route_family": "B",
+   "difficulty": "normal",
+   "difficulty_index": 1,
+   "team": 0,
+   "team_name": "Border Team",
+   "status": "touched_by_training",
+   "retail_replay_fixture_ids": [
+    "normal-0-b",
+    "normal-1-b",
+    "normal-10-b",
+    "normal-11-b",
+    "normal-2-b",
+    "normal-3-b",
+    "normal-4-b",
+    "normal-5-b",
+    "normal-6-b",
+    "normal-7-b",
+    "normal-8-b",
+    "normal-9-b"
+   ],
+   "touched_by": [
+    "teacher_query",
+    "bc_dataset",
+    "dagger_round",
+    "policy_rl",
+    "model_selection",
+    "hyperparameter_selection"
+   ],
+   "training_evidence": [
+    {
+     "source_kind": "teacher_query",
+     "source_id": "d1-teacher-fast",
+     "evidence_path": ".tmp_v400_d1/d1/manifest.json",
+     "record": "canonical D1: one ancestor per shard, all difficulty=1, stages 0-7"
+    },
+    {
+     "source_kind": "teacher_query",
+     "source_id": "d1-s1c",
+     "evidence_path": ".tmp_v410_s1c/d1/manifest.json",
+     "record": "D410-S1: 12 shards, stage 0, difficulty=1, seeds 9-20"
+    },
+    {
+     "source_kind": "teacher_query",
+     "source_id": "d0-fast",
+     "evidence_path": ".tmp_v400_d0/summary.json",
+     "record": "D0: 16 shards, stage 0, difficulty=1, seeds 1-16"
+    },
+    {
+     "source_kind": "dagger_round",
+     "source_id": "v410-wp05-round3",
+     "evidence_path": ".tmp_v410_wp05_round3/shards",
+     "record": "DAgger round 3: 15 shards stage 0, difficulty=1, seeds 2040-2054"
+    },
+    {
+     "source_kind": "bc_dataset",
+     "source_id": "v420-a0-a1-2f",
+     "evidence_path": ".tmp_v420_data/T04/dataset/index.json",
+     "record": "v4.2.0 2-frame corpus rebuilt from D410-S1 shards (n3300), stage 0, difficulty=1, seeds 10-12"
+    },
+    {
+     "source_kind": "policy_rl",
+     "source_id": "v420-t06-r3",
+     "evidence_path": "configs/v420/rl-engine-r3-pilot1m.json",
+     "record": "rollout stage 0 / difficulty normal / team 0, train_seeds 3000-3004"
+    }
+   ],
+   "note": "Normal difficulty is the only difficulty any fitting source used (D1 manifest: 147/147 shards difficulty=1)."
+  },
+  {
+   "family_id": "th08-extra-team0",
+   "game": "th08",
+   "stage_index": 8,
+   "stage_name": "Extra",
+   "route_family": "single",
+   "difficulty": "extra",
+   "difficulty_index": 4,
+   "team": 0,
+   "team_name": "Border Team",
+   "status": "instrument_only",
+   "retail_replay_fixture_ids": [
+    "extra-0-extra",
+    "extra-1-extra",
+    "extra-10-extra",
+    "extra-11-extra",
+    "extra-2-extra",
+    "extra-3-extra",
+    "extra-4-extra",
+    "extra-5-extra",
+    "extra-6-extra",
+    "extra-7-extra",
+    "extra-8-extra",
+    "extra-9-extra"
+   ],
+   "clean_evidence": [
+    {
+     "claim": "the canonical D1 teacher corpus never contains this difficulty",
+     "records_absent_from": [
+      ".tmp_v400_d1/d1/manifest.json",
+      ".tmp_v400_d1/plan.full.json"
+     ],
+     "observation": "147/147 D1 shards declare difficulty=1 and stage in 0..7; the difficulty set of the corpus is exactly {1}",
+     "evidence_paths": [
+      ".tmp_v400_d1/d1/manifest.json",
+      ".tmp_v400_d1/plan.full.json",
+      ".tmp_v400_d1/work/gate.full.json"
+     ]
+    },
+    {
+     "claim": "every v4.1.0 / v4.2.0 training corpus is Normal stage 1 / team 0",
+     "records_absent_from": [
+      ".tmp_v410_s1c/d1/manifest.json",
+      ".tmp_v410_s1b/d1/manifest.json",
+      ".tmp_v410_wp05_round1/shards",
+      ".tmp_v410_wp05_round2/shards",
+      ".tmp_v410_wp05_round3/shards",
+      "configs/v420/dagger-D1.json",
+      "configs/v420/dagger-D2.json",
+      "configs/v420/dagger-D3.json",
+      "configs/v420/a1-safe-set-full.json",
+      "configs/v420/rl-engine-r3-pilot1m.json",
+      ".tmp_v420_data/T04/dataset/index.json"
+     ],
+     "observation": "all of them declare stage 0 (or stage=None with stage 0 rollout), difficulty normal/1 and team 0",
+     "evidence_paths": [
+      ".tmp_v410_s1c/d1/manifest.json",
+      ".tmp_v410_s1b/d1/manifest.json",
+      "configs/v420/dagger-D3.json",
+      "configs/v420/rl-engine-r3-pilot1m.json",
+      ".tmp_v420_data/T04/dataset/index.json",
+      ".tmp_v410_wp05_round3/shards/dagger-s0d1seed2040/shard.json"
+     ]
+    },
+    {
+     "claim": "no human-reference measurement covers this (difficulty, stage) pair",
+     "records_absent_from": [
+      ".tmp_v400_human_autoplay/EXP-P0-046_measured_stages.json",
+      "Document/Update/Alpha/v4.0.0/bench/human_reference.json"
+     ],
+     "observation": "EXP-P0-046 measured only Normal stages 0,1,2,3,5,7 and Lunatic stages 0,1,2,4,5,7; human_reference.json lists coverage.missing",
+     "evidence_paths": [
+      ".tmp_v400_human_autoplay/EXP-P0-046_measured_stages.json",
+      "Document/Update/Alpha/v4.0.0/bench/human_reference.json"
+     ]
+    },
+    {
+     "claim": "no development, candidate-selection or confirmation record uses it",
+     "records_absent_from": [
+      "Document/Update/Alpha/v4.1.0/evidence/WP00/exposure.json",
+      "Document/Update/Alpha/v4.2.0/README.md",
+      "Document/Update/Alpha/v4.1.0/evidence/WP02/G4101_100_TEACHER.md"
+     ],
+     "observation": "dev/candidate seeds are 1000-1039 and the spent teacher confirmation batch is 61300-61399, all of them Normal stage 1",
+     "evidence_paths": [
+      "Document/Update/Alpha/v4.1.0/evidence/WP00/exposure.json",
+      "Document/Update/Alpha/v4.2.0/README.md",
+      "Document/Update/Alpha/v4.1.0/evidence/WP02/G4101_100_TEACHER.md"
+     ]
+    },
+    {
+     "claim": "the pair appears only in the retail replay instrument, which fits no model",
+     "records_absent_from": [
+      "third_party/th08/config/replay-fixtures.json"
+     ],
+     "observation": "the 108-fixture retail corpus covers Easy/Normal/Hard/Lunatic x stages 0-7 plus Extra; replaying it verified harness traces only (G0.1). Any source that fits these frames must declare uses_retail_replay_fixtures=true and is then rejected by H_INSTRUMENT_FIXTURE_LEAK",
+     "evidence_paths": [
+      "third_party/th08/config/replay-fixtures.json",
+      ".tmp_v400_trace_batch/journal.jsonl",
+      ".tmp_v400_trace_batch/report.json"
+     ]
+    }
+   ],
+   "note": "Extra stage: instrument-only; clean but likely floors every arm, kept as last-resort replacement"
+  },
+  {
+   "family_id": "th08-stage4a-hard-team0",
+   "game": "th08",
+   "stage_index": 3,
+   "stage_name": "Stage 4A",
+   "route_family": "A",
+   "difficulty": "hard",
+   "difficulty_index": 2,
+   "team": 0,
+   "team_name": "Border Team",
+   "status": "instrument_only",
+   "retail_replay_fixture_ids": [
+    "hard-1-a",
+    "hard-1-b",
+    "hard-2-a",
+    "hard-2-b",
+    "hard-6-a",
+    "hard-6-b",
+    "hard-7-a",
+    "hard-7-b",
+    "hard-8-a",
+    "hard-8-b",
+    "hard-9-a",
+    "hard-9-b"
+   ],
+   "clean_evidence": [
+    {
+     "claim": "the canonical D1 teacher corpus never contains this difficulty",
+     "records_absent_from": [
+      ".tmp_v400_d1/d1/manifest.json",
+      ".tmp_v400_d1/plan.full.json"
+     ],
+     "observation": "147/147 D1 shards declare difficulty=1 and stage in 0..7; the difficulty set of the corpus is exactly {1}",
+     "evidence_paths": [
+      ".tmp_v400_d1/d1/manifest.json",
+      ".tmp_v400_d1/plan.full.json",
+      ".tmp_v400_d1/work/gate.full.json"
+     ]
+    },
+    {
+     "claim": "every v4.1.0 / v4.2.0 training corpus is Normal stage 1 / team 0",
+     "records_absent_from": [
+      ".tmp_v410_s1c/d1/manifest.json",
+      ".tmp_v410_s1b/d1/manifest.json",
+      ".tmp_v410_wp05_round1/shards",
+      ".tmp_v410_wp05_round2/shards",
+      ".tmp_v410_wp05_round3/shards",
+      "configs/v420/dagger-D1.json",
+      "configs/v420/dagger-D2.json",
+      "configs/v420/dagger-D3.json",
+      "configs/v420/a1-safe-set-full.json",
+      "configs/v420/rl-engine-r3-pilot1m.json",
+      ".tmp_v420_data/T04/dataset/index.json"
+     ],
+     "observation": "all of them declare stage 0 (or stage=None with stage 0 rollout), difficulty normal/1 and team 0",
+     "evidence_paths": [
+      ".tmp_v410_s1c/d1/manifest.json",
+      ".tmp_v410_s1b/d1/manifest.json",
+      "configs/v420/dagger-D3.json",
+      "configs/v420/rl-engine-r3-pilot1m.json",
+      ".tmp_v420_data/T04/dataset/index.json",
+      ".tmp_v410_wp05_round3/shards/dagger-s0d1seed2040/shard.json"
+     ]
+    },
+    {
+     "claim": "no human-reference measurement covers this (difficulty, stage) pair",
+     "records_absent_from": [
+      ".tmp_v400_human_autoplay/EXP-P0-046_measured_stages.json",
+      "Document/Update/Alpha/v4.0.0/bench/human_reference.json"
+     ],
+     "observation": "EXP-P0-046 measured only Normal stages 0,1,2,3,5,7 and Lunatic stages 0,1,2,4,5,7; human_reference.json lists coverage.missing",
+     "evidence_paths": [
+      ".tmp_v400_human_autoplay/EXP-P0-046_measured_stages.json",
+      "Document/Update/Alpha/v4.0.0/bench/human_reference.json"
+     ]
+    },
+    {
+     "claim": "no development, candidate-selection or confirmation record uses it",
+     "records_absent_from": [
+      "Document/Update/Alpha/v4.1.0/evidence/WP00/exposure.json",
+      "Document/Update/Alpha/v4.2.0/README.md",
+      "Document/Update/Alpha/v4.1.0/evidence/WP02/G4101_100_TEACHER.md"
+     ],
+     "observation": "dev/candidate seeds are 1000-1039 and the spent teacher confirmation batch is 61300-61399, all of them Normal stage 1",
+     "evidence_paths": [
+      "Document/Update/Alpha/v4.1.0/evidence/WP00/exposure.json",
+      "Document/Update/Alpha/v4.2.0/README.md",
+      "Document/Update/Alpha/v4.1.0/evidence/WP02/G4101_100_TEACHER.md"
+     ]
+    },
+    {
+     "claim": "the pair appears only in the retail replay instrument, which fits no model",
+     "records_absent_from": [
+      "third_party/th08/config/replay-fixtures.json"
+     ],
+     "observation": "the 108-fixture retail corpus covers Easy/Normal/Hard/Lunatic x stages 0-7 plus Extra; replaying it verified harness traces only (G0.1). Any source that fits these frames must declare uses_retail_replay_fixtures=true and is then rejected by H_INSTRUMENT_FIXTURE_LEAK",
+     "evidence_paths": [
+      "third_party/th08/config/replay-fixtures.json",
+      ".tmp_v400_trace_batch/journal.jsonl",
+      ".tmp_v400_trace_batch/report.json"
+     ]
+    }
+   ],
+   "note": "clean difficulty family; frozen or reserved for G410-6"
+  },
+  {
+   "family_id": "th08-stage6a-lunatic-team0",
+   "game": "th08",
+   "stage_index": 6,
+   "stage_name": "Stage 6A",
+   "route_family": "A",
+   "difficulty": "lunatic",
+   "difficulty_index": 3,
+   "team": 0,
+   "team_name": "Border Team",
+   "status": "instrument_only",
+   "retail_replay_fixture_ids": [
+    "lunatic-0-a",
+    "lunatic-1-a",
+    "lunatic-10-a",
+    "lunatic-11-a",
+    "lunatic-2-a",
+    "lunatic-3-a",
+    "lunatic-4-a",
+    "lunatic-5-a",
+    "lunatic-6-a",
+    "lunatic-7-a",
+    "lunatic-8-a",
+    "lunatic-9-a"
+   ],
+   "clean_evidence": [
+    {
+     "claim": "the canonical D1 teacher corpus never contains this difficulty",
+     "records_absent_from": [
+      ".tmp_v400_d1/d1/manifest.json",
+      ".tmp_v400_d1/plan.full.json"
+     ],
+     "observation": "147/147 D1 shards declare difficulty=1 and stage in 0..7; the difficulty set of the corpus is exactly {1}",
+     "evidence_paths": [
+      ".tmp_v400_d1/d1/manifest.json",
+      ".tmp_v400_d1/plan.full.json",
+      ".tmp_v400_d1/work/gate.full.json"
+     ]
+    },
+    {
+     "claim": "every v4.1.0 / v4.2.0 training corpus is Normal stage 1 / team 0",
+     "records_absent_from": [
+      ".tmp_v410_s1c/d1/manifest.json",
+      ".tmp_v410_s1b/d1/manifest.json",
+      ".tmp_v410_wp05_round1/shards",
+      ".tmp_v410_wp05_round2/shards",
+      ".tmp_v410_wp05_round3/shards",
+      "configs/v420/dagger-D1.json",
+      "configs/v420/dagger-D2.json",
+      "configs/v420/dagger-D3.json",
+      "configs/v420/a1-safe-set-full.json",
+      "configs/v420/rl-engine-r3-pilot1m.json",
+      ".tmp_v420_data/T04/dataset/index.json"
+     ],
+     "observation": "all of them declare stage 0 (or stage=None with stage 0 rollout), difficulty normal/1 and team 0",
+     "evidence_paths": [
+      ".tmp_v410_s1c/d1/manifest.json",
+      ".tmp_v410_s1b/d1/manifest.json",
+      "configs/v420/dagger-D3.json",
+      "configs/v420/rl-engine-r3-pilot1m.json",
+      ".tmp_v420_data/T04/dataset/index.json",
+      ".tmp_v410_wp05_round3/shards/dagger-s0d1seed2040/shard.json"
+     ]
+    },
+    {
+     "claim": "no human-reference measurement covers this (difficulty, stage) pair",
+     "records_absent_from": [
+      ".tmp_v400_human_autoplay/EXP-P0-046_measured_stages.json",
+      "Document/Update/Alpha/v4.0.0/bench/human_reference.json"
+     ],
+     "observation": "EXP-P0-046 measured only Normal stages 0,1,2,3,5,7 and Lunatic stages 0,1,2,4,5,7; human_reference.json lists coverage.missing",
+     "evidence_paths": [
+      ".tmp_v400_human_autoplay/EXP-P0-046_measured_stages.json",
+      "Document/Update/Alpha/v4.0.0/bench/human_reference.json"
+     ]
+    },
+    {
+     "claim": "no development, candidate-selection or confirmation record uses it",
+     "records_absent_from": [
+      "Document/Update/Alpha/v4.1.0/evidence/WP00/exposure.json",
+      "Document/Update/Alpha/v4.2.0/README.md",
+      "Document/Update/Alpha/v4.1.0/evidence/WP02/G4101_100_TEACHER.md"
+     ],
+     "observation": "dev/candidate seeds are 1000-1039 and the spent teacher confirmation batch is 61300-61399, all of them Normal stage 1",
+     "evidence_paths": [
+      "Document/Update/Alpha/v4.1.0/evidence/WP00/exposure.json",
+      "Document/Update/Alpha/v4.2.0/README.md",
+      "Document/Update/Alpha/v4.1.0/evidence/WP02/G4101_100_TEACHER.md"
+     ]
+    },
+    {
+     "claim": "the pair appears only in the retail replay instrument, which fits no model",
+     "records_absent_from": [
+      "third_party/th08/config/replay-fixtures.json"
+     ],
+     "observation": "the 108-fixture retail corpus covers Easy/Normal/Hard/Lunatic x stages 0-7 plus Extra; replaying it verified harness traces only (G0.1). Any source that fits these frames must declare uses_retail_replay_fixtures=true and is then rejected by H_INSTRUMENT_FIXTURE_LEAK",
+     "evidence_paths": [
+      "third_party/th08/config/replay-fixtures.json",
+      ".tmp_v400_trace_batch/journal.jsonl",
+      ".tmp_v400_trace_batch/report.json"
+     ]
+    }
+   ],
+   "note": "clean difficulty family; frozen or reserved for G410-6"
+  },
+  {
+   "family_id": "th08-stage4b-lunatic-team0",
+   "game": "th08",
+   "stage_index": 4,
+   "stage_name": "Stage 4B",
+   "route_family": "B",
+   "difficulty": "lunatic",
+   "difficulty_index": 3,
+   "team": 0,
+   "team_name": "Border Team",
+   "status": "instrument_only",
+   "retail_replay_fixture_ids": [
+    "lunatic-0-a",
+    "lunatic-0-b",
+    "lunatic-10-a",
+    "lunatic-10-b",
+    "lunatic-11-a",
+    "lunatic-11-b",
+    "lunatic-3-a",
+    "lunatic-3-b",
+    "lunatic-4-a",
+    "lunatic-4-b",
+    "lunatic-5-a",
+    "lunatic-5-b"
+   ],
+   "clean_evidence": [
+    {
+     "claim": "the canonical D1 teacher corpus never contains this difficulty",
+     "records_absent_from": [
+      ".tmp_v400_d1/d1/manifest.json",
+      ".tmp_v400_d1/plan.full.json"
+     ],
+     "observation": "147/147 D1 shards declare difficulty=1 and stage in 0..7; the difficulty set of the corpus is exactly {1}",
+     "evidence_paths": [
+      ".tmp_v400_d1/d1/manifest.json",
+      ".tmp_v400_d1/plan.full.json",
+      ".tmp_v400_d1/work/gate.full.json"
+     ]
+    },
+    {
+     "claim": "every v4.1.0 / v4.2.0 training corpus is Normal stage 1 / team 0",
+     "records_absent_from": [
+      ".tmp_v410_s1c/d1/manifest.json",
+      ".tmp_v410_s1b/d1/manifest.json",
+      ".tmp_v410_wp05_round1/shards",
+      ".tmp_v410_wp05_round2/shards",
+      ".tmp_v410_wp05_round3/shards",
+      "configs/v420/dagger-D1.json",
+      "configs/v420/dagger-D2.json",
+      "configs/v420/dagger-D3.json",
+      "configs/v420/a1-safe-set-full.json",
+      "configs/v420/rl-engine-r3-pilot1m.json",
+      ".tmp_v420_data/T04/dataset/index.json"
+     ],
+     "observation": "all of them declare stage 0 (or stage=None with stage 0 rollout), difficulty normal/1 and team 0",
+     "evidence_paths": [
+      ".tmp_v410_s1c/d1/manifest.json",
+      ".tmp_v410_s1b/d1/manifest.json",
+      "configs/v420/dagger-D3.json",
+      "configs/v420/rl-engine-r3-pilot1m.json",
+      ".tmp_v420_data/T04/dataset/index.json",
+      ".tmp_v410_wp05_round3/shards/dagger-s0d1seed2040/shard.json"
+     ]
+    },
+    {
+     "claim": "no human-reference measurement covers this (difficulty, stage) pair",
+     "records_absent_from": [
+      ".tmp_v400_human_autoplay/EXP-P0-046_measured_stages.json",
+      "Document/Update/Alpha/v4.0.0/bench/human_reference.json"
+     ],
+     "observation": "EXP-P0-046 measured only Normal stages 0,1,2,3,5,7 and Lunatic stages 0,1,2,4,5,7; human_reference.json lists coverage.missing",
+     "evidence_paths": [
+      ".tmp_v400_human_autoplay/EXP-P0-046_measured_stages.json",
+      "Document/Update/Alpha/v4.0.0/bench/human_reference.json"
+     ]
+    },
+    {
+     "claim": "no development, candidate-selection or confirmation record uses it",
+     "records_absent_from": [
+      "Document/Update/Alpha/v4.1.0/evidence/WP00/exposure.json",
+      "Document/Update/Alpha/v4.2.0/README.md",
+      "Document/Update/Alpha/v4.1.0/evidence/WP02/G4101_100_TEACHER.md"
+     ],
+     "observation": "dev/candidate seeds are 1000-1039 and the spent teacher confirmation batch is 61300-61399, all of them Normal stage 1",
+     "evidence_paths": [
+      "Document/Update/Alpha/v4.1.0/evidence/WP00/exposure.json",
+      "Document/Update/Alpha/v4.2.0/README.md",
+      "Document/Update/Alpha/v4.1.0/evidence/WP02/G4101_100_TEACHER.md"
+     ]
+    },
+    {
+     "claim": "the pair appears only in the retail replay instrument, which fits no model",
+     "records_absent_from": [
+      "third_party/th08/config/replay-fixtures.json"
+     ],
+     "observation": "the 108-fixture retail corpus covers Easy/Normal/Hard/Lunatic x stages 0-7 plus Extra; replaying it verified harness traces only (G0.1). Any source that fits these frames must declare uses_retail_replay_fixtures=true and is then rejected by H_INSTRUMENT_FIXTURE_LEAK",
+     "evidence_paths": [
+      "third_party/th08/config/replay-fixtures.json",
+      ".tmp_v400_trace_batch/journal.jsonl",
+      ".tmp_v400_trace_batch/report.json"
+     ]
+    }
+   ],
+   "note": "clean difficulty family; frozen or reserved for G410-6"
+  },
+  {
+   "family_id": "th08-stage6a-hard-team0",
+   "game": "th08",
+   "stage_index": 6,
+   "stage_name": "Stage 6A",
+   "route_family": "A",
+   "difficulty": "hard",
+   "difficulty_index": 2,
+   "team": 0,
+   "team_name": "Border Team",
+   "status": "instrument_only",
+   "retail_replay_fixture_ids": [
+    "hard-0-a",
+    "hard-1-a",
+    "hard-10-a",
+    "hard-11-a",
+    "hard-2-a",
+    "hard-3-a",
+    "hard-4-a",
+    "hard-5-a",
+    "hard-6-a",
+    "hard-7-a",
+    "hard-8-a",
+    "hard-9-a"
+   ],
+   "clean_evidence": [
+    {
+     "claim": "the canonical D1 teacher corpus never contains this difficulty",
+     "records_absent_from": [
+      ".tmp_v400_d1/d1/manifest.json",
+      ".tmp_v400_d1/plan.full.json"
+     ],
+     "observation": "147/147 D1 shards declare difficulty=1 and stage in 0..7; the difficulty set of the corpus is exactly {1}",
+     "evidence_paths": [
+      ".tmp_v400_d1/d1/manifest.json",
+      ".tmp_v400_d1/plan.full.json",
+      ".tmp_v400_d1/work/gate.full.json"
+     ]
+    },
+    {
+     "claim": "every v4.1.0 / v4.2.0 training corpus is Normal stage 1 / team 0",
+     "records_absent_from": [
+      ".tmp_v410_s1c/d1/manifest.json",
+      ".tmp_v410_s1b/d1/manifest.json",
+      ".tmp_v410_wp05_round1/shards",
+      ".tmp_v410_wp05_round2/shards",
+      ".tmp_v410_wp05_round3/shards",
+      "configs/v420/dagger-D1.json",
+      "configs/v420/dagger-D2.json",
+      "configs/v420/dagger-D3.json",
+      "configs/v420/a1-safe-set-full.json",
+      "configs/v420/rl-engine-r3-pilot1m.json",
+      ".tmp_v420_data/T04/dataset/index.json"
+     ],
+     "observation": "all of them declare stage 0 (or stage=None with stage 0 rollout), difficulty normal/1 and team 0",
+     "evidence_paths": [
+      ".tmp_v410_s1c/d1/manifest.json",
+      ".tmp_v410_s1b/d1/manifest.json",
+      "configs/v420/dagger-D3.json",
+      "configs/v420/rl-engine-r3-pilot1m.json",
+      ".tmp_v420_data/T04/dataset/index.json",
+      ".tmp_v410_wp05_round3/shards/dagger-s0d1seed2040/shard.json"
+     ]
+    },
+    {
+     "claim": "no human-reference measurement covers this (difficulty, stage) pair",
+     "records_absent_from": [
+      ".tmp_v400_human_autoplay/EXP-P0-046_measured_stages.json",
+      "Document/Update/Alpha/v4.0.0/bench/human_reference.json"
+     ],
+     "observation": "EXP-P0-046 measured only Normal stages 0,1,2,3,5,7 and Lunatic stages 0,1,2,4,5,7; human_reference.json lists coverage.missing",
+     "evidence_paths": [
+      ".tmp_v400_human_autoplay/EXP-P0-046_measured_stages.json",
+      "Document/Update/Alpha/v4.0.0/bench/human_reference.json"
+     ]
+    },
+    {
+     "claim": "no development, candidate-selection or confirmation record uses it",
+     "records_absent_from": [
+      "Document/Update/Alpha/v4.1.0/evidence/WP00/exposure.json",
+      "Document/Update/Alpha/v4.2.0/README.md",
+      "Document/Update/Alpha/v4.1.0/evidence/WP02/G4101_100_TEACHER.md"
+     ],
+     "observation": "dev/candidate seeds are 1000-1039 and the spent teacher confirmation batch is 61300-61399, all of them Normal stage 1",
+     "evidence_paths": [
+      "Document/Update/Alpha/v4.1.0/evidence/WP00/exposure.json",
+      "Document/Update/Alpha/v4.2.0/README.md",
+      "Document/Update/Alpha/v4.1.0/evidence/WP02/G4101_100_TEACHER.md"
+     ]
+    },
+    {
+     "claim": "the pair appears only in the retail replay instrument, which fits no model",
+     "records_absent_from": [
+      "third_party/th08/config/replay-fixtures.json"
+     ],
+     "observation": "the 108-fixture retail corpus covers Easy/Normal/Hard/Lunatic x stages 0-7 plus Extra; replaying it verified harness traces only (G0.1). Any source that fits these frames must declare uses_retail_replay_fixtures=true and is then rejected by H_INSTRUMENT_FIXTURE_LEAK",
+     "evidence_paths": [
+      "third_party/th08/config/replay-fixtures.json",
+      ".tmp_v400_trace_batch/journal.jsonl",
+      ".tmp_v400_trace_batch/report.json"
+     ]
+    }
+   ],
+   "note": "clean difficulty family; frozen or reserved for G410-6"
+  },
+  {
+   "family_id": "th08-stage1-easy-team0",
+   "game": "th08",
+   "stage_index": 0,
+   "stage_name": "Stage 1",
+   "route_family": "single",
+   "difficulty": "easy",
+   "difficulty_index": 0,
+   "team": 0,
+   "team_name": "Border Team",
+   "status": "instrument_only",
+   "retail_replay_fixture_ids": [
+    "easy-0-a",
+    "easy-0-b",
+    "easy-1-a",
+    "easy-1-b",
+    "easy-10-a",
+    "easy-10-b",
+    "easy-11-a",
+    "easy-11-b",
+    "easy-2-a",
+    "easy-2-b",
+    "easy-3-a",
+    "easy-3-b",
+    "easy-4-a",
+    "easy-4-b",
+    "easy-5-a",
+    "easy-5-b",
+    "easy-6-a",
+    "easy-6-b",
+    "easy-7-a",
+    "easy-7-b",
+    "easy-8-a",
+    "easy-8-b",
+    "easy-9-a",
+    "easy-9-b"
+   ],
+   "clean_evidence": [
+    {
+     "claim": "the canonical D1 teacher corpus never contains this difficulty",
+     "records_absent_from": [
+      ".tmp_v400_d1/d1/manifest.json",
+      ".tmp_v400_d1/plan.full.json"
+     ],
+     "observation": "147/147 D1 shards declare difficulty=1 and stage in 0..7; the difficulty set of the corpus is exactly {1}",
+     "evidence_paths": [
+      ".tmp_v400_d1/d1/manifest.json",
+      ".tmp_v400_d1/plan.full.json",
+      ".tmp_v400_d1/work/gate.full.json"
+     ]
+    },
+    {
+     "claim": "every v4.1.0 / v4.2.0 training corpus is Normal stage 1 / team 0",
+     "records_absent_from": [
+      ".tmp_v410_s1c/d1/manifest.json",
+      ".tmp_v410_s1b/d1/manifest.json",
+      ".tmp_v410_wp05_round1/shards",
+      ".tmp_v410_wp05_round2/shards",
+      ".tmp_v410_wp05_round3/shards",
+      "configs/v420/dagger-D1.json",
+      "configs/v420/dagger-D2.json",
+      "configs/v420/dagger-D3.json",
+      "configs/v420/a1-safe-set-full.json",
+      "configs/v420/rl-engine-r3-pilot1m.json",
+      ".tmp_v420_data/T04/dataset/index.json"
+     ],
+     "observation": "all of them declare stage 0 (or stage=None with stage 0 rollout), difficulty normal/1 and team 0",
+     "evidence_paths": [
+      ".tmp_v410_s1c/d1/manifest.json",
+      ".tmp_v410_s1b/d1/manifest.json",
+      "configs/v420/dagger-D3.json",
+      "configs/v420/rl-engine-r3-pilot1m.json",
+      ".tmp_v420_data/T04/dataset/index.json",
+      ".tmp_v410_wp05_round3/shards/dagger-s0d1seed2040/shard.json"
+     ]
+    },
+    {
+     "claim": "no human-reference measurement covers this (difficulty, stage) pair",
+     "records_absent_from": [
+      ".tmp_v400_human_autoplay/EXP-P0-046_measured_stages.json",
+      "Document/Update/Alpha/v4.0.0/bench/human_reference.json"
+     ],
+     "observation": "EXP-P0-046 measured only Normal stages 0,1,2,3,5,7 and Lunatic stages 0,1,2,4,5,7; human_reference.json lists coverage.missing",
+     "evidence_paths": [
+      ".tmp_v400_human_autoplay/EXP-P0-046_measured_stages.json",
+      "Document/Update/Alpha/v4.0.0/bench/human_reference.json"
+     ]
+    },
+    {
+     "claim": "no development, candidate-selection or confirmation record uses it",
+     "records_absent_from": [
+      "Document/Update/Alpha/v4.1.0/evidence/WP00/exposure.json",
+      "Document/Update/Alpha/v4.2.0/README.md",
+      "Document/Update/Alpha/v4.1.0/evidence/WP02/G4101_100_TEACHER.md"
+     ],
+     "observation": "dev/candidate seeds are 1000-1039 and the spent teacher confirmation batch is 61300-61399, all of them Normal stage 1",
+     "evidence_paths": [
+      "Document/Update/Alpha/v4.1.0/evidence/WP00/exposure.json",
+      "Document/Update/Alpha/v4.2.0/README.md",
+      "Document/Update/Alpha/v4.1.0/evidence/WP02/G4101_100_TEACHER.md"
+     ]
+    },
+    {
+     "claim": "the pair appears only in the retail replay instrument, which fits no model",
+     "records_absent_from": [
+      "third_party/th08/config/replay-fixtures.json"
+     ],
+     "observation": "the 108-fixture retail corpus covers Easy/Normal/Hard/Lunatic x stages 0-7 plus Extra; replaying it verified harness traces only (G0.1). Any source that fits these frames must declare uses_retail_replay_fixtures=true and is then rejected by H_INSTRUMENT_FIXTURE_LEAK",
+     "evidence_paths": [
+      "third_party/th08/config/replay-fixtures.json",
+      ".tmp_v400_trace_batch/journal.jsonl",
+      ".tmp_v400_trace_batch/report.json"
+     ]
+    }
+   ],
+   "note": "Easy Stage 1: instrument-only; registered because the Easy difficulty appears in the retail replay corpus"
+  }
+ ],
+ "unregistered_combinations": {
+  "state": "unknown",
+  "note": "the 33 instrument-covered (difficulty, stage) pairs other than the ones listed above are not registered individually because no training, selection or measurement record distinguishes them yet; any of them may only be promoted to a registered family together with its evidence"
+ }
+}

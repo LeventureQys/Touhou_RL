@@ -1,0 +1,2400 @@
+{
+  "schema": "v430-contract-validation/1",
+  "experiment_id": "v430-w01-contract-001",
+  "run_id": "contract-001",
+  "phase": "W01",
+  "mode": "contract_validation",
+  "command": "validate-contract",
+  "command_class": "contract",
+  "spec_revision": "v430-plan-r2",
+  "config_frozen_at": "2026-11-15T11:06:52+08:00",
+  "started_at": "2026-11-15T11:20:04+08:00",
+  "finished_at": "2026-11-15T11:20:04+08:00",
+  "duration_seconds": 0.158,
+  "timezone": "+0800",
+  "argv": [
+    "tools/rl/v430.py",
+    "validate-contract",
+    "--config",
+    "configs/v430/contracts.json",
+    "--out",
+    "Document/Update/Alpha/v4.3.0/evidence/W01/contract-001.json"
+  ],
+  "cwd": "D:\\WorkShop\\Touhou_RL",
+  "python_executable": "C:\\Users\\a5935\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+  "output_path": "Document\\Update\\Alpha\\v4.3.0\\evidence\\W01\\contract-001.json",
+  "exit_code": 0,
+  "execution_status": "ok",
+  "protocol_validity": "valid",
+  "research_result": {
+    "kind": "contract_validation",
+    "status": "pass",
+    "requested_gate": "every config<->module constant, action mask, observation shape, privileged-field, time and terminal check agrees",
+    "passed": true,
+    "checks": [
+      {
+        "group": "identity",
+        "name": "contracts_module",
+        "ok": true,
+        "detail": {
+          "sha256": "ac78cdf082f3d35e107e3db6b8b239b16d9f99590c862a1c1932eb608f0f960c",
+          "digest_scope": "text/lf-normalized",
+          "bytes": 82557,
+          "line_endings": {
+            "crlf": 0,
+            "lf_only": 1885,
+            "has_crlf": false,
+            "mixed": false
+          }
+        }
+      },
+      {
+        "group": "identity",
+        "name": "actions_module",
+        "ok": true,
+        "detail": {
+          "sha256": "cebfbc2205f2d1f7582db5182118ec2ea24ac351a8b616aed0ca1a746d7c2ebc",
+          "digest_scope": "text/lf-normalized",
+          "bytes": 28412,
+          "line_endings": {
+            "crlf": 0,
+            "lf_only": 690,
+            "has_crlf": false,
+            "mixed": false
+          }
+        }
+      },
+      {
+        "group": "identity",
+        "name": "session_module",
+        "ok": true,
+        "detail": {
+          "sha256": "76c43b1e5adda98c0bc3063f75f1424e6cacfc418f9beb2f473ee0fa4189b97f",
+          "digest_scope": "text/lf-normalized",
+          "bytes": 70645,
+          "line_endings": {
+            "crlf": 0,
+            "lf_only": 1599,
+            "has_crlf": false,
+            "mixed": false
+          }
+        }
+      },
+      {
+        "group": "identity",
+        "name": "evaluate_module",
+        "ok": true,
+        "detail": {
+          "sha256": "931dc37740100436e7d327dccf464750270a4a00c80d8e00ff07d1a7ebb57842",
+          "digest_scope": "text/lf-normalized",
+          "bytes": 54378,
+          "line_endings": {
+            "crlf": 0,
+            "lf_only": 1256,
+            "has_crlf": false,
+            "mixed": false
+          }
+        }
+      },
+      {
+        "group": "identity",
+        "name": "contracts_config",
+        "ok": true,
+        "detail": {
+          "sha256": "1863c1cf8bc01670cdb9dc5b308e7f4f2a2e2c0898285e9e8bf7a753c17f80dd",
+          "digest_scope": "text/lf-normalized",
+          "bytes": 10199,
+          "line_endings": {
+            "crlf": 0,
+            "lf_only": 406,
+            "has_crlf": false,
+            "mixed": false
+          }
+        }
+      },
+      {
+        "group": "identity",
+        "name": "plan_spec",
+        "ok": true,
+        "detail": {
+          "sha256": "dc2b6111142703c239c0d9ed3185823135b71e4cd1c550ce5fbb3f42c0ca47d7",
+          "digest_scope": "text/lf-normalized",
+          "bytes": 23300,
+          "line_endings": {
+            "crlf": 948,
+            "lf_only": 0,
+            "has_crlf": true,
+            "mixed": false
+          }
+        }
+      },
+      {
+        "group": "identity",
+        "name": "cli",
+        "ok": true,
+        "detail": {
+          "sha256": "7893a355c45e7266678971149bd157ed11a1d7cf7e589ad2294d8b77e136dd0e",
+          "digest_scope": "text/lf-normalized",
+          "bytes": 120595,
+          "line_endings": {
+            "crlf": 0,
+            "lf_only": 2417,
+            "has_crlf": false,
+            "mixed": false
+          }
+        }
+      },
+      {
+        "group": "identity",
+        "name": "every_identity_has_digest_scope",
+        "ok": true,
+        "detail": {
+          "identities": 7
+        }
+      },
+      {
+        "group": "plan_spec",
+        "name": "config_schema",
+        "ok": true,
+        "detail": {
+          "expected": "v430-contracts/1",
+          "actual": "v430-contracts/1"
+        }
+      },
+      {
+        "group": "plan_spec",
+        "name": "present",
+        "ok": true,
+        "detail": {
+          "path": "Document/Update/Alpha/v4.3.0/PLAN_SPEC.json",
+          "schema": "v430-training-plan/2",
+          "revision": "v430-plan-r2"
+        }
+      },
+      {
+        "group": "plan_spec",
+        "name": "schema",
+        "ok": true,
+        "detail": {
+          "expected": "v430-training-plan/2",
+          "actual": "v430-training-plan/2"
+        }
+      },
+      {
+        "group": "plan_spec",
+        "name": "revision",
+        "ok": true,
+        "detail": {
+          "expected": "v430-plan-r2",
+          "actual": "v430-plan-r2"
+        }
+      },
+      {
+        "group": "plan_spec",
+        "name": "config_spec_revision",
+        "ok": true,
+        "detail": {
+          "expected": "v430-plan-r2",
+          "actual": "v430-plan-r2"
+        }
+      },
+      {
+        "group": "config_constants",
+        "name": "bidirectional_equality",
+        "ok": true,
+        "detail": {
+          "differences": [],
+          "difference_count": 0,
+          "note": "compared contracts.contract_constants() with configs/v430/contracts.json['constants']; both directions (module-only and config-only keys) are reported"
+        }
+      },
+      {
+        "group": "config_constants",
+        "name": "contract_version",
+        "ok": true,
+        "detail": {
+          "expected": "v430-contract/1",
+          "actual": "v430-contract/1"
+        }
+      },
+      {
+        "group": "config_constants",
+        "name": "spec_revision",
+        "ok": true,
+        "detail": {
+          "expected": "v430-plan-r2",
+          "actual": "v430-plan-r2"
+        }
+      },
+      {
+        "group": "action_space",
+        "name": "joint_count",
+        "ok": true,
+        "detail": {
+          "expected": 72,
+          "actual": 72
+        }
+      },
+      {
+        "group": "action_space",
+        "name": "n_move",
+        "ok": true,
+        "detail": {
+          "expected": 9,
+          "actual": 9
+        }
+      },
+      {
+        "group": "action_space",
+        "name": "head_sizes",
+        "ok": true,
+        "detail": {
+          "expected": {
+            "move": 9,
+            "focus": 2,
+            "shoot": 2,
+            "bomb": 2
+          },
+          "actual": {
+            "move": 9,
+            "focus": 2,
+            "shoot": 2,
+            "bomb": 2
+          }
+        }
+      },
+      {
+        "group": "action_space",
+        "name": "head_order",
+        "ok": true,
+        "detail": {
+          "expected": [
+            "move",
+            "focus",
+            "shoot",
+            "bomb"
+          ],
+          "actual": [
+            "move",
+            "focus",
+            "shoot",
+            "bomb"
+          ]
+        }
+      },
+      {
+        "group": "action_space",
+        "name": "encode_decode_inverse",
+        "ok": true,
+        "detail": {
+          "expected": true,
+          "actual": true
+        }
+      },
+      {
+        "group": "action_space",
+        "name": "mask_count",
+        "ok": true,
+        "detail": {
+          "expected": 72,
+          "actual": 72
+        }
+      },
+      {
+        "group": "action_space",
+        "name": "distinct_masks",
+        "ok": true,
+        "detail": {
+          "expected": 72,
+          "actual": 72
+        }
+      },
+      {
+        "group": "action_space",
+        "name": "all_masks_agent_emittable",
+        "ok": true,
+        "detail": {
+          "rejected": [],
+          "count": 0
+        }
+      },
+      {
+        "group": "action_space",
+        "name": "compile_masks_frames",
+        "ok": true,
+        "detail": {
+          "expected": 2,
+          "actual": 2
+        }
+      },
+      {
+        "group": "action_space",
+        "name": "config_joint_count",
+        "ok": true,
+        "detail": {
+          "expected": 72,
+          "actual": 72
+        }
+      },
+      {
+        "group": "action_space",
+        "name": "plan_joint_count",
+        "ok": true,
+        "detail": {
+          "expected": 72,
+          "actual": 72
+        }
+      },
+      {
+        "group": "action_space",
+        "name": "plan_heads",
+        "ok": true,
+        "detail": {
+          "expected": {
+            "move": 9,
+            "focus": 2,
+            "shoot": 2,
+            "bomb": 2
+          },
+          "actual": {
+            "move": 9,
+            "focus": 2,
+            "shoot": 2,
+            "bomb": 2
+          }
+        }
+      },
+      {
+        "group": "action_space",
+        "name": "truth_action_mask",
+        "ok": true,
+        "detail": {
+          "expected": false,
+          "actual": false
+        }
+      },
+      {
+        "group": "action_space",
+        "name": "forced_shoot",
+        "ok": true,
+        "detail": {
+          "expected": false,
+          "actual": false
+        }
+      },
+      {
+        "group": "probability",
+        "name": "joint_logprob_is_sum",
+        "ok": true,
+        "detail": {
+          "expected": -0.9375,
+          "actual": -0.9375
+        }
+      },
+      {
+        "group": "probability",
+        "name": "joint_entropy_is_sum",
+        "ok": true,
+        "detail": {
+          "expected": 1.9375,
+          "actual": 1.9375
+        }
+      },
+      {
+        "group": "probability",
+        "name": "joint_logprob_components",
+        "ok": true,
+        "detail": {
+          "expected": -0.9375,
+          "actual": -0.9375
+        }
+      },
+      {
+        "group": "probability",
+        "name": "nan_logprob_refused",
+        "ok": true,
+        "detail": {
+          "raised": "ContractError",
+          "message": "move_logprob must be finite, got nan"
+        }
+      },
+      {
+        "group": "probability",
+        "name": "negative_entropy_refused",
+        "ok": true,
+        "detail": {
+          "raised": "ContractError",
+          "message": "move_entropy -1.0 < 0"
+        }
+      },
+      {
+        "group": "probability",
+        "name": "forced_shoot_constant",
+        "ok": true,
+        "detail": {
+          "expected": false,
+          "actual": false
+        }
+      },
+      {
+        "group": "probability",
+        "name": "truth_action_mask_constant",
+        "ok": true,
+        "detail": {
+          "expected": false,
+          "actual": false
+        }
+      },
+      {
+        "group": "probability",
+        "name": "shoot_bit_equals_request",
+        "ok": true,
+        "detail": {
+          "checked": 72,
+          "mismatched": [],
+          "shoot_bit": 1
+        }
+      },
+      {
+        "group": "probability",
+        "name": "forced_shoot_rule_refused",
+        "ok": true,
+        "detail": {
+          "raised": "ContractError",
+          "message": "frame 0: requested shoot=0 but mask 0x0001 has shoot bit 1; the shoot head must not be OR-ed on"
+        }
+      },
+      {
+        "group": "probability",
+        "name": "factorization_string",
+        "ok": true,
+        "detail": {
+          "expected": "independent categorical heads; summed log-probability and entropy",
+          "actual": "independent categorical heads; summed log-probability and entropy"
+        }
+      },
+      {
+        "group": "probability",
+        "name": "factorization_is_summed",
+        "ok": true,
+        "detail": {
+          "factorization": "independent categorical heads; summed log-probability and entropy"
+        }
+      },
+      {
+        "group": "observation",
+        "name": "field_names",
+        "ok": true,
+        "detail": {
+          "expected": [
+            "global_rgb",
+            "play_gray",
+            "hud_gray",
+            "executed_key_history",
+            "history_valid",
+            "elapsed_capture_s",
+            "memory"
+          ],
+          "actual": [
+            "global_rgb",
+            "play_gray",
+            "hud_gray",
+            "executed_key_history",
+            "history_valid",
+            "elapsed_capture_s",
+            "memory"
+          ]
+        }
+      },
+      {
+        "group": "observation",
+        "name": "field_count",
+        "ok": true,
+        "detail": {
+          "expected": 7,
+          "actual": 7
+        }
+      },
+      {
+        "group": "observation",
+        "name": "config_shape:global_rgb",
+        "ok": true,
+        "detail": {
+          "expected": [
+            3,
+            240,
+            320
+          ],
+          "actual": [
+            3,
+            240,
+            320
+          ]
+        }
+      },
+      {
+        "group": "observation",
+        "name": "config_shape:play_gray",
+        "ok": true,
+        "detail": {
+          "expected": [
+            4,
+            224,
+            192
+          ],
+          "actual": [
+            4,
+            224,
+            192
+          ]
+        }
+      },
+      {
+        "group": "observation",
+        "name": "config_shape:hud_gray",
+        "ok": true,
+        "detail": {
+          "expected": [
+            1,
+            448,
+            160
+          ],
+          "actual": [
+            1,
+            448,
+            160
+          ]
+        }
+      },
+      {
+        "group": "observation",
+        "name": "config_shape:executed_key_history",
+        "ok": true,
+        "detail": {
+          "expected": [
+            8,
+            7
+          ],
+          "actual": [
+            8,
+            7
+          ]
+        }
+      },
+      {
+        "group": "observation",
+        "name": "config_shape:history_valid",
+        "ok": true,
+        "detail": {
+          "expected": [
+            8
+          ],
+          "actual": [
+            8
+          ]
+        }
+      },
+      {
+        "group": "observation",
+        "name": "config_shape:memory",
+        "ok": true,
+        "detail": {
+          "expected": [
+            256
+          ],
+          "actual": [
+            256
+          ]
+        }
+      },
+      {
+        "group": "observation",
+        "name": "config_shape:elapsed_capture_s",
+        "ok": true,
+        "detail": {
+          "expected": 0,
+          "actual": 0
+        }
+      },
+      {
+        "group": "observation",
+        "name": "plan_shape:global_rgb",
+        "ok": true,
+        "detail": {
+          "expected": [
+            3,
+            240,
+            320
+          ],
+          "actual": [
+            3,
+            240,
+            320
+          ]
+        }
+      },
+      {
+        "group": "observation",
+        "name": "plan_shape:play_gray",
+        "ok": true,
+        "detail": {
+          "expected": [
+            4,
+            224,
+            192
+          ],
+          "actual": [
+            4,
+            224,
+            192
+          ]
+        }
+      },
+      {
+        "group": "observation",
+        "name": "plan_shape:hud_gray",
+        "ok": true,
+        "detail": {
+          "expected": [
+            1,
+            448,
+            160
+          ],
+          "actual": [
+            1,
+            448,
+            160
+          ]
+        }
+      },
+      {
+        "group": "observation",
+        "name": "plan_shape:executed_key_history",
+        "ok": true,
+        "detail": {
+          "expected": [
+            8,
+            7
+          ],
+          "actual": [
+            8,
+            7
+          ]
+        }
+      },
+      {
+        "group": "observation",
+        "name": "plan_shape:history_valid",
+        "ok": true,
+        "detail": {
+          "expected": [
+            8
+          ],
+          "actual": [
+            8
+          ]
+        }
+      },
+      {
+        "group": "observation",
+        "name": "plan_key_order",
+        "ok": true,
+        "detail": {
+          "expected": [
+            "left",
+            "right",
+            "up",
+            "down",
+            "focus",
+            "shoot",
+            "bomb"
+          ],
+          "actual": [
+            "left",
+            "right",
+            "up",
+            "down",
+            "focus",
+            "shoot",
+            "bomb"
+          ]
+        }
+      },
+      {
+        "group": "observation",
+        "name": "config_key_order",
+        "ok": true,
+        "detail": {
+          "expected": [
+            "left",
+            "right",
+            "up",
+            "down",
+            "focus",
+            "shoot",
+            "bomb"
+          ],
+          "actual": [
+            "left",
+            "right",
+            "up",
+            "down",
+            "focus",
+            "shoot",
+            "bomb"
+          ]
+        }
+      },
+      {
+        "group": "observation",
+        "name": "source_rgb_wh",
+        "ok": true,
+        "detail": {
+          "expected": [
+            640,
+            480
+          ],
+          "actual": [
+            640,
+            480
+          ]
+        }
+      },
+      {
+        "group": "observation",
+        "name": "play_crop",
+        "ok": true,
+        "detail": {
+          "expected": [
+            32,
+            16,
+            384,
+            448
+          ],
+          "actual": [
+            32,
+            16,
+            384,
+            448
+          ]
+        }
+      },
+      {
+        "group": "observation",
+        "name": "hud_crop",
+        "ok": true,
+        "detail": {
+          "expected": [
+            480,
+            16,
+            160,
+            448
+          ],
+          "actual": [
+            480,
+            16,
+            160,
+            448
+          ]
+        }
+      },
+      {
+        "group": "observation",
+        "name": "image_bytes_per_decision",
+        "ok": true,
+        "detail": {
+          "expected": 474112,
+          "actual": 474112
+        }
+      },
+      {
+        "group": "observation",
+        "name": "config_image_bytes",
+        "ok": true,
+        "detail": {
+          "expected": 474112,
+          "actual": 474112
+        }
+      },
+      {
+        "group": "observation",
+        "name": "plan_image_bytes",
+        "ok": true,
+        "detail": {
+          "expected": 474112,
+          "actual": 474112
+        }
+      },
+      {
+        "group": "observation",
+        "name": "o2_digest_matches_config",
+        "ok": true,
+        "detail": {
+          "expected": "cb1616e4cbfa928e691c2fb8497a84c813bded528064cf2b0aa1e30fa86b85b5",
+          "actual": "cb1616e4cbfa928e691c2fb8497a84c813bded528064cf2b0aa1e30fa86b85b5"
+        }
+      },
+      {
+        "group": "observation",
+        "name": "storage_dtype",
+        "ok": true,
+        "detail": {
+          "expected": "uint8",
+          "actual": "uint8"
+        }
+      },
+      {
+        "group": "observation",
+        "name": "gray_rule",
+        "ok": true,
+        "detail": {
+          "expected": "(77*R+151*G+28*B)>>8",
+          "actual": "(77*R+151*G+28*B)>>8"
+        }
+      },
+      {
+        "group": "observation",
+        "name": "config_field_rows",
+        "ok": true,
+        "detail": {
+          "expected": 7,
+          "actual": 7
+        }
+      },
+      {
+        "group": "observation",
+        "name": "config_dtype:global_rgb",
+        "ok": true,
+        "detail": {
+          "expected": "uint8",
+          "actual": "uint8"
+        }
+      },
+      {
+        "group": "observation",
+        "name": "config_shape_row:global_rgb",
+        "ok": true,
+        "detail": {
+          "expected": [
+            3,
+            240,
+            320
+          ],
+          "actual": [
+            3,
+            240,
+            320
+          ]
+        }
+      },
+      {
+        "group": "observation",
+        "name": "config_dtype:play_gray",
+        "ok": true,
+        "detail": {
+          "expected": "uint8",
+          "actual": "uint8"
+        }
+      },
+      {
+        "group": "observation",
+        "name": "config_shape_row:play_gray",
+        "ok": true,
+        "detail": {
+          "expected": [
+            4,
+            224,
+            192
+          ],
+          "actual": [
+            4,
+            224,
+            192
+          ]
+        }
+      },
+      {
+        "group": "observation",
+        "name": "config_dtype:hud_gray",
+        "ok": true,
+        "detail": {
+          "expected": "uint8",
+          "actual": "uint8"
+        }
+      },
+      {
+        "group": "observation",
+        "name": "config_shape_row:hud_gray",
+        "ok": true,
+        "detail": {
+          "expected": [
+            1,
+            448,
+            160
+          ],
+          "actual": [
+            1,
+            448,
+            160
+          ]
+        }
+      },
+      {
+        "group": "observation",
+        "name": "config_dtype:executed_key_history",
+        "ok": true,
+        "detail": {
+          "expected": "uint8",
+          "actual": "uint8"
+        }
+      },
+      {
+        "group": "observation",
+        "name": "config_shape_row:executed_key_history",
+        "ok": true,
+        "detail": {
+          "expected": [
+            8,
+            7
+          ],
+          "actual": [
+            8,
+            7
+          ]
+        }
+      },
+      {
+        "group": "observation",
+        "name": "config_dtype:history_valid",
+        "ok": true,
+        "detail": {
+          "expected": "bool",
+          "actual": "bool"
+        }
+      },
+      {
+        "group": "observation",
+        "name": "config_shape_row:history_valid",
+        "ok": true,
+        "detail": {
+          "expected": [
+            8
+          ],
+          "actual": [
+            8
+          ]
+        }
+      },
+      {
+        "group": "observation",
+        "name": "config_dtype:elapsed_capture_s",
+        "ok": true,
+        "detail": {
+          "expected": "float32",
+          "actual": "float32"
+        }
+      },
+      {
+        "group": "observation",
+        "name": "config_shape_row:elapsed_capture_s",
+        "ok": true,
+        "detail": {
+          "expected": [],
+          "actual": []
+        }
+      },
+      {
+        "group": "observation",
+        "name": "config_dtype:memory",
+        "ok": true,
+        "detail": {
+          "expected": "float32",
+          "actual": "float32"
+        }
+      },
+      {
+        "group": "observation",
+        "name": "config_shape_row:memory",
+        "ok": true,
+        "detail": {
+          "expected": [
+            256
+          ],
+          "actual": [
+            256
+          ]
+        }
+      },
+      {
+        "group": "observation",
+        "name": "valid_observation_accepted",
+        "ok": true,
+        "detail": {
+          "result": [
+            "elapsed_capture_s",
+            "executed_key_history",
+            "global_rgb",
+            "history_valid",
+            "hud_gray",
+            "memory",
+            "play_gray"
+          ]
+        }
+      },
+      {
+        "group": "observation",
+        "name": "missing_field_refused",
+        "ok": true,
+        "detail": {
+          "raised": "ContractError",
+          "message": "actor observation missing fields ['memory']; the actor input is a closed set and a missing field cannot be zero-filled"
+        }
+      },
+      {
+        "group": "observation",
+        "name": "extra_field_refused",
+        "ok": true,
+        "detail": {
+          "raised": "ContractError",
+          "message": "ActorObservation carries privileged fields ['stage_truth']; the actor may see pixels and its own executed keys only (forbidden: ['engine_frame', 'seed', 'script_id', 'stage_truth', 'enemy_table', 'resource_truth', 'teacher_action', 'future_tape'])"
+        }
+      },
+      {
+        "group": "observation",
+        "name": "resized_image_refused",
+        "ok": true,
+        "detail": {
+          "raised": "ContractError",
+          "message": "global_rgb: shape (3, 224, 320) != required (3, 240, 320); resizing or interpolation into another shape is refused, not adapted"
+        }
+      },
+      {
+        "group": "observation",
+        "name": "wrong_dtype_refused",
+        "ok": true,
+        "detail": {
+          "raised": "ContractError",
+          "message": "memory: dtype uint8 != required float32; a Python list of ints infers uint8 — pass floats or a typed array for a float32 field"
+        }
+      },
+      {
+        "group": "observation",
+        "name": "history_hole_refused",
+        "ok": true,
+        "detail": {
+          "raised": "ContractError",
+          "message": "history_valid[1] is False after a valid entry; missing history in the middle of the window cannot be represented (a zero row would be read as executed idle)"
+        }
+      },
+      {
+        "group": "observation",
+        "name": "key_history_2_refused",
+        "ok": true,
+        "detail": {
+          "raised": "ContractError",
+          "message": "executed_key_history: value 2 at leaf 0 outside [0, 1]; it does not fit uint8"
+        }
+      },
+      {
+        "group": "observation",
+        "name": "negative_capture_interval_refused",
+        "ok": true,
+        "detail": {
+          "raised": "ContractError",
+          "message": "elapsed_capture_s: leaf 0 -0.5 < minimum 0.0"
+        }
+      },
+      {
+        "group": "privileged",
+        "name": "config_forbidden_actor_fields",
+        "ok": true,
+        "detail": {
+          "expected": [
+            "engine_frame",
+            "seed",
+            "script_id",
+            "stage_truth",
+            "enemy_table",
+            "resource_truth",
+            "teacher_action",
+            "future_tape"
+          ],
+          "actual": [
+            "engine_frame",
+            "seed",
+            "script_id",
+            "stage_truth",
+            "enemy_table",
+            "resource_truth",
+            "teacher_action",
+            "future_tape"
+          ]
+        }
+      },
+      {
+        "group": "privileged",
+        "name": "plan_forbidden_actor_fields",
+        "ok": true,
+        "detail": {
+          "expected": [
+            "engine_frame",
+            "seed",
+            "script_id",
+            "stage_truth",
+            "enemy_table",
+            "resource_truth",
+            "teacher_action",
+            "future_tape"
+          ],
+          "actual": [
+            "engine_frame",
+            "seed",
+            "script_id",
+            "stage_truth",
+            "enemy_table",
+            "resource_truth",
+            "teacher_action",
+            "future_tape"
+          ]
+        }
+      },
+      {
+        "group": "privileged",
+        "name": "config_observation_forbidden",
+        "ok": true,
+        "detail": {
+          "expected": [
+            "engine_frame",
+            "seed",
+            "script_id",
+            "stage_truth",
+            "enemy_table",
+            "resource_truth",
+            "teacher_action",
+            "future_tape"
+          ],
+          "actual": [
+            "engine_frame",
+            "seed",
+            "script_id",
+            "stage_truth",
+            "enemy_table",
+            "resource_truth",
+            "teacher_action",
+            "future_tape"
+          ]
+        }
+      },
+      {
+        "group": "privileged",
+        "name": "config_privileged_field_names",
+        "ok": true,
+        "detail": {
+          "expected": [
+            "engine_frame",
+            "seed",
+            "script_id",
+            "stage_truth",
+            "enemy_table",
+            "resource_truth",
+            "teacher_action",
+            "future_tape",
+            "privileged_ref",
+            "privileged_state",
+            "oracle_state",
+            "lives_truth",
+            "bomb_count_truth",
+            "power_truth",
+            "rng_state",
+            "replay_input_tape"
+          ],
+          "actual": [
+            "engine_frame",
+            "seed",
+            "script_id",
+            "stage_truth",
+            "enemy_table",
+            "resource_truth",
+            "teacher_action",
+            "future_tape",
+            "privileged_ref",
+            "privileged_state",
+            "oracle_state",
+            "lives_truth",
+            "bomb_count_truth",
+            "power_truth",
+            "rng_state",
+            "replay_input_tape"
+          ]
+        }
+      },
+      {
+        "group": "privileged",
+        "name": "every_forbidden_name_refused",
+        "ok": true,
+        "detail": {
+          "expected": [
+            "engine_frame",
+            "seed",
+            "script_id",
+            "stage_truth",
+            "enemy_table",
+            "resource_truth",
+            "teacher_action",
+            "future_tape"
+          ],
+          "actual": [
+            "engine_frame",
+            "seed",
+            "script_id",
+            "stage_truth",
+            "enemy_table",
+            "resource_truth",
+            "teacher_action",
+            "future_tape"
+          ]
+        }
+      },
+      {
+        "group": "privileged",
+        "name": "session_refuses_engine_truth",
+        "ok": true,
+        "detail": {
+          "missing": [],
+          "session_truth_fields": [
+            "stage_id",
+            "stage",
+            "stage_number",
+            "stage_index",
+            "stage_truth",
+            "stage_clear",
+            "stage_clear_flag",
+            "stage_clear_screen_state",
+            "game_over",
+            "game_over_flag",
+            "is_game_over",
+            "game_manager_state",
+            "supervisor_state",
+            "lives",
+            "life",
+            "lives_truth",
+            "bomb_count",
+            "bomb_stock",
+            "bomb_count_truth",
+            "power",
+            "power_truth",
+            "resource_truth",
+            "resource_state",
+            "engine_frame",
+            "engine_frame_index",
+            "engine_frames",
+            "seed",
+            "script_id",
+            "enemy_table",
+            "teacher_action",
+            "future_tape",
+            "privileged_ref",
+            "privileged_state",
+            "oracle_state",
+            "rng_state",
+            "replay_input_tape"
+          ]
+        }
+      },
+      {
+        "group": "privileged",
+        "name": "session_refuses_each_truth_name",
+        "ok": true,
+        "detail": {
+          "expected": [
+            "stage_id",
+            "stage_truth",
+            "stage_clear",
+            "game_over",
+            "lives",
+            "bomb_count",
+            "resource_truth",
+            "engine_frame"
+          ],
+          "actual": [
+            "stage_id",
+            "stage_truth",
+            "stage_clear",
+            "game_over",
+            "lives",
+            "bomb_count",
+            "resource_truth",
+            "engine_frame"
+          ]
+        }
+      },
+      {
+        "group": "time",
+        "name": "hold_game_frames",
+        "ok": true,
+        "detail": {
+          "expected": 2,
+          "actual": 2
+        }
+      },
+      {
+        "group": "time",
+        "name": "config_action_hold",
+        "ok": true,
+        "detail": {
+          "expected": 2,
+          "actual": 2
+        }
+      },
+      {
+        "group": "time",
+        "name": "config_time_hold",
+        "ok": true,
+        "detail": {
+          "expected": 2,
+          "actual": 2
+        }
+      },
+      {
+        "group": "time",
+        "name": "plan_hold",
+        "ok": true,
+        "detail": {
+          "expected": 2,
+          "actual": 2
+        }
+      },
+      {
+        "group": "time",
+        "name": "reference_hz",
+        "ok": true,
+        "detail": {
+          "expected": 60,
+          "actual": 60
+        }
+      },
+      {
+        "group": "time",
+        "name": "config_reference_hz",
+        "ok": true,
+        "detail": {
+          "expected": 60,
+          "actual": 60
+        }
+      },
+      {
+        "group": "time",
+        "name": "duration_sources",
+        "ok": true,
+        "detail": {
+          "expected": [
+            "engine_elapsed_frames",
+            "external_controller_clock",
+            "invalid"
+          ],
+          "actual": [
+            "engine_elapsed_frames",
+            "external_controller_clock",
+            "invalid"
+          ]
+        }
+      },
+      {
+        "group": "time",
+        "name": "duration_tolerance_frames",
+        "ok": true,
+        "detail": {
+          "expected": 0.5,
+          "actual": 0.5
+        }
+      },
+      {
+        "group": "time",
+        "name": "external_two_frame_interval",
+        "ok": true,
+        "detail": {
+          "effective_frames": 2.0,
+          "duration_source": "external_controller_clock"
+        }
+      },
+      {
+        "group": "time",
+        "name": "two_frame_step_is_normal",
+        "ok": true,
+        "detail": {
+          "result": {
+            "duration_source": "external_controller_clock",
+            "elapsed_game_frames": null,
+            "elapsed_capture_s": 0.03333333333333333,
+            "effective_frames": 2.0,
+            "hz": 60,
+            "valid": true
+          }
+        }
+      },
+      {
+        "group": "time",
+        "name": "three_frame_step_refused",
+        "ok": true,
+        "detail": {
+          "raised": "ContractError",
+          "message": "effective_frames 3.0 is 1.0 frames away from the nominal 2 (tolerance 0.5); a dropped/duplicated frame or a pause must be recorded as invalid, not rounded to the normal step"
+        }
+      },
+      {
+        "group": "time",
+        "name": "engine_source_reports_frames",
+        "ok": true,
+        "detail": {
+          "effective_frames": 2.0
+        }
+      },
+      {
+        "group": "time",
+        "name": "external_source_rejects_engine_frames",
+        "ok": true,
+        "detail": {
+          "raised": "ContractError",
+          "message": "duration_source=external_controller_clock must not carry elapsed_game_frames; the engine frame counter is truth the R1 actor may not read"
+        }
+      },
+      {
+        "group": "time",
+        "name": "engine_source_requires_frames",
+        "ok": true,
+        "detail": {
+          "raised": "ContractError",
+          "message": "duration_source=engine_elapsed_frames requires elapsed_game_frames; the engine reports whole frames and no other field may stand in for it"
+        }
+      },
+      {
+        "group": "time",
+        "name": "invalid_source_has_no_frame_count",
+        "ok": true,
+        "detail": {
+          "effective_frames": null,
+          "duration_source": "invalid"
+        }
+      },
+      {
+        "group": "time",
+        "name": "effective_frames_from_capture",
+        "ok": true,
+        "detail": {
+          "expected": 2.0,
+          "actual": 2.0
+        }
+      },
+      {
+        "group": "time",
+        "name": "plan_r1_r2_clock_is_external",
+        "ok": true,
+        "detail": {
+          "plan": "shared external capture/controller timing only"
+        }
+      },
+      {
+        "group": "time",
+        "name": "reference_hz_matches_plan",
+        "ok": true,
+        "detail": {
+          "plan": 60
+        }
+      },
+      {
+        "group": "terminal",
+        "name": "config_transition_block_matches",
+        "ok": true,
+        "detail": {
+          "differences": [],
+          "difference_count": 0
+        }
+      },
+      {
+        "group": "terminal",
+        "name": "end_flags",
+        "ok": true,
+        "detail": {
+          "expected": [
+            "terminated",
+            "truncated",
+            "segment_end"
+          ],
+          "actual": [
+            "terminated",
+            "truncated",
+            "segment_end"
+          ]
+        }
+      },
+      {
+        "group": "terminal",
+        "name": "end_flag_count",
+        "ok": true,
+        "detail": {
+          "expected": 3,
+          "actual": 3
+        }
+      },
+      {
+        "group": "terminal",
+        "name": "check_end_flags_accepts",
+        "ok": true,
+        "detail": {
+          "expected": [
+            false,
+            false,
+            true
+          ],
+          "actual": [
+            false,
+            false,
+            true
+          ]
+        }
+      },
+      {
+        "group": "terminal",
+        "name": "done_alias_refused",
+        "ok": true,
+        "detail": {
+          "raised": "ContractError",
+          "message": "record carries 'done'; terminated / truncated / segment_end are three different facts and may not share one done field"
+        }
+      },
+      {
+        "group": "terminal",
+        "name": "terminated_and_truncated_refused",
+        "ok": true,
+        "detail": {
+          "raised": "ContractError",
+          "message": "terminated and truncated are both true; a terminal end and a sampling interruption are mutually exclusive"
+        }
+      },
+      {
+        "group": "terminal",
+        "name": "truncated_without_reason_refused",
+        "ok": true,
+        "detail": {
+          "raised": "ContractError",
+          "message": "truncated=True requires truncation_reason in ['rollout_limit', 'frame_budget', 'time_limit', 'resource_limit', 'owner_preempt', 'delivery_timeout', 'capture_gap', 'protocol_invalid', 'other'], got None"
+        }
+      },
+      {
+        "group": "terminal",
+        "name": "terminated_bootstrap_is_zero",
+        "ok": true,
+        "detail": {
+          "expected": 0,
+          "actual": 0
+        }
+      },
+      {
+        "group": "terminal",
+        "name": "terminated_bootstrap_one_refused",
+        "ok": true,
+        "detail": {
+          "raised": "ContractError",
+          "message": "bootstrap_mask must be 0 on a terminated episode; the terminal reward is the value target, not V(next_obs)"
+        }
+      },
+      {
+        "group": "terminal",
+        "name": "truncated_bootstrap_without_terminal_obs",
+        "ok": true,
+        "detail": {
+          "raised": "ContractError",
+          "message": "truncated=True with bootstrap_mask=1 requires terminal_observation_ref; bootstrapping an interrupted segment without its last genuine observation would use a reset image"
+        }
+      },
+      {
+        "group": "terminal",
+        "name": "continuing_bootstrap_without_next_obs",
+        "ok": true,
+        "detail": {
+          "raised": "ContractError",
+          "message": "bootstrap_mask=1 on a continuing step requires next_obs_ref; there is no default next observation"
+        }
+      },
+      {
+        "group": "terminal",
+        "name": "reset_image_never_bootstraps",
+        "ok": true,
+        "detail": {
+          "raised": "ContractError",
+          "message": "next_obs_ref 'obs:same' is the post-reset observation; a reset image is not the next state of this episode and cannot bootstrap it"
+        }
+      },
+      {
+        "group": "terminal",
+        "name": "bootstrapping_continuing_step",
+        "ok": true,
+        "detail": {
+          "expected": 1,
+          "actual": 1
+        }
+      },
+      {
+        "group": "results",
+        "name": "result_fields",
+        "ok": true,
+        "detail": {
+          "expected": [
+            "execution_status",
+            "protocol_validity",
+            "research_result",
+            "capability_gate"
+          ],
+          "actual": [
+            "execution_status",
+            "protocol_validity",
+            "research_result",
+            "capability_gate"
+          ]
+        }
+      },
+      {
+        "group": "results",
+        "name": "config_result_fields",
+        "ok": true,
+        "detail": {
+          "expected": [
+            "execution_status",
+            "protocol_validity",
+            "research_result",
+            "capability_gate"
+          ],
+          "actual": [
+            "execution_status",
+            "protocol_validity",
+            "research_result",
+            "capability_gate"
+          ]
+        }
+      },
+      {
+        "group": "results",
+        "name": "exit_codes",
+        "ok": true,
+        "detail": {
+          "expected": [
+            "0",
+            "2",
+            "3",
+            "4"
+          ],
+          "actual": [
+            "0",
+            "2",
+            "3",
+            "4"
+          ]
+        }
+      },
+      {
+        "group": "results",
+        "name": "plan_exit_codes",
+        "ok": true,
+        "detail": {
+          "expected": [
+            "0",
+            "2",
+            "3",
+            "4"
+          ],
+          "actual": [
+            "0",
+            "2",
+            "3",
+            "4"
+          ]
+        }
+      },
+      {
+        "group": "results",
+        "name": "exit_code_by_status",
+        "ok": true,
+        "detail": {
+          "expected": {
+            "ok": 0,
+            "invalid": 2,
+            "gate_fail": 3,
+            "incomplete": 4
+          },
+          "actual": {
+            "ok": 0,
+            "invalid": 2,
+            "gate_fail": 3,
+            "incomplete": 4
+          }
+        }
+      },
+      {
+        "group": "results",
+        "name": "capability_gate_default",
+        "ok": true,
+        "detail": {
+          "expected": "not_run",
+          "actual": "not_run"
+        }
+      },
+      {
+        "group": "results",
+        "name": "config_capability_gate_default",
+        "ok": true,
+        "detail": {
+          "expected": "not_run",
+          "actual": "not_run"
+        }
+      },
+      {
+        "group": "results",
+        "name": "new_result_capability_gate",
+        "ok": true,
+        "detail": {
+          "expected": "not_run",
+          "actual": "not_run"
+        }
+      },
+      {
+        "group": "results",
+        "name": "exit_code_for_ok",
+        "ok": true,
+        "detail": {
+          "expected": 0,
+          "actual": 0
+        }
+      },
+      {
+        "group": "results",
+        "name": "assert_result_schema_accepts_legal_result",
+        "ok": true,
+        "detail": {
+          "result": "ok"
+        }
+      },
+      {
+        "group": "results",
+        "name": "constructor_cannot_claim_capability",
+        "ok": true,
+        "detail": {
+          "raised": "ContractError",
+          "message": "capability_gate='pass' cannot be set by a result constructor; only an independent judgement may set it (set_capability_gate with evidence), and an exit-0 command does not promote a capability"
+        }
+      },
+      {
+        "group": "results",
+        "name": "training_command_capability_refused",
+        "ok": true,
+        "detail": {
+          "raised": "ContractError",
+          "message": "a 'training' command may not report capability_gate='pass'; training exit 0 is not a capability"
+        }
+      },
+      {
+        "group": "results",
+        "name": "invalid_protocol_with_ok_refused",
+        "ok": true,
+        "detail": {
+          "raised": "ContractError",
+          "message": "protocol_validity='invalid' requires execution_status='invalid' (exit 2), got 'ok'"
+        }
+      },
+      {
+        "group": "results",
+        "name": "mismatched_exit_code_refused",
+        "ok": true,
+        "detail": {
+          "raised": "ContractError",
+          "message": "exit_code 3 does not match execution_status='ok' (expected 0)"
+        }
+      },
+      {
+        "group": "session",
+        "name": "required_states_present",
+        "ok": true,
+        "detail": {
+          "missing": [],
+          "states": [
+            "playing",
+            "hit_pending",
+            "respawn",
+            "transition",
+            "game_over",
+            "menu",
+            "ending",
+            "unknown"
+          ]
+        }
+      },
+      {
+        "group": "session",
+        "name": "every_state_maps_to_an_action",
+        "ok": true,
+        "detail": {
+          "session_driven": [
+            "transition",
+            "game_over",
+            "menu",
+            "ending"
+          ],
+          "actor_driven": [
+            "playing",
+            "hit_pending",
+            "respawn",
+            "unknown"
+          ],
+          "problems": []
+        }
+      },
+      {
+        "group": "session",
+        "name": "unknown_presses_nothing",
+        "ok": true,
+        "detail": {
+          "expected": true,
+          "actual": true
+        }
+      },
+      {
+        "group": "session",
+        "name": "session_actor_loss_mask",
+        "ok": true,
+        "detail": {
+          "expected": 0,
+          "actual": 0
+        }
+      },
+      {
+        "group": "session",
+        "name": "contract_session_actor_loss_mask",
+        "ok": true,
+        "detail": {
+          "expected": 0,
+          "actual": 0
+        }
+      },
+      {
+        "group": "session",
+        "name": "plan_session_actor_loss_mask",
+        "ok": true,
+        "detail": {
+          "expected": 0,
+          "actual": 0
+        }
+      },
+      {
+        "group": "session",
+        "name": "owner_exclusive",
+        "ok": true,
+        "detail": {
+          "expected": true,
+          "actual": true
+        }
+      },
+      {
+        "group": "session",
+        "name": "source_imports_pixel_only",
+        "ok": true,
+        "detail": {
+          "imports": [
+            "__future__",
+            "ast",
+            "dataclasses",
+            "hashlib",
+            "math",
+            "touhou_rl.v430.actions",
+            "touhou_rl.v430.contracts",
+            "typing"
+          ],
+          "sha256": "76c43b1e5adda98c0bc3063f75f1424e6cacfc418f9beb2f473ee0fa4189b97f",
+          "digest_scope": "text/lf-normalized"
+        }
+      },
+      {
+        "group": "evaluation",
+        "name": "digest_scopes",
+        "ok": true,
+        "detail": {
+          "expected": [
+            "text/lf-normalized",
+            "binary/raw"
+          ],
+          "actual": [
+            "text/lf-normalized",
+            "binary/raw"
+          ]
+        }
+      },
+      {
+        "group": "evaluation",
+        "name": "session_pixel_scope",
+        "ok": true,
+        "detail": {
+          "expected": "binary/raw",
+          "actual": "binary/raw"
+        }
+      },
+      {
+        "group": "evaluation",
+        "name": "text_scope_ignores_line_endings",
+        "ok": true,
+        "detail": {
+          "expected": "5e36b6560513586ced65eca0e8b025fe88edbcab82ba2cb67a5fcb2d7b202383",
+          "actual": "5e36b6560513586ced65eca0e8b025fe88edbcab82ba2cb67a5fcb2d7b202383"
+        }
+      },
+      {
+        "group": "evaluation",
+        "name": "binary_scope_sees_line_endings",
+        "ok": true,
+        "detail": {
+          "note": "binary/raw must not normalise"
+        }
+      },
+      {
+        "group": "evaluation",
+        "name": "identity_without_scope_refused",
+        "ok": true,
+        "detail": {
+          "raised": "MissingDigestScopeError",
+          "message": "identity for None carries sha256 0000000000000000000000000000000000000000000000000000000000000000 without a digest_scope; every v4.3.0 identity must declare ['text/lf-normalized', 'binary/raw'] (see SHA_LINE_ENDING_FINDING.md §6.3)"
+        }
+      },
+      {
+        "group": "evaluation",
+        "name": "scope_mismatch_is_distinguished",
+        "ok": true,
+        "detail": {
+          "raised": "DigestScopeMismatch",
+          "message": "input 'probe': the bytes are identical but the digest was taken under a different scope. The identity declares digest_scope='text/lf-normalized' and its sha256 d8b04a95ac8f6ebb754f2567d677142939890259b9facc2629436023638eef9e is the 'binary/raw' digest of this file; the same content hashed under 'tex"
+        }
+      },
+      {
+        "group": "evaluation",
+        "name": "content_mismatch_is_distinguished",
+        "ok": true,
+        "detail": {
+          "raised": "DigestMismatch",
+          "message": "input 'probe': the content differs. The identity declares digest_scope='text/lf-normalized' with sha256 0000000000000000000000000000000000000000000000000000000000000000; the file hashes to 5e36b6560513586ced65eca0e8b025fe88edbcab82ba2cb67a5fcb2d7b202383 under 'text/lf-normalized' and to d8b04a95ac8f"
+        }
+      },
+      {
+        "group": "evaluation",
+        "name": "zero_denominator_refused",
+        "ok": true,
+        "detail": {
+          "raised": "ZeroDenominatorError",
+          "message": "total must be >= 1 to form an interval, got 0; a rate with a zero denominator is not a measurement"
+        }
+      },
+      {
+        "group": "evaluation",
+        "name": "plan_wilson_bound_achievable",
+        "ok": true,
+        "detail": {
+          "successes": 50,
+          "episodes": 100,
+          "wilson_low": 0.40382982859014716,
+          "wilson_high": 0.5961701714098528,
+          "required_low": 0.35
+        }
+      },
+      {
+        "group": "evaluation",
+        "name": "normal_approximation_edge_refused",
+        "ok": true,
+        "detail": {
+          "raised": "EvaluationError",
+          "message": "successes 101 outside [0, 100]"
+        }
+      },
+      {
+        "group": "evaluation",
+        "name": "gate_from_plan_spec",
+        "ok": true,
+        "detail": {
+          "expected": [
+            100,
+            50
+          ],
+          "actual": [
+            100,
+            50
+          ]
+        }
+      },
+      {
+        "group": "evaluation",
+        "name": "capability_gate_never_promoted",
+        "ok": true,
+        "detail": {
+          "expected": "not_run",
+          "actual": "not_run"
+        }
+      },
+      {
+        "group": "evaluation",
+        "name": "invalid_policy_is_full_batch",
+        "ok": true,
+        "detail": {
+          "expected": true,
+          "actual": true
+        }
+      },
+      {
+        "group": "evaluation",
+        "name": "judge_isolation",
+        "ok": true,
+        "detail": {
+          "imports": [
+            "__future__",
+            "ast",
+            "dataclasses",
+            "datetime",
+            "hashlib",
+            "json",
+            "math",
+            "pathlib",
+            "statistics",
+            "touhou_rl.v430.contracts",
+            "typing"
+          ],
+          "sha256": "931dc37740100436e7d327dccf464750270a4a00c80d8e00ff07d1a7ebb57842",
+          "digest_scope": "text/lf-normalized"
+        }
+      },
+      {
+        "group": "evaluation",
+        "name": "manual_aggregate_refused",
+        "ok": true,
+        "detail": {
+          "raised": "ManualAggregateError",
+          "message": "episode[0] carries hand-written aggregate fields ['mean']; the judge recomputes every count from the per-episode records and refuses a typed mean/clears as authoritative data"
+        }
+      },
+      {
+        "group": "evaluation",
+        "name": "missing_episode_field_refused",
+        "ok": true,
+        "detail": {
+          "raised": "MissingFieldError",
+          "message": "episode[0] is missing required fields ['episode_id', 'ancestor_id', 'seed', 'split', 'outcome', 'protocol_validity', 'policy_sha256', 'frames']; the denominator cannot be audited without them"
+        }
+      },
+      {
+        "group": "evaluation",
+        "name": "hand_edited_success_refused",
+        "ok": true,
+        "detail": {
+          "raised": "InvalidRecordError",
+          "message": "episode[0] declares success=True but outcome='game_over'; success is derived from the outcome and a disagreeing flag is a hand edit"
+        }
+      },
+      {
+        "group": "evaluation",
+        "name": "missing_batch_refused",
+        "ok": true,
+        "detail": {
+          "raised": "InvalidInputError",
+          "message": "episode batch does not exist: D:\\WorkShop\\Touhou_RL\\nonexistent-batch.json"
+        }
+      },
+      {
+        "group": "digest",
+        "name": "four_protocol_parts",
+        "ok": true,
+        "detail": {
+          "expected": [
+            "observation",
+            "action",
+            "reward",
+            "terminal"
+          ],
+          "actual": [
+            "observation",
+            "action",
+            "reward",
+            "terminal"
+          ]
+        }
+      },
+      {
+        "group": "digest",
+        "name": "reward_digest_nonempty",
+        "ok": true,
+        "detail": {
+          "expected": true,
+          "actual": true
+        }
+      },
+      {
+        "group": "digest",
+        "name": "scope:observation",
+        "ok": true,
+        "detail": {
+          "expected": "text/lf-normalized",
+          "actual": "text/lf-normalized"
+        }
+      },
+      {
+        "group": "digest",
+        "name": "scope:action",
+        "ok": true,
+        "detail": {
+          "expected": "text/lf-normalized",
+          "actual": "text/lf-normalized"
+        }
+      },
+      {
+        "group": "digest",
+        "name": "scope:reward",
+        "ok": true,
+        "detail": {
+          "expected": "text/lf-normalized",
+          "actual": "text/lf-normalized"
+        }
+      },
+      {
+        "group": "digest",
+        "name": "scope:terminal",
+        "ok": true,
+        "detail": {
+          "expected": "text/lf-normalized",
+          "actual": "text/lf-normalized"
+        }
+      }
+    ],
+    "summary": {
+      "checks": 173,
+      "failed": 0,
+      "groups": {
+        "identity": {
+          "checks": 8,
+          "failed": 0
+        },
+        "plan_spec": {
+          "checks": 5,
+          "failed": 0
+        },
+        "config_constants": {
+          "checks": 3,
+          "failed": 0
+        },
+        "action_space": {
+          "checks": 14,
+          "failed": 0
+        },
+        "probability": {
+          "checks": 11,
+          "failed": 0
+        },
+        "observation": {
+          "checks": 48,
+          "failed": 0
+        },
+        "privileged": {
+          "checks": 7,
+          "failed": 0
+        },
+        "time": {
+          "checks": 18,
+          "failed": 0
+        },
+        "terminal": {
+          "checks": 13,
+          "failed": 0
+        },
+        "results": {
+          "checks": 14,
+          "failed": 0
+        },
+        "session": {
+          "checks": 8,
+          "failed": 0
+        },
+        "evaluation": {
+          "checks": 18,
+          "failed": 0
+        },
+        "digest": {
+          "checks": 6,
+          "failed": 0
+        }
+      }
+    }
+  },
+  "capability_gate": "not_run",
+  "capability_gate_detail": {
+    "status": "not_run",
+    "reason": "validate-contract is a protocol/consistency check (command_class='contract'). It cannot report capability_gate='pass': contracts.assert_result_schema refuses pass/fail without an independent capability judgement, and this command has none.",
+    "gates": {
+      "G430-E0": "not_run",
+      "G410-0": "not_reassessed"
+    }
+  },
+  "contract_version": "v430-contract/1",
+  "protocol_digests": {
+    "observation": {
+      "sha256": "293ed302d7f1ad06ea63cd2b6c2676a0144bd5e93d925c78c8c8bd7119f138e5",
+      "digest_scope": "text/lf-normalized",
+      "bytes": 2332,
+      "source": "touhou_rl/v430/contracts.py::observation_parameters()",
+      "normalization": "canonical-json, sorted keys, separators=(',',':'); LF only, so CRLF->LF is a no-op",
+      "o2_digest": "cb1616e4cbfa928e691c2fb8497a84c813bded528064cf2b0aa1e30fa86b85b5"
+    },
+    "action": {
+      "sha256": "6ab5c8e2dbbcb58227297f14662b02b3a80bae9ba7c3a902a2ec0667fe83d04a",
+      "digest_scope": "text/lf-normalized",
+      "bytes": 653,
+      "source": "touhou_rl/v430/contracts.py::action_parameters()",
+      "normalization": "canonical-json, sorted keys, separators=(',',':'); LF only, so CRLF->LF is a no-op"
+    },
+    "reward": {
+      "sha256": "1fdcd810581cd1ac8863d36a292b66dc8345a2bd1d6c57e920e3411e32c2fc6b",
+      "digest_scope": "text/lf-normalized",
+      "bytes": 144,
+      "source": "PLAN_SPEC.json::ppo.main_reward",
+      "normalization": "canonical-json, sorted keys, separators=(',',':'); LF only, so CRLF->LF is a no-op"
+    },
+    "terminal": {
+      "sha256": "7fe08bd18aed2a4cbb1084736aac1d92f133e17bcc52d0fa93929ecf32c4c387",
+      "digest_scope": "text/lf-normalized",
+      "bytes": 1038,
+      "source": "touhou_rl/v430/contracts.py::contract_constants().transition",
+      "normalization": "canonical-json, sorted keys, separators=(',',':'); LF only, so CRLF->LF is a no-op"
+    },
+    "time": {
+      "sha256": "18fbc704d9c56f643a44f98aa376f4a3abf587908865302c84fc572b730fd180",
+      "digest_scope": "text/lf-normalized",
+      "bytes": 261,
+      "source": "touhou_rl/v430/contracts.py::time_parameters()",
+      "normalization": "canonical-json, sorted keys, separators=(',',':'); LF only, so CRLF->LF is a no-op"
+    },
+    "results": {
+      "sha256": "7dc785d6017511190c170c9c3e8b6f02069c6a0b1133885fb0eff3daa5fa1e79",
+      "digest_scope": "text/lf-normalized",
+      "bytes": 961,
+      "source": "touhou_rl/v430/contracts.py::result_parameters()",
+      "normalization": "canonical-json, sorted keys, separators=(',',':'); LF only, so CRLF->LF is a no-op"
+    },
+    "composite": {
+      "sha256": "64d4300c3de6264176f42f6c01b53d72a5c8b52e316bc73f01c6db100545bb8a",
+      "digest_scope": "text/lf-normalized",
+      "parts": {
+        "observation": "293ed302d7f1ad06ea63cd2b6c2676a0144bd5e93d925c78c8c8bd7119f138e5",
+        "action": "6ab5c8e2dbbcb58227297f14662b02b3a80bae9ba7c3a902a2ec0667fe83d04a",
+        "reward": "1fdcd810581cd1ac8863d36a292b66dc8345a2bd1d6c57e920e3411e32c2fc6b",
+        "terminal": "7fe08bd18aed2a4cbb1084736aac1d92f133e17bcc52d0fa93929ecf32c4c387"
+      },
+      "note": "sha256 over the four protocol digests (observation/action/reward/terminal)"
+    }
+  },
+  "identities": {
+    "contracts_module": {
+      "path": "D:\\WorkShop\\Touhou_RL\\touhou_rl\\v430\\contracts.py",
+      "sha256": "ac78cdf082f3d35e107e3db6b8b239b16d9f99590c862a1c1932eb608f0f960c",
+      "digest_scope": "text/lf-normalized",
+      "bytes": 82557,
+      "line_endings": {
+        "crlf": 0,
+        "lf_only": 1885,
+        "has_crlf": false,
+        "mixed": false
+      },
+      "label": "contracts_module",
+      "path_relative": "touhou_rl/v430/contracts.py"
+    },
+    "actions_module": {
+      "path": "D:\\WorkShop\\Touhou_RL\\touhou_rl\\v430\\actions.py",
+      "sha256": "cebfbc2205f2d1f7582db5182118ec2ea24ac351a8b616aed0ca1a746d7c2ebc",
+      "digest_scope": "text/lf-normalized",
+      "bytes": 28412,
+      "line_endings": {
+        "crlf": 0,
+        "lf_only": 690,
+        "has_crlf": false,
+        "mixed": false
+      },
+      "label": "actions_module",
+      "path_relative": "touhou_rl/v430/actions.py"
+    },
+    "session_module": {
+      "path": "D:\\WorkShop\\Touhou_RL\\touhou_rl\\v430\\session.py",
+      "sha256": "76c43b1e5adda98c0bc3063f75f1424e6cacfc418f9beb2f473ee0fa4189b97f",
+      "digest_scope": "text/lf-normalized",
+      "bytes": 70645,
+      "line_endings": {
+        "crlf": 0,
+        "lf_only": 1599,
+        "has_crlf": false,
+        "mixed": false
+      },
+      "label": "session_module",
+      "path_relative": "touhou_rl/v430/session.py"
+    },
+    "evaluate_module": {
+      "path": "D:\\WorkShop\\Touhou_RL\\touhou_rl\\v430\\evaluate.py",
+      "sha256": "931dc37740100436e7d327dccf464750270a4a00c80d8e00ff07d1a7ebb57842",
+      "digest_scope": "text/lf-normalized",
+      "bytes": 54378,
+      "line_endings": {
+        "crlf": 0,
+        "lf_only": 1256,
+        "has_crlf": false,
+        "mixed": false
+      },
+      "label": "evaluate_module",
+      "path_relative": "touhou_rl/v430/evaluate.py"
+    },
+    "contracts_config": {
+      "path": "D:\\WorkShop\\Touhou_RL\\configs\\v430\\contracts.json",
+      "sha256": "1863c1cf8bc01670cdb9dc5b308e7f4f2a2e2c0898285e9e8bf7a753c17f80dd",
+      "digest_scope": "text/lf-normalized",
+      "bytes": 10199,
+      "line_endings": {
+        "crlf": 0,
+        "lf_only": 406,
+        "has_crlf": false,
+        "mixed": false
+      },
+      "label": "contracts_config",
+      "path_relative": "configs/v430/contracts.json"
+    },
+    "plan_spec": {
+      "path": "D:\\WorkShop\\Touhou_RL\\Document\\Update\\Alpha\\v4.3.0\\PLAN_SPEC.json",
+      "sha256": "dc2b6111142703c239c0d9ed3185823135b71e4cd1c550ce5fbb3f42c0ca47d7",
+      "digest_scope": "text/lf-normalized",
+      "bytes": 23300,
+      "line_endings": {
+        "crlf": 948,
+        "lf_only": 0,
+        "has_crlf": true,
+        "mixed": false
+      },
+      "label": "plan_spec",
+      "path_relative": "Document/Update/Alpha/v4.3.0/PLAN_SPEC.json"
+    },
+    "cli": {
+      "path": "D:\\WorkShop\\Touhou_RL\\tools\\rl\\v430.py",
+      "sha256": "7893a355c45e7266678971149bd157ed11a1d7cf7e589ad2294d8b77e136dd0e",
+      "digest_scope": "text/lf-normalized",
+      "bytes": 120595,
+      "line_endings": {
+        "crlf": 0,
+        "lf_only": 2417,
+        "has_crlf": false,
+        "mixed": false
+      },
+      "label": "cli",
+      "path_relative": "tools/rl/v430.py"
+    }
+  },
+  "identity_count": 7,
+  "remaining_gaps": [
+    "validate-contract checks code/config/plan consistency only; it starts no engine and produces no game evidence.",
+    "G430-E0 is not passed here: W01 still needs real success/failure replays through this contract on the asset host.",
+    "capability_gate stays not_run: a protocol check is not a capability."
+  ],
+  "notes": []
+}

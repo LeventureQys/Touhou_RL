@@ -1,0 +1,1781 @@
+{
+  "schema": "v430-audit/1",
+  "experiment_id": "v430-w00-assets-r2",
+  "run_id": "audit-001",
+  "phase": "W00",
+  "mode": "read_only_audit",
+  "command": "audit",
+  "spec_revision": "v430-plan-r2",
+  "config_frozen_at": "2026-11-15T11:03:31+08:00",
+  "started_at": "2026-11-15T11:04:57+08:00",
+  "finished_at": "2026-11-15T11:04:59+08:00",
+  "duration_seconds": 2.251,
+  "timezone": "+0800",
+  "argv": [
+    "tools/rl/v430.py",
+    "audit",
+    "--config",
+    "configs/v430/assets.json",
+    "--out",
+    "Document/Update/Alpha/v4.3.0/evidence/W00/audit-001.json"
+  ],
+  "cwd": "D:\\WorkShop\\Touhou_RL",
+  "python_executable": "C:\\Users\\a5935\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+  "output_path": "Document\\Update\\Alpha\\v4.3.0\\evidence\\W00\\audit-001.json",
+  "exit_code": 3,
+  "execution_status": "completed_with_unmet_checks",
+  "protocol_validity": "valid",
+  "protocol_validity_detail": {
+    "config_schema": "ok",
+    "config_frozen_at": "ok",
+    "plan_spec_pin": "ok",
+    "sync_manifest_pin": "ok",
+    "observation_action_protocol": "not_asserted_by_W00_audit"
+  },
+  "research_result": {
+    "kind": "asset_audit",
+    "requested_gate": "every registered check is satisfied",
+    "passed": false,
+    "unmet_checks": 1,
+    "note": "an asset audit is not a capability measurement"
+  },
+  "capability_gate": {
+    "status": "not_run",
+    "gates": {
+      "G430-E0": "not_run",
+      "G410-0": "not_reassessed"
+    },
+    "reason": "W00 audits assets and identities only; capability needs W01 replays and later gates."
+  },
+  "identities": {
+    "source_repository": {
+      "repository_root": "D:\\WorkShop\\Touhou_RL",
+      "tool": {
+        "path": "tools/rl/v430.py",
+        "sha256": "0db421f468b70ed4383994eb1dcc9c89c70e6482f85796cf49e878215b59e6af",
+        "size_bytes": 65831
+      },
+      "config": {
+        "path": "configs\\v430\\assets.json",
+        "sha256": "5bae116baf2591ec2a3e573be3060abb9494c619e9556ce0aae4d1ee7f71b383"
+      },
+      "git": {
+        "available": true,
+        "head": "6eb76f26a3cb70478130ed8dd9b4c60fdccbb3ed",
+        "branch": "v400",
+        "tracked_changes": {
+          "D": 3493,
+          "M": 21
+        },
+        "tracked_change_total": 3514,
+        "clean": false,
+        "status_error": null
+      }
+    },
+    "plan_spec": {
+      "path": "Document/Update/Alpha/v4.3.0/PLAN_SPEC.json",
+      "resolved_absolute": "D:\\WorkShop\\Touhou_RL\\Document\\Update\\Alpha\\v4.3.0\\PLAN_SPEC.json",
+      "sha256": "1fc99ef683a9a47ba913cbcc0165e0d01801db04e4080034eca54e9fd6fe1935",
+      "schema": "v430-training-plan/2",
+      "revision": "v430-plan-r2"
+    },
+    "sync_manifest": {
+      "path": "ASSET_SYNC.sha256",
+      "resolved_absolute": "D:\\WorkShop\\Touhou_RL\\ASSET_SYNC.sha256",
+      "sha256": "0d08ae4eac5fc7c8102244ec7a3fe97e27d3c6b1ff3ec731d97372f39ecf1681",
+      "entry_count_expected": 46
+    },
+    "runtime": {
+      "python_executable": "C:\\Users\\a5935\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+      "python_version": "3.12.10",
+      "python_implementation": "CPython",
+      "platform": "Windows-11-10.0.26300-SP0",
+      "cwd": "D:\\WorkShop\\Touhou_RL",
+      "pid": 27216,
+      "torch": {
+        "status": "present_verified",
+        "observed": {
+          "version": "2.14.1+cu132",
+          "file": "C:\\Users\\a5935\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\torch\\__init__.py",
+          "cuda_version": "13.2",
+          "cuda_available": true,
+          "device_count": 1,
+          "device_name": "NVIDIA GeForce RTX 4070 SUPER"
+        }
+      }
+    },
+    "wsl": {
+      "distro": "Ubuntu",
+      "available": true,
+      "transport": "exec",
+      "probe_exit_code": 0,
+      "probe_reason": "ok",
+      "probe_attempts": [
+        {
+          "transport": "exec",
+          "exit_code": 0,
+          "ok": true
+        }
+      ],
+      "commands": 3
+    },
+    "engine_and_data": {
+      "engines": {
+        "engine:rl_v3": {
+          "wsl": {
+            "wsl_distro": "Ubuntu",
+            "wsl_path": "/root/Touhou_RL/third_party/th08-rl/build/rl_v3/th08-modern"
+          },
+          "sha256_expected": "691bfd77b7eca3361aa8bb7af0977556a70cc73a070b29a2447222ba7a568ef6",
+          "sha256_actual": "691bfd77b7eca3361aa8bb7af0977556a70cc73a070b29a2447222ba7a568ef6",
+          "size_bytes": 4836008,
+          "status": "present_verified"
+        },
+        "engine:rl_laser": {
+          "wsl": {
+            "wsl_distro": "Ubuntu",
+            "wsl_path": "/root/Touhou_RL/third_party/th08-rl/build/rl_laser/th08-modern"
+          },
+          "sha256_expected": "1462829ba756bab49aae0878686988687dbaa109ea1750729d1202b555340d2f",
+          "sha256_actual": "1462829ba756bab49aae0878686988687dbaa109ea1750729d1202b555340d2f",
+          "size_bytes": 4828752,
+          "status": "present_verified"
+        }
+      },
+      "game_data": {
+        "wsl": {
+          "wsl_distro": "Ubuntu",
+          "wsl_path": "/root/v400-data/game"
+        },
+        "status": "present_unhashed",
+        "observed": {
+          "entry_count": 13,
+          "entries": [
+            "&1",
+            "backup",
+            "log.txt",
+            "modern-files.txt",
+            "score.dat",
+            "score.dat.dirty-20261109-001521",
+            "score.dat.dirty-20261109-002226",
+            "score.dat.orig",
+            "th08.cfg",
+            "th08.cfg.dirty-20261109-001521",
+            "th08.cfg.orig",
+            "th08.dat",
+            "thbgm.dat"
+          ]
+        }
+      },
+      "wsl_python": {
+        "status": "present_verified",
+        "observed": {
+          "version": "3.10.12",
+          "raw": "Python 3.10.12"
+        }
+      }
+    },
+    "protocol": {
+      "digest": "bf602dd5cf23f74a52faf7f132bd31ee92bddc43314b63c6d79821ea828f9117",
+      "digest_kind": "v430-audit-identity-composite/1",
+      "digest_components": {
+        "audit_schema": "v430-audit/1",
+        "assets_schema": "v430-assets/1",
+        "assets_config_sha256": "5bae116baf2591ec2a3e573be3060abb9494c619e9556ce0aae4d1ee7f71b383",
+        "plan_spec_sha256": "1fc99ef683a9a47ba913cbcc0165e0d01801db04e4080034eca54e9fd6fe1935",
+        "spec_revision": "v430-plan-r2",
+        "tool_sha256": "0db421f468b70ed4383994eb1dcc9c89c70e6482f85796cf49e878215b59e6af",
+        "sync_manifest_sha256": "0d08ae4eac5fc7c8102244ec7a3fe97e27d3c6b1ff3ec731d97372f39ecf1681"
+      },
+      "observation_action_protocol": "not_defined_in_W00",
+      "note": "This digest covers the audit identity (schemas, config, plan spec, manifest, tool). The frozen observation/action protocol is W01's contracts.py and is not asserted here."
+    }
+  },
+  "checks": [
+    {
+      "id": "plan_spec",
+      "category": "config",
+      "kind": "json-file",
+      "require": "pin",
+      "description": "PLAN_SPEC.json must carry the pinned plan schema and revision.",
+      "location": {
+        "path": "Document/Update/Alpha/v4.3.0/PLAN_SPEC.json",
+        "resolved_absolute": "D:\\WorkShop\\Touhou_RL\\Document\\Update\\Alpha\\v4.3.0\\PLAN_SPEC.json"
+      },
+      "status": "present_verified",
+      "requested_check_met": true,
+      "measurement": "sha256 of the repository file + JSON fields",
+      "sha256_expected": null,
+      "sha256_actual": "1fc99ef683a9a47ba913cbcc0165e0d01801db04e4080034eca54e9fd6fe1935",
+      "size_bytes": 23300,
+      "expectations": {
+        "schema": {
+          "expected": "v430-training-plan/2",
+          "actual": "v430-training-plan/2",
+          "ok": true
+        },
+        "revision": {
+          "expected": "v430-plan-r2",
+          "actual": "v430-plan-r2",
+          "ok": true
+        }
+      },
+      "observed": {
+        "schema": "v430-training-plan/2",
+        "revision": "v430-plan-r2"
+      },
+      "reason": null,
+      "live_mutated": false
+    },
+    {
+      "id": "sync_manifest",
+      "category": "config",
+      "kind": "hash-manifest",
+      "require": "pin",
+      "description": "ASSET_SYNC.sha256 must be byte-identical to the pinned authority list.",
+      "location": {
+        "path": "ASSET_SYNC.sha256",
+        "resolved_absolute": "D:\\WorkShop\\Touhou_RL\\ASSET_SYNC.sha256"
+      },
+      "status": "present_verified",
+      "requested_check_met": true,
+      "measurement": "sha256 of the repository file",
+      "sha256_expected": "0d08ae4eac5fc7c8102244ec7a3fe97e27d3c6b1ff3ec731d97372f39ecf1681",
+      "sha256_actual": "0d08ae4eac5fc7c8102244ec7a3fe97e27d3c6b1ff3ec731d97372f39ecf1681",
+      "size_bytes": 5474,
+      "expectations": {},
+      "observed": {},
+      "reason": null,
+      "live_mutated": false
+    },
+    {
+      "id": "sync_manifest:coverage",
+      "category": "config",
+      "kind": "hash-manifest",
+      "require": "pin",
+      "description": "Every ASSET_SYNC.sha256 entry must be verified by exactly one registered asset row.",
+      "location": {
+        "path": "ASSET_SYNC.sha256",
+        "entry_count": 46
+      },
+      "status": "present_verified",
+      "requested_check_met": true,
+      "measurement": "manifest lines joined to registered rows by path and sha256",
+      "sha256_expected": null,
+      "sha256_actual": null,
+      "size_bytes": null,
+      "expectations": {},
+      "observed": {
+        "entries": 46,
+        "covered": 46,
+        "uncovered": []
+      },
+      "reason": null,
+      "live_mutated": false
+    },
+    {
+      "id": "python",
+      "category": "asset",
+      "kind": "python",
+      "require": "presence",
+      "description": "Windows CPython that runs tools/rl/v430.py; the audit must run under this exact build.",
+      "location": {
+        "registered_executable": "C:\\Users\\a5935\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+        "running_executable": "C:\\Users\\a5935\\AppData\\Local\\Programs\\Python\\Python312\\python.exe"
+      },
+      "status": "present_verified",
+      "requested_check_met": true,
+      "measurement": "sys.executable + platform probes",
+      "sha256_expected": null,
+      "sha256_actual": null,
+      "size_bytes": null,
+      "expectations": {
+        "executable": {
+          "expected": "C:\\Users\\a5935\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+          "actual": "C:\\Users\\a5935\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+          "ok": true
+        },
+        "version": {
+          "expected": "3.12.10",
+          "actual": "3.12.10",
+          "ok": true
+        },
+        "implementation": {
+          "expected": "CPython",
+          "actual": "CPython",
+          "ok": true
+        }
+      },
+      "observed": {
+        "executable": "C:\\Users\\a5935\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+        "resolved_path": "C:\\Users\\a5935\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+        "version": "3.12.10",
+        "implementation": "CPython",
+        "platform": "Windows-11-10.0.26300-SP0"
+      },
+      "reason": null,
+      "live_mutated": false
+    },
+    {
+      "id": "torch",
+      "category": "asset",
+      "kind": "torch",
+      "require": "presence",
+      "description": "PyTorch importable by the registered Windows interpreter, with a usable CUDA runtime.",
+      "location": {
+        "python": "C:\\Users\\a5935\\AppData\\Local\\Programs\\Python\\Python312\\python.exe"
+      },
+      "status": "present_verified",
+      "requested_check_met": true,
+      "measurement": "import torch + torch.cuda probes",
+      "sha256_expected": null,
+      "sha256_actual": null,
+      "size_bytes": null,
+      "expectations": {
+        "version": {
+          "expected": "2.14.1+cu132",
+          "actual": "2.14.1+cu132",
+          "ok": true
+        },
+        "cuda_version": {
+          "expected": "13.2",
+          "actual": "13.2",
+          "ok": true
+        },
+        "cuda_available": {
+          "expected": true,
+          "actual": true,
+          "ok": true
+        }
+      },
+      "observed": {
+        "version": "2.14.1+cu132",
+        "file": "C:\\Users\\a5935\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\torch\\__init__.py",
+        "cuda_version": "13.2",
+        "cuda_available": true,
+        "device_count": 1,
+        "device_name": "NVIDIA GeForce RTX 4070 SUPER"
+      },
+      "reason": null,
+      "live_mutated": false
+    },
+    {
+      "id": "engine:rl_v3",
+      "category": "asset",
+      "kind": "wsl_file",
+      "require": "hash",
+      "description": "rl_v3 engine binary used by the RL training/eval legs; Linux-side asset, hash verified via WSL.",
+      "location": {
+        "wsl_distro": "Ubuntu",
+        "wsl_path": "/root/Touhou_RL/third_party/th08-rl/build/rl_v3/th08-modern"
+      },
+      "status": "present_verified",
+      "requested_check_met": true,
+      "measurement": "wsl sha256sum over the Linux-side file",
+      "sha256_expected": "691bfd77b7eca3361aa8bb7af0977556a70cc73a070b29a2447222ba7a568ef6",
+      "sha256_actual": "691bfd77b7eca3361aa8bb7af0977556a70cc73a070b29a2447222ba7a568ef6",
+      "size_bytes": 4836008,
+      "expectations": {
+        "sha256": {
+          "expected": "691bfd77b7eca3361aa8bb7af0977556a70cc73a070b29a2447222ba7a568ef6",
+          "actual": "691bfd77b7eca3361aa8bb7af0977556a70cc73a070b29a2447222ba7a568ef6",
+          "ok": true
+        }
+      },
+      "observed": {},
+      "reason": null,
+      "live_mutated": false
+    },
+    {
+      "id": "engine:rl_laser",
+      "category": "asset",
+      "kind": "wsl_file",
+      "require": "hash",
+      "description": "rl_laser engine binary used by the laser/fence legs; Linux-side asset, hash verified via WSL.",
+      "location": {
+        "wsl_distro": "Ubuntu",
+        "wsl_path": "/root/Touhou_RL/third_party/th08-rl/build/rl_laser/th08-modern"
+      },
+      "status": "present_verified",
+      "requested_check_met": true,
+      "measurement": "wsl sha256sum over the Linux-side file",
+      "sha256_expected": "1462829ba756bab49aae0878686988687dbaa109ea1750729d1202b555340d2f",
+      "sha256_actual": "1462829ba756bab49aae0878686988687dbaa109ea1750729d1202b555340d2f",
+      "size_bytes": 4828752,
+      "expectations": {
+        "sha256": {
+          "expected": "1462829ba756bab49aae0878686988687dbaa109ea1750729d1202b555340d2f",
+          "actual": "1462829ba756bab49aae0878686988687dbaa109ea1750729d1202b555340d2f",
+          "ok": true
+        }
+      },
+      "observed": {},
+      "reason": null,
+      "live_mutated": false
+    },
+    {
+      "id": "game_data",
+      "category": "asset",
+      "kind": "wsl_dir",
+      "require": "presence",
+      "description": "TH08 game data directory on the Linux asset host. score.dat/th08.cfg are live-mutated by the game, so layout is registered but contents are not content-hashed.",
+      "location": {
+        "wsl_distro": "Ubuntu",
+        "wsl_path": "/root/v400-data/game"
+      },
+      "status": "present_unhashed",
+      "requested_check_met": true,
+      "measurement": "wsl directory listing",
+      "sha256_expected": null,
+      "sha256_actual": null,
+      "size_bytes": null,
+      "expectations": {
+        "contains:th08.dat": {
+          "expected": true,
+          "actual": true,
+          "ok": true
+        },
+        "contains:thbgm.dat": {
+          "expected": true,
+          "actual": true,
+          "ok": true
+        },
+        "contains:th08.cfg": {
+          "expected": true,
+          "actual": true,
+          "ok": true
+        },
+        "contains:score.dat": {
+          "expected": true,
+          "actual": true,
+          "ok": true
+        }
+      },
+      "observed": {
+        "entry_count": 13,
+        "entries": [
+          "&1",
+          "backup",
+          "log.txt",
+          "modern-files.txt",
+          "score.dat",
+          "score.dat.dirty-20261109-001521",
+          "score.dat.dirty-20261109-002226",
+          "score.dat.orig",
+          "th08.cfg",
+          "th08.cfg.dirty-20261109-001521",
+          "th08.cfg.orig",
+          "th08.dat",
+          "thbgm.dat"
+        ]
+      },
+      "reason": "directory; layout registered, contents not content-hashed (live game files are mutated)",
+      "live_mutated": false
+    },
+    {
+      "id": "wsl-python",
+      "category": "asset",
+      "kind": "wsl_python",
+      "require": "presence",
+      "description": "Frozen WSL virtualenv interpreter used by engine-side work; distinct from the Windows interpreter.",
+      "location": {
+        "wsl_distro": "Ubuntu",
+        "wsl_path": "/root/v400-venv/bin/python"
+      },
+      "status": "present_verified",
+      "requested_check_met": true,
+      "measurement": "wsl <interpreter> --version",
+      "sha256_expected": null,
+      "sha256_actual": null,
+      "size_bytes": null,
+      "expectations": {
+        "version": {
+          "expected": "3.10.12",
+          "actual": "3.10.12",
+          "ok": true
+        }
+      },
+      "observed": {
+        "version": "3.10.12",
+        "raw": "Python 3.10.12"
+      },
+      "reason": null,
+      "live_mutated": false
+    },
+    {
+      "id": "sync:Document/Update/Alpha/v4.1.0/README.md",
+      "category": "asset",
+      "kind": "file",
+      "require": "hash",
+      "description": "ASSET_SYNC.sha256 entry 1; repository-relative path, never copied.",
+      "location": {
+        "windows_path": "Document/Update/Alpha/v4.1.0/README.md",
+        "path_base": "repo",
+        "resolved_absolute": "D:\\WorkShop\\Touhou_RL\\Document\\Update\\Alpha\\v4.1.0\\README.md"
+      },
+      "status": "present_verified",
+      "requested_check_met": true,
+      "measurement": "hashlib.sha256 over the Windows file",
+      "sha256_expected": "8fc51064e5e54e7cdf6e0b924dcaefd0b3020d148ceeaf5bc0deb9294ae4876c",
+      "sha256_actual": "8fc51064e5e54e7cdf6e0b924dcaefd0b3020d148ceeaf5bc0deb9294ae4876c",
+      "size_bytes": 84790,
+      "expectations": {
+        "sha256": {
+          "expected": "8fc51064e5e54e7cdf6e0b924dcaefd0b3020d148ceeaf5bc0deb9294ae4876c",
+          "actual": "8fc51064e5e54e7cdf6e0b924dcaefd0b3020d148ceeaf5bc0deb9294ae4876c",
+          "ok": true
+        }
+      },
+      "observed": {},
+      "reason": null,
+      "live_mutated": false
+    },
+    {
+      "id": "sync:Document/Update/Alpha/v4.1.0/state.json",
+      "category": "asset",
+      "kind": "file",
+      "require": "hash",
+      "description": "ASSET_SYNC.sha256 entry 2; repository-relative path, never copied.",
+      "location": {
+        "windows_path": "Document/Update/Alpha/v4.1.0/state.json",
+        "path_base": "repo",
+        "resolved_absolute": "D:\\WorkShop\\Touhou_RL\\Document\\Update\\Alpha\\v4.1.0\\state.json"
+      },
+      "status": "present_verified",
+      "requested_check_met": true,
+      "measurement": "hashlib.sha256 over the Windows file",
+      "sha256_expected": "13e0e31476f2f44bd0c5eb54c93574583e7b59e305edbb2da2eeff5d0e19962c",
+      "sha256_actual": "13e0e31476f2f44bd0c5eb54c93574583e7b59e305edbb2da2eeff5d0e19962c",
+      "size_bytes": 2465,
+      "expectations": {
+        "sha256": {
+          "expected": "13e0e31476f2f44bd0c5eb54c93574583e7b59e305edbb2da2eeff5d0e19962c",
+          "actual": "13e0e31476f2f44bd0c5eb54c93574583e7b59e305edbb2da2eeff5d0e19962c",
+          "ok": true
+        }
+      },
+      "observed": {},
+      "reason": null,
+      "live_mutated": true
+    },
+    {
+      "id": "sync:Document/Update/Alpha/v4.1.0/journal.jsonl",
+      "category": "asset",
+      "kind": "file",
+      "require": "hash",
+      "description": "ASSET_SYNC.sha256 entry 3; repository-relative path, never copied.",
+      "location": {
+        "windows_path": "Document/Update/Alpha/v4.1.0/journal.jsonl",
+        "path_base": "repo",
+        "resolved_absolute": "D:\\WorkShop\\Touhou_RL\\Document\\Update\\Alpha\\v4.1.0\\journal.jsonl"
+      },
+      "status": "present_verified",
+      "requested_check_met": true,
+      "measurement": "hashlib.sha256 over the Windows file",
+      "sha256_expected": "5ad6f2fdb9e8d6dc5a2e6422136422a41096e01d110814be7a74861a829d8f1d",
+      "sha256_actual": "5ad6f2fdb9e8d6dc5a2e6422136422a41096e01d110814be7a74861a829d8f1d",
+      "size_bytes": 67008,
+      "expectations": {
+        "sha256": {
+          "expected": "5ad6f2fdb9e8d6dc5a2e6422136422a41096e01d110814be7a74861a829d8f1d",
+          "actual": "5ad6f2fdb9e8d6dc5a2e6422136422a41096e01d110814be7a74861a829d8f1d",
+          "ok": true
+        }
+      },
+      "observed": {},
+      "reason": null,
+      "live_mutated": true
+    },
+    {
+      "id": "sync:Document/Update/Alpha/v4.1.0/budget.jsonl",
+      "category": "asset",
+      "kind": "file",
+      "require": "hash",
+      "description": "ASSET_SYNC.sha256 entry 4; repository-relative path, never copied.",
+      "location": {
+        "windows_path": "Document/Update/Alpha/v4.1.0/budget.jsonl",
+        "path_base": "repo",
+        "resolved_absolute": "D:\\WorkShop\\Touhou_RL\\Document\\Update\\Alpha\\v4.1.0\\budget.jsonl"
+      },
+      "status": "present_verified",
+      "requested_check_met": true,
+      "measurement": "hashlib.sha256 over the Windows file",
+      "sha256_expected": "2a766e230b6650328a4353d6512969f4fa8014ef6c17de6b96a5633ba54c11eb",
+      "sha256_actual": "2a766e230b6650328a4353d6512969f4fa8014ef6c17de6b96a5633ba54c11eb",
+      "size_bytes": 6630,
+      "expectations": {
+        "sha256": {
+          "expected": "2a766e230b6650328a4353d6512969f4fa8014ef6c17de6b96a5633ba54c11eb",
+          "actual": "2a766e230b6650328a4353d6512969f4fa8014ef6c17de6b96a5633ba54c11eb",
+          "ok": true
+        }
+      },
+      "observed": {},
+      "reason": null,
+      "live_mutated": true
+    },
+    {
+      "id": "sync:Document/Update/Alpha/v4.1.0/evidence/WP01/g0.1-108.json",
+      "category": "asset",
+      "kind": "file",
+      "require": "hash",
+      "description": "ASSET_SYNC.sha256 entry 5; repository-relative path, never copied.",
+      "location": {
+        "windows_path": "Document/Update/Alpha/v4.1.0/evidence/WP01/g0.1-108.json",
+        "path_base": "repo",
+        "resolved_absolute": "D:\\WorkShop\\Touhou_RL\\Document\\Update\\Alpha\\v4.1.0\\evidence\\WP01\\g0.1-108.json"
+      },
+      "status": "present_verified",
+      "requested_check_met": true,
+      "measurement": "hashlib.sha256 over the Windows file",
+      "sha256_expected": "33274e174eda6cc4865b64ff359fd9587cc94f15bceca1a89caa4b1a6cc1c31f",
+      "sha256_actual": "33274e174eda6cc4865b64ff359fd9587cc94f15bceca1a89caa4b1a6cc1c31f",
+      "size_bytes": 74360,
+      "expectations": {
+        "sha256": {
+          "expected": "33274e174eda6cc4865b64ff359fd9587cc94f15bceca1a89caa4b1a6cc1c31f",
+          "actual": "33274e174eda6cc4865b64ff359fd9587cc94f15bceca1a89caa4b1a6cc1c31f",
+          "ok": true
+        }
+      },
+      "observed": {},
+      "reason": null,
+      "live_mutated": false
+    },
+    {
+      "id": "sync:Document/Update/Alpha/v4.1.0/evidence/WP02/G4101_100_TEACHER.md",
+      "category": "asset",
+      "kind": "file",
+      "require": "hash",
+      "description": "ASSET_SYNC.sha256 entry 6; repository-relative path, never copied.",
+      "location": {
+        "windows_path": "Document/Update/Alpha/v4.1.0/evidence/WP02/G4101_100_TEACHER.md",
+        "path_base": "repo",
+        "resolved_absolute": "D:\\WorkShop\\Touhou_RL\\Document\\Update\\Alpha\\v4.1.0\\evidence\\WP02\\G4101_100_TEACHER.md"
+      },
+      "status": "present_verified",
+      "requested_check_met": true,
+      "measurement": "hashlib.sha256 over the Windows file",
+      "sha256_expected": "aa3f5abcbd0f75a01b1b7e4413bb1b1933e84f097b64eec258dbd0e6d5956c49",
+      "sha256_actual": "aa3f5abcbd0f75a01b1b7e4413bb1b1933e84f097b64eec258dbd0e6d5956c49",
+      "size_bytes": 2279,
+      "expectations": {
+        "sha256": {
+          "expected": "aa3f5abcbd0f75a01b1b7e4413bb1b1933e84f097b64eec258dbd0e6d5956c49",
+          "actual": "aa3f5abcbd0f75a01b1b7e4413bb1b1933e84f097b64eec258dbd0e6d5956c49",
+          "ok": true
+        }
+      },
+      "observed": {},
+      "reason": null,
+      "live_mutated": false
+    },
+    {
+      "id": "sync:Document/Update/Alpha/v4.1.0/evidence/WP05/round1.json",
+      "category": "asset",
+      "kind": "file",
+      "require": "hash",
+      "description": "ASSET_SYNC.sha256 entry 7; repository-relative path, never copied.",
+      "location": {
+        "windows_path": "Document/Update/Alpha/v4.1.0/evidence/WP05/round1.json",
+        "path_base": "repo",
+        "resolved_absolute": "D:\\WorkShop\\Touhou_RL\\Document\\Update\\Alpha\\v4.1.0\\evidence\\WP05\\round1.json"
+      },
+      "status": "present_verified",
+      "requested_check_met": true,
+      "measurement": "hashlib.sha256 over the Windows file",
+      "sha256_expected": "8cc68b54778c1cedad30acaf8216b15eedf1c49846b325248047572c3b2a4f09",
+      "sha256_actual": "8cc68b54778c1cedad30acaf8216b15eedf1c49846b325248047572c3b2a4f09",
+      "size_bytes": 70416,
+      "expectations": {
+        "sha256": {
+          "expected": "8cc68b54778c1cedad30acaf8216b15eedf1c49846b325248047572c3b2a4f09",
+          "actual": "8cc68b54778c1cedad30acaf8216b15eedf1c49846b325248047572c3b2a4f09",
+          "ok": true
+        }
+      },
+      "observed": {},
+      "reason": null,
+      "live_mutated": false
+    },
+    {
+      "id": "sync:Document/Update/Alpha/v4.1.0/evidence/WP05/round2.json",
+      "category": "asset",
+      "kind": "file",
+      "require": "hash",
+      "description": "ASSET_SYNC.sha256 entry 8; repository-relative path, never copied.",
+      "location": {
+        "windows_path": "Document/Update/Alpha/v4.1.0/evidence/WP05/round2.json",
+        "path_base": "repo",
+        "resolved_absolute": "D:\\WorkShop\\Touhou_RL\\Document\\Update\\Alpha\\v4.1.0\\evidence\\WP05\\round2.json"
+      },
+      "status": "present_verified",
+      "requested_check_met": true,
+      "measurement": "hashlib.sha256 over the Windows file",
+      "sha256_expected": "81bf1a5a34befa5a6d74ca022e1b69af26c444b9d6b9b03e074d8f091d42fb6f",
+      "sha256_actual": "81bf1a5a34befa5a6d74ca022e1b69af26c444b9d6b9b03e074d8f091d42fb6f",
+      "size_bytes": 72152,
+      "expectations": {
+        "sha256": {
+          "expected": "81bf1a5a34befa5a6d74ca022e1b69af26c444b9d6b9b03e074d8f091d42fb6f",
+          "actual": "81bf1a5a34befa5a6d74ca022e1b69af26c444b9d6b9b03e074d8f091d42fb6f",
+          "ok": true
+        }
+      },
+      "observed": {},
+      "reason": null,
+      "live_mutated": false
+    },
+    {
+      "id": "sync:Document/Update/Alpha/v4.1.0/evidence/WP05/train_beta05_20k.json",
+      "category": "asset",
+      "kind": "file",
+      "require": "hash",
+      "description": "ASSET_SYNC.sha256 entry 9; repository-relative path, never copied.",
+      "location": {
+        "windows_path": "Document/Update/Alpha/v4.1.0/evidence/WP05/train_beta05_20k.json",
+        "path_base": "repo",
+        "resolved_absolute": "D:\\WorkShop\\Touhou_RL\\Document\\Update\\Alpha\\v4.1.0\\evidence\\WP05\\train_beta05_20k.json"
+      },
+      "status": "present_verified",
+      "requested_check_met": true,
+      "measurement": "hashlib.sha256 over the Windows file",
+      "sha256_expected": "f5d9590534cc28aaf942137b90bd91ec08c13108acd6190a8093c36a5319c8bf",
+      "sha256_actual": "f5d9590534cc28aaf942137b90bd91ec08c13108acd6190a8093c36a5319c8bf",
+      "size_bytes": 91445,
+      "expectations": {
+        "sha256": {
+          "expected": "f5d9590534cc28aaf942137b90bd91ec08c13108acd6190a8093c36a5319c8bf",
+          "actual": "f5d9590534cc28aaf942137b90bd91ec08c13108acd6190a8093c36a5319c8bf",
+          "ok": true
+        }
+      },
+      "observed": {},
+      "reason": null,
+      "live_mutated": false
+    },
+    {
+      "id": "sync:Document/Update/Alpha/v4.1.0/evidence/WP05/train_tiebreak.json",
+      "category": "asset",
+      "kind": "file",
+      "require": "hash",
+      "description": "ASSET_SYNC.sha256 entry 10; repository-relative path, never copied.",
+      "location": {
+        "windows_path": "Document/Update/Alpha/v4.1.0/evidence/WP05/train_tiebreak.json",
+        "path_base": "repo",
+        "resolved_absolute": "D:\\WorkShop\\Touhou_RL\\Document\\Update\\Alpha\\v4.1.0\\evidence\\WP05\\train_tiebreak.json"
+      },
+      "status": "present_verified",
+      "requested_check_met": true,
+      "measurement": "hashlib.sha256 over the Windows file",
+      "sha256_expected": "d2698c359e89cad7c4a35575fd41b4e462244a844e4e321ec36f272d6ca5f62e",
+      "sha256_actual": "d2698c359e89cad7c4a35575fd41b4e462244a844e4e321ec36f272d6ca5f62e",
+      "size_bytes": 85818,
+      "expectations": {
+        "sha256": {
+          "expected": "d2698c359e89cad7c4a35575fd41b4e462244a844e4e321ec36f272d6ca5f62e",
+          "actual": "d2698c359e89cad7c4a35575fd41b4e462244a844e4e321ec36f272d6ca5f62e",
+          "ok": true
+        }
+      },
+      "observed": {},
+      "reason": null,
+      "live_mutated": false
+    },
+    {
+      "id": "sync:.tmp_v410_wp04_arms/b0_seed0_last.pt",
+      "category": "asset",
+      "kind": "file",
+      "require": "hash",
+      "description": "ASSET_SYNC.sha256 entry 11; repository-relative path, never copied.",
+      "location": {
+        "windows_path": ".tmp_v410_wp04_arms/b0_seed0_last.pt",
+        "path_base": "repo",
+        "resolved_absolute": "D:\\WorkShop\\Touhou_RL\\.tmp_v410_wp04_arms\\b0_seed0_last.pt"
+      },
+      "status": "present_verified",
+      "requested_check_met": true,
+      "measurement": "hashlib.sha256 over the Windows file",
+      "sha256_expected": "3bc0ec4461701bebb2ffc551d61dffff77f15cd486125baf9db6eaafc741b3a6",
+      "sha256_actual": "3bc0ec4461701bebb2ffc551d61dffff77f15cd486125baf9db6eaafc741b3a6",
+      "size_bytes": 2946867,
+      "expectations": {
+        "sha256": {
+          "expected": "3bc0ec4461701bebb2ffc551d61dffff77f15cd486125baf9db6eaafc741b3a6",
+          "actual": "3bc0ec4461701bebb2ffc551d61dffff77f15cd486125baf9db6eaafc741b3a6",
+          "ok": true
+        }
+      },
+      "observed": {},
+      "reason": null,
+      "live_mutated": false
+    },
+    {
+      "id": "sync:.tmp_v410_wp05_train50k/b0_s0_dagger_step1000.pt",
+      "category": "asset",
+      "kind": "file",
+      "require": "hash",
+      "description": "ASSET_SYNC.sha256 entry 12; repository-relative path, never copied.",
+      "location": {
+        "windows_path": ".tmp_v410_wp05_train50k/b0_s0_dagger_step1000.pt",
+        "path_base": "repo",
+        "resolved_absolute": "D:\\WorkShop\\Touhou_RL\\.tmp_v410_wp05_train50k\\b0_s0_dagger_step1000.pt"
+      },
+      "status": "present_verified",
+      "requested_check_met": true,
+      "measurement": "hashlib.sha256 over the Windows file",
+      "sha256_expected": "6ebe4ea91d81d9333bfa1ccc065fc3515bb25b1d3b90a2684cdaa8a0a69b8086",
+      "sha256_actual": "6ebe4ea91d81d9333bfa1ccc065fc3515bb25b1d3b90a2684cdaa8a0a69b8086",
+      "size_bytes": 2941187,
+      "expectations": {
+        "sha256": {
+          "expected": "6ebe4ea91d81d9333bfa1ccc065fc3515bb25b1d3b90a2684cdaa8a0a69b8086",
+          "actual": "6ebe4ea91d81d9333bfa1ccc065fc3515bb25b1d3b90a2684cdaa8a0a69b8086",
+          "ok": true
+        }
+      },
+      "observed": {},
+      "reason": null,
+      "live_mutated": false
+    },
+    {
+      "id": "sync:.tmp_v410_wp05_train_beta05_5k/b0_s0_dagger_step5000.pt",
+      "category": "asset",
+      "kind": "file",
+      "require": "hash",
+      "description": "ASSET_SYNC.sha256 entry 13; repository-relative path, never copied.",
+      "location": {
+        "windows_path": ".tmp_v410_wp05_train_beta05_5k/b0_s0_dagger_step5000.pt",
+        "path_base": "repo",
+        "resolved_absolute": "D:\\WorkShop\\Touhou_RL\\.tmp_v410_wp05_train_beta05_5k\\b0_s0_dagger_step5000.pt"
+      },
+      "status": "present_verified",
+      "requested_check_met": true,
+      "measurement": "hashlib.sha256 over the Windows file",
+      "sha256_expected": "692fdc61dc473ff10657d2a0b1a37434d3b24561fedb9798a41a38086bdbd120",
+      "sha256_actual": "692fdc61dc473ff10657d2a0b1a37434d3b24561fedb9798a41a38086bdbd120",
+      "size_bytes": 2941187,
+      "expectations": {
+        "sha256": {
+          "expected": "692fdc61dc473ff10657d2a0b1a37434d3b24561fedb9798a41a38086bdbd120",
+          "actual": "692fdc61dc473ff10657d2a0b1a37434d3b24561fedb9798a41a38086bdbd120",
+          "ok": true
+        }
+      },
+      "observed": {},
+      "reason": null,
+      "live_mutated": false
+    },
+    {
+      "id": "sync:.tmp_v410_wp05_train_beta05_20k/b0_s0_dagger_step20000.pt",
+      "category": "asset",
+      "kind": "file",
+      "require": "hash",
+      "description": "ASSET_SYNC.sha256 entry 14; repository-relative path, never copied.",
+      "location": {
+        "windows_path": ".tmp_v410_wp05_train_beta05_20k/b0_s0_dagger_step20000.pt",
+        "path_base": "repo",
+        "resolved_absolute": "D:\\WorkShop\\Touhou_RL\\.tmp_v410_wp05_train_beta05_20k\\b0_s0_dagger_step20000.pt"
+      },
+      "status": "present_verified",
+      "requested_check_met": true,
+      "measurement": "hashlib.sha256 over the Windows file",
+      "sha256_expected": "15ae1fd5b9a6e0cbbddfd668bb342444bdb44db123b5f7e56abf3c5e7215bd95",
+      "sha256_actual": "15ae1fd5b9a6e0cbbddfd668bb342444bdb44db123b5f7e56abf3c5e7215bd95",
+      "size_bytes": 2941293,
+      "expectations": {
+        "sha256": {
+          "expected": "15ae1fd5b9a6e0cbbddfd668bb342444bdb44db123b5f7e56abf3c5e7215bd95",
+          "actual": "15ae1fd5b9a6e0cbbddfd668bb342444bdb44db123b5f7e56abf3c5e7215bd95",
+          "ok": true
+        }
+      },
+      "observed": {},
+      "reason": null,
+      "live_mutated": false
+    },
+    {
+      "id": "sync:.tmp_v410_wp05_classweight/b0_s0_dagger_step5000.pt",
+      "category": "asset",
+      "kind": "file",
+      "require": "hash",
+      "description": "ASSET_SYNC.sha256 entry 15; repository-relative path, never copied.",
+      "location": {
+        "windows_path": ".tmp_v410_wp05_classweight/b0_s0_dagger_step5000.pt",
+        "path_base": "repo",
+        "resolved_absolute": "D:\\WorkShop\\Touhou_RL\\.tmp_v410_wp05_classweight\\b0_s0_dagger_step5000.pt"
+      },
+      "status": "present_verified",
+      "requested_check_met": true,
+      "measurement": "hashlib.sha256 over the Windows file",
+      "sha256_expected": "f447664c660933af9c2840dd2c8e43051e9757c2f520fa9706178c92b53a4919",
+      "sha256_actual": "f447664c660933af9c2840dd2c8e43051e9757c2f520fa9706178c92b53a4919",
+      "size_bytes": 2941699,
+      "expectations": {
+        "sha256": {
+          "expected": "f447664c660933af9c2840dd2c8e43051e9757c2f520fa9706178c92b53a4919",
+          "actual": "f447664c660933af9c2840dd2c8e43051e9757c2f520fa9706178c92b53a4919",
+          "ok": true
+        }
+      },
+      "observed": {},
+      "reason": null,
+      "live_mutated": false
+    },
+    {
+      "id": "sync:.tmp_v410_wp05_tiebreak/b0_s0_dagger_step5000.pt",
+      "category": "asset",
+      "kind": "file",
+      "require": "hash",
+      "description": "ASSET_SYNC.sha256 entry 16; repository-relative path, never copied.",
+      "location": {
+        "windows_path": ".tmp_v410_wp05_tiebreak/b0_s0_dagger_step5000.pt",
+        "path_base": "repo",
+        "resolved_absolute": "D:\\WorkShop\\Touhou_RL\\.tmp_v410_wp05_tiebreak\\b0_s0_dagger_step5000.pt"
+      },
+      "status": "present_verified",
+      "requested_check_met": true,
+      "measurement": "hashlib.sha256 over the Windows file",
+      "sha256_expected": "adc4fa9b8b5f2b57e059a99f81e0082156737593db92f962adabc1f07857e4d0",
+      "sha256_actual": "adc4fa9b8b5f2b57e059a99f81e0082156737593db92f962adabc1f07857e4d0",
+      "size_bytes": 2941827,
+      "expectations": {
+        "sha256": {
+          "expected": "adc4fa9b8b5f2b57e059a99f81e0082156737593db92f962adabc1f07857e4d0",
+          "actual": "adc4fa9b8b5f2b57e059a99f81e0082156737593db92f962adabc1f07857e4d0",
+          "ok": true
+        }
+      },
+      "observed": {},
+      "reason": null,
+      "live_mutated": false
+    },
+    {
+      "id": "sync:Document/Update/Alpha/v4.1.0/evidence/WP05/round3.json",
+      "category": "asset",
+      "kind": "file",
+      "require": "hash",
+      "description": "ASSET_SYNC.sha256 entry 17; repository-relative path, never copied.",
+      "location": {
+        "windows_path": "Document/Update/Alpha/v4.1.0/evidence/WP05/round3.json",
+        "path_base": "repo",
+        "resolved_absolute": "D:\\WorkShop\\Touhou_RL\\Document\\Update\\Alpha\\v4.1.0\\evidence\\WP05\\round3.json"
+      },
+      "status": "present_verified",
+      "requested_check_met": true,
+      "measurement": "hashlib.sha256 over the Windows file",
+      "sha256_expected": "f1c6b8dbef230699a23e9db63132d1ac52431be3c16ea72fad8f3c9e91cf303c",
+      "sha256_actual": "f1c6b8dbef230699a23e9db63132d1ac52431be3c16ea72fad8f3c9e91cf303c",
+      "size_bytes": 93330,
+      "expectations": {
+        "sha256": {
+          "expected": "f1c6b8dbef230699a23e9db63132d1ac52431be3c16ea72fad8f3c9e91cf303c",
+          "actual": "f1c6b8dbef230699a23e9db63132d1ac52431be3c16ea72fad8f3c9e91cf303c",
+          "ok": true
+        }
+      },
+      "observed": {},
+      "reason": null,
+      "live_mutated": false
+    },
+    {
+      "id": "sync:Document/Update/Alpha/v4.1.0/evidence/WP05/ROUND3.md",
+      "category": "asset",
+      "kind": "file",
+      "require": "hash",
+      "description": "ASSET_SYNC.sha256 entry 18; repository-relative path, never copied.",
+      "location": {
+        "windows_path": "Document/Update/Alpha/v4.1.0/evidence/WP05/ROUND3.md",
+        "path_base": "repo",
+        "resolved_absolute": "D:\\WorkShop\\Touhou_RL\\Document\\Update\\Alpha\\v4.1.0\\evidence\\WP05\\ROUND3.md"
+      },
+      "status": "present_verified",
+      "requested_check_met": true,
+      "measurement": "hashlib.sha256 over the Windows file",
+      "sha256_expected": "75bc330b3bdbe8f2fdd97f48c18b2ee2c16ff7b888c60cd86cf4aed0eba9d21a",
+      "sha256_actual": "75bc330b3bdbe8f2fdd97f48c18b2ee2c16ff7b888c60cd86cf4aed0eba9d21a",
+      "size_bytes": 24701,
+      "expectations": {
+        "sha256": {
+          "expected": "75bc330b3bdbe8f2fdd97f48c18b2ee2c16ff7b888c60cd86cf4aed0eba9d21a",
+          "actual": "75bc330b3bdbe8f2fdd97f48c18b2ee2c16ff7b888c60cd86cf4aed0eba9d21a",
+          "ok": true
+        }
+      },
+      "observed": {},
+      "reason": null,
+      "live_mutated": false
+    },
+    {
+      "id": "sync:.tmp_v420_data/T04/checkpoints/a0_seed0_step5000.pt",
+      "category": "asset",
+      "kind": "file",
+      "require": "hash",
+      "description": "ASSET_SYNC.sha256 entry 21; repository-relative path, never copied.",
+      "location": {
+        "windows_path": ".tmp_v420_data/T04/checkpoints/a0_seed0_step5000.pt",
+        "path_base": "repo",
+        "resolved_absolute": "D:\\WorkShop\\Touhou_RL\\.tmp_v420_data\\T04\\checkpoints\\a0_seed0_step5000.pt"
+      },
+      "status": "present_verified",
+      "requested_check_met": true,
+      "measurement": "hashlib.sha256 over the Windows file",
+      "sha256_expected": "96cb219eac83391f42b18ea656b5a6c5ac81e97cd1fd8c1e2c0d404aee6b89ad",
+      "sha256_actual": "96cb219eac83391f42b18ea656b5a6c5ac81e97cd1fd8c1e2c0d404aee6b89ad",
+      "size_bytes": 2940699,
+      "expectations": {
+        "sha256": {
+          "expected": "96cb219eac83391f42b18ea656b5a6c5ac81e97cd1fd8c1e2c0d404aee6b89ad",
+          "actual": "96cb219eac83391f42b18ea656b5a6c5ac81e97cd1fd8c1e2c0d404aee6b89ad",
+          "ok": true
+        }
+      },
+      "observed": {},
+      "reason": null,
+      "live_mutated": false
+    },
+    {
+      "id": "sync:.tmp_v420_data/T05/checkpoints_d2/d2_seed0_step5000.pt",
+      "category": "asset",
+      "kind": "file",
+      "require": "hash",
+      "description": "ASSET_SYNC.sha256 entry 22; repository-relative path, never copied.",
+      "location": {
+        "windows_path": ".tmp_v420_data/T05/checkpoints_d2/d2_seed0_step5000.pt",
+        "path_base": "repo",
+        "resolved_absolute": "D:\\WorkShop\\Touhou_RL\\.tmp_v420_data\\T05\\checkpoints_d2\\d2_seed0_step5000.pt"
+      },
+      "status": "present_verified",
+      "requested_check_met": true,
+      "measurement": "hashlib.sha256 over the Windows file",
+      "sha256_expected": "9f284e48c2304a519308b947f3d9e6705a49d9404dbc3ee5b596c2a4ea3751b6",
+      "sha256_actual": "9f284e48c2304a519308b947f3d9e6705a49d9404dbc3ee5b596c2a4ea3751b6",
+      "size_bytes": 2940699,
+      "expectations": {
+        "sha256": {
+          "expected": "9f284e48c2304a519308b947f3d9e6705a49d9404dbc3ee5b596c2a4ea3751b6",
+          "actual": "9f284e48c2304a519308b947f3d9e6705a49d9404dbc3ee5b596c2a4ea3751b6",
+          "ok": true
+        }
+      },
+      "observed": {},
+      "reason": null,
+      "live_mutated": false
+    },
+    {
+      "id": "sync:.tmp_v420_data/T05/checkpoints_d3/d3_seed0_step5000.pt",
+      "category": "asset",
+      "kind": "file",
+      "require": "hash",
+      "description": "ASSET_SYNC.sha256 entry 23; repository-relative path, never copied.",
+      "location": {
+        "windows_path": ".tmp_v420_data/T05/checkpoints_d3/d3_seed0_step5000.pt",
+        "path_base": "repo",
+        "resolved_absolute": "D:\\WorkShop\\Touhou_RL\\.tmp_v420_data\\T05\\checkpoints_d3\\d3_seed0_step5000.pt"
+      },
+      "status": "present_verified",
+      "requested_check_met": true,
+      "measurement": "hashlib.sha256 over the Windows file",
+      "sha256_expected": "91d11d22187bc25b15bc6eb36932aaf30f30c548ffa7ce076e7a57fbdd68a603",
+      "sha256_actual": "91d11d22187bc25b15bc6eb36932aaf30f30c548ffa7ce076e7a57fbdd68a603",
+      "size_bytes": 2940699,
+      "expectations": {
+        "sha256": {
+          "expected": "91d11d22187bc25b15bc6eb36932aaf30f30c548ffa7ce076e7a57fbdd68a603",
+          "actual": "91d11d22187bc25b15bc6eb36932aaf30f30c548ffa7ce076e7a57fbdd68a603",
+          "ok": true
+        }
+      },
+      "observed": {},
+      "reason": null,
+      "live_mutated": false
+    },
+    {
+      "id": "sync:.tmp_v420_data/T06/checkpoints/r3_seed0_50000f.pt",
+      "category": "asset",
+      "kind": "file",
+      "require": "hash",
+      "description": "ASSET_SYNC.sha256 entry 24; repository-relative path, never copied.",
+      "location": {
+        "windows_path": ".tmp_v420_data/T06/checkpoints/r3_seed0_50000f.pt",
+        "path_base": "repo",
+        "resolved_absolute": "D:\\WorkShop\\Touhou_RL\\.tmp_v420_data\\T06\\checkpoints\\r3_seed0_50000f.pt"
+      },
+      "status": "present_verified",
+      "requested_check_met": true,
+      "measurement": "hashlib.sha256 over the Windows file",
+      "sha256_expected": "83f1ac4436c7c0bcb3e03296b24dad915eecffa4a57f3e301f68927e4a4b4685",
+      "sha256_actual": "83f1ac4436c7c0bcb3e03296b24dad915eecffa4a57f3e301f68927e4a4b4685",
+      "size_bytes": 2948551,
+      "expectations": {
+        "sha256": {
+          "expected": "83f1ac4436c7c0bcb3e03296b24dad915eecffa4a57f3e301f68927e4a4b4685",
+          "actual": "83f1ac4436c7c0bcb3e03296b24dad915eecffa4a57f3e301f68927e4a4b4685",
+          "ok": true
+        }
+      },
+      "observed": {},
+      "reason": null,
+      "live_mutated": false
+    },
+    {
+      "id": "sync:.tmp_v420_data/T06/checkpoints/r3b200_seed0_200000f.pt",
+      "category": "asset",
+      "kind": "file",
+      "require": "hash",
+      "description": "ASSET_SYNC.sha256 entry 25; repository-relative path, never copied.",
+      "location": {
+        "windows_path": ".tmp_v420_data/T06/checkpoints/r3b200_seed0_200000f.pt",
+        "path_base": "repo",
+        "resolved_absolute": "D:\\WorkShop\\Touhou_RL\\.tmp_v420_data\\T06\\checkpoints\\r3b200_seed0_200000f.pt"
+      },
+      "status": "present_verified",
+      "requested_check_met": true,
+      "measurement": "hashlib.sha256 over the Windows file",
+      "sha256_expected": "35e92dfe90053a2dcee47bcf0f2d956efb5cd5d04a3ffa046ba2722b3dd09b01",
+      "sha256_actual": "35e92dfe90053a2dcee47bcf0f2d956efb5cd5d04a3ffa046ba2722b3dd09b01",
+      "size_bytes": 2948761,
+      "expectations": {
+        "sha256": {
+          "expected": "35e92dfe90053a2dcee47bcf0f2d956efb5cd5d04a3ffa046ba2722b3dd09b01",
+          "actual": "35e92dfe90053a2dcee47bcf0f2d956efb5cd5d04a3ffa046ba2722b3dd09b01",
+          "ok": true
+        }
+      },
+      "observed": {},
+      "reason": null,
+      "live_mutated": false
+    },
+    {
+      "id": "sync:.tmp_v420_data/T06/checkpoints/advoff_seed0_50000f.pt",
+      "category": "asset",
+      "kind": "file",
+      "require": "hash",
+      "description": "ASSET_SYNC.sha256 entry 26; repository-relative path, never copied.",
+      "location": {
+        "windows_path": ".tmp_v420_data/T06/checkpoints/advoff_seed0_50000f.pt",
+        "path_base": "repo",
+        "resolved_absolute": "D:\\WorkShop\\Touhou_RL\\.tmp_v420_data\\T06\\checkpoints\\advoff_seed0_50000f.pt"
+      },
+      "status": "present_verified",
+      "requested_check_met": true,
+      "measurement": "hashlib.sha256 over the Windows file",
+      "sha256_expected": "f84e8b2e95a518d37f38d1552eca8065149c0b9b63ec63404a9ad86cf3cd4e73",
+      "sha256_actual": "f84e8b2e95a518d37f38d1552eca8065149c0b9b63ec63404a9ad86cf3cd4e73",
+      "size_bytes": 2948719,
+      "expectations": {
+        "sha256": {
+          "expected": "f84e8b2e95a518d37f38d1552eca8065149c0b9b63ec63404a9ad86cf3cd4e73",
+          "actual": "f84e8b2e95a518d37f38d1552eca8065149c0b9b63ec63404a9ad86cf3cd4e73",
+          "ok": true
+        }
+      },
+      "observed": {},
+      "reason": null,
+      "live_mutated": false
+    },
+    {
+      "id": "sync:.tmp_v420_data/T08/setsup/checkpoints/a1set_seed0_step5000.pt",
+      "category": "asset",
+      "kind": "file",
+      "require": "hash",
+      "description": "ASSET_SYNC.sha256 entry 27; repository-relative path, never copied.",
+      "location": {
+        "windows_path": ".tmp_v420_data/T08/setsup/checkpoints/a1set_seed0_step5000.pt",
+        "path_base": "repo",
+        "resolved_absolute": "D:\\WorkShop\\Touhou_RL\\.tmp_v420_data\\T08\\setsup\\checkpoints\\a1set_seed0_step5000.pt"
+      },
+      "status": "present_verified",
+      "requested_check_met": true,
+      "measurement": "hashlib.sha256 over the Windows file",
+      "sha256_expected": "7bacab5e23492f4bda7dc30cc8c256de8067ef25c6c08b559ed014219c2bcfba",
+      "sha256_actual": "7bacab5e23492f4bda7dc30cc8c256de8067ef25c6c08b559ed014219c2bcfba",
+      "size_bytes": 2941273,
+      "expectations": {
+        "sha256": {
+          "expected": "7bacab5e23492f4bda7dc30cc8c256de8067ef25c6c08b559ed014219c2bcfba",
+          "actual": "7bacab5e23492f4bda7dc30cc8c256de8067ef25c6c08b559ed014219c2bcfba",
+          "ok": true
+        }
+      },
+      "observed": {},
+      "reason": null,
+      "live_mutated": false
+    },
+    {
+      "id": "sync:.tmp_v420_data/T02c/rebuild/d1-s0d1-n3300-seed10-shard/2f/meta.json",
+      "category": "asset",
+      "kind": "file",
+      "require": "hash",
+      "description": "ASSET_SYNC.sha256 entry 28; repository-relative path, never copied.",
+      "location": {
+        "windows_path": ".tmp_v420_data/T02c/rebuild/d1-s0d1-n3300-seed10-shard/2f/meta.json",
+        "path_base": "repo",
+        "resolved_absolute": "D:\\WorkShop\\Touhou_RL\\.tmp_v420_data\\T02c\\rebuild\\d1-s0d1-n3300-seed10-shard\\2f\\meta.json"
+      },
+      "status": "present_verified",
+      "requested_check_met": true,
+      "measurement": "hashlib.sha256 over the Windows file",
+      "sha256_expected": "3baf305647b0b8b00c218e3dbf0818668550c6a6bab1cfea09087a4718f7b192",
+      "sha256_actual": "3baf305647b0b8b00c218e3dbf0818668550c6a6bab1cfea09087a4718f7b192",
+      "size_bytes": 10760,
+      "expectations": {
+        "sha256": {
+          "expected": "3baf305647b0b8b00c218e3dbf0818668550c6a6bab1cfea09087a4718f7b192",
+          "actual": "3baf305647b0b8b00c218e3dbf0818668550c6a6bab1cfea09087a4718f7b192",
+          "ok": true
+        }
+      },
+      "observed": {},
+      "reason": null,
+      "live_mutated": false
+    },
+    {
+      "id": "sync:.tmp_v420_data/T02c/rebuild/d1-s0d1-n3300-seed11-shard/2f/meta.json",
+      "category": "asset",
+      "kind": "file",
+      "require": "hash",
+      "description": "ASSET_SYNC.sha256 entry 29; repository-relative path, never copied.",
+      "location": {
+        "windows_path": ".tmp_v420_data/T02c/rebuild/d1-s0d1-n3300-seed11-shard/2f/meta.json",
+        "path_base": "repo",
+        "resolved_absolute": "D:\\WorkShop\\Touhou_RL\\.tmp_v420_data\\T02c\\rebuild\\d1-s0d1-n3300-seed11-shard\\2f\\meta.json"
+      },
+      "status": "present_verified",
+      "requested_check_met": true,
+      "measurement": "hashlib.sha256 over the Windows file",
+      "sha256_expected": "efbd3ea022756f46f4ce4df19676336da5a5965c47b71894e4e526d6ac3f702d",
+      "sha256_actual": "efbd3ea022756f46f4ce4df19676336da5a5965c47b71894e4e526d6ac3f702d",
+      "size_bytes": 10760,
+      "expectations": {
+        "sha256": {
+          "expected": "efbd3ea022756f46f4ce4df19676336da5a5965c47b71894e4e526d6ac3f702d",
+          "actual": "efbd3ea022756f46f4ce4df19676336da5a5965c47b71894e4e526d6ac3f702d",
+          "ok": true
+        }
+      },
+      "observed": {},
+      "reason": null,
+      "live_mutated": false
+    },
+    {
+      "id": "sync:.tmp_v420_data/T02c/rebuild/d1-s0d1-n3300-seed12-shard/2f/meta.json",
+      "category": "asset",
+      "kind": "file",
+      "require": "hash",
+      "description": "ASSET_SYNC.sha256 entry 30; repository-relative path, never copied.",
+      "location": {
+        "windows_path": ".tmp_v420_data/T02c/rebuild/d1-s0d1-n3300-seed12-shard/2f/meta.json",
+        "path_base": "repo",
+        "resolved_absolute": "D:\\WorkShop\\Touhou_RL\\.tmp_v420_data\\T02c\\rebuild\\d1-s0d1-n3300-seed12-shard\\2f\\meta.json"
+      },
+      "status": "present_verified",
+      "requested_check_met": true,
+      "measurement": "hashlib.sha256 over the Windows file",
+      "sha256_expected": "2b18e628ad7103d40e6003771d2f664f0e0d4e5b60ff04e4201d06d49f8f3a18",
+      "sha256_actual": "2b18e628ad7103d40e6003771d2f664f0e0d4e5b60ff04e4201d06d49f8f3a18",
+      "size_bytes": 10762,
+      "expectations": {
+        "sha256": {
+          "expected": "2b18e628ad7103d40e6003771d2f664f0e0d4e5b60ff04e4201d06d49f8f3a18",
+          "actual": "2b18e628ad7103d40e6003771d2f664f0e0d4e5b60ff04e4201d06d49f8f3a18",
+          "ok": true
+        }
+      },
+      "observed": {},
+      "reason": null,
+      "live_mutated": false
+    },
+    {
+      "id": "sync:.tmp_v420_data/T02c/logs/rebuild_seed10.json",
+      "category": "asset",
+      "kind": "file",
+      "require": "hash",
+      "description": "ASSET_SYNC.sha256 entry 31; repository-relative path, never copied.",
+      "location": {
+        "windows_path": ".tmp_v420_data/T02c/logs/rebuild_seed10.json",
+        "path_base": "repo",
+        "resolved_absolute": "D:\\WorkShop\\Touhou_RL\\.tmp_v420_data\\T02c\\logs\\rebuild_seed10.json"
+      },
+      "status": "present_verified",
+      "requested_check_met": true,
+      "measurement": "hashlib.sha256 over the Windows file",
+      "sha256_expected": "6699660b88154eae3b8ae5cba16ccac6b1c1dd87a6b0c0ce5daf1412315f088c",
+      "sha256_actual": "6699660b88154eae3b8ae5cba16ccac6b1c1dd87a6b0c0ce5daf1412315f088c",
+      "size_bytes": 13224,
+      "expectations": {
+        "sha256": {
+          "expected": "6699660b88154eae3b8ae5cba16ccac6b1c1dd87a6b0c0ce5daf1412315f088c",
+          "actual": "6699660b88154eae3b8ae5cba16ccac6b1c1dd87a6b0c0ce5daf1412315f088c",
+          "ok": true
+        }
+      },
+      "observed": {},
+      "reason": null,
+      "live_mutated": false
+    },
+    {
+      "id": "sync:.tmp_v420_data/T02c/logs/rebuild_seed11.json",
+      "category": "asset",
+      "kind": "file",
+      "require": "hash",
+      "description": "ASSET_SYNC.sha256 entry 32; repository-relative path, never copied.",
+      "location": {
+        "windows_path": ".tmp_v420_data/T02c/logs/rebuild_seed11.json",
+        "path_base": "repo",
+        "resolved_absolute": "D:\\WorkShop\\Touhou_RL\\.tmp_v420_data\\T02c\\logs\\rebuild_seed11.json"
+      },
+      "status": "present_verified",
+      "requested_check_met": true,
+      "measurement": "hashlib.sha256 over the Windows file",
+      "sha256_expected": "9f65a1c7b384a43295875e35b6889372a7d5a9d058179477ae23fd45c942fe3d",
+      "sha256_actual": "9f65a1c7b384a43295875e35b6889372a7d5a9d058179477ae23fd45c942fe3d",
+      "size_bytes": 13224,
+      "expectations": {
+        "sha256": {
+          "expected": "9f65a1c7b384a43295875e35b6889372a7d5a9d058179477ae23fd45c942fe3d",
+          "actual": "9f65a1c7b384a43295875e35b6889372a7d5a9d058179477ae23fd45c942fe3d",
+          "ok": true
+        }
+      },
+      "observed": {},
+      "reason": null,
+      "live_mutated": false
+    },
+    {
+      "id": "sync:.tmp_v420_data/T02c/logs/rebuild_seed12.json",
+      "category": "asset",
+      "kind": "file",
+      "require": "hash",
+      "description": "ASSET_SYNC.sha256 entry 33; repository-relative path, never copied.",
+      "location": {
+        "windows_path": ".tmp_v420_data/T02c/logs/rebuild_seed12.json",
+        "path_base": "repo",
+        "resolved_absolute": "D:\\WorkShop\\Touhou_RL\\.tmp_v420_data\\T02c\\logs\\rebuild_seed12.json"
+      },
+      "status": "present_verified",
+      "requested_check_met": true,
+      "measurement": "hashlib.sha256 over the Windows file",
+      "sha256_expected": "79e377151724a6b25d9d5693d94fa9ecbbafb5bb4a3060238bc422f5fc17a879",
+      "sha256_actual": "79e377151724a6b25d9d5693d94fa9ecbbafb5bb4a3060238bc422f5fc17a879",
+      "size_bytes": 13224,
+      "expectations": {
+        "sha256": {
+          "expected": "79e377151724a6b25d9d5693d94fa9ecbbafb5bb4a3060238bc422f5fc17a879",
+          "actual": "79e377151724a6b25d9d5693d94fa9ecbbafb5bb4a3060238bc422f5fc17a879",
+          "ok": true
+        }
+      },
+      "observed": {},
+      "reason": null,
+      "live_mutated": false
+    },
+    {
+      "id": "sync:.tmp_v420_data/T02d/reslot/d1-s0d1-n3300-seed10-shard/meta.json",
+      "category": "asset",
+      "kind": "file",
+      "require": "hash",
+      "description": "ASSET_SYNC.sha256 entry 34; repository-relative path, never copied.",
+      "location": {
+        "windows_path": ".tmp_v420_data/T02d/reslot/d1-s0d1-n3300-seed10-shard/meta.json",
+        "path_base": "repo",
+        "resolved_absolute": "D:\\WorkShop\\Touhou_RL\\.tmp_v420_data\\T02d\\reslot\\d1-s0d1-n3300-seed10-shard\\meta.json"
+      },
+      "status": "present_verified",
+      "requested_check_met": true,
+      "measurement": "hashlib.sha256 over the Windows file",
+      "sha256_expected": "8098cfd733b9e47113f1da3a98fda4fa179f4c624805ae27e3a49c7bb1d5b979",
+      "sha256_actual": "8098cfd733b9e47113f1da3a98fda4fa179f4c624805ae27e3a49c7bb1d5b979",
+      "size_bytes": 14928,
+      "expectations": {
+        "sha256": {
+          "expected": "8098cfd733b9e47113f1da3a98fda4fa179f4c624805ae27e3a49c7bb1d5b979",
+          "actual": "8098cfd733b9e47113f1da3a98fda4fa179f4c624805ae27e3a49c7bb1d5b979",
+          "ok": true
+        }
+      },
+      "observed": {},
+      "reason": null,
+      "live_mutated": false
+    },
+    {
+      "id": "sync:.tmp_v420_data/T02d/reslot/d1-s0d1-n3300-seed11-shard/meta.json",
+      "category": "asset",
+      "kind": "file",
+      "require": "hash",
+      "description": "ASSET_SYNC.sha256 entry 35; repository-relative path, never copied.",
+      "location": {
+        "windows_path": ".tmp_v420_data/T02d/reslot/d1-s0d1-n3300-seed11-shard/meta.json",
+        "path_base": "repo",
+        "resolved_absolute": "D:\\WorkShop\\Touhou_RL\\.tmp_v420_data\\T02d\\reslot\\d1-s0d1-n3300-seed11-shard\\meta.json"
+      },
+      "status": "present_verified",
+      "requested_check_met": true,
+      "measurement": "hashlib.sha256 over the Windows file",
+      "sha256_expected": "4663d02c5554b8aaa7b063dd8dcec095312cf3149b335ffdb1fe578d87baa07d",
+      "sha256_actual": "4663d02c5554b8aaa7b063dd8dcec095312cf3149b335ffdb1fe578d87baa07d",
+      "size_bytes": 14928,
+      "expectations": {
+        "sha256": {
+          "expected": "4663d02c5554b8aaa7b063dd8dcec095312cf3149b335ffdb1fe578d87baa07d",
+          "actual": "4663d02c5554b8aaa7b063dd8dcec095312cf3149b335ffdb1fe578d87baa07d",
+          "ok": true
+        }
+      },
+      "observed": {},
+      "reason": null,
+      "live_mutated": false
+    },
+    {
+      "id": "sync:.tmp_v420_data/T02d/reslot/d1-s0d1-n3300-seed12-shard/meta.json",
+      "category": "asset",
+      "kind": "file",
+      "require": "hash",
+      "description": "ASSET_SYNC.sha256 entry 36; repository-relative path, never copied.",
+      "location": {
+        "windows_path": ".tmp_v420_data/T02d/reslot/d1-s0d1-n3300-seed12-shard/meta.json",
+        "path_base": "repo",
+        "resolved_absolute": "D:\\WorkShop\\Touhou_RL\\.tmp_v420_data\\T02d\\reslot\\d1-s0d1-n3300-seed12-shard\\meta.json"
+      },
+      "status": "present_verified",
+      "requested_check_met": true,
+      "measurement": "hashlib.sha256 over the Windows file",
+      "sha256_expected": "a7a9ab4261177da994ad3e4e6b1964f14084b9eb2c5b1fce88131d2ff4f07af9",
+      "sha256_actual": "a7a9ab4261177da994ad3e4e6b1964f14084b9eb2c5b1fce88131d2ff4f07af9",
+      "size_bytes": 14930,
+      "expectations": {
+        "sha256": {
+          "expected": "a7a9ab4261177da994ad3e4e6b1964f14084b9eb2c5b1fce88131d2ff4f07af9",
+          "actual": "a7a9ab4261177da994ad3e4e6b1964f14084b9eb2c5b1fce88131d2ff4f07af9",
+          "ok": true
+        }
+      },
+      "observed": {},
+      "reason": null,
+      "live_mutated": false
+    },
+    {
+      "id": "sync:.tmp_v420_data/T02d/logs/reslot_2f_join.json",
+      "category": "asset",
+      "kind": "file",
+      "require": "hash",
+      "description": "ASSET_SYNC.sha256 entry 37; repository-relative path, never copied.",
+      "location": {
+        "windows_path": ".tmp_v420_data/T02d/logs/reslot_2f_join.json",
+        "path_base": "repo",
+        "resolved_absolute": "D:\\WorkShop\\Touhou_RL\\.tmp_v420_data\\T02d\\logs\\reslot_2f_join.json"
+      },
+      "status": "present_verified",
+      "requested_check_met": true,
+      "measurement": "hashlib.sha256 over the Windows file",
+      "sha256_expected": "74ef2ebbf82137871d3ad2ef77b1d5750a5439dc29e233e044acdd2c831495a1",
+      "sha256_actual": "74ef2ebbf82137871d3ad2ef77b1d5750a5439dc29e233e044acdd2c831495a1",
+      "size_bytes": 16149,
+      "expectations": {
+        "sha256": {
+          "expected": "74ef2ebbf82137871d3ad2ef77b1d5750a5439dc29e233e044acdd2c831495a1",
+          "actual": "74ef2ebbf82137871d3ad2ef77b1d5750a5439dc29e233e044acdd2c831495a1",
+          "ok": true
+        }
+      },
+      "observed": {},
+      "reason": null,
+      "live_mutated": false
+    },
+    {
+      "id": "sync:.tmp_v420_data/T02d/logs/reslot_seed10.json",
+      "category": "asset",
+      "kind": "file",
+      "require": "hash",
+      "description": "ASSET_SYNC.sha256 entry 38; repository-relative path, never copied.",
+      "location": {
+        "windows_path": ".tmp_v420_data/T02d/logs/reslot_seed10.json",
+        "path_base": "repo",
+        "resolved_absolute": "D:\\WorkShop\\Touhou_RL\\.tmp_v420_data\\T02d\\logs\\reslot_seed10.json"
+      },
+      "status": "present_verified",
+      "requested_check_met": true,
+      "measurement": "hashlib.sha256 over the Windows file",
+      "sha256_expected": "727d21f51645a44bb48330e2bda0b760ba2d49b9a875abfb9aa87ff0b37ea8a7",
+      "sha256_actual": "727d21f51645a44bb48330e2bda0b760ba2d49b9a875abfb9aa87ff0b37ea8a7",
+      "size_bytes": 17165,
+      "expectations": {
+        "sha256": {
+          "expected": "727d21f51645a44bb48330e2bda0b760ba2d49b9a875abfb9aa87ff0b37ea8a7",
+          "actual": "727d21f51645a44bb48330e2bda0b760ba2d49b9a875abfb9aa87ff0b37ea8a7",
+          "ok": true
+        }
+      },
+      "observed": {},
+      "reason": null,
+      "live_mutated": false
+    },
+    {
+      "id": "sync:.tmp_v420_data/T02d/logs/reslot_seed11.json",
+      "category": "asset",
+      "kind": "file",
+      "require": "hash",
+      "description": "ASSET_SYNC.sha256 entry 39; repository-relative path, never copied.",
+      "location": {
+        "windows_path": ".tmp_v420_data/T02d/logs/reslot_seed11.json",
+        "path_base": "repo",
+        "resolved_absolute": "D:\\WorkShop\\Touhou_RL\\.tmp_v420_data\\T02d\\logs\\reslot_seed11.json"
+      },
+      "status": "present_verified",
+      "requested_check_met": true,
+      "measurement": "hashlib.sha256 over the Windows file",
+      "sha256_expected": "bfee4979a884cc734982a97a272dfecc43e6b3141004098733b42d3cbfe207ca",
+      "sha256_actual": "bfee4979a884cc734982a97a272dfecc43e6b3141004098733b42d3cbfe207ca",
+      "size_bytes": 17164,
+      "expectations": {
+        "sha256": {
+          "expected": "bfee4979a884cc734982a97a272dfecc43e6b3141004098733b42d3cbfe207ca",
+          "actual": "bfee4979a884cc734982a97a272dfecc43e6b3141004098733b42d3cbfe207ca",
+          "ok": true
+        }
+      },
+      "observed": {},
+      "reason": null,
+      "live_mutated": false
+    },
+    {
+      "id": "sync:.tmp_v420_data/T02d/logs/reslot_seed12.json",
+      "category": "asset",
+      "kind": "file",
+      "require": "hash",
+      "description": "ASSET_SYNC.sha256 entry 40; repository-relative path, never copied.",
+      "location": {
+        "windows_path": ".tmp_v420_data/T02d/logs/reslot_seed12.json",
+        "path_base": "repo",
+        "resolved_absolute": "D:\\WorkShop\\Touhou_RL\\.tmp_v420_data\\T02d\\logs\\reslot_seed12.json"
+      },
+      "status": "present_verified",
+      "requested_check_met": true,
+      "measurement": "hashlib.sha256 over the Windows file",
+      "sha256_expected": "38a4424cb444b4bfd14004692eaf9d2c3a6abd300a78df8e36a0da62070c89c5",
+      "sha256_actual": "38a4424cb444b4bfd14004692eaf9d2c3a6abd300a78df8e36a0da62070c89c5",
+      "size_bytes": 17164,
+      "expectations": {
+        "sha256": {
+          "expected": "38a4424cb444b4bfd14004692eaf9d2c3a6abd300a78df8e36a0da62070c89c5",
+          "actual": "38a4424cb444b4bfd14004692eaf9d2c3a6abd300a78df8e36a0da62070c89c5",
+          "ok": true
+        }
+      },
+      "observed": {},
+      "reason": null,
+      "live_mutated": false
+    },
+    {
+      "id": "sync:.tmp_v420_data/T04/dataset/index.json",
+      "category": "asset",
+      "kind": "file",
+      "require": "hash",
+      "description": "ASSET_SYNC.sha256 entry 41; repository-relative path, never copied.",
+      "location": {
+        "windows_path": ".tmp_v420_data/T04/dataset/index.json",
+        "path_base": "repo",
+        "resolved_absolute": "D:\\WorkShop\\Touhou_RL\\.tmp_v420_data\\T04\\dataset\\index.json"
+      },
+      "status": "present_verified",
+      "requested_check_met": true,
+      "measurement": "hashlib.sha256 over the Windows file",
+      "sha256_expected": "dbb17ec201a63a0c91112739c80e44de2cbd55d3712a25271ed17770672b09a8",
+      "sha256_actual": "dbb17ec201a63a0c91112739c80e44de2cbd55d3712a25271ed17770672b09a8",
+      "size_bytes": 3941,
+      "expectations": {
+        "sha256": {
+          "expected": "dbb17ec201a63a0c91112739c80e44de2cbd55d3712a25271ed17770672b09a8",
+          "actual": "dbb17ec201a63a0c91112739c80e44de2cbd55d3712a25271ed17770672b09a8",
+          "ok": true
+        }
+      },
+      "observed": {},
+      "reason": null,
+      "live_mutated": false
+    },
+    {
+      "id": "sync:Document/Update/Alpha/v4.2.0/evidence/T08/a1_safe_set_full.json",
+      "category": "asset",
+      "kind": "file",
+      "require": "hash",
+      "description": "ASSET_SYNC.sha256 entry 42; repository-relative path, never copied.",
+      "location": {
+        "windows_path": "Document/Update/Alpha/v4.2.0/evidence/T08/a1_safe_set_full.json",
+        "path_base": "repo",
+        "resolved_absolute": "D:\\WorkShop\\Touhou_RL\\Document\\Update\\Alpha\\v4.2.0\\evidence\\T08\\a1_safe_set_full.json"
+      },
+      "status": "present_verified",
+      "requested_check_met": true,
+      "measurement": "hashlib.sha256 over the Windows file",
+      "sha256_expected": "d6da8ea80eab2a2bc967c7802a6aa4d47a590fc500afa4f02b575351e7c482ef",
+      "sha256_actual": "d6da8ea80eab2a2bc967c7802a6aa4d47a590fc500afa4f02b575351e7c482ef",
+      "size_bytes": 2718805,
+      "expectations": {
+        "sha256": {
+          "expected": "d6da8ea80eab2a2bc967c7802a6aa4d47a590fc500afa4f02b575351e7c482ef",
+          "actual": "d6da8ea80eab2a2bc967c7802a6aa4d47a590fc500afa4f02b575351e7c482ef",
+          "ok": true
+        }
+      },
+      "observed": {},
+      "reason": null,
+      "live_mutated": false
+    },
+    {
+      "id": "sync:Document/Update/Alpha/v4.2.0/evidence/T08/a1_safe_set_pilot.json",
+      "category": "asset",
+      "kind": "file",
+      "require": "hash",
+      "description": "ASSET_SYNC.sha256 entry 43; repository-relative path, never copied.",
+      "location": {
+        "windows_path": "Document/Update/Alpha/v4.2.0/evidence/T08/a1_safe_set_pilot.json",
+        "path_base": "repo",
+        "resolved_absolute": "D:\\WorkShop\\Touhou_RL\\Document\\Update\\Alpha\\v4.2.0\\evidence\\T08\\a1_safe_set_pilot.json"
+      },
+      "status": "present_verified",
+      "requested_check_met": true,
+      "measurement": "hashlib.sha256 over the Windows file",
+      "sha256_expected": "675fbffdd6949dc72a69ba4587c25b33db84ffc4fbcd771b662ca6c71b2babff",
+      "sha256_actual": "675fbffdd6949dc72a69ba4587c25b33db84ffc4fbcd771b662ca6c71b2babff",
+      "size_bytes": 918879,
+      "expectations": {
+        "sha256": {
+          "expected": "675fbffdd6949dc72a69ba4587c25b33db84ffc4fbcd771b662ca6c71b2babff",
+          "actual": "675fbffdd6949dc72a69ba4587c25b33db84ffc4fbcd771b662ca6c71b2babff",
+          "ok": true
+        }
+      },
+      "observed": {},
+      "reason": null,
+      "live_mutated": false
+    },
+    {
+      "id": "sync:Document/Update/Alpha/v4.2.0/state.json",
+      "category": "asset",
+      "kind": "file",
+      "require": "hash",
+      "description": "ASSET_SYNC.sha256 entry 44; repository-relative path, never copied.",
+      "location": {
+        "windows_path": "Document/Update/Alpha/v4.2.0/state.json",
+        "path_base": "repo",
+        "resolved_absolute": "D:\\WorkShop\\Touhou_RL\\Document\\Update\\Alpha\\v4.2.0\\state.json"
+      },
+      "status": "present_verified",
+      "requested_check_met": true,
+      "measurement": "hashlib.sha256 over the Windows file",
+      "sha256_expected": "99e22af942b2c3eb89eed274fbfd38981a928954a6d9d17b8d359849989a6039",
+      "sha256_actual": "99e22af942b2c3eb89eed274fbfd38981a928954a6d9d17b8d359849989a6039",
+      "size_bytes": 57539,
+      "expectations": {
+        "sha256": {
+          "expected": "99e22af942b2c3eb89eed274fbfd38981a928954a6d9d17b8d359849989a6039",
+          "actual": "99e22af942b2c3eb89eed274fbfd38981a928954a6d9d17b8d359849989a6039",
+          "ok": true
+        }
+      },
+      "observed": {},
+      "reason": null,
+      "live_mutated": true
+    },
+    {
+      "id": "sync:Document/Update/Alpha/v4.2.0/journal.jsonl",
+      "category": "asset",
+      "kind": "file",
+      "require": "hash",
+      "description": "ASSET_SYNC.sha256 entry 45; repository-relative path, never copied.",
+      "location": {
+        "windows_path": "Document/Update/Alpha/v4.2.0/journal.jsonl",
+        "path_base": "repo",
+        "resolved_absolute": "D:\\WorkShop\\Touhou_RL\\Document\\Update\\Alpha\\v4.2.0\\journal.jsonl"
+      },
+      "status": "present_mismatch",
+      "requested_check_met": false,
+      "measurement": "hashlib.sha256 over the Windows file",
+      "sha256_expected": "5ed3693f38e4ac4a7f823d6ddd50c7eabbffa15c20acd13566798b3bafaf64e9",
+      "sha256_actual": "835b9e18d22095a78761dd0773245b39d355cb1c61cdadc33bf6202002fdae38",
+      "size_bytes": 190979,
+      "expectations": {
+        "sha256": {
+          "expected": "5ed3693f38e4ac4a7f823d6ddd50c7eabbffa15c20acd13566798b3bafaf64e9",
+          "actual": "835b9e18d22095a78761dd0773245b39d355cb1c61cdadc33bf6202002fdae38",
+          "ok": false
+        }
+      },
+      "observed": {},
+      "reason": "sha256 differs from the pinned value",
+      "live_mutated": true
+    },
+    {
+      "id": "sync:Document/Update/Alpha/v4.2.0/budget.jsonl",
+      "category": "asset",
+      "kind": "file",
+      "require": "hash",
+      "description": "ASSET_SYNC.sha256 entry 46; repository-relative path, never copied.",
+      "location": {
+        "windows_path": "Document/Update/Alpha/v4.2.0/budget.jsonl",
+        "path_base": "repo",
+        "resolved_absolute": "D:\\WorkShop\\Touhou_RL\\Document\\Update\\Alpha\\v4.2.0\\budget.jsonl"
+      },
+      "status": "present_verified",
+      "requested_check_met": true,
+      "measurement": "hashlib.sha256 over the Windows file",
+      "sha256_expected": "01d8bd048b982bf19a2123c21265dac751cb79cf6a7e3e0550543784ddea4b16",
+      "sha256_actual": "01d8bd048b982bf19a2123c21265dac751cb79cf6a7e3e0550543784ddea4b16",
+      "size_bytes": 9627,
+      "expectations": {
+        "sha256": {
+          "expected": "01d8bd048b982bf19a2123c21265dac751cb79cf6a7e3e0550543784ddea4b16",
+          "actual": "01d8bd048b982bf19a2123c21265dac751cb79cf6a7e3e0550543784ddea4b16",
+          "ok": true
+        }
+      },
+      "observed": {},
+      "reason": null,
+      "live_mutated": true
+    }
+  ],
+  "statistics": {
+    "denominator": 53,
+    "denominator_note": "one row per registered check: config pins (plan spec, sync manifest, manifest coverage) plus every registered asset",
+    "registered_assets": 50,
+    "verified": 51,
+    "present_unhashed": 1,
+    "mismatch": 1,
+    "missing": 0,
+    "unreachable": 0,
+    "unmet": 1,
+    "unmet_ids": [
+      "sync:Document/Update/Alpha/v4.2.0/journal.jsonl"
+    ],
+    "by_category": {
+      "asset": 50,
+      "config": 3
+    },
+    "by_kind": {
+      "file": 44,
+      "hash-manifest": 2,
+      "json-file": 1,
+      "python": 1,
+      "torch": 1,
+      "wsl_dir": 1,
+      "wsl_file": 2,
+      "wsl_python": 1
+    },
+    "bytes_hashed": 43051781,
+    "files_hashed": 44,
+    "manifest_entries": 46,
+    "manifest_entries_covered": 46,
+    "wsl_commands": 3,
+    "wsl_available": true
+  },
+  "remaining_gaps": [
+    "Working tree is dirty: 3514 tracked file(s) changed ({'D': 3493, 'M': 21}); git HEAD alone does not reproduce this tree.",
+    "game_data: present but not content-hashed - directory; layout registered, contents not content-hashed (live game files are mutated); not counted as verified.",
+    "sync:Document/Update/Alpha/v4.2.0/journal.jsonl: present_mismatch - sha256 differs from the pinned value; this row is a live execution file (state/journal/budget) that was appended after the pinned manifest was generated, so it is live drift rather than static corruption: do not re-pin it blindly (DEVELOPMENT_GUIDE section 12).",
+    "audit starts no engine, no game and no training: it measures registered assets and pins only.",
+    "Observation/action protocol validity is W01's contract; this audit asserts no capability and no protocol conformance.",
+    "G430-E0 is not passed by this audit; the W00 gate also needs W01's real replay evidence."
+  ],
+  "notes": []
+}

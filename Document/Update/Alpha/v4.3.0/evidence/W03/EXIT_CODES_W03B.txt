@@ -1,0 +1,54 @@
+W03B — exit codes and pytest statistics
+=======================================
+Slice: sequence segmentation + burn-in masks + padding statistics only
+       (no model, no hidden state, no optimiser, no rollout, no training)
+Host: Windows, repo D:\WorkShop\Touhou_RL
+Python 3.12.10 / pytest 9.1.1
+Run (UTC): 2026-11-15T03:41:44Z
+
+Command 1
+---------
+$env:PYTHONPATH='D:\WorkShop\Touhou_RL'
+python -m compileall -q touhou_rl/v430/sequence.py
+exit code: 0
+output: (none — compileall -q prints nothing on success)
+
+Command 2
+---------
+$env:PYTHONPATH='D:\WorkShop\Touhou_RL'
+python -m pytest -p no:cacheprovider --basetemp .tmp_v430_pytest_w03a3 -q tests/test_v430_sequence.py
+exit code: 0
+output tail:
+
+................................................................         [100%]
+64 passed in 0.08s
+
+interpretation: 64 passed, 0 failed, 0 skipped, 0 errors.
+  W03A baseline: 45 passed
+  W03B added   : 19 passed  (all inside tests/test_v430_sequence.py; no second
+                             test file was created)
+  total        : 64
+
+Command 3 (collection cross-check, not an acceptance gate)
+----------------------------------------------------------
+$env:PYTHONPATH='D:\WorkShop\Touhou_RL'
+python -m pytest -p no:cacheprovider --basetemp .tmp_v430_pytest_w03a3b -q tests/test_v430_sequence.py --collect-only
+exit code: 0
+output tail:
+
+64 tests collected in 0.05s
+
+Behaviour change recorded by this slice
+---------------------------------------
+`segment_end=True` no longer behaves like `truncated`: it is validated to be a
+real bool and changes neither bootstrap_mask nor continuation_mask. All 45 W03A
+tests still pass unchanged; no strict rule was relaxed (a mid-sample
+episode_id change with neither terminated nor truncated still raises
+SequenceError).
+
+Note on what this proves
+------------------------
+Both acceptance commands cover syntax plus synthetic unit tests of pure
+functions. They are NOT evidence of game capability: no engine was started, no
+game data, checkpoint or model was read, no rollout or training ran. compileall
+exit 0 only means the file parses.

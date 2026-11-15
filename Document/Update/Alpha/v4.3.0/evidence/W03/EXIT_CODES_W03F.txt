@@ -1,0 +1,30 @@
+W03F — obs-contract guard: acceptance commands and real exit codes
+=================================================================
+Date: 2026-11-15
+Repo: D:\WorkShop\Touhou_RL
+Env : $env:PYTHONPATH='D:\WorkShop\Touhou_RL'
+
+1) python -m compileall -q touhou_rl/v430/data/manifest.py
+   exit code: 0
+
+2) python -m pytest -p no:cacheprovider --basetemp .tmp_v430_pytest_w03f -q tests/test_v430_data.py
+   exit code: 0
+   result   : 36 passed in 0.67s
+   (baseline was 29 passed; +7 new tests, no existing test removed or weakened)
+
+3) python -m pytest -p no:cacheprovider --basetemp .tmp_v430_pytest_w03f_reg -q tests/test_v430_splits.py tests/test_v430_models.py
+   exit code: 0
+   result   : 97 passed in 2.74s
+
+Legacy contract name read off disk (single file, read-only):
+   .tmp_v420_data/T04/dataset/d1-s0d1-n3300-seed10-shard/meta.json
+   meta["contract"]["obs_contract"] == "obs-v420-2f"
+
+New problem codes (registered in PROBLEM_CODES, 31 -> 33):
+   P_OBS_CONTRACT_UNKNOWN
+   P_OBS_SHAPE_CONTRACT_MISMATCH
+
+Not done (out of scope by instruction):
+   - no legacy -> O2 conversion, no resampling/zero-fill/channel synthesis
+   - no O2 corpus captured; no engine run; no training
+   - no large corpus read (only the one meta.json above)

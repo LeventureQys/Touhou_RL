@@ -1,0 +1,20 @@
+﻿# W04A exit codes — captured from a real run (Windows, pwsh, PYTHONPATH=D:\WorkShop\Touhou_RL)
+# cwd: D:\WorkShop\Touhou_RL
+
+$ python -m compileall -q touhou_rl/v430/ppo.py
+
+[exit code: 0]
+
+$ python -m pytest -p no:cacheprovider --basetemp .tmp_v430_pytest_w04a -q tests/test_v430_ppo.py
+......................................                                   [100%]
+38 passed in 1.57s
+[exit code: 0]
+
+$ python -m pytest -p no:cacheprovider --basetemp .tmp_v430_pytest_w04a_reg -q tests/test_v430_learn.py tests/test_v430_sequence.py
+........................................................................ [ 81%]
+................                                                         [100%]
+88 passed in 8.83s
+[exit code: 0]
+
+Note: compileall exit 0 only proves the file parses. The two pytest lines are the real evidence.
+The PPO tests are synthetic arithmetic checks, not game/capability evidence.

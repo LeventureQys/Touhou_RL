@@ -1,0 +1,197 @@
+W03K — 1000-decision real-O2 corpus (o2-1k): commands and real exit codes
+=============================================================================
+Date: 2026-11-15
+Repo: D:\WorkShop\Touhou_RL   (engine work runs inside WSL; source root is
+      /mnt/d/WorkShop/Touhou_RL, the engine is the stale checkout's binary at
+      /root/Touhou_RL/third_party/th08-rl/build/rl_v3/th08-modern)
+Python: /root/v400-venv/bin/python (engine side) / `python` on Windows (verify side)
+Note: every command below was really executed. Exit codes are process exit codes
+      unless marked "not captured". Engine-side bash scripts were fed to
+      `wsl -e bash -s` on stdin; PowerShell terminates the last line with CRLF,
+      so bash echoes `$'\r': command not found` AFTER the script has run -- that
+      stray status belongs to the wrapper, not to the capture, and it is called
+      out wherever it happened.
+
+--- Phase 0: environment and concurrency --------------------------------
+
+0) sha256sum /root/Touhou_RL/third_party/th08-rl/build/rl_v3/th08-modern
+   exit code: 0
+   691bfd77b7eca3361aa8bb7af0977556a70cc73a070b29a2447222ba7a568ef6
+   == meta.json engine sha256 (the engine W03H used; unchanged)
+
+1) sha256sum .tmp_v420_data/T04/dataset/d1-s0d1-n3300-seed12-shard/slots.jsonl
+   exit code: 0
+   f759de7dacc78343dec8825da5de14942e749b8a5a2c5319304e513d1618b7b9
+   == the frozen CLEAR_SHARD_SHA256 the capture pins (sha256_matches_frozen: true)
+
+2) ps -eo args | grep -c "[t]h08-modern"
+   exit code: 0     3
+   the three expansion engines were running before and after this slice and were
+   never signalled, recycled or restarted; run_all.sh / run_worker.sh were not
+   invoked. This slice ran exactly ONE engine process of its own
+   (--shm-name w03k_o2_1k).
+
+3) df / venv probe (Get-PSDrive D + wsl ls /root/v400-venv/bin/python)
+   exit code: 0     free 1131.9 GB; venv present; 20 cores; 23 GB RAM
+   (the corpus needs ~553 MB, so space was never a constraint)
+
+--- Phase 1: instrument change rehearsal (no engine) --------------------
+
+4) python -m py_compile .tmp_v430_o2/capture_o2.py
+   exit code: 0     (after every edit to the instrument)
+
+5) encode_o2 cost probe, attempt 1 (stdin script to /root/v400-venv/bin/python)
+   exit code: 1
+   ObservationError: elapsed_capture_s is required: the decision's interval on
+   the capture clock (guide §5.3); it cannot default to zero or to a frame count
+
+6) attempt 2, with elapsed_capture_s / then with key_history
+   exit code: 1
+   KeyHistoryError: history_valid claims 4 valid slot(s) but 8 executed key
+   row(s) were supplied
+   action: pass 4 rows + 4 tail-True flags, which is what the capture does
+
+7) attempt 3
+   exit code: 0
+   encode_o2_ms_per_decision 8.1
+   => 1000 encodes add ~8 s to the ~150 s replay: the full-replay plan fits the
+      300 s guard with a large margin, so no truncation was needed
+
+8) write_arrays smoke (synthetic 20-sample result, limit 64 and limit 0)
+   exit code: 0
+   limit 64 -> 8 files incl. frames_rgba, alpha audit 111/255, 20 labels
+   limit 0  -> 7 files, no frames_rgba, alpha audit still 111/255
+   proves both writer paths before spending a replay
+
+9) shape-guard smoke (pass/fail cases for the new assert_written_shapes)
+   exit code: 0
+   pass_1000_64raw: True
+   caught_row_short: global_rgb.npy has 64 rows, 1000 decisions were collected
+   caught_labels: labels.jsonl has 999 lines, 1000 decisions were collected
+
+--- Phase 2: preview (200 decisions, then discarded) --------------------
+
+10) timeout 300 xvfb-run -a -s "-screen 0 1024x768x24" \
+      /root/v400-venv/bin/python .tmp_v430_o2/capture_o2.py \
+      --out .tmp_v430_o2/o2-1k --max-frames 13195 --collect 200 \
+      --stop-after-collect --raw-frames-limit 64 --alpha-mode any \
+      --data-dir /mnt/d/WorkShop/Touhou_RL/.tmp_v430_o2/engine-data \
+      --shm-name w03k_o2_1k
+    exit code: 0   elapsed_s: 18
+    {"bytes_total": 173527179, "collected": 200, "decisions": 201, "frames": 402,
+     "stop_reason": "collect_complete", "wall_s": 13.893}
+    meta: provenance {leading_history: 7, recorded_slot: 193}, skipped =
+    [{decision 0, short_stack}], frames_rgba (64,480,640,4), data dir =
+    /mnt/d/WorkShop/Touhou_RL/.tmp_v430_o2/engine-data
+    action: preview artefacts deleted (they were this slice's own new files),
+            then the full run below
+
+--- Phase 3: the full run (1000 decisions, complete replay) -------------
+
+11) timeout 300 xvfb-run -a -s "-screen 0 1024x768x24" \
+      /root/v400-venv/bin/python .tmp_v430_o2/capture_o2.py \
+      --out .tmp_v430_o2/o2-1k --max-frames 13195 --collect 1000 \
+      --raw-frames-limit 64 --alpha-mode any \
+      --data-dir /mnt/d/WorkShop/Touhou_RL/.tmp_v430_o2/engine-data \
+      --shm-name w03k_o2_1k > .tmp_v430_o2/o2-1k.log 2>&1
+    exit code: 0   wrapper elapsed_s: 177   capture wall_s: 172.119
+    {"bytes_total": 553061004, "collected": 1000, "decisions": 6598,
+     "frames": 13195, "stop_reason": "stage_clear"}
+    300 s guard NOT hit. The wrapper printed `exit_code=0` before bash's stray
+    `$'\r': command not found`; PowerShell surfaced that wrapper status as 1,
+    which is why the same line is annotated here rather than silently "fixed".
+
+--- Phase 4: verification ----------------------------------------------
+
+12) python -c "import numpy as np; g=np.load('.tmp_v430_o2/o2-1k/global_rgb.npy',
+      mmap_mode='r'); print(g.shape, g.dtype)"
+    exit code: 0     (1000, 3, 240, 320) uint8
+    all seven arrays: global_rgb (1000,3,240,320), play_gray (1000,4,224,192),
+    hud_gray (1000,1,448,160), executed_key_history (1000,8,7),
+    history_valid (1000,8) bool, elapsed_capture_s (1000,) float32,
+    frames_rgba (64,480,640,4)
+
+13) python .tmp_v430_o2/verify_manifest_bc.py --out-dir .tmp_v430_o2/o2-1k
+    exit code: 0
+    {"assert_o2_raised": null, "complete": true, "first_loss": 4.27155,
+     "last_loss": 3.26328, "model_supplied": true, "n_parameters": 2726671,
+     "n_steps": 8, "problems": 0, "valid": true}
+
+14) python .tmp_v430_o2/verify_labels_provenance.py .tmp_v430_o2/o2-1k
+    (POSITIONAL argument: this script has no --out-dir flag)
+    exit code: 0
+    {"labels_total": 1000, "provenance_counts": {"leading_history": 7,
+     "recorded_slot": 993}, "tail_repeat_labels": 0,
+     "recorded_slot_cross_check": {"checked": 993, "mismatches": 0},
+     "supervised_heads": ["move","focus"], "unsupervised_heads": ["shoot","bomb"]}
+    move distinct [0,2,3,4,6,7], focus distinct [0,1]
+
+15) coverage re-computation, attempt 1 (labels vs tape + windows + bomb bits)
+    exit code: 1
+    all coverage numbers printed, then the LAST line raised
+    ValueError: could not convert string to float: '{"alpha_mean": …'
+    (a bug in this session's throwaway check, not in the data); re-run below
+
+16) coverage re-computation, attempt 2
+    exit code: 0
+    labels_vs_tape_cand_mismatches 0
+    collected_1000 move_distinct [0,2,3,4,6,7] = 6/9 histogram
+      {0:339, 2:110, 3:205, 4:3, 6:145, 7:198}
+    collected_1000 focus_distinct [0,1] = 2 histogram {0:739, 1:261}
+    collected_1000 cand_distinct 10/18
+    first64 move 5/9 | first200 move 5/9 | first1000 move 6/9 | whole 9/9
+    whole_tape rows_with_bomb_bit 0 / 6588 | rows_with_shoot_bit 6588
+    is_blank 0 / 1000
+
+17) python .tmp_v430_o2/verify_manifest_bc.py --out-dir .tmp_v430_o2/o2-1k \
+      --max-steps 126
+    exit code: 0   real 35.1 s
+    n_steps 126, first_loss 4.271553, last_loss 2.584638
+    (extra run, documented in §12 of W03K_O2_1K.md; the committed bc_smoke.json
+     is then restored to the 8-step default protocol by command 18)
+
+18) python .tmp_v430_o2/verify_manifest_bc.py --out-dir .tmp_v430_o2/o2-1k
+    exit code: 0   (restores the W03H-comparable 8-step artifact)
+
+19) python .tmp_v430_o2/recompute_manifest_stats.py --out-dir .tmp_v430_o2/o2-1k
+    exit code: 0
+    dataset_id …-64 -> w03h-o2-capture-seed12-1000
+    sample_count 1000, sample_count_check.ok true
+    counts {decisions: 8000, labels_valid: 8000, episodes: 8, shards: 8,
+            files: 8, observation_channels: 8, sample_count: 1000}
+    valid true, complete true, problems [], assert_o2 returned the new dataset id
+    bc_smoke disclaimer rewritten to "1000 real decisions"
+    manifest.json sha256 886a30c0ca4995762cf937b9a0460fe93496b07c9dc28be9baf29e867103c6aa
+
+20) python .tmp_v430_o2/recompute_manifest_stats.py --out-dir .tmp_v430_o2/o2-64 \
+      --dry-run
+    exit code: 0   written: false
+    dataset_id …-seed12-64 (already correct), sample_count 64,
+    counts {decisions: 512, labels_valid: 512, episodes: 8, shards: 8}
+    o2-64 was NOT rewritten: all 12 files keep their W03H mtimes and
+    manifest.json sha256 338d83d08bcc992cacaa0b4252d51218205928e6b0eeaba081abea9c0fea7fb7
+
+21) counts-invariant experiment (in memory, nothing written)
+    exit code: 0
+    as_is                valid= True  problems= []
+    decisions=1000       valid= False P_COUNTS_MISMATCH ("counts.decisions is
+                         1000 but the shards sum to 8000")
+    episodes=1           valid= False P_COUNTS_MISMATCH ("counts.episodes is 1
+                         but the shards sum to 8")
+    additive_fields_only valid= True  problems= []
+    => counts.decisions cannot be set to 1000 while
+       touhou_rl/v430/data/manifest.py::_check_counts is in force and
+       touhou_rl/** is out of scope; labelled instead (sample_count + counts_note)
+
+22) du -sb .tmp_v430_o2/engine-data .tmp_v430_o2/o2-1k .tmp_v430_o2/o2-64
+    exit code: 0
+    496968814  .tmp_v430_o2/engine-data   (reused in place, not copied)
+    553086334  .tmp_v430_o2/o2-1k          (sum of files: 553082238)
+    109025255  .tmp_v430_o2/o2-64          (sum of files: 109021159)
+
+--- Nothing was deleted, moved or committed ----------------------------
+
+* .tmp_v430_o2/o2-64/**            untouched (W03H mtimes 2026-11-15 12:08…12:11)
+* .tmp_v430_o2/engine-data/**      untouched, reused as --data-dir
+* touhou_rl/**, tools/rl/**, configs/**, third_party/**, ASSET_SYNC.*  unchanged
+* no git add / commit / push; no image or asset uploaded

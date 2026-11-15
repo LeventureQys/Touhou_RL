@@ -1,0 +1,156 @@
+# W00 脚本归位（P1-07 收尾）— 原始退出码
+# 生成时间：2026-11-15 Asia/Shanghai；主机 D:\WorkShop\Touhou_RL；Python 3.12.10（Windows）
+# 本文件只登记实际执行过的命令与它们真实的退出码，不登记"预期"结果。
+# 除特别注明，全部命令均在仓库根 D:\WorkShop\Touhou_RL 执行；两个脚本都不 import
+# touhou_rl，因此未设 PYTHONPATH。合成输入全部写在 %TEMP%\w00_restore_synth_20261115
+# （仓库外），仓库内除白名单 2 个 tools 文件 + 2 个证据文件外无写入。
+# 驱动器：%TEMP%\w00_restore_synth_20261115\run_verify.ps1，完整 transcript 同目录 transcript.txt。
+
+## 0 环境与前置
+python --version                                              => exit 0   (Python 3.12.10)
+Get-ChildItem -LiteralPath . -Filter '.tmp_v420_*' -File | Group-Object Extension
+                                                              => exit 0   (.sh 42 / .py 18，合计 60)
+
+## 1 引用复核（独立重做）
+扫描对象：Document/Update/Alpha/v4.2.0 下 53 个 .md（递归，含 README/PROGRESS/ROUTE_CONCLUSION/
+evidence/**/experiments/**）。命令形态：Select-String -LiteralPath <53 md> -Pattern <名> -SimpleMatch。
+.tmp_v420_expected.py                                         => 1 处   PREFLIGHT.md:144
+.tmp_v420_action_mix.py                                       => 1 处   ACTION_MIX.md:5
+.tmp_v420_slot_probe.py                                       => 3 处   PREFLIGHT.md:101 | T01-contract-spec.md:18 | :28
+.tmp_v420_mask_probe.py                                       => 2 处   PREFLIGHT.md:101 | T01-contract-spec.md:23
+.tmp_v420_release_probe.py                                    => 2 处   PREFLIGHT.md:101 | T01-contract-spec.md:24
+.tmp_v420_hist_probe.py                                       => 3 处   PREFLIGHT.md:101 | T01-contract-spec.md:25 | :29
+.tmp_v420_replay_probe.py                                     => 0 处（正文未点名；由 .tmp_v420_replay_all.sh 调用）
+.tmp_v420_smoke_eval.sh                                       => 1 处   PREFLIGHT.md:57
+.tmp_v420_repro.sh                                            => 1 处   PREFLIGHT.md:80
+.tmp_v420_replay_all.sh                                       => 2 处   PREFLIGHT.md:190 | PREFLIGHT_REPLAY.md:6
+Get-FileHash .tmp_v420_replay_probe.py / evidence/PREFLIGHT/replay/replay_probe.py
+                                                              => exit 0   两者 sha256 = 44a218927794000900ad9b16c9c67408648684d7ba236705493b5fd3c88286af（逐字节相同）
+
+## 2 60 个根级脚本的 Git 状态（关键勘误）
+Get-ChildItem -LiteralPath . -Filter '.tmp_v420_*' -File 计 60 个，逐个喂给 git：
+git check-ignore -- <60 个根级 .tmp_v420_* 文件>               => exit 1   输出 0 行（无一个被忽略）
+git status --porcelain -- <同样 60 个>                         => exit 0   60 行，全部 "??"（untracked 但未被忽略）
+git status --porcelain -- tools/rl/v420_expected.py tools/rl/v420_action_mix.py .tmp_v420_expected.py .tmp_v420_action_mix.py
+                                                              => exit 0   4 行全是 "??"
+git check-ignore -v tools/rl/v420_expected.py tools/rl/v420_action_mix.py
+                                                              => exit 1   （新文件未被忽略，正常源码路径）
+git check-ignore -v .tmp_v420_adjudicate/adjudicate_corpus.py .tmp_v420_t04/eval_dev.py .tmp_v420_data/T04/eval
+                                                              => exit 0   .gitignore:32:.tmp_*/ 命中（子目录被忽略）
+
+## 3 静态检查
+python -m compileall -q tools/rl/v420_expected.py tools/rl/v420_action_mix.py
+                                                              => exit 0
+python tools/rl/v420_expected.py --help                       => exit 0
+python tools/rl/v420_action_mix.py --help                     => exit 0
+危险 token 扫描（write_text|write_bytes|json.dump|subprocess|socket|requests|urllib|
+os.system|shutil|expanduser|Path.home|/root/|Users\|\D:\，两个文件）
+                                                              => 0 匹配
+"open(" 扫描（两个文件）                                       => 0 匹配
+
+## 4 合成输入等价性（合成 JSON，仓库外；同输入跑原件与归位件）
+python D:\WorkShop\Touhou_RL\.tmp_v420_expected.py            => exit 0
+python tools/rl/v420_expected.py --b0 <synth B0> --twenty-k <synth 20k>
+                                                              => exit 0   stdout 与原件逐字符相同 = True
+python D:\WorkShop\Touhou_RL\.tmp_v420_action_mix.py          => exit 0
+python tools/rl/v420_action_mix.py --base <synth eval dir>    => exit 0   stdout 与原件逐字符相同 = True
+合成各臂 decisions 与驱动器独立算出的真值逐格比对（8/8）        => 全 match=True（driver/partial 两个投毒文件已被过滤）
+
+## 5 真实数据只读复现（不启引擎、不写旧证据）
+python .tmp_v420_expected.py                                  => exit 0
+python tools/rl/v420_expected.py                              => exit 0   stdout 与原件逐字符相同 = True
+python .tmp_v420_action_mix.py                                => exit 0
+python tools/rl/v420_action_mix.py                            => exit 0   stdout 与原件逐字符相同 = True
+（数字与 PREFLIGHT.md §4 / ACTION_MIX.md §1 逐格比对见 W00_SCRIPT_RESTORE.md §5.4）
+
+## 6 反向用例（fail-closed）
+原件在中途缺一个输入时（cwd 里只有 20k 文件）                  => exit 0   旧行为：打印 MISSING 后仍然成功退出
+python tools/rl/v420_expected.py --b0 <absent> --twenty-k <ok> => exit 2   新行为：仍打印同一行 MISSING，退出码 2
+python tools/rl/v420_action_mix.py --base <不存在的目录>        => exit 2   argparse: "error: --base is not a directory: ..."
+python tools/rl/v420_action_mix.py --base <存在的空目录>        => exit 2   8 行 "no data" 之后 fail-closed
+
+## 7 原件未被修改（前后 sha256 相同）
+.tmp_v420_expected.py    前 = 6cea35c04e7ed7717009157d71dffe0af9bc2ec0a327b950888c9d8ab6718e4b
+                         后 = 6cea35c04e7ed7717009157d71dffe0af9bc2ec0a327b950888c9d8ab6718e4b
+.tmp_v420_action_mix.py  前 = f3b2f0359cbf51b40fdd14146e9209b5921bb8fe3e0c678e83c468537a6b7382
+                         后 = f3b2f0359cbf51b40fdd14146e9209b5921bb8fe3e0c678e83c468537a6b7382
+
+## 8 归位件 sha256（写证据时的实际值）
+tools/rl/v420_expected.py     = f8b2cc0647ace4ad0d0c03bdc1fb956a8607d7b88b37dc40845e1d30e4d1e2aa  (99 行)
+tools/rl/v420_action_mix.py   = 2ca24e44c8741f74b9dfad9ab1ce29b6e035459dc98419da9c0498016eef3005  (102 行)
+
+## 9 测量口径备注（不是脚本失败）
+`python <script> --help | Select-Object -First 4` 会让 PowerShell 提前关闭管道，导致
+$LASTEXITCODE 报 -1；这是管道被打断的测量artifact，不是脚本退出码。不截断重跑
+（`| Out-String` 后取 $LASTEXITCODE）两个 --help 均 exit 0，见 §3。
+
+## PROBE RESTORE
+# 追加于 2026-11-15（v4.3.0 W00 / P1-07 最后缺口：4 个只读 probe 归位）
+# 本文件 0–9 节由另一位代理写入；本节只追加，不改动已有任何一行。
+# 本节除注明外均在仓库根 D:\WorkShop\Touhou_RL 执行；合成输入在
+# %TEMP%\w00_probe_restore_20261115（仓库外）；未启引擎、未训练、未写旧证据/账本。
+# 详见 evidence/W00/W00_PROBE_RESTORE.md。
+
+## 0 引用复核（4 个精确文件名，v4.2.0 整目录 .md/.json/.txt/.jsonl）
+.tmp_v420_slot_probe.py                                       => 3 处   PREFLIGHT.md:101 | T01-contract-spec.md:18 | :28
+.tmp_v420_hist_probe.py                                       => 3 处   PREFLIGHT.md:101 | T01-contract-spec.md:25 | :29
+.tmp_v420_mask_probe.py                                       => 2 处   PREFLIGHT.md:101 | T01-contract-spec.md:23
+.tmp_v420_release_probe.py                                    => 2 处   PREFLIGHT.md:101 | T01-contract-spec.md:24
+（与 §1 独立扫描的 3/3/2/2 逐条一致；未发现第 5 个“被引用”的只读 py）
+
+## 1 静态检查
+python -m compileall -q tools/rl/v420_slot_probe.py tools/rl/v420_hist_probe.py tools/rl/v420_mask_probe.py tools/rl/v420_release_probe.py
+                                                              => exit 0
+python tools/rl/v420_slot_probe.py --help                     => exit 0
+python tools/rl/v420_hist_probe.py --help                     => exit 0
+python tools/rl/v420_mask_probe.py --help                     => exit 0
+python tools/rl/v420_release_probe.py --help                  => exit 0
+危险 token 扫描 write_text|write_bytes|json.dump(|subprocess|os.system|shutil.|
+socket.|requests.|urllib|expanduser|Path.home（4 个文件）      => 0 匹配
+盘符绝对路径 [A-Za-z]:\（-CaseSensitive，4 个文件）             => 0 匹配
+open( 扫描（4 个文件共 4 处）                                  => 全部 "r" 模式
+np.load 扫描（v420_hist_probe.py:81）                          => 默认 mode="r"
+
+## 2 合成输入等价性（%TEMP% 夹具；同一输入喂原件与归位件）
+原件：cwd=夹具根，无参数；归位件：--shard <夹具绝对路径>
+slot / clean        : orig exit 0 | new exit 0 | stdout 逐字节相同 = True
+hist / clean        : orig exit 0 | new exit 0 | stdout 逐字节相同 = True
+mask / clean        : orig exit 0 | new exit 0 | stdout 逐字节相同 = True
+release / clean     : orig exit 0 | new exit 0 | stdout 逐字节相同 = True
+hist / bad（污染行） : orig exit 0 | new exit 0 | stdout 逐字节相同 = True
+（夹具 5 行、4 帧步长、第 4 行刻意 shoot_release；污染夹具把 act_hist 第 2 行置零，
+  归位件报 mismatches: 1 first: 2，与原件相同 ⇒ 比较逻辑不是恒真）
+
+## 3 真实 shard 只读复现（不启引擎、不写旧证据）
+python .tmp_v420_slot_probe.py                                => exit 0   rows 3300 | {4: 3299} | hash breaks 0 | duration {2:588,1:2712}
+python tools/rl/v420_slot_probe.py                            => exit 0   stdout 与原件逐字节相同 = True
+python .tmp_v420_hist_probe.py                                => exit 0   act_hist (3300,8,18) | 0 失配 | bomb nonzero 0 | shoot_release 137
+python tools/rl/v420_hist_probe.py                            => exit 0   stdout 与原件逐字节相同 = True
+python .tmp_v420_mask_probe.py                                => exit 0   3300/3300 | 3163/3300 | neither 0
+python tools/rl/v420_mask_probe.py                            => exit 0   stdout 与原件逐字节相同 = True
+python .tmp_v420_release_probe.py                             => exit 0   mismatch 137 | all shoot_release True | second_only 137
+python tools/rl/v420_release_probe.py                         => exit 0   stdout 与原件逐字节相同 = True
+
+## 4 反向用例（fail-closed）
+python tools/rl/v420_<x>_probe.py --shard <不存在的目录>       => exit 2   （4/4 个脚本，stderr 一行）
+TOUHOU_RL_ROOT=<非仓库目录> python tools/rl/v420_<x>_probe.py  => exit 2   （4/4 个脚本，stderr 一行）
+cwd=%TEMP% + python <仓库根>\tools\rl\v420_slot_probe.py      => exit 0   首行 rows: 3300（默认参数异地 CWD 可用）
+
+## 5 原件与资产未被修改
+.tmp_v420_slot_probe.py    前 = 后 = ceff33d89616482bd91ae5dbc81fd91b47413087198d4339c1b60a68609f8427
+.tmp_v420_hist_probe.py    前 = 后 = 81820648ee00f1dc51c33f5915457ad40e08bcb38437042a2b9a8ec89796329f
+.tmp_v420_mask_probe.py    前 = 后 = 262fe55f7c8bd30816a7eae9b50293351b5d2d64fac0c1bb5510778eb11a738d
+.tmp_v420_release_probe.py 前 = 后 = 8239b6773e5dfec0908bd72aff6c7d0f7ecefa822452b3def09dbe9789de391b
+.tmp_v410_s1c/…/labels.jsonl, shard.json, obs/act_hist.npy    => 运行前后 sha256 相同（3/3，mtime 仍为 2026-11-13）
+git check-ignore -v <4 个新文件>                              => exit 1   输出 0 行（未被忽略）
+git status --porcelain -- <4 新 + 4 原件>                     => exit 0   8 行全是 "??"（未 add）
+
+## 6 归位件 sha256（写证据时的实际值）
+tools/rl/v420_slot_probe.py    = 53ed7f715b340c05d282bf9b11f6764787f04fb1eb12538d7f723a1ba02c5b09  (144 行)
+tools/rl/v420_hist_probe.py    = c28b972ab283202c115566c56574cc062a38d8d39122581d164812d1dadc5353  (130 行)
+tools/rl/v420_mask_probe.py    = 32d78fcb6cbdfefde9770034fe1f654f06d9ec48423e4c9ee39864276e4dd5a2  (108 行)
+tools/rl/v420_release_probe.py = 749cf1f6c00dd6c586f4792d1980cdd233ca175f1958f61aa3f621916d1388bb  (122 行)
+
+## 7 not_run（不伪造）
+其它 shard（S1 其它 seed / D1 canonical / dev-eval）未运行；未跑 pytest / 引擎 / 训练 / tools/rl/v430.py。
+理由：这 4 个 probe 的唯一已定义输入就是 v4.2.0 报告引用的那个 shard。

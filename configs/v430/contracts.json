@@ -1,0 +1,406 @@
+{
+  "schema": "v430-contracts/1",
+  "spec_revision": "v430-plan-r2",
+  "frozen_at": "2026-11-15T11:06:52+08:00",
+  "timezone": "Asia/Shanghai",
+  "description": "Frozen v4.3.0 data contract (W01). The constants block below is generated from touhou_rl/v430/contracts.py; tests/test_v430_contracts.py asserts both directions, so a change on either side fails the suite. Parameters only: this file configures no run, starts no engine and claims no capability (capability_gate stays not_run).",
+  "plan_spec": {
+    "path": "Document/Update/Alpha/v4.3.0/PLAN_SPEC.json",
+    "schema_expected": "v430-training-plan/2",
+    "revision_expected": "v430-plan-r2",
+    "sections_mirrored": [
+      "action",
+      "observation.O2",
+      "model.action_heads_input",
+      "ppo.duration_source_R1_R2",
+      "future_cli.exit_codes",
+      "future_cli.result_fields"
+    ]
+  },
+  "source_module": "touhou_rl/v430/contracts.py",
+  "constants": {
+    "contract_version": "v430-contract/1",
+    "spec_revision": "v430-plan-r2",
+    "config_schema": "v430-contracts/1",
+    "action": {
+      "heads": {
+        "move": 9,
+        "focus": 2,
+        "shoot": 2,
+        "bomb": 2
+      },
+      "head_order": [
+        "move",
+        "focus",
+        "shoot",
+        "bomb"
+      ],
+      "joint_count": 72,
+      "joint_formula": "((move*2+focus)*2+shoot)*2+bomb",
+      "factorization": "independent categorical heads; summed log-probability and entropy",
+      "hold_game_frames": 2,
+      "forced_shoot": false,
+      "truth_action_mask": false,
+      "actual_key_history": true,
+      "owner_exclusive": true,
+      "session_actor_loss_mask": 0,
+      "controller_sources": [
+        "actor",
+        "session"
+      ],
+      "state_machine_semantics": "requested action and emitted masks both logged; compile identically in sampling and evaluation",
+      "bomb_semantics": "press-edge trigger recorded separately from the held level; no hidden hit state"
+    },
+    "observation": {
+      "variant": "O2_candidate",
+      "source_rgb_wh": [
+        640,
+        480
+      ],
+      "rgb_channel_order": [
+        "R",
+        "G",
+        "B"
+      ],
+      "rgba_input_order": [
+        "R",
+        "G",
+        "B",
+        "A"
+      ],
+      "play_crop_xywh": [
+        32,
+        16,
+        384,
+        448
+      ],
+      "hud_crop_xywh": [
+        480,
+        16,
+        160,
+        448
+      ],
+      "gray_rule": "(77*R+151*G+28*B)>>8",
+      "gray_weights_rgb": [
+        77,
+        151,
+        28
+      ],
+      "gray_shift": 8,
+      "downsample_factor": 2,
+      "downsample_accumulator": "uint32",
+      "downsample_rule": "2x2 mean; uint32 sum then floor division by 4",
+      "storage_dtype": "uint8",
+      "normalization": "divide by 255 in minibatch",
+      "normalize_divisor": 255.0,
+      "play_temporal_spacing": "consecutive genuine captured game frames",
+      "global_rgb_chw": [
+        3,
+        240,
+        320
+      ],
+      "play_gray_chw": [
+        4,
+        224,
+        192
+      ],
+      "hud_gray_chw": [
+        1,
+        448,
+        160
+      ],
+      "executed_key_history_shape": [
+        8,
+        7
+      ],
+      "history_valid_shape": [
+        8
+      ],
+      "memory_shape": [
+        256
+      ],
+      "elapsed_capture_s_rank": 0,
+      "key_order": [
+        "left",
+        "right",
+        "up",
+        "down",
+        "focus",
+        "shoot",
+        "bomb"
+      ],
+      "image_bytes_per_decision": 474112,
+      "forbidden_actor_fields": [
+        "engine_frame",
+        "seed",
+        "script_id",
+        "stage_truth",
+        "enemy_table",
+        "resource_truth",
+        "teacher_action",
+        "future_tape"
+      ],
+      "digest": "cb1616e4cbfa928e691c2fb8497a84c813bded528064cf2b0aa1e30fa86b85b5",
+      "fields": [
+        {
+          "name": "global_rgb",
+          "shape": [
+            3,
+            240,
+            320
+          ],
+          "dtype": "uint8",
+          "minimum": 0,
+          "maximum": 255,
+          "value_domain": null,
+          "semantics": "the current full framed region, RGB, including menus and HUD"
+        },
+        {
+          "name": "play_gray",
+          "shape": [
+            4,
+            224,
+            192
+          ],
+          "dtype": "uint8",
+          "minimum": 0,
+          "maximum": 255,
+          "value_domain": null,
+          "semantics": "current and three previous *genuine consecutive* play frames"
+        },
+        {
+          "name": "hud_gray",
+          "shape": [
+            1,
+            448,
+            160
+          ],
+          "dtype": "uint8",
+          "minimum": 0,
+          "maximum": 255,
+          "value_domain": null,
+          "semantics": "TH08 native-pixel HUD strip; other games need their own check"
+        },
+        {
+          "name": "executed_key_history",
+          "shape": [
+            8,
+            7
+          ],
+          "dtype": "uint8",
+          "minimum": 0,
+          "maximum": 1,
+          "value_domain": [
+            0,
+            1
+          ],
+          "semantics": "oldest to newest actual executed key state, columns KEY_ORDER"
+        },
+        {
+          "name": "history_valid",
+          "shape": [
+            8
+          ],
+          "dtype": "bool",
+          "minimum": null,
+          "maximum": null,
+          "value_domain": [
+            false,
+            true
+          ],
+          "semantics": "cold start / missing history must not be faked as executed idle"
+        },
+        {
+          "name": "elapsed_capture_s",
+          "shape": [],
+          "dtype": "float32",
+          "minimum": 0.0,
+          "maximum": null,
+          "value_domain": null,
+          "semantics": "the capture clock's own interval, not an engine frame number"
+        },
+        {
+          "name": "memory",
+          "shape": [
+            256
+          ],
+          "dtype": "float32",
+          "minimum": null,
+          "maximum": null,
+          "value_domain": null,
+          "semantics": "model-internal recurrent state; a teacher must never fill it"
+        }
+      ]
+    },
+    "time": {
+      "hold_game_frames": 2,
+      "reference_hz": 60,
+      "duration_sources": [
+        "engine_elapsed_frames",
+        "external_controller_clock",
+        "invalid"
+      ],
+      "duration_tolerance_frames": 0.5,
+      "effective_frames_from_capture": "hz * elapsed_capture_s, external source only",
+      "independent_sources": true
+    },
+    "results": {
+      "exit_codes": {
+        "0": "requested execution completed or requested gate passed; not automatic capability success",
+        "2": "invalid inputs protocol or environment",
+        "3": "valid measurement failed requested gate",
+        "4": "incomplete due to resources or interruption"
+      },
+      "result_fields": [
+        "execution_status",
+        "protocol_validity",
+        "research_result",
+        "capability_gate"
+      ],
+      "execution_statuses": [
+        "ok",
+        "invalid",
+        "gate_fail",
+        "incomplete"
+      ],
+      "exit_code_by_execution_status": {
+        "ok": 0,
+        "invalid": 2,
+        "gate_fail": 3,
+        "incomplete": 4
+      },
+      "protocol_validity_values": [
+        "valid",
+        "invalid",
+        "not_run"
+      ],
+      "result_statuses": [
+        "not_run",
+        "pass",
+        "fail",
+        "inconclusive",
+        "invalid",
+        "incomplete"
+      ],
+      "capability_gate_values": [
+        "not_run",
+        "not_applicable",
+        "pass",
+        "fail",
+        "invalid"
+      ],
+      "capability_gate_default": "not_run",
+      "capability_gate_judged_only": [
+        "pass",
+        "fail"
+      ],
+      "training_command_classes": [
+        "training"
+      ],
+      "command_classes": [
+        "audit",
+        "contract",
+        "training",
+        "evaluation",
+        "confirmation",
+        "adaptation",
+        "settlement",
+        "planning",
+        "data",
+        "teacher"
+      ]
+    },
+    "forbidden_actor_fields": [
+      "engine_frame",
+      "seed",
+      "script_id",
+      "stage_truth",
+      "enemy_table",
+      "resource_truth",
+      "teacher_action",
+      "future_tape"
+    ],
+    "privileged_field_names": [
+      "engine_frame",
+      "seed",
+      "script_id",
+      "stage_truth",
+      "enemy_table",
+      "resource_truth",
+      "teacher_action",
+      "future_tape",
+      "privileged_ref",
+      "privileged_state",
+      "oracle_state",
+      "lives_truth",
+      "bomb_count_truth",
+      "power_truth",
+      "rng_state",
+      "replay_input_tape"
+    ],
+    "transition": {
+      "end_flags": [
+        "terminated",
+        "truncated",
+        "segment_end"
+      ],
+      "alias_keys": [
+        "done",
+        "is_done",
+        "episode_done",
+        "end",
+        "terminal",
+        "is_terminal"
+      ],
+      "required_fields": [
+        "record_id",
+        "episode_id",
+        "obs_ref",
+        "next_obs_ref",
+        "requested_action",
+        "executed_masks",
+        "controller_source",
+        "terminated",
+        "truncated",
+        "segment_end",
+        "terminal_observation_ref",
+        "elapsed_game_frames",
+        "actor_loss_mask",
+        "value_loss_mask",
+        "privileged_ref"
+      ],
+      "optional_fields": [
+        "ancestor_id",
+        "event_id",
+        "split",
+        "history_valid",
+        "obs_digest",
+        "action_digest",
+        "behavior_policy_sha",
+        "behavior_log_prob",
+        "recurrent_state_version",
+        "reward_components",
+        "reward_total",
+        "reward_source",
+        "reward_digest",
+        "capture_timestamps",
+        "delivery_timestamps",
+        "label_validity",
+        "protocol_validity",
+        "truncation_reason"
+      ],
+      "truncation_reasons": [
+        "rollout_limit",
+        "frame_budget",
+        "time_limit",
+        "resource_limit",
+        "owner_preempt",
+        "delivery_timeout",
+        "capture_gap",
+        "protocol_invalid",
+        "other"
+      ],
+      "bootstrap_rule": "terminated -> 0; truncated -> needs terminal_observation_ref; continuing -> needs next_obs_ref; a reset image never bootstraps"
+    }
+  }
+}

@@ -1,0 +1,32 @@
+W03A — exit codes and pytest statistics
+=======================================
+Slice: GAE + discount/lambda only (no segmentation, no burn-in, no model, no training)
+Host: Windows, repo D:\WorkShop\Touhou_RL
+Python 3.12.10 / pytest 9.1.1
+Run (UTC): 2026-11-15T03:37:00Z
+
+Command 1
+---------
+$env:PYTHONPATH='D:\WorkShop\Touhou_RL'
+python -m compileall -q touhou_rl/v430/sequence.py
+exit code: 0
+output: (none — compileall -q prints nothing on success)
+
+Command 2
+---------
+$env:PYTHONPATH='D:\WorkShop\Touhou_RL'
+python -m pytest -p no:cacheprovider --basetemp .tmp_v430_pytest_w03a2 -q tests/test_v430_sequence.py
+exit code: 0
+output tail:
+
+.............................................                            [100%]
+45 passed in 0.08s
+
+interpretation: 45 passed, 0 failed, 0 skipped, 0 errors.
+
+Note on what this proves
+------------------------
+Both commands cover syntax plus synthetic unit tests of two pure functions.
+They are NOT evidence of game capability: no engine was started, no game data,
+checkpoint or model was read, no rollout or training ran. compileall exit 0 only
+means the file parses.

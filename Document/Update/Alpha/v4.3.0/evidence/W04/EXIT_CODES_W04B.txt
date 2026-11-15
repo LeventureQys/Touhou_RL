@@ -1,0 +1,35 @@
+# W04B exit codes — captured from a real run (Windows, pwsh, PYTHONPATH=D:\WorkShop\Touhou_RL)
+# cwd: D:\WorkShop\Touhou_RL
+# final file state: touhou_rl/v430/learn.py + tests/test_v430_learn.py (29 tests)
+
+$ python -m compileall -q touhou_rl/v430/learn.py
+
+[exit code: 0]
+
+$ python -m pytest -p no:cacheprovider --basetemp .tmp_v430_pytest_w04b -q tests/test_v430_learn.py
+.............................                                            [100%]
+29 passed in 9.69s
+[exit code: 0]
+
+$ python -m pytest -p no:cacheprovider --basetemp .tmp_v430_pytest_w04b_reg -q tests/test_v430_data.py tests/test_v430_ppo.py tests/test_v430_models.py
+........................................................................ [ 76%]
+......................                                                   [100%]
+94 passed in 2.53s
+[exit code: 0]
+
+# Before this slice, the same learn file reported "24 passed"; the five new checks are:
+#   test_train_from_manifest_refuses_a_legacy_obs_contract
+#   test_dry_run_also_refuses_a_legacy_obs_contract
+#   test_batch_source_defaults_to_synthetic
+#   test_batch_source_captured_o2_is_not_called_synthetic
+#   test_an_unregistered_batch_source_is_refused
+#
+# Measured refusal (scripts/one-off, same fixture as the tests; full text in
+# W04B_OBS_GUARD_WIRING.md §3):
+#   validate_manifest(legacy manifest)["valid"] == True       <- gate 1 passes it
+#   run=True  -> touhou_rl.v430.data.manifest.ManifestError   <- guard refuses it
+#   run=False -> touhou_rl.v430.data.manifest.ManifestError   <- dry run refuses it
+#
+# Note: compileall exit 0 only proves the file parses. The two pytest lines are the
+# real evidence. Everything here is a synthetic-fixture / code-level check: no engine,
+# no real corpus, no training on captured data -> not game/capability evidence.

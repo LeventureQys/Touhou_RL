@@ -1,0 +1,3322 @@
+{
+ "schema": "v430-splits/1",
+ "experiment_id": "v430-w09-clean-holdout-splits-001",
+ "spec_revision": "v430-plan-r2",
+ "frozen_at": "2026-11-15T11:34:26+08:00",
+ "timezone": "Asia/Shanghai",
+ "work_package": "v4.3.0 W09",
+ "purpose": "freeze train/dev/confirm/adapt task lineage before the corpus grows, so G410-6 can be run on two families no pretraining source ever touched",
+ "roots": {
+  "repo": ".",
+  "d1_corpus": ".tmp_v400_d1/d1",
+  "s1_corpus": ".tmp_v410_s1c/d1",
+  "s1b_corpus_quarantined": ".tmp_v410_s1b/d1",
+  "v420_data": ".tmp_v420_data",
+  "dagger_v410": ".tmp_v410_wp05_round3",
+  "dagger_v420": "configs/v420",
+  "engine_binary_relative": "third_party/th08-rl/build/rl_v3/th08-modern",
+  "retail_replay_corpus": "third_party/th08/config/replay-fixtures.json",
+  "registries": "Document/Update/Alpha/v4.3.0/registries",
+  "evidence": "Document/Update/Alpha/v4.3.0/evidence/W09",
+  "asset_binding": "configs/v430/assets.json"
+ },
+ "root_binding_note": "paths are repo-relative so the config is portable between the Windows checkout and an asset host; the Linux engine path itself is bound in configs/v430/assets.json, never here",
+ "registries": [
+  {
+   "role": "task_families",
+   "path": "Document/Update/Alpha/v4.3.0/registries/task_families.json",
+   "sha256": "8736ad6b702514b015ede93cdc5825047328d09a4dbdc94a5fdfe120fdf6fe19",
+   "digest_scope": "text/lf-normalized",
+   "frozen": true
+  },
+  {
+   "role": "pretraining_sources",
+   "path": "Document/Update/Alpha/v4.3.0/registries/pretraining_sources.json",
+   "sha256": "9c890133fa307a49b4d015ebefd1beb0c2e977c0b3c3bc3394866178b559cde0",
+   "digest_scope": "text/lf-normalized",
+   "frozen": true
+  },
+  {
+   "role": "holdout_families",
+   "path": "Document/Update/Alpha/v4.3.0/registries/holdout_families.json",
+   "sha256": "81e94bef48d5714862f2c502a30ca67c087f5c6118293d1208af2e7a4ba57a63",
+   "digest_scope": "text/lf-normalized",
+   "frozen": true
+  },
+  {
+   "role": "runs",
+   "path": "Document/Update/Alpha/v4.3.0/registries/runs.json",
+   "sha256": "84a32efe34c8f6356cc390f4d4d7d713bb77ec2cab1988a46e2ff085fcad9e81",
+   "digest_scope": "text/lf-normalized",
+   "frozen": false,
+   "note": "live ledger: W12 appends entries, so only the frozen shape is enforced"
+  }
+ ],
+ "ancestors": [
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s0d1-n3371-seed1-shard",
+   "seed": 1,
+   "task_family": "th08-stage1-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s0d1-n3371-seed1-shard-i008",
+   "seed": 1,
+   "task_family": "th08-stage1-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s0d1-n3371-seed1-shard-i016",
+   "seed": 1,
+   "task_family": "th08-stage1-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s0d1-n3371-seed10-shard",
+   "seed": 10,
+   "task_family": "th08-stage1-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s0d1-n3371-seed11-shard",
+   "seed": 11,
+   "task_family": "th08-stage1-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s0d1-n3371-seed12-shard",
+   "seed": 12,
+   "task_family": "th08-stage1-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s0d1-n3371-seed13-shard",
+   "seed": 13,
+   "task_family": "th08-stage1-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s0d1-n3371-seed14-shard",
+   "seed": 14,
+   "task_family": "th08-stage1-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s0d1-n3371-seed15-shard",
+   "seed": 15,
+   "task_family": "th08-stage1-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s0d1-n3371-seed16-shard",
+   "seed": 16,
+   "task_family": "th08-stage1-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s0d1-n3371-seed17-shard",
+   "seed": 17,
+   "task_family": "th08-stage1-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s0d1-n3371-seed18-shard",
+   "seed": 18,
+   "task_family": "th08-stage1-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s0d1-n3371-seed19-shard",
+   "seed": 19,
+   "task_family": "th08-stage1-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s0d1-n3371-seed2-shard",
+   "seed": 2,
+   "task_family": "th08-stage1-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s0d1-n3371-seed2-shard-i009",
+   "seed": 2,
+   "task_family": "th08-stage1-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s0d1-n3371-seed2-shard-i017",
+   "seed": 2,
+   "task_family": "th08-stage1-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s0d1-n3371-seed3-shard",
+   "seed": 3,
+   "task_family": "th08-stage1-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s0d1-n3371-seed3-shard-i010",
+   "seed": 3,
+   "task_family": "th08-stage1-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s0d1-n3371-seed3-shard-i018",
+   "seed": 3,
+   "task_family": "th08-stage1-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s0d1-n3371-seed4-shard",
+   "seed": 4,
+   "task_family": "th08-stage1-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s0d1-n3371-seed5-shard",
+   "seed": 5,
+   "task_family": "th08-stage1-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s0d1-n3371-seed5-shard-i012",
+   "seed": 5,
+   "task_family": "th08-stage1-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s0d1-n3371-seed6-shard",
+   "seed": 6,
+   "task_family": "th08-stage1-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s0d1-n3371-seed6-shard-i013",
+   "seed": 6,
+   "task_family": "th08-stage1-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s0d1-n3371-seed7-shard",
+   "seed": 7,
+   "task_family": "th08-stage1-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s0d1-n3371-seed7-shard-i014",
+   "seed": 7,
+   "task_family": "th08-stage1-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s0d1-n3371-seed8-shard",
+   "seed": 8,
+   "task_family": "th08-stage1-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s0d1-n3371-seed8-shard-i015",
+   "seed": 8,
+   "task_family": "th08-stage1-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s0d1-n3371-seed9-shard",
+   "seed": 9,
+   "task_family": "th08-stage1-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s1d1-n4000-seed10-shard",
+   "seed": 10,
+   "task_family": "th08-stage2-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s1d1-n4000-seed11-shard",
+   "seed": 11,
+   "task_family": "th08-stage2-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s1d1-n4000-seed12-shard",
+   "seed": 12,
+   "task_family": "th08-stage2-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s1d1-n4000-seed13-shard",
+   "seed": 13,
+   "task_family": "th08-stage2-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s1d1-n4000-seed14-shard",
+   "seed": 14,
+   "task_family": "th08-stage2-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s1d1-n4000-seed15-shard",
+   "seed": 15,
+   "task_family": "th08-stage2-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s1d1-n4000-seed16-shard",
+   "seed": 16,
+   "task_family": "th08-stage2-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s1d1-n4000-seed17-shard",
+   "seed": 17,
+   "task_family": "th08-stage2-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s1d1-n4000-seed2-shard",
+   "seed": 2,
+   "task_family": "th08-stage2-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s1d1-n4000-seed3-shard",
+   "seed": 3,
+   "task_family": "th08-stage2-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s1d1-n4000-seed4-shard",
+   "seed": 4,
+   "task_family": "th08-stage2-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s1d1-n4000-seed5-shard",
+   "seed": 5,
+   "task_family": "th08-stage2-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s1d1-n4000-seed6-shard",
+   "seed": 6,
+   "task_family": "th08-stage2-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s1d1-n4000-seed7-shard",
+   "seed": 7,
+   "task_family": "th08-stage2-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s1d1-n4000-seed8-shard",
+   "seed": 8,
+   "task_family": "th08-stage2-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s1d1-n4000-seed9-shard",
+   "seed": 9,
+   "task_family": "th08-stage2-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s2d1-n4000-seed10-shard",
+   "seed": 10,
+   "task_family": "th08-stage3-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s2d1-n4000-seed11-shard",
+   "seed": 11,
+   "task_family": "th08-stage3-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s2d1-n4000-seed12-shard",
+   "seed": 12,
+   "task_family": "th08-stage3-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s2d1-n4000-seed13-shard",
+   "seed": 13,
+   "task_family": "th08-stage3-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s2d1-n4000-seed14-shard",
+   "seed": 14,
+   "task_family": "th08-stage3-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s2d1-n4000-seed15-shard",
+   "seed": 15,
+   "task_family": "th08-stage3-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s2d1-n4000-seed16-shard",
+   "seed": 16,
+   "task_family": "th08-stage3-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s2d1-n4000-seed17-shard",
+   "seed": 17,
+   "task_family": "th08-stage3-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s2d1-n4000-seed18-shard",
+   "seed": 18,
+   "task_family": "th08-stage3-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s2d1-n4000-seed19-shard",
+   "seed": 19,
+   "task_family": "th08-stage3-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s2d1-n4000-seed4-shard",
+   "seed": 4,
+   "task_family": "th08-stage3-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s2d1-n4000-seed5-shard",
+   "seed": 5,
+   "task_family": "th08-stage3-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s2d1-n4000-seed6-shard",
+   "seed": 6,
+   "task_family": "th08-stage3-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s2d1-n4000-seed7-shard",
+   "seed": 7,
+   "task_family": "th08-stage3-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s2d1-n4000-seed8-shard",
+   "seed": 8,
+   "task_family": "th08-stage3-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s2d1-n4000-seed9-shard",
+   "seed": 9,
+   "task_family": "th08-stage3-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s3d1-n3833-seed10-shard",
+   "seed": 10,
+   "task_family": "th08-stage4a-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s3d1-n3833-seed11-shard",
+   "seed": 11,
+   "task_family": "th08-stage4a-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s3d1-n3833-seed12-shard",
+   "seed": 12,
+   "task_family": "th08-stage4a-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s3d1-n3833-seed13-shard",
+   "seed": 13,
+   "task_family": "th08-stage4a-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s3d1-n3833-seed14-shard",
+   "seed": 14,
+   "task_family": "th08-stage4a-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s3d1-n3833-seed15-shard",
+   "seed": 15,
+   "task_family": "th08-stage4a-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s3d1-n3833-seed16-shard",
+   "seed": 16,
+   "task_family": "th08-stage4a-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s3d1-n3833-seed17-shard",
+   "seed": 17,
+   "task_family": "th08-stage4a-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s3d1-n3833-seed18-shard",
+   "seed": 18,
+   "task_family": "th08-stage4a-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s3d1-n3833-seed19-shard",
+   "seed": 19,
+   "task_family": "th08-stage4a-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s3d1-n3833-seed3-shard",
+   "seed": 3,
+   "task_family": "th08-stage4a-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s3d1-n3833-seed4-shard",
+   "seed": 4,
+   "task_family": "th08-stage4a-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s3d1-n3833-seed5-shard",
+   "seed": 5,
+   "task_family": "th08-stage4a-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s3d1-n3833-seed6-shard",
+   "seed": 6,
+   "task_family": "th08-stage4a-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s3d1-n3833-seed7-shard",
+   "seed": 7,
+   "task_family": "th08-stage4a-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s3d1-n3833-seed8-shard",
+   "seed": 8,
+   "task_family": "th08-stage4a-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s3d1-n3833-seed9-shard",
+   "seed": 9,
+   "task_family": "th08-stage4a-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s4d1-n4000-seed10-shard",
+   "seed": 10,
+   "task_family": "th08-stage4b-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s4d1-n4000-seed11-shard",
+   "seed": 11,
+   "task_family": "th08-stage4b-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s4d1-n4000-seed12-shard",
+   "seed": 12,
+   "task_family": "th08-stage4b-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s4d1-n4000-seed13-shard",
+   "seed": 13,
+   "task_family": "th08-stage4b-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s4d1-n4000-seed14-shard",
+   "seed": 14,
+   "task_family": "th08-stage4b-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s4d1-n4000-seed15-shard",
+   "seed": 15,
+   "task_family": "th08-stage4b-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s4d1-n4000-seed16-shard",
+   "seed": 16,
+   "task_family": "th08-stage4b-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s4d1-n4000-seed17-shard",
+   "seed": 17,
+   "task_family": "th08-stage4b-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s4d1-n4000-seed18-shard",
+   "seed": 18,
+   "task_family": "th08-stage4b-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s4d1-n4000-seed19-shard",
+   "seed": 19,
+   "task_family": "th08-stage4b-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s4d1-n4000-seed20-shard",
+   "seed": 20,
+   "task_family": "th08-stage4b-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s4d1-n4000-seed5-shard",
+   "seed": 5,
+   "task_family": "th08-stage4b-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s4d1-n4000-seed6-shard",
+   "seed": 6,
+   "task_family": "th08-stage4b-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s4d1-n4000-seed7-shard",
+   "seed": 7,
+   "task_family": "th08-stage4b-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s4d1-n4000-seed8-shard",
+   "seed": 8,
+   "task_family": "th08-stage4b-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s4d1-n4000-seed9-shard",
+   "seed": 9,
+   "task_family": "th08-stage4b-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s5d1-n4000-seed10-shard",
+   "seed": 10,
+   "task_family": "th08-stage5-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s5d1-n4000-seed11-shard",
+   "seed": 11,
+   "task_family": "th08-stage5-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s5d1-n4000-seed12-shard",
+   "seed": 12,
+   "task_family": "th08-stage5-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s5d1-n4000-seed13-shard",
+   "seed": 13,
+   "task_family": "th08-stage5-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s5d1-n4000-seed14-shard",
+   "seed": 14,
+   "task_family": "th08-stage5-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s5d1-n4000-seed15-shard",
+   "seed": 15,
+   "task_family": "th08-stage5-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s5d1-n4000-seed16-shard",
+   "seed": 16,
+   "task_family": "th08-stage5-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s5d1-n4000-seed17-shard",
+   "seed": 17,
+   "task_family": "th08-stage5-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s5d1-n4000-seed18-shard",
+   "seed": 18,
+   "task_family": "th08-stage5-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s5d1-n4000-seed19-shard",
+   "seed": 19,
+   "task_family": "th08-stage5-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s5d1-n4000-seed20-shard",
+   "seed": 20,
+   "task_family": "th08-stage5-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s5d1-n4000-seed21-shard",
+   "seed": 21,
+   "task_family": "th08-stage5-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s5d1-n4000-seed6-shard",
+   "seed": 6,
+   "task_family": "th08-stage5-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s5d1-n4000-seed7-shard",
+   "seed": 7,
+   "task_family": "th08-stage5-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s5d1-n4000-seed8-shard",
+   "seed": 8,
+   "task_family": "th08-stage5-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s5d1-n4000-seed9-shard",
+   "seed": 9,
+   "task_family": "th08-stage5-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s6d1-n3836-seed10-shard",
+   "seed": 10,
+   "task_family": "th08-stage6a-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s6d1-n3836-seed11-shard",
+   "seed": 11,
+   "task_family": "th08-stage6a-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s6d1-n3836-seed12-shard",
+   "seed": 12,
+   "task_family": "th08-stage6a-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s6d1-n3836-seed13-shard",
+   "seed": 13,
+   "task_family": "th08-stage6a-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s6d1-n3836-seed14-shard",
+   "seed": 14,
+   "task_family": "th08-stage6a-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s6d1-n3836-seed15-shard",
+   "seed": 15,
+   "task_family": "th08-stage6a-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s6d1-n3836-seed16-shard",
+   "seed": 16,
+   "task_family": "th08-stage6a-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s6d1-n3836-seed17-shard",
+   "seed": 17,
+   "task_family": "th08-stage6a-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s6d1-n3836-seed18-shard",
+   "seed": 18,
+   "task_family": "th08-stage6a-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s6d1-n3836-seed19-shard",
+   "seed": 19,
+   "task_family": "th08-stage6a-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s6d1-n3836-seed20-shard",
+   "seed": 20,
+   "task_family": "th08-stage6a-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s6d1-n3836-seed21-shard",
+   "seed": 21,
+   "task_family": "th08-stage6a-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s6d1-n3836-seed22-shard",
+   "seed": 22,
+   "task_family": "th08-stage6a-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s6d1-n3836-seed23-shard",
+   "seed": 23,
+   "task_family": "th08-stage6a-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s6d1-n3836-seed7-shard",
+   "seed": 7,
+   "task_family": "th08-stage6a-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s6d1-n3836-seed8-shard",
+   "seed": 8,
+   "task_family": "th08-stage6a-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s6d1-n3836-seed9-shard",
+   "seed": 9,
+   "task_family": "th08-stage6a-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s7d1-n3218-seed1-shard",
+   "seed": 1,
+   "task_family": "th08-stage6b-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s7d1-n3218-seed10-shard",
+   "seed": 10,
+   "task_family": "th08-stage6b-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s7d1-n3218-seed11-shard",
+   "seed": 11,
+   "task_family": "th08-stage6b-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s7d1-n3218-seed12-shard",
+   "seed": 12,
+   "task_family": "th08-stage6b-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s7d1-n3218-seed13-shard",
+   "seed": 13,
+   "task_family": "th08-stage6b-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s7d1-n3218-seed14-shard",
+   "seed": 14,
+   "task_family": "th08-stage6b-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s7d1-n3218-seed15-shard",
+   "seed": 15,
+   "task_family": "th08-stage6b-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s7d1-n3218-seed16-shard",
+   "seed": 16,
+   "task_family": "th08-stage6b-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s7d1-n3218-seed17-shard",
+   "seed": 17,
+   "task_family": "th08-stage6b-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s7d1-n3218-seed18-shard",
+   "seed": 18,
+   "task_family": "th08-stage6b-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s7d1-n3218-seed19-shard",
+   "seed": 19,
+   "task_family": "th08-stage6b-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s7d1-n3218-seed2-shard",
+   "seed": 2,
+   "task_family": "th08-stage6b-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s7d1-n3218-seed20-shard",
+   "seed": 20,
+   "task_family": "th08-stage6b-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s7d1-n3218-seed21-shard",
+   "seed": 21,
+   "task_family": "th08-stage6b-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s7d1-n3218-seed22-shard",
+   "seed": 22,
+   "task_family": "th08-stage6b-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s7d1-n3218-seed23-shard",
+   "seed": 23,
+   "task_family": "th08-stage6b-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s7d1-n3218-seed24-shard",
+   "seed": 24,
+   "task_family": "th08-stage6b-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s7d1-n3218-seed25-shard",
+   "seed": 25,
+   "task_family": "th08-stage6b-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s7d1-n3218-seed8-shard",
+   "seed": 8,
+   "task_family": "th08-stage6b-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-teacher-fast",
+   "episode": "d1-s7d1-n3218-seed9-shard",
+   "seed": 9,
+   "task_family": "th08-stage6b-normal-team0",
+   "note": "D1 shard; difficulty fixed at 1 by the corpus"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-s1c",
+   "episode": "d1-s0d1-n3300-seed10-shard",
+   "seed": 10,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-s1c",
+   "episode": "d1-s0d1-n3300-seed11-shard",
+   "seed": 11,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-s1c",
+   "episode": "d1-s0d1-n3300-seed12-shard",
+   "seed": 12,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-s1c",
+   "episode": "d1-s0d1-n3300-seed13-shard",
+   "seed": 13,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-s1c",
+   "episode": "d1-s0d1-n3300-seed14-shard",
+   "seed": 14,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-s1c",
+   "episode": "d1-s0d1-n3300-seed15-shard",
+   "seed": 15,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-s1c",
+   "episode": "d1-s0d1-n3300-seed16-shard",
+   "seed": 16,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-s1c",
+   "episode": "d1-s0d1-n3300-seed17-shard",
+   "seed": 17,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-s1c",
+   "episode": "d1-s0d1-n3300-seed18-shard",
+   "seed": 18,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-s1c",
+   "episode": "d1-s0d1-n3300-seed19-shard",
+   "seed": 19,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-s1c",
+   "episode": "d1-s0d1-n3300-seed20-shard",
+   "seed": 20,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-s1c",
+   "episode": "d1-s0d1-n3300-seed9-shard",
+   "seed": 9,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-s1b-rejected",
+   "episode": "d1-s0d1-n3251-seed1000-shard",
+   "seed": 1000,
+   "task_family": "th08-stage1-normal-team0",
+   "note": "rejected for seed provenance (dev seeds 1000-1011); quarantined, never fitted"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-s1b-rejected",
+   "episode": "d1-s0d1-n3251-seed1001-shard",
+   "seed": 1001,
+   "task_family": "th08-stage1-normal-team0",
+   "note": "rejected for seed provenance (dev seeds 1000-1011); quarantined, never fitted"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-s1b-rejected",
+   "episode": "d1-s0d1-n3251-seed1002-shard",
+   "seed": 1002,
+   "task_family": "th08-stage1-normal-team0",
+   "note": "rejected for seed provenance (dev seeds 1000-1011); quarantined, never fitted"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-s1b-rejected",
+   "episode": "d1-s0d1-n3251-seed1003-shard",
+   "seed": 1003,
+   "task_family": "th08-stage1-normal-team0",
+   "note": "rejected for seed provenance (dev seeds 1000-1011); quarantined, never fitted"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-s1b-rejected",
+   "episode": "d1-s0d1-n3251-seed1004-shard",
+   "seed": 1004,
+   "task_family": "th08-stage1-normal-team0",
+   "note": "rejected for seed provenance (dev seeds 1000-1011); quarantined, never fitted"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-s1b-rejected",
+   "episode": "d1-s0d1-n3251-seed1005-shard",
+   "seed": 1005,
+   "task_family": "th08-stage1-normal-team0",
+   "note": "rejected for seed provenance (dev seeds 1000-1011); quarantined, never fitted"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-s1b-rejected",
+   "episode": "d1-s0d1-n3251-seed1006-shard",
+   "seed": 1006,
+   "task_family": "th08-stage1-normal-team0",
+   "note": "rejected for seed provenance (dev seeds 1000-1011); quarantined, never fitted"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-s1b-rejected",
+   "episode": "d1-s0d1-n3251-seed1007-shard",
+   "seed": 1007,
+   "task_family": "th08-stage1-normal-team0",
+   "note": "rejected for seed provenance (dev seeds 1000-1011); quarantined, never fitted"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-s1b-rejected",
+   "episode": "d1-s0d1-n3251-seed1008-shard",
+   "seed": 1008,
+   "task_family": "th08-stage1-normal-team0",
+   "note": "rejected for seed provenance (dev seeds 1000-1011); quarantined, never fitted"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-s1b-rejected",
+   "episode": "d1-s0d1-n3251-seed1009-shard",
+   "seed": 1009,
+   "task_family": "th08-stage1-normal-team0",
+   "note": "rejected for seed provenance (dev seeds 1000-1011); quarantined, never fitted"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-s1b-rejected",
+   "episode": "d1-s0d1-n3251-seed1010-shard",
+   "seed": 1010,
+   "task_family": "th08-stage1-normal-team0",
+   "note": "rejected for seed provenance (dev seeds 1000-1011); quarantined, never fitted"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d1-s1b-rejected",
+   "episode": "d1-s0d1-n3251-seed1011-shard",
+   "seed": 1011,
+   "task_family": "th08-stage1-normal-team0",
+   "note": "rejected for seed provenance (dev seeds 1000-1011); quarantined, never fitted"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d0-fast",
+   "episode": "d0-s0d1-seed1-shard",
+   "seed": 1,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d0-fast",
+   "episode": "d0-s0d1-seed2-shard",
+   "seed": 2,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d0-fast",
+   "episode": "d0-s0d1-seed3-shard",
+   "seed": 3,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d0-fast",
+   "episode": "d0-s0d1-seed4-shard",
+   "seed": 4,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d0-fast",
+   "episode": "d0-s0d1-seed5-shard",
+   "seed": 5,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d0-fast",
+   "episode": "d0-s0d1-seed6-shard",
+   "seed": 6,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d0-fast",
+   "episode": "d0-s0d1-seed7-shard",
+   "seed": 7,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d0-fast",
+   "episode": "d0-s0d1-seed8-shard",
+   "seed": 8,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d0-fast",
+   "episode": "d0-s0d1-seed9-shard",
+   "seed": 9,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d0-fast",
+   "episode": "d0-s0d1-seed10-shard",
+   "seed": 10,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d0-fast",
+   "episode": "d0-s0d1-seed11-shard",
+   "seed": 11,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d0-fast",
+   "episode": "d0-s0d1-seed12-shard",
+   "seed": 12,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d0-fast",
+   "episode": "d0-s0d1-seed13-shard",
+   "seed": 13,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d0-fast",
+   "episode": "d0-s0d1-seed14-shard",
+   "seed": 14,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d0-fast",
+   "episode": "d0-s0d1-seed15-shard",
+   "seed": 15,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "d0-fast",
+   "episode": "d0-s0d1-seed16-shard",
+   "seed": 16,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "dagger_round",
+   "source_id": "v410-wp05-round1",
+   "episode": "dagger-s0d1seed2000",
+   "seed": 2000,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "dagger_round",
+   "source_id": "v410-wp05-round1",
+   "episode": "dagger-s0d1seed2001",
+   "seed": 2001,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "dagger_round",
+   "source_id": "v410-wp05-round1",
+   "episode": "dagger-s0d1seed2002",
+   "seed": 2002,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "dagger_round",
+   "source_id": "v410-wp05-round1",
+   "episode": "dagger-s0d1seed2003",
+   "seed": 2003,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "dagger_round",
+   "source_id": "v410-wp05-round1",
+   "episode": "dagger-s0d1seed2004",
+   "seed": 2004,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "dagger_round",
+   "source_id": "v410-wp05-round1",
+   "episode": "dagger-s0d1seed2005",
+   "seed": 2005,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "dagger_round",
+   "source_id": "v410-wp05-round1",
+   "episode": "dagger-s0d1seed2006",
+   "seed": 2006,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "dagger_round",
+   "source_id": "v410-wp05-round1",
+   "episode": "dagger-s0d1seed2007",
+   "seed": 2007,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "dagger_round",
+   "source_id": "v410-wp05-round1",
+   "episode": "dagger-s0d1seed2008",
+   "seed": 2008,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "dagger_round",
+   "source_id": "v410-wp05-round1",
+   "episode": "dagger-s0d1seed2009",
+   "seed": 2009,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "dagger_round",
+   "source_id": "v410-wp05-round1",
+   "episode": "dagger-s0d1seed2010",
+   "seed": 2010,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "dagger_round",
+   "source_id": "v410-wp05-round1",
+   "episode": "dagger-s0d1seed2020",
+   "seed": 2020,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "dagger_round",
+   "source_id": "v410-wp05-round1",
+   "episode": "dagger-s0d1seed2021",
+   "seed": 2021,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "dagger_round",
+   "source_id": "v410-wp05-round1",
+   "episode": "dagger-s0d1seed2022",
+   "seed": 2022,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "dagger_round",
+   "source_id": "v410-wp05-round1",
+   "episode": "dagger-s0d1seed2023",
+   "seed": 2023,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "dagger_round",
+   "source_id": "v410-wp05-round1",
+   "episode": "dagger-s0d1seed2024",
+   "seed": 2024,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "dagger_round",
+   "source_id": "v410-wp05-round2",
+   "episode": "dagger-s0d1seed2025",
+   "seed": 2025,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "dagger_round",
+   "source_id": "v410-wp05-round2",
+   "episode": "dagger-s0d1seed2026",
+   "seed": 2026,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "dagger_round",
+   "source_id": "v410-wp05-round2",
+   "episode": "dagger-s0d1seed2027",
+   "seed": 2027,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "dagger_round",
+   "source_id": "v410-wp05-round2",
+   "episode": "dagger-s0d1seed2028",
+   "seed": 2028,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "dagger_round",
+   "source_id": "v410-wp05-round2",
+   "episode": "dagger-s0d1seed2029",
+   "seed": 2029,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "dagger_round",
+   "source_id": "v410-wp05-round2",
+   "episode": "dagger-s0d1seed2030",
+   "seed": 2030,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "dagger_round",
+   "source_id": "v410-wp05-round2",
+   "episode": "dagger-s0d1seed2031",
+   "seed": 2031,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "dagger_round",
+   "source_id": "v410-wp05-round2",
+   "episode": "dagger-s0d1seed2032",
+   "seed": 2032,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "dagger_round",
+   "source_id": "v410-wp05-round2",
+   "episode": "dagger-s0d1seed2033",
+   "seed": 2033,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "dagger_round",
+   "source_id": "v410-wp05-round2",
+   "episode": "dagger-s0d1seed2034",
+   "seed": 2034,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "dagger_round",
+   "source_id": "v410-wp05-round2",
+   "episode": "dagger-s0d1seed2035",
+   "seed": 2035,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "dagger_round",
+   "source_id": "v410-wp05-round2",
+   "episode": "dagger-s0d1seed2036",
+   "seed": 2036,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "dagger_round",
+   "source_id": "v410-wp05-round2",
+   "episode": "dagger-s0d1seed2037",
+   "seed": 2037,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "dagger_round",
+   "source_id": "v410-wp05-round2",
+   "episode": "dagger-s0d1seed2038",
+   "seed": 2038,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "dagger_round",
+   "source_id": "v410-wp05-round2",
+   "episode": "dagger-s0d1seed2039",
+   "seed": 2039,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "dagger_round",
+   "source_id": "v410-wp05-round3",
+   "episode": "dagger-s0d1seed2040",
+   "seed": 2040,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "dagger_round",
+   "source_id": "v410-wp05-round3",
+   "episode": "dagger-s0d1seed2041",
+   "seed": 2041,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "dagger_round",
+   "source_id": "v410-wp05-round3",
+   "episode": "dagger-s0d1seed2042",
+   "seed": 2042,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "dagger_round",
+   "source_id": "v410-wp05-round3",
+   "episode": "dagger-s0d1seed2043",
+   "seed": 2043,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "dagger_round",
+   "source_id": "v410-wp05-round3",
+   "episode": "dagger-s0d1seed2044",
+   "seed": 2044,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "dagger_round",
+   "source_id": "v410-wp05-round3",
+   "episode": "dagger-s0d1seed2045",
+   "seed": 2045,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "dagger_round",
+   "source_id": "v410-wp05-round3",
+   "episode": "dagger-s0d1seed2046",
+   "seed": 2046,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "dagger_round",
+   "source_id": "v410-wp05-round3",
+   "episode": "dagger-s0d1seed2047",
+   "seed": 2047,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "dagger_round",
+   "source_id": "v410-wp05-round3",
+   "episode": "dagger-s0d1seed2048",
+   "seed": 2048,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "dagger_round",
+   "source_id": "v410-wp05-round3",
+   "episode": "dagger-s0d1seed2049",
+   "seed": 2049,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "dagger_round",
+   "source_id": "v410-wp05-round3",
+   "episode": "dagger-s0d1seed2050",
+   "seed": 2050,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "dagger_round",
+   "source_id": "v410-wp05-round3",
+   "episode": "dagger-s0d1seed2051",
+   "seed": 2051,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "dagger_round",
+   "source_id": "v410-wp05-round3",
+   "episode": "dagger-s0d1seed2052",
+   "seed": 2052,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "dagger_round",
+   "source_id": "v410-wp05-round3",
+   "episode": "dagger-s0d1seed2053",
+   "seed": 2053,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "dagger_round",
+   "source_id": "v410-wp05-round3",
+   "episode": "dagger-s0d1seed2054",
+   "seed": 2054,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "dagger_round",
+   "source_id": "v420-t05-d1",
+   "episode": "v420-t05-d1-s0d1-seed3000",
+   "seed": 3000,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "dagger_round",
+   "source_id": "v420-t05-d1",
+   "episode": "v420-t05-d1-s0d1-seed3001",
+   "seed": 3001,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "dagger_round",
+   "source_id": "v420-t05-d1",
+   "episode": "v420-t05-d1-s0d1-seed3002",
+   "seed": 3002,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "dagger_round",
+   "source_id": "v420-t05-d1",
+   "episode": "v420-t05-d1-s0d1-seed3003",
+   "seed": 3003,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "dagger_round",
+   "source_id": "v420-t05-d1",
+   "episode": "v420-t05-d1-s0d1-seed3004",
+   "seed": 3004,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "dagger_round",
+   "source_id": "v420-t05-d2",
+   "episode": "v420-t05-d2-s0d1-seed3010",
+   "seed": 3010,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "dagger_round",
+   "source_id": "v420-t05-d2",
+   "episode": "v420-t05-d2-s0d1-seed3011",
+   "seed": 3011,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "dagger_round",
+   "source_id": "v420-t05-d2",
+   "episode": "v420-t05-d2-s0d1-seed3012",
+   "seed": 3012,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "dagger_round",
+   "source_id": "v420-t05-d2",
+   "episode": "v420-t05-d2-s0d1-seed3013",
+   "seed": 3013,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "dagger_round",
+   "source_id": "v420-t05-d2",
+   "episode": "v420-t05-d2-s0d1-seed3014",
+   "seed": 3014,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "dagger_round",
+   "source_id": "v420-t05-d2",
+   "episode": "v420-t05-d2-s0d1-seed3015",
+   "seed": 3015,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "dagger_round",
+   "source_id": "v420-t05-d2",
+   "episode": "v420-t05-d2-s0d1-seed3016",
+   "seed": 3016,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "dagger_round",
+   "source_id": "v420-t05-d2",
+   "episode": "v420-t05-d2-s0d1-seed3017",
+   "seed": 3017,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "dagger_round",
+   "source_id": "v420-t05-d2",
+   "episode": "v420-t05-d2-s0d1-seed3018",
+   "seed": 3018,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "dagger_round",
+   "source_id": "v420-t05-d2",
+   "episode": "v420-t05-d2-s0d1-seed3019",
+   "seed": 3019,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "dagger_round",
+   "source_id": "v420-t05-d2",
+   "episode": "v420-t05-d2-s0d1-seed3020",
+   "seed": 3020,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "dagger_round",
+   "source_id": "v420-t05-d2",
+   "episode": "v420-t05-d2-s0d1-seed3021",
+   "seed": 3021,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "dagger_round",
+   "source_id": "v420-t05-d2",
+   "episode": "v420-t05-d2-s0d1-seed3022",
+   "seed": 3022,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "dagger_round",
+   "source_id": "v420-t05-d2",
+   "episode": "v420-t05-d2-s0d1-seed3023",
+   "seed": 3023,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "dagger_round",
+   "source_id": "v420-t05-d2",
+   "episode": "v420-t05-d2-s0d1-seed3024",
+   "seed": 3024,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "dagger_round",
+   "source_id": "v420-t05-d2",
+   "episode": "v420-t05-d2-s0d1-seed3025",
+   "seed": 3025,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "dagger_round",
+   "source_id": "v420-t05-d2",
+   "episode": "v420-t05-d2-s0d1-seed3026",
+   "seed": 3026,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "dagger_round",
+   "source_id": "v420-t05-d2",
+   "episode": "v420-t05-d2-s0d1-seed3027",
+   "seed": 3027,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "dagger_round",
+   "source_id": "v420-t05-d2",
+   "episode": "v420-t05-d2-s0d1-seed3028",
+   "seed": 3028,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "dagger_round",
+   "source_id": "v420-t05-d2",
+   "episode": "v420-t05-d2-s0d1-seed3029",
+   "seed": 3029,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "dagger_round",
+   "source_id": "v420-t05-d3",
+   "episode": "v420-t05-d3-s0d1-seed3042",
+   "seed": 3042,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "dagger_round",
+   "source_id": "v420-t05-d3",
+   "episode": "v420-t05-d3-s0d1-seed3043",
+   "seed": 3043,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "dagger_round",
+   "source_id": "v420-t05-d3",
+   "episode": "v420-t05-d3-s0d1-seed3044",
+   "seed": 3044,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "dagger_round",
+   "source_id": "v420-t05-d3",
+   "episode": "v420-t05-d3-s0d1-seed3045",
+   "seed": 3045,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "dagger_round",
+   "source_id": "v420-t05-d3",
+   "episode": "v420-t05-d3-s0d1-seed3046",
+   "seed": 3046,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "dagger_round",
+   "source_id": "v420-t05-d3",
+   "episode": "v420-t05-d3-s0d1-seed3047",
+   "seed": 3047,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "dagger_round",
+   "source_id": "v420-t05-d3",
+   "episode": "v420-t05-d3-s0d1-seed3048",
+   "seed": 3048,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "dagger_round",
+   "source_id": "v420-t05-d3",
+   "episode": "v420-t05-d3-s0d1-seed3049",
+   "seed": 3049,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "dagger_round",
+   "source_id": "v420-t05-d3",
+   "episode": "v420-t05-d3-s0d1-seed3050",
+   "seed": 3050,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "dagger_round",
+   "source_id": "v420-t05-d3",
+   "episode": "v420-t05-d3-s0d1-seed3051",
+   "seed": 3051,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "dagger_round",
+   "source_id": "v420-t05-d3",
+   "episode": "v420-t05-d3-s0d1-seed3052",
+   "seed": 3052,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "dagger_round",
+   "source_id": "v420-t05-d3",
+   "episode": "v420-t05-d3-s0d1-seed3053",
+   "seed": 3053,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "dagger_round",
+   "source_id": "v420-t05-d3",
+   "episode": "v420-t05-d3-s0d1-seed3054",
+   "seed": 3054,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "dagger_round",
+   "source_id": "v420-t05-d3",
+   "episode": "v420-t05-d3-s0d1-seed3055",
+   "seed": 3055,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "dagger_round",
+   "source_id": "v420-t05-d3",
+   "episode": "v420-t05-d3-s0d1-seed3056",
+   "seed": 3056,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "dagger_round",
+   "source_id": "v420-t05-d3",
+   "episode": "v420-t05-d3-s0d1-seed3057",
+   "seed": 3057,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "dagger_round",
+   "source_id": "v420-t05-d3",
+   "episode": "v420-t05-d3-s0d1-seed3058",
+   "seed": 3058,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "dagger_round",
+   "source_id": "v420-t05-d3",
+   "episode": "v420-t05-d3-s0d1-seed3059",
+   "seed": 3059,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "dagger_round",
+   "source_id": "v420-t05-d3",
+   "episode": "v420-t05-d3-s0d1-seed3060",
+   "seed": 3060,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "dagger_round",
+   "source_id": "v420-t05-d3",
+   "episode": "v420-t05-d3-s0d1-seed3061",
+   "seed": 3061,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "dagger_round",
+   "source_id": "v420-t05-d3",
+   "episode": "v420-t05-d3-s0d1-seed3062",
+   "seed": 3062,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "dagger_round",
+   "source_id": "v420-t05-d3",
+   "episode": "v420-t05-d3-s0d1-seed3063",
+   "seed": 3063,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "dagger_round",
+   "source_id": "v420-t05-d3",
+   "episode": "v420-t05-d3-s0d1-seed3064",
+   "seed": 3064,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "dagger_round",
+   "source_id": "v420-t05-d3",
+   "episode": "v420-t05-d3-s0d1-seed3065",
+   "seed": 3065,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "dagger_round",
+   "source_id": "v420-t05-d3",
+   "episode": "v420-t05-d3-s0d1-seed3066",
+   "seed": 3066,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "dagger_round",
+   "source_id": "v420-t05-d3",
+   "episode": "v420-t05-d3-s0d1-seed3067",
+   "seed": 3067,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "dagger_round",
+   "source_id": "v420-t05-d3",
+   "episode": "v420-t05-d3-s0d1-seed3068",
+   "seed": 3068,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "v420-a1-safe-set",
+   "episode": "v420-a1-s0d1-seed3042",
+   "seed": 3042,
+   "task_family": "th08-stage1-normal-team0",
+   "note": "A1 safe-set corpus: 750 states x 18 arms inside these episodes"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "v420-a1-safe-set",
+   "episode": "v420-a1-s0d1-seed3043",
+   "seed": 3043,
+   "task_family": "th08-stage1-normal-team0",
+   "note": "A1 safe-set corpus: 750 states x 18 arms inside these episodes"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "v420-a1-safe-set",
+   "episode": "v420-a1-s0d1-seed3044",
+   "seed": 3044,
+   "task_family": "th08-stage1-normal-team0",
+   "note": "A1 safe-set corpus: 750 states x 18 arms inside these episodes"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "v420-a1-safe-set",
+   "episode": "v420-a1-s0d1-seed3045",
+   "seed": 3045,
+   "task_family": "th08-stage1-normal-team0",
+   "note": "A1 safe-set corpus: 750 states x 18 arms inside these episodes"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "v420-a1-safe-set",
+   "episode": "v420-a1-s0d1-seed3046",
+   "seed": 3046,
+   "task_family": "th08-stage1-normal-team0",
+   "note": "A1 safe-set corpus: 750 states x 18 arms inside these episodes"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "v420-a1-safe-set",
+   "episode": "v420-a1-s0d1-seed3047",
+   "seed": 3047,
+   "task_family": "th08-stage1-normal-team0",
+   "note": "A1 safe-set corpus: 750 states x 18 arms inside these episodes"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "v420-a1-safe-set",
+   "episode": "v420-a1-s0d1-seed3048",
+   "seed": 3048,
+   "task_family": "th08-stage1-normal-team0",
+   "note": "A1 safe-set corpus: 750 states x 18 arms inside these episodes"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "v420-a1-safe-set",
+   "episode": "v420-a1-s0d1-seed3049",
+   "seed": 3049,
+   "task_family": "th08-stage1-normal-team0",
+   "note": "A1 safe-set corpus: 750 states x 18 arms inside these episodes"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "v420-a1-safe-set",
+   "episode": "v420-a1-s0d1-seed3050",
+   "seed": 3050,
+   "task_family": "th08-stage1-normal-team0",
+   "note": "A1 safe-set corpus: 750 states x 18 arms inside these episodes"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "v420-a1-safe-set",
+   "episode": "v420-a1-s0d1-seed3051",
+   "seed": 3051,
+   "task_family": "th08-stage1-normal-team0",
+   "note": "A1 safe-set corpus: 750 states x 18 arms inside these episodes"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "v420-a1-safe-set",
+   "episode": "v420-a1-s0d1-seed3052",
+   "seed": 3052,
+   "task_family": "th08-stage1-normal-team0",
+   "note": "A1 safe-set corpus: 750 states x 18 arms inside these episodes"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "v420-a1-safe-set",
+   "episode": "v420-a1-s0d1-seed3053",
+   "seed": 3053,
+   "task_family": "th08-stage1-normal-team0",
+   "note": "A1 safe-set corpus: 750 states x 18 arms inside these episodes"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "v420-a1-safe-set",
+   "episode": "v420-a1-s0d1-seed3054",
+   "seed": 3054,
+   "task_family": "th08-stage1-normal-team0",
+   "note": "A1 safe-set corpus: 750 states x 18 arms inside these episodes"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "v420-a1-safe-set",
+   "episode": "v420-a1-s0d1-seed3055",
+   "seed": 3055,
+   "task_family": "th08-stage1-normal-team0",
+   "note": "A1 safe-set corpus: 750 states x 18 arms inside these episodes"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "v420-a1-safe-set",
+   "episode": "v420-a1-s0d1-seed3056",
+   "seed": 3056,
+   "task_family": "th08-stage1-normal-team0",
+   "note": "A1 safe-set corpus: 750 states x 18 arms inside these episodes"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "v420-a1-safe-set",
+   "episode": "v420-a1-s0d1-seed3057",
+   "seed": 3057,
+   "task_family": "th08-stage1-normal-team0",
+   "note": "A1 safe-set corpus: 750 states x 18 arms inside these episodes"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "v420-a1-safe-set",
+   "episode": "v420-a1-s0d1-seed3058",
+   "seed": 3058,
+   "task_family": "th08-stage1-normal-team0",
+   "note": "A1 safe-set corpus: 750 states x 18 arms inside these episodes"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "v420-a1-safe-set",
+   "episode": "v420-a1-s0d1-seed3059",
+   "seed": 3059,
+   "task_family": "th08-stage1-normal-team0",
+   "note": "A1 safe-set corpus: 750 states x 18 arms inside these episodes"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "v420-a1-safe-set",
+   "episode": "v420-a1-s0d1-seed3060",
+   "seed": 3060,
+   "task_family": "th08-stage1-normal-team0",
+   "note": "A1 safe-set corpus: 750 states x 18 arms inside these episodes"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "v420-a1-safe-set",
+   "episode": "v420-a1-s0d1-seed3061",
+   "seed": 3061,
+   "task_family": "th08-stage1-normal-team0",
+   "note": "A1 safe-set corpus: 750 states x 18 arms inside these episodes"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "v420-a1-safe-set",
+   "episode": "v420-a1-s0d1-seed3062",
+   "seed": 3062,
+   "task_family": "th08-stage1-normal-team0",
+   "note": "A1 safe-set corpus: 750 states x 18 arms inside these episodes"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "v420-a1-safe-set",
+   "episode": "v420-a1-s0d1-seed3063",
+   "seed": 3063,
+   "task_family": "th08-stage1-normal-team0",
+   "note": "A1 safe-set corpus: 750 states x 18 arms inside these episodes"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "v420-a1-safe-set",
+   "episode": "v420-a1-s0d1-seed3064",
+   "seed": 3064,
+   "task_family": "th08-stage1-normal-team0",
+   "note": "A1 safe-set corpus: 750 states x 18 arms inside these episodes"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "v420-a1-safe-set",
+   "episode": "v420-a1-s0d1-seed3065",
+   "seed": 3065,
+   "task_family": "th08-stage1-normal-team0",
+   "note": "A1 safe-set corpus: 750 states x 18 arms inside these episodes"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "v420-a1-safe-set",
+   "episode": "v420-a1-s0d1-seed3066",
+   "seed": 3066,
+   "task_family": "th08-stage1-normal-team0",
+   "note": "A1 safe-set corpus: 750 states x 18 arms inside these episodes"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "v420-a1-safe-set",
+   "episode": "v420-a1-s0d1-seed3067",
+   "seed": 3067,
+   "task_family": "th08-stage1-normal-team0",
+   "note": "A1 safe-set corpus: 750 states x 18 arms inside these episodes"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "v420-a1-safe-set",
+   "episode": "v420-a1-s0d1-seed3068",
+   "seed": 3068,
+   "task_family": "th08-stage1-normal-team0",
+   "note": "A1 safe-set corpus: 750 states x 18 arms inside these episodes"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "v420-a1-safe-set",
+   "episode": "v420-a1-s0d1-seed3069",
+   "seed": 3069,
+   "task_family": "th08-stage1-normal-team0",
+   "note": "A1 safe-set corpus: 750 states x 18 arms inside these episodes"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "v420-a1-safe-set",
+   "episode": "v420-a1-s0d1-seed3070",
+   "seed": 3070,
+   "task_family": "th08-stage1-normal-team0",
+   "note": "A1 safe-set corpus: 750 states x 18 arms inside these episodes"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "v420-a1-safe-set",
+   "episode": "v420-a1-s0d1-seed3071",
+   "seed": 3071,
+   "task_family": "th08-stage1-normal-team0",
+   "note": "A1 safe-set corpus: 750 states x 18 arms inside these episodes"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "v420-a1-safe-set",
+   "episode": "v420-a1-s0d1-seed3072",
+   "seed": 3072,
+   "task_family": "th08-stage1-normal-team0",
+   "note": "A1 safe-set corpus: 750 states x 18 arms inside these episodes"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "v420-a1-safe-set",
+   "episode": "v420-a1-s0d1-seed3073",
+   "seed": 3073,
+   "task_family": "th08-stage1-normal-team0",
+   "note": "A1 safe-set corpus: 750 states x 18 arms inside these episodes"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "v420-a1-safe-set",
+   "episode": "v420-a1-s0d1-seed3074",
+   "seed": 3074,
+   "task_family": "th08-stage1-normal-team0",
+   "note": "A1 safe-set corpus: 750 states x 18 arms inside these episodes"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "v420-a1-safe-set",
+   "episode": "v420-a1-s0d1-seed3075",
+   "seed": 3075,
+   "task_family": "th08-stage1-normal-team0",
+   "note": "A1 safe-set corpus: 750 states x 18 arms inside these episodes"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "v420-a1-safe-set",
+   "episode": "v420-a1-s0d1-seed3076",
+   "seed": 3076,
+   "task_family": "th08-stage1-normal-team0",
+   "note": "A1 safe-set corpus: 750 states x 18 arms inside these episodes"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "v420-a1-safe-set",
+   "episode": "v420-a1-s0d1-seed3077",
+   "seed": 3077,
+   "task_family": "th08-stage1-normal-team0",
+   "note": "A1 safe-set corpus: 750 states x 18 arms inside these episodes"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "v420-a1-safe-set",
+   "episode": "v420-a1-s0d1-seed3078",
+   "seed": 3078,
+   "task_family": "th08-stage1-normal-team0",
+   "note": "A1 safe-set corpus: 750 states x 18 arms inside these episodes"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "v420-a1-safe-set",
+   "episode": "v420-a1-s0d1-seed3079",
+   "seed": 3079,
+   "task_family": "th08-stage1-normal-team0",
+   "note": "A1 safe-set corpus: 750 states x 18 arms inside these episodes"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "v420-a1-safe-set",
+   "episode": "v420-a1-s0d1-seed3080",
+   "seed": 3080,
+   "task_family": "th08-stage1-normal-team0",
+   "note": "A1 safe-set corpus: 750 states x 18 arms inside these episodes"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "v420-a1-safe-set",
+   "episode": "v420-a1-s0d1-seed3081",
+   "seed": 3081,
+   "task_family": "th08-stage1-normal-team0",
+   "note": "A1 safe-set corpus: 750 states x 18 arms inside these episodes"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "v420-a1-safe-set",
+   "episode": "v420-a1-s0d1-seed3082",
+   "seed": 3082,
+   "task_family": "th08-stage1-normal-team0",
+   "note": "A1 safe-set corpus: 750 states x 18 arms inside these episodes"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "v420-a1-safe-set",
+   "episode": "v420-a1-s0d1-seed3083",
+   "seed": 3083,
+   "task_family": "th08-stage1-normal-team0",
+   "note": "A1 safe-set corpus: 750 states x 18 arms inside these episodes"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "v420-a1-safe-set",
+   "episode": "v420-a1-s0d1-seed3084",
+   "seed": 3084,
+   "task_family": "th08-stage1-normal-team0",
+   "note": "A1 safe-set corpus: 750 states x 18 arms inside these episodes"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "v420-a1-safe-set",
+   "episode": "v420-a1-s0d1-seed3085",
+   "seed": 3085,
+   "task_family": "th08-stage1-normal-team0",
+   "note": "A1 safe-set corpus: 750 states x 18 arms inside these episodes"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "v420-a1-safe-set",
+   "episode": "v420-a1-s0d1-seed3086",
+   "seed": 3086,
+   "task_family": "th08-stage1-normal-team0",
+   "note": "A1 safe-set corpus: 750 states x 18 arms inside these episodes"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "v420-a1-safe-set",
+   "episode": "v420-a1-s0d1-seed3087",
+   "seed": 3087,
+   "task_family": "th08-stage1-normal-team0",
+   "note": "A1 safe-set corpus: 750 states x 18 arms inside these episodes"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "v420-a1-safe-set",
+   "episode": "v420-a1-s0d1-seed3088",
+   "seed": 3088,
+   "task_family": "th08-stage1-normal-team0",
+   "note": "A1 safe-set corpus: 750 states x 18 arms inside these episodes"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "v420-a1-safe-set",
+   "episode": "v420-a1-s0d1-seed3089",
+   "seed": 3089,
+   "task_family": "th08-stage1-normal-team0",
+   "note": "A1 safe-set corpus: 750 states x 18 arms inside these episodes"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "v420-a1-safe-set",
+   "episode": "v420-a1-s0d1-seed3090",
+   "seed": 3090,
+   "task_family": "th08-stage1-normal-team0",
+   "note": "A1 safe-set corpus: 750 states x 18 arms inside these episodes"
+  },
+  {
+   "source_kind": "teacher_query",
+   "source_id": "v420-a1-safe-set",
+   "episode": "v420-a1-s0d1-seed3091",
+   "seed": 3091,
+   "task_family": "th08-stage1-normal-team0",
+   "note": "A1 safe-set corpus: 750 states x 18 arms inside these episodes"
+  },
+  {
+   "source_kind": "policy_rl",
+   "source_id": "v420-t06-r3",
+   "episode": "v420-t06-r3-rollout-s0d1-seed3000",
+   "seed": 3000,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "policy_rl",
+   "source_id": "v420-t06-r3",
+   "episode": "v420-t06-r3-rollout-s0d1-seed3001",
+   "seed": 3001,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "policy_rl",
+   "source_id": "v420-t06-r3",
+   "episode": "v420-t06-r3-rollout-s0d1-seed3002",
+   "seed": 3002,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "policy_rl",
+   "source_id": "v420-t06-r3",
+   "episode": "v420-t06-r3-rollout-s0d1-seed3003",
+   "seed": 3003,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "policy_rl",
+   "source_id": "v420-t06-r3",
+   "episode": "v420-t06-r3-rollout-s0d1-seed3004",
+   "seed": 3004,
+   "task_family": "th08-stage1-normal-team0"
+  },
+  {
+   "source_kind": "model_selection",
+   "source_id": "v420-dev-panel",
+   "episode": "dev-seed-1000",
+   "seed": 1000,
+   "task_family": "th08-stage1-normal-team0",
+   "note": "development / candidate-selection panel; never training data"
+  },
+  {
+   "source_kind": "model_selection",
+   "source_id": "v420-dev-panel",
+   "episode": "dev-seed-1001",
+   "seed": 1001,
+   "task_family": "th08-stage1-normal-team0",
+   "note": "development / candidate-selection panel; never training data"
+  },
+  {
+   "source_kind": "model_selection",
+   "source_id": "v420-dev-panel",
+   "episode": "dev-seed-1002",
+   "seed": 1002,
+   "task_family": "th08-stage1-normal-team0",
+   "note": "development / candidate-selection panel; never training data"
+  },
+  {
+   "source_kind": "model_selection",
+   "source_id": "v420-dev-panel",
+   "episode": "dev-seed-1003",
+   "seed": 1003,
+   "task_family": "th08-stage1-normal-team0",
+   "note": "development / candidate-selection panel; never training data"
+  },
+  {
+   "source_kind": "model_selection",
+   "source_id": "v420-dev-panel",
+   "episode": "dev-seed-1004",
+   "seed": 1004,
+   "task_family": "th08-stage1-normal-team0",
+   "note": "development / candidate-selection panel; never training data"
+  },
+  {
+   "source_kind": "model_selection",
+   "source_id": "v420-dev-panel",
+   "episode": "dev-seed-1005",
+   "seed": 1005,
+   "task_family": "th08-stage1-normal-team0",
+   "note": "development / candidate-selection panel; never training data"
+  },
+  {
+   "source_kind": "model_selection",
+   "source_id": "v420-dev-panel",
+   "episode": "dev-seed-1006",
+   "seed": 1006,
+   "task_family": "th08-stage1-normal-team0",
+   "note": "development / candidate-selection panel; never training data"
+  },
+  {
+   "source_kind": "model_selection",
+   "source_id": "v420-dev-panel",
+   "episode": "dev-seed-1007",
+   "seed": 1007,
+   "task_family": "th08-stage1-normal-team0",
+   "note": "development / candidate-selection panel; never training data"
+  },
+  {
+   "source_kind": "model_selection",
+   "source_id": "v420-dev-panel",
+   "episode": "dev-seed-1008",
+   "seed": 1008,
+   "task_family": "th08-stage1-normal-team0",
+   "note": "development / candidate-selection panel; never training data"
+  },
+  {
+   "source_kind": "model_selection",
+   "source_id": "v420-dev-panel",
+   "episode": "dev-seed-1009",
+   "seed": 1009,
+   "task_family": "th08-stage1-normal-team0",
+   "note": "development / candidate-selection panel; never training data"
+  },
+  {
+   "source_kind": "model_selection",
+   "source_id": "v420-dev-panel",
+   "episode": "dev-seed-1010",
+   "seed": 1010,
+   "task_family": "th08-stage1-normal-team0",
+   "note": "development / candidate-selection panel; never training data"
+  },
+  {
+   "source_kind": "model_selection",
+   "source_id": "v420-dev-panel",
+   "episode": "dev-seed-1011",
+   "seed": 1011,
+   "task_family": "th08-stage1-normal-team0",
+   "note": "development / candidate-selection panel; never training data"
+  },
+  {
+   "source_kind": "model_selection",
+   "source_id": "v420-dev-panel",
+   "episode": "dev-seed-1012",
+   "seed": 1012,
+   "task_family": "th08-stage1-normal-team0",
+   "note": "development / candidate-selection panel; never training data"
+  },
+  {
+   "source_kind": "model_selection",
+   "source_id": "v420-dev-panel",
+   "episode": "dev-seed-1013",
+   "seed": 1013,
+   "task_family": "th08-stage1-normal-team0",
+   "note": "development / candidate-selection panel; never training data"
+  },
+  {
+   "source_kind": "model_selection",
+   "source_id": "v420-dev-panel",
+   "episode": "dev-seed-1014",
+   "seed": 1014,
+   "task_family": "th08-stage1-normal-team0",
+   "note": "development / candidate-selection panel; never training data"
+  },
+  {
+   "source_kind": "model_selection",
+   "source_id": "v420-dev-panel",
+   "episode": "dev-seed-1015",
+   "seed": 1015,
+   "task_family": "th08-stage1-normal-team0",
+   "note": "development / candidate-selection panel; never training data"
+  },
+  {
+   "source_kind": "model_selection",
+   "source_id": "v420-dev-panel",
+   "episode": "dev-seed-1016",
+   "seed": 1016,
+   "task_family": "th08-stage1-normal-team0",
+   "note": "development / candidate-selection panel; never training data"
+  },
+  {
+   "source_kind": "model_selection",
+   "source_id": "v420-dev-panel",
+   "episode": "dev-seed-1017",
+   "seed": 1017,
+   "task_family": "th08-stage1-normal-team0",
+   "note": "development / candidate-selection panel; never training data"
+  },
+  {
+   "source_kind": "model_selection",
+   "source_id": "v420-dev-panel",
+   "episode": "dev-seed-1018",
+   "seed": 1018,
+   "task_family": "th08-stage1-normal-team0",
+   "note": "development / candidate-selection panel; never training data"
+  },
+  {
+   "source_kind": "model_selection",
+   "source_id": "v420-dev-panel",
+   "episode": "dev-seed-1019",
+   "seed": 1019,
+   "task_family": "th08-stage1-normal-team0",
+   "note": "development / candidate-selection panel; never training data"
+  }
+ ],
+ "splits": {
+  "train": {
+   "purpose": "records that any fitting path consumed (teacher corpora, BC corpora, DAgger rounds, RL rollouts)",
+   "ancestor_ids": [
+    "teacher_query|d1-teacher-fast|d1-s0d1-n3371-seed1-shard|th08-stage1-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s0d1-n3371-seed1-shard-i008|th08-stage1-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s0d1-n3371-seed1-shard-i016|th08-stage1-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s0d1-n3371-seed10-shard|th08-stage1-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s0d1-n3371-seed11-shard|th08-stage1-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s0d1-n3371-seed12-shard|th08-stage1-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s0d1-n3371-seed13-shard|th08-stage1-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s0d1-n3371-seed14-shard|th08-stage1-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s0d1-n3371-seed15-shard|th08-stage1-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s0d1-n3371-seed16-shard|th08-stage1-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s0d1-n3371-seed17-shard|th08-stage1-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s0d1-n3371-seed18-shard|th08-stage1-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s0d1-n3371-seed19-shard|th08-stage1-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s0d1-n3371-seed2-shard|th08-stage1-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s0d1-n3371-seed2-shard-i009|th08-stage1-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s0d1-n3371-seed2-shard-i017|th08-stage1-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s0d1-n3371-seed3-shard|th08-stage1-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s0d1-n3371-seed3-shard-i010|th08-stage1-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s0d1-n3371-seed3-shard-i018|th08-stage1-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s0d1-n3371-seed4-shard|th08-stage1-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s0d1-n3371-seed5-shard|th08-stage1-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s0d1-n3371-seed5-shard-i012|th08-stage1-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s0d1-n3371-seed6-shard|th08-stage1-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s0d1-n3371-seed6-shard-i013|th08-stage1-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s0d1-n3371-seed7-shard|th08-stage1-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s0d1-n3371-seed7-shard-i014|th08-stage1-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s0d1-n3371-seed8-shard|th08-stage1-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s0d1-n3371-seed8-shard-i015|th08-stage1-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s0d1-n3371-seed9-shard|th08-stage1-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s1d1-n4000-seed10-shard|th08-stage2-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s1d1-n4000-seed11-shard|th08-stage2-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s1d1-n4000-seed12-shard|th08-stage2-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s1d1-n4000-seed13-shard|th08-stage2-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s1d1-n4000-seed14-shard|th08-stage2-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s1d1-n4000-seed15-shard|th08-stage2-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s1d1-n4000-seed16-shard|th08-stage2-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s1d1-n4000-seed17-shard|th08-stage2-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s1d1-n4000-seed2-shard|th08-stage2-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s1d1-n4000-seed3-shard|th08-stage2-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s1d1-n4000-seed4-shard|th08-stage2-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s1d1-n4000-seed5-shard|th08-stage2-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s1d1-n4000-seed6-shard|th08-stage2-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s1d1-n4000-seed7-shard|th08-stage2-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s1d1-n4000-seed8-shard|th08-stage2-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s1d1-n4000-seed9-shard|th08-stage2-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s2d1-n4000-seed10-shard|th08-stage3-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s2d1-n4000-seed11-shard|th08-stage3-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s2d1-n4000-seed12-shard|th08-stage3-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s2d1-n4000-seed13-shard|th08-stage3-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s2d1-n4000-seed14-shard|th08-stage3-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s2d1-n4000-seed15-shard|th08-stage3-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s2d1-n4000-seed16-shard|th08-stage3-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s2d1-n4000-seed17-shard|th08-stage3-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s2d1-n4000-seed18-shard|th08-stage3-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s2d1-n4000-seed19-shard|th08-stage3-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s2d1-n4000-seed4-shard|th08-stage3-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s2d1-n4000-seed5-shard|th08-stage3-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s2d1-n4000-seed6-shard|th08-stage3-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s2d1-n4000-seed7-shard|th08-stage3-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s2d1-n4000-seed8-shard|th08-stage3-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s2d1-n4000-seed9-shard|th08-stage3-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s3d1-n3833-seed10-shard|th08-stage4a-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s3d1-n3833-seed11-shard|th08-stage4a-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s3d1-n3833-seed12-shard|th08-stage4a-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s3d1-n3833-seed13-shard|th08-stage4a-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s3d1-n3833-seed14-shard|th08-stage4a-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s3d1-n3833-seed15-shard|th08-stage4a-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s3d1-n3833-seed16-shard|th08-stage4a-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s3d1-n3833-seed17-shard|th08-stage4a-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s3d1-n3833-seed18-shard|th08-stage4a-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s3d1-n3833-seed19-shard|th08-stage4a-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s3d1-n3833-seed3-shard|th08-stage4a-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s3d1-n3833-seed4-shard|th08-stage4a-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s3d1-n3833-seed5-shard|th08-stage4a-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s3d1-n3833-seed6-shard|th08-stage4a-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s3d1-n3833-seed7-shard|th08-stage4a-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s3d1-n3833-seed8-shard|th08-stage4a-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s3d1-n3833-seed9-shard|th08-stage4a-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s4d1-n4000-seed10-shard|th08-stage4b-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s4d1-n4000-seed11-shard|th08-stage4b-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s4d1-n4000-seed12-shard|th08-stage4b-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s4d1-n4000-seed13-shard|th08-stage4b-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s4d1-n4000-seed14-shard|th08-stage4b-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s4d1-n4000-seed15-shard|th08-stage4b-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s4d1-n4000-seed16-shard|th08-stage4b-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s4d1-n4000-seed17-shard|th08-stage4b-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s4d1-n4000-seed18-shard|th08-stage4b-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s4d1-n4000-seed19-shard|th08-stage4b-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s4d1-n4000-seed20-shard|th08-stage4b-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s4d1-n4000-seed5-shard|th08-stage4b-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s4d1-n4000-seed6-shard|th08-stage4b-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s4d1-n4000-seed7-shard|th08-stage4b-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s4d1-n4000-seed8-shard|th08-stage4b-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s4d1-n4000-seed9-shard|th08-stage4b-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s5d1-n4000-seed10-shard|th08-stage5-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s5d1-n4000-seed11-shard|th08-stage5-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s5d1-n4000-seed12-shard|th08-stage5-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s5d1-n4000-seed13-shard|th08-stage5-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s5d1-n4000-seed14-shard|th08-stage5-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s5d1-n4000-seed15-shard|th08-stage5-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s5d1-n4000-seed16-shard|th08-stage5-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s5d1-n4000-seed17-shard|th08-stage5-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s5d1-n4000-seed18-shard|th08-stage5-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s5d1-n4000-seed19-shard|th08-stage5-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s5d1-n4000-seed20-shard|th08-stage5-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s5d1-n4000-seed21-shard|th08-stage5-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s5d1-n4000-seed6-shard|th08-stage5-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s5d1-n4000-seed7-shard|th08-stage5-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s5d1-n4000-seed8-shard|th08-stage5-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s5d1-n4000-seed9-shard|th08-stage5-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s6d1-n3836-seed10-shard|th08-stage6a-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s6d1-n3836-seed11-shard|th08-stage6a-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s6d1-n3836-seed12-shard|th08-stage6a-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s6d1-n3836-seed13-shard|th08-stage6a-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s6d1-n3836-seed14-shard|th08-stage6a-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s6d1-n3836-seed15-shard|th08-stage6a-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s6d1-n3836-seed16-shard|th08-stage6a-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s6d1-n3836-seed17-shard|th08-stage6a-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s6d1-n3836-seed18-shard|th08-stage6a-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s6d1-n3836-seed19-shard|th08-stage6a-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s6d1-n3836-seed20-shard|th08-stage6a-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s6d1-n3836-seed21-shard|th08-stage6a-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s6d1-n3836-seed22-shard|th08-stage6a-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s6d1-n3836-seed23-shard|th08-stage6a-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s6d1-n3836-seed7-shard|th08-stage6a-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s6d1-n3836-seed8-shard|th08-stage6a-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s6d1-n3836-seed9-shard|th08-stage6a-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s7d1-n3218-seed1-shard|th08-stage6b-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s7d1-n3218-seed10-shard|th08-stage6b-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s7d1-n3218-seed11-shard|th08-stage6b-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s7d1-n3218-seed12-shard|th08-stage6b-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s7d1-n3218-seed13-shard|th08-stage6b-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s7d1-n3218-seed14-shard|th08-stage6b-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s7d1-n3218-seed15-shard|th08-stage6b-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s7d1-n3218-seed16-shard|th08-stage6b-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s7d1-n3218-seed17-shard|th08-stage6b-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s7d1-n3218-seed18-shard|th08-stage6b-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s7d1-n3218-seed19-shard|th08-stage6b-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s7d1-n3218-seed2-shard|th08-stage6b-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s7d1-n3218-seed20-shard|th08-stage6b-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s7d1-n3218-seed21-shard|th08-stage6b-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s7d1-n3218-seed22-shard|th08-stage6b-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s7d1-n3218-seed23-shard|th08-stage6b-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s7d1-n3218-seed24-shard|th08-stage6b-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s7d1-n3218-seed25-shard|th08-stage6b-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s7d1-n3218-seed8-shard|th08-stage6b-normal-team0",
+    "teacher_query|d1-teacher-fast|d1-s7d1-n3218-seed9-shard|th08-stage6b-normal-team0",
+    "teacher_query|d1-s1c|d1-s0d1-n3300-seed10-shard|th08-stage1-normal-team0",
+    "teacher_query|d1-s1c|d1-s0d1-n3300-seed11-shard|th08-stage1-normal-team0",
+    "teacher_query|d1-s1c|d1-s0d1-n3300-seed12-shard|th08-stage1-normal-team0",
+    "teacher_query|d1-s1c|d1-s0d1-n3300-seed13-shard|th08-stage1-normal-team0",
+    "teacher_query|d1-s1c|d1-s0d1-n3300-seed14-shard|th08-stage1-normal-team0",
+    "teacher_query|d1-s1c|d1-s0d1-n3300-seed15-shard|th08-stage1-normal-team0",
+    "teacher_query|d1-s1c|d1-s0d1-n3300-seed16-shard|th08-stage1-normal-team0",
+    "teacher_query|d1-s1c|d1-s0d1-n3300-seed17-shard|th08-stage1-normal-team0",
+    "teacher_query|d1-s1c|d1-s0d1-n3300-seed18-shard|th08-stage1-normal-team0",
+    "teacher_query|d1-s1c|d1-s0d1-n3300-seed19-shard|th08-stage1-normal-team0",
+    "teacher_query|d1-s1c|d1-s0d1-n3300-seed20-shard|th08-stage1-normal-team0",
+    "teacher_query|d1-s1c|d1-s0d1-n3300-seed9-shard|th08-stage1-normal-team0",
+    "teacher_query|d0-fast|d0-s0d1-seed1-shard|th08-stage1-normal-team0",
+    "teacher_query|d0-fast|d0-s0d1-seed2-shard|th08-stage1-normal-team0",
+    "teacher_query|d0-fast|d0-s0d1-seed3-shard|th08-stage1-normal-team0",
+    "teacher_query|d0-fast|d0-s0d1-seed4-shard|th08-stage1-normal-team0",
+    "teacher_query|d0-fast|d0-s0d1-seed5-shard|th08-stage1-normal-team0",
+    "teacher_query|d0-fast|d0-s0d1-seed6-shard|th08-stage1-normal-team0",
+    "teacher_query|d0-fast|d0-s0d1-seed7-shard|th08-stage1-normal-team0",
+    "teacher_query|d0-fast|d0-s0d1-seed8-shard|th08-stage1-normal-team0",
+    "teacher_query|d0-fast|d0-s0d1-seed9-shard|th08-stage1-normal-team0",
+    "teacher_query|d0-fast|d0-s0d1-seed10-shard|th08-stage1-normal-team0",
+    "teacher_query|d0-fast|d0-s0d1-seed11-shard|th08-stage1-normal-team0",
+    "teacher_query|d0-fast|d0-s0d1-seed12-shard|th08-stage1-normal-team0",
+    "teacher_query|d0-fast|d0-s0d1-seed13-shard|th08-stage1-normal-team0",
+    "teacher_query|d0-fast|d0-s0d1-seed14-shard|th08-stage1-normal-team0",
+    "teacher_query|d0-fast|d0-s0d1-seed15-shard|th08-stage1-normal-team0",
+    "teacher_query|d0-fast|d0-s0d1-seed16-shard|th08-stage1-normal-team0",
+    "dagger_round|v410-wp05-round1|dagger-s0d1seed2000|th08-stage1-normal-team0",
+    "dagger_round|v410-wp05-round1|dagger-s0d1seed2001|th08-stage1-normal-team0",
+    "dagger_round|v410-wp05-round1|dagger-s0d1seed2002|th08-stage1-normal-team0",
+    "dagger_round|v410-wp05-round1|dagger-s0d1seed2003|th08-stage1-normal-team0",
+    "dagger_round|v410-wp05-round1|dagger-s0d1seed2004|th08-stage1-normal-team0",
+    "dagger_round|v410-wp05-round1|dagger-s0d1seed2005|th08-stage1-normal-team0",
+    "dagger_round|v410-wp05-round1|dagger-s0d1seed2006|th08-stage1-normal-team0",
+    "dagger_round|v410-wp05-round1|dagger-s0d1seed2007|th08-stage1-normal-team0",
+    "dagger_round|v410-wp05-round1|dagger-s0d1seed2008|th08-stage1-normal-team0",
+    "dagger_round|v410-wp05-round1|dagger-s0d1seed2009|th08-stage1-normal-team0",
+    "dagger_round|v410-wp05-round1|dagger-s0d1seed2010|th08-stage1-normal-team0",
+    "dagger_round|v410-wp05-round1|dagger-s0d1seed2020|th08-stage1-normal-team0",
+    "dagger_round|v410-wp05-round1|dagger-s0d1seed2021|th08-stage1-normal-team0",
+    "dagger_round|v410-wp05-round1|dagger-s0d1seed2022|th08-stage1-normal-team0",
+    "dagger_round|v410-wp05-round1|dagger-s0d1seed2023|th08-stage1-normal-team0",
+    "dagger_round|v410-wp05-round1|dagger-s0d1seed2024|th08-stage1-normal-team0",
+    "dagger_round|v410-wp05-round2|dagger-s0d1seed2025|th08-stage1-normal-team0",
+    "dagger_round|v410-wp05-round2|dagger-s0d1seed2026|th08-stage1-normal-team0",
+    "dagger_round|v410-wp05-round2|dagger-s0d1seed2027|th08-stage1-normal-team0",
+    "dagger_round|v410-wp05-round2|dagger-s0d1seed2028|th08-stage1-normal-team0",
+    "dagger_round|v410-wp05-round2|dagger-s0d1seed2029|th08-stage1-normal-team0",
+    "dagger_round|v410-wp05-round2|dagger-s0d1seed2030|th08-stage1-normal-team0",
+    "dagger_round|v410-wp05-round2|dagger-s0d1seed2031|th08-stage1-normal-team0",
+    "dagger_round|v410-wp05-round2|dagger-s0d1seed2032|th08-stage1-normal-team0",
+    "dagger_round|v410-wp05-round2|dagger-s0d1seed2033|th08-stage1-normal-team0",
+    "dagger_round|v410-wp05-round2|dagger-s0d1seed2034|th08-stage1-normal-team0",
+    "dagger_round|v410-wp05-round2|dagger-s0d1seed2035|th08-stage1-normal-team0",
+    "dagger_round|v410-wp05-round2|dagger-s0d1seed2036|th08-stage1-normal-team0",
+    "dagger_round|v410-wp05-round2|dagger-s0d1seed2037|th08-stage1-normal-team0",
+    "dagger_round|v410-wp05-round2|dagger-s0d1seed2038|th08-stage1-normal-team0",
+    "dagger_round|v410-wp05-round2|dagger-s0d1seed2039|th08-stage1-normal-team0",
+    "dagger_round|v410-wp05-round3|dagger-s0d1seed2040|th08-stage1-normal-team0",
+    "dagger_round|v410-wp05-round3|dagger-s0d1seed2041|th08-stage1-normal-team0",
+    "dagger_round|v410-wp05-round3|dagger-s0d1seed2042|th08-stage1-normal-team0",
+    "dagger_round|v410-wp05-round3|dagger-s0d1seed2043|th08-stage1-normal-team0",
+    "dagger_round|v410-wp05-round3|dagger-s0d1seed2044|th08-stage1-normal-team0",
+    "dagger_round|v410-wp05-round3|dagger-s0d1seed2045|th08-stage1-normal-team0",
+    "dagger_round|v410-wp05-round3|dagger-s0d1seed2046|th08-stage1-normal-team0",
+    "dagger_round|v410-wp05-round3|dagger-s0d1seed2047|th08-stage1-normal-team0",
+    "dagger_round|v410-wp05-round3|dagger-s0d1seed2048|th08-stage1-normal-team0",
+    "dagger_round|v410-wp05-round3|dagger-s0d1seed2049|th08-stage1-normal-team0",
+    "dagger_round|v410-wp05-round3|dagger-s0d1seed2050|th08-stage1-normal-team0",
+    "dagger_round|v410-wp05-round3|dagger-s0d1seed2051|th08-stage1-normal-team0",
+    "dagger_round|v410-wp05-round3|dagger-s0d1seed2052|th08-stage1-normal-team0",
+    "dagger_round|v410-wp05-round3|dagger-s0d1seed2053|th08-stage1-normal-team0",
+    "dagger_round|v410-wp05-round3|dagger-s0d1seed2054|th08-stage1-normal-team0",
+    "dagger_round|v420-t05-d1|v420-t05-d1-s0d1-seed3000|th08-stage1-normal-team0",
+    "dagger_round|v420-t05-d1|v420-t05-d1-s0d1-seed3001|th08-stage1-normal-team0",
+    "dagger_round|v420-t05-d1|v420-t05-d1-s0d1-seed3002|th08-stage1-normal-team0",
+    "dagger_round|v420-t05-d1|v420-t05-d1-s0d1-seed3003|th08-stage1-normal-team0",
+    "dagger_round|v420-t05-d1|v420-t05-d1-s0d1-seed3004|th08-stage1-normal-team0",
+    "dagger_round|v420-t05-d2|v420-t05-d2-s0d1-seed3010|th08-stage1-normal-team0",
+    "dagger_round|v420-t05-d2|v420-t05-d2-s0d1-seed3011|th08-stage1-normal-team0",
+    "dagger_round|v420-t05-d2|v420-t05-d2-s0d1-seed3012|th08-stage1-normal-team0",
+    "dagger_round|v420-t05-d2|v420-t05-d2-s0d1-seed3013|th08-stage1-normal-team0",
+    "dagger_round|v420-t05-d2|v420-t05-d2-s0d1-seed3014|th08-stage1-normal-team0",
+    "dagger_round|v420-t05-d2|v420-t05-d2-s0d1-seed3015|th08-stage1-normal-team0",
+    "dagger_round|v420-t05-d2|v420-t05-d2-s0d1-seed3016|th08-stage1-normal-team0",
+    "dagger_round|v420-t05-d2|v420-t05-d2-s0d1-seed3017|th08-stage1-normal-team0",
+    "dagger_round|v420-t05-d2|v420-t05-d2-s0d1-seed3018|th08-stage1-normal-team0",
+    "dagger_round|v420-t05-d2|v420-t05-d2-s0d1-seed3019|th08-stage1-normal-team0",
+    "dagger_round|v420-t05-d2|v420-t05-d2-s0d1-seed3020|th08-stage1-normal-team0",
+    "dagger_round|v420-t05-d2|v420-t05-d2-s0d1-seed3021|th08-stage1-normal-team0",
+    "dagger_round|v420-t05-d2|v420-t05-d2-s0d1-seed3022|th08-stage1-normal-team0",
+    "dagger_round|v420-t05-d2|v420-t05-d2-s0d1-seed3023|th08-stage1-normal-team0",
+    "dagger_round|v420-t05-d2|v420-t05-d2-s0d1-seed3024|th08-stage1-normal-team0",
+    "dagger_round|v420-t05-d2|v420-t05-d2-s0d1-seed3025|th08-stage1-normal-team0",
+    "dagger_round|v420-t05-d2|v420-t05-d2-s0d1-seed3026|th08-stage1-normal-team0",
+    "dagger_round|v420-t05-d2|v420-t05-d2-s0d1-seed3027|th08-stage1-normal-team0",
+    "dagger_round|v420-t05-d2|v420-t05-d2-s0d1-seed3028|th08-stage1-normal-team0",
+    "dagger_round|v420-t05-d2|v420-t05-d2-s0d1-seed3029|th08-stage1-normal-team0",
+    "dagger_round|v420-t05-d3|v420-t05-d3-s0d1-seed3042|th08-stage1-normal-team0",
+    "dagger_round|v420-t05-d3|v420-t05-d3-s0d1-seed3043|th08-stage1-normal-team0",
+    "dagger_round|v420-t05-d3|v420-t05-d3-s0d1-seed3044|th08-stage1-normal-team0",
+    "dagger_round|v420-t05-d3|v420-t05-d3-s0d1-seed3045|th08-stage1-normal-team0",
+    "dagger_round|v420-t05-d3|v420-t05-d3-s0d1-seed3046|th08-stage1-normal-team0",
+    "dagger_round|v420-t05-d3|v420-t05-d3-s0d1-seed3047|th08-stage1-normal-team0",
+    "dagger_round|v420-t05-d3|v420-t05-d3-s0d1-seed3048|th08-stage1-normal-team0",
+    "dagger_round|v420-t05-d3|v420-t05-d3-s0d1-seed3049|th08-stage1-normal-team0",
+    "dagger_round|v420-t05-d3|v420-t05-d3-s0d1-seed3050|th08-stage1-normal-team0",
+    "dagger_round|v420-t05-d3|v420-t05-d3-s0d1-seed3051|th08-stage1-normal-team0",
+    "dagger_round|v420-t05-d3|v420-t05-d3-s0d1-seed3052|th08-stage1-normal-team0",
+    "dagger_round|v420-t05-d3|v420-t05-d3-s0d1-seed3053|th08-stage1-normal-team0",
+    "dagger_round|v420-t05-d3|v420-t05-d3-s0d1-seed3054|th08-stage1-normal-team0",
+    "dagger_round|v420-t05-d3|v420-t05-d3-s0d1-seed3055|th08-stage1-normal-team0",
+    "dagger_round|v420-t05-d3|v420-t05-d3-s0d1-seed3056|th08-stage1-normal-team0",
+    "dagger_round|v420-t05-d3|v420-t05-d3-s0d1-seed3057|th08-stage1-normal-team0",
+    "dagger_round|v420-t05-d3|v420-t05-d3-s0d1-seed3058|th08-stage1-normal-team0",
+    "dagger_round|v420-t05-d3|v420-t05-d3-s0d1-seed3059|th08-stage1-normal-team0",
+    "dagger_round|v420-t05-d3|v420-t05-d3-s0d1-seed3060|th08-stage1-normal-team0",
+    "dagger_round|v420-t05-d3|v420-t05-d3-s0d1-seed3061|th08-stage1-normal-team0",
+    "dagger_round|v420-t05-d3|v420-t05-d3-s0d1-seed3062|th08-stage1-normal-team0",
+    "dagger_round|v420-t05-d3|v420-t05-d3-s0d1-seed3063|th08-stage1-normal-team0",
+    "dagger_round|v420-t05-d3|v420-t05-d3-s0d1-seed3064|th08-stage1-normal-team0",
+    "dagger_round|v420-t05-d3|v420-t05-d3-s0d1-seed3065|th08-stage1-normal-team0",
+    "dagger_round|v420-t05-d3|v420-t05-d3-s0d1-seed3066|th08-stage1-normal-team0",
+    "dagger_round|v420-t05-d3|v420-t05-d3-s0d1-seed3067|th08-stage1-normal-team0",
+    "dagger_round|v420-t05-d3|v420-t05-d3-s0d1-seed3068|th08-stage1-normal-team0",
+    "teacher_query|v420-a1-safe-set|v420-a1-s0d1-seed3042|th08-stage1-normal-team0",
+    "teacher_query|v420-a1-safe-set|v420-a1-s0d1-seed3043|th08-stage1-normal-team0",
+    "teacher_query|v420-a1-safe-set|v420-a1-s0d1-seed3044|th08-stage1-normal-team0",
+    "teacher_query|v420-a1-safe-set|v420-a1-s0d1-seed3045|th08-stage1-normal-team0",
+    "teacher_query|v420-a1-safe-set|v420-a1-s0d1-seed3046|th08-stage1-normal-team0",
+    "teacher_query|v420-a1-safe-set|v420-a1-s0d1-seed3047|th08-stage1-normal-team0",
+    "teacher_query|v420-a1-safe-set|v420-a1-s0d1-seed3048|th08-stage1-normal-team0",
+    "teacher_query|v420-a1-safe-set|v420-a1-s0d1-seed3049|th08-stage1-normal-team0",
+    "teacher_query|v420-a1-safe-set|v420-a1-s0d1-seed3050|th08-stage1-normal-team0",
+    "teacher_query|v420-a1-safe-set|v420-a1-s0d1-seed3051|th08-stage1-normal-team0",
+    "teacher_query|v420-a1-safe-set|v420-a1-s0d1-seed3052|th08-stage1-normal-team0",
+    "teacher_query|v420-a1-safe-set|v420-a1-s0d1-seed3053|th08-stage1-normal-team0",
+    "teacher_query|v420-a1-safe-set|v420-a1-s0d1-seed3054|th08-stage1-normal-team0",
+    "teacher_query|v420-a1-safe-set|v420-a1-s0d1-seed3055|th08-stage1-normal-team0",
+    "teacher_query|v420-a1-safe-set|v420-a1-s0d1-seed3056|th08-stage1-normal-team0",
+    "teacher_query|v420-a1-safe-set|v420-a1-s0d1-seed3057|th08-stage1-normal-team0",
+    "teacher_query|v420-a1-safe-set|v420-a1-s0d1-seed3058|th08-stage1-normal-team0",
+    "teacher_query|v420-a1-safe-set|v420-a1-s0d1-seed3059|th08-stage1-normal-team0",
+    "teacher_query|v420-a1-safe-set|v420-a1-s0d1-seed3060|th08-stage1-normal-team0",
+    "teacher_query|v420-a1-safe-set|v420-a1-s0d1-seed3061|th08-stage1-normal-team0",
+    "teacher_query|v420-a1-safe-set|v420-a1-s0d1-seed3062|th08-stage1-normal-team0",
+    "teacher_query|v420-a1-safe-set|v420-a1-s0d1-seed3063|th08-stage1-normal-team0",
+    "teacher_query|v420-a1-safe-set|v420-a1-s0d1-seed3064|th08-stage1-normal-team0",
+    "teacher_query|v420-a1-safe-set|v420-a1-s0d1-seed3065|th08-stage1-normal-team0",
+    "teacher_query|v420-a1-safe-set|v420-a1-s0d1-seed3066|th08-stage1-normal-team0",
+    "teacher_query|v420-a1-safe-set|v420-a1-s0d1-seed3067|th08-stage1-normal-team0",
+    "teacher_query|v420-a1-safe-set|v420-a1-s0d1-seed3068|th08-stage1-normal-team0",
+    "teacher_query|v420-a1-safe-set|v420-a1-s0d1-seed3069|th08-stage1-normal-team0",
+    "teacher_query|v420-a1-safe-set|v420-a1-s0d1-seed3070|th08-stage1-normal-team0",
+    "teacher_query|v420-a1-safe-set|v420-a1-s0d1-seed3071|th08-stage1-normal-team0",
+    "teacher_query|v420-a1-safe-set|v420-a1-s0d1-seed3072|th08-stage1-normal-team0",
+    "teacher_query|v420-a1-safe-set|v420-a1-s0d1-seed3073|th08-stage1-normal-team0",
+    "teacher_query|v420-a1-safe-set|v420-a1-s0d1-seed3074|th08-stage1-normal-team0",
+    "teacher_query|v420-a1-safe-set|v420-a1-s0d1-seed3075|th08-stage1-normal-team0",
+    "teacher_query|v420-a1-safe-set|v420-a1-s0d1-seed3076|th08-stage1-normal-team0",
+    "teacher_query|v420-a1-safe-set|v420-a1-s0d1-seed3077|th08-stage1-normal-team0",
+    "teacher_query|v420-a1-safe-set|v420-a1-s0d1-seed3078|th08-stage1-normal-team0",
+    "teacher_query|v420-a1-safe-set|v420-a1-s0d1-seed3079|th08-stage1-normal-team0",
+    "teacher_query|v420-a1-safe-set|v420-a1-s0d1-seed3080|th08-stage1-normal-team0",
+    "teacher_query|v420-a1-safe-set|v420-a1-s0d1-seed3081|th08-stage1-normal-team0",
+    "teacher_query|v420-a1-safe-set|v420-a1-s0d1-seed3082|th08-stage1-normal-team0",
+    "teacher_query|v420-a1-safe-set|v420-a1-s0d1-seed3083|th08-stage1-normal-team0",
+    "teacher_query|v420-a1-safe-set|v420-a1-s0d1-seed3084|th08-stage1-normal-team0",
+    "teacher_query|v420-a1-safe-set|v420-a1-s0d1-seed3085|th08-stage1-normal-team0",
+    "teacher_query|v420-a1-safe-set|v420-a1-s0d1-seed3086|th08-stage1-normal-team0",
+    "teacher_query|v420-a1-safe-set|v420-a1-s0d1-seed3087|th08-stage1-normal-team0",
+    "teacher_query|v420-a1-safe-set|v420-a1-s0d1-seed3088|th08-stage1-normal-team0",
+    "teacher_query|v420-a1-safe-set|v420-a1-s0d1-seed3089|th08-stage1-normal-team0",
+    "teacher_query|v420-a1-safe-set|v420-a1-s0d1-seed3090|th08-stage1-normal-team0",
+    "teacher_query|v420-a1-safe-set|v420-a1-s0d1-seed3091|th08-stage1-normal-team0",
+    "policy_rl|v420-t06-r3|v420-t06-r3-rollout-s0d1-seed3000|th08-stage1-normal-team0",
+    "policy_rl|v420-t06-r3|v420-t06-r3-rollout-s0d1-seed3001|th08-stage1-normal-team0",
+    "policy_rl|v420-t06-r3|v420-t06-r3-rollout-s0d1-seed3002|th08-stage1-normal-team0",
+    "policy_rl|v420-t06-r3|v420-t06-r3-rollout-s0d1-seed3003|th08-stage1-normal-team0",
+    "policy_rl|v420-t06-r3|v420-t06-r3-rollout-s0d1-seed3004|th08-stage1-normal-team0"
+   ],
+   "corpus_note": "membership means 'inside a training corpus'. D1's internal v3 val/test shards are corpus records used for checkpoint selection; they are listed here and also touched by model_selection."
+  },
+  "dev": {
+   "purpose": "development / candidate-selection panel; never training data",
+   "ancestor_ids": [
+    "model_selection|v420-dev-panel|dev-seed-1000|th08-stage1-normal-team0",
+    "model_selection|v420-dev-panel|dev-seed-1001|th08-stage1-normal-team0",
+    "model_selection|v420-dev-panel|dev-seed-1002|th08-stage1-normal-team0",
+    "model_selection|v420-dev-panel|dev-seed-1003|th08-stage1-normal-team0",
+    "model_selection|v420-dev-panel|dev-seed-1004|th08-stage1-normal-team0",
+    "model_selection|v420-dev-panel|dev-seed-1005|th08-stage1-normal-team0",
+    "model_selection|v420-dev-panel|dev-seed-1006|th08-stage1-normal-team0",
+    "model_selection|v420-dev-panel|dev-seed-1007|th08-stage1-normal-team0",
+    "model_selection|v420-dev-panel|dev-seed-1008|th08-stage1-normal-team0",
+    "model_selection|v420-dev-panel|dev-seed-1009|th08-stage1-normal-team0",
+    "model_selection|v420-dev-panel|dev-seed-1010|th08-stage1-normal-team0",
+    "model_selection|v420-dev-panel|dev-seed-1011|th08-stage1-normal-team0",
+    "model_selection|v420-dev-panel|dev-seed-1012|th08-stage1-normal-team0",
+    "model_selection|v420-dev-panel|dev-seed-1013|th08-stage1-normal-team0",
+    "model_selection|v420-dev-panel|dev-seed-1014|th08-stage1-normal-team0",
+    "model_selection|v420-dev-panel|dev-seed-1015|th08-stage1-normal-team0",
+    "model_selection|v420-dev-panel|dev-seed-1016|th08-stage1-normal-team0",
+    "model_selection|v420-dev-panel|dev-seed-1017|th08-stage1-normal-team0",
+    "model_selection|v420-dev-panel|dev-seed-1018|th08-stage1-normal-team0",
+    "model_selection|v420-dev-panel|dev-seed-1019|th08-stage1-normal-team0"
+   ],
+   "reserved_seeds": {
+    "seed_min": 1020,
+    "seed_max": 1039,
+    "note": "v4.2.0 README §6 candidate-selection seeds; no run evidence yet, so they are reserved rather than registered as ancestors"
+   },
+   "note": "seeds 1000-1019 are the actual panel; 1040-1099 stay reserved for pre-registered ablations"
+  },
+  "confirm": {
+   "purpose": "formal confirmation on fresh, unused seeds",
+   "ancestor_ids": [],
+   "empty_reason": "v4.3.0 has not frozen a confirmation batch; the historical batch is recorded in confirm_batches (61300-61399, spent)"
+  },
+  "adapt": {
+   "purpose": "G410-6 adaptation target: Z/A/S/A-ad on the frozen hold-out families",
+   "ancestor_ids": [],
+   "target_families": [
+    "th08-stage4a-hard-team0",
+    "th08-stage6a-lunatic-team0"
+   ],
+   "empty_reason": "no adaptation episode has run yet; the split freezes the target declaration only",
+   "reserved_seed_range": {
+    "seed_min": 61200,
+    "seed_max": 61299,
+    "note": "W10 confirmation range for the adaptation gate; adaptation *training* seeds must be registered in a new revision before any run"
+   }
+  },
+  "quarantine": {
+   "purpose": "records retained on disk but barred from every fitting path",
+   "ancestor_ids": [
+    "teacher_query|d1-s1b-rejected|d1-s0d1-n3251-seed1000-shard|th08-stage1-normal-team0",
+    "teacher_query|d1-s1b-rejected|d1-s0d1-n3251-seed1001-shard|th08-stage1-normal-team0",
+    "teacher_query|d1-s1b-rejected|d1-s0d1-n3251-seed1002-shard|th08-stage1-normal-team0",
+    "teacher_query|d1-s1b-rejected|d1-s0d1-n3251-seed1003-shard|th08-stage1-normal-team0",
+    "teacher_query|d1-s1b-rejected|d1-s0d1-n3251-seed1004-shard|th08-stage1-normal-team0",
+    "teacher_query|d1-s1b-rejected|d1-s0d1-n3251-seed1005-shard|th08-stage1-normal-team0",
+    "teacher_query|d1-s1b-rejected|d1-s0d1-n3251-seed1006-shard|th08-stage1-normal-team0",
+    "teacher_query|d1-s1b-rejected|d1-s0d1-n3251-seed1007-shard|th08-stage1-normal-team0",
+    "teacher_query|d1-s1b-rejected|d1-s0d1-n3251-seed1008-shard|th08-stage1-normal-team0",
+    "teacher_query|d1-s1b-rejected|d1-s0d1-n3251-seed1009-shard|th08-stage1-normal-team0",
+    "teacher_query|d1-s1b-rejected|d1-s0d1-n3251-seed1010-shard|th08-stage1-normal-team0",
+    "teacher_query|d1-s1b-rejected|d1-s0d1-n3251-seed1011-shard|th08-stage1-normal-team0"
+   ],
+   "note": "S1b (dev seeds 1000-1011) was rejected for seed provenance; the records were kept, so they are named here instead of silently ignored"
+  }
+ },
+ "confirm_batches": [
+  {
+   "name": "v410-first-stage-confirm",
+   "seed_min": 61000,
+   "seed_max": 61099,
+   "episodes": 0,
+   "status": "unused",
+   "evidence": "ASSET_SYNC.md",
+   "note": "ASSET_SYNC §6: still unused, do not read"
+  },
+  {
+   "name": "v410-fullrun-confirm",
+   "seed_min": 61100,
+   "seed_max": 61199,
+   "episodes": 0,
+   "status": "unused",
+   "evidence": "ASSET_SYNC.md",
+   "note": "still unused"
+  },
+  {
+   "name": "v430-adapt-confirm",
+   "seed_min": 61200,
+   "seed_max": 61299,
+   "episodes": 0,
+   "status": "unused",
+   "evidence": "Document/Update/Alpha/v4.1.0/README.md",
+   "note": "reserved for the W10 adaptation gate, never for training"
+  },
+  {
+   "name": "v410-g4101-teacher-confirm-s1n",
+   "seed_min": 61300,
+   "seed_max": 61399,
+   "episodes": 100,
+   "status": "spent",
+   "evidence": "Document/Update/Alpha/v4.1.0/evidence/WP02/G4101_100_TEACHER.md",
+   "note": "100 teacher confirmation seeds, 100/100 clears; the range is spent and must not be reused for a new candidate"
+  },
+  {
+   "name": "v410-rl-confirm",
+   "seed_min": 61400,
+   "seed_max": 61499,
+   "episodes": 0,
+   "status": "unused",
+   "evidence": "ASSET_SYNC.md",
+   "note": "still unused"
+  }
+ ],
+ "reserved_training_exclusion": {
+  "seed_min": 60000,
+  "seed_max": 60199,
+  "read_sealed_results": false,
+  "note": "60000-60199 is permanently banned for training (EXECUTION_PLAN §6)",
+  "protected_ranges": [
+   {
+    "name": "first_stage_confirm",
+    "seed_min": 61000,
+    "seed_max": 61099,
+    "usage": "unused",
+    "evidence": "ASSET_SYNC.md"
+   },
+   {
+    "name": "fullrun_confirm",
+    "seed_min": 61100,
+    "seed_max": 61199,
+    "usage": "unused",
+    "evidence": "ASSET_SYNC.md"
+   },
+   {
+    "name": "adaptation_confirm",
+    "seed_min": 61200,
+    "seed_max": 61299,
+    "usage": "reserved_for_v430",
+    "evidence": "Document/Update/Alpha/v4.1.0/README.md"
+   },
+   {
+    "name": "teacher_confirm",
+    "seed_min": 61300,
+    "seed_max": 61399,
+    "usage": "spent",
+    "evidence": "Document/Update/Alpha/v4.1.0/evidence/WP02/G4101_100_TEACHER.md"
+   },
+   {
+    "name": "rl_confirm",
+    "seed_min": 61400,
+    "seed_max": 61499,
+    "usage": "unused",
+    "evidence": "ASSET_SYNC.md"
+   }
+  ]
+ },
+ "sealed": {
+  "read_sealed_results": false,
+  "present_on_host": false,
+  "path_patterns": [
+   "sealed/",
+   ".tmp_v430_sealed",
+   ".tmp_v430_confirm",
+   "evidence/W12/SEALED",
+   "SEALED_RESULTS"
+  ],
+  "verified_absent": {
+   "checked_at": "2026-11-15T11:34:26+08:00",
+   "method": "directory listing of the repository root and of Document/Update/Alpha/v4.3.0 (no sealed directory, file or result bundle exists); no payload was opened",
+   "evidence_paths": [
+    "ASSET_SYNC.md",
+    "Document/Update/Alpha/v4.1.0/README.md",
+    "Document/Update/Alpha/v4.3.0/PLAN_SPEC.json"
+   ]
+  },
+  "policy": "sealed assets/results are never opened and never referenced by a split registry; a sealed path appearing anywhere in this config is rejected (EXECUTION_PLAN §6, v4.1.0 README §4.3/§WP10)"
+ },
+ "registries_note": "the four registries are bound by sha256+digest_scope; changing a registry without re-freezing this config makes validate-splits fail"
+}

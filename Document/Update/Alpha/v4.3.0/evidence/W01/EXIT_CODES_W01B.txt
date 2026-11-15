@@ -1,0 +1,105 @@
+v4.3.0 W01b -- EXIT CODES (real runs, this checkout, Windows + WSL up)
+=======================================================================
+Date        : 2026-11-15 (Asia/Shanghai)
+Repository  : D:\WorkShop\Touhou_RL
+Python      : 3.12.10   pytest: 9.1.1
+Identity    : touhou_rl/v430/session.py, touhou_rl/v430/evaluate.py,
+              tools/rl/v430.py, tests/test_v430_session.py
+              (sha256 + digest_scope in evidence/W01/contract-001.json)
+
+No engine, no game and no training was started. Everything below is pure
+Python plus the W00 asset audit that was already in the tree.
+
+
+ACCEPTANCE COMMANDS (as specified in the dispatch)
+--------------------------------------------------
+# 1
+$env:PYTHONPATH='D:\WorkShop\Touhou_RL'
+python -m compileall -q touhou_rl/v430 tools/rl/v430.py
+-> exit 0
+
+# 2
+python -m pytest -p no:cacheprovider --basetemp .tmp_v430_pytest_w01b -q tests/test_v430_session.py tests/test_v430_contracts.py tests/test_v430_actions.py
+-> exit 0
+   237 passed, 0 failed, 0 skipped, 0 errors (0.66s)
+   breakdown: tests/test_v430_session.py   90 passed
+              tests/test_v430_contracts.py  (upstream W01a, unchanged)
+              tests/test_v430_actions.py    (upstream W01a, unchanged)
+   NOTE: tests/test_v430_actions.py already existed in this checkout
+         (18,419 B, W01 slice C). It was NOT created by W01b and was not
+         modified.
+
+# 3   (creates evidence/W01/contract-001.json; the file did not exist before)
+python tools/rl/v430.py validate-contract --config configs/v430/contracts.json --out Document/Update/Alpha/v4.3.0/evidence/W01/contract-001.json
+-> exit 0
+   stdout: validate-contract: checks 173 | failed 0 | groups 13 | gate passed | exit 0
+
+# 4   (expected exit 3: the known v4.2.0/journal.jsonl drift)
+python tools/rl/v430.py audit --config configs/v430/assets.json --out .tmp_v430_w01b_audit_recheck.json
+-> exit 3
+   stdout: audit: checks 53 | verified 51 | unhashed 1 | mismatch 1 | missing 0 | unreachable 0 | wsl up | gate NOT met | exit 3
+   stderr: unmet checks: sync:Document/Update/Alpha/v4.2.0/journal.jsonl
+
+   Independently compared against evidence/W00/audit-001.json:
+     denominator 53, verified 51, present_unhashed 1, mismatch 1, missing 0,
+     unreachable 0, unmet 1, unmet_ids ['sync:...journal.jsonl'],
+     manifest_entries 46, manifest_entries_covered 46, files_hashed 44,
+     bytes_hashed 43,051,781, wsl_commands 3, wsl_available True,
+     by_category / by_kind identical.
+     -> 18 of 18 statistics fields identical, 0 differing
+     -> check id list identical (53 ids, same order)
+     -> check status list identical
+     -> exit_code 3 in both
+   => the W01b CLI edit did NOT change `audit`.
+
+
+ADDITIONAL PROBES (not part of the required list; evidence for behaviour)
+------------------------------------------------------------------------
+# 4b  re-running `audit` into an existing --out must be refused
+python tools/rl/v430.py audit --config configs/v430/assets.json --out .tmp_v430_w01b_audit_recheck.json
+-> exit 2   ("refusing to overwrite existing output")   [behaviour preserved]
+
+# 3b  re-running `validate-contract` into an existing --out must be refused
+python tools/rl/v430.py validate-contract --config configs/v430/contracts.json --out Document/Update/Alpha/v4.3.0/evidence/W01/contract-001.json
+-> exit 2   (same refusal; --out still defaults to never overwrite)
+
+# 5   evidence self-check: the written contract-001.json passes the contract
+python -c "import json; from touhou_rl.v430 import contracts as C; C.assert_result_schema(json.load(open('Document/Update/Alpha/v4.3.0/evidence/W01/contract-001.json', encoding='utf-8')))"
+-> exit 0   execution_status=ok protocol_validity=valid
+            capability_gate=not_run command_class=contract exit_code=0
+
+# 6   mutation probes proving the new tests assert behaviour (file restored after)
+A) restore `SessionAction(state=state, *request)` (the original defect)
+   -> pytest tests/test_v430_session.py: 19 failed, 71 passed
+B) make `unrecognised` fall through to `playing` (unknown silently upgraded)
+   -> pytest tests/test_v430_session.py: 3 failed, 87 passed
+   (test_unknown_is_not_filled_with_playing_or_game_over,
+    test_unknown_is_sticky_until_a_positive_pixel_signal,
+    test_unrecognised_keeps_a_pending_death_beat)
+   restored file -> 90 passed (exit 0)
+
+# 7   reproducibility: a second run into a scratch path is identical
+python tools/rl/v430.py validate-contract --config configs/v430/contracts.json --out .tmp_v430_w01b_contract_repro.json
+-> exit 0
+   compared with Document/Update/Alpha/v4.3.0/evidence/W01/contract-001.json:
+     protocol_digests   SAME
+     identities         SAME   (identity_count 7)
+     research_result    SAME   (173 checks / 0 failed / 13 groups)
+     capability_gate    SAME   (not_run)
+     exit_code          SAME   (0)
+     contract_version   SAME   (v430-contract/1)
+   -> the committed evidence is reproducible from the tree, not hand-written.
+
+
+WHAT EACH EXIT CODE MEANS HERE
+------------------------------
+0  compileall: syntax only. pytest: the asserted behaviours hold.
+   validate-contract: every code/config/plan consistency check really agrees.
+   It is NOT a capability claim (capability_gate stays "not_run").
+2  invalid inputs: an existing --out was refused. Nothing was overwritten.
+3  audit: the measurement was valid but a registered pin is not met
+   (the known v4.2.0/journal.jsonl live drift). Unchanged from W00.
+4  not produced by any command in this slice.
+
+No command in this slice returned "gate passed" on invalid, empty, partial or
+synthetic-only input.

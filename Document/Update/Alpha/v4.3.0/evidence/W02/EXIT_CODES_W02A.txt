@@ -1,0 +1,23 @@
+﻿# v4.3.0 work package W02, slice A (O2 observation encoding) - acceptance command log
+# repository: D:\WorkShop\Touhou_RL ; python/numpy/pytest: 3.12.10 2.5.4 9.1.1
+# every command ran with: $env:PYTHONPATH='D:\WorkShop\Touhou_RL'
+# raw output below; durations are from this run (2026-11-15, Asia/Shanghai)
+
+$ python -m compileall -q touhou_rl/v430/observation.py
+(no output)
+[exit code: 0]
+
+$ python -m pytest -p no:cacheprovider --basetemp .tmp_v430_pytest_w02a -q tests/test_v430_observation.py
+...............................................                          [100%]
+47 passed in 0.97s
+[exit code: 0]
+
+$ python -m pytest -p no:cacheprovider --basetemp .tmp_v430_pytest_w02a_reg -q tests/test_v430_contracts.py tests/test_v430_actions.py tests/test_v430_session.py
+........................................................................ [ 30%]
+........................................................................ [ 60%]
+........................................................................ [ 91%]
+.....................                                                    [100%]
+237 passed in 0.61s
+[exit code: 0]
+
+# summary: compileall 0 ; W02A pytest 47 passed (exit 0) ; W01 regression pytest 237 passed (exit 0)

@@ -1,0 +1,55 @@
+W03I — alpha_mode opt-in: acceptance commands and real exit codes
+=================================================================
+Date: 2026-11-15
+Repo: D:\WorkShop\Touhou_RL
+Env : $env:PYTHONPATH='D:\WorkShop\Touhou_RL'
+
+0) Baseline BEFORE any change (same interpreter, same command shape):
+   python -m pytest -p no:cacheprovider --basetemp .tmp_v430_pytest_w03i_base -q tests/test_v430_observation.py
+   exit code: 0
+   result   : 47 passed in 0.99s
+
+0b) Implementation landed, new tests NOT yet appended (proves the additive change
+    alone leaves every existing test green):
+   python -m pytest -p no:cacheprovider --basetemp .tmp_v430_pytest_w03i_pre -q tests/test_v430_observation.py
+   exit code: 0
+   result   : 47 passed in 1.06s
+
+1) python -m compileall -q touhou_rl/v430/observation.py
+   exit code: 0
+
+2) python -m pytest -p no:cacheprovider --basetemp .tmp_v430_pytest_w03i -q tests/test_v430_observation.py
+   exit code: 0
+   result   : 56 passed in 1.98s
+   (baseline was 47 passed; +9 new tests, no existing test modified, removed or
+    weakened — the 47 assertions in the file before the appended block are
+    untouched, which run 0b demonstrates independently of the new block)
+
+3) python -m pytest -p no:cacheprovider --basetemp .tmp_v430_pytest_w03i_reg -q tests/test_v430_models.py tests/test_v430_learn.py
+   exit code: 0
+   result   : 44 passed in 10.20s
+   (consumer regression: the six-field encoded surface, as_dict(), minibatch and
+    attach_memory are unchanged, so the model/learn suites are unaffected)
+
+Identity values measured on this tree (python -c, no engine):
+   o2_digest()                     = cb1616e4cbfa928e691c2fb8497a84c813bded528064cf2b0aa1e30fa86b85b5
+   contracts.o2_digest()           = cb1616e4cbfa928e691c2fb8497a84c813bded528064cf2b0aa1e30fa86b85b5  (identical: alpha_mode does NOT enter o2_digest)
+   encoder_digest()                = 37ebb8d40c45ee63d8e6d4d5f873cef00c9e34eff719af1343b8d8e49dc5a1aa  (alpha_mode_used = "strict")
+   encoder_digest(alpha_mode="any")= 90e43af671e0c93bf333e26613345d5fe135e8ed8ae1c095b688bfd6993a54fc  (differs: lenient data cannot share a strict identity)
+
+API shape after the change:
+   encode_o2(frames, key_history=None, history_valid=None, elapsed_capture_s=None,
+             *, alpha_mode='strict', **unexpected)
+   ALPHA_MODES        = ('opaque_255', 'unused_0', 'binary_mixed', 'any')
+   ALPHA_STRICT_MODES = ('opaque_255', 'unused_0', 'binary_mixed')
+   ALPHA_MODE_CHOICES = ('opaque_255', 'unused_0', 'binary_mixed', 'any', 'strict')
+   ALPHA_MODE_DEFAULT = 'strict'
+   O2Observation.alpha_mode  (7th field, provenance only; not in O2_ENCODED_KEYS)
+
+Not done (out of scope by instruction):
+   - no engine launched, no glReadPixels readback, no session/evaluate wiring
+   - no capture corpus read or written; only synthetic numpy frames in the tests
+   - no alpha pre-multiply inverse / upsampling / zero-fill / composite
+   - no other strict gate relaxed (short stack, duplicate, placeholder, history
+     prefix, key rows, elapsed interval, privileged names all unchanged)
+   - no other test file touched; no file deleted, moved, added to git or committed

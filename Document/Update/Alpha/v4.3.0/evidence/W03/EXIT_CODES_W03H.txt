@@ -1,0 +1,178 @@
+W03H — real O2 capture + real-O2 BC closed loop: commands and real exit codes
+============================================================================
+Date: 2026-11-15
+Repo: D:\WorkShop\Touhou_RL   (all commands run inside WSL; source root is
+      /mnt/d/WorkShop/Touhou_RL, the engine is the stale checkout's binary at
+      /root/Touhou_RL/third_party/th08-rl/build/rl_v3/th08-modern)
+Python: /root/v400-venv/bin/python (3.10.12)
+Note: every command below was really executed. Where the exit code is quoted it
+      is the process exit code. Capture runs went through
+      .tmp_v430_o2/run_capture.sh, which prints `exit_code=` and `elapsed_s=`;
+      diagnostic commands whose output was piped through `tail` have no reliable
+      process code and are marked "not captured (piped)" instead of guessing.
+
+--- Phase 0: environment ------------------------------------------------
+
+0) sha256sum /root/Touhou_RL/third_party/th08-rl/build/rl_v3/th08-modern
+   exit code: 0
+   691bfd77b7eca3361aa8bb7af0977556a70cc73a070b29a2447222ba7a568ef6
+
+1) sha256sum .tmp_v420_data/T04/dataset/d1-s0d1-n3300-seed12-shard/slots.jsonl
+   exit code: 0
+   f759de7dacc78343dec8825da5de14942e749b8a5a2c5319304e513d1618b7b9
+   == tools/rl/v420_eval_shoot.py CLEAR_SHARD_SHA256 (the frozen audited tape)
+
+2) cp -a .tmp_v420_data/T06/engine-data-gamesrc .tmp_v430_o2/engine-data
+   exit code: 0   real 0m5.324s
+   474M; kept (the engine writes score.dat/th08.cfg there)
+   the shared .tmp_v420_data/T06/engine-data-gamesrc is never pointed at
+
+--- Phase 1: rehearsals (each failure cost seconds, not a full replay) ---
+
+3) bash .tmp_v430_o2/run_capture.sh .tmp_v430_o2/_probe 400 64 200
+   exit code: 1   elapsed_s: 2
+   error: KeyError: 'executed_cand'
+          (the T02c *rebuild* shard stores `cand`, not `executed_cand`;
+           failed inside touhou_rl.v420.rl.load_clear_schedule BEFORE any
+           engine start -- no engine process was created)
+   action : switched the tape to the T04 dataset shard, whose bytes equal the
+            frozen CLEAR_SHARD_SHA256; no existing file was modified
+
+4) bash .tmp_v430_o2/run_capture.sh .tmp_v430_o2/_probe 400 64 200
+   exit code: 1   elapsed_s: 8
+   error: CaptureError: KeyError: 'lives'   (frames=1, decisions=1)
+          the wire STATE reply names it lives_remaining
+   action : use the ruler's own _readings mapping instead of guessing keys
+
+5) bash .tmp_v430_o2/run_capture.sh .tmp_v430_o2/_probe 400 64 200
+   exit code: 1   elapsed_s: 9
+   error: CaptureError: encode_o2 refused decision 1 (frames 4):
+          FrameAlphaError: alpha plane holds intermediate values (202..219)
+   action : diagnosed with .tmp_v430_o2/probe_alpha.py / probe_alpha2.py,
+            reported to the parent slice; encode_o2 gained the audited
+            alpha_mode="any" opt-in (W03I) and the capture now records the gate
+            it used. The capture script was NOT patched to rewrite alpha.
+
+6) xvfb-run ... python .tmp_v430_o2/probe_alpha.py            (first attempt)
+   exit code: not captured (traceback in the probe itself: alpha_mode() raised
+              FrameAlphaError at frame 0 before the statistics printed)
+7) xvfb-run ... python .tmp_v430_o2/probe_alpha.py            (after fix)
+   exit code: not captured (output piped through tail)
+   result   : 8 frames; alpha min 177..219, alpha==255 fraction 0.000000,
+              alpha_mode REFUSED on every frame; per-plane distinct counts
+              62/59/60/28 (alpha is not a copy of any colour plane)
+8) xvfb-run ... python .tmp_v430_o2/probe_alpha2.py --max-frames 700 --every 25
+   exit code: not captured (output piped through tail)
+   result   : 28 sampled frames, 0 with alpha_min==255, 0 accepted by the
+              encoder -> the alpha plane is intermediate for the WHOLE replay,
+              not only the opening fade
+9) xvfb-run ... python .tmp_v430_o2/probe_alpha2.py --max-frames 300 --every 100
+   exit code: 0   (background job, exit code observed by the harness)
+   result   : premultiplication evidence:
+              frame 100: rgb>alpha 103/307200 = 0.000335
+              frame 200: rgb>alpha 362/307200 = 0.001178
+              frame 300: rgb>alpha 338/307200 = 0.001100
+              => supports premultiplied/alpha-weighted RGB; nothing converted
+
+--- Phase 2: the capture (canonical) ------------------------------------
+
+10) bash .tmp_v430_o2/run_capture.sh .tmp_v430_o2/_probe40 40 4 200
+    exit code: 0   elapsed_s: 10
+    {"bytes_total": 6813594, "collected": 4, "decisions": 20, "frames": 40,
+     "stop_reason": "frame_cap", "wall_s": 7.058}
+
+11) bash .tmp_v430_o2/run_capture.sh .tmp_v430_o2/o2-64 400 64 290
+    exit code: 0   elapsed_s: 14
+    {"bytes_total": 109004272, "collected": 64, "decisions": 200,
+     "frames": 400, "stop_reason": "frame_cap", "wall_s": 11.499}
+
+12) bash .tmp_v430_o2/run_capture.sh .tmp_v430_o2/o2-64 13195 64 290
+    exit code: 0   elapsed_s: 152
+    {"bytes_total": 109004272, "collected": 64, "decisions": 6598,
+     "frames": 13195, "stop_reason": "stage_clear", "wall_s": 150.425}
+    -> frames=13195, decisions=6598, 64 collected, invalid_frames=0,
+       warmup_frames=0, error=null
+
+--- Phase 3: manifest + O2 guard + BC smoke ------------------------------
+
+13) bash .tmp_v430_o2/_dryrun/build_dryrun.py
+    exit code: 0   (4-sample synthetic fixture, .tmp_v430_o2/_dryrun/ only;
+                    used to iterate the manifest field set, never as evidence)
+
+14) bash .tmp_v430_o2/run_verify.sh .tmp_v430_o2/_dryrun
+    exit code: 0
+    {"valid": true, "complete": true, "problems": 0,
+     "assert_o2_raised": null, "n_steps": 1, "n_samples": 4}
+
+15) bash .tmp_v430_o2/run_verify.sh .tmp_v430_o2/o2-64      (final, 3rd run)
+    exit code: 0
+    verify_exit_code=0
+    {"assert_o2_raised": null, "complete": true,
+     "first_loss": 4.271553993225098, "last_loss": 3.305506706237793,
+     "model_supplied": true, "n_parameters": 2726671, "n_steps": 8,
+     "problems": 0, "valid": true}
+    validate_manifest: valid=True complete=True exit_code=0 problems=[] degradations=[]
+    assert_o2_compatible: returned the manifest, DID NOT RAISE
+    (run twice in a row with bit-identical losses -> reproducible after
+     torch.manual_seed(0) before build_actor())
+
+16) bash .tmp_v430_o2/hash_all.sh                       exit code: 0
+    per-file sha256 + composite digest of the 7 artefacts:
+    1c85869a96832fd9413179d90d2c141dec12ccb6b64cdb2f2341e332a65c2dd2
+    o2-64 total: 109,023,135 bytes; .tmp_v430_o2 total: 619,738,825 bytes
+
+--- Phase 4: label provenance audit + tail-label guard (no engine) ------
+
+17) /root/v400-venv/bin/python .tmp_v430_o2/verify_labels_provenance.py \
+      .tmp_v430_o2/o2-64
+    exit code: 0
+    {"labels_total": 64,
+     "provenance_counts": {"leading_history": 7, "recorded_slot": 57},
+     "tail_repeat_labels": 0,
+     "recorded_slot_cross_check": {"checked": 57, "mismatches": 0,
+                                   "fields": ["cand", "mask", "decision_frame"]},
+     "head_distribution": {"move": {"distinct": [0,2,3,6,7], "constant": false},
+                           "focus": {"distinct": [0,1], "constant": false},
+                           "shoot": {"distinct": [1], "constant": true},
+                           "bomb":  {"distinct": [0], "constant": true}},
+     "supervised_heads": ["move", "focus"],
+     "unsupervised_heads": ["shoot", "bomb"]}
+    -> the 7 leading labels are recorded by tape slot 0's history/history_frames;
+       0 of the 64 labels is without tape provenance
+    artifact: .tmp_v430_o2/o2-64/labels_provenance.json (2,120 bytes,
+              sha256 ca868c956ad1170acf85909834dcd817f87fe642ee1864d39888cd1a8185dfec)
+
+18) /root/v400-venv/bin/python -m py_compile .tmp_v430_o2/capture_o2.py
+    exit code: 0   (the fail-closed tail-label guard compiles)
+
+19) /root/v400-venv/bin/python .tmp_v430_o2/_selftest_guard.py
+    exit code: 0
+    {'schedule_length': 6660, 'leading_decisions': 8, 'recorded_frames': 6588,
+     'tail_entries': 64, 'decision_0_is_leading': True,
+     'decision_7_is_leading': True, 'decision_8_is_recorded_slot': True,
+     'decision_9_is_recorded_slot': True, 'last_recorded_is_slot': True,
+     'first_tail_is_tail': True, 'last_schedule_is_tail': True,
+     'beyond_schedule_refused': True,
+     'collected_kinds': ['leading_history', 'recorded_slot'],
+     'no_tail_in_collected_window': True}
+    guard_ok = True
+    -> the guard's classification is verified WITHOUT starting an engine; no
+       new engine run was made for this addition
+
+    NOTE: the 64 labels already on disk were captured before the `tape_provenance`
+    tag existed; their provenance is established by command 17, so no re-capture
+    was required. The guard takes effect on the next capture.
+
+    Final totals after command 17 (re-measured):
+      .tmp_v430_o2/o2-64       109,025,255 bytes
+      .tmp_v430_o2 (whole)     619,754,789 bytes
+
+--- Not run / deliberately out of scope --------------------------------
+* no `git add` / commit / move / delete of any asset
+* no upload
+* the v4.2.0 expansion run (run_all.sh / run_worker.sh / its th08-modern) was
+  never touched; this slice's engine concurrency was 1 throughout
+* ASSET_SYNC.md / ASSET_SYNC.sha256 untouched (a draft entry is in
+  W03H_O2_CAPTURE.md §10 only)
+* no file under touhou_rl/, tools/rl/, configs/, third_party/,
+  .tmp_v400_d1/, .tmp_v410_s1c/, .tmp_v420_data/ was created or modified

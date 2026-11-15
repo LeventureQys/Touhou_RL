@@ -1,0 +1,36 @@
+{
+ "schema": "v430-runs/1",
+ "frozen_at": "2026-11-15T11:34:26+08:00",
+ "timezone": "Asia/Shanghai",
+ "work_package": "v4.3.0 W09 (skeleton; W12 extends it)",
+ "purpose": "seed/run register that a settlement must be able to replay; W12 (settle.py) appends the actual runs, W09 only freezes the shape",
+ "append_only": true,
+ "identity_fields": [
+  "run_id",
+  "experiment_id",
+  "phase",
+  "mode",
+  "seed",
+  "train_seed",
+  "started_at",
+  "finished_at",
+  "exit_code",
+  "argv",
+  "split_registry_sha",
+  "split_registry_sha_scope",
+  "checkpoint_path",
+  "checkpoint_sha256",
+  "checkpoint_digest_scope",
+  "ancestor_ids",
+  "split",
+  "protocol_validity",
+  "capability_gate"
+ ],
+ "digest_scope_rule": "every sha256 in an entry must sit next to its digest_scope (text/lf-normalized for text artefacts, binary/raw for binaries)",
+ "entries": [],
+ "entries_note": "empty by design: v4.3.0 has not run any experiment yet; W12 fills it and must not back-fill entries for v4.1.0/v4.2.0 runs (they live in their own state/journal ledgers)",
+ "reserved_for": {
+  "W10": "adaptation runs (Z/A/S/A-ad per family per seed)",
+  "W12": "settlement / model card"
+ }
+}

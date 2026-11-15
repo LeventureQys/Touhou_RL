@@ -1,0 +1,215 @@
+W03M — seed10/seed11 O2 capture: commands and real exit codes
+=============================================================
+Date: 2026-11-15
+Repo: D:\WorkShop\Touhou_RL   (WSL source root /mnt/d/WorkShop/Touhou_RL; the
+      engine binary is the stale checkout's at
+      /root/Touhou_RL/third_party/th08-rl/build/rl_v3/th08-modern)
+Python: /root/v400-venv/bin/python (engine runs, via xvfb-run) and the Windows
+        `python` on PYTHONPATH=D:\WorkShop\Touhou_RL (offline checks)
+Note: every command below was really executed; the exit code quoted is the
+      process exit code. Engine runs went through
+      .tmp_v430_o2/o2-stride-seed10/_runner/capture_seed.sh, which prints
+      `exit_code=` and `elapsed_s=` (a script file, because PowerShell's native
+      argument passing strips the double quotes xvfb-run needs for
+      "-screen 0 1024x768x24"). Runs were strictly serial (engine concurrency 1).
+
+--- Phase 0: identity ---------------------------------------------------
+
+0) wsl -d Ubuntu -- bash -lc "sha256sum /root/Touhou_RL/third_party/th08-rl/build/rl_v3/th08-modern"
+   exit code: 0
+   691bfd77b7eca3361aa8bb7af0977556a70cc73a070b29a2447222ba7a568ef6
+   == the frozen engine sha on record for W03H/W03I/W03L
+
+1) wsl -d Ubuntu -- bash -lc "sha256sum .tmp_v420_data/T04/dataset/d1-s0d1-n3300-seed1?-shard/slots.jsonl"
+   exit code: 0
+   seed10 52402de44692fa2decd019da9701f57de6e27f193aea01c1e19d2b69fab781a2
+   seed11 f75e632ba6990a372b4bae614f51bbc74049a75296380491b558b9071f09eb9e
+   seed12 f759de7dacc78343dec8825da5de14942e749b8a5a2c5319304e513d1618b7b9
+   (the seed12 digest is the ruler's frozen CLEAR_SHARD_SHA256; the seed10/11
+   digests are the two new audited tapes)
+
+2) wsl -d Ubuntu -- bash -lc "wc -l .../seed1?-shard/slots.jsonl"
+   exit code: 0
+   seed10 6592 / seed11 6592 / seed12 6588
+   -> schedule(--tail 0) 6600 / 6600 / 6596 = 8 leading + slots
+
+--- Phase 1: first pre-flight, refused BEFORE any engine start --------------
+
+3) wsl -d Ubuntu -- bash .../capture_seed.sh .tmp_v430_o2/o2-stride-seed10/_dry-keep60 \
+     60 20 64 w03m_o2_seed10_dry .tmp_v430_o2/o2-stride-seed10-dry.log \
+     .tmp_v420_data/T04/dataset/d1-s0d1-n3300-seed10-shard/slots.jsonl
+   (NOTE: no --tape-sha256 yet; this is the historical invocation)
+   capture exit code: 1   elapsed_s: 13
+   capture failed: tape shard sha256 52402de44692fa2decd019da9701f57de6e27f193aea01c1e19d2b69fab781a2
+   != the frozen f759de7dacc78343dec8825da5de14942e749b8a5a2c5319304e513d1618b7b9;
+   this capture replays only the audited clear tape
+   No engine frame was rendered; no artefact was written.
+
+--- Phase 2: the minimal instrument change, checked offline ---------------
+
+4) python -m py_compile .tmp_v430_o2/capture_o2.py
+   exit code: 0
+
+5) python -c "load_tape_schedule(seed12); load_tape_schedule(seed10); load_tape_schedule(seed10, expected_sha256=...)"
+   exit code: 0
+   seed12 default ok 12 6588 True 6596
+   seed10 default refused: tape shard sha256 52402de4... != the frozen f759de7d...
+   seed10 repin ok 10 6592 True 6600 8
+   -> the new option is a re-pin, not a bypass: the default still refuses it,
+      and the re-pinned load records `sha256_matches_frozen: true`
+
+6) python -m py_compile .tmp_v430_o2/verify_manifest_bc.py
+   exit code: 0
+   python -c "import verify_manifest_bc"
+   exit code: 0
+
+7) python .tmp_v430_o2/verify_labels_provenance.py --help
+   exit code: 0
+   usage now lists [out_dir_pos] plus --out-dir / --tape / --tape-sha256;
+   the historical positional form and the seed12 default are unchanged
+
+--- Phase 3: seed10 (dry first, then full) -------------------------------
+
+8) wsl -d Ubuntu -- bash .../capture_seed.sh .tmp_v430_o2/o2-stride-seed10/_dry-keep60 \
+     60 20 64 w03m_o2_seed10_dry .tmp_v430_o2/o2-stride-seed10-dry.log \
+     .../d1-s0d1-n3300-seed10-shard/slots.jsonl 52402de4...81a2
+   exit code: 0   elapsed_s: 217   wall_s: 216.427
+   {"bytes_total": 34065246, "collected": 20, "decisions": 6646,
+    "frames": 13291, "stop_reason": "stage_clear"}
+
+9) wsl -d Ubuntu -- bash .../capture_seed.sh .tmp_v430_o2/o2-stride-seed10 \
+     6 1200 64 w03m_o2_seed10 .tmp_v430_o2/o2-stride-seed10.log \
+     .../d1-s0d1-n3300-seed10-shard/slots.jsonl 52402de4...81a2
+   exit code: 0   elapsed_s: 286   wall_s: 271.28
+   {"bytes_total": 600030604, "collected": 1099, "decisions": 6646,
+    "frames": 13291, "stop_reason": "stage_clear"}
+   (286 s because three unrelated th08-modern expansion engines were running;
+    the 300 s fallback was not hit. They were not signalled or touched.)
+
+10) python -c "import numpy as np; print(np.load('.tmp_v430_o2/o2-stride-seed10/global_rgb.npy',
+       mmap_mode='r').shape)"
+    exit code: 0   (1099, 3, 240, 320)
+
+11) python .tmp_v430_o2/verify_manifest_bc.py --out-dir .tmp_v430_o2/o2-stride-seed10 \
+       --epochs 1 --max-steps 8
+    exit code: 0
+    {"assert_o2_raised": null, "complete": true, "counts_decisions": 1099,
+     "counts_episodes": 1, "dataset_id": "w03h-o2-capture-seed10-strided-1099",
+     "first_loss": 4.341227054595947, "last_loss": 3.2006285190582275,
+     "manifest_selfcheck_problems": 0, "n_parameters": 2726671,
+     "n_samples": 1099, "n_steps": 8, "problems": 0, "sample_count": 1099,
+     "three_way_equal": true, "valid": true}
+
+12) python .tmp_v430_o2/o2-strided/_runner/w03l_label_stats.py \
+       --out-dir .tmp_v430_o2/o2-stride-seed10 --tape .../seed10-shard/slots.jsonl
+    exit code: 1   (documented failure, not hidden)
+    CaptureError: tape shard sha256 52402de4... != the frozen f759de7d...
+    The W03L script pins the seed12 tape and was NOT modified (it lives inside
+    the accepted o2-strided evidence directory).
+
+13) python .tmp_v430_o2/o2-stride-seed10/_runner/stats_seed.py \
+       --out-dir .tmp_v430_o2/o2-stride-seed10 --tape .../seed10-shard/slots.jsonl \
+       --tape-sha256 52402de4...81a2
+    exit code: 0
+    move 9/9 {0:467,1:28,2:153,3:197,4:20,5:21,6:92,7:97,8:24}; cand 17/18
+    focus {0:930,1:169}; shoot {1:1099}; bomb {0:1099}
+    decision_frame deltas [12]; cumulative frames deltas [12]; cand_mismatches 0
+
+14) python .tmp_v430_o2/verify_labels_provenance.py \
+       --out-dir .tmp_v430_o2/o2-stride-seed10 --tape .../seed10-shard/slots.jsonl \
+       --tape-sha256 52402de4...81a2
+    exit code: 0
+    provenance_counts {leading_history: 1, recorded_slot: 1098}
+    recorded_slot_cross_check {checked: 1098, mismatches: 0}
+    tail_repeat_labels 0; supervised_heads [move, focus]
+    written: .tmp_v430_o2/o2-stride-seed10/labels_provenance.json 2225 bytes
+
+--- Phase 4: seed11 (dry first, then full) -------------------------------
+
+15) wsl -d Ubuntu -- bash .../capture_seed.sh .tmp_v430_o2/o2-stride-seed11/_dry-keep60 \
+      60 20 64 w03m_o2_seed11_dry .tmp_v430_o2/o2-stride-seed11-dry.log \
+      .../d1-s0d1-n3300-seed11-shard/slots.jsonl f75e632b...eb9e
+    exit code: 0   elapsed_s: 145   wall_s: 141.154
+    {"bytes_total": 34065237, "collected": 20, "decisions": 6646,
+     "frames": 13291, "stop_reason": "stage_clear"}
+
+16) wsl -d Ubuntu -- bash .../capture_seed.sh .tmp_v430_o2/o2-stride-seed11 \
+      6 1200 64 w03m_o2_seed11 .tmp_v430_o2/o2-stride-seed11.log \
+      .../d1-s0d1-n3300-seed11-shard/slots.jsonl f75e632b...eb9e
+    exit code: 0   elapsed_s: 159   wall_s: 150.678
+    {"bytes_total": 600030536, "collected": 1099, "decisions": 6646,
+     "frames": 13291, "stop_reason": "stage_clear"}
+
+17) python -c "np.load('.tmp_v430_o2/o2-stride-seed11/global_rgb.npy', mmap_mode='r').shape"
+    exit code: 0   (1099, 3, 240, 320)
+
+18) python .tmp_v430_o2/verify_manifest_bc.py --out-dir .tmp_v430_o2/o2-stride-seed11 \
+       --epochs 1 --max-steps 8
+    exit code: 0
+    {"assert_o2_raised": null, "complete": true, "counts_decisions": 1099,
+     "counts_episodes": 1, "dataset_id": "w03h-o2-capture-seed11-strided-1099",
+     "first_loss": 4.342604637145996, "last_loss": 3.200563669204712,
+     "manifest_selfcheck_problems": 0, "n_parameters": 2726671,
+     "n_samples": 1099, "n_steps": 8, "problems": 0, "sample_count": 1099,
+     "three_way_equal": true, "valid": true}
+
+19) python .tmp_v430_o2/o2-stride-seed10/_runner/stats_seed.py \
+       --out-dir .tmp_v430_o2/o2-stride-seed11 --tape .../seed11-shard/slots.jsonl \
+       --tape-sha256 f75e632b...eb9e
+    exit code: 0
+    move 9/9 {0:484,1:18,2:156,3:192,4:30,5:13,6:86,7:94,8:26}; cand 17/18
+    focus {0:942,1:157}; shoot {1:1099}; bomb {0:1099}
+    decision_frame deltas [12]; cumulative frames deltas [12]; cand_mismatches 0
+
+20) python .tmp_v430_o2/verify_labels_provenance.py \
+       --out-dir .tmp_v430_o2/o2-stride-seed11 --tape .../seed11-shard/slots.jsonl \
+       --tape-sha256 f75e632b...eb9e
+    exit code: 0
+    provenance_counts {leading_history: 1, recorded_slot: 1098}
+    recorded_slot_cross_check {checked: 1098, mismatches: 0}
+    tail_repeat_labels 0; supervised_heads [move, focus]
+    written: .tmp_v430_o2/o2-stride-seed11/labels_provenance.json 2225 bytes
+
+--- Phase 5: post-hoc confirmation --------------------------------------
+
+21) python -c "re-read manifest.json + meta.json of both batches"
+    exit code: 0
+    seed10: dataset_id w03h-o2-capture-seed10-strided-1099,
+            counts {decisions 1099, episodes 1, shards 1, files 8, bytes 600030604},
+            ancestor engine|d1-s0d1-n3300-seed10|10|th08-stage1-normal
+    seed11: dataset_id w03h-o2-capture-seed11-strided-1099,
+            counts {decisions 1099, episodes 1, shards 1, files 8, bytes 600030536},
+            ancestor engine|d1-s0d1-n3300-seed11|11|th08-stage1-normal
+    (both sampling.tape.seed = 10 / 11; no seed12 and no "-64" in either id)
+
+22) wsl -d Ubuntu -- bash -lc "ps -eo pid,etime,cmd | grep th08-modern"
+    exit code: 0
+    the three expansion engines (private data dirs under .tmp_v420_data/T08/expand/
+    run/arm-state*) were still the same processes before, during and after W03M:
+    never signalled, never restarted, never pointed at engine-data-strided
+
+--- Summary of exit codes ----------------------------------------------
+
+  engine sha check ................ 0
+  tape sha256 x3 .................. 0
+  py_compile capture_o2.py ........ 0
+  offline pin unit-check .......... 0
+  py_compile verify_manifest_bc ... 0
+  py_compile provenance ........... 0  (help also 0)
+  seed10 dry capture .............. 0
+  seed10 full capture ............. 0
+  seed10 shape print .............. 0
+  seed10 manifest+BC verify ....... 0
+  seed10 W03L stats (refused) ..... 1   -> replaced by stats_seed.py: 0
+  seed10 provenance audit ......... 0
+  seed11 dry capture .............. 0
+  seed11 full capture ............. 0
+  seed11 shape print .............. 0
+  seed11 manifest+BC verify ....... 0
+  seed11 stats .................... 0
+  seed11 provenance audit ......... 0
+
+No non-zero exit is hidden: the only non-zero results are the *pre-flight
+refusals* (3 and 12), both of which are the instrument correctly refusing a
+shard it was not pinned to, and were resolved by the explicit re-pin before any
+engine frame was rendered.

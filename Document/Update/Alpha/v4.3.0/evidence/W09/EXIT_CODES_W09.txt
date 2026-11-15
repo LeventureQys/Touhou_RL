@@ -1,0 +1,79 @@
+# W09 验收命令与真实退出码
+
+工作包：v4.3.0 **W09 干净留出任务谱系**
+首次记录：2026-11-15T11:32:58+08:00（Asia/Shanghai）
+**定时戳复检后重跑：2026-11-15T11:34:47+08:00（Asia/Shanghai）**
+主机：Windows `D:\WorkShop\Touhou_RL`，Python 3.12.10，`PYTHONPATH=D:\WorkShop\Touhou_RL`
+范围：**只做数据治理与谱系登记**；未启动引擎，未训练，未打开任何 `.tmp_*` 像素载荷，未读 sealed 资产。
+
+---
+
+## 0 作废的身份（保留，不覆盖）
+
+| 身份 | 值 | 作废原因 |
+| --- | --- | --- |
+| `split_registry_sha`（第一次收口） | `763e875fbd295081828eea80f6865ddb50f15d0a57913fe4636c5d742bad19f8` | 996 problem 版本（父代理 11:29:49 实测） |
+| `split_registry_sha`（第二次收口） | `47be2dcb3b47a4c33ab062a8781853a45b37c554990a20acd538a4bffd051fc3` | `frozen_at` / `sealed.verified_absent.checked_at` 误写为未来时刻 `2026-11-15T19:40:00+08:00`，该"冻结"当时尚未发生 |
+| 注册表摘要（第二次收口） | task_families `e898c249…`、pretraining_sources `db27138e…`、holdout_families `e801e0d1…`、runs `8fac9c09…` | 同上（`frozen_at` 字段值变） |
+
+当前有效身份见 §3。旧 sha **只作为历史记录**，不得用于任何 manifest 绑定。
+
+---
+
+## 1 三条验收命令（定时戳修正后逐条真实执行）
+
+```powershell
+$env:PYTHONPATH='D:\WorkShop\Touhou_RL'
+python -m compileall -q touhou_rl/v430/data
+python -m pytest -p no:cacheprovider --basetemp .tmp_v430_pytest_w09 -q tests/test_v430_splits.py
+python -c "from touhou_rl.v430.data.lineage import validate_splits; import json; print(json.dumps(validate_splits('configs/v430/splits.json'), ensure_ascii=False)[:400])"
+```
+
+| # | 命令 | 真实退出码 | 关键输出 |
+| --- | --- | --- | --- |
+| 1 | `python -m compileall -q touhou_rl/v430/data` | **0** | 无输出（`data/__init__.py`、`data/lineage.py` 语法通过） |
+| 2 | `python -m pytest -p no:cacheprovider --basetemp .tmp_v430_pytest_w09 -q tests/test_v430_splits.py` | **0** | `73 passed in 0.17s`（0 failed / 0 skipped / 0 xfail / 0 error） |
+| 3 | `python -c "... validate_splits('configs/v430/splits.json') ..."` | **0** | `"mode": "strict", "passed": true, "problems": [], "degradations": []` |
+
+第 3 条的前 400 字符（真实 stdout，含修正后的 `frozen_at`）：
+
+```json
+{"schema": "v430-splits-validation/1", "mode": "strict", "config_schema": "v430-splits/1", "experiment_id": "v430-w09-clean-holdout-splits-001", "spec_revision": "v430-plan-r2", "frozen_at": "2026-11-15T11:34:26+08:00", "passed": true, "problems": [], "degradations": [], "statistics": {"splits": {"train": {"declared_ancestors": 328, "independent_ancestors": 328, "collapsed_groups": [], "seeds": [1
+```
+
+## 2 补充核验（同一模块，不是门）
+
+| 检查 | 命令要点 | 结果 |
+| --- | --- | --- |
+| 摘要稳定性（同输入两次） | 两次 `validate_splits('configs/v430/splits.json')` | `split_registry_sha` 相同 |
+| 摘要敏感性（改一个字段） | 复制配置后把 `roots.repo` 由 `.` 改为 `./` | `split_registry_sha` 改变 |
+| 分层（strict / degraded） | `validate_splits(cfg, strict=False)` 于缺 `enumeration_limit` 的 family-level 来源 | strict: `passed=False`（`P_SOURCE_ENUMERATION_LIMIT`）；degraded: `passed=True` 且该码进 `degradations` |
+| 分层不掩盖谱系违规 | 四类硬违规（禁训 seed / sealed 引用 / 干净家族被触碰 / train-dev 交叉）× 两种模式 | 8 个组合全部 `passed=False`（`test_critical_violations_fail_in_both_tiers`） |
+| 换行口径 | 同一文本的 CRLF / LF 两份文件 | `text/lf-normalized` 摘要相同；`binary/raw` 摘要不同 |
+| 定时戳 | 4 个注册表 + 配置内全部 `*_at` / `checked_at` | 都是带 `+08:00` 的 ISO 串，同一时刻 `2026-11-15T11:34:26+08:00`，且不晚于运行时刻 |
+| 保护范围 | 从 `EXECUTION_PLAN.md` §6 句子解析出的每个范围 | 全部已登记（含 `61400–61499`），无 split seed 命中 |
+| 收口前（父代理 11:29:49 实测） | 旧配置（118,172 B，sha `763e875f…`） | `passed=False`，**996** problem：`P_SOURCE_UNKNOWN_ANCESTOR 635` / `A_UNATTRIBUTED 360` / `H_UNKNOWN_FAMILY 1` |
+| 收口后（本文件 §1） | 新配置（118,172 B，sha `9160cf84…`） | `passed=True`，**0** problem，0 degradation |
+
+## 3 产物身份（文本口径 `text/lf-normalized`）
+
+| 文件 | 字节 | sha256（LF 规范化后） | `frozen_at` |
+| --- | ---: | --- | --- |
+| `Document/Update/Alpha/v4.3.0/registries/task_families.json` | 45,436 | `8736ad6b702514b015ede93cdc5825047328d09a4dbdc94a5fdfe120fdf6fe19` | `2026-11-15T11:34:26+08:00` |
+| `Document/Update/Alpha/v4.3.0/registries/pretraining_sources.json` | 68,945 | `9c890133fa307a49b4d015ebefd1beb0c2e977c0b3c3bc3394866178b559cde0` | 同上 |
+| `Document/Update/Alpha/v4.3.0/registries/holdout_families.json` | 21,337 | `81e94bef48d5714862f2c502a30ca67c087f5c6118293d1208af2e7a4ba57a63` | 同上 |
+| `Document/Update/Alpha/v4.3.0/registries/runs.json`（`frozen=false`，活账本） | 1,160 | `84a32efe34c8f6356cc390f4d4d7d713bb77ec2cab1988a46e2ff085fcad9e81` | 同上 |
+| `configs/v430/splits.json` | 118,172 | `split_registry_sha = 9160cf841de1cab1c99d2b6646ffaac27322c3c537e3de316405293dad28636f`，scope=`text/lf-normalized`，canonicalization=`json/sorted-keys-compact-utf8-lf` | 同上 |
+
+前三条被 `configs/v430/splits.json` 以 `sha256 + digest_scope` 冻结绑定（`frozen=true`），
+`runs.json` 只绑定身份不锁定（`frozen=false`），因为 W12 会向 `entries` 追加。
+任何一个冻结注册表被改动而配置未重新冻结，`validate-splits` 会以 `P_BINDING_SHA_MISMATCH` 失败。
+
+## 4 未执行 / 未打开
+
+- 未启动游戏引擎、未训练、未评测：本包产出是登记与校验，不是能力证据。
+- 未打开 sealed 资产或 sealed 结果（本机不存在该类资产，见 `W09.md` §7）。
+- 未读 `.tmp_*` 的像素/NPY/JSONL 载荷：只读 `manifest.json` / `plan*.json` / `split-full.json` /
+  `replay-fixtures.json` / `summary.json` / `shard.json` / `index.json` / `runs.jsonl` 等元数据。
+- 未修改 `tools/rl/v430.py`（另一代理在改），未改 `touhou_rl/v420/**`、`v400/**`、`ASSET_SYNC.*`、
+  既有证据/账本，未删除/移动/`git add`/commit/上传。

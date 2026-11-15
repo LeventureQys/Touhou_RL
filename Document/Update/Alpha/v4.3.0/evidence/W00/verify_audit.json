@@ -1,0 +1,729 @@
+{
+  "schema": "v430-audit-selfcheck/1",
+  "evidence_class": "implementation_self_check",
+  "not_capability_evidence": true,
+  "statement": "This exercises the decision logic of tools/rl/v430.py audit on synthetic fixtures in a temporary directory. It is implementation self-checking only: it is not game, engine, asset or capability evidence, it does not validate any registered real asset, and it does not pass G430-E0. Regenerated on every run, so it always describes the last executed code.",
+  "started_at": "2026-11-15T11:05:00+08:00",
+  "finished_at": "2026-11-15T11:05:03+08:00",
+  "target": {
+    "tool": "tools/rl/v430.py",
+    "sha256": "0db421f468b70ed4383994eb1dcc9c89c70e6482f85796cf49e878215b59e6af",
+    "python": "C:\\Users\\a5935\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+    "python_version": "3.12.10"
+  },
+  "workspace": "temporary directory, removed after the run",
+  "summary": {
+    "cases": 12,
+    "passed": 12,
+    "failed": 0
+  },
+  "cases": [
+    {
+      "name": "all_pass",
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "ok": true,
+      "stdout_tail": [
+        "audit: checks 7 | verified 6 | unhashed 1 | mismatch 0 | missing 0 | unreachable 0 | wsl down | gate passed | exit 0",
+        "result: C:\\Users\\a5935\\AppData\\Local\\Temp\\v430_audit_selfcheck_nx2eqtqs\\all_pass\\result.json"
+      ],
+      "stderr_tail": [],
+      "assertions": [
+        {
+          "label": "exit 0",
+          "ok": true
+        },
+        {
+          "label": "all rows satisfied",
+          "ok": true
+        },
+        {
+          "label": "3 verified + 1 present_unhashed",
+          "ok": true
+        },
+        {
+          "label": "manifest fully covered",
+          "ok": true
+        },
+        {
+          "label": "directory row is present_unhashed but met",
+          "ok": true
+        },
+        {
+          "label": "protocol_validity valid",
+          "ok": true
+        },
+        {
+          "label": "result records exit_code 0",
+          "ok": true
+        }
+      ],
+      "observed": {
+        "statistics": {
+          "denominator": 7,
+          "denominator_note": "one row per registered check: config pins (plan spec, sync manifest, manifest coverage) plus every registered asset",
+          "registered_assets": 4,
+          "verified": 6,
+          "present_unhashed": 1,
+          "mismatch": 0,
+          "missing": 0,
+          "unreachable": 0,
+          "unmet": 0,
+          "unmet_ids": [],
+          "by_category": {
+            "asset": 4,
+            "config": 3
+          },
+          "by_kind": {
+            "dir": 1,
+            "file": 2,
+            "hash-manifest": 2,
+            "json-file": 1,
+            "python": 1
+          },
+          "bytes_hashed": 398,
+          "files_hashed": 2,
+          "manifest_entries": 2,
+          "manifest_entries_covered": 2,
+          "wsl_commands": 0,
+          "wsl_available": false
+        },
+        "statuses": {
+          "plan_spec": "present_verified",
+          "sync_manifest": "present_verified",
+          "sync_manifest:coverage": "present_verified",
+          "alpha": "present_verified",
+          "beta": "present_verified",
+          "tree": "present_unhashed",
+          "python": "present_verified"
+        }
+      }
+    },
+    {
+      "name": "missing_file",
+      "expected_exit": 3,
+      "actual_exit": 3,
+      "ok": true,
+      "stdout_tail": [
+        "audit: checks 3 | verified 2 | unhashed 0 | mismatch 0 | missing 1 | unreachable 0 | wsl down | gate NOT met | exit 3",
+        "result: C:\\Users\\a5935\\AppData\\Local\\Temp\\v430_audit_selfcheck_nx2eqtqs\\missing_file\\result.json"
+      ],
+      "stderr_tail": [
+        "unmet checks: gone"
+      ],
+      "assertions": [
+        {
+          "label": "exit 3",
+          "ok": true
+        },
+        {
+          "label": "absent row is missing",
+          "ok": true
+        },
+        {
+          "label": "present row still verified",
+          "ok": true
+        },
+        {
+          "label": "statistics.missing == 1",
+          "ok": true
+        },
+        {
+          "label": "unmet names the row",
+          "ok": true
+        },
+        {
+          "label": "not downgraded to pass",
+          "ok": true
+        }
+      ],
+      "observed": {
+        "statistics": {
+          "denominator": 3,
+          "denominator_note": "one row per registered check: config pins (plan spec, sync manifest, manifest coverage) plus every registered asset",
+          "registered_assets": 2,
+          "verified": 2,
+          "present_unhashed": 0,
+          "mismatch": 0,
+          "missing": 1,
+          "unreachable": 0,
+          "unmet": 1,
+          "unmet_ids": [
+            "gone"
+          ],
+          "by_category": {
+            "asset": 2,
+            "config": 1
+          },
+          "by_kind": {
+            "file": 2,
+            "json-file": 1
+          },
+          "bytes_hashed": 79,
+          "files_hashed": 1,
+          "manifest_entries": null,
+          "manifest_entries_covered": null,
+          "wsl_commands": 0,
+          "wsl_available": false
+        },
+        "statuses": {
+          "plan_spec": "present_verified",
+          "present": "present_verified",
+          "gone": "missing"
+        }
+      }
+    },
+    {
+      "name": "sha_mismatch",
+      "expected_exit": 3,
+      "actual_exit": 3,
+      "ok": true,
+      "stdout_tail": [
+        "audit: checks 2 | verified 1 | unhashed 0 | mismatch 1 | missing 0 | unreachable 0 | wsl down | gate NOT met | exit 3",
+        "result: C:\\Users\\a5935\\AppData\\Local\\Temp\\v430_audit_selfcheck_nx2eqtqs\\sha_mismatch\\result.json"
+      ],
+      "stderr_tail": [
+        "unmet checks: drifted"
+      ],
+      "assertions": [
+        {
+          "label": "exit 3",
+          "ok": true
+        },
+        {
+          "label": "row is present_mismatch",
+          "ok": true
+        },
+        {
+          "label": "statistics.mismatch == 1",
+          "ok": true
+        },
+        {
+          "label": "both hashes are recorded",
+          "ok": true
+        }
+      ],
+      "observed": {
+        "statistics": {
+          "denominator": 2,
+          "denominator_note": "one row per registered check: config pins (plan spec, sync manifest, manifest coverage) plus every registered asset",
+          "registered_assets": 1,
+          "verified": 1,
+          "present_unhashed": 0,
+          "mismatch": 1,
+          "missing": 0,
+          "unreachable": 0,
+          "unmet": 1,
+          "unmet_ids": [
+            "drifted"
+          ],
+          "by_category": {
+            "asset": 1,
+            "config": 1
+          },
+          "by_kind": {
+            "file": 1,
+            "json-file": 1
+          },
+          "bytes_hashed": 96,
+          "files_hashed": 1,
+          "manifest_entries": null,
+          "manifest_entries_covered": null,
+          "wsl_commands": 0,
+          "wsl_available": false
+        },
+        "statuses": {
+          "plan_spec": "present_verified",
+          "drifted": "present_mismatch"
+        }
+      }
+    },
+    {
+      "name": "plan_spec_drift",
+      "expected_exit": 3,
+      "actual_exit": 3,
+      "ok": true,
+      "stdout_tail": [
+        "audit: checks 2 | verified 1 | unhashed 0 | mismatch 1 | missing 0 | unreachable 0 | wsl down | gate NOT met | exit 3",
+        "result: C:\\Users\\a5935\\AppData\\Local\\Temp\\v430_audit_selfcheck_nx2eqtqs\\plan_spec_drift\\result.json"
+      ],
+      "stderr_tail": [
+        "unmet checks: plan_spec"
+      ],
+      "assertions": [
+        {
+          "label": "exit 3",
+          "ok": true
+        },
+        {
+          "label": "plan_spec pin is present_mismatch",
+          "ok": true
+        },
+        {
+          "label": "unmet names plan_spec",
+          "ok": true
+        }
+      ],
+      "observed": {
+        "statistics": {
+          "denominator": 2,
+          "denominator_note": "one row per registered check: config pins (plan spec, sync manifest, manifest coverage) plus every registered asset",
+          "registered_assets": 1,
+          "verified": 1,
+          "present_unhashed": 0,
+          "mismatch": 1,
+          "missing": 0,
+          "unreachable": 0,
+          "unmet": 1,
+          "unmet_ids": [
+            "plan_spec"
+          ],
+          "by_category": {
+            "asset": 1,
+            "config": 1
+          },
+          "by_kind": {
+            "file": 1,
+            "json-file": 1
+          },
+          "bytes_hashed": 77,
+          "files_hashed": 1,
+          "manifest_entries": null,
+          "manifest_entries_covered": null,
+          "wsl_commands": 0,
+          "wsl_available": false
+        },
+        "statuses": {
+          "plan_spec": "present_mismatch",
+          "ok": "present_verified"
+        }
+      }
+    },
+    {
+      "name": "manifest_coverage_gap",
+      "expected_exit": 3,
+      "actual_exit": 3,
+      "ok": true,
+      "stdout_tail": [
+        "audit: checks 4 | verified 3 | unhashed 0 | mismatch 1 | missing 0 | unreachable 0 | wsl down | gate NOT met | exit 3",
+        "result: C:\\Users\\a5935\\AppData\\Local\\Temp\\v430_audit_selfcheck_nx2eqtqs\\manifest_coverage_gap\\result.json"
+      ],
+      "stderr_tail": [
+        "unmet checks: sync_manifest:coverage"
+      ],
+      "assertions": [
+        {
+          "label": "exit 3",
+          "ok": true
+        },
+        {
+          "label": "manifest itself verifies",
+          "ok": true
+        },
+        {
+          "label": "coverage row is present_mismatch",
+          "ok": true
+        },
+        {
+          "label": "statistics exposes 1 of 2 covered",
+          "ok": true
+        }
+      ],
+      "observed": {
+        "statistics": {
+          "denominator": 4,
+          "denominator_note": "one row per registered check: config pins (plan spec, sync manifest, manifest coverage) plus every registered asset",
+          "registered_assets": 1,
+          "verified": 3,
+          "present_unhashed": 0,
+          "mismatch": 1,
+          "missing": 0,
+          "unreachable": 0,
+          "unmet": 1,
+          "unmet_ids": [
+            "sync_manifest:coverage"
+          ],
+          "by_category": {
+            "asset": 1,
+            "config": 3
+          },
+          "by_kind": {
+            "file": 1,
+            "hash-manifest": 2,
+            "json-file": 1
+          },
+          "bytes_hashed": 405,
+          "files_hashed": 1,
+          "manifest_entries": 2,
+          "manifest_entries_covered": 1,
+          "wsl_commands": 0,
+          "wsl_available": false
+        },
+        "statuses": {
+          "plan_spec": "present_verified",
+          "sync_manifest": "present_verified",
+          "sync_manifest:coverage": "present_mismatch",
+          "first": "present_verified"
+        }
+      }
+    },
+    {
+      "name": "oversize_blocked",
+      "expected_exit": 3,
+      "actual_exit": 3,
+      "ok": true,
+      "stdout_tail": [
+        "audit: checks 2 | verified 1 | unhashed 1 | mismatch 0 | missing 0 | unreachable 0 | wsl down | gate NOT met | exit 3",
+        "result: C:\\Users\\a5935\\AppData\\Local\\Temp\\v430_audit_selfcheck_nx2eqtqs\\oversize_blocked\\result.json"
+      ],
+      "stderr_tail": [
+        "unmet checks: big"
+      ],
+      "assertions": [
+        {
+          "label": "oversized row never counts as verified",
+          "ok": true
+        },
+        {
+          "label": "row is not left unmeasured",
+          "ok": true
+        },
+        {
+          "label": "exit matches the policy",
+          "ok": true
+        },
+        {
+          "label": "reason explains the size limit",
+          "ok": true
+        }
+      ],
+      "observed": {
+        "statistics": {
+          "denominator": 2,
+          "denominator_note": "one row per registered check: config pins (plan spec, sync manifest, manifest coverage) plus every registered asset",
+          "registered_assets": 1,
+          "verified": 1,
+          "present_unhashed": 1,
+          "mismatch": 0,
+          "missing": 0,
+          "unreachable": 0,
+          "unmet": 1,
+          "unmet_ids": [
+            "big"
+          ],
+          "by_category": {
+            "asset": 1,
+            "config": 1
+          },
+          "by_kind": {
+            "file": 1,
+            "json-file": 1
+          },
+          "bytes_hashed": 74,
+          "files_hashed": 0,
+          "manifest_entries": null,
+          "manifest_entries_covered": null,
+          "wsl_commands": 0,
+          "wsl_available": false
+        },
+        "statuses": {
+          "plan_spec": "present_verified",
+          "big": "present_unhashed"
+        }
+      }
+    },
+    {
+      "name": "oversize_stat_only",
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "ok": true,
+      "stdout_tail": [
+        "audit: checks 2 | verified 1 | unhashed 1 | mismatch 0 | missing 0 | unreachable 0 | wsl down | gate passed | exit 0",
+        "result: C:\\Users\\a5935\\AppData\\Local\\Temp\\v430_audit_selfcheck_nx2eqtqs\\oversize_stat_only\\result.json"
+      ],
+      "stderr_tail": [],
+      "assertions": [
+        {
+          "label": "oversized row never counts as verified",
+          "ok": true
+        },
+        {
+          "label": "row is not left unmeasured",
+          "ok": true
+        },
+        {
+          "label": "exit matches the policy",
+          "ok": true
+        },
+        {
+          "label": "reason explains the size limit",
+          "ok": true
+        }
+      ],
+      "observed": {
+        "statistics": {
+          "denominator": 2,
+          "denominator_note": "one row per registered check: config pins (plan spec, sync manifest, manifest coverage) plus every registered asset",
+          "registered_assets": 1,
+          "verified": 1,
+          "present_unhashed": 1,
+          "mismatch": 0,
+          "missing": 0,
+          "unreachable": 0,
+          "unmet": 0,
+          "unmet_ids": [],
+          "by_category": {
+            "asset": 1,
+            "config": 1
+          },
+          "by_kind": {
+            "file": 1,
+            "json-file": 1
+          },
+          "bytes_hashed": 74,
+          "files_hashed": 0,
+          "manifest_entries": null,
+          "manifest_entries_covered": null,
+          "wsl_commands": 0,
+          "wsl_available": false
+        },
+        "statuses": {
+          "plan_spec": "present_verified",
+          "big": "present_unhashed"
+        }
+      }
+    },
+    {
+      "name": "wsl_unreachable",
+      "expected_exit": 3,
+      "actual_exit": 3,
+      "ok": true,
+      "stdout_tail": [
+        "audit: checks 4 | verified 1 | unhashed 0 | mismatch 0 | missing 0 | unreachable 3 | wsl down | gate NOT met | exit 3",
+        "result: C:\\Users\\a5935\\AppData\\Local\\Temp\\v430_audit_selfcheck_nx2eqtqs\\wsl_unreachable\\result.json"
+      ],
+      "stderr_tail": [
+        "unmet checks: wsl-file, wsl-dir, wsl-python"
+      ],
+      "assertions": [
+        {
+          "label": "exit 3",
+          "ok": true
+        },
+        {
+          "label": "all three WSL rows are unreachable",
+          "ok": true
+        },
+        {
+          "label": "nothing becomes missing",
+          "ok": true
+        },
+        {
+          "label": "statistics.unreachable == 3",
+          "ok": true
+        },
+        {
+          "label": "wsl availability recorded as false",
+          "ok": true
+        },
+        {
+          "label": "no row is counted as satisfied",
+          "ok": true
+        }
+      ],
+      "observed": {
+        "statistics": {
+          "denominator": 4,
+          "denominator_note": "one row per registered check: config pins (plan spec, sync manifest, manifest coverage) plus every registered asset",
+          "registered_assets": 3,
+          "verified": 1,
+          "present_unhashed": 0,
+          "mismatch": 0,
+          "missing": 0,
+          "unreachable": 3,
+          "unmet": 3,
+          "unmet_ids": [
+            "wsl-file",
+            "wsl-dir",
+            "wsl-python"
+          ],
+          "by_category": {
+            "asset": 3,
+            "config": 1
+          },
+          "by_kind": {
+            "json-file": 1,
+            "wsl_dir": 1,
+            "wsl_file": 1,
+            "wsl_python": 1
+          },
+          "bytes_hashed": 74,
+          "files_hashed": 0,
+          "manifest_entries": null,
+          "manifest_entries_covered": null,
+          "wsl_commands": 0,
+          "wsl_available": false
+        },
+        "statuses": {
+          "plan_spec": "present_verified",
+          "wsl-file": "unreachable",
+          "wsl-dir": "unreachable",
+          "wsl-python": "unreachable"
+        }
+      }
+    },
+    {
+      "name": "bad_schema",
+      "expected_exit": 2,
+      "actual_exit": 2,
+      "ok": true,
+      "stdout_tail": [],
+      "stderr_tail": [
+        "v430: config schema must be 'v430-assets/1', got 'v430-assets/nope'"
+      ],
+      "assertions": [
+        {
+          "label": "exit 2",
+          "ok": true
+        },
+        {
+          "label": "result says invalid_inputs",
+          "ok": true
+        },
+        {
+          "label": "protocol_validity invalid",
+          "ok": true
+        },
+        {
+          "label": "nothing measured",
+          "ok": true
+        },
+        {
+          "label": "gap names the schema",
+          "ok": true
+        }
+      ],
+      "observed": {
+        "statistics": {
+          "denominator": 0,
+          "registered_assets": 0,
+          "verified": 0,
+          "present_unhashed": 0,
+          "mismatch": 0,
+          "missing": 0,
+          "unreachable": 0,
+          "unmet": 0,
+          "unmet_ids": [],
+          "by_category": {},
+          "by_kind": {},
+          "bytes_hashed": 0,
+          "files_hashed": 0,
+          "manifest_entries": null,
+          "manifest_entries_covered": null,
+          "wsl_commands": 0,
+          "wsl_available": null
+        },
+        "statuses": {}
+      }
+    },
+    {
+      "name": "bad_frozen_at",
+      "expected_exit": 2,
+      "actual_exit": 2,
+      "ok": true,
+      "stdout_tail": [],
+      "stderr_tail": [
+        "v430: frozen_at must carry a timezone offset"
+      ],
+      "assertions": [
+        {
+          "label": "exit 2",
+          "ok": true
+        },
+        {
+          "label": "gap explains the missing timezone",
+          "ok": true
+        }
+      ],
+      "observed": {
+        "statistics": {
+          "denominator": 0,
+          "registered_assets": 0,
+          "verified": 0,
+          "present_unhashed": 0,
+          "mismatch": 0,
+          "missing": 0,
+          "unreachable": 0,
+          "unmet": 0,
+          "unmet_ids": [],
+          "by_category": {},
+          "by_kind": {},
+          "bytes_hashed": 0,
+          "files_hashed": 0,
+          "manifest_entries": null,
+          "manifest_entries_covered": null,
+          "wsl_commands": 0,
+          "wsl_available": null
+        },
+        "statuses": {}
+      }
+    },
+    {
+      "name": "out_exists",
+      "expected_exit": 2,
+      "actual_exit": 2,
+      "ok": true,
+      "stdout_tail": [],
+      "stderr_tail": [
+        "v430: refusing to overwrite existing output: C:\\Users\\a5935\\AppData\\Local\\Temp\\v430_audit_selfcheck_nx2eqtqs\\out_exists\\result.json"
+      ],
+      "assertions": [
+        {
+          "label": "exit 2",
+          "ok": true
+        },
+        {
+          "label": "no result was parsed from the old file",
+          "ok": true
+        },
+        {
+          "label": "existing file is byte-identical",
+          "ok": true
+        }
+      ],
+      "observed": {
+        "statistics": {},
+        "statuses": {}
+      }
+    },
+    {
+      "name": "reserved_subcommand",
+      "expected_exit": 2,
+      "actual_exit": 2,
+      "ok": true,
+      "stdout_tail": [
+        "{\"schema\": \"v430-cli-notice/1\", \"command\": \"train\", \"status\": \"not_implemented\", \"exit_code\": 2, \"owner\": \"W04\", \"purpose\": \"curriculum / PPO training (also W07, W08)\", \"implemented_here\": [\"audit\"], \"message\": \"'train' is reserved for W04 in v4.3.0 and is not implemented by W00. Nothing was executed, no result was written and no gate was evaluated.\"}"
+      ],
+      "stderr_tail": [],
+      "assertions": [
+        {
+          "label": "exit 2",
+          "ok": true
+        },
+        {
+          "label": "notice says not_implemented",
+          "ok": true
+        },
+        {
+          "label": "no result file was written",
+          "ok": true
+        }
+      ],
+      "observed": {
+        "statistics": {},
+        "statuses": {}
+      }
+    }
+  ],
+  "exit_code": 0
+}

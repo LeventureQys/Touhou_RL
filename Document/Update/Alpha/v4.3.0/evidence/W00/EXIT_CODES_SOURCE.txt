@@ -1,0 +1,104 @@
+# W00 源码身份与可复现性核验 — 原始退出码
+# 生成时间：2026-11-15 Asia/Shanghai；主机 D:\WorkShop\Touhou_RL；Python 3.12.10；torch 2.14.1+cu132
+# 本文件只登记实际执行过的命令与它们真实的退出码，不登记"预期"结果。
+# 全部命令均设 PYTHONPATH=D:\WorkShop\Touhou_RL，均在仓库根执行。
+
+## 0 环境与前置
+python --version                                     => exit 0   (Python 3.12.10)
+python -c "import torch; ..."                        => exit 0   (2.14.1+cu132, cuda_available=True)
+git rev-parse --abbrev-ref HEAD                      => exit 0   (v400)
+git rev-parse HEAD                                   => exit 0   (6eb76f26a3cb70478130ed8dd9b4c60fdccbb3ed)
+
+## 1 四组源码存在性（磁盘）
+Get-ChildItem touhou_rl\v420 -File -Filter *.py             => exit 0   (14 files)
+Get-ChildItem configs\v420 -Recurse -File -Filter *.json    => exit 0   (26 files)
+Get-ChildItem tests -File -Filter test_v420_*.py            => exit 0   (12 files)
+Get-ChildItem tools\rl -File -Filter v420*                  => exit 0   (2 files)
+
+## 2 git 可同步性（关键取证）
+git ls-files -- touhou_rl/v420                                => exit 0   输出为空（0 行）
+git ls-files -- tools/rl/v420.py tools/rl/v420_eval_shoot.py  => exit 0   输出为空（0 行）
+git ls-files -- configs/v420                                  => exit 0   输出为空（0 行）
+git ls-files -- tests/test_v420_*.py                          => exit 0   输出为空（0 行）
+git status --short --untracked-files=all -- touhou_rl/v420 tools/rl/v420.py tools/rl/v420_eval_shoot.py configs/v420 tests
+                                                              => exit 0   四组全部为 "??"（untracked），共 54 条
+git check-ignore -v touhou_rl/v420/__init__.py tools/rl/v420.py configs/v420/protocol.json tests/test_v420_contracts.py
+                                                              => exit 1   （1 = 无匹配：未被 .gitignore 忽略）
+git status --short | Measure-Object -Line                      => exit 0   仓库范围 3716 行脏状态（含 1 条 tracked modified: tests/test_v373_player_relative_aux.py，非本次改动）
+
+## 3 与 v4.2.0 报告交叉核验（期望值来源）
+Document/Update/Alpha/v4.2.0/evidence/T00/assets_verify.json    => 读取，exit 0
+Document/Update/Alpha/v4.2.0/evidence/T01/audit-assets.json    => 读取，exit 0
+Document/Update/Alpha/v4.2.0/evidence/T02/RAW_SHA256.txt       => 读取，exit 0
+Document/Update/Alpha/v4.2.0/evidence/T01/T01.md               => 读取，exit 0
+verify_source_identity.py（重抽取 30 条参考 + 逐条比对）        => exit 0   verified 16 / mismatch 2 / missing 1 / not_referenced 11
+
+## 4 checkpoint 全新进程加载（每次独立进程）
+python .../verify_source_identity.py --load-checkpoint .tmp_v410_wp04_arms/b0_seed0_last.pt --record
+                                                              => exit 0   pid 27080, strict_binding_ok=True
+python .../verify_source_identity.py --load-checkpoint .tmp_v410_wp05_train_beta05_20k/b0_s0_dagger_step20000.pt --record
+                                                              => exit 0   pid 27436, strict_binding_ok=True
+
+## 5 现存 v420 测试（只读运行）
+python -m pytest -p no:cacheprovider --basetemp .tmp_v430_w00_src_pytest -q <12 files>
+                                                              => exit 0   468 passed, 3 skipped in 20.36s
+python -m pytest ... --junitxml=.tmp_v430_w00_src_pytest/junit.xml -q <12 files>
+                                                              => exit 0   468 passed, 3 skipped in 19.52s（机器可读记录用）
+python .../verify_source_identity.py --record-tests .tmp_v430_w00_src_pytest/junit.xml
+                                                              => exit 0   collected 471
+
+## 6 验收（W00 源码身份半的正式命令）
+python -m compileall -q tools/rl/v420.py touhou_rl/v420       => exit 0
+python Document/Update/Alpha/v4.3.0/evidence/W00/verify_source_identity.py
+                                                              => exit 0   status=pass, problems=[]
+
+## 7 附带对照（不在四组白名单内，仅为身份对照）
+Get-FileHash ASSET_SYNC.sha256                                => 0d08ae4eac5fc7c8102244ec7a3fe97e27d3c6b1ff3ec731d97372f39ecf1681
+                                                                 与 T00 记录的 22fe78b3... 不同（见 W00_SOURCE_IDENTITY.md §3.1）
+Get-FileHash ASSET_SYNC.md                                    => 90fb60e855d30449145fa87fb977a7d93e344ec0607137af1a75bc7c7d9dce72
+                                                                 与 T00 记录的 340fb22b... 不同（同上）
+
+## 8 修正轮（第二次提交）：取消 tracked=0 硬断言 + engine420 改判 + 26/28 口径
+# 8.1 修正前（第一版）的失败路径 —— 实测记录，作为"反目标"的证据
+python .../verify_source_identity.py --self-test（修正后、重钉清单前）
+                                                              => exit 1   both_states_exit_0=false
+                                                                 两种 git 状态同时报同 3 条 problems：
+                                                                   reference t01.engine420.verdict: pinned 'missing' now 'unverified_host_split'
+                                                                   reference t01.engine420.wsl_side_observed_sha256: pinned None now '691bfd77...'
+                                                                   reference t01.engine420.windows_side_observed: pinned None now False
+                                                                 （该 3 条与 git 状态无关，证明确实不是 git 造成的失败）
+# 8.2 重钉清单
+python .../verify_source_identity.py --write                  => exit 0
+                                                                reference_verdicts: verified 16 / mismatch 2 / not_referenced 11
+                                                                                    / unverified_host_split 1 / missing 0
+                                                                  groups: 14 / 2 / 26 / 12 ; totals 54 文件 / 2,290,051 B
+                                                                  manifest_sha256 d5f2c4a3...56f509（未变）
+# 8.3 修正后：两种 git 情形都通过（合成的 git.ls_files 注入）
+python .../verify_source_identity.py --self-test              => exit 0
+  case before_add_real_git_state                tracked=0    exit 0  problems=[]
+  case after_add_synthetic_tracked_state        tracked=54   exit 0  problems=[]
+  temporary_repo_demo: 一次性临时仓库真实 git add
+    before: ls_files=[]              status=['?? a.py','?? b.py']   digests f706648f.../26824d37...
+    after : ls_files=['a.py','b.py'] status=['A  a.py','A  b.py']   digests f706648f.../26824d37...
+    digests_unchanged_by_add=true  tracking_changed_by_add=true
+# 8.4 修正后的真实校验（本仓库真实 git 状态：tracked=0）
+python Document/Update/Alpha/v4.3.0/evidence/W00/verify_source_identity.py
+                                                              => exit 0   status=pass, problems=[], notes=[]
+                                                                 observations.git_tracking_state=untracked
+                                                                 observations.git_tracked_in_groups=0
+                                                                 observations.git_status_untracked_count=79
+                                                                 observations.git_check_ignore_exit_code=1
+                                                                 reference_verdicts: verified 16 / mismatch 2 / not_referenced 11
+                                                                                    / unverified_host_split 1 / missing 0
+# 8.5 修正后重跑验收两条命令
+python -m compileall -q tools/rl/v420.py touhou_rl/v420       => exit 0
+python Document/Update/Alpha/v4.3.0/evidence/W00/verify_source_identity.py
+                                                              => exit 0   status=pass, problems=[]
+
+## 9 口径统一（26 vs 28）
+configs/v420/*.json                                           => 实测 26
+任务书数字                                                     => 28（偏大 2），以磁盘为准
+所有产物（source_identity.json.known_discrepancies[D-2] 含
+brief_number=28 / measured_number=26 / delta_brief_minus_measured=2、
+W00_SOURCE_IDENTITY.md §3.2、registries/code_identity.json）统一使用该表述。
+

@@ -1,0 +1,88 @@
+W03G — train-bc CLI slice: acceptance commands and real exit codes
+=================================================================
+Date: 2026-11-15
+Repo: D:\WorkShop\Touhou_RL
+Env : $env:PYTHONPATH='D:\WorkShop\Touhou_RL'
+Note: every command below was really executed in this session; the exit codes
+      are the process exit codes, not the handler return values.
+
+1) python -m compileall -q tools/rl/v430.py
+   exit code: 0
+
+2) python tools/rl/v430.py train-bc --batches .tmp_w03g_batches.json --epochs 1 ^
+     --lr 1e-3 --seed 7 --max-steps 4 ^
+     --out Document/Update/Alpha/v4.3.0/evidence/W03/train-bc-001.json
+   exit code: 0
+   stdout   : train-bc: dataset synthetic | memory none | steps 4 |
+              last loss 4.736084 | params 2726671 | gate not_run | exit 0
+   artifact : Document/Update/Alpha/v4.3.0/evidence/W03/train-bc-001.json
+              (9063 bytes, sha256 BCD393F9DB1541F41C67F6F2AC8C2A5B0A8DC231B12331826CE7A3629D33F6A3)
+
+3) python -m pytest -p no:cacheprovider --basetemp .tmp_v430_pytest_w03g -q ^
+     tests/test_v430_learn.py
+   exit code: 0
+   result   : 24 passed
+   (baseline was 17 passed; +7 new tests, no existing test removed or weakened)
+
+4) Existing-subcommand regression (behaviour must not change):
+   python tools/rl/v430.py audit --config configs/v430/assets.json --out .tmp_w03g_audit.json
+     exit code: 3
+     summary  : checks 53 | verified 51 | unhashed 1 | mismatch 1 | missing 0 |
+                unreachable 0 | wsl up | gate NOT met
+     unmet    : sync:Document/Update/Alpha/v4.2.0/journal.jsonl   (pre-existing, unchanged)
+   python tools/rl/v430.py validate-contract --config configs/v430/contracts.json --out .tmp_w03g_c.json
+     exit code: 0
+     summary  : checks 173 | failed 0 | groups 13 | gate passed
+   python tools/rl/v430.py validate-splits --config configs/v430/splits.json --out .tmp_w03g_s.json
+     exit code: 0
+     summary  : mode strict | problems 0 | splits 5 | sha 9160cf841de1 | gate passed
+
+5) Same seed, two independent processes (batches are bit-identical and so are the losses):
+   python tools/rl/v430.py train-bc --batches .tmp_w03g_batches.json --epochs 1 ^
+     --lr 1e-3 --seed 7 --max-steps 4 --out .tmp_w03g_s1.json      exit code: 0
+   python tools/rl/v430.py train-bc --batches .tmp_w03g_batches.json --epochs 1 ^
+     --lr 1e-3 --seed 7 --max-steps 4 --out .tmp_w03g_s2.json      exit code: 0
+   run A losses: [4.36763334274292, 4.401745796203613, 4.949324131011963, 4.736083984375]
+   run B losses: [4.36763334274292, 4.401745796203613, 4.949324131011963, 4.736083984375]
+   identical   : True
+   batches signature_sha256 (both): dc39ca75e13ec2cf6d1c8e18895dc4ee0bdb7684013ec8441dc0cd44e14e660f
+   (bitwise equality across processes needs one CPU thread: the CLI pins
+    torch.set_num_threads(1) and records it under result["determinism"])
+
+6) memory-mode gru really runs (sequence of one observation per batch):
+   python tools/rl/v430.py train-bc --batches .tmp_w03g_batches.json --memory-mode gru ^
+     --max-steps 2 --seed 7 --out .tmp_w03g_gru.json              exit code: 0
+   result: memory_mode=gru, n_steps=2, losses=[4.36763334274292, 4.355645179748535]
+
+7) Fail-closed matrix (every row really executed; nothing was written in any row):
+   --out already exists                       exit code: 2   (file byte-identical)
+   --checkpoint-out already exists            exit code: 2   (file byte-identical, no --out written)
+   --memory-mode lstm                         exit code: 2   ("not one of ['none', 'gru']")
+   batches spec missing 'n_batches'           exit code: 2
+   batches spec observation_shapes.play_gray [4,224,128]   exit code: 2
+   batches spec steps=2 with --memory-mode none            exit code: 2
+
+8) Anti-forgery gate measured against the *real* artifact train-bc-001.json:
+   a) capability_gate -> "pass", no judgement:
+      ContractError: capability_gate='pass' requires a capability_judgement record
+      from an independent judge; nothing may promote itself
+   b) capability_gate -> "pass" + complete forged capability_judgement
+      {judge: "w03g-forged-judge", sha256: 64x "0"}:
+      ContractError: a 'training' command may not report capability_gate='pass';
+      training exit 0 is not a capability
+   c) contracts.new_result(..., capability_gate="pass"):
+      ContractError: capability_gate='pass' cannot be set by a result constructor;
+      only an independent judgement may set it (set_capability_gate with evidence),
+      and an exit-0 command does not promote a capability
+   d) control: the same forged document with command_class="evaluation" is accepted
+      (capability_gate="pass"), which proves (b) is refused because of the training
+      command class, not because of a malformed judgement block.
+
+Not done (out of scope by instruction):
+   - no real corpus was read; the v4.2.0 corpus is a legacy contract and cannot
+     feed an O2 actor (W03F); .tmp_* corpora were not opened
+   - no engine, no game, no evaluation episode, no gate judged: capability_gate
+     stays "not_run" and the result records dataset_kind="synthetic"
+   - no checkpoint reload/re-evaluation (a fresh --checkpoint-out is written and
+     hashed, but the result's remaining_gaps says it was not re-evaluated)
+   - no files were deleted, moved, staged or committed; ASSET_SYNC.* untouched

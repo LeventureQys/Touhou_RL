@@ -1,0 +1,2613 @@
+{
+ "checkpoints": [
+  {
+   "exists": true,
+   "id": "B0",
+   "mtime_iso": "2026-11-13T04:32:48.433606+08:00",
+   "path": ".tmp_v410_wp04_arms/b0_seed0_last.pt",
+   "sha256_observed": "3bc0ec4461701bebb2ffc551d61dffff77f15cd486125baf9db6eaafc741b3a6",
+   "size_bytes": 2946867,
+   "stated_sha256": "3bc0ec4461701bebb2ffc551d61dffff77f15cd486125baf9db6eaafc741b3a6",
+   "verdict": "verified"
+  },
+  {
+   "exists": true,
+   "id": "20k",
+   "mtime_iso": "2026-11-13T14:50:42.917270+08:00",
+   "path": ".tmp_v410_wp05_train_beta05_20k/b0_s0_dagger_step20000.pt",
+   "sha256_observed": "15ae1fd5b9a6e0cbbddfd668bb342444bdb44db123b5f7e56abf3c5e7215bd95",
+   "size_bytes": 2941293,
+   "stated_sha256": "15ae1fd5b9a6e0cbbddfd668bb342444bdb44db123b5f7e56abf3c5e7215bd95",
+   "verdict": "verified"
+  }
+ ],
+ "environment": {
+  "manifest_path": "Document/Update/Alpha/v4.3.0/evidence/W00/source_identity.json",
+  "platform": "win32",
+  "python": "3.12.10",
+  "registry_path": "Document/Update/Alpha/v4.3.0/registries/code_identity.json",
+  "repo_root": "D:/WorkShop/Touhou_RL"
+ },
+ "generated_at_utc": "2026-11-15T03:04:57Z",
+ "git": {
+  "branch": "v400",
+  "check_ignore_exit_code": 1,
+  "check_ignore_stdout": "",
+  "consequence_if_untracked": "a fresh clone has none of the 54 files; this is the W00 delivery gap, reported as an observation and never as a verification failure -- closing the gap must not break this checker",
+  "head": "6eb76f26a3cb70478130ed8dd9b4c60fdccbb3ed",
+  "ignore_verdict": "none of the four groups is ignored (git check-ignore exit 1 = no match)",
+  "ls_files": {
+   "configs/v420": {
+    "argv": "git ls-files -- configs/v420",
+    "exit_code": 0,
+    "stdout": "",
+    "tracked_count": 0
+   },
+   "tests/test_v420_*.py": {
+    "argv": "git ls-files -- tests/test_v420_contracts.py tests/test_v420_counterfactual.py tests/test_v420_dagger.py tests/test_v420_dataset_2f.py tests/test_v420_eval.py tests/test_v420_eval_shoot.py tests/test_v420_rebuild.py tests/test_v420_replay_audit.py tests/test_v420_reslot.py tests/test_v420_rl.py tests/test_v420_setsup.py tests/test_v420_train.py",
+    "exit_code": 0,
+    "stdout": "",
+    "tracked_count": 0
+   },
+   "tools/rl/v420*.py": {
+    "argv": "git ls-files -- tools/rl/v420.py tools/rl/v420_eval_shoot.py",
+    "exit_code": 0,
+    "stdout": "",
+    "tracked_count": 0
+   },
+   "touhou_rl/v420": {
+    "argv": "git ls-files -- touhou_rl/v420",
+    "exit_code": 0,
+    "stdout": "",
+    "tracked_count": 0
+   }
+  },
+  "status_argv": "git status --short --untracked-files=all -- touhou_rl/v420 tools/rl/v420.py tools/rl/v420_eval_shoot.py configs/v420 tests",
+  "status_exit_code": 0,
+  "status_tracked_changed_count": 1,
+  "status_untracked_count": 79,
+  "status_untracked_lines": [
+   "?? configs/v420/a1-safe-set-expand.json",
+   "?? configs/v420/a1-safe-set-full.json",
+   "?? configs/v420/a1-safe-set-pilot.json",
+   "?? configs/v420/a1-setsup-expand.json",
+   "?? configs/v420/a1-setsup-train.json",
+   "?? configs/v420/a1-setsup-uniform.json",
+   "?? configs/v420/audit-time.json",
+   "?? configs/v420/counterfactual-pilot.json",
+   "?? configs/v420/counterfactual-student.json",
+   "?? configs/v420/dagger-D1.json",
+   "?? configs/v420/dagger-D2.json",
+   "?? configs/v420/dagger-D3.json",
+   "?? configs/v420/learn-controlled.json",
+   "?? configs/v420/legacy-reproduce.json",
+   "?? configs/v420/local.json",
+   "?? configs/v420/protocol.json",
+   "?? configs/v420/rl-engine-advnorm-off.json",
+   "?? configs/v420/rl-engine-audit.json",
+   "?? configs/v420/rl-engine-pilot-kl.json",
+   "?? configs/v420/rl-engine-pilot.json",
+   "?? configs/v420/rl-engine-r3-aloudit.json",
+   "?? configs/v420/rl-engine-r3-pilot.json",
+   "?? configs/v420/rl-engine-r3-pilot1m.json",
+   "?? configs/v420/rl-engine-r3-pilot200k.json",
+   "?? configs/v420/rl-engine-r4-aloudit.json",
+   "?? configs/v420/rl-engine-r4-pilot.json",
+   "?? tests/test_v410_baselines.py",
+   "?? tests/test_v410_boundary.py",
+   "?? tests/test_v410_consistency.py",
+   "?? tests/test_v410_dagger_collect.py",
+   "?? tests/test_v410_dagger_labels.py",
+   "?? tests/test_v410_dagger_tiebreak.py",
+   "?? tests/test_v410_dagger_train.py",
+   "?? tests/test_v410_dataset_plan.py",
+   "?? tests/test_v410_evidence.py",
+   "?? tests/test_v410_parity.py",
+   "?? tests/test_v410_protocol.py",
+   "?? tests/test_v410_relabel_d1.py",
+   "?? tests/test_v410_reward_events.py",
+   "?? tests/test_v410_reward_state_machine.py",
+   "?? tests/test_v410_s1c_audit.py",
+   "?? tests/test_v410_student_bc.py",
+   "?? tests/test_v410_student_bc_arms.py",
+   "?? tests/test_v410_student_diagnostics.py",
+   "?? tests/test_v410_student_eval.py",
+   "?? tests/test_v410_teacher_audit.py",
+   "?? tests/test_v410_teacher_calibration.py",
+   "?? tests/test_v410_teacher_death_probe.py",
+   "?? tests/test_v410_teacher_fast20.py",
+   "?? tests/test_v410_teacher_labels.py",
+   "?? tests/test_v410_wp01_check.py",
+   "?? tests/test_v420_contracts.py",
+   "?? tests/test_v420_counterfactual.py",
+   "?? tests/test_v420_dagger.py",
+   "?? tests/test_v420_dataset_2f.py",
+   "?? tests/test_v420_eval.py",
+   "?? tests/test_v420_eval_shoot.py",
+   "?? tests/test_v420_rebuild.py",
+   "?? tests/test_v420_replay_audit.py",
+   "?? tests/test_v420_reslot.py",
+   "?? tests/test_v420_rl.py",
+   "?? tests/test_v420_setsup.py",
+   "?? tests/test_v420_train.py",
+   "?? tools/rl/v420.py",
+   "?? tools/rl/v420_eval_shoot.py",
+   "?? touhou_rl/v420/__init__.py",
+   "?? touhou_rl/v420/batch_2f.py",
+   "?? touhou_rl/v420/contracts.py",
+   "?? touhou_rl/v420/counterfactual.py",
+   "?? touhou_rl/v420/dagger.py",
+   "?? touhou_rl/v420/dataset_2f.py",
+   "?? touhou_rl/v420/diagnostics.py",
+   "?? touhou_rl/v420/eval.py",
+   "?? touhou_rl/v420/rebuild.py",
+   "?? touhou_rl/v420/replay_audit.py",
+   "?? touhou_rl/v420/reslot.py",
+   "?? touhou_rl/v420/rl.py",
+   "?? touhou_rl/v420/setsup.py",
+   "?? touhou_rl/v420/train.py"
+  ],
+  "tracked_total": 0,
+  "tracking_state": "untracked"
+ },
+ "groups": [
+  {
+   "count": 14,
+   "files": [
+    {
+     "exists": true,
+     "mtime_iso": "2026-11-13T17:21:23.534055+08:00",
+     "mtime_ns": 1794561683534054800,
+     "path": "touhou_rl/v420/__init__.py",
+     "sha256": "e8d9e14344f8863471277bc063482700f40f942b32f7797700c64993b86f3d80",
+     "size_bytes": 1728
+    },
+    {
+     "exists": true,
+     "mtime_iso": "2026-11-13T18:33:17.173169+08:00",
+     "mtime_ns": 1794565997173169300,
+     "path": "touhou_rl/v420/batch_2f.py",
+     "sha256": "fb711625571262d8e62003b1f4a27cda6288891589899a0f02e220bf74bdaf16",
+     "size_bytes": 26375
+    },
+    {
+     "exists": true,
+     "mtime_iso": "2026-11-13T18:47:13.846512+08:00",
+     "mtime_ns": 1794566833846511900,
+     "path": "touhou_rl/v420/contracts.py",
+     "sha256": "1357c69c32a74fda20553a3e6b290ca2102b7cc5c52e47e9fdc6eb9e08c946c1",
+     "size_bytes": 56321
+    },
+    {
+     "exists": true,
+     "mtime_iso": "2026-11-13T21:46:39.789348+08:00",
+     "mtime_ns": 1794577599789347700,
+     "path": "touhou_rl/v420/counterfactual.py",
+     "sha256": "c1f8cae4c5ff8d36fc7d0ea4a5a908bb6bbe83cbc0218474ab647786d38eb9d8",
+     "size_bytes": 235298
+    },
+    {
+     "exists": true,
+     "mtime_iso": "2026-11-13T22:29:41.159464+08:00",
+     "mtime_ns": 1794580181159464200,
+     "path": "touhou_rl/v420/dagger.py",
+     "sha256": "8943e029e07adf6528bb44f39b67a135ee61f6d2bd474b31e896f663c8c1f0d5",
+     "size_bytes": 141440
+    },
+    {
+     "exists": true,
+     "mtime_iso": "2026-11-13T18:38:08.436726+08:00",
+     "mtime_ns": 1794566288436725600,
+     "path": "touhou_rl/v420/dataset_2f.py",
+     "sha256": "94341de6de35b25c7d9199d783f79b269b5dae5aa6bcc1bb5500bbd80e2cdbc9",
+     "size_bytes": 87280
+    },
+    {
+     "exists": true,
+     "mtime_iso": "2026-11-13T18:47:33.237848+08:00",
+     "mtime_ns": 1794566853237848400,
+     "path": "touhou_rl/v420/diagnostics.py",
+     "sha256": "85f557d836768f6964c4f51d3611b36048db0723b18ea796c58ef5263bfb9a2f",
+     "size_bytes": 13957
+    },
+    {
+     "exists": true,
+     "mtime_iso": "2026-11-13T17:44:07.604172+08:00",
+     "mtime_ns": 1794563047604171500,
+     "path": "touhou_rl/v420/eval.py",
+     "sha256": "fdb8e2e44a30a9fd90465950b373b6e4701a5b9dfac03c2b407ffe77e8c449a0",
+     "size_bytes": 45353
+    },
+    {
+     "exists": true,
+     "mtime_iso": "2026-11-13T17:46:09.949243+08:00",
+     "mtime_ns": 1794563169949242600,
+     "path": "touhou_rl/v420/rebuild.py",
+     "sha256": "727f47082ba678b00827c6c2a0e7544b3c4b9e2d0e3a6c5a18c64ed7a84dc572",
+     "size_bytes": 80691
+    },
+    {
+     "exists": true,
+     "mtime_iso": "2026-11-13T18:10:40.660764+08:00",
+     "mtime_ns": 1794564640660764100,
+     "path": "touhou_rl/v420/replay_audit.py",
+     "sha256": "06555d4d4171eaf7ae487d4ce5e2783f0eedf147d1f39a3409353194869c8493",
+     "size_bytes": 137977
+    },
+    {
+     "exists": true,
+     "mtime_iso": "2026-11-13T17:59:57.603726+08:00",
+     "mtime_ns": 1794563997603726500,
+     "path": "touhou_rl/v420/reslot.py",
+     "sha256": "f4af917da7a81b1c4f540dc8688e987fd4146038d356d196de4931494eb3ed83",
+     "size_bytes": 82647
+    },
+    {
+     "exists": true,
+     "mtime_iso": "2026-11-15T02:05:43.232329+08:00",
+     "mtime_ns": 1794679543232329400,
+     "path": "touhou_rl/v420/rl.py",
+     "sha256": "a5f9d92d62d7b5ab73da261ca72bed4fcf06977f389beeeaa49c3135cdf713aa",
+     "size_bytes": 284850
+    },
+    {
+     "exists": true,
+     "mtime_iso": "2026-11-14T14:24:38.691081+08:00",
+     "mtime_ns": 1794637478691080700,
+     "path": "touhou_rl/v420/setsup.py",
+     "sha256": "5013c803744a95dad482dd405d6af005d45b9a7b5b94c68b452d353a045e09c6",
+     "size_bytes": 77602
+    },
+    {
+     "exists": true,
+     "mtime_iso": "2026-11-13T18:50:21.086203+08:00",
+     "mtime_ns": 1794567021086202800,
+     "path": "touhou_rl/v420/train.py",
+     "sha256": "bf4c2c1bf99015536127e5bf4f28b804ebcb74645b23b187011a722a4849a7b9",
+     "size_bytes": 55803
+    }
+   ],
+   "label": "touhou_rl/v420/*.py",
+   "missing_count": 0,
+   "total_bytes": 1327322
+  },
+  {
+   "count": 2,
+   "files": [
+    {
+     "exists": true,
+     "mtime_iso": "2026-11-14T12:24:07.761841+08:00",
+     "mtime_ns": 1794630247761840600,
+     "path": "tools/rl/v420.py",
+     "sha256": "3f04779edfcfa5199337f3dadf50f15764c565d7828925c9b39c84b16a2bd7d8",
+     "size_bytes": 36043
+    },
+    {
+     "exists": true,
+     "mtime_iso": "2026-11-14T10:30:40.113289+08:00",
+     "mtime_ns": 1794623440113289200,
+     "path": "tools/rl/v420_eval_shoot.py",
+     "sha256": "7dbc2a3145562e54f4a7397fa63c8391938b6f6982f5d4b495a66b28fc6e8519",
+     "size_bytes": 76609
+    }
+   ],
+   "label": "tools/rl/v420.py + v420_eval_shoot.py",
+   "missing_count": 0,
+   "total_bytes": 112652
+  },
+  {
+   "count": 26,
+   "files": [
+    {
+     "exists": true,
+     "mtime_iso": "2026-11-14T14:55:08.514923+08:00",
+     "mtime_ns": 1794639308514923300,
+     "path": "configs/v420/a1-safe-set-expand.json",
+     "sha256": "0f9c13b331b42e93147dfc58a481aed64a6d67b990ee54bc6d905e8660faf1f5",
+     "size_bytes": 14873
+    },
+    {
+     "exists": true,
+     "mtime_iso": "2026-11-14T07:05:07.425496+08:00",
+     "mtime_ns": 1794611107425496000,
+     "path": "configs/v420/a1-safe-set-full.json",
+     "sha256": "4d958a01b81d6c0776fbddfa83ea300fe992178a1afd20bbbb9071b71ac43a5a",
+     "size_bytes": 16290
+    },
+    {
+     "exists": true,
+     "mtime_iso": "2026-11-14T05:22:14.772233+08:00",
+     "mtime_ns": 1794604934772233100,
+     "path": "configs/v420/a1-safe-set-pilot.json",
+     "sha256": "1a428dec0e6afe5ac8102d13c3086b0efa851a97fd280a5712e90a999232648e",
+     "size_bytes": 13511
+    },
+    {
+     "exists": true,
+     "mtime_iso": "2026-11-14T15:04:13.795439+08:00",
+     "mtime_ns": 1794639853795438500,
+     "path": "configs/v420/a1-setsup-expand.json",
+     "sha256": "f36a619c2bfd7220ca5416f3cc5dcb59d3d1e7d113e3df23f94035153b48825a",
+     "size_bytes": 13039
+    },
+    {
+     "exists": true,
+     "mtime_iso": "2026-11-14T12:23:49.456511+08:00",
+     "mtime_ns": 1794630229456511100,
+     "path": "configs/v420/a1-setsup-train.json",
+     "sha256": "7c774788009425729286c85cfe59fca4e2cc530470f400fb73ea82d9d4522731",
+     "size_bytes": 7464
+    },
+    {
+     "exists": true,
+     "mtime_iso": "2026-11-14T14:24:19.263585+08:00",
+     "mtime_ns": 1794637459263584800,
+     "path": "configs/v420/a1-setsup-uniform.json",
+     "sha256": "7a701968d981dc499b1ef72ef623f52534538cb9c8a93667cfb8ba15b2796ac7",
+     "size_bytes": 10285
+    },
+    {
+     "exists": true,
+     "mtime_iso": "2026-11-13T17:44:42.314936+08:00",
+     "mtime_ns": 1794563082314935800,
+     "path": "configs/v420/audit-time.json",
+     "sha256": "658436d8edc2ba79a86225a2da7be8cdc2206435bb83553bb4bfafec10f585d1",
+     "size_bytes": 3985
+    },
+    {
+     "exists": true,
+     "mtime_iso": "2026-11-13T19:03:48.228962+08:00",
+     "mtime_ns": 1794567828228961800,
+     "path": "configs/v420/counterfactual-pilot.json",
+     "sha256": "78dc70b711ab74f5e349e6a630363756a1981419eb05ba0fbed5428d0a3681e8",
+     "size_bytes": 5818
+    },
+    {
+     "exists": true,
+     "mtime_iso": "2026-11-13T21:15:20.059640+08:00",
+     "mtime_ns": 1794575720059639800,
+     "path": "configs/v420/counterfactual-student.json",
+     "sha256": "65d294575f4b1e0a53579dedd1315bc35995021fd9dab6eafdee6b6f9a5b9e1c",
+     "size_bytes": 7289
+    },
+    {
+     "exists": true,
+     "mtime_iso": "2026-11-13T21:29:18.986164+08:00",
+     "mtime_ns": 1794576558986163500,
+     "path": "configs/v420/dagger-D1.json",
+     "sha256": "5d909a8e63eff38adaab49d6a80d28700f9b1bfce56dc8c84cbde596e37b1e3b",
+     "size_bytes": 8885
+    },
+    {
+     "exists": true,
+     "mtime_iso": "2026-11-13T22:41:29.540470+08:00",
+     "mtime_ns": 1794580889540470200,
+     "path": "configs/v420/dagger-D2.json",
+     "sha256": "511325bb51d38b6b4371586a6da2efe2d7ca0108b8b1a5f2a0d24866d648b441",
+     "size_bytes": 15157
+    },
+    {
+     "exists": true,
+     "mtime_iso": "2026-11-14T01:17:04.985096+08:00",
+     "mtime_ns": 1794590224985095700,
+     "path": "configs/v420/dagger-D3.json",
+     "sha256": "6c0570602740e0caa033ba6fb8018651518902d7b3395e3788be5017eb20249e",
+     "size_bytes": 15138
+    },
+    {
+     "exists": true,
+     "mtime_iso": "2026-11-13T18:49:05.939612+08:00",
+     "mtime_ns": 1794566945939611700,
+     "path": "configs/v420/learn-controlled.json",
+     "sha256": "cc1ae9dcda76ad11de298b9c8722c80438ac8e87f606bcc19427fe2030d0577c",
+     "size_bytes": 4477
+    },
+    {
+     "exists": true,
+     "mtime_iso": "2026-11-13T17:27:08.146517+08:00",
+     "mtime_ns": 1794562028146516800,
+     "path": "configs/v420/legacy-reproduce.json",
+     "sha256": "16a29f5972c30d9e024c8f1403c53519b5dcf12f4a043057819223e5247e3d46",
+     "size_bytes": 3340
+    },
+    {
+     "exists": true,
+     "mtime_iso": "2026-11-13T17:22:01.066739+08:00",
+     "mtime_ns": 1794561721066739300,
+     "path": "configs/v420/local.json",
+     "sha256": "6a104778f1c650b07c04a71013825c59a2a30cd3e88eced06f37c385e5fc4e05",
+     "size_bytes": 5544
+    },
+    {
+     "exists": true,
+     "mtime_iso": "2026-11-13T17:26:58.359842+08:00",
+     "mtime_ns": 1794562018359842400,
+     "path": "configs/v420/protocol.json",
+     "sha256": "ad34c1e92e8268b32d164576c46990be73ab0a6dcb32767dc187d3b2942c777e",
+     "size_bytes": 1988
+    },
+    {
+     "exists": true,
+     "mtime_iso": "2026-11-14T08:29:25.487569+08:00",
+     "mtime_ns": 1794616165487568500,
+     "path": "configs/v420/rl-engine-advnorm-off.json",
+     "sha256": "ca1dca15393d7983b493f1f1fa5254d2c686f7ce7a27474febd95c5742bb9fbe",
+     "size_bytes": 28061
+    },
+    {
+     "exists": true,
+     "mtime_iso": "2026-11-14T00:54:04.918438+08:00",
+     "mtime_ns": 1794588844918437900,
+     "path": "configs/v420/rl-engine-audit.json",
+     "sha256": "205b53aff1e9e0c47fe695bcd2ef8d53c7d3030c39f80621ab6d47665ba40981",
+     "size_bytes": 6539
+    },
+    {
+     "exists": true,
+     "mtime_iso": "2026-11-14T02:16:02.755742+08:00",
+     "mtime_ns": 1794593762755742100,
+     "path": "configs/v420/rl-engine-pilot-kl.json",
+     "sha256": "c0681c674f42e0c75329f20c302aada5b0808dad87ac4cc90f99f0887933400c",
+     "size_bytes": 7070
+    },
+    {
+     "exists": true,
+     "mtime_iso": "2026-11-14T00:58:05.228223+08:00",
+     "mtime_ns": 1794589085228223100,
+     "path": "configs/v420/rl-engine-pilot.json",
+     "sha256": "2537c98c02f0a0b1eac2c5f6f0647d53b97d974b668c1744e296685f1ee3428f",
+     "size_bytes": 5357
+    },
+    {
+     "exists": true,
+     "mtime_iso": "2026-11-14T04:26:07.310594+08:00",
+     "mtime_ns": 1794601567310594100,
+     "path": "configs/v420/rl-engine-r3-aloudit.json",
+     "sha256": "29c960d1ca5605b93113c11bc6eaf8df6586ed68139b298c89b68cb6ad8929da",
+     "size_bytes": 12432
+    },
+    {
+     "exists": true,
+     "mtime_iso": "2026-11-14T04:26:07.316166+08:00",
+     "mtime_ns": 1794601567316166100,
+     "path": "configs/v420/rl-engine-r3-pilot.json",
+     "sha256": "83f16c8a34090ae2994e51835624fb2e9252adc9e668a4b653ac0ba4d1f0673c",
+     "size_bytes": 12787
+    },
+    {
+     "exists": true,
+     "mtime_iso": "2026-11-14T07:10:35.023122+08:00",
+     "mtime_ns": 1794611435023121500,
+     "path": "configs/v420/rl-engine-r3-pilot1m.json",
+     "sha256": "d47557645573818f5becfe07626131003da535d8a7d892541a5d1ad9e9c11f65",
+     "size_bytes": 22461
+    },
+    {
+     "exists": true,
+     "mtime_iso": "2026-11-14T05:48:32.500257+08:00",
+     "mtime_ns": 1794606512500257600,
+     "path": "configs/v420/rl-engine-r3-pilot200k.json",
+     "sha256": "a341f0ad78ba469bd3cd31b923dc010facad0aac3d35d4a71211cd7b41679e26",
+     "size_bytes": 17596
+    },
+    {
+     "exists": true,
+     "mtime_iso": "2026-11-15T02:05:58.385987+08:00",
+     "mtime_ns": 1794679558385987400,
+     "path": "configs/v420/rl-engine-r4-aloudit.json",
+     "sha256": "cf7a900be7988108a9798878549452f621f545627f3216dd8b4dcabde6753dfd",
+     "size_bytes": 16279
+    },
+    {
+     "exists": true,
+     "mtime_iso": "2026-11-15T02:05:58.379920+08:00",
+     "mtime_ns": 1794679558379920300,
+     "path": "configs/v420/rl-engine-r4-pilot.json",
+     "sha256": "2a7763adf3191b3a1905475d5e102788025947b839d737820a2144943b84f37d",
+     "size_bytes": 19428
+    }
+   ],
+   "label": "configs/v420/*.json",
+   "missing_count": 0,
+   "total_bytes": 295093
+  },
+  {
+   "count": 12,
+   "files": [
+    {
+     "exists": true,
+     "mtime_iso": "2026-11-13T18:48:22.009618+08:00",
+     "mtime_ns": 1794566902009618200,
+     "path": "tests/test_v420_contracts.py",
+     "sha256": "32da152c4f0057b61c8880c97cd868503d03f01db3611216882b29df9761a038",
+     "size_bytes": 31428
+    },
+    {
+     "exists": true,
+     "mtime_iso": "2026-11-14T06:59:14.172125+08:00",
+     "mtime_ns": 1794610754172125400,
+     "path": "tests/test_v420_counterfactual.py",
+     "sha256": "fab435ca56136bc21a1449b594b3b47749b5d06566ea3a1167702adab2767868",
+     "size_bytes": 76286
+    },
+    {
+     "exists": true,
+     "mtime_iso": "2026-11-14T01:21:19.541673+08:00",
+     "mtime_ns": 1794590479541672900,
+     "path": "tests/test_v420_dagger.py",
+     "sha256": "c954242b39606c6f9728b85a4fa767c213fb46b86d34a6c6dbfc2a1e6861c9b4",
+     "size_bytes": 44254
+    },
+    {
+     "exists": true,
+     "mtime_iso": "2026-11-13T18:33:21.624576+08:00",
+     "mtime_ns": 1794566001624575900,
+     "path": "tests/test_v420_dataset_2f.py",
+     "sha256": "4b881354a6633e30ba08b82a7f6971c23e50d4ec49676955f36a91294da91c95",
+     "size_bytes": 31802
+    },
+    {
+     "exists": true,
+     "mtime_iso": "2026-11-13T17:32:03.327865+08:00",
+     "mtime_ns": 1794562323327864600,
+     "path": "tests/test_v420_eval.py",
+     "sha256": "26e321bbd86b811951fb6567a011080999ddd403d54dff75de352f2fc8328acb",
+     "size_bytes": 21789
+    },
+    {
+     "exists": true,
+     "mtime_iso": "2026-11-14T10:31:24.036084+08:00",
+     "mtime_ns": 1794623484036083900,
+     "path": "tests/test_v420_eval_shoot.py",
+     "sha256": "b3dbcf0407eb6ae621431caf3b666ccd5ba280aea15c7749c0ce256c6998dd2c",
+     "size_bytes": 34218
+    },
+    {
+     "exists": true,
+     "mtime_iso": "2026-11-13T17:45:11.764406+08:00",
+     "mtime_ns": 1794563111764406400,
+     "path": "tests/test_v420_rebuild.py",
+     "sha256": "effcd338afd1b667c5d7b4e3d4b176b7212c8f62843bc4e145f7a49abf46478b",
+     "size_bytes": 23179
+    },
+    {
+     "exists": true,
+     "mtime_iso": "2026-11-13T18:10:59.375566+08:00",
+     "mtime_ns": 1794564659375566300,
+     "path": "tests/test_v420_replay_audit.py",
+     "sha256": "397684219f80454ee74de5e5748829d09ba5c9f7a08a9701f44a5b3935711b37",
+     "size_bytes": 50085
+    },
+    {
+     "exists": true,
+     "mtime_iso": "2026-11-13T17:59:31.587247+08:00",
+     "mtime_ns": 1794563971587247400,
+     "path": "tests/test_v420_reslot.py",
+     "sha256": "52734b1ae3964838ec54d8276adf82d6f02bda4a4813e369280420189063299a",
+     "size_bytes": 24972
+    },
+    {
+     "exists": true,
+     "mtime_iso": "2026-11-15T02:07:06.820574+08:00",
+     "mtime_ns": 1794679626820573600,
+     "path": "tests/test_v420_rl.py",
+     "sha256": "04114e30722d1d01d16801618ad6fdb9231c0aa5a3e9c2f9c4af661bc2e9abf5",
+     "size_bytes": 139929
+    },
+    {
+     "exists": true,
+     "mtime_iso": "2026-11-15T03:17:21.094657+08:00",
+     "mtime_ns": 1794683841094657300,
+     "path": "tests/test_v420_setsup.py",
+     "sha256": "e7dbfa107615ae37f6e20514091b70d32259f54087c7afdc40ef649428290e2d",
+     "size_bytes": 55909
+    },
+    {
+     "exists": true,
+     "mtime_iso": "2026-11-13T18:50:28.273501+08:00",
+     "mtime_ns": 1794567028273501200,
+     "path": "tests/test_v420_train.py",
+     "sha256": "a607476b11446054986c5e42f40009537e869bfbd3a4d88662869e75911f14c0",
+     "size_bytes": 21133
+    }
+   ],
+   "label": "tests/test_v420_*.py",
+   "missing_count": 0,
+   "total_bytes": 554984
+  }
+ ],
+ "known_discrepancies": [
+  {
+   "evidence": "Document/Update/Alpha/v4.3.0/README.md L37-L39, git ls-files / git status in this file's 'git' block",
+   "id": "D-1",
+   "impact": "P1-07's real defect is not absence but Git invisibility: the files exist and are untracked, so they cannot be synchronised and a fresh clone would genuinely lack them. A downstream agent that trusted the README would look for a restore source that is not needed instead of fixing tracking.",
+   "observed": "touhou_rl/v420/*.py = 14 files, configs/v420/*.json = 26 files, tests/test_v420_*.py = 12 files, tools/rl/v420.py + tools/rl/v420_eval_shoot.py = 2 files, all present on this disk",
+   "verdict": "plan_text_out_of_date",
+   "what": "v4.3.0 README §2 says this checkout is missing touhou_rl/v420, configs/v420, the tests and the evaluators"
+  },
+  {
+   "brief_number": 28,
+   "delta_brief_minus_measured": 2,
+   "evidence": "groups[2].files in this manifest",
+   "id": "D-2",
+   "impact": "file counts must come from disk, not from the brief",
+   "measured_number": 26,
+   "observed": "26 json files on disk",
+   "rule": "以磁盘为准 / disk is authoritative",
+   "verdict": "measured_26_brief_is_2_too_high (实测 26，任务书数字偏大 2，以磁盘为准)",
+   "what": "the W00 brief states configs/v420 holds 28 json files"
+  }
+ ],
+ "mismatch_explanations": [
+  {
+   "cause": "re-pinned after T00 while registering the v4.2.0 binary assets (ASSET_SYNC.md §9); the bytes changed, the file is not a v420 source file",
+   "cause_recheck": {
+    "asset_sync_md_documents_2026_11_15_repin": true,
+    "cause_holds": true,
+    "v420_asset_lines_in_asset_sync_sha256": 21,
+    "v420_source_lines_in_asset_sync_sha256": 0
+   },
+   "expected_sha256": "22fe78b3d78a3aa92a06c0b0c02d6ad7cdefd66cb309ac50e6d4311cf1701bd2",
+   "observed_sha256": "0d08ae4eac5fc7c8102244ec7a3fe97e27d3c6b1ff3ec731d97372f39ecf1681",
+   "reference": "t00.object.asset_sync_sha256",
+   "target": "ASSET_SYNC.sha256"
+  },
+  {
+   "cause": "re-pinned after T00 while registering the v4.2.0 binary assets (ASSET_SYNC.md §9); the bytes changed, the file is not a v420 source file",
+   "cause_recheck": {
+    "asset_sync_md_documents_2026_11_15_repin": true,
+    "cause_holds": true,
+    "v420_asset_lines_in_asset_sync_sha256": 21,
+    "v420_source_lines_in_asset_sync_sha256": 0
+   },
+   "expected_sha256": "340fb22ba252e2679c84c69e355c3e9fe4ae0cbef781f3d50edc849f184c1801",
+   "observed_sha256": "90fb60e855d30449145fa87fb977a7d93e344ec0607137af1a75bc7c7d9dce72",
+   "reference": "t00.object.asset_sync_md",
+   "target": "ASSET_SYNC.md"
+  }
+ ],
+ "model_load": {
+  ".tmp_v410_wp04_arms/b0_seed0_last.pt": {
+   "checkpoint": ".tmp_v410_wp04_arms/b0_seed0_last.pt",
+   "direct_binding": {
+    "built_config": {
+     "groups": 8,
+     "hist_hidden": 64,
+     "hud_width": 16,
+     "play_width": 24,
+     "readout": 128,
+     "trunk": 128
+    },
+    "built_parameters": 731802,
+    "loaded_parameters": 731802,
+    "model_class": "touhou_rl.v410.student.diagnostics.ProbeNet",
+    "ok": true,
+    "strict": true
+   },
+   "process": {
+    "cuda_available": true,
+    "isolated": true,
+    "pid": 27080,
+    "python": "3.12.10",
+    "torch": "2.14.1+cu132"
+   },
+   "production_loader": {
+    "info": {
+     "arm": "B0",
+     "bomb_aux_weight": 0.0,
+     "bomb_head": false,
+     "epochs": 20,
+     "family": "probe",
+     "last_epoch": 20,
+     "metrics": {
+      "train": {
+       "loss": 0.08749064386104857,
+       "macro_recall": 0.9255562341455722,
+       "samples": 46397,
+       "steps": 363,
+       "top1": 0.9769166109877794
+      },
+      "val": {
+       "loss": 2.9367071009484733,
+       "macro_recall": 0.3079649134166203,
+       "samples": 9874,
+       "top1": 0.6280129633380596
+      }
+     },
+     "model_class": "touhou_rl.v410.student.diagnostics.ProbeNet",
+     "model_config": {
+      "groups": 8,
+      "hist_hidden": 64,
+      "hud_width": 16,
+      "play_width": 24,
+      "readout": 128,
+      "trunk": 128
+     },
+     "parameters": 731802,
+     "parameters_pinned": 731802,
+     "path": "D:\\WorkShop\\Touhou_RL\\.tmp_v410_wp04_arms\\b0_seed0_last.pt",
+     "schema": "v410-wp04-bc-arm-checkpoint/1",
+     "seed": 0,
+     "sha256": "3bc0ec4461701bebb2ffc551d61dffff77f15cd486125baf9db6eaafc741b3a6"
+    },
+    "model_class": "ProbeNet",
+    "ok": true,
+    "parameters": 731802
+   },
+   "strict_binding_ok": true,
+   "torch_load": {
+    "arm": "B0",
+    "model_config": {
+     "groups": 8,
+     "hist_hidden": 64,
+     "hud_width": 16,
+     "play_width": 24,
+     "readout": 128,
+     "trunk": 128
+    },
+    "ok": true,
+    "payload_keys": [
+     "arm",
+     "arm_spec",
+     "budget",
+     "config",
+     "created_at",
+     "epochs",
+     "family",
+     "last_epoch",
+     "metrics",
+     "model_class",
+     "model_config",
+     "optimiser",
+     "parameters",
+     "schema",
+     "seed",
+     "split",
+     "state_dict",
+     "wp"
+    ],
+    "payload_type": "dict",
+    "schema": "v410-wp04-bc-arm-checkpoint/1",
+    "state_dict_key_count": 36,
+    "state_dict_total_parameters": 731802
+   },
+   "v420_loader": {
+    "description": {
+     "arm": "B0",
+     "bomb_aux_weight": 0.0,
+     "bomb_head": false,
+     "epochs": 20,
+     "family": "probe",
+     "last_epoch": 20,
+     "metrics": {
+      "train": {
+       "loss": 0.08749064386104857,
+       "macro_recall": 0.9255562341455722,
+       "samples": 46397,
+       "steps": 363,
+       "top1": 0.9769166109877794
+      },
+      "val": {
+       "loss": 2.9367071009484733,
+       "macro_recall": 0.3079649134166203,
+       "samples": 9874,
+       "top1": 0.6280129633380596
+      }
+     },
+     "model_class": "touhou_rl.v410.student.diagnostics.ProbeNet",
+     "model_config": {
+      "groups": 8,
+      "hist_hidden": 64,
+      "hud_width": 16,
+      "play_width": 24,
+      "readout": 128,
+      "trunk": 128
+     },
+     "parameters": 731802,
+     "parameters_pinned": 731802,
+     "path": "D:\\WorkShop\\Touhou_RL\\.tmp_v410_wp04_arms\\b0_seed0_last.pt",
+     "schema": "v410-wp04-bc-arm-checkpoint/1",
+     "seed": 0,
+     "sha256": "3bc0ec4461701bebb2ffc551d61dffff77f15cd486125baf9db6eaafc741b3a6"
+    },
+    "model_class": "ProbeNet",
+    "ok": true
+   },
+   "verdict": "verified"
+  },
+  ".tmp_v410_wp05_train_beta05_20k/b0_s0_dagger_step20000.pt": {
+   "checkpoint": ".tmp_v410_wp05_train_beta05_20k/b0_s0_dagger_step20000.pt",
+   "direct_binding": {
+    "built_config": {
+     "groups": 8,
+     "hist_hidden": 64,
+     "hud_width": 16,
+     "play_width": 24,
+     "readout": 128,
+     "trunk": 128
+    },
+    "built_parameters": 731802,
+    "loaded_parameters": 731802,
+    "model_class": "touhou_rl.v410.student.diagnostics.ProbeNet",
+    "ok": true,
+    "strict": true
+   },
+   "process": {
+    "cuda_available": true,
+    "isolated": true,
+    "pid": 27436,
+    "python": "3.12.10",
+    "torch": "2.14.1+cu132"
+   },
+   "production_loader": {
+    "info": {
+     "arm": "B0",
+     "bomb_aux_weight": 0.0,
+     "bomb_head": false,
+     "epochs": 1,
+     "family": "probe",
+     "last_epoch": 1,
+     "metrics": {
+      "train": {
+       "loss": 0.32447231749873606,
+       "macro_recall": 0.590400958243511,
+       "samples": 2560000,
+       "steps": 20000,
+       "top1": 0.90050625
+      },
+      "val": {}
+     },
+     "model_class": "touhou_rl.v410.student.diagnostics.ProbeNet",
+     "model_config": {
+      "groups": 8,
+      "hist_hidden": 64,
+      "hud_width": 16,
+      "play_width": 24,
+      "readout": 128,
+      "trunk": 128
+     },
+     "parameters": 731802,
+     "parameters_pinned": 731802,
+     "path": "D:\\WorkShop\\Touhou_RL\\.tmp_v410_wp05_train_beta05_20k\\b0_s0_dagger_step20000.pt",
+     "schema": "v410-wp04-bc-arm-checkpoint/1",
+     "seed": 0,
+     "sha256": "15ae1fd5b9a6e0cbbddfd668bb342444bdb44db123b5f7e56abf3c5e7215bd95"
+    },
+    "model_class": "ProbeNet",
+    "ok": true,
+    "parameters": 731802
+   },
+   "strict_binding_ok": true,
+   "torch_load": {
+    "arm": "B0",
+    "model_config": {
+     "groups": 8,
+     "hist_hidden": 64,
+     "hud_width": 16,
+     "play_width": 24,
+     "readout": 128,
+     "trunk": 128
+    },
+    "ok": true,
+    "payload_keys": [
+     "arm",
+     "arm_spec",
+     "budget",
+     "config",
+     "created_at",
+     "data_mix",
+     "epochs",
+     "family",
+     "last_epoch",
+     "metrics",
+     "model_class",
+     "model_config",
+     "optimiser",
+     "parameters",
+     "schema",
+     "seed",
+     "split",
+     "state_dict",
+     "steps",
+     "wp"
+    ],
+    "payload_type": "dict",
+    "schema": "v410-wp04-bc-arm-checkpoint/1",
+    "state_dict_key_count": 36,
+    "state_dict_total_parameters": 731802
+   },
+   "v420_loader": {
+    "description": {
+     "arm": "B0",
+     "bomb_aux_weight": 0.0,
+     "bomb_head": false,
+     "epochs": 1,
+     "family": "probe",
+     "last_epoch": 1,
+     "metrics": {
+      "train": {
+       "loss": 0.32447231749873606,
+       "macro_recall": 0.590400958243511,
+       "samples": 2560000,
+       "steps": 20000,
+       "top1": 0.90050625
+      },
+      "val": {}
+     },
+     "model_class": "touhou_rl.v410.student.diagnostics.ProbeNet",
+     "model_config": {
+      "groups": 8,
+      "hist_hidden": 64,
+      "hud_width": 16,
+      "play_width": 24,
+      "readout": 128,
+      "trunk": 128
+     },
+     "parameters": 731802,
+     "parameters_pinned": 731802,
+     "path": "D:\\WorkShop\\Touhou_RL\\.tmp_v410_wp05_train_beta05_20k\\b0_s0_dagger_step20000.pt",
+     "schema": "v410-wp04-bc-arm-checkpoint/1",
+     "seed": 0,
+     "sha256": "15ae1fd5b9a6e0cbbddfd668bb342444bdb44db123b5f7e56abf3c5e7215bd95"
+    },
+    "model_class": "ProbeNet",
+    "ok": true
+   },
+   "verdict": "verified"
+  }
+ },
+ "not_referenced_files": [
+  {
+   "group": "touhou_rl/v420/*.py",
+   "path": "touhou_rl/v420/__init__.py",
+   "verdict": "not_referenced"
+  },
+  {
+   "group": "touhou_rl/v420/*.py",
+   "path": "touhou_rl/v420/batch_2f.py",
+   "verdict": "not_referenced"
+  },
+  {
+   "group": "touhou_rl/v420/*.py",
+   "path": "touhou_rl/v420/contracts.py",
+   "verdict": "not_referenced"
+  },
+  {
+   "group": "touhou_rl/v420/*.py",
+   "path": "touhou_rl/v420/counterfactual.py",
+   "verdict": "not_referenced"
+  },
+  {
+   "group": "touhou_rl/v420/*.py",
+   "path": "touhou_rl/v420/dagger.py",
+   "verdict": "not_referenced"
+  },
+  {
+   "group": "touhou_rl/v420/*.py",
+   "path": "touhou_rl/v420/dataset_2f.py",
+   "verdict": "not_referenced"
+  },
+  {
+   "group": "touhou_rl/v420/*.py",
+   "path": "touhou_rl/v420/diagnostics.py",
+   "verdict": "not_referenced"
+  },
+  {
+   "group": "touhou_rl/v420/*.py",
+   "path": "touhou_rl/v420/eval.py",
+   "verdict": "not_referenced"
+  },
+  {
+   "group": "touhou_rl/v420/*.py",
+   "path": "touhou_rl/v420/rebuild.py",
+   "verdict": "not_referenced"
+  },
+  {
+   "group": "touhou_rl/v420/*.py",
+   "path": "touhou_rl/v420/replay_audit.py",
+   "verdict": "not_referenced"
+  },
+  {
+   "group": "touhou_rl/v420/*.py",
+   "path": "touhou_rl/v420/reslot.py",
+   "verdict": "not_referenced"
+  },
+  {
+   "group": "touhou_rl/v420/*.py",
+   "path": "touhou_rl/v420/rl.py",
+   "verdict": "not_referenced"
+  },
+  {
+   "group": "touhou_rl/v420/*.py",
+   "path": "touhou_rl/v420/setsup.py",
+   "verdict": "not_referenced"
+  },
+  {
+   "group": "touhou_rl/v420/*.py",
+   "path": "touhou_rl/v420/train.py",
+   "verdict": "not_referenced"
+  },
+  {
+   "group": "tools/rl/v420.py + v420_eval_shoot.py",
+   "path": "tools/rl/v420.py",
+   "verdict": "not_referenced"
+  },
+  {
+   "group": "tools/rl/v420.py + v420_eval_shoot.py",
+   "path": "tools/rl/v420_eval_shoot.py",
+   "verdict": "not_referenced"
+  },
+  {
+   "group": "configs/v420/*.json",
+   "path": "configs/v420/a1-safe-set-expand.json",
+   "verdict": "not_referenced"
+  },
+  {
+   "group": "configs/v420/*.json",
+   "path": "configs/v420/a1-safe-set-full.json",
+   "verdict": "not_referenced"
+  },
+  {
+   "group": "configs/v420/*.json",
+   "path": "configs/v420/a1-safe-set-pilot.json",
+   "verdict": "not_referenced"
+  },
+  {
+   "group": "configs/v420/*.json",
+   "path": "configs/v420/a1-setsup-expand.json",
+   "verdict": "not_referenced"
+  },
+  {
+   "group": "configs/v420/*.json",
+   "path": "configs/v420/a1-setsup-train.json",
+   "verdict": "not_referenced"
+  },
+  {
+   "group": "configs/v420/*.json",
+   "path": "configs/v420/a1-setsup-uniform.json",
+   "verdict": "not_referenced"
+  },
+  {
+   "group": "configs/v420/*.json",
+   "path": "configs/v420/audit-time.json",
+   "verdict": "not_referenced"
+  },
+  {
+   "group": "configs/v420/*.json",
+   "path": "configs/v420/counterfactual-pilot.json",
+   "verdict": "not_referenced"
+  },
+  {
+   "group": "configs/v420/*.json",
+   "path": "configs/v420/counterfactual-student.json",
+   "verdict": "not_referenced"
+  },
+  {
+   "group": "configs/v420/*.json",
+   "path": "configs/v420/dagger-D1.json",
+   "verdict": "not_referenced"
+  },
+  {
+   "group": "configs/v420/*.json",
+   "path": "configs/v420/dagger-D2.json",
+   "verdict": "not_referenced"
+  },
+  {
+   "group": "configs/v420/*.json",
+   "path": "configs/v420/dagger-D3.json",
+   "verdict": "not_referenced"
+  },
+  {
+   "group": "configs/v420/*.json",
+   "path": "configs/v420/learn-controlled.json",
+   "verdict": "not_referenced"
+  },
+  {
+   "group": "configs/v420/*.json",
+   "path": "configs/v420/legacy-reproduce.json",
+   "verdict": "not_referenced"
+  },
+  {
+   "group": "configs/v420/*.json",
+   "path": "configs/v420/local.json",
+   "verdict": "referenced"
+  },
+  {
+   "group": "configs/v420/*.json",
+   "path": "configs/v420/protocol.json",
+   "verdict": "not_referenced"
+  },
+  {
+   "group": "configs/v420/*.json",
+   "path": "configs/v420/rl-engine-advnorm-off.json",
+   "verdict": "not_referenced"
+  },
+  {
+   "group": "configs/v420/*.json",
+   "path": "configs/v420/rl-engine-audit.json",
+   "verdict": "not_referenced"
+  },
+  {
+   "group": "configs/v420/*.json",
+   "path": "configs/v420/rl-engine-pilot-kl.json",
+   "verdict": "not_referenced"
+  },
+  {
+   "group": "configs/v420/*.json",
+   "path": "configs/v420/rl-engine-pilot.json",
+   "verdict": "not_referenced"
+  },
+  {
+   "group": "configs/v420/*.json",
+   "path": "configs/v420/rl-engine-r3-aloudit.json",
+   "verdict": "not_referenced"
+  },
+  {
+   "group": "configs/v420/*.json",
+   "path": "configs/v420/rl-engine-r3-pilot.json",
+   "verdict": "referenced"
+  },
+  {
+   "group": "configs/v420/*.json",
+   "path": "configs/v420/rl-engine-r3-pilot1m.json",
+   "verdict": "not_referenced"
+  },
+  {
+   "group": "configs/v420/*.json",
+   "path": "configs/v420/rl-engine-r3-pilot200k.json",
+   "verdict": "referenced"
+  },
+  {
+   "group": "configs/v420/*.json",
+   "path": "configs/v420/rl-engine-r4-aloudit.json",
+   "verdict": "not_referenced"
+  },
+  {
+   "group": "configs/v420/*.json",
+   "path": "configs/v420/rl-engine-r4-pilot.json",
+   "verdict": "not_referenced"
+  },
+  {
+   "group": "tests/test_v420_*.py",
+   "path": "tests/test_v420_contracts.py",
+   "verdict": "not_referenced"
+  },
+  {
+   "group": "tests/test_v420_*.py",
+   "path": "tests/test_v420_counterfactual.py",
+   "verdict": "not_referenced"
+  },
+  {
+   "group": "tests/test_v420_*.py",
+   "path": "tests/test_v420_dagger.py",
+   "verdict": "not_referenced"
+  },
+  {
+   "group": "tests/test_v420_*.py",
+   "path": "tests/test_v420_dataset_2f.py",
+   "verdict": "not_referenced"
+  },
+  {
+   "group": "tests/test_v420_*.py",
+   "path": "tests/test_v420_eval.py",
+   "verdict": "not_referenced"
+  },
+  {
+   "group": "tests/test_v420_*.py",
+   "path": "tests/test_v420_eval_shoot.py",
+   "verdict": "not_referenced"
+  },
+  {
+   "group": "tests/test_v420_*.py",
+   "path": "tests/test_v420_rebuild.py",
+   "verdict": "not_referenced"
+  },
+  {
+   "group": "tests/test_v420_*.py",
+   "path": "tests/test_v420_replay_audit.py",
+   "verdict": "not_referenced"
+  },
+  {
+   "group": "tests/test_v420_*.py",
+   "path": "tests/test_v420_reslot.py",
+   "verdict": "not_referenced"
+  },
+  {
+   "group": "tests/test_v420_*.py",
+   "path": "tests/test_v420_rl.py",
+   "verdict": "not_referenced"
+  },
+  {
+   "group": "tests/test_v420_*.py",
+   "path": "tests/test_v420_setsup.py",
+   "verdict": "not_referenced"
+  },
+  {
+   "group": "tests/test_v420_*.py",
+   "path": "tests/test_v420_train.py",
+   "verdict": "not_referenced"
+  }
+ ],
+ "path_translation": {
+  "examples": [
+   {
+    "recorded": "/mnt/d/WorkShop/Touhou_RL/.tmp_v410_wp04_arms/b0_seed0_last.pt",
+    "resolved": ".tmp_v410_wp04_arms/b0_seed0_last.pt"
+   },
+   {
+    "recorded": "/mnt/d/WorkShop/Touhou_RL/.tmp_v410_wp05_train_beta05_20k/b0_s0_dagger_step20000.pt",
+    "resolved": ".tmp_v410_wp05_train_beta05_20k/b0_s0_dagger_step20000.pt"
+   },
+   {
+    "recorded": "/mnt/d/WorkShop/Touhou_RL/tools/rl/v410_student_eval.py",
+    "resolved": "tools/rl/v410_student_eval.py"
+   }
+  ],
+  "prefix": "/mnt/d/WorkShop/Touhou_RL/",
+  "replacement": "",
+  "translated_count": 4,
+  "untranslated_absolute_paths": [
+   "/root/Touhou_RL/third_party/th08-rl/build/rl_v3/th08-modern"
+  ],
+  "untranslated_note": "absolute paths outside /mnt/d/WorkShop/Touhou_RL name the WSL asset host (/root/...). They are not on this Windows checkout, so they resolve to 'missing' here; that is an expected host split, not a deleted asset."
+ },
+ "reference_crosscheck": [
+  {
+   "exists": true,
+   "expectation_kind": "pinned_expectation",
+   "expected_sha256": "6a104778f1c650b07c04a71013825c59a2a30cd3e88eced06f37c385e5fc4e05",
+   "id": "t00.local_json",
+   "locator": "artifacts.local_json.sha256",
+   "note": "the only v420 *config* byte-pin in the v4.2.0 evidence",
+   "observed_sha256": "6a104778f1c650b07c04a71013825c59a2a30cd3e88eced06f37c385e5fc4e05",
+   "path_translated": false,
+   "recorded_in": "Document/Update/Alpha/v4.2.0/evidence/T00/assets_verify.json",
+   "target_path": "configs/v420/local.json",
+   "target_path_resolved": "configs/v420/local.json",
+   "verdict": "verified",
+   "w00_scope": "v420_config"
+  },
+  {
+   "exists": true,
+   "expectation_kind": "pinned_expectation",
+   "expected_sha256": "77f9ed49408d596f957432d28a19491c271acee9fbdb20043b10fbfb0273b62e",
+   "id": "t00.t00_report",
+   "locator": "artifacts.t00_report.sha256",
+   "note": "self-consistency of the T00 report itself",
+   "observed_sha256": "77f9ed49408d596f957432d28a19491c271acee9fbdb20043b10fbfb0273b62e",
+   "path_translated": false,
+   "recorded_in": "Document/Update/Alpha/v4.2.0/evidence/T00/assets_verify.json",
+   "target_path": "Document/Update/Alpha/v4.2.0/evidence/T00/T00.md",
+   "target_path_resolved": "Document/Update/Alpha/v4.2.0/evidence/T00/T00.md",
+   "verdict": "verified",
+   "w00_scope": "evidence_self"
+  },
+  {
+   "exists": true,
+   "expectation_kind": "observed_not_expected",
+   "expected_sha256": "2db2caaf9089c1698cef9b6a682991a7594ebac47ae93244c3d9932591eddddc",
+   "id": "t00.object.evaluator",
+   "locator": "objects[path=tools/rl/v410_student_eval.py].sha256_actual",
+   "note": "T00 verdict: 'OK (computed, not registered)'",
+   "observed_sha256": "2db2caaf9089c1698cef9b6a682991a7594ebac47ae93244c3d9932591eddddc",
+   "path_translated": false,
+   "recorded_in": "Document/Update/Alpha/v4.2.0/evidence/T00/assets_verify.json",
+   "target_path": "tools/rl/v410_student_eval.py",
+   "target_path_resolved": "tools/rl/v410_student_eval.py",
+   "verdict": "verified",
+   "w00_scope": "evaluator"
+  },
+  {
+   "exists": true,
+   "expectation_kind": "observed_not_expected",
+   "expected_sha256": "f74199047c7c3103348fd9075bfd1cffdbe0dbadc9a5d6f06f10b2dec1f3aee2",
+   "id": "t00.object.v410_init",
+   "locator": "objects[path=touhou_rl/v410/__init__.py].sha256_actual",
+   "note": "T00 verdict: 'OK (computed, not registered)'",
+   "observed_sha256": "f74199047c7c3103348fd9075bfd1cffdbe0dbadc9a5d6f06f10b2dec1f3aee2",
+   "path_translated": false,
+   "recorded_in": "Document/Update/Alpha/v4.2.0/evidence/T00/assets_verify.json",
+   "target_path": "touhou_rl/v410/__init__.py",
+   "target_path_resolved": "touhou_rl/v410/__init__.py",
+   "verdict": "verified",
+   "w00_scope": "outside_v420"
+  },
+  {
+   "exists": true,
+   "expectation_kind": "observed_not_expected",
+   "expected_sha256": "22fe78b3d78a3aa92a06c0b0c02d6ad7cdefd66cb309ac50e6d4311cf1701bd2",
+   "id": "t00.object.asset_sync_sha256",
+   "locator": "objects[path=ASSET_SYNC.sha256].sha256_actual",
+   "note": "T00 verdict: 'OK (computed, not registered)'",
+   "observed_sha256": "0d08ae4eac5fc7c8102244ec7a3fe97e27d3c6b1ff3ec731d97372f39ecf1681",
+   "path_translated": false,
+   "recorded_in": "Document/Update/Alpha/v4.2.0/evidence/T00/assets_verify.json",
+   "target_path": "ASSET_SYNC.sha256",
+   "target_path_resolved": "ASSET_SYNC.sha256",
+   "verdict": "mismatch",
+   "w00_scope": "outside_v420"
+  },
+  {
+   "exists": true,
+   "expectation_kind": "observed_not_expected",
+   "expected_sha256": "340fb22ba252e2679c84c69e355c3e9fe4ae0cbef781f3d50edc849f184c1801",
+   "id": "t00.object.asset_sync_md",
+   "locator": "objects[path=ASSET_SYNC.md].sha256_actual",
+   "note": "T00 verdict: 'OK (computed, not registered)'",
+   "observed_sha256": "90fb60e855d30449145fa87fb977a7d93e344ec0607137af1a75bc7c7d9dce72",
+   "path_translated": false,
+   "recorded_in": "Document/Update/Alpha/v4.2.0/evidence/T00/assets_verify.json",
+   "target_path": "ASSET_SYNC.md",
+   "target_path_resolved": "ASSET_SYNC.md",
+   "verdict": "mismatch",
+   "w00_scope": "outside_v420"
+  },
+  {
+   "exists": true,
+   "expectation_kind": "pinned_expectation",
+   "expected_sha256": "3bc0ec4461701bebb2ffc551d61dffff77f15cd486125baf9db6eaafc741b3a6",
+   "id": "t01.checkpoint:B0",
+   "locator": "checks_by_object['checkpoint:B0'].sha256_expected",
+   "note": "v4.1.0 B0 student",
+   "observed_sha256": "3bc0ec4461701bebb2ffc551d61dffff77f15cd486125baf9db6eaafc741b3a6",
+   "path_translated": true,
+   "recorded_in": "Document/Update/Alpha/v4.2.0/evidence/T01/audit-assets.json",
+   "target_path": "/mnt/d/WorkShop/Touhou_RL/.tmp_v410_wp04_arms/b0_seed0_last.pt",
+   "target_path_resolved": ".tmp_v410_wp04_arms/b0_seed0_last.pt",
+   "verdict": "verified",
+   "w00_scope": "checkpoint"
+  },
+  {
+   "exists": true,
+   "expectation_kind": "pinned_expectation",
+   "expected_sha256": "15ae1fd5b9a6e0cbbddfd668bb342444bdb44db123b5f7e56abf3c5e7215bd95",
+   "id": "t01.checkpoint:20k",
+   "locator": "checks_by_object['checkpoint:20k'].sha256_expected",
+   "note": "v4.1.0 DAgger 20k student",
+   "observed_sha256": "15ae1fd5b9a6e0cbbddfd668bb342444bdb44db123b5f7e56abf3c5e7215bd95",
+   "path_translated": true,
+   "recorded_in": "Document/Update/Alpha/v4.2.0/evidence/T01/audit-assets.json",
+   "target_path": "/mnt/d/WorkShop/Touhou_RL/.tmp_v410_wp05_train_beta05_20k/b0_s0_dagger_step20000.pt",
+   "target_path_resolved": ".tmp_v410_wp05_train_beta05_20k/b0_s0_dagger_step20000.pt",
+   "verdict": "verified",
+   "w00_scope": "checkpoint"
+  },
+  {
+   "exists": true,
+   "expectation_kind": "pinned_expectation",
+   "expected_sha256": "2db2caaf9089c1698cef9b6a682991a7594ebac47ae93244c3d9932591eddddc",
+   "id": "t01.evaluator",
+   "locator": "checks_by_object['evaluator'].sha256_expected",
+   "note": "T01 pins the *v4.1.0* evaluator; no v420 evaluator digest is pinned",
+   "observed_sha256": "2db2caaf9089c1698cef9b6a682991a7594ebac47ae93244c3d9932591eddddc",
+   "path_translated": true,
+   "recorded_in": "Document/Update/Alpha/v4.2.0/evidence/T01/audit-assets.json",
+   "target_path": "/mnt/d/WorkShop/Touhou_RL/tools/rl/v410_student_eval.py",
+   "target_path_resolved": "tools/rl/v410_student_eval.py",
+   "verdict": "verified",
+   "w00_scope": "evaluator"
+  },
+  {
+   "citation_checks": [
+    {
+     "document": "Document/Update/Alpha/v4.3.0/evidence/W00/ASSET_LEDGER_CHECK.md",
+     "locator": "§4 引擎二进制身份（主代理在 WSL 侧实测）",
+     "missing": [],
+     "must_contain_present": true
+    },
+    {
+     "document": "Document/Update/Alpha/v4.2.0/evidence/T01/audit-assets.json",
+     "equals_wsl_measurement": true,
+     "locator": "checks_by_object['engine420'].sha256_expected",
+     "re_extracted": "691bfd77b7eca3361aa8bb7af0977556a70cc73a070b29a2447222ba7a568ef6"
+    }
+   ],
+   "citation_holds": true,
+   "exists": null,
+   "expectation_kind": "pinned_expectation",
+   "expected_sha256": "691bfd77b7eca3361aa8bb7af0977556a70cc73a070b29a2447222ba7a568ef6",
+   "id": "t01.engine420",
+   "locator": "checks_by_object['engine420'].sha256_expected",
+   "note": "engine binary, not source",
+   "observed_sha256": null,
+   "path_translated": false,
+   "recorded_in": "Document/Update/Alpha/v4.2.0/evidence/T01/audit-assets.json",
+   "target_path": "/root/Touhou_RL/third_party/th08-rl/build/rl_v3/th08-modern",
+   "target_path_resolved": "/root/Touhou_RL/third_party/th08-rl/build/rl_v3/th08-modern",
+   "verdict": "unverified_host_split",
+   "verdict_reason": "host_split",
+   "w00_scope": "outside_v420",
+   "windows_side_note": "no build/ tree exists under D:\\...\\third_party\\th08-rl (that path is .gitignore'd and holds only src/rlharness)",
+   "windows_side_observed": false,
+   "windows_side_observed_sha256": null,
+   "wsl_side_observed_sha256": "691bfd77b7eca3361aa8bb7af0977556a70cc73a070b29a2447222ba7a568ef6",
+   "wsl_side_verified_by": [
+    {
+     "also_states": "rl_laser/th08-modern 与游戏数据目录同样存在",
+     "command": "sha256sum /root/Touhou_RL/third_party/th08-rl/build/rl_v3/th08-modern",
+     "document": "Document/Update/Alpha/v4.3.0/evidence/W00/ASSET_LEDGER_CHECK.md",
+     "locator": "§4 引擎二进制身份（主代理在 WSL 侧实测）",
+     "must_contain": [
+      "sha256sum /root/Touhou_RL/third_party/th08-rl/build/rl_v3/th08-modern",
+      "691bfd77b7eca3361aa8bb7af0977556a70cc73a070b29a2447222ba7a568ef6"
+     ]
+    },
+    {
+     "document": "Document/Update/Alpha/v4.2.0/evidence/T01/audit-assets.json",
+     "locator": "checks_by_object['engine420'].sha256_expected",
+     "must_equal_expected": true
+    }
+   ]
+  },
+  {
+   "exists": true,
+   "expectation_kind": "referenced_no_sha",
+   "expected_sha256": null,
+   "id": "t01.local_config_reference",
+   "locator": "local_config.path",
+   "note": "T01 states this config was 'applied' but records no digest",
+   "observed_sha256": "6a104778f1c650b07c04a71013825c59a2a30cd3e88eced06f37c385e5fc4e05",
+   "path_translated": true,
+   "recorded_in": "Document/Update/Alpha/v4.2.0/evidence/T01/audit-assets.json",
+   "target_path": "/mnt/d/WorkShop/Touhou_RL/configs/v420/local.json",
+   "target_path_resolved": "configs/v420/local.json",
+   "verdict": "not_referenced",
+   "w00_scope": "v420_config"
+  },
+  {
+   "exists": true,
+   "expectation_kind": "pinned_expectation",
+   "expected_sha256": "e76141d979d631b974bf1f517048507da86f0526147a1c63eaf929950a9a84bb",
+   "id": "t02.raw.b0_dev3_rep1.json",
+   "locator": "line entry '<sha256>  <path>'",
+   "note": "T02 evaluator output, not v420 source",
+   "observed_sha256": "e76141d979d631b974bf1f517048507da86f0526147a1c63eaf929950a9a84bb",
+   "path_translated": false,
+   "recorded_in": "Document/Update/Alpha/v4.2.0/evidence/T02/RAW_SHA256.txt",
+   "target_path": "Document/Update/Alpha/v4.2.0/evidence/T02/b0_dev3_rep1.json",
+   "target_path_resolved": "Document/Update/Alpha/v4.2.0/evidence/T02/b0_dev3_rep1.json",
+   "verdict": "verified",
+   "w00_scope": "t02_artifact"
+  },
+  {
+   "exists": true,
+   "expectation_kind": "pinned_expectation",
+   "expected_sha256": "b1c29092fb6d503facf7b75173a7019637c537ab496be14a1e93dc37e6ea0c4f",
+   "id": "t02.raw.b0_dev3_rep2.json",
+   "locator": "line entry '<sha256>  <path>'",
+   "note": "T02 evaluator output, not v420 source",
+   "observed_sha256": "b1c29092fb6d503facf7b75173a7019637c537ab496be14a1e93dc37e6ea0c4f",
+   "path_translated": false,
+   "recorded_in": "Document/Update/Alpha/v4.2.0/evidence/T02/RAW_SHA256.txt",
+   "target_path": "Document/Update/Alpha/v4.2.0/evidence/T02/b0_dev3_rep2.json",
+   "target_path_resolved": "Document/Update/Alpha/v4.2.0/evidence/T02/b0_dev3_rep2.json",
+   "verdict": "verified",
+   "w00_scope": "t02_artifact"
+  },
+  {
+   "exists": true,
+   "expectation_kind": "pinned_expectation",
+   "expected_sha256": "8f12f76dc6c148679357816f697b544e2ef8dac9e1a939eb4eb5281031a751fa",
+   "id": "t02.raw.beta20k_dev3_rep1.json",
+   "locator": "line entry '<sha256>  <path>'",
+   "note": "T02 evaluator output, not v420 source",
+   "observed_sha256": "8f12f76dc6c148679357816f697b544e2ef8dac9e1a939eb4eb5281031a751fa",
+   "path_translated": false,
+   "recorded_in": "Document/Update/Alpha/v4.2.0/evidence/T02/RAW_SHA256.txt",
+   "target_path": "Document/Update/Alpha/v4.2.0/evidence/T02/beta20k_dev3_rep1.json",
+   "target_path_resolved": "Document/Update/Alpha/v4.2.0/evidence/T02/beta20k_dev3_rep1.json",
+   "verdict": "verified",
+   "w00_scope": "t02_artifact"
+  },
+  {
+   "exists": true,
+   "expectation_kind": "pinned_expectation",
+   "expected_sha256": "b190195b1d9552233997807319af6fa16325eb075c69781da398e4389ec14190",
+   "id": "t02.raw.beta20k_dev3_rep2.json",
+   "locator": "line entry '<sha256>  <path>'",
+   "note": "T02 evaluator output, not v420 source",
+   "observed_sha256": "b190195b1d9552233997807319af6fa16325eb075c69781da398e4389ec14190",
+   "path_translated": false,
+   "recorded_in": "Document/Update/Alpha/v4.2.0/evidence/T02/RAW_SHA256.txt",
+   "target_path": "Document/Update/Alpha/v4.2.0/evidence/T02/beta20k_dev3_rep2.json",
+   "target_path_resolved": "Document/Update/Alpha/v4.2.0/evidence/T02/beta20k_dev3_rep2.json",
+   "verdict": "verified",
+   "w00_scope": "t02_artifact"
+  },
+  {
+   "exists": true,
+   "expectation_kind": "pinned_expectation",
+   "expected_sha256": "73dc43d23538236e869d4b00ae061319f33fd537db9eedee660deb4acf6d6738",
+   "id": "t02.raw.legacy_reproduce.json",
+   "locator": "line entry '<sha256>  <path>'",
+   "note": "T02 evaluator output, not v420 source",
+   "observed_sha256": "73dc43d23538236e869d4b00ae061319f33fd537db9eedee660deb4acf6d6738",
+   "path_translated": false,
+   "recorded_in": "Document/Update/Alpha/v4.2.0/evidence/T02/RAW_SHA256.txt",
+   "target_path": "Document/Update/Alpha/v4.2.0/evidence/T02/legacy_reproduce.json",
+   "target_path_resolved": "Document/Update/Alpha/v4.2.0/evidence/T02/legacy_reproduce.json",
+   "verdict": "verified",
+   "w00_scope": "t02_artifact"
+  },
+  {
+   "exists": true,
+   "expectation_kind": "referenced_no_sha",
+   "expected_sha256": null,
+   "id": "t01md.configs/v420/audit-time.json",
+   "locator": "path mention in prose",
+   "note": "T01.md names the file but records no sha256 for it",
+   "observed_sha256": "658436d8edc2ba79a86225a2da7be8cdc2206435bb83553bb4bfafec10f585d1",
+   "path_translated": false,
+   "recorded_in": "Document/Update/Alpha/v4.2.0/evidence/T01/T01.md",
+   "target_path": "configs/v420/audit-time.json",
+   "target_path_resolved": "configs/v420/audit-time.json",
+   "verdict": "not_referenced",
+   "w00_scope": "v420_source_or_config"
+  },
+  {
+   "exists": true,
+   "expectation_kind": "referenced_no_sha",
+   "expected_sha256": null,
+   "id": "t01md.configs/v420/legacy-reproduce.json",
+   "locator": "path mention in prose",
+   "note": "T01.md names the file but records no sha256 for it",
+   "observed_sha256": "16a29f5972c30d9e024c8f1403c53519b5dcf12f4a043057819223e5247e3d46",
+   "path_translated": false,
+   "recorded_in": "Document/Update/Alpha/v4.2.0/evidence/T01/T01.md",
+   "target_path": "configs/v420/legacy-reproduce.json",
+   "target_path_resolved": "configs/v420/legacy-reproduce.json",
+   "verdict": "not_referenced",
+   "w00_scope": "v420_source_or_config"
+  },
+  {
+   "exists": true,
+   "expectation_kind": "referenced_no_sha",
+   "expected_sha256": null,
+   "id": "t01md.configs/v420/local.json",
+   "locator": "path mention in prose",
+   "note": "T01.md names the file but records no sha256 for it",
+   "observed_sha256": "6a104778f1c650b07c04a71013825c59a2a30cd3e88eced06f37c385e5fc4e05",
+   "path_translated": false,
+   "recorded_in": "Document/Update/Alpha/v4.2.0/evidence/T01/T01.md",
+   "target_path": "configs/v420/local.json",
+   "target_path_resolved": "configs/v420/local.json",
+   "verdict": "not_referenced",
+   "w00_scope": "v420_source_or_config"
+  },
+  {
+   "exists": true,
+   "expectation_kind": "referenced_no_sha",
+   "expected_sha256": null,
+   "id": "t01md.configs/v420/protocol.json",
+   "locator": "path mention in prose",
+   "note": "T01.md names the file but records no sha256 for it",
+   "observed_sha256": "ad34c1e92e8268b32d164576c46990be73ab0a6dcb32767dc187d3b2942c777e",
+   "path_translated": false,
+   "recorded_in": "Document/Update/Alpha/v4.2.0/evidence/T01/T01.md",
+   "target_path": "configs/v420/protocol.json",
+   "target_path_resolved": "configs/v420/protocol.json",
+   "verdict": "not_referenced",
+   "w00_scope": "v420_source_or_config"
+  },
+  {
+   "exists": true,
+   "expectation_kind": "referenced_no_sha",
+   "expected_sha256": null,
+   "id": "t01md.tools/rl/v420.py",
+   "locator": "path mention in prose",
+   "note": "T01.md names the file but records no sha256 for it",
+   "observed_sha256": "3f04779edfcfa5199337f3dadf50f15764c565d7828925c9b39c84b16a2bd7d8",
+   "path_translated": false,
+   "recorded_in": "Document/Update/Alpha/v4.2.0/evidence/T01/T01.md",
+   "target_path": "tools/rl/v420.py",
+   "target_path_resolved": "tools/rl/v420.py",
+   "verdict": "not_referenced",
+   "w00_scope": "v420_source_or_config"
+  },
+  {
+   "exists": true,
+   "expectation_kind": "referenced_no_sha",
+   "expected_sha256": null,
+   "id": "t01md.touhou_rl/v420/__init__.py",
+   "locator": "path mention in prose",
+   "note": "T01.md names the file but records no sha256 for it",
+   "observed_sha256": "e8d9e14344f8863471277bc063482700f40f942b32f7797700c64993b86f3d80",
+   "path_translated": false,
+   "recorded_in": "Document/Update/Alpha/v4.2.0/evidence/T01/T01.md",
+   "target_path": "touhou_rl/v420/__init__.py",
+   "target_path_resolved": "touhou_rl/v420/__init__.py",
+   "verdict": "not_referenced",
+   "w00_scope": "v420_source_or_config"
+  },
+  {
+   "exists": true,
+   "expectation_kind": "referenced_no_sha",
+   "expected_sha256": null,
+   "id": "t01md.touhou_rl/v420/contracts.py",
+   "locator": "path mention in prose",
+   "note": "T01.md names the file but records no sha256 for it",
+   "observed_sha256": "1357c69c32a74fda20553a3e6b290ca2102b7cc5c52e47e9fdc6eb9e08c946c1",
+   "path_translated": false,
+   "recorded_in": "Document/Update/Alpha/v4.2.0/evidence/T01/T01.md",
+   "target_path": "touhou_rl/v420/contracts.py",
+   "target_path_resolved": "touhou_rl/v420/contracts.py",
+   "verdict": "not_referenced",
+   "w00_scope": "v420_source_or_config"
+  },
+  {
+   "exists": true,
+   "expectation_kind": "referenced_no_sha",
+   "expected_sha256": null,
+   "id": "t01md.touhou_rl/v420/counterfactual.py",
+   "locator": "path mention in prose",
+   "note": "T01.md names the file but records no sha256 for it",
+   "observed_sha256": "c1f8cae4c5ff8d36fc7d0ea4a5a908bb6bbe83cbc0218474ab647786d38eb9d8",
+   "path_translated": false,
+   "recorded_in": "Document/Update/Alpha/v4.2.0/evidence/T01/T01.md",
+   "target_path": "touhou_rl/v420/counterfactual.py",
+   "target_path_resolved": "touhou_rl/v420/counterfactual.py",
+   "verdict": "not_referenced",
+   "w00_scope": "v420_source_or_config"
+  },
+  {
+   "exists": true,
+   "expectation_kind": "referenced_no_sha",
+   "expected_sha256": null,
+   "id": "t01md.touhou_rl/v420/eval.py",
+   "locator": "path mention in prose",
+   "note": "T01.md names the file but records no sha256 for it",
+   "observed_sha256": "fdb8e2e44a30a9fd90465950b373b6e4701a5b9dfac03c2b407ffe77e8c449a0",
+   "path_translated": false,
+   "recorded_in": "Document/Update/Alpha/v4.2.0/evidence/T01/T01.md",
+   "target_path": "touhou_rl/v420/eval.py",
+   "target_path_resolved": "touhou_rl/v420/eval.py",
+   "verdict": "not_referenced",
+   "w00_scope": "v420_source_or_config"
+  },
+  {
+   "exists": true,
+   "expectation_kind": "referenced_no_sha",
+   "expected_sha256": null,
+   "id": "t01md.touhou_rl/v420/replay_audit.py",
+   "locator": "path mention in prose",
+   "note": "T01.md names the file but records no sha256 for it",
+   "observed_sha256": "06555d4d4171eaf7ae487d4ce5e2783f0eedf147d1f39a3409353194869c8493",
+   "path_translated": false,
+   "recorded_in": "Document/Update/Alpha/v4.2.0/evidence/T01/T01.md",
+   "target_path": "touhou_rl/v420/replay_audit.py",
+   "target_path_resolved": "touhou_rl/v420/replay_audit.py",
+   "verdict": "not_referenced",
+   "w00_scope": "v420_source_or_config"
+  },
+  {
+   "exists": true,
+   "expectation_kind": "pinned_expectation",
+   "expected_sha256": "83f16c8a34090ae2994e51835624fb2e9252adc9e668a4b653ac0ba4d1f0673c",
+   "id": "cfg.rl-engine-advnorm-off.json.source_config_sha256[0]",
+   "locator": "advantage_norm_only.the_one_changed_variable.source_config_sha256",
+   "note": "a v420 config pinning the digest of the config it was derived from; this is the only byte-pin the v4.2.0 *configs* carry about other v420 configs",
+   "observed_sha256": "83f16c8a34090ae2994e51835624fb2e9252adc9e668a4b653ac0ba4d1f0673c",
+   "path_translated": false,
+   "recorded_in": "configs/v420/rl-engine-advnorm-off.json",
+   "target_path": "configs/v420/rl-engine-r3-pilot.json",
+   "target_path_resolved": "configs/v420/rl-engine-r3-pilot.json",
+   "verdict": "verified",
+   "w00_scope": "v420_config"
+  },
+  {
+   "exists": true,
+   "expectation_kind": "pinned_expectation",
+   "expected_sha256": "a341f0ad78ba469bd3cd31b923dc010facad0aac3d35d4a71211cd7b41679e26",
+   "id": "cfg.rl-engine-r3-pilot1m.json.source_config_sha256[0]",
+   "locator": "budget_only.the_one_changed_variable.source_config_sha256",
+   "note": "a v420 config pinning the digest of the config it was derived from; this is the only byte-pin the v4.2.0 *configs* carry about other v420 configs",
+   "observed_sha256": "a341f0ad78ba469bd3cd31b923dc010facad0aac3d35d4a71211cd7b41679e26",
+   "path_translated": false,
+   "recorded_in": "configs/v420/rl-engine-r3-pilot1m.json",
+   "target_path": "configs/v420/rl-engine-r3-pilot200k.json",
+   "target_path_resolved": "configs/v420/rl-engine-r3-pilot200k.json",
+   "verdict": "verified",
+   "w00_scope": "v420_config"
+  },
+  {
+   "exists": true,
+   "expectation_kind": "pinned_expectation",
+   "expected_sha256": "83f16c8a34090ae2994e51835624fb2e9252adc9e668a4b653ac0ba4d1f0673c",
+   "id": "cfg.rl-engine-r3-pilot200k.json.source_config_sha256[0]",
+   "locator": "budget_only.the_one_changed_variable.source_config_sha256",
+   "note": "a v420 config pinning the digest of the config it was derived from; this is the only byte-pin the v4.2.0 *configs* carry about other v420 configs",
+   "observed_sha256": "83f16c8a34090ae2994e51835624fb2e9252adc9e668a4b653ac0ba4d1f0673c",
+   "path_translated": false,
+   "recorded_in": "configs/v420/rl-engine-r3-pilot200k.json",
+   "target_path": "configs/v420/rl-engine-r3-pilot.json",
+   "target_path_resolved": "configs/v420/rl-engine-r3-pilot.json",
+   "verdict": "verified",
+   "w00_scope": "v420_config"
+  },
+  {
+   "exists": true,
+   "expectation_kind": "pinned_expectation",
+   "expected_sha256": "2db2caaf9089c1698cef9b6a682991a7594ebac47ae93244c3d9932591eddddc",
+   "id": "cfg.legacy-reproduce.evaluator_sha256",
+   "locator": "evaluator_sha256",
+   "note": "the v4.2.0 run config reusing the v4.1.0 evaluator verbatim",
+   "observed_sha256": "2db2caaf9089c1698cef9b6a682991a7594ebac47ae93244c3d9932591eddddc",
+   "path_translated": false,
+   "recorded_in": "configs/v420/legacy-reproduce.json",
+   "target_path": "tools/rl/v410_student_eval.py",
+   "target_path_resolved": "tools/rl/v410_student_eval.py",
+   "verdict": "verified",
+   "w00_scope": "evaluator"
+  }
+ ],
+ "schema": "v430-w00-source-identity/1",
+ "scope_statement": "pins the bytes of four v4.2.0 source groups, cross-checks every sha256 the v4.2.0 evidence recorded, and loads two checkpoints. A match is a byte statement: not a capability, not a test result and not G430-E0.",
+ "test_run": {
+  "runs": [
+   {
+    "collected": 471,
+    "errors": 0,
+    "failed": 0,
+    "failed_cases": [],
+    "junit": ".tmp_v430_w00_src_pytest/junit.xml",
+    "passed": 468,
+    "skipped": 3
+   }
+  ]
+ },
+ "tmp_v420_scripts": {
+  "action_counts": {
+   "already_archived_in_evidence_no_restore": 1,
+   "discard_shell_orchestration_command_is_inlined_in_report": 3,
+   "discard_unreferenced_one_shot": 50,
+   "preserve_as_provenance_only_logic_now_in_tracked_code": 4,
+   "restore_into_tools_rl_v420_needed_to_reproduce_reported_number": 2
+  },
+  "archived_script_count": 1,
+  "closure_added": [
+   ".tmp_v420_replay_probe.py"
+  ],
+  "directly_referenced": [
+   ".tmp_v420_action_mix.py",
+   ".tmp_v420_expected.py",
+   ".tmp_v420_hist_probe.py",
+   ".tmp_v420_mask_probe.py",
+   ".tmp_v420_release_probe.py",
+   ".tmp_v420_replay_all.sh",
+   ".tmp_v420_repro.sh",
+   ".tmp_v420_slot_probe.py",
+   ".tmp_v420_smoke_eval.sh"
+  ],
+  "scan_scope": "Document/Update/Alpha/v4.2.0/**/*.md|*.json|*.jsonl|*.txt (explicit recursive walk of that directory only; no repository-wide scan)",
+  "scanned_document_count": 149,
+  "script_count": 60,
+  "scripts": [
+   {
+    "archived_copy_in_v420_evidence": null,
+    "depends_on_tmp_v420": [],
+    "kind": "sh",
+    "path": ".tmp_v420_a1probe.sh",
+    "reachable_from_docs": false,
+    "referenced_count": 0,
+    "referenced_in_v420_docs": [],
+    "restore_action": "discard_unreferenced_one_shot",
+    "sha256": "060d54ee015d0c6de0957004ccc51ad7af00c0ebea3c54fd306541e1e93cf3ec",
+    "size_bytes": 421,
+    "superseded_by": null
+   },
+   {
+    "archived_copy_in_v420_evidence": null,
+    "depends_on_tmp_v420": [],
+    "kind": "sh",
+    "path": ".tmp_v420_accept.sh",
+    "reachable_from_docs": false,
+    "referenced_count": 0,
+    "referenced_in_v420_docs": [],
+    "restore_action": "discard_unreferenced_one_shot",
+    "sha256": "44628078fe8c9fbb99b96ed758935302c8a4d94535a4f25efb4ef3d454652f1b",
+    "size_bytes": 3811,
+    "superseded_by": null
+   },
+   {
+    "archived_copy_in_v420_evidence": null,
+    "depends_on_tmp_v420": [],
+    "kind": "sh",
+    "path": ".tmp_v420_accept2.sh",
+    "reachable_from_docs": false,
+    "referenced_count": 0,
+    "referenced_in_v420_docs": [],
+    "restore_action": "discard_unreferenced_one_shot",
+    "sha256": "ef1ab104776f31015a423f480f63e7a7884449b1dac8ebb8c19708fc5ee6fb19",
+    "size_bytes": 2645,
+    "superseded_by": null
+   },
+   {
+    "archived_copy_in_v420_evidence": null,
+    "depends_on_tmp_v420": [],
+    "kind": "py",
+    "path": ".tmp_v420_action_mix.py",
+    "reachable_from_docs": true,
+    "referenced_count": 1,
+    "referenced_in_v420_docs": [
+     "Document/Update/Alpha/v4.2.0/evidence/T04/ACTION_MIX.md"
+    ],
+    "restore_action": "restore_into_tools_rl_v420_needed_to_reproduce_reported_number",
+    "sha256": "f3b2f0359cbf51b40fdd14146e9209b5921bb8fe3e0c678e83c468537a6b7382",
+    "size_bytes": 1513,
+    "superseded_by": null
+   },
+   {
+    "archived_copy_in_v420_evidence": null,
+    "depends_on_tmp_v420": [],
+    "kind": "sh",
+    "path": ".tmp_v420_asset_check.sh",
+    "reachable_from_docs": false,
+    "referenced_count": 0,
+    "referenced_in_v420_docs": [],
+    "restore_action": "discard_unreferenced_one_shot",
+    "sha256": "3e6b9c2c4343e36de0afdb162ceec5cf74492d2eeb9c50da7d6de9b8279f0ee5",
+    "size_bytes": 630,
+    "superseded_by": null
+   },
+   {
+    "archived_copy_in_v420_evidence": null,
+    "depends_on_tmp_v420": [],
+    "kind": "sh",
+    "path": ".tmp_v420_cleanup.sh",
+    "reachable_from_docs": false,
+    "referenced_count": 0,
+    "referenced_in_v420_docs": [],
+    "restore_action": "discard_unreferenced_one_shot",
+    "sha256": "06dd7a7d8c622fc6389f245e4f8fbb01d5d7f35146afd637bdc35d809961dd01",
+    "size_bytes": 1460,
+    "superseded_by": null
+   },
+   {
+    "archived_copy_in_v420_evidence": null,
+    "depends_on_tmp_v420": [],
+    "kind": "sh",
+    "path": ".tmp_v420_cleanup2.sh",
+    "reachable_from_docs": false,
+    "referenced_count": 0,
+    "referenced_in_v420_docs": [],
+    "restore_action": "discard_unreferenced_one_shot",
+    "sha256": "dacaa05ee6a50ccc34e195a74262ef87739b6937d088d7df8853552738bd049a",
+    "size_bytes": 1607,
+    "superseded_by": null
+   },
+   {
+    "archived_copy_in_v420_evidence": null,
+    "depends_on_tmp_v420": [],
+    "kind": "sh",
+    "path": ".tmp_v420_cleanup3.sh",
+    "reachable_from_docs": false,
+    "referenced_count": 0,
+    "referenced_in_v420_docs": [],
+    "restore_action": "discard_unreferenced_one_shot",
+    "sha256": "d2cea12979c3fef5756b3f5926c4a96809413641c0f8df2b917164045fd054b6",
+    "size_bytes": 995,
+    "superseded_by": null
+   },
+   {
+    "archived_copy_in_v420_evidence": null,
+    "depends_on_tmp_v420": [],
+    "kind": "sh",
+    "path": ".tmp_v420_cleanup4.sh",
+    "reachable_from_docs": false,
+    "referenced_count": 0,
+    "referenced_in_v420_docs": [],
+    "restore_action": "discard_unreferenced_one_shot",
+    "sha256": "e1aa71b70eccba7d1f2e0dbe41e13270a319b94649b7539823af4c5c1804564c",
+    "size_bytes": 891,
+    "superseded_by": null
+   },
+   {
+    "archived_copy_in_v420_evidence": null,
+    "depends_on_tmp_v420": [],
+    "kind": "sh",
+    "path": ".tmp_v420_commit.sh",
+    "reachable_from_docs": false,
+    "referenced_count": 0,
+    "referenced_in_v420_docs": [],
+    "restore_action": "discard_unreferenced_one_shot",
+    "sha256": "a45184a6a343891b0166a9edffcfc91c4c48c8a07677689f44bccd4ddfa1c8cc",
+    "size_bytes": 1336,
+    "superseded_by": null
+   },
+   {
+    "archived_copy_in_v420_evidence": null,
+    "depends_on_tmp_v420": [],
+    "kind": "sh",
+    "path": ".tmp_v420_datadir.sh",
+    "reachable_from_docs": false,
+    "referenced_count": 0,
+    "referenced_in_v420_docs": [],
+    "restore_action": "discard_unreferenced_one_shot",
+    "sha256": "0f2fb88e480cdf507afbc8cb71bfbaea2e5bc00e341e64897039e8c2cb07b10c",
+    "size_bytes": 229,
+    "superseded_by": null
+   },
+   {
+    "archived_copy_in_v420_evidence": null,
+    "depends_on_tmp_v420": [],
+    "kind": "py",
+    "path": ".tmp_v420_eval_identity.py",
+    "reachable_from_docs": false,
+    "referenced_count": 0,
+    "referenced_in_v420_docs": [],
+    "restore_action": "discard_unreferenced_one_shot",
+    "sha256": "811a5e70b5dc0635cfd28e8d62be9c2063eaeab5cc5a12a52ce1f82ae1bc223f",
+    "size_bytes": 875,
+    "superseded_by": null
+   },
+   {
+    "archived_copy_in_v420_evidence": null,
+    "depends_on_tmp_v420": [],
+    "kind": "sh",
+    "path": ".tmp_v420_expcfg.sh",
+    "reachable_from_docs": false,
+    "referenced_count": 0,
+    "referenced_in_v420_docs": [],
+    "restore_action": "discard_unreferenced_one_shot",
+    "sha256": "719738c7109df54904d0dcce06f07944df398a3f28ec5366fb55af0734fd9769",
+    "size_bytes": 631,
+    "superseded_by": null
+   },
+   {
+    "archived_copy_in_v420_evidence": null,
+    "depends_on_tmp_v420": [],
+    "kind": "sh",
+    "path": ".tmp_v420_expcheck.sh",
+    "reachable_from_docs": false,
+    "referenced_count": 0,
+    "referenced_in_v420_docs": [],
+    "restore_action": "discard_unreferenced_one_shot",
+    "sha256": "673b12c14c267d8f8e20780581370a48040dca71f2fcf11a0eb148feed338022",
+    "size_bytes": 819,
+    "superseded_by": null
+   },
+   {
+    "archived_copy_in_v420_evidence": null,
+    "depends_on_tmp_v420": [],
+    "kind": "py",
+    "path": ".tmp_v420_expected.py",
+    "reachable_from_docs": true,
+    "referenced_count": 1,
+    "referenced_in_v420_docs": [
+     "Document/Update/Alpha/v4.2.0/evidence/PREFLIGHT/PREFLIGHT.md"
+    ],
+    "restore_action": "restore_into_tools_rl_v420_needed_to_reproduce_reported_number",
+    "sha256": "6cea35c04e7ed7717009157d71dffe0af9bc2ec0a327b950888c9d8ab6718e4b",
+    "size_bytes": 1107,
+    "superseded_by": null
+   },
+   {
+    "archived_copy_in_v420_evidence": null,
+    "depends_on_tmp_v420": [],
+    "kind": "sh",
+    "path": ".tmp_v420_explog.sh",
+    "reachable_from_docs": false,
+    "referenced_count": 0,
+    "referenced_in_v420_docs": [],
+    "restore_action": "discard_unreferenced_one_shot",
+    "sha256": "45b14b612e09748a078da9b5e4139b1a3e384c5397d0f32ae25c6062bc62a450",
+    "size_bytes": 552,
+    "superseded_by": null
+   },
+   {
+    "archived_copy_in_v420_evidence": null,
+    "depends_on_tmp_v420": [],
+    "kind": "sh",
+    "path": ".tmp_v420_expstate.sh",
+    "reachable_from_docs": false,
+    "referenced_count": 0,
+    "referenced_in_v420_docs": [],
+    "restore_action": "discard_unreferenced_one_shot",
+    "sha256": "0fc74f07d2cef6e9221d451636001e338c03106adca3bce231294d47d207f1d9",
+    "size_bytes": 862,
+    "superseded_by": null
+   },
+   {
+    "archived_copy_in_v420_evidence": null,
+    "depends_on_tmp_v420": [],
+    "kind": "sh",
+    "path": ".tmp_v420_final.sh",
+    "reachable_from_docs": false,
+    "referenced_count": 0,
+    "referenced_in_v420_docs": [],
+    "restore_action": "discard_unreferenced_one_shot",
+    "sha256": "951f634f29aaa24c4560b90057ee5973fffd06f3da8e7201c02fd04db8902862",
+    "size_bytes": 1695,
+    "superseded_by": null
+   },
+   {
+    "archived_copy_in_v420_evidence": null,
+    "depends_on_tmp_v420": [],
+    "kind": "sh",
+    "path": ".tmp_v420_final2.sh",
+    "reachable_from_docs": false,
+    "referenced_count": 0,
+    "referenced_in_v420_docs": [],
+    "restore_action": "discard_unreferenced_one_shot",
+    "sha256": "22de074e3013950b3e1dc7ec2b13c9dfe0dcf962a77674f1e0fe575123d79def",
+    "size_bytes": 351,
+    "superseded_by": null
+   },
+   {
+    "archived_copy_in_v420_evidence": null,
+    "depends_on_tmp_v420": [],
+    "kind": "sh",
+    "path": ".tmp_v420_final_check.sh",
+    "reachable_from_docs": false,
+    "referenced_count": 0,
+    "referenced_in_v420_docs": [],
+    "restore_action": "discard_unreferenced_one_shot",
+    "sha256": "f415d2a64e6803ba8dfde0f691b877fe441c2f93acb05a48571520f9721850fc",
+    "size_bytes": 1690,
+    "superseded_by": null
+   },
+   {
+    "archived_copy_in_v420_evidence": null,
+    "depends_on_tmp_v420": [],
+    "kind": "sh",
+    "path": ".tmp_v420_gate.sh",
+    "reachable_from_docs": false,
+    "referenced_count": 0,
+    "referenced_in_v420_docs": [],
+    "restore_action": "discard_unreferenced_one_shot",
+    "sha256": "3184122f1ac6347af88537500af1fd98a7d7c869af035b7e65d76c3cd9919930",
+    "size_bytes": 1102,
+    "superseded_by": null
+   },
+   {
+    "archived_copy_in_v420_evidence": null,
+    "depends_on_tmp_v420": [],
+    "kind": "py",
+    "path": ".tmp_v420_hist_dev20.py",
+    "reachable_from_docs": false,
+    "referenced_count": 0,
+    "referenced_in_v420_docs": [],
+    "restore_action": "discard_unreferenced_one_shot",
+    "sha256": "78cc12e7a97d98d812eb59a501884cf0c8e231a8e8afd0fd9cfa5bc7d35bb759",
+    "size_bytes": 861,
+    "superseded_by": null
+   },
+   {
+    "archived_copy_in_v420_evidence": null,
+    "depends_on_tmp_v420": [],
+    "kind": "py",
+    "path": ".tmp_v420_hist_probe.py",
+    "reachable_from_docs": true,
+    "referenced_count": 2,
+    "referenced_in_v420_docs": [
+     "Document/Update/Alpha/v4.2.0/evidence/PREFLIGHT/PREFLIGHT.md",
+     "Document/Update/Alpha/v4.2.0/experiments/T01-contract-spec.md"
+    ],
+    "restore_action": "preserve_as_provenance_only_logic_now_in_tracked_code",
+    "sha256": "81820648ee00f1dc51c33f5915457ad40e08bcb38437042a2b9a8ec89796329f",
+    "size_bytes": 2341,
+    "superseded_by": "touhou_rl/v420/replay_audit.py::audit_legacy_shard (act_hist leg)"
+   },
+   {
+    "archived_copy_in_v420_evidence": null,
+    "depends_on_tmp_v420": [],
+    "kind": "py",
+    "path": ".tmp_v420_inspect.py",
+    "reachable_from_docs": false,
+    "referenced_count": 0,
+    "referenced_in_v420_docs": [],
+    "restore_action": "discard_unreferenced_one_shot",
+    "sha256": "2cf3a3cac62b266489d5ed91f3c2e8769be26717ae82f915499a5efee47ec6b4",
+    "size_bytes": 528,
+    "superseded_by": null
+   },
+   {
+    "archived_copy_in_v420_evidence": null,
+    "depends_on_tmp_v420": [],
+    "kind": "sh",
+    "path": ".tmp_v420_kill1m.sh",
+    "reachable_from_docs": false,
+    "referenced_count": 0,
+    "referenced_in_v420_docs": [],
+    "restore_action": "discard_unreferenced_one_shot",
+    "sha256": "0b94acfe73104b7aecf213b78551dbb0c7a435eed88547e9bcc5e2f39cb01c0f",
+    "size_bytes": 646,
+    "superseded_by": null
+   },
+   {
+    "archived_copy_in_v420_evidence": null,
+    "depends_on_tmp_v420": [],
+    "kind": "py",
+    "path": ".tmp_v420_mask_probe.py",
+    "reachable_from_docs": true,
+    "referenced_count": 2,
+    "referenced_in_v420_docs": [
+     "Document/Update/Alpha/v4.2.0/evidence/PREFLIGHT/PREFLIGHT.md",
+     "Document/Update/Alpha/v4.2.0/experiments/T01-contract-spec.md"
+    ],
+    "restore_action": "preserve_as_provenance_only_logic_now_in_tracked_code",
+    "sha256": "262fe55f7c8bd30816a7eae9b50293351b5d2d64fac0c1bb5510778eb11a738d",
+    "size_bytes": 1164,
+    "superseded_by": "touhou_rl/v420/replay_audit.py::audit_legacy_shard (slot-1 mask leg)"
+   },
+   {
+    "archived_copy_in_v420_evidence": null,
+    "depends_on_tmp_v420": [],
+    "kind": "sh",
+    "path": ".tmp_v420_mtimes.sh",
+    "reachable_from_docs": false,
+    "referenced_count": 0,
+    "referenced_in_v420_docs": [],
+    "restore_action": "discard_unreferenced_one_shot",
+    "sha256": "dd926441109f9c95ac04c72dcea81516a21990254b056d7b9b825143aacb1755",
+    "size_bytes": 639,
+    "superseded_by": null
+   },
+   {
+    "archived_copy_in_v420_evidence": null,
+    "depends_on_tmp_v420": [],
+    "kind": "sh",
+    "path": ".tmp_v420_postreboot.sh",
+    "reachable_from_docs": false,
+    "referenced_count": 0,
+    "referenced_in_v420_docs": [],
+    "restore_action": "discard_unreferenced_one_shot",
+    "sha256": "f56fb50a0e3b0a6d2398802a0a1520ad71928e279a49b70a2ce91be2e5afe969",
+    "size_bytes": 948,
+    "superseded_by": null
+   },
+   {
+    "archived_copy_in_v420_evidence": null,
+    "depends_on_tmp_v420": [],
+    "kind": "sh",
+    "path": ".tmp_v420_powercheck.sh",
+    "reachable_from_docs": false,
+    "referenced_count": 0,
+    "referenced_in_v420_docs": [],
+    "restore_action": "discard_unreferenced_one_shot",
+    "sha256": "e17d5a9233d2351a1f024f47a23e0706afc8e6382018fa83602c2bc0cf1d7cc3",
+    "size_bytes": 808,
+    "superseded_by": null
+   },
+   {
+    "archived_copy_in_v420_evidence": null,
+    "depends_on_tmp_v420": [],
+    "kind": "sh",
+    "path": ".tmp_v420_probe.sh",
+    "reachable_from_docs": false,
+    "referenced_count": 0,
+    "referenced_in_v420_docs": [],
+    "restore_action": "discard_unreferenced_one_shot",
+    "sha256": "5254cae5540b06125b9ec05716a8c45297a4747e8459b903680d22486bf9f2ea",
+    "size_bytes": 767,
+    "superseded_by": null
+   },
+   {
+    "archived_copy_in_v420_evidence": null,
+    "depends_on_tmp_v420": [],
+    "kind": "sh",
+    "path": ".tmp_v420_probe2.sh",
+    "reachable_from_docs": false,
+    "referenced_count": 0,
+    "referenced_in_v420_docs": [],
+    "restore_action": "discard_unreferenced_one_shot",
+    "sha256": "77f60c4504db8222961cc8254f881ed2cc7e8a5f167c30349fd69848627862a5",
+    "size_bytes": 540,
+    "superseded_by": null
+   },
+   {
+    "archived_copy_in_v420_evidence": null,
+    "depends_on_tmp_v420": [],
+    "kind": "sh",
+    "path": ".tmp_v420_proxy.sh",
+    "reachable_from_docs": false,
+    "referenced_count": 0,
+    "referenced_in_v420_docs": [],
+    "restore_action": "discard_unreferenced_one_shot",
+    "sha256": "21a491c614afad585e52e4aa1e5c239e1ca2a1d8d06a6d3a2b3dd59d23754c96",
+    "size_bytes": 641,
+    "superseded_by": null
+   },
+   {
+    "archived_copy_in_v420_evidence": null,
+    "depends_on_tmp_v420": [],
+    "kind": "sh",
+    "path": ".tmp_v420_proxy2.sh",
+    "reachable_from_docs": false,
+    "referenced_count": 0,
+    "referenced_in_v420_docs": [],
+    "restore_action": "discard_unreferenced_one_shot",
+    "sha256": "b4e89df2a50f51c1c514c004593790f29647946fa86c94543ad3f720caa1860f",
+    "size_bytes": 437,
+    "superseded_by": null
+   },
+   {
+    "archived_copy_in_v420_evidence": null,
+    "depends_on_tmp_v420": [],
+    "kind": "sh",
+    "path": ".tmp_v420_ps.sh",
+    "reachable_from_docs": false,
+    "referenced_count": 0,
+    "referenced_in_v420_docs": [],
+    "restore_action": "discard_unreferenced_one_shot",
+    "sha256": "b247c3bb52ce98d552d6eeeea9d4501a823af50993fa369cb91b1a3cc02f5bce",
+    "size_bytes": 407,
+    "superseded_by": null
+   },
+   {
+    "archived_copy_in_v420_evidence": null,
+    "depends_on_tmp_v420": [],
+    "kind": "sh",
+    "path": ".tmp_v420_ps2.sh",
+    "reachable_from_docs": false,
+    "referenced_count": 0,
+    "referenced_in_v420_docs": [],
+    "restore_action": "discard_unreferenced_one_shot",
+    "sha256": "ab0759caa6c0d4ee07b336782cb033a3cd0b0bba2ff8b7ade0526aa3cb7a397c",
+    "size_bytes": 284,
+    "superseded_by": null
+   },
+   {
+    "archived_copy_in_v420_evidence": null,
+    "depends_on_tmp_v420": [],
+    "kind": "sh",
+    "path": ".tmp_v420_push.sh",
+    "reachable_from_docs": false,
+    "referenced_count": 0,
+    "referenced_in_v420_docs": [],
+    "restore_action": "discard_unreferenced_one_shot",
+    "sha256": "47eb9f4db3a8eaf255531b6e273fa8fa8f6df12c1f74bd054723e7e0f708968e",
+    "size_bytes": 548,
+    "superseded_by": null
+   },
+   {
+    "archived_copy_in_v420_evidence": null,
+    "depends_on_tmp_v420": [],
+    "kind": "sh",
+    "path": ".tmp_v420_push2.sh",
+    "reachable_from_docs": false,
+    "referenced_count": 0,
+    "referenced_in_v420_docs": [],
+    "restore_action": "discard_unreferenced_one_shot",
+    "sha256": "0de8b02eeaf714bbd48f1b3dc452d89bdda9c14bdea29fca7031bfc417cc4c3e",
+    "size_bytes": 594,
+    "superseded_by": null
+   },
+   {
+    "archived_copy_in_v420_evidence": null,
+    "depends_on_tmp_v420": [],
+    "kind": "py",
+    "path": ".tmp_v420_read_smoke.py",
+    "reachable_from_docs": false,
+    "referenced_count": 0,
+    "referenced_in_v420_docs": [],
+    "restore_action": "discard_unreferenced_one_shot",
+    "sha256": "d5af2333a54a2680a5e0d26eddcd6a02d4da8f5708b2592a1afefe2114a43c4b",
+    "size_bytes": 631,
+    "superseded_by": null
+   },
+   {
+    "archived_copy_in_v420_evidence": null,
+    "depends_on_tmp_v420": [],
+    "kind": "py",
+    "path": ".tmp_v420_read_window.py",
+    "reachable_from_docs": false,
+    "referenced_count": 0,
+    "referenced_in_v420_docs": [],
+    "restore_action": "discard_unreferenced_one_shot",
+    "sha256": "0b7be3cfd0c3126baa2530d676d64905b4d93d102b5b067549b64779948cb07a",
+    "size_bytes": 532,
+    "superseded_by": null
+   },
+   {
+    "archived_copy_in_v420_evidence": null,
+    "depends_on_tmp_v420": [],
+    "kind": "py",
+    "path": ".tmp_v420_release_probe.py",
+    "reachable_from_docs": true,
+    "referenced_count": 2,
+    "referenced_in_v420_docs": [
+     "Document/Update/Alpha/v4.2.0/evidence/PREFLIGHT/PREFLIGHT.md",
+     "Document/Update/Alpha/v4.2.0/experiments/T01-contract-spec.md"
+    ],
+    "restore_action": "preserve_as_provenance_only_logic_now_in_tracked_code",
+    "sha256": "8239b6773e5dfec0908bd72aff6c7d0f7ecefa822452b3def09dbe9789de391b",
+    "size_bytes": 1943,
+    "superseded_by": "touhou_rl/v420/replay_audit.py::audit_legacy_shard (slot1_tail_release leg)"
+   },
+   {
+    "archived_copy_in_v420_evidence": null,
+    "depends_on_tmp_v420": [
+     ".tmp_v420_replay_probe.py"
+    ],
+    "kind": "sh",
+    "path": ".tmp_v420_replay_all.sh",
+    "reachable_from_docs": true,
+    "referenced_count": 2,
+    "referenced_in_v420_docs": [
+     "Document/Update/Alpha/v4.2.0/evidence/PREFLIGHT/PREFLIGHT.md",
+     "Document/Update/Alpha/v4.2.0/evidence/PREFLIGHT/PREFLIGHT_REPLAY.md"
+    ],
+    "restore_action": "discard_shell_orchestration_command_is_inlined_in_report",
+    "sha256": "0512604e79a5974880c2d78084226d87abaed8432fa18d610a2ee8fbc7bc9df3",
+    "size_bytes": 1288,
+    "superseded_by": null
+   },
+   {
+    "archived_copy_in_v420_evidence": "Document/Update/Alpha/v4.2.0/evidence/PREFLIGHT/replay/replay_probe.py",
+    "depends_on_tmp_v420": [],
+    "kind": "py",
+    "path": ".tmp_v420_replay_probe.py",
+    "reachable_from_docs": true,
+    "referenced_count": 0,
+    "referenced_in_v420_docs": [],
+    "restore_action": "already_archived_in_evidence_no_restore",
+    "sha256": "44a218927794000900ad9b16c9c67408648684d7ba236705493b5fd3c88286af",
+    "size_bytes": 4945,
+    "superseded_by": null
+   },
+   {
+    "archived_copy_in_v420_evidence": null,
+    "depends_on_tmp_v420": [
+     ".tmp_v420_replay_probe.py"
+    ],
+    "kind": "sh",
+    "path": ".tmp_v420_replay_run.sh",
+    "reachable_from_docs": false,
+    "referenced_count": 0,
+    "referenced_in_v420_docs": [],
+    "restore_action": "discard_unreferenced_one_shot",
+    "sha256": "0e6b650a43e4c30f68452d1cbdc12465cc77affe8e2a1f620017cf2a79e8598d",
+    "size_bytes": 588,
+    "superseded_by": null
+   },
+   {
+    "archived_copy_in_v420_evidence": null,
+    "depends_on_tmp_v420": [],
+    "kind": "sh",
+    "path": ".tmp_v420_repro.sh",
+    "reachable_from_docs": true,
+    "referenced_count": 1,
+    "referenced_in_v420_docs": [
+     "Document/Update/Alpha/v4.2.0/evidence/PREFLIGHT/PREFLIGHT.md"
+    ],
+    "restore_action": "discard_shell_orchestration_command_is_inlined_in_report",
+    "sha256": "c1229e262841b5580fb587264e96d003f9f0b3bde1f89f6fd298bbd814af2865",
+    "size_bytes": 2352,
+    "superseded_by": null
+   },
+   {
+    "archived_copy_in_v420_evidence": null,
+    "depends_on_tmp_v420": [],
+    "kind": "py",
+    "path": ".tmp_v420_s1n_agg.py",
+    "reachable_from_docs": false,
+    "referenced_count": 0,
+    "referenced_in_v420_docs": [],
+    "restore_action": "discard_unreferenced_one_shot",
+    "sha256": "37c3589f2796e2283900312d030d6dd0077d2ed67767912a73fddb7442365479",
+    "size_bytes": 953,
+    "superseded_by": null
+   },
+   {
+    "archived_copy_in_v420_evidence": null,
+    "depends_on_tmp_v420": [],
+    "kind": "sh",
+    "path": ".tmp_v420_sha_check.sh",
+    "reachable_from_docs": false,
+    "referenced_count": 0,
+    "referenced_in_v420_docs": [],
+    "restore_action": "discard_unreferenced_one_shot",
+    "sha256": "a3f42c5f77ae2b9ee6740504d30f21b84c89c5b9a43218f75328c05482ff54a7",
+    "size_bytes": 154,
+    "superseded_by": null
+   },
+   {
+    "archived_copy_in_v420_evidence": null,
+    "depends_on_tmp_v420": [],
+    "kind": "py",
+    "path": ".tmp_v420_shard_engine.py",
+    "reachable_from_docs": false,
+    "referenced_count": 0,
+    "referenced_in_v420_docs": [],
+    "restore_action": "discard_unreferenced_one_shot",
+    "sha256": "3650485b1a58a501d95f8c930d5d8648e128945e2378b72454bbbf6ef73275da",
+    "size_bytes": 724,
+    "superseded_by": null
+   },
+   {
+    "archived_copy_in_v420_evidence": null,
+    "depends_on_tmp_v420": [],
+    "kind": "sh",
+    "path": ".tmp_v420_shist.sh",
+    "reachable_from_docs": false,
+    "referenced_count": 0,
+    "referenced_in_v420_docs": [],
+    "restore_action": "discard_unreferenced_one_shot",
+    "sha256": "268482d1c5bea11caf29c2c37bd8da4c7daffdfc3f2560b79b574378700a41c4",
+    "size_bytes": 908,
+    "superseded_by": null
+   },
+   {
+    "archived_copy_in_v420_evidence": null,
+    "depends_on_tmp_v420": [],
+    "kind": "py",
+    "path": ".tmp_v420_slot_probe.py",
+    "reachable_from_docs": true,
+    "referenced_count": 2,
+    "referenced_in_v420_docs": [
+     "Document/Update/Alpha/v4.2.0/evidence/PREFLIGHT/PREFLIGHT.md",
+     "Document/Update/Alpha/v4.2.0/experiments/T01-contract-spec.md"
+    ],
+    "restore_action": "preserve_as_provenance_only_logic_now_in_tracked_code",
+    "sha256": "ceff33d89616482bd91ae5dbc81fd91b47413087198d4339c1b60a68609f8427",
+    "size_bytes": 3059,
+    "superseded_by": "touhou_rl/v420/replay_audit.py::audit_legacy_shard (hash chain leg, frames-per-decision leg)"
+   },
+   {
+    "archived_copy_in_v420_evidence": null,
+    "depends_on_tmp_v420": [],
+    "kind": "sh",
+    "path": ".tmp_v420_smoke_eval.sh",
+    "reachable_from_docs": true,
+    "referenced_count": 1,
+    "referenced_in_v420_docs": [
+     "Document/Update/Alpha/v4.2.0/evidence/PREFLIGHT/PREFLIGHT.md"
+    ],
+    "restore_action": "discard_shell_orchestration_command_is_inlined_in_report",
+    "sha256": "0fee7995632b8534bb1b9804b977e3793db4bf47b6202d76975a6e8fa3732d90",
+    "size_bytes": 1059,
+    "superseded_by": null
+   },
+   {
+    "archived_copy_in_v420_evidence": null,
+    "depends_on_tmp_v420": [],
+    "kind": "sh",
+    "path": ".tmp_v420_stage.sh",
+    "reachable_from_docs": false,
+    "referenced_count": 0,
+    "referenced_in_v420_docs": [],
+    "restore_action": "discard_unreferenced_one_shot",
+    "sha256": "722df413798421ba4ca0d595fd7f720f006198673c85466fc94b2545eb1f067d",
+    "size_bytes": 805,
+    "superseded_by": null
+   },
+   {
+    "archived_copy_in_v420_evidence": null,
+    "depends_on_tmp_v420": [],
+    "kind": "sh",
+    "path": ".tmp_v420_stage_check.sh",
+    "reachable_from_docs": false,
+    "referenced_count": 0,
+    "referenced_in_v420_docs": [],
+    "restore_action": "discard_unreferenced_one_shot",
+    "sha256": "37fe90289937041cbecd6659a6461d8df64aa36e6f6c221ed31c46b243f62117",
+    "size_bytes": 548,
+    "superseded_by": null
+   },
+   {
+    "archived_copy_in_v420_evidence": null,
+    "depends_on_tmp_v420": [],
+    "kind": "sh",
+    "path": ".tmp_v420_status.sh",
+    "reachable_from_docs": false,
+    "referenced_count": 0,
+    "referenced_in_v420_docs": [],
+    "restore_action": "discard_unreferenced_one_shot",
+    "sha256": "eea7447b0373c59e99b02bbd3804d1148d767a56fa4f755fab26045eb9f0d855",
+    "size_bytes": 557,
+    "superseded_by": null
+   },
+   {
+    "archived_copy_in_v420_evidence": null,
+    "depends_on_tmp_v420": [],
+    "kind": "py",
+    "path": ".tmp_v420_t02_check.py",
+    "reachable_from_docs": false,
+    "referenced_count": 0,
+    "referenced_in_v420_docs": [],
+    "restore_action": "discard_unreferenced_one_shot",
+    "sha256": "52c3d8ba21db7e8de972f9e90e868cedd05228cfe5f78e9247732330d3163a41",
+    "size_bytes": 1542,
+    "superseded_by": null
+   },
+   {
+    "archived_copy_in_v420_evidence": null,
+    "depends_on_tmp_v420": [],
+    "kind": "sh",
+    "path": ".tmp_v420_t02c2.sh",
+    "reachable_from_docs": false,
+    "referenced_count": 0,
+    "referenced_in_v420_docs": [],
+    "restore_action": "discard_unreferenced_one_shot",
+    "sha256": "9624084a0ec81c6ddcb57a47ea1c61a39545d86e78a9df7d22e504234101da37",
+    "size_bytes": 1287,
+    "superseded_by": null
+   },
+   {
+    "archived_copy_in_v420_evidence": null,
+    "depends_on_tmp_v420": [],
+    "kind": "py",
+    "path": ".tmp_v420_t02c_check.py",
+    "reachable_from_docs": false,
+    "referenced_count": 0,
+    "referenced_in_v420_docs": [],
+    "restore_action": "discard_unreferenced_one_shot",
+    "sha256": "7d2d0553a1fe3f3acefc133f6ee638f26bc6f33902ba24d1124e4ea353de48e1",
+    "size_bytes": 2483,
+    "superseded_by": null
+   },
+   {
+    "archived_copy_in_v420_evidence": null,
+    "depends_on_tmp_v420": [],
+    "kind": "py",
+    "path": ".tmp_v420_t02c_check2.py",
+    "reachable_from_docs": false,
+    "referenced_count": 0,
+    "referenced_in_v420_docs": [],
+    "restore_action": "discard_unreferenced_one_shot",
+    "sha256": "1cf82787cbabe423847241e45ad21a155dfa6d84ae9ba177392cee0797bdc334",
+    "size_bytes": 1603,
+    "superseded_by": null
+   },
+   {
+    "archived_copy_in_v420_evidence": null,
+    "depends_on_tmp_v420": [],
+    "kind": "sh",
+    "path": ".tmp_v420_t02c_probe.sh",
+    "reachable_from_docs": false,
+    "referenced_count": 0,
+    "referenced_in_v420_docs": [],
+    "restore_action": "discard_unreferenced_one_shot",
+    "sha256": "029cb715964eec8a04af589914be58296018ac867e6401ac209c00579ae208ad",
+    "size_bytes": 1022,
+    "superseded_by": null
+   },
+   {
+    "archived_copy_in_v420_evidence": null,
+    "depends_on_tmp_v420": [],
+    "kind": "py",
+    "path": ".tmp_v420_t03_check.py",
+    "reachable_from_docs": false,
+    "referenced_count": 0,
+    "referenced_in_v420_docs": [],
+    "restore_action": "discard_unreferenced_one_shot",
+    "sha256": "e45a4f723e294958ddaeb5e697389bc0cc2154589cf3026e684b0a1a172914bb",
+    "size_bytes": 1533,
+    "superseded_by": null
+   },
+   {
+    "archived_copy_in_v420_evidence": null,
+    "depends_on_tmp_v420": [],
+    "kind": "sh",
+    "path": ".tmp_v420_who.sh",
+    "reachable_from_docs": false,
+    "referenced_count": 0,
+    "referenced_in_v420_docs": [],
+    "restore_action": "discard_unreferenced_one_shot",
+    "sha256": "4bcb273e45b0bf590d2685cd0f9c0be00b29f773f2526b689607c484359f8e28",
+    "size_bytes": 479,
+    "superseded_by": null
+   }
+  ],
+  "transitive_closure": [
+   ".tmp_v420_action_mix.py",
+   ".tmp_v420_expected.py",
+   ".tmp_v420_hist_probe.py",
+   ".tmp_v420_mask_probe.py",
+   ".tmp_v420_release_probe.py",
+   ".tmp_v420_replay_all.sh",
+   ".tmp_v420_repro.sh",
+   ".tmp_v420_slot_probe.py",
+   ".tmp_v420_smoke_eval.sh",
+   ".tmp_v420_replay_probe.py"
+  ]
+ },
+ "totals": {
+  "file_count": 54,
+  "manifest_note": "sha256 over the sorted '<sha256>  <path>' lines of every file in the four groups",
+  "manifest_sha256": "d5f2c4a31461502b88aaf4990cd9b20f2eb5e153655668fe49892c014256f509",
+  "total_bytes": 2290051
+ },
+ "work_package": "v4.3.0 W00 (source identity and reproducibility half)"
+}

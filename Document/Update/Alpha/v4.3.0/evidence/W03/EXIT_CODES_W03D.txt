@@ -1,0 +1,63 @@
+W03D — exit codes and pytest statistics
+=======================================
+Slice: the actor policy candidate only — observation encoder (three spatial CNN
+       streams + 65-dim history projection) + GRU(256) + four linear action heads.
+       No critic, no auxiliary head, no optimiser, no rollout, no training.
+Host: Windows, repo D:\WorkShop\Touhou_RL
+Python 3.12.10 / pytest 9.1.1 / torch 2.14.1+cu132
+Run (UTC): 2026-11-15T03:48:25Z
+
+Command 1
+---------
+$env:PYTHONPATH='D:\WorkShop\Touhou_RL'
+python -m compileall -q touhou_rl/v430/models
+exit code: 0
+output: (none — compileall -q prints nothing on success)
+
+Command 2
+---------
+$env:PYTHONPATH='D:\WorkShop\Touhou_RL'
+python -m pytest -p no:cacheprovider --basetemp .tmp_v430_pytest_w03c -q tests/test_v430_models.py
+exit code: 0
+output tail:
+
+....................                                                     [100%]
+20 passed in 1.97s
+
+interpretation: 20 passed, 0 failed, 0 skipped, 0 errors, 0 warnings.
+  20 items = 14 test functions, one of which is parametrised 7 ways
+  (test_privileged_input_is_refused over stage_id, seed, engine_frame,
+  teacher_action, resource_truth, player_center, enemy_table), i.e. 13 + 7 = 20.
+
+Command 3 (regression: the earlier W01/W02/W03 slices must not be broken)
+------------------------------------------------------------------------
+$env:PYTHONPATH='D:\WorkShop\Touhou_RL'
+python -m pytest -p no:cacheprovider --basetemp .tmp_v430_pytest_w03c_reg -q tests/test_v430_contracts.py tests/test_v430_observation.py tests/test_v430_sequence.py
+exit code: 0
+output tail:
+
+........................................................................ [ 33%]
+........................................................................ [ 67%]
+......................................................................   [100%]
+214 passed in 1.10s
+
+interpretation: 214 passed, 0 failed, 0 skipped, 0 errors. Nothing in
+contracts/observation/sequence changed behaviour (no file in those modules was
+edited by this slice).
+
+Values printed by the acceptance run (seeded fixture, torch.manual_seed(0))
+--------------------------------------------------------------------------
+ACTUAL ACTOR PARAMETER TOTAL: 2,726,671 (2.726671 M)
+  streams: global=212,000 play=1,435,360 hud=587,712
+  history=2,112 fusion=90,880 gru=394,752 heads=3,855
+SUM OVER 72 JOINT PROBABILITIES = 0.9999998848553472
+  (|sum - 1| = 1.151e-7, inside the 1e-6 tolerance; stable across reruns)
+
+Note on what this proves
+------------------------
+All three commands cover syntax plus synthetic unit tests of one nn.Module and
+its arithmetic. They are NOT evidence of game capability: no engine was started,
+no game data, checkpoint, rollout or training was read or produced, and the test
+observations are seeded noise encoded by observation.encode_o2 (so the shapes are
+the frozen O2 shapes and the pixels mean nothing). compileall exit 0 only means
+the files parse.

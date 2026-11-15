@@ -1,0 +1,494 @@
+{
+ "schema": "v430-holdout-families/1",
+ "frozen_at": "2026-11-15T11:34:26+08:00",
+ "timezone": "Asia/Shanghai",
+ "work_package": "v4.3.0 W09",
+ "gate": "G410-6",
+ "requirement": "at least two task families that no pretraining source ever touched (README §9.2, PLAN_SPEC datasets.ADAPT-HOLDOUT.min_clean_families = 2)",
+ "freeze_policy": [
+  "the frozen pair is what W10 runs Z/A/S/A-ad on; it may not be re-picked after seeing results (that would turn the hold-out into development data)",
+  "a replacement may only be taken from 'reserved' and only through a new frozen registry revision that records the original family as unused",
+  "every family here is excluded from BOOTSTRAP/TACT/POWER/BC/DAgger/perception/reward/selection by pretraining_sources.json; the validator rejects a config where a pretraining source lists one of them"
+ ],
+ "frozen": [
+  {
+   "family_id": "th08-stage4a-hard-team0",
+   "label": "TH08 Hard / Stage 4A / Border Team (team 0)",
+   "bucket": "frozen",
+   "frozen_for": "G410-6 (clean hold-out adaptation)",
+   "difficulty_index": 2,
+   "stage_index": 3,
+   "team": 0,
+   "status": "instrument_only",
+   "why_clean": "difficulty=2 never appears in any fitting source; stage 3 is Stage 4A; neither the human reference measurement nor any dev/confirm record covers Hard 4A",
+   "clean_evidence": [
+    {
+     "claim": "the canonical D1 teacher corpus never contains this difficulty",
+     "records_absent_from": [
+      ".tmp_v400_d1/d1/manifest.json",
+      ".tmp_v400_d1/plan.full.json"
+     ],
+     "observation": "147/147 D1 shards declare difficulty=1 and stage in 0..7; the difficulty set of the corpus is exactly {1}",
+     "evidence_paths": [
+      ".tmp_v400_d1/d1/manifest.json",
+      ".tmp_v400_d1/plan.full.json",
+      ".tmp_v400_d1/work/gate.full.json"
+     ]
+    },
+    {
+     "claim": "every v4.1.0 / v4.2.0 training corpus is Normal stage 1 / team 0",
+     "records_absent_from": [
+      ".tmp_v410_s1c/d1/manifest.json",
+      ".tmp_v410_s1b/d1/manifest.json",
+      ".tmp_v410_wp05_round1/shards",
+      ".tmp_v410_wp05_round2/shards",
+      ".tmp_v410_wp05_round3/shards",
+      "configs/v420/dagger-D1.json",
+      "configs/v420/dagger-D2.json",
+      "configs/v420/dagger-D3.json",
+      "configs/v420/a1-safe-set-full.json",
+      "configs/v420/rl-engine-r3-pilot1m.json",
+      ".tmp_v420_data/T04/dataset/index.json"
+     ],
+     "observation": "all of them declare stage 0 (or stage=None with stage 0 rollout), difficulty normal/1 and team 0",
+     "evidence_paths": [
+      ".tmp_v410_s1c/d1/manifest.json",
+      ".tmp_v410_s1b/d1/manifest.json",
+      "configs/v420/dagger-D3.json",
+      "configs/v420/rl-engine-r3-pilot1m.json",
+      ".tmp_v420_data/T04/dataset/index.json",
+      ".tmp_v410_wp05_round3/shards/dagger-s0d1seed2040/shard.json"
+     ]
+    },
+    {
+     "claim": "no human-reference measurement covers this (difficulty, stage) pair",
+     "records_absent_from": [
+      ".tmp_v400_human_autoplay/EXP-P0-046_measured_stages.json",
+      "Document/Update/Alpha/v4.0.0/bench/human_reference.json"
+     ],
+     "observation": "EXP-P0-046 measured only Normal stages 0,1,2,3,5,7 and Lunatic stages 0,1,2,4,5,7; human_reference.json lists coverage.missing",
+     "evidence_paths": [
+      ".tmp_v400_human_autoplay/EXP-P0-046_measured_stages.json",
+      "Document/Update/Alpha/v4.0.0/bench/human_reference.json"
+     ]
+    },
+    {
+     "claim": "no development, candidate-selection or confirmation record uses it",
+     "records_absent_from": [
+      "Document/Update/Alpha/v4.1.0/evidence/WP00/exposure.json",
+      "Document/Update/Alpha/v4.2.0/README.md",
+      "Document/Update/Alpha/v4.1.0/evidence/WP02/G4101_100_TEACHER.md"
+     ],
+     "observation": "dev/candidate seeds are 1000-1039 and the spent teacher confirmation batch is 61300-61399, all of them Normal stage 1",
+     "evidence_paths": [
+      "Document/Update/Alpha/v4.1.0/evidence/WP00/exposure.json",
+      "Document/Update/Alpha/v4.2.0/README.md",
+      "Document/Update/Alpha/v4.1.0/evidence/WP02/G4101_100_TEACHER.md"
+     ]
+    },
+    {
+     "claim": "the pair appears only in the retail replay instrument, which fits no model",
+     "records_absent_from": [
+      "third_party/th08/config/replay-fixtures.json"
+     ],
+     "observation": "the 108-fixture retail corpus covers Easy/Normal/Hard/Lunatic x stages 0-7 plus Extra; replaying it verified harness traces only (G0.1). Any source that fits these frames must declare uses_retail_replay_fixtures=true and is then rejected by H_INSTRUMENT_FIXTURE_LEAK",
+     "evidence_paths": [
+      "third_party/th08/config/replay-fixtures.json",
+      ".tmp_v400_trace_batch/journal.jsonl",
+      ".tmp_v400_trace_batch/report.json"
+     ]
+    }
+   ],
+   "instrument_exposure": {
+    "retail_replay_fixture_count": 12,
+    "retail_replay_fixture_ids": [
+     "hard-1-a",
+     "hard-1-b",
+     "hard-2-a",
+     "hard-2-b",
+     "hard-6-a",
+     "hard-6-b",
+     "hard-7-a",
+     "hard-7-b",
+     "hard-8-a",
+     "hard-8-b",
+     "hard-9-a",
+     "hard-9-b"
+    ],
+    "fits_any_model": false,
+    "note": "the fixtures were replayed to verify the harness trace (G0.1); no gradient, label, reward model or selection rule consumed them"
+   },
+   "risks": [
+    "difficulty shift: the whole pretraining corpus is Normal; a zero success rate for every arm is a live possibility and would make G410-6 evidence insufficient rather than passed",
+    "stage-script overlap: the stage layout/enemy waves exist at Normal in D1; the clean claim is difficulty-scoped, not stage-novel",
+    "if any future source fits the retail replay corpus, this family stops being clean (the corpus covers every (difficulty, stage) pair)"
+   ],
+   "capability_range_unverified": true
+  },
+  {
+   "family_id": "th08-stage6a-lunatic-team0",
+   "label": "TH08 Lunatic / Stage 6A / Border Team (team 0)",
+   "bucket": "frozen",
+   "frozen_for": "G410-6 (clean hold-out adaptation)",
+   "difficulty_index": 3,
+   "stage_index": 6,
+   "team": 0,
+   "status": "instrument_only",
+   "why_clean": "difficulty=3 never appears in any fitting source; Stage 6A (stage_index 6) is missing from the human reference in BOTH measured difficulties, so not even a benchmark reference exists for it",
+   "clean_evidence": [
+    {
+     "claim": "the canonical D1 teacher corpus never contains this difficulty",
+     "records_absent_from": [
+      ".tmp_v400_d1/d1/manifest.json",
+      ".tmp_v400_d1/plan.full.json"
+     ],
+     "observation": "147/147 D1 shards declare difficulty=1 and stage in 0..7; the difficulty set of the corpus is exactly {1}",
+     "evidence_paths": [
+      ".tmp_v400_d1/d1/manifest.json",
+      ".tmp_v400_d1/plan.full.json",
+      ".tmp_v400_d1/work/gate.full.json"
+     ]
+    },
+    {
+     "claim": "every v4.1.0 / v4.2.0 training corpus is Normal stage 1 / team 0",
+     "records_absent_from": [
+      ".tmp_v410_s1c/d1/manifest.json",
+      ".tmp_v410_s1b/d1/manifest.json",
+      ".tmp_v410_wp05_round1/shards",
+      ".tmp_v410_wp05_round2/shards",
+      ".tmp_v410_wp05_round3/shards",
+      "configs/v420/dagger-D1.json",
+      "configs/v420/dagger-D2.json",
+      "configs/v420/dagger-D3.json",
+      "configs/v420/a1-safe-set-full.json",
+      "configs/v420/rl-engine-r3-pilot1m.json",
+      ".tmp_v420_data/T04/dataset/index.json"
+     ],
+     "observation": "all of them declare stage 0 (or stage=None with stage 0 rollout), difficulty normal/1 and team 0",
+     "evidence_paths": [
+      ".tmp_v410_s1c/d1/manifest.json",
+      ".tmp_v410_s1b/d1/manifest.json",
+      "configs/v420/dagger-D3.json",
+      "configs/v420/rl-engine-r3-pilot1m.json",
+      ".tmp_v420_data/T04/dataset/index.json",
+      ".tmp_v410_wp05_round3/shards/dagger-s0d1seed2040/shard.json"
+     ]
+    },
+    {
+     "claim": "no human-reference measurement covers this (difficulty, stage) pair",
+     "records_absent_from": [
+      ".tmp_v400_human_autoplay/EXP-P0-046_measured_stages.json",
+      "Document/Update/Alpha/v4.0.0/bench/human_reference.json"
+     ],
+     "observation": "EXP-P0-046 measured only Normal stages 0,1,2,3,5,7 and Lunatic stages 0,1,2,4,5,7; human_reference.json lists coverage.missing",
+     "evidence_paths": [
+      ".tmp_v400_human_autoplay/EXP-P0-046_measured_stages.json",
+      "Document/Update/Alpha/v4.0.0/bench/human_reference.json"
+     ]
+    },
+    {
+     "claim": "no development, candidate-selection or confirmation record uses it",
+     "records_absent_from": [
+      "Document/Update/Alpha/v4.1.0/evidence/WP00/exposure.json",
+      "Document/Update/Alpha/v4.2.0/README.md",
+      "Document/Update/Alpha/v4.1.0/evidence/WP02/G4101_100_TEACHER.md"
+     ],
+     "observation": "dev/candidate seeds are 1000-1039 and the spent teacher confirmation batch is 61300-61399, all of them Normal stage 1",
+     "evidence_paths": [
+      "Document/Update/Alpha/v4.1.0/evidence/WP00/exposure.json",
+      "Document/Update/Alpha/v4.2.0/README.md",
+      "Document/Update/Alpha/v4.1.0/evidence/WP02/G4101_100_TEACHER.md"
+     ]
+    },
+    {
+     "claim": "the pair appears only in the retail replay instrument, which fits no model",
+     "records_absent_from": [
+      "third_party/th08/config/replay-fixtures.json"
+     ],
+     "observation": "the 108-fixture retail corpus covers Easy/Normal/Hard/Lunatic x stages 0-7 plus Extra; replaying it verified harness traces only (G0.1). Any source that fits these frames must declare uses_retail_replay_fixtures=true and is then rejected by H_INSTRUMENT_FIXTURE_LEAK",
+     "evidence_paths": [
+      "third_party/th08/config/replay-fixtures.json",
+      ".tmp_v400_trace_batch/journal.jsonl",
+      ".tmp_v400_trace_batch/report.json"
+     ]
+    }
+   ],
+   "instrument_exposure": {
+    "retail_replay_fixture_count": 12,
+    "retail_replay_fixture_ids": [
+     "lunatic-0-a",
+     "lunatic-1-a",
+     "lunatic-10-a",
+     "lunatic-11-a",
+     "lunatic-2-a",
+     "lunatic-3-a",
+     "lunatic-4-a",
+     "lunatic-5-a",
+     "lunatic-6-a",
+     "lunatic-7-a",
+     "lunatic-8-a",
+     "lunatic-9-a"
+    ],
+    "fits_any_model": false,
+    "note": "the fixtures were replayed to verify the harness trace (G0.1); no gradient, label, reward model or selection rule consumed them"
+   },
+   "risks": [
+    "difficulty shift: the whole pretraining corpus is Normal; a zero success rate for every arm is a live possibility and would make G410-6 evidence insufficient rather than passed",
+    "stage-script overlap: the stage layout/enemy waves exist at Normal in D1; the clean claim is difficulty-scoped, not stage-novel",
+    "if any future source fits the retail replay corpus, this family stops being clean (the corpus covers every (difficulty, stage) pair)"
+   ],
+   "capability_range_unverified": true
+  }
+ ],
+ "reserved": [
+  {
+   "family_id": "th08-stage4b-lunatic-team0",
+   "label": "TH08 Lunatic / Stage 4B / Border Team (team 0)",
+   "bucket": "reserved",
+   "frozen_for": "replacement only; not part of the G410-6 primary pair",
+   "difficulty_index": 3,
+   "stage_index": 4,
+   "team": 0,
+   "status": "instrument_only",
+   "why_clean": "same cleanliness as the frozen pair (difficulty=3, no fitting source)",
+   "clean_evidence": [
+    {
+     "claim": "the canonical D1 teacher corpus never contains this difficulty",
+     "records_absent_from": [
+      ".tmp_v400_d1/d1/manifest.json",
+      ".tmp_v400_d1/plan.full.json"
+     ],
+     "observation": "147/147 D1 shards declare difficulty=1 and stage in 0..7; the difficulty set of the corpus is exactly {1}",
+     "evidence_paths": [
+      ".tmp_v400_d1/d1/manifest.json",
+      ".tmp_v400_d1/plan.full.json",
+      ".tmp_v400_d1/work/gate.full.json"
+     ]
+    },
+    {
+     "claim": "every v4.1.0 / v4.2.0 training corpus is Normal stage 1 / team 0",
+     "records_absent_from": [
+      ".tmp_v410_s1c/d1/manifest.json",
+      ".tmp_v410_s1b/d1/manifest.json",
+      ".tmp_v410_wp05_round1/shards",
+      ".tmp_v410_wp05_round2/shards",
+      ".tmp_v410_wp05_round3/shards",
+      "configs/v420/dagger-D1.json",
+      "configs/v420/dagger-D2.json",
+      "configs/v420/dagger-D3.json",
+      "configs/v420/a1-safe-set-full.json",
+      "configs/v420/rl-engine-r3-pilot1m.json",
+      ".tmp_v420_data/T04/dataset/index.json"
+     ],
+     "observation": "all of them declare stage 0 (or stage=None with stage 0 rollout), difficulty normal/1 and team 0",
+     "evidence_paths": [
+      ".tmp_v410_s1c/d1/manifest.json",
+      ".tmp_v410_s1b/d1/manifest.json",
+      "configs/v420/dagger-D3.json",
+      "configs/v420/rl-engine-r3-pilot1m.json",
+      ".tmp_v420_data/T04/dataset/index.json",
+      ".tmp_v410_wp05_round3/shards/dagger-s0d1seed2040/shard.json"
+     ]
+    },
+    {
+     "claim": "no human-reference measurement covers this (difficulty, stage) pair",
+     "records_absent_from": [
+      ".tmp_v400_human_autoplay/EXP-P0-046_measured_stages.json",
+      "Document/Update/Alpha/v4.0.0/bench/human_reference.json"
+     ],
+     "observation": "EXP-P0-046 measured only Normal stages 0,1,2,3,5,7 and Lunatic stages 0,1,2,4,5,7; human_reference.json lists coverage.missing",
+     "evidence_paths": [
+      ".tmp_v400_human_autoplay/EXP-P0-046_measured_stages.json",
+      "Document/Update/Alpha/v4.0.0/bench/human_reference.json"
+     ]
+    },
+    {
+     "claim": "no development, candidate-selection or confirmation record uses it",
+     "records_absent_from": [
+      "Document/Update/Alpha/v4.1.0/evidence/WP00/exposure.json",
+      "Document/Update/Alpha/v4.2.0/README.md",
+      "Document/Update/Alpha/v4.1.0/evidence/WP02/G4101_100_TEACHER.md"
+     ],
+     "observation": "dev/candidate seeds are 1000-1039 and the spent teacher confirmation batch is 61300-61399, all of them Normal stage 1",
+     "evidence_paths": [
+      "Document/Update/Alpha/v4.1.0/evidence/WP00/exposure.json",
+      "Document/Update/Alpha/v4.2.0/README.md",
+      "Document/Update/Alpha/v4.1.0/evidence/WP02/G4101_100_TEACHER.md"
+     ]
+    },
+    {
+     "claim": "the pair appears only in the retail replay instrument, which fits no model",
+     "records_absent_from": [
+      "third_party/th08/config/replay-fixtures.json"
+     ],
+     "observation": "the 108-fixture retail corpus covers Easy/Normal/Hard/Lunatic x stages 0-7 plus Extra; replaying it verified harness traces only (G0.1). Any source that fits these frames must declare uses_retail_replay_fixtures=true and is then rejected by H_INSTRUMENT_FIXTURE_LEAK",
+     "evidence_paths": [
+      "third_party/th08/config/replay-fixtures.json",
+      ".tmp_v400_trace_batch/journal.jsonl",
+      ".tmp_v400_trace_batch/report.json"
+     ]
+    }
+   ],
+   "instrument_exposure": {
+    "retail_replay_fixture_count": 12,
+    "retail_replay_fixture_ids": [
+     "lunatic-0-a",
+     "lunatic-0-b",
+     "lunatic-10-a",
+     "lunatic-10-b",
+     "lunatic-11-a",
+     "lunatic-11-b",
+     "lunatic-3-a",
+     "lunatic-3-b",
+     "lunatic-4-a",
+     "lunatic-4-b",
+     "lunatic-5-a",
+     "lunatic-5-b"
+    ],
+    "fits_any_model": false,
+    "note": "the fixtures were replayed to verify the harness trace (G0.1); no gradient, label, reward model or selection rule consumed them"
+   },
+   "risks": [
+    "difficulty shift: the whole pretraining corpus is Normal; a zero success rate for every arm is a live possibility and would make G410-6 evidence insufficient rather than passed",
+    "stage-script overlap: the stage layout/enemy waves exist at Normal in D1; the clean claim is difficulty-scoped, not stage-novel",
+    "if any future source fits the retail replay corpus, this family stops being clean (the corpus covers every (difficulty, stage) pair)"
+   ],
+   "capability_range_unverified": true
+  },
+  {
+   "family_id": "th08-stage6a-hard-team0",
+   "label": "TH08 Hard / Stage 6A / Border Team (team 0)",
+   "bucket": "reserved",
+   "frozen_for": "replacement only; not part of the G410-6 primary pair",
+   "difficulty_index": 2,
+   "stage_index": 6,
+   "team": 0,
+   "status": "instrument_only",
+   "why_clean": "same cleanliness as the frozen pair (difficulty=2, no fitting source)",
+   "clean_evidence": [
+    {
+     "claim": "the canonical D1 teacher corpus never contains this difficulty",
+     "records_absent_from": [
+      ".tmp_v400_d1/d1/manifest.json",
+      ".tmp_v400_d1/plan.full.json"
+     ],
+     "observation": "147/147 D1 shards declare difficulty=1 and stage in 0..7; the difficulty set of the corpus is exactly {1}",
+     "evidence_paths": [
+      ".tmp_v400_d1/d1/manifest.json",
+      ".tmp_v400_d1/plan.full.json",
+      ".tmp_v400_d1/work/gate.full.json"
+     ]
+    },
+    {
+     "claim": "every v4.1.0 / v4.2.0 training corpus is Normal stage 1 / team 0",
+     "records_absent_from": [
+      ".tmp_v410_s1c/d1/manifest.json",
+      ".tmp_v410_s1b/d1/manifest.json",
+      ".tmp_v410_wp05_round1/shards",
+      ".tmp_v410_wp05_round2/shards",
+      ".tmp_v410_wp05_round3/shards",
+      "configs/v420/dagger-D1.json",
+      "configs/v420/dagger-D2.json",
+      "configs/v420/dagger-D3.json",
+      "configs/v420/a1-safe-set-full.json",
+      "configs/v420/rl-engine-r3-pilot1m.json",
+      ".tmp_v420_data/T04/dataset/index.json"
+     ],
+     "observation": "all of them declare stage 0 (or stage=None with stage 0 rollout), difficulty normal/1 and team 0",
+     "evidence_paths": [
+      ".tmp_v410_s1c/d1/manifest.json",
+      ".tmp_v410_s1b/d1/manifest.json",
+      "configs/v420/dagger-D3.json",
+      "configs/v420/rl-engine-r3-pilot1m.json",
+      ".tmp_v420_data/T04/dataset/index.json",
+      ".tmp_v410_wp05_round3/shards/dagger-s0d1seed2040/shard.json"
+     ]
+    },
+    {
+     "claim": "no human-reference measurement covers this (difficulty, stage) pair",
+     "records_absent_from": [
+      ".tmp_v400_human_autoplay/EXP-P0-046_measured_stages.json",
+      "Document/Update/Alpha/v4.0.0/bench/human_reference.json"
+     ],
+     "observation": "EXP-P0-046 measured only Normal stages 0,1,2,3,5,7 and Lunatic stages 0,1,2,4,5,7; human_reference.json lists coverage.missing",
+     "evidence_paths": [
+      ".tmp_v400_human_autoplay/EXP-P0-046_measured_stages.json",
+      "Document/Update/Alpha/v4.0.0/bench/human_reference.json"
+     ]
+    },
+    {
+     "claim": "no development, candidate-selection or confirmation record uses it",
+     "records_absent_from": [
+      "Document/Update/Alpha/v4.1.0/evidence/WP00/exposure.json",
+      "Document/Update/Alpha/v4.2.0/README.md",
+      "Document/Update/Alpha/v4.1.0/evidence/WP02/G4101_100_TEACHER.md"
+     ],
+     "observation": "dev/candidate seeds are 1000-1039 and the spent teacher confirmation batch is 61300-61399, all of them Normal stage 1",
+     "evidence_paths": [
+      "Document/Update/Alpha/v4.1.0/evidence/WP00/exposure.json",
+      "Document/Update/Alpha/v4.2.0/README.md",
+      "Document/Update/Alpha/v4.1.0/evidence/WP02/G4101_100_TEACHER.md"
+     ]
+    },
+    {
+     "claim": "the pair appears only in the retail replay instrument, which fits no model",
+     "records_absent_from": [
+      "third_party/th08/config/replay-fixtures.json"
+     ],
+     "observation": "the 108-fixture retail corpus covers Easy/Normal/Hard/Lunatic x stages 0-7 plus Extra; replaying it verified harness traces only (G0.1). Any source that fits these frames must declare uses_retail_replay_fixtures=true and is then rejected by H_INSTRUMENT_FIXTURE_LEAK",
+     "evidence_paths": [
+      "third_party/th08/config/replay-fixtures.json",
+      ".tmp_v400_trace_batch/journal.jsonl",
+      ".tmp_v400_trace_batch/report.json"
+     ]
+    }
+   ],
+   "instrument_exposure": {
+    "retail_replay_fixture_count": 12,
+    "retail_replay_fixture_ids": [
+     "hard-0-a",
+     "hard-1-a",
+     "hard-10-a",
+     "hard-11-a",
+     "hard-2-a",
+     "hard-3-a",
+     "hard-4-a",
+     "hard-5-a",
+     "hard-6-a",
+     "hard-7-a",
+     "hard-8-a",
+     "hard-9-a"
+    ],
+    "fits_any_model": false,
+    "note": "the fixtures were replayed to verify the harness trace (G0.1); no gradient, label, reward model or selection rule consumed them"
+   },
+   "risks": [
+    "difficulty shift: the whole pretraining corpus is Normal; a zero success rate for every arm is a live possibility and would make G410-6 evidence insufficient rather than passed",
+    "stage-script overlap: the stage layout/enemy waves exist at Normal in D1; the clean claim is difficulty-scoped, not stage-novel",
+    "if any future source fits the retail replay corpus, this family stops being clean (the corpus covers every (difficulty, stage) pair)"
+   ],
+   "capability_range_unverified": true
+  }
+ ],
+ "not_selected": [
+  {
+   "family_id": "th08-extra-team0",
+   "label": "TH08 Extra / team 0",
+   "reason": "also clean (no fitting source) but likely floors every arm at 0% success; kept as the last-resort replacement instead of a primary family"
+  }
+ ],
+ "contamination_if_used": [
+  {
+   "trigger": "a pretraining source fits the retail replay corpus",
+   "effect": "every TH08 (difficulty, stage) family becomes train-exposed because the corpus covers all of them; both frozen families die with it"
+  },
+  {
+   "trigger": "any source fits frames from difficulty!=1 or stage_index==8",
+   "effect": "that specific family must be removed from this registry in a new revision"
+  },
+  {
+   "trigger": "dev/candidate seeds 1020-1039 are used to look at a hold-out family",
+   "effect": "the family becomes selection-exposed (model_selection covers the panel)"
+  }
+ ]
+}

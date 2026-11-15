@@ -1,0 +1,43 @@
+﻿# W01A acceptance run (captured by the executor; no edits after this point)
+timestamp_utc: 2026-11-15T03:08:34Z
+timestamp_local: 2026-11-15T11:08:34+08:00
+host_os: Microsoft Windows NT 10.0.26300.0
+cwd: D:\WorkShop\Touhou_RL
+python: 3.12.10 (tags/v3.12.10:0cc8128, Apr  8 2025, 12:21:36) [MSC v.1943 64 bit (AMD64)]
+PYTHONPATH: D:\WorkShop\Touhou_RL
+
+## CMD1: python -m compileall -q touhou_rl/v430
+stdout/stderr: <empty>
+exit_code: 0
+
+## CMD2: python -m pytest -p no:cacheprovider --basetemp .tmp_v430_pytest_w01a -q tests/test_v430_contracts.py tests/test_v430_actions.py
+output:
+........................................................................ [ 48%]
+........................................................................ [ 97%]
+...                                                                      [100%]
+147 passed in 0.23s
+exit_code: 0
+
+## CMD3: python -m pytest ... tests/test_v430_contracts.py (per-file split, same flags)
+........................................................................ [ 69%]
+...............................                                          [100%]
+103 passed in 0.12s
+exit_code: 0
+
+## CMD4: python -m pytest ... tests/test_v430_actions.py (per-file split, same flags)
+............................................                             [100%]
+44 passed in 0.18s
+exit_code: 0
+
+## CMD5: python -c 'import touhou_rl.v430.contracts, touhou_rl.v430.actions' (import smoke, no engine)
+4.3.0 v430-contract/1 touhou_rl.v430.actions cb1616e4cbfa928e691c2fb8497a84c813bded528064cf2b0aa1e30fa86b85b5
+exit_code: 0
+
+## CMD6: python -m pytest ... tests/test_v420_contracts.py (regression check, pre-existing suite)
+........................................................................ [ 93%]
+.....                                                                    [100%]
+77 passed in 0.18s
+exit_code: 0
+
+## summary
+compileall=0 pytest_w01a_pair=0 pytest_contracts_only=0 pytest_actions_only=0 import_smoke=0 v420_contracts_regression=0

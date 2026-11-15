@@ -1,0 +1,81 @@
+W03C — exit codes and pytest statistics
+=======================================
+Slice: dataset manifest layer only — load_manifest / validate_manifest /
+       partial_view + tests.  No engine start, no training, no evaluation, no
+       real .tmp_* corpus, no checkpoint/model read.
+Host: Windows, repo D:\WorkShop\Touhou_RL
+Python 3.12.10 / pytest 9.1.1
+Run (UTC): 2026-11-15T03:50:47Z  (per-file cross-check at 2026-11-15T03:50:35Z)
+
+Command 1
+---------
+$env:PYTHONPATH='D:\WorkShop\Touhou_RL'
+python -m compileall -q touhou_rl/v430/data/manifest.py
+exit code: 0
+output: (none — compileall -q prints nothing on success)
+
+Command 2
+---------
+$env:PYTHONPATH='D:\WorkShop\Touhou_RL'
+python -m pytest -p no:cacheprovider --basetemp .tmp_v430_pytest_w03b -q tests/test_v430_data.py
+exit code: 0
+output tail:
+
+.............................                                            [100%]
+29 passed in 0.27s
+
+interpretation: 29 passed, 0 failed, 0 skipped, 0 errors, 0 warnings.
+  this slice added : 29 tests (one new file, tests/test_v430_data.py)
+  no pre-existing test file was edited or added to.
+
+Command 3 (regression — must not break W09 splits / W03 sequence)
+----------------------------------------------------------------
+$env:PYTHONPATH='D:\WorkShop\Touhou_RL'
+python -m pytest -p no:cacheprovider --basetemp .tmp_v430_pytest_w03b_reg -q tests/test_v430_splits.py tests/test_v430_sequence.py
+exit code: 0
+output tail:
+
+.....................................................................    [100%]
+141 passed in 0.68s
+
+Command 3b (same regression split per file — why 141 and not 137)
+---------------------------------------------------------------
+$env:PYTHONPATH='D:\WorkShop\Touhou_RL'
+python -m pytest -p no:cacheprovider --basetemp .tmp_v430_pytest_w03b_reg -q tests/test_v430_splits.py
+exit code: 0
+output tail:
+
+.....                                                                    [100%]
+77 passed in 0.63s
+
+$env:PYTHONPATH='D:\WorkShop\Touhou_RL'
+python -m pytest -p no:cacheprovider --basetemp .tmp_v430_pytest_w03b_reg -q tests/test_v430_sequence.py
+exit code: 0
+output tail:
+
+................................................................         [100%]
+64 passed in 0.09s
+
+interpretation: 77 + 64 = 141, 0 failed.
+  The slice brief expected "W09 73 + sequence 64 = 137".  tests/test_v430_splits.py
+  collects 77 today (sequence is still exactly 64).  This slice did NOT touch that
+  file — it is outside the write whitelist — and the per-file figures above are
+  the same 77 + 64 as the combined run, so the difference is a pre-existing
+  (+4) count in the W09 suite, not a change made here.
+
+Files written by this slice (whitelist, nothing else)
+----------------------------------------------------
+touhou_rl/v430/data/manifest.py                                  (new)
+tests/test_v430_data.py                                          (new)
+Document/Update/Alpha/v4.3.0/evidence/W03/W03C_MANIFEST.md       (new)
+Document/Update/Alpha/v4.3.0/evidence/W03/EXIT_CODES_W03C.txt    (new)
+
+Read-only reuse (not modified): touhou_rl/v430/data/lineage.py,
+touhou_rl/v430/contracts.py, touhou_rl/v430/data/__init__.py.
+
+Note on what this proves
+------------------------
+Command 1 only proves the module parses.  Commands 2/3 prove the decisions of a
+pure function over a synthetic two-shard fixture built in tmp_path.  They are NOT
+evidence of game capability or dataset quality: no engine was started, no real
+game data, checkpoint or model was read, no rollout, training or evaluation ran.

@@ -1,0 +1,374 @@
+{
+  "execution_status": "ok",
+  "protocol_validity": "valid",
+  "research_result": {
+    "status": "not_run",
+    "kind": "behaviour_cloning",
+    "dataset_kind": "synthetic",
+    "passed": false,
+    "requested_gate": null,
+    "note": "train-bc runs behaviour cloning on synthetic batches and reports the run; it claims no research result and no capability (capability_gate='not_run')"
+  },
+  "capability_gate": "not_run",
+  "schema": "v430-train-bc/1",
+  "command": "train-bc",
+  "command_class": "training",
+  "owner": "W03G",
+  "started_at": "2026-11-15T12:01:05+08:00",
+  "finished_at": "2026-11-15T12:01:08+08:00",
+  "duration_seconds": 3.187,
+  "argv": [
+    "tools/rl/v430.py",
+    "train-bc",
+    "--batches",
+    ".tmp_w03g_batches.json",
+    "--epochs",
+    "1",
+    "--lr",
+    "1e-3",
+    "--seed",
+    "7",
+    "--max-steps",
+    "4",
+    "--out",
+    "Document/Update/Alpha/v4.3.0/evidence/W03/train-bc-001.json"
+  ],
+  "cwd": "D:\\WorkShop\\Touhou_RL",
+  "python_executable": "C:\\Users\\a5935\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+  "torch_version": "2.14.1+cu132",
+  "output_path": "Document\\Update\\Alpha\\v4.3.0\\evidence\\W03\\train-bc-001.json",
+  "exit_code": 0,
+  "dataset_kind": "synthetic",
+  "batches": {
+    "path": ".tmp_w03g_batches.json",
+    "sha256": "35b403d39f5e7bbd08e2e7585570c78d20f9934cafb5b985ed453a3d366f2c32",
+    "spec": {
+      "n_batches": 4,
+      "batch_size": 2,
+      "seed": 1234,
+      "steps": 1,
+      "elapsed_capture_s": 0.016,
+      "observation_shapes": {
+        "global_rgb": [
+          3,
+          240,
+          320
+        ],
+        "play_gray": [
+          4,
+          224,
+          192
+        ],
+        "hud_gray": [
+          1,
+          448,
+          160
+        ],
+        "executed_key_history": [
+          8,
+          7
+        ],
+        "history_valid": [
+          8
+        ]
+      }
+    },
+    "signature_sha256": "dc39ca75e13ec2cf6d1c8e18895dc4ee0bdb7684013ec8441dc0cd44e14e660f",
+    "generator": "torch.Generator(device='cpu') seeded with spec.seed; the global RNG is not consulted",
+    "observation_dtype": "uint8",
+    "label_dtype": "int64"
+  },
+  "memory_mode": "none",
+  "epochs": 1,
+  "lr": 0.001,
+  "seed": 7,
+  "determinism": {
+    "torch_num_threads": 1,
+    "global_seed_for_initial_weights": 7,
+    "batch_generator": "explicit torch.Generator(device='cpu')",
+    "global_rng_used_for_training": false
+  },
+  "optimizer": "AdamW",
+  "shuffle_batches": false,
+  "max_steps": 4,
+  "n_steps": 4,
+  "steps": [
+    {
+      "step": 1,
+      "epoch": 0,
+      "loss": 4.36763334274292,
+      "per_head_loss": {
+        "move": 2.3437881469726562,
+        "focus": 0.679282546043396,
+        "shoot": 0.7526049613952637,
+        "bomb": 0.5919574499130249
+      },
+      "n_samples": 2
+    },
+    {
+      "step": 2,
+      "epoch": 0,
+      "loss": 4.401745796203613,
+      "per_head_loss": {
+        "move": 2.195077657699585,
+        "focus": 0.6712081432342529,
+        "shoot": 0.7539676427841187,
+        "bomb": 0.7814921736717224
+      },
+      "n_samples": 2
+    },
+    {
+      "step": 3,
+      "epoch": 0,
+      "loss": 4.949324131011963,
+      "per_head_loss": {
+        "move": 2.415660858154297,
+        "focus": 1.0638465881347656,
+        "shoot": 0.7301100492477417,
+        "bomb": 0.7397066950798035
+      },
+      "n_samples": 2
+    },
+    {
+      "step": 4,
+      "epoch": 0,
+      "loss": 4.736083984375,
+      "per_head_loss": {
+        "move": 2.293653726577759,
+        "focus": 0.7157307863235474,
+        "shoot": 0.8695549964904785,
+        "bomb": 0.8571443557739258
+      },
+      "n_samples": 2
+    }
+  ],
+  "losses": [
+    4.36763334274292,
+    4.401745796203613,
+    4.949324131011963,
+    4.736083984375
+  ],
+  "first_loss": 4.36763334274292,
+  "last_loss": 4.736083984375,
+  "n_batches": 4,
+  "batch_size": 2,
+  "o2_digest": "cb1616e4cbfa928e691c2fb8497a84c813bded528064cf2b0aa1e30fa86b85b5",
+  "parameter_report": {
+    "scope": "actor",
+    "parameter_scope": "actor encoder, memory and action heads; critic and auxiliary heads counted separately",
+    "includes_critic": false,
+    "includes_auxiliary_heads": false,
+    "auxiliary_heads_not_included": [
+      "player",
+      "visible_entities",
+      "motion_and_danger",
+      "visible_resources",
+      "tactical_goal",
+      "future_outcome"
+    ],
+    "model_spec_parameter_range_millions": [
+      1,
+      3
+    ],
+    "parameter_range_is_gate": false,
+    "streams": {
+      "global": {
+        "convs": [
+          [
+            16,
+            3,
+            5,
+            5
+          ],
+          [
+            32,
+            16,
+            3,
+            3
+          ],
+          [
+            32,
+            32,
+            3,
+            3
+          ]
+        ],
+        "input_hw": [
+          240,
+          320
+        ],
+        "pre_pool_hw": [
+          30,
+          40
+        ],
+        "adaptive_pool_hw": [
+          6,
+          8
+        ],
+        "out_channels": 32,
+        "project_features": 128,
+        "groups": [
+          4
+        ],
+        "conv_and_norm_parameters": 15264,
+        "projection_parameters": 196736,
+        "total": 212000
+      },
+      "play": {
+        "convs": [
+          [
+            32,
+            4,
+            5,
+            5
+          ],
+          [
+            64,
+            32,
+            3,
+            3
+          ],
+          [
+            64,
+            64,
+            3,
+            3
+          ]
+        ],
+        "input_hw": [
+          224,
+          192
+        ],
+        "pre_pool_hw": [
+          28,
+          24
+        ],
+        "adaptive_pool_hw": [
+          14,
+          12
+        ],
+        "out_channels": 64,
+        "project_features": 128,
+        "groups": [
+          4
+        ],
+        "conv_and_norm_parameters": 58976,
+        "projection_parameters": 1376384,
+        "total": 1435360
+      },
+      "hud": {
+        "convs": [
+          [
+            16,
+            1,
+            3,
+            3
+          ],
+          [
+            32,
+            16,
+            3,
+            3
+          ],
+          [
+            32,
+            32,
+            3,
+            3
+          ]
+        ],
+        "input_hw": [
+          448,
+          160
+        ],
+        "pre_pool_hw": [
+          112,
+          40
+        ],
+        "adaptive_pool_hw": [
+          28,
+          10
+        ],
+        "out_channels": 32,
+        "project_features": 64,
+        "groups": [
+          4
+        ],
+        "conv_and_norm_parameters": 14208,
+        "projection_parameters": 573504,
+        "total": 587712
+      }
+    },
+    "history": {
+      "flattened_features": 65,
+      "project_features": 32,
+      "total": 2112
+    },
+    "fusion": {
+      "features": 352,
+      "projection": 256,
+      "total": 90880
+    },
+    "memory_gru": {
+      "hidden_size": 256,
+      "num_layers": 1,
+      "total": 394752
+    },
+    "action_heads": {
+      "move": 2313,
+      "focus": 514,
+      "shoot": 514,
+      "bomb": 514
+    },
+    "joint_count": 72,
+    "parts": {
+      "global_stream": 212000,
+      "play_stream": 1435360,
+      "hud_stream": 587712,
+      "history_branch": 2112,
+      "fusion": 90880,
+      "memory_gru": 394752,
+      "action_heads": 3855
+    },
+    "total": 2726671,
+    "total_millions": 2.726671,
+    "within_parameter_range": true,
+    "normalization_layers": "GroupNorm + LayerNorm only",
+    "batch_norm_modules": [],
+    "has_mutable_batch_statistics": false,
+    "activation": "SiLU",
+    "conv_padding": "kernel_size//2",
+    "measurement": "sum(p.numel() for p in policy.parameters())"
+  },
+  "trainable_parameter_count": 2726671,
+  "checkpoint": null,
+  "identities": {
+    "cli": {
+      "path": "tools/rl/v430.py",
+      "sha256": "55dc87507408f16cdc6b8e325a41057c84b052852d6d1969afdd7a5ab362bf7d"
+    },
+    "batches_spec": {
+      "path": ".tmp_w03g_batches.json",
+      "sha256": "35b403d39f5e7bbd08e2e7585570c78d20f9934cafb5b985ed453a3d366f2c32"
+    },
+    "o2_digest": "cb1616e4cbfa928e691c2fb8497a84c813bded528064cf2b0aa1e30fa86b85b5",
+    "contract_version": "v430-contract/1",
+    "spec_revision": "v430-plan-r2",
+    "runtime": {
+      "python_executable": "C:\\Users\\a5935\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+      "python_version": "3.12.10",
+      "platform": "Windows-11-10.0.26300-SP0",
+      "torch_version": "2.14.1+cu132"
+    }
+  },
+  "remaining_gaps": [
+    "dataset_kind='synthetic': no real corpus was read, so these losses say nothing about the game and are not an evaluation",
+    "capability_gate='not_run': a training exit 0 is not a capability; no G430 gate was judged",
+    "no checkpoint was written (--checkpoint-out was not given)",
+    "no episode was run: no engine, no game, no evaluation entry point"
+  ],
+  "notes": [
+    "the batches are generated inside the CLI from the spec's seed; the same spec reproduces the same signature and the same losses",
+    "observations are uint8 in the frozen O2 shapes; the /255 normalisation happens inside the model"
+  ]
+}

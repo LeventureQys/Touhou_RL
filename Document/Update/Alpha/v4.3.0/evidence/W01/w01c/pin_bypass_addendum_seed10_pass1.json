@@ -1,0 +1,27 @@
+{
+  "schema": "w01c-pin-bypass-addendum/1",
+  "about": "post-hoc metadata addendum for ONE raw record that predates the fixed pin-bypass field set",
+  "applies_to": "Document/Update/Alpha/v4.3.0/evidence/W01/w01c/step3_seed10.json",
+  "raw_record_sha256": "9ec042156ceda91bdef88c2adb2ad7472ee04ab3ca186b2899fb6f5f3305e926",
+  "raw_record_modified": false,
+  "raw_record_has": ["w01c.shard_pin_bypassed (= true)", "w01c.shard_pin_note",
+                     "tape.shard_sha256", "engine_sha256"],
+  "raw_record_lacks": ["w01c.pin_bypassed_reason", "w01c.instrument_identity"],
+  "why": "it was the first pin-bypassed run; the required field set was fixed after it, and the same seed was immediately re-run with the full block (step4_seed10_r2.json). The raw record is left byte-for-byte as produced rather than patched.",
+  "supplied_now": {
+    "shard_pin_bypassed": true,
+    "pin_bypassed_reason": "seed10/11 shard sha256 is not in tools/rl/v420_eval_shoot.py's hard-pinned shard set (CLEAR_SHARD_SHA256), so that one assertion was bypassed in order to classify clearability. Nothing else was bypassed: the key-masking, record assembly and validation paths are the tool's own functions, called unmodified and not copied (tape_identity / _run_loop / _assemble_tape_record / validate_tape_record).",
+    "classification_only": true,
+    "instrument_identity": {
+      "instrument": "tools/rl/v420_eval_shoot.py",
+      "instrument_sha256": "7dbc2a3145562e54f4a7397fa63c8391938b6f6982f5d4b495a66b28fc6e8519",
+      "instrument_mtime_utc": "2026-11-14T02:30:40Z",
+      "engine": "/root/Touhou_RL/third_party/th08-rl/build/rl_v3/th08-modern",
+      "engine_sha256": "691bfd77b7eca3361aa8bb7af0977556a70cc73a070b29a2447222ba7a568ef6",
+      "call_path": "importlib module load of the instrument; called tape_identity / TapePolicy / _run_loop / _assemble_tape_record / validate_tape_record"
+    }
+  },
+  "why_the_identity_is_provable_after_the_fact": "the instrument's sha256 is the file's sha256 today and its mtime (2026-11-14T02:30:40Z) predates both runs, so the bytes could not have changed between the run and this note; the engine sha256 is written inside the raw record itself by tape_identity().",
+  "engine_sha256_in_raw_record": "691bfd77b7eca3361aa8bb7af0977556a70cc73a070b29a2447222ba7a568ef6",
+  "cross_check": "step4_seed10_r2.json is the byte-identical repeat of this run (frames/score/stage_clear/stop_reason/deaths/lives_end/action_sequence_sha256/observed_input_sha256/engine_sha256 all equal) and it carries the full block."
+}

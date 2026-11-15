@@ -1,0 +1,130 @@
+W03L — strided O2 re-sample: commands and real exit codes
+=========================================================
+Date: 2026-11-15
+Repo: D:\WorkShop\Touhou_RL   (WSL source root /mnt/d/WorkShop/Touhou_RL; the
+      engine binary is the stale checkout's at
+      /root/Touhou_RL/third_party/th08-rl/build/rl_v3/th08-modern)
+Python: /root/v400-venv/bin/python (engine runs, via xvfb-run) and the Windows
+        `python` on PYTHONPATH=D:\WorkShop\Touhou_RL (offline checks)
+Note: every command below was really executed; the exit code quoted is the
+      process exit code. Capture runs went through
+      .tmp_v430_o2/o2-strided/_runner/w03l_capture.sh, which prints
+      `exit_code=` and `elapsed_s=` (a script file, because PowerShell's native
+      argument passing strips the double quotes xvfb-run needs for
+      "-screen 0 1024x768x24").
+
+--- Phase 0: identity ---------------------------------------------------
+
+0) wsl -e bash -lc "sha256sum /root/Touhou_RL/third_party/th08-rl/build/rl_v3/th08-modern"
+   exit code: 0
+   691bfd77b7eca3361aa8bb7af0977556a70cc73a070b29a2447222ba7a568ef6
+   == the frozen engine sha on record for W03H/W03I
+
+1) python -c "sha256(slots.jsonl) + load_clear_schedule(...)"
+   (offline; also prints the schedule length and the strided position counts)
+   exit code: 0
+   tape sha256 f759de7dacc78343dec8825da5de14942e749b8a5a2c5319304e513d1618b7b9
+   schedule(tail=0) 6596 = 8 leading + 6588 slots; [::6] = 1100; [::60] = 110
+   schedule(tail=64) 6660 -> [::6] = 1110 (the reason --tail 0 is used: the
+   parent's 1100 positions are the *recorded* schedule, not the synthesised tail)
+
+2) cp -a .tmp_v430_o2/engine-data .tmp_v430_o2/engine-data-strided
+   exit code: 0   real 0m4.898s   474M   13 entries
+   the private data dir exists ONLY for this run; .tmp_v430_o2/engine-data
+   (used by o2-1k) was neither read nor written by the capture
+
+--- Phase 1: code change, checked before any engine start -----------------
+
+3) python -m py_compile .tmp_v430_o2/capture_o2.py
+   exit code: 0   (syntax ok)
+   python -c "import capture_o2"                 exit code: 0   (import ok)
+
+4) wsl ... /root/v400-venv/bin/python .tmp_v430_o2/capture_o2.py --help
+   exit code: 0
+   the option list now has 17 entries: `[--keep-every N]` was added after
+   `--collect`; every pre-existing option and default is unchanged
+
+--- Phase 2: pre-flight run (110 positions) ------------------------------
+
+5) wsl -e bash .tmp_v430_o2/o2-strided/_runner/w03l_capture.sh \
+     .tmp_v430_o2/o2-strided/_dry-keep60 60 110 0 w03l_o2_strided_dry \
+     .tmp_v430_o2/o2-strided-dry.log
+   exit code: 0   (capture)   elapsed_s: 202   wall_s: 179.9
+   {"bytes_total": 51712446, "collected": 109, "decisions": 6598,
+    "frames": 13195, "stop_reason": "stage_clear", "wall_s": 179.9}
+   109 of 110 positions: decision 0 is refused as `short_stack`
+   (3 frames in a 4-frame stack) — pre-existing capture behaviour, recorded in
+   meta.run.skipped_decisions, not a sampling failure
+
+   Earlier attempts of this same command failed BEFORE any engine start and are
+   kept here instead of being hidden:
+   5a) inline `wsl -e bash -lc "... $(date +%s) ..."` from PowerShell
+       exit code: 1   (PowerShell evaluated `$(date +%s)` itself -> Get-Date
+                       parameter error; no engine, no python, nothing written)
+   5b) inline `wsl -e bash -lc '... xvfb-run -a -s "-screen 0 1024x768x24" ...'`
+       exit code: 1   (xvfb-run: usage error: need a command to run — the
+                       quotes did not survive the Windows->wsl hand-off; again
+                       before any engine start)
+   action: moved the invocation into a bash script file (the two quoting layers
+           are then resolved by bash alone)
+
+--- Phase 3: the full run (1,100 positions -> 1,099 samples) -------------
+
+6) wsl -e bash .tmp_v430_o2/o2-strided/_runner/w03l_capture.sh \
+     .tmp_v430_o2/o2-strided 6 1100 64 w03l_o2_strided \
+     .tmp_v430_o2/o2-strided.log
+   exit code: 0   (capture)   elapsed_s: 243   wall_s: 223.371
+   {"bytes_total": 600030621, "collected": 1099, "decisions": 6598,
+    "frames": 13195, "stop_reason": "stage_clear", "wall_s": 223.371}
+   same 6598 decisions / 13195 frames / stage_clear as the historical prefix
+   capture o2-1k: the stride changed what was SAVED, not what was replayed
+
+--- Phase 4: verification ------------------------------------------------
+
+7) python -c "import numpy as np; print(np.load('.tmp_v430_o2/o2-strided/global_rgb.npy', mmap_mode='r').shape)"
+   exit code: 0
+   (1099, 3, 240, 320)
+
+8) python .tmp_v430_o2/verify_manifest_bc.py --out-dir .tmp_v430_o2/o2-strided
+   exit code: 0
+   {"assert_o2_raised": null, "complete": true, "counts_decisions": 1099,
+    "counts_episodes": 1, "dataset_id": "w03h-o2-capture-seed12-strided-1099",
+    "first_loss": 4.341777324676514, "last_loss": 3.2010152339935303,
+    "manifest_selfcheck_problems": 0, "model_supplied": true,
+    "n_parameters": 2726671, "n_samples": 1099, "n_steps": 8, "problems": 0,
+    "sample_count": 1099, "three_way_equal": true, "valid": true}
+   (its own internal order, before this run: py_compile of the edited file ->
+    exit code 0, and a READ-ONLY dry build of the same builder against
+    .tmp_v430_o2/o2-64/meta.json -> exit code 0, validate -> valid=True,
+    dataset_id still w03h-o2-capture-seed12-64, nothing written to o2-64)
+
+9) python .tmp_v430_o2/o2-strided/_runner/w03l_label_stats.py --out-dir .tmp_v430_o2/o2-strided
+   exit code: 0
+   corpus move distinct 9 / missing [], cand distinct 17 / missing [9],
+   shoot {1:1099}, bomb {0:1099}; the identical histograms recomputed off the
+   tape at the same 1099 positions
+
+10) python .tmp_v430_o2/verify_labels_provenance.py .tmp_v430_o2/o2-strided
+    exit code: 0
+    provenance_counts {"leading_history": 1, "recorded_slot": 1098},
+    tail_repeat_labels 0, recorded_slot_cross_check 1098 checked / 0 mismatches
+
+11) python .tmp_v430_o2/_selftest_guard.py
+    exit code: 0
+    guard_ok = True  (tail_repeat still classified as tail_repeat and
+    beyond_schedule still refused, on a 6660-entry tail=64 schedule, no engine)
+
+--- Phase 5: not run on purpose ------------------------------------------
+
+12) the stride-1 captures (o2-64, o2-1k) were NOT re-captured and NOT
+    re-verified: verify_manifest_bc.py --out-dir <them> would rewrite their
+    manifest.json/bc_smoke.json, and those are already-accepted evidence.
+    Their newest file timestamps are still 2026-11-15 12:11:14 (o2-64) and
+    12:21:33 (o2-1k), both before this capture. Only an in-memory dry build was
+    used to prove the edited builder still yields dataset_id
+    w03h-o2-capture-seed12-64 for the 64-sample corpus.
+
+13) the expansion workers (.tmp_v420_expand/run_all.sh, run_worker.sh x3, the
+    three th08-modern instances they own) were not touched; this capture used
+    its own --data-dir and its own --shm-name (w03l_o2_strided), so no
+    score.dat/th08.cfg race and no shm collision was possible.

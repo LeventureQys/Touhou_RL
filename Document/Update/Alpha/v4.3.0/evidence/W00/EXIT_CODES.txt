@@ -1,0 +1,95 @@
+# W00（audit 入口 + 资产登记）真实执行记录与退出码
+# 生成时间：2026-11-15 11:04–11:08 Asia/Shanghai（+08:00）
+# 主机：D:\WorkShop\Touhou_RL　　分支：v400　　HEAD：6eb76f26a3cb70478130ed8dd9b4c60fdccbb3ed
+# Windows：Python 3.12.10（C:\Users\a5935\AppData\Local\Programs\Python\Python312\python.exe）
+# torch 2.14.1+cu132，cuda_available=True，CUDA 13.2，1×NVIDIA GeForce RTX 4070 SUPER
+# WSL：Ubuntu（发行版 v2，Running），v400-venv = Python 3.10.12
+# 全部命令均在仓库根执行，全部先设 $env:PYTHONPATH='D:\WorkShop\Touhou_RL'。
+# 本文件只登记实际执行过的命令与真实退出码；未执行的项目不在此列，见 W00.md §6 not_run。
+
+## 0 验收命令（本任务规定的三条，按顺序真实执行）
+
+python -m compileall -q tools/rl/v430.py
+    => exit 0
+    （只说明语法可编译，不等于行为通过）
+
+python tools/rl/v430.py audit --config configs/v430/assets.json \
+    --out Document/Update/Alpha/v4.3.0/evidence/W00/audit-001.json
+    => exit 3
+    stdout: audit: checks 53 | verified 51 | unhashed 1 | mismatch 1 | missing 0 |
+            unreachable 0 | wsl up | gate NOT met | exit 3
+    stdout: result: Document\Update\Alpha\v4.3.0\evidence\W00\audit-001.json
+    stderr: unmet checks: sync:Document/Update/Alpha/v4.2.0/journal.jsonl
+    说明：3 = 有效测量但未达请求门。**唯一**未满足项是 1 条真实资产漂移
+          （v4.2.0/journal.jsonl 在 ASSET_SYNC.sha256 生成之后又被写入，见 W00.md §4.3），
+          不是 audit 实现失败；53 行中 51 行 verified、1 行 present_unhashed（game_data 目录）、
+          0 行 missing、0 行 unreachable。
+
+python Document/Update/Alpha/v4.3.0/evidence/W00/verify_audit.py
+    => exit 0
+    stdout: self-check: 12/12 cases passed | report
+            ...\evidence\W00\verify_audit.json
+    说明：合成自检，12 个用例全部按预期退出码/判定结束。**不是**游戏、引擎或能力证据。
+
+## 1 额外真实检查（同一半工作，非规定验收命令）
+
+python -m compileall -q Document/Update/Alpha/v4.3.0/evidence/W00/verify_audit.py
+    => exit 0
+
+# CLI 结构：17 个子命令全部注册（audit 已实现，其余 16 个为预留）
+python tools/rl/v430.py --help
+    => exit 0
+    （列出 audit + validate-contract/validate-splits/tactical-pilot/power-pilot/prepare-data/
+      pretrain/behavior-clone/micro-learn/train/evaluate/confirm/windows-eval/feedback-eval/
+      adapt/settle/plan，均标注 "reserved for Wxx: not implemented"）
+
+# 预留子命令必须 fail-closed：exit 2 + not_implemented + 不写任何文件
+$tmpOut = Join-Path $env:TEMP 'v430_reserved_probe'
+python tools/rl/v430.py validate-contract --config configs/v430/contracts.json --out $tmpOut
+    => exit 2
+    stdout: {"schema": "v430-cli-notice/1", "command": "validate-contract",
+             "status": "not_implemented", "exit_code": 2, "owner": "W01", ...}
+    核对：$tmpOut 未被创建（Test-Path = False）
+
+# 已存在 --out 时的默认拒绝覆盖（对真实产物文件重复执行同一条 audit）
+python tools/rl/v430.py audit --config configs/v430/assets.json \
+    --out Document/Update/Alpha/v4.3.0/evidence/W00/audit-001.json
+    => exit 2
+    stderr: v430: refusing to overwrite existing output:
+            Document\Update\Alpha\v4.3.0\evidence\W00\audit-001.json
+    核对：执行前后 audit-001.json 的 sha256 均为
+          561c4611a3d8f71d9a30e53fb3b336636fd970e6244d4148d7832c6d3cf631cb（未被改写）
+
+# 换行符三口径判别：确认该漂移不是 CRLF/LF 归一化假象
+python -c "<raw / lf / crlf 三种口径与 pinned 值比对；三者全不匹配则 exit 0>"
+    => exit 0
+    输出：bytes 190979 crlf_present True
+          raw  835b9e18d22095a78761dd0773245b39d355cb1c61cdadc33bf6202002fdae38 190979 match=False
+          lf   35de02b989ad78909237e4adb630e751ccf0b2b5f939f3dedf5255301a3722a4 190840 match=False
+          crlf 25a5fd1cee86c6da0e09b81aa86594fc797ffcfad4ae66fdf7a8d96d2af9c92f 190989 match=False
+          pinned 5ed3693f38e4ac4a7f823d6ddd50c7eabbffa15c20acd13566798b3bafaf64e9
+          matches_under: none
+    说明：该文件当前是混合换行（存在 CRLF，且 10 行是 LF-only）。三种口径都不等于
+          ASSET_SYNC.sha256 记录的值，因此这里是**内容漂移**，不是换行符归一化差异。
+          文件名 mtime 也支持这一点：ASSET_SYNC.sha256 = 2026-11-15 08:24:47，
+          v4.2.0/journal.jsonl = 2026-11-15 08:26:39（晚 1 分 52 秒）。
+
+## 2 本次落盘产物（sha256 与字节数）
+
+0db421f468b70ed4383994eb1dcc9c89c70e6482f85796cf49e878215b59e6af   tools/rl/v430.py
+5bae116baf2591ec2a3e573be3060abb9494c619e9556ce0aae4d1ee7f71b383   configs/v430/assets.json
+561c4611a3d8f71d9a30e53fb3b336636fd970e6244d4148d7832c6d3cf631cb   70775 B  evidence/W00/audit-001.json
+dd5565062ed7eb29d48ca8615f61992ef39396702298ec65b8a81bb028699a09   22903 B  evidence/W00/verify_audit.py
+65c13e5406b16a8905754067efba38d67a7870f33633ed03979f7803c3aff878   21271 B  evidence/W00/verify_audit.json
+
+audit-001.json 自述的身份（可直接在其中复核）：
+    schema=v430-audit/1　experiment_id=v430-w00-assets-r2　exit_code=3
+    started_at=2026-11-15T11:04:57+08:00　finished_at=2026-11-15T11:04:59+08:00
+    protocol_digest=bf602dd5cf23f74a52faf7f132bd31ee92bddc43314b63c6d79821ea828f9117
+    tool_sha256=0db421f4…　config_sha256=5bae116b…　plan_spec_sha256=1fc99ef6…
+    wsl.transport=exec　wsl.commands=3　bytes_hashed=43,051,781　files_hashed=44
+
+## 3 未在此文件登记的项目
+
+引擎启动、游戏运行、任何训练或评测、任何 WSL 内的引擎调用都没有执行；
+它们不在 W00 这一半的范围内（见 W00.md §6）。

@@ -1,0 +1,77 @@
+W03E — exit codes and pytest statistics
+=======================================
+Slice: BC training orchestration on SYNTHETIC batches only
+       (four-head cross-entropy loss + deterministic training loop + checkpoint
+       writer/reader + the fail-closed manifest/splits entry point).
+       No PPO, no value head, no burn-in, no real corpus, no engine.
+Host: Windows, repo D:\WorkShop\Touhou_RL
+Python 3.12.10 / pytest 9.1.1 / torch 2.14.1+cu132
+Run (UTC): 2026-11-15T09:20:00Z (approximate wall clock of the acceptance run)
+
+Command 1
+---------
+$env:PYTHONPATH='D:\WorkShop\Touhou_RL'
+python -m compileall -q touhou_rl/v430/learn.py
+exit code: 0
+output: (none — compileall -q prints nothing on success)
+
+Command 2
+---------
+$env:PYTHONPATH='D:\WorkShop\Touhou_RL'
+python -m pytest -p no:cacheprovider --basetemp .tmp_v430_pytest_w03d -q tests/test_v430_learn.py
+exit code: 0
+output tail:
+
+.................                                                        [100%]
+17 passed in 8.24s
+
+interpretation: 17 passed, 0 failed, 0 skipped, 0 errors, 0 warnings.
+  17 items = 17 test functions, none parametrised.
+
+Command 3 (regression: the earlier v4.3.0 slices must not be broken)
+--------------------------------------------------------------------
+$env:PYTHONPATH='D:\WorkShop\Touhou_RL'
+python -m pytest -p no:cacheprovider --basetemp .tmp_v430_pytest_w03d_reg -q tests/test_v430_models.py tests/test_v430_data.py tests/test_v430_sequence.py
+exit code: 0
+output tail:
+
+........................................................................ [ 60%]
+................................................                         [100%]
+120 passed in 3.74s
+
+interpretation: 120 passed, 0 failed, 0 skipped, 0 errors. No file in
+contracts / observation / sequence / models / data was edited by this slice
+(learn.py imports them read-only), so this is a genuine no-regression check of
+the dependencies it consumes.
+
+Values printed by the acceptance run (all from tests/test_v430_learn.py)
+-----------------------------------------------------------------------
+bc_loss hand calculation (one sample, natural log)
+  EXPECTED  move 2.7336566139  focus 1.3132616875  shoot 1.3132616875  bomb 0.6931471806
+            total 6.0533271695   (a silent /4 would be 1.5133317924)
+  MEASURED  move 2.7336566448  focus 1.3132616282  shoot 1.3132616282  bomb 0.6931471825
+            total 6.0533270836
+  ABS DIFF  move 3.10e-08  focus 5.94e-08  shoot 5.94e-08  bomb 1.90e-09  total 8.59e-08
+  (tolerance 1e-6; the residual is float32 log_softmax rounding, not a formula gap)
+
+Determinism, two independent train_bc calls (same seed 99, epochs=2, lr=1e-3,
+B=2, identical initial weights from _fresh_actor(seed=7))
+  run 1 first three losses: 4.034379959106445, 4.381588459014893, 3.952694892883301
+  run 2 first three losses: 4.034379959106445, 4.381588459014893, 3.952694892883301
+  all 4 step losses identical: True
+  weights: torch.equal over all 60 state_dict tensors: True
+  step-1 per-head: move 2.020080804824829 focus 0.7051489949226379
+                   shoot 0.6336367130279541 bomb 0.675513505935669 (identical in both)
+
+Checkpoint round-trip: save -> load -> forward on the same input is compared with
+torch.equal for all four heads AND the (1,B,256) GRU state — bitwise identical.
+
+Note on what this proves
+------------------------
+All three commands cover syntax plus synthetic unit tests of one orchestration
+module. They are NOT evidence of game capability or of a trained policy: no
+engine was started, no game data / checkpoint / rollout was read, and every
+observation is seeded noise at the frozen O2 shapes (the pixels mean nothing).
+The split registry read by two tests is the repository's own frozen
+configs/v430/splits.json, read unmodified; the crossing case is a deep copy with
+one dev ancestor appended to train. compileall exit 0 only means the file parses.
