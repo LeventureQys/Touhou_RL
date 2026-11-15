@@ -1,0 +1,450 @@
+{
+  "schema": "v410-student-eval-smoke/1",
+  "kind": "dev-smoke",
+  "wp": "WP04.3",
+  "version": "4.1.0",
+  "generated_at": "2026-11-13T09:22:48Z",
+  "tool": "tools/rl/v410_student_eval.py",
+  "command": "python tools/rl/v410_student_eval.py --engine /root/Touhou_RL/third_party/th08-rl/build/rl_v3/th08-modern --data-dir /root/v400-data/game --checkpoint .tmp_v410_wp04_arms/b0_seed0_last.pt --seeds 1000 --stage 0 --difficulty normal --max-frames 19887 --stop-on-death --device cpu --out /mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/smoke/b0_seed1000_rep3.json",
+  "argv": [
+    "--engine",
+    "/root/Touhou_RL/third_party/th08-rl/build/rl_v3/th08-modern",
+    "--data-dir",
+    "/root/v400-data/game",
+    "--checkpoint",
+    ".tmp_v410_wp04_arms/b0_seed0_last.pt",
+    "--seeds",
+    "1000",
+    "--stage",
+    "0",
+    "--difficulty",
+    "normal",
+    "--max-frames",
+    "19887",
+    "--stop-on-death",
+    "--device",
+    "cpu",
+    "--out",
+    "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/smoke/b0_seed1000_rep3.json"
+  ],
+  "python": "3.10.12",
+  "torch": "2.14.1+cu130",
+  "device": "cpu",
+  "platform": "Linux-6.18.58.1-microsoft-standard-WSL2-x86_64-with-glibc2.35",
+  "checkpoint": {
+    "path": ".tmp_v410_wp04_arms/b0_seed0_last.pt",
+    "sha256": "3bc0ec4461701bebb2ffc551d61dffff77f15cd486125baf9db6eaafc741b3a6",
+    "schema": "v410-wp04-bc-arm-checkpoint/1",
+    "arm": "B0",
+    "family": "probe",
+    "model_class": "touhou_rl.v410.student.diagnostics.ProbeNet",
+    "model_config": {
+      "play_width": 24,
+      "hud_width": 16,
+      "hist_hidden": 64,
+      "readout": 128,
+      "trunk": 128,
+      "groups": 8
+    },
+    "parameters": 731802,
+    "parameters_pinned": 731802,
+    "bomb_head": false,
+    "bomb_aux_weight": 0.0,
+    "train_seed": 0,
+    "epochs": 20,
+    "last_epoch": 20,
+    "metrics": {
+      "train": {
+        "loss": 0.08749064386104857,
+        "top1": 0.9769166109877794,
+        "macro_recall": 0.9255562341455722,
+        "samples": 46397,
+        "steps": 363
+      },
+      "val": {
+        "loss": 2.9367071009484733,
+        "top1": 0.6280129633380596,
+        "macro_recall": 0.3079649134166203,
+        "samples": 9874
+      }
+    },
+    "role": "BC baseline (behaviour cloning), not an RL-trained policy"
+  },
+  "engine": {
+    "path": "/root/Touhou_RL/third_party/th08-rl/build/rl_v3/th08-modern",
+    "sha256": "691bfd77b7eca3361aa8bb7af0977556a70cc73a070b29a2447222ba7a568ef6",
+    "role": "env (pixels + state)"
+  },
+  "obs_spec": {
+    "version": "obs-v3",
+    "digest": "ef2fbd15385f26f425db2bfe855d105ee009023acb08c26916e811963553a105",
+    "play_shape": [
+      4,
+      112,
+      96
+    ],
+    "hud_shape": [
+      1,
+      56,
+      160
+    ],
+    "act_hist_shape": [
+      8,
+      18
+    ],
+    "decision_frames": 2,
+    "note": "frozen obs-v3: 4x112x96 playfield + 56x160 HUD + 8x18 action history; the checkpoint was trained on this contract"
+  },
+  "suite": {
+    "name": "S1N",
+    "stage": 0,
+    "stage_argument_semantics": "RESET stage is 0-based; S1N = stage 0",
+    "difficulty": "normal",
+    "max_frames": 19887,
+    "stop_on_death": true,
+    "obs_window": "consecutive",
+    "window_alignment": {
+      "mode": "consecutive",
+      "frames_per_decision": 2,
+      "renders_per_decision": 2,
+      "stack_span_frames": 4,
+      "matches_training_obs": true,
+      "training_window": "the D410-S1 shards store frames[t-3..t], four consecutive game frames; one decision = two frames = two renders, so the stack is consecutive"
+    }
+  },
+  "seed_policy": {
+    "allowed": "1000-1099 (dev)",
+    "refused": [
+      "60000-60199 (confirm)",
+      "1-20 (D410-S1 corpus: train 1-14 / val 15-17 / test 18-20)"
+    ],
+    "seeds_requested": [
+      1000
+    ],
+    "all_dev": true
+  },
+  "episodes": [
+    {
+      "schema": "v410-student-eval-episode/1",
+      "controller": "tools/rl/v410_student_eval.py",
+      "checkpoint": ".tmp_v410_wp04_arms/b0_seed0_last.pt",
+      "checkpoint_sha256": "3bc0ec4461701bebb2ffc551d61dffff77f15cd486125baf9db6eaafc741b3a6",
+      "checkpoint_schema": "v410-wp04-bc-arm-checkpoint/1",
+      "arm": "B0",
+      "arm_family": "probe",
+      "model_class": "touhou_rl.v410.student.diagnostics.ProbeNet",
+      "parameters": 731802,
+      "arm_parameters_pinned": 731802,
+      "arm_bomb_head": false,
+      "arm_bomb_aux_weight": 0.0,
+      "action_rule": "argmax over the 18 move logits; the bomb channel is never actuated (bomb=0 for every decision) so all four arms share one actuation rule",
+      "checkpoint_train_seed": 0,
+      "checkpoint_epochs": 20,
+      "obs_spec_version": "obs-v3",
+      "obs_spec_digest": "ef2fbd15385f26f425db2bfe855d105ee009023acb08c26916e811963553a105",
+      "obs_shapes": {
+        "play": [
+          4,
+          112,
+          96
+        ],
+        "hud": [
+          1,
+          56,
+          160
+        ],
+        "act_hist": [
+          8,
+          18
+        ]
+      },
+      "seed": 1000,
+      "seed_role": "dev",
+      "suite": "S1N",
+      "stage": 0,
+      "difficulty": "normal",
+      "max_frames": 19887,
+      "decision_frames": 2,
+      "obs_window": "consecutive",
+      "window_alignment": {
+        "mode": "consecutive",
+        "frames_per_decision": 2,
+        "renders_per_decision": 2,
+        "stack_span_frames": 4,
+        "matches_training_obs": true,
+        "training_window": "the D410-S1 shards store frames[t-3..t], four consecutive game frames; one decision = two frames = two renders, so the stack is consecutive"
+      },
+      "stage_argument_semantics": "RESET stage is 0-based; S1N = stage 0 (Stage1)",
+      "stop_on_death": true,
+      "privilege": "deploy_pixel",
+      "policy_input": "play96x112 4-frame stack + hud 56x160 + act_hist 8x18 one-hot of the policy's own last 8 decisions; no privileged state",
+      "referee_state_source": "engine STATE reply after each stepped frame",
+      "engine": "/root/Touhou_RL/third_party/th08-rl/build/rl_v3/th08-modern",
+      "engine_sha256": "691bfd77b7eca3361aa8bb7af0977556a70cc73a070b29a2447222ba7a568ef6",
+      "not_a_gate": true,
+      "not_a_dev_score": true,
+      "not_the_confirm_split": true,
+      "frames": 1398,
+      "steps": 699,
+      "renders": 1398,
+      "pixels_warmup_frames": 0,
+      "deaths": 1.0,
+      "lives_end": 2.0,
+      "bombs_start": 3.0,
+      "bombs_end": 3.0,
+      "bombs_used": 0.0,
+      "score": 13102,
+      "score_start": 0,
+      "state_frame": 1398,
+      "gameplay_frame": 1400,
+      "stage_start": 0,
+      "stage_end": 0,
+      "stage_clear": false,
+      "stop_reason": "death_stop",
+      "exit": "controller",
+      "actions": {
+        "histogram": [
+          295,
+          1,
+          42,
+          107,
+          3,
+          1,
+          99,
+          98,
+          3,
+          0,
+          0,
+          13,
+          32,
+          0,
+          0,
+          5,
+          0,
+          0
+        ],
+        "decisions": 699,
+        "action0_share": 0.4220314735336195,
+        "unique_actions": 12,
+        "labels": [
+          "idle",
+          "N",
+          "NE",
+          "E",
+          "SE",
+          "S",
+          "SW",
+          "W",
+          "NW",
+          "focus-idle",
+          "focus-N",
+          "focus-NE",
+          "focus-E",
+          "focus-SE",
+          "focus-S",
+          "focus-SW",
+          "focus-W",
+          "focus-NW"
+        ],
+        "idle_definition": "candidate 0 = focus 0 + move 0 (no direction held)",
+        "no_bomb": "B0/B2 have no bomb head; every action is (cand, bomb=0)",
+        "bomb": {
+          "head_present": false,
+          "actuated": false,
+          "decisions_read": 0,
+          "decisions": 699,
+          "mean_logit": null,
+          "sd_logit": null,
+          "min_logit": null,
+          "max_logit": null,
+          "share_positive": null,
+          "note": "the arm has no bomb head; there is no auxiliary logit to read"
+        }
+      },
+      "action_sequence_sha256": "85a528fd29c83f513d1464f8a9bf3ef20de52c352ed8aa64bc366d8b59cedac6",
+      "policy_input_sha256": "41d171cccc2d9486dc5ac5de85216f2f59c7be389e38410746112a4dbb442b15",
+      "wall_s": 43.077,
+      "harness_role": "env",
+      "error": null
+    }
+  ],
+  "per_seed": [
+    {
+      "seed": 1000,
+      "frames": 1398,
+      "deaths": 1.0,
+      "stop_reason": "death_stop",
+      "stage_clear": false,
+      "score": 13102,
+      "steps": 699,
+      "action0_share": 0.422031,
+      "unique_actions": 12,
+      "error": null
+    }
+  ],
+  "arm_summary": {
+    "arm": "B0",
+    "family": "probe",
+    "base": "B0",
+    "model_class": "touhou_rl.v410.student.diagnostics.ProbeNet",
+    "parameters": 731802,
+    "bomb_head": false,
+    "bomb_aux_weight": 0.0,
+    "n_episodes": 1,
+    "n_measured": 1,
+    "clears": 0,
+    "clear_rate": 0.0,
+    "wilson_95": {
+      "successes": 0,
+      "n": 1,
+      "rate": 0.0,
+      "low": 0.0,
+      "high": 0.7934506856227626,
+      "method": "Wilson score interval, 95%, descriptive only",
+      "basis": "all scheduled episodes; a failed episode counts as a non-clear",
+      "descriptive_only": true
+    },
+    "frames": {
+      "n": 1,
+      "mean": 1398.0,
+      "median": 1398.0,
+      "min": 1398,
+      "max": 1398,
+      "sd": null,
+      "note": "descriptive only; no confidence interval is attached"
+    },
+    "deaths_mean": 1.0,
+    "stop_reasons": {
+      "death_stop": 1
+    },
+    "actions": {
+      "decisions": 699,
+      "histogram": [
+        295,
+        1,
+        42,
+        107,
+        3,
+        1,
+        99,
+        98,
+        3,
+        0,
+        0,
+        13,
+        32,
+        0,
+        0,
+        5,
+        0,
+        0
+      ],
+      "share": [
+        0.422031,
+        0.001431,
+        0.060086,
+        0.153076,
+        0.004292,
+        0.001431,
+        0.141631,
+        0.1402,
+        0.004292,
+        0.0,
+        0.0,
+        0.018598,
+        0.04578,
+        0.0,
+        0.0,
+        0.007153,
+        0.0,
+        0.0
+      ],
+      "labels": [
+        "idle",
+        "N",
+        "NE",
+        "E",
+        "SE",
+        "S",
+        "SW",
+        "W",
+        "NW",
+        "focus-idle",
+        "focus-N",
+        "focus-NE",
+        "focus-E",
+        "focus-SE",
+        "focus-S",
+        "focus-SW",
+        "focus-W",
+        "focus-NW"
+      ],
+      "idle_share": 0.4220314735336195,
+      "idle_share_by_episode_mean": 0.4220314735336195,
+      "unique_actions_mean": 12.0,
+      "idle_definition": "candidate 0 = focus 0 + move 0 (no direction held)",
+      "note": "pooled over the arm's episodes; descriptive only"
+    },
+    "bomb": null,
+    "not_a_gate": true,
+    "not_a_development_score": true,
+    "not_g410_2": true,
+    "note": "descriptive per-arm dev summary; 20 episodes, seed0 checkpoint, last epoch, no pre-registered decision rule"
+  },
+  "aggregate": {
+    "n": 1,
+    "n_measured": 1,
+    "frames": [
+      1398
+    ],
+    "frames_stats": {
+      "n": 1,
+      "mean": 1398.0,
+      "min": 1398,
+      "max": 1398,
+      "sd": null,
+      "ci_reportable": false,
+      "note": "descriptive only; n < 20 -> no confidence interval and no claim"
+    },
+    "deaths": [
+      1.0
+    ],
+    "deaths_mean": 1.0,
+    "clears": 0,
+    "clear_rate": 0.0,
+    "stop_reasons": {
+      "death_stop": 1
+    },
+    "note": "descriptive only: this block is not a development score and its clear_rate is not a pass rate"
+  },
+  "verdict": {
+    "what_this_is": "smoke: the v410 checkpoint ran in the real engine under the S1N dev ruler",
+    "is_a_gate": false,
+    "is_a_development_score": false,
+    "is_a_pass_rate": false,
+    "is_a_four_arm_comparison": false,
+    "conclusion_allowed": false
+  },
+  "not_a_gate": true,
+  "not_a_development_score": true,
+  "not_g410_2": true,
+  "limits": [
+    "This is a descriptive dev ruler, not a development score and not a gate: a handful of dev episodes is only a SMOKE, and even 20 episodes per arm has no pre-registered decision rule, no interval-based arm comparison and no pass/fail verdict.",
+    "The checkpoint is a WP04.2 behaviour-cloning baseline (chosen one-hot CE on D410-S1, last epoch only), not an RL-trained policy and not the final student.",
+    "No G410-2 conclusion: the confirm split 60000-60199 is never read, there is no G410-2 protocol, no four-arm gate matrix and no pass rate. Frames, deaths, stop_reason, clear count and the action distribution are descriptive only.",
+    "The Wilson intervals are descriptive, computed over the scheduled episodes (a failed episode counts as a non-clear); they are not a confidence interval for any pre-registered pass rate.",
+    "B1/B3 carry a bomb head but this ruler has no bomb channel: the head is read and recorded, never actuated, so all four arms play the same move-only rule. On D410-S1 the bomb label is 0 on every row, so the auxiliary term has no positive class to learn.",
+    "The confirm split is refused by check_seed_policy and the D410-S1 corpus seeds 1-20 are refused too, so a checkpoint can never be scored on a seed it saw.",
+    "The policy sees only pixels + its own action history; the engine STATE reply is a referee for death/stage/score, never an input."
+  ],
+  "not_claimed": [
+    "not G410-2",
+    "not a development-game score",
+    "not a clear rate",
+    "not a four-arm gate comparison",
+    "not evidence that the WP04.2 BC matrix works in closed loop",
+    "not evidence that the bomb auxiliary head helps (its label is constant 0)",
+    "not a confirm-split measurement"
+  ],
+  "exit_code": 0
+}

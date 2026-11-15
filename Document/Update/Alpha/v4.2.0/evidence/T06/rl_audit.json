@@ -1,0 +1,1327 @@
+{
+ "schema": "v420-rl-audit-evidence/2",
+ "source": ".tmp_v420_data/T06/audit2.json",
+ "supersedes": {
+  "path": "Document/Update/Alpha/v4.2.0/evidence/T06/rl_audit.json (round 1)",
+  "why": "the round-1 audit failed reward_discount_horizon at τ = 30 s (γ^T = 6.548456e-04).  This run is the same 17 items after the single authorised discount revision (τ = 200 s, v420-discount/2); the reward coefficients are unchanged",
+  "discount_revision_evidence": "Document/Update/Alpha/v4.2.0/evidence/T06/DISCOUNT_REVISION.md"
+ },
+ "contract": "v420-rl/1",
+ "obs_contract": "obs-v420-2f",
+ "action_contract": "action-v420-2f",
+ "reward_version": "v420-reward-r2/1",
+ "termination_version": "v420-termination/1",
+ "discount_version": "v420-discount/2",
+ "device": "cpu",
+ "engine": "/root/Touhou_RL/third_party/th08-rl/build/rl_v3/th08-modern",
+ "data_dir": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/engine-data-gamesrc",
+ "data_dir_check": {
+  "data_dir": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/engine-data-gamesrc",
+  "fail_closed": true,
+  "forbidden_markers": [
+   "/root/v400-data",
+   ".tmp_v400_",
+   ".tmp_v410_",
+   "Document/Update/Alpha/v4.0.0",
+   "Document/Update/Alpha/v4.1.0",
+   "Document/Update/Alpha/v4.2.0/evidence/T02",
+   "Document/Update/Alpha/v4.2.0/evidence/T03",
+   "Document/Update/Alpha/v4.2.0/evidence/T04",
+   "Document/Update/Alpha/v4.2.0/evidence/T05"
+  ],
+  "note": "the engine and the frozen evaluator only ever see a private copy; a data dir inside a read-only asset/evidence tree is refused before an engine starts"
+ },
+ "declaration": "R2 uses engine-truth reward and termination, so it is a training-time privileged diagnostic: it is NOT strict pixel self-improvement (R1) and no result here may be reported as R1.",
+ "checkpoint": {
+  "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T04/checkpoints/a0_seed0_step5000.pt",
+  "source_sha256": "96cb219eac83391f42b18ea656b5a6c5ac81e97cd1fd8c1e2c0d404aee6b89ad",
+  "copy": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/checkpoints/a0_seed0_step5000.pt",
+  "copy_sha256": "96cb219eac83391f42b18ea656b5a6c5ac81e97cd1fd8c1e2c0d404aee6b89ad",
+  "copy_matches_source": true,
+  "declared_sha_check": {
+   "checked": true,
+   "expected": "96cb219eac83391f42b18ea656b5a6c5ac81e97cd1fd8c1e2c0d404aee6b89ad",
+   "actual": "96cb219eac83391f42b18ea656b5a6c5ac81e97cd1fd8c1e2c0d404aee6b89ad",
+   "match": true,
+   "form": "full sha256"
+  },
+  "bytes": 2940699,
+  "warning": "a second file with this name exists under T05/checkpoints and is a different model; reference by full path + sha256"
+ },
+ "identity": {
+  "torch": "2.14.1+cu130",
+  "numpy": "2.2.6",
+  "obs_spec_digest": "ef2fbd15385f26f425db2bfe855d105ee009023acb08c26916e811963553a105",
+  "parameters": {
+   "actor": 731802,
+   "critic": 129
+  },
+  "critic_arch": "Linear(128,1) on the actor trunk output",
+  "bomb_channel": 0
+ },
+ "reward": {
+  "version": "v420-reward-r2/1",
+  "source": "engine_truth",
+  "stage_clear_bonus": 1.0,
+  "death_penalty": 0.25,
+  "bomb_penalty": 0.1,
+  "progress_total": 0.5,
+  "progress_score_full": 2631430.0,
+  "survive_per_decision": 0.0,
+  "units": {
+   "stage_clear_bonus": {
+    "unit": "reward per first-face completion",
+    "role": "primary positive event",
+    "event": "engine stage index advances (stage_clear)",
+    "counted": "once per episode"
+   },
+   "death_penalty": {
+    "unit": "reward per engine death event",
+    "role": "auxiliary",
+    "event": "globals.deaths increases",
+    "counted": "once per death, a first death does not end the episode"
+   },
+   "bomb_penalty": {
+    "unit": "reward per bomb spent",
+    "role": "auxiliary",
+    "event": "globals.bombsRemaining decreases",
+    "counted": "once per bomb"
+   },
+   "progress_total": {
+    "unit": "reward for traversing the whole first face by score",
+    "role": "bounded progress",
+    "event": "score increases, normalised by progress_score_full",
+    "counted": "cumulative, hard-capped at progress_total per episode"
+   },
+   "progress_score_full": {
+    "unit": "score points",
+    "role": "normaliser",
+    "event": "the score a real first-face clear reaches",
+    "counted": "measured, see evidence/T06/RL_AUDIT.md"
+   },
+   "survive_per_decision": {
+    "unit": "reward per decision at the two-frame beat",
+    "role": "explicitly zero",
+    "event": "every decision",
+    "counted": "0.0: a bare survival constant is what §5 forbids, because at γ = 0.999833 (τ = 200 s) the discounted sum of a constant c is c/(1-γ) ≈ 6001·c and a long stall would out-earn a clear"
+   }
+  },
+  "progress_bound": {
+   "cumulative_cap": 0.5,
+   "per_decision_rate": 1.9001075460871086e-07,
+   "meaning": "a trajectory can never earn more than progress_total from progress, however long it stalls"
+  }
+ },
+ "discount": {
+  "version": "v420-discount/2",
+  "version_legacy": "v420-discount/1",
+  "decision_frames": 2,
+  "frames_per_second": 60.0,
+  "delta_t_seconds": 0.03333333333333333,
+  "tau_seconds": 200.0,
+  "tau_seconds_legacy": 30.0,
+  "gamma": 0.9998333472214507,
+  "gamma_recomputed": true,
+  "gamma_published": 0.9998333472214507,
+  "gamma_legacy": 0.9988895059442793,
+  "gae_lambda": 0.95,
+  "effective_horizon_decisions": 6000.500013889792,
+  "effective_horizon_seconds": 200.01666712965974,
+  "clear_decisions_measured": 6598,
+  "gamma_T_at_clear": 0.33298205922092694,
+  "gamma_T_at_clear_legacy_tau": 0.0006548455765539476,
+  "floor": {
+   "gamma_T_clear_min": 0.3,
+   "clear_vs_early_death_discounted_ratio_min": 1.5,
+   "rule": "the smallest τ in TAU_CANDIDATE_SECONDS whose γ^T at the measured clear length T = 6598 decisions reaches gamma_T_clear_min; ties broken towards the shorter effective horizon (the smaller τ)",
+   "note": "written before the revision ran and frozen after it; the thresholds are a visibility floor for a terminal event, not a tolerance that was moved to let a run through"
+  },
+  "note": "Δt = 2/60 s is the physical clock; τ = 200 s is the single diagnosed revision of the τ = 30 s initial configuration (at 30 s the terminal weight over the measured 6,598-decision clear was 6.55e-04, i.e. a clear bonus worth 1/382 of one death penalty). γ is always recomputed from Δt/τ and never read from the config"
+ },
+ "discount_floor": {
+  "gamma_T_clear_min": 0.3,
+  "clear_vs_early_death_discounted_ratio_min": 1.5,
+  "rule": "written before the revision was applied and frozen after it: the smallest tau in [200, 300, 400, 600] whose gamma^T at the measured clear length reaches gamma_T_clear_min, ties broken towards the shorter horizon",
+  "note": "this is the audit's explicit pass criterion for reward_discount_horizon. It is STRICTER than the criterion it replaces (stage_clear_bonus*gamma^T > death_penalty, i.e. gamma^T > 0.25), it rejects the replaced tau = 30 s by a factor of 458 (gamma^T = 6.55e-04), and a config may raise it but never lower it (resolve_discount_floor refuses relaxation)."
+ },
+ "discount_revision": {
+  "rule": "written before the revision was applied and frozen after it: the smallest tau in [200, 300, 400, 600] whose gamma^T at the measured clear length reaches gamma_T_clear_min, ties broken towards the shorter horizon",
+  "delta_t_seconds": 0.03333333333333333,
+  "clear_decisions_measured": 6598,
+  "clear_bonus": 1.0,
+  "floor": {
+   "gamma_T_clear_min": 0.3,
+   "clear_vs_early_death_discounted_ratio_min": 1.5,
+   "rule": "written before the revision was applied and frozen after it: the smallest tau in [200, 300, 400, 600] whose gamma^T at the measured clear length reaches gamma_T_clear_min, ties broken towards the shorter horizon",
+   "note": "this is the audit's explicit pass criterion for reward_discount_horizon. It is STRICTER than the criterion it replaces (stage_clear_bonus*gamma^T > death_penalty, i.e. gamma^T > 0.25), it rejects the replaced tau = 30 s by a factor of 458 (gamma^T = 6.55e-04), and a config may raise it but never lower it (resolve_discount_floor refuses relaxation)."
+  },
+  "candidates": [
+   {
+    "tau_seconds": 200.0,
+    "gamma": 0.9998333472214507,
+    "effective_horizon_decisions": 6000.500013889792,
+    "effective_horizon_seconds": 200.01666712965974,
+    "gamma_T_at_clear": 0.33298205922092694,
+    "clear_bonus_at_terminal_value": 0.33298205922092694,
+    "meets_gamma_T_floor": true
+   },
+   {
+    "tau_seconds": 300.0,
+    "gamma": 0.9998888950614998,
+    "effective_horizon_decisions": 9000.50000926147,
+    "effective_horizon_seconds": 300.01666697538235,
+    "gamma_T_at_clear": 0.48041204746150784,
+    "clear_bonus_at_terminal_value": 0.48041204746150784,
+    "meets_gamma_T_floor": true
+   },
+   {
+    "tau_seconds": 400.0,
+    "gamma": 0.9999166701387925,
+    "effective_horizon_decisions": 12000.500006950875,
+    "effective_horizon_seconds": 400.0166668983625,
+    "gamma_T_at_clear": 0.5770459766960238,
+    "clear_bonus_at_terminal_value": 0.5770459766960238,
+    "meets_gamma_T_floor": true
+   },
+   {
+    "tau_seconds": 600.0,
+    "gamma": 0.9999444459876258,
+    "effective_horizon_decisions": 18000.500004639547,
+    "effective_horizon_seconds": 600.0166668213183,
+    "gamma_T_at_clear": 0.6931176288781115,
+    "clear_bonus_at_terminal_value": 0.6931176288781115,
+    "meets_gamma_T_floor": true
+   }
+  ],
+  "selected_tau_seconds": 200.0,
+  "selected": {
+   "tau_seconds": 200.0,
+   "gamma": 0.9998333472214507,
+   "effective_horizon_decisions": 6000.500013889792,
+   "effective_horizon_seconds": 200.01666712965974,
+   "gamma_T_at_clear": 0.33298205922092694,
+   "clear_bonus_at_terminal_value": 0.33298205922092694,
+   "meets_gamma_T_floor": true
+  },
+  "admissible_tau_seconds": [
+   200.0,
+   300.0,
+   400.0,
+   600.0
+  ],
+  "no_lookahead": "the rule reads only Δt, the candidate τ's and the already-measured clear length; no audit or training result enters the selection",
+  "rejected_initial_configuration": {
+   "tau_seconds": 30.0,
+   "gamma": 0.9988895059442793,
+   "effective_horizon_decisions": 900.5000925925611,
+   "gamma_T_at_clear": 0.0006548455765539476,
+   "meets_gamma_T_floor": false,
+   "why_rejected": "γ^T over the real task length is 6.55e-04, so a terminal clear bonus is smaller than one death penalty by three orders of magnitude"
+  }
+ },
+ "ppo": {
+  "clip": 0.2,
+  "grad_clip": 0.5,
+  "actor_lr": 3e-05,
+  "critic_lr": 0.0003,
+  "entropy_coef": 0.001,
+  "value_coef": 0.5,
+  "epochs": 2,
+  "minibatch": 128,
+  "advantage_normalisation": true,
+  "critic_warmup_steps": 200,
+  "zero_update": true,
+  "temperature": null,
+  "temperature_grid": [
+   1.0,
+   2.0,
+   4.0,
+   8.0,
+   16.0,
+   32.0
+  ],
+  "temperature_min_entropy": 1.0
+ },
+ "rollout": {
+  "decisions_per_update": 512,
+  "episode_max_frames": 19887,
+  "train_seeds": [
+   3000,
+   3001,
+   3002,
+   3003,
+   3004
+  ],
+  "sampled_rollout_decisions": 256,
+  "sampled_rollout_frames": 512,
+  "sampled_rollout_episodes": [],
+  "episodes_collected": 0
+ },
+ "status": "pass",
+ "passed": true,
+ "failed": [],
+ "checks": [
+  {
+   "id": "obs_contract",
+   "status": "pass",
+   "pass": true,
+   "detail": {
+    "obs_contract": "obs-v420-2f",
+    "action_contract": "action-v420-2f",
+    "shapes": {
+     "play": [
+      4,
+      112,
+      96
+     ],
+     "hud": [
+      56,
+      160
+     ],
+     "act_hist": [
+      8,
+      18
+     ]
+    },
+    "dtypes": {
+     "play": "uint8",
+     "hud": "uint8",
+     "act_hist": "uint8"
+    },
+    "history_is_executed_only": true,
+    "rows_checked": 256
+   }
+  },
+  {
+   "id": "initial_logits",
+   "status": "pass",
+   "pass": true,
+   "detail": {
+    "shape": [
+     256,
+     18
+    ],
+    "finite": true,
+    "bitwise_deterministic_across_two_calls": true,
+    "sha256_float32": "c8b6df33929365ae98be5735b2ba8818d774bf641ae2ad693086fef4c0606d85",
+    "logit_min": -26.879554748535156,
+    "logit_max": 29.04317283630371,
+    "logit_mean": -4.25663423538208,
+    "logit_sd": 8.078593254089355,
+    "logit_range": 55.9227294921875,
+    "device": "cpu",
+    "checkpoint_sha256": "96cb219eac83391f42b18ea656b5a6c5ac81e97cd1fd8c1e2c0d404aee6b89ad",
+    "parameters": {
+     "actor": 731802,
+     "critic": 129
+    }
+   }
+  },
+  {
+   "id": "argmax_behaviour",
+   "status": "pass",
+   "pass": true,
+   "detail": {
+    "decisions": 256,
+    "distinct_argmax": 9,
+    "argmax_counts": {
+     "0": 51,
+     "2": 30,
+     "3": 21,
+     "6": 70,
+     "7": 39,
+     "11": 3,
+     "12": 14,
+     "15": 15,
+     "16": 13
+    },
+    "argmax_share": 0.04827586206896552,
+    "threshold": 0.6,
+    "temperature_invariant": true,
+    "note": "argmax is the deployment rule; a single action owning most decisions is the idle collapse this audit is looking for"
+   }
+  },
+  {
+   "id": "sample_behaviour",
+   "status": "pass",
+   "pass": true,
+   "detail": {
+    "draws": 256,
+    "distinct_sampled": 17,
+    "sampled_counts": {
+     "0": 16,
+     "1": 8,
+     "2": 30,
+     "3": 24,
+     "4": 7,
+     "5": 5,
+     "6": 24,
+     "7": 46,
+     "8": 10,
+     "10": 10,
+     "11": 13,
+     "12": 10,
+     "13": 8,
+     "14": 8,
+     "15": 10,
+     "16": 12,
+     "17": 15
+    },
+    "sampled_share": 0.1796875,
+    "temperature": 8.0,
+    "raw_at_temperature_one": {
+     "draws": 256,
+     "distinct": 9,
+     "sampled_share": 0.2578125,
+     "mean_entropy_nats": 0.4126422703266144
+    },
+    "generator": "torch.multinomial, cpu generator seeded from pilot.run_seed"
+   }
+  },
+  {
+   "id": "initial_policy_degeneracy",
+   "status": "pass",
+   "pass": true,
+   "detail": {
+    "mean_entropy_nats": 2.394838333129883,
+    "max_entropy_nats": 2.8903717578961645,
+    "entropy_fraction": 0.8285572008470741,
+    "effective_actions": 10.96642500815504,
+    "argmax_share": 0.04827586206896552,
+    "temperature": 8.0,
+    "temperature_selection": {
+     "rule": "frozen: smallest temperature in the grid whose mean row entropy over the audit's real observations satisfies both pre-registered degeneracy thresholds",
+     "min_entropy_nats": 1.0,
+     "min_effective_actions": 6.0,
+     "grid": [
+      1.0,
+      2.0,
+      4.0,
+      8.0,
+      16.0,
+      32.0
+     ],
+     "walk": [
+      {
+       "temperature": 1.0,
+       "mean_entropy_nats": 0.4126422703266144,
+       "effective_actions": 1.510804469663767,
+       "satisfies_thresholds": false
+      },
+      {
+       "temperature": 2.0,
+       "mean_entropy_nats": 0.8496732115745544,
+       "effective_actions": 2.3388824073277776,
+       "satisfies_thresholds": false
+      },
+      {
+       "temperature": 4.0,
+       "mean_entropy_nats": 1.6146702766418457,
+       "effective_actions": 5.026230384657849,
+       "satisfies_thresholds": false
+      },
+      {
+       "temperature": 8.0,
+       "mean_entropy_nats": 2.394838333129883,
+       "effective_actions": 10.96642500815504,
+       "satisfies_thresholds": true
+      },
+      {
+       "temperature": 16.0,
+       "mean_entropy_nats": 2.7605178356170654,
+       "effective_actions": 15.808026788442135,
+       "satisfies_thresholds": true
+      },
+      {
+       "temperature": 32.0,
+       "mean_entropy_nats": 2.858442544937134,
+       "effective_actions": 17.434352559975448,
+       "satisfies_thresholds": true
+      }
+     ],
+     "selected": 8.0,
+     "frozen_in_config": false,
+     "reached_floor": true,
+     "argmax_invariant": true,
+     "deployment_rule": "argmax (unchanged by a positive temperature)"
+    },
+    "raw_at_temperature_one": {
+     "mean_entropy_nats": 0.4126422703266144,
+     "effective_actions": 1.510804469663767,
+     "sampled_share": 0.2578125,
+     "degenerate": true
+    },
+    "remedy": "the raw A0 softmax is effectively deterministic (see raw_at_temperature_one), so the pre-registered rule selects the smallest sampling temperature whose mean row entropy reaches the floor; deployment stays argmax and is therefore unchanged, so R0 and R2 are still measured with the same action rule",
+    "thresholds": {
+     "min_entropy_nats": 1.0,
+     "max_argmax_share": 0.6,
+     "min_effective_actions": 6.0,
+     "note": "max entropy of 18 actions is ln(18) = 2.890372 nats; one nat is 0.346 of that, six effective actions is exp(1.0)"
+    },
+    "note": "pre-registered thresholds; a failure means the sampling distribution has to be fixed before any training, not that training should run longer"
+   }
+  },
+  {
+   "id": "joint_log_prob",
+   "status": "pass",
+   "pass": true,
+   "detail": {
+    "rows": 256,
+    "actions": 18,
+    "exp_row_sum_min": 0.9999998211860657,
+    "exp_row_sum_max": 1.000000238418579,
+    "probabilities_sum_to_one": true,
+    "recorded_log_prob_matches_matrix": true,
+    "single_row_matches_batch": true,
+    "single_row_max_abs_difference": 9.5367431640625e-07,
+    "single_row_tolerance": 0.0001,
+    "temperature": 8.0,
+    "probe_row_per_action": {
+     "0": {
+      "matrix": -2.1365561485290527,
+      "single_row": -2.1365554332733154
+     },
+     "1": {
+      "matrix": -5.041678428649902,
+      "single_row": -5.041678428649902
+     },
+     "2": {
+      "matrix": -3.561596155166626,
+      "single_row": -3.5615954399108887
+     },
+     "3": {
+      "matrix": -3.457773208618164,
+      "single_row": -3.4577724933624268
+     },
+     "4": {
+      "matrix": -4.548352241516113,
+      "single_row": -4.548352241516113
+     },
+     "5": {
+      "matrix": -5.240969657897949,
+      "single_row": -5.240969181060791
+     },
+     "6": {
+      "matrix": -3.0125949382781982,
+      "single_row": -3.01259446144104
+     },
+     "7": {
+      "matrix": -0.5284156203269958,
+      "single_row": -0.5284159779548645
+     },
+     "8": {
+      "matrix": -5.8066792488098145,
+      "single_row": -5.806678771972656
+     },
+     "9": {
+      "matrix": -6.148268699645996,
+      "single_row": -6.148268222808838
+     },
+     "10": {
+      "matrix": -4.9060821533203125,
+      "single_row": -4.906081676483154
+     },
+     "11": {
+      "matrix": -3.796046018600464,
+      "single_row": -3.7960457801818848
+     },
+     "12": {
+      "matrix": -3.6400673389434814,
+      "single_row": -3.640066623687744
+     },
+     "13": {
+      "matrix": -4.889599323272705,
+      "single_row": -4.889598369598389
+     },
+     "14": {
+      "matrix": -4.460397720336914,
+      "single_row": -4.460397720336914
+     },
+     "15": {
+      "matrix": -3.096174478530884,
+      "single_row": -3.096174478530884
+     },
+     "16": {
+      "matrix": -3.886232852935791,
+      "single_row": -3.886232852935791
+     },
+     "17": {
+      "matrix": -4.205149173736572,
+      "single_row": -4.205148696899414
+     }
+    }
+   }
+  },
+  {
+   "id": "ratio_zero_update",
+   "status": "pass",
+   "pass": true,
+   "detail": {
+    "tolerance": 1e-06,
+    "recomputed_ratio_min": 0.9999990463261383,
+    "recomputed_ratio_max": 1.0000009536747712,
+    "max_abs_ratio_minus_one": 9.536747711536009e-07,
+    "ppo_path_ratio": {
+     "max_abs_ratio_minus_one": 9.5367431640625e-07,
+     "min_ratio": 0.9999990463256836,
+     "max_ratio": 1.0000009536743164
+    },
+    "ppo_path_ok": true,
+    "actor_parameters_bitwise_unchanged": true,
+    "critic_parameters_bitwise_unchanged": true,
+    "minibatches": 4.0,
+    "note": "zero_update runs the forward pass, both losses and the backward pass, and never steps the optimiser, so a ratio away from 1 would be a real bug"
+   }
+  },
+  {
+   "id": "gae",
+   "status": "pass",
+   "pass": true,
+   "detail": {
+    "transitions": 256,
+    "segments": 1,
+    "max_abs_difference_vs_reference": 3.3881317890172014e-21,
+    "max_abs_return_difference_vs_reference": 3.3881317890172014e-21,
+    "advantage_min": 0.0,
+    "advantage_max": 3.2141012001992434e-05,
+    "advantage_mean": 3.151888672832605e-06,
+    "advantage_sd": 6.50673926760994e-06,
+    "lambda_": 0.95,
+    "gamma": 0.9998333472214507,
+    "reference": "an independent forward-built-segment implementation"
+   }
+  },
+  {
+   "id": "gamma_lambda",
+   "status": "pass",
+   "pass": true,
+   "detail": {
+    "version": "v420-discount/2",
+    "version_legacy": "v420-discount/1",
+    "decision_frames": 2,
+    "frames_per_second": 60.0,
+    "delta_t_seconds": 0.03333333333333333,
+    "tau_seconds": 200.0,
+    "tau_seconds_legacy": 30.0,
+    "gamma": 0.9998333472214507,
+    "gamma_recomputed": true,
+    "gamma_published": 0.9998333472214507,
+    "gamma_legacy": 0.9988895059442793,
+    "gae_lambda": 0.95,
+    "effective_horizon_decisions": 6000.500013889792,
+    "effective_horizon_seconds": 200.01666712965974,
+    "clear_decisions_measured": 6598,
+    "gamma_T_at_clear": 0.33298205922092694,
+    "gamma_T_at_clear_legacy_tau": 0.0006548455765539476,
+    "floor": {
+     "gamma_T_clear_min": 0.3,
+     "clear_vs_early_death_discounted_ratio_min": 1.5,
+     "rule": "the smallest τ in TAU_CANDIDATE_SECONDS whose γ^T at the measured clear length T = 6598 decisions reaches gamma_T_clear_min; ties broken towards the shorter effective horizon (the smaller τ)",
+     "note": "written before the revision ran and frozen after it; the thresholds are a visibility floor for a terminal event, not a tolerance that was moved to let a run through"
+    },
+    "note": "Δt = 2/60 s is the physical clock; τ = 200 s is the single diagnosed revision of the τ = 30 s initial configuration (at 30 s the terminal weight over the measured 6,598-decision clear was 6.55e-04, i.e. a clear bonus worth 1/382 of one death penalty). γ is always recomputed from Δt/τ and never read from the config"
+   }
+  },
+  {
+   "id": "truncation_bootstrap",
+   "status": "pass",
+   "pass": true,
+   "detail": {
+    "frames": 68,
+    "decisions": 34,
+    "truncated_transitions": 1,
+    "terminated_transitions": 0,
+    "truncated_index": 31,
+    "truncated_bootstrap": 1.0,
+    "critic_bias_during_check": 1.0,
+    "advantage_at_truncation": -0.00016665277854932548,
+    "expected_delta_reward_plus_gamma_bootstrap": -0.00016665277854932548,
+    "non_truncated_transitions_bootstrap_zero": true,
+    "tail_value": 1.0,
+    "tail_known": true,
+    "note": "a frame cap is truncation, not termination: the episode was still alive, so its value bootstraps instead of being zeroed.  The critic bias is 1.0 for this leg so the check is observable rather than a comparison of two zeros"
+   }
+  },
+  {
+   "id": "death_vs_game_over",
+   "status": "pass",
+   "pass": true,
+   "detail": {
+    "episode_end": "game_over",
+    "frames": 2186,
+    "first_death_frame": 1370,
+    "death_events": 3,
+    "decisions_after_first_death": 408,
+    "deaths_end": 3.0,
+    "note": "a first death is an event: the episode continued and only game_over (or the cap) ended it — this is the WP420-05 rule the v4.0.0 prototype's stop_on_death conflated"
+   }
+  },
+  {
+   "id": "reward_units",
+   "status": "pass",
+   "pass": true,
+   "detail": {
+    "spec": {
+     "version": "v420-reward-r2/1",
+     "source": "engine_truth",
+     "stage_clear_bonus": 1.0,
+     "death_penalty": 0.25,
+     "bomb_penalty": 0.1,
+     "progress_total": 0.5,
+     "progress_score_full": 2631430.0,
+     "survive_per_decision": 0.0,
+     "units": {
+      "stage_clear_bonus": {
+       "unit": "reward per first-face completion",
+       "role": "primary positive event",
+       "event": "engine stage index advances (stage_clear)",
+       "counted": "once per episode"
+      },
+      "death_penalty": {
+       "unit": "reward per engine death event",
+       "role": "auxiliary",
+       "event": "globals.deaths increases",
+       "counted": "once per death, a first death does not end the episode"
+      },
+      "bomb_penalty": {
+       "unit": "reward per bomb spent",
+       "role": "auxiliary",
+       "event": "globals.bombsRemaining decreases",
+       "counted": "once per bomb"
+      },
+      "progress_total": {
+       "unit": "reward for traversing the whole first face by score",
+       "role": "bounded progress",
+       "event": "score increases, normalised by progress_score_full",
+       "counted": "cumulative, hard-capped at progress_total per episode"
+      },
+      "progress_score_full": {
+       "unit": "score points",
+       "role": "normaliser",
+       "event": "the score a real first-face clear reaches",
+       "counted": "measured, see evidence/T06/RL_AUDIT.md"
+      },
+      "survive_per_decision": {
+       "unit": "reward per decision at the two-frame beat",
+       "role": "explicitly zero",
+       "event": "every decision",
+       "counted": "0.0: a bare survival constant is what §5 forbids, because at γ = 0.999833 (τ = 200 s) the discounted sum of a constant c is c/(1-γ) ≈ 6001·c and a long stall would out-earn a clear"
+      }
+     },
+     "progress_bound": {
+      "cumulative_cap": 0.5,
+      "per_decision_rate": 1.9001075460871086e-07,
+      "meaning": "a trajectory can never earn more than progress_total from progress, however long it stalls"
+     }
+    },
+    "clear_decomposition": {
+     "survive": 0.0,
+     "progress": 0.5,
+     "death": 0.0,
+     "bomb": 0.0,
+     "stage_clear": 1.0
+    },
+    "delay_decomposition": {
+     "survive": 0.0,
+     "progress": 0.0011837670012122693,
+     "death": -0.75,
+     "bomb": 0.0,
+     "stage_clear": 0.0
+    },
+    "early_death_decomposition": {
+     "survive": 0.0,
+     "progress": 0.001055699752605998,
+     "death": -0.25,
+     "bomb": 0.0,
+     "stage_clear": 0.0
+    },
+    "bomb_abuse_decomposition": {
+     "survive": 0.0,
+     "progress": 0.00908213404878713,
+     "death": -0.5,
+     "bomb": -0.7,
+     "stage_clear": 0.0
+    },
+    "survive_constant": 0.0,
+    "progress_cap": 0.5
+   }
+  },
+  {
+   "id": "reward_ordering",
+   "status": "pass",
+   "pass": true,
+   "detail": {
+    "checks": {
+     "clear_gt_delay_undiscounted": {
+      "better": "clear",
+      "better_return": 1.5,
+      "worse": "delay",
+      "worse_return": -0.7488162329987875,
+      "margin": 2.2488162329987875,
+      "pass": true
+     },
+     "clear_gt_early_death_undiscounted": {
+      "better": "clear",
+      "better_return": 1.5,
+      "worse": "early_death",
+      "worse_return": -0.248944300247394,
+      "margin": 1.748944300247394,
+      "pass": true
+     },
+     "clear_gt_bomb_abuse_undiscounted": {
+      "better": "clear",
+      "better_return": 1.5,
+      "worse": "bomb_abuse",
+      "worse_return": -1.1909178659512172,
+      "margin": 2.690917865951217,
+      "pass": true
+     },
+     "clear_actually_cleared": {
+      "value": true,
+      "pass": true
+     },
+     "non_clear_upper_bound_below_clear": {
+      "non_clear_bound": 0.5,
+      "clear_undiscounted": 1.5,
+      "pass": true,
+      "note": "no survival constant and a hard progress cap mean the longest possible stall is bounded at progress_total, so 'survive forever' can never out-earn one clear in the table"
+     },
+     "survive_constant_absent": {
+      "survive_per_decision": 0.0,
+      "pass": true
+     }
+    },
+    "table": {
+     "clear": {
+      "decisions": 6598,
+      "frames": 13195,
+      "end": "stage_clear",
+      "discounted_return": 0.5234995935445186,
+      "undiscounted_return": 1.5,
+      "reward_totals": {
+       "survive": 0.0,
+       "progress": 0.5,
+       "death": 0.0,
+       "bomb": 0.0,
+       "stage_clear": 1.0
+      },
+      "stage_clear": true,
+      "deaths": 0.0,
+      "score": 2631430.0
+     },
+     "early_death": {
+      "decisions": 685,
+      "frames": 1370,
+      "end": "first_death",
+      "discounted_return": -0.2220786307208668,
+      "undiscounted_return": -0.248944300247394,
+      "reward_totals": {
+       "survive": 0.0,
+       "progress": 0.001055699752605998,
+       "death": -0.25,
+       "bomb": 0.0,
+       "stage_clear": 0.0
+      },
+      "stage_clear": false,
+      "deaths": 1.0,
+      "score": 5556.0
+     },
+     "delay": {
+      "decisions": 752,
+      "frames": 1503,
+      "end": "game_over",
+      "discounted_return": -0.6831000099064892,
+      "undiscounted_return": -0.7488162329987875,
+      "reward_totals": {
+       "survive": 0.0,
+       "progress": 0.0011837670012122693,
+       "death": -0.75,
+       "bomb": 0.0,
+       "stage_clear": 0.0
+      },
+      "stage_clear": false,
+      "deaths": 3.0,
+      "score": 6230.0
+     },
+     "bomb_abuse": {
+      "decisions": 1000,
+      "frames": 2000,
+      "end": "cap",
+      "discounted_return": -1.0937235371868195,
+      "undiscounted_return": -1.1909178659512172,
+      "reward_totals": {
+       "survive": 0.0,
+       "progress": 0.00908213404878713,
+       "death": -0.5,
+       "bomb": -0.7,
+       "stage_clear": 0.0
+      },
+      "stage_clear": false,
+      "deaths": 2.0,
+      "score": 47798.0
+     }
+    },
+    "claim": "the reward table ranks a first-face clear above stalling, an early death and bomb abuse, and the non-clearing classes are bounded below it",
+    "comparison": "undiscounted (length cannot confound a table comparison)",
+    "schedule": {
+     "shard": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T04/dataset/d1-s0d1-n3300-seed12-shard/slots.jsonl",
+     "shard_sha256": "f759de7dacc78343dec8825da5de14942e749b8a5a2c5319304e513d1618b7b9",
+     "seed": 12,
+     "slots": 6588,
+     "tail_decisions": 64
+    }
+   }
+  },
+  {
+   "id": "reward_discount_horizon",
+   "status": "pass",
+   "pass": true,
+   "detail": {
+    "checks": {
+     "clear_gt_delay_discounted": {
+      "better": "clear",
+      "better_return": 0.5234995935445186,
+      "worse": "delay",
+      "worse_return": -0.6831000099064892,
+      "margin": 1.2065996034510078,
+      "pass": true
+     },
+     "clear_gt_early_death_discounted": {
+      "better": "clear",
+      "better_return": 0.5234995935445186,
+      "worse": "early_death",
+      "worse_return": -0.2220786307208668,
+      "margin": 0.7455782242653854,
+      "pass": true
+     },
+     "clear_gt_bomb_abuse_discounted": {
+      "better": "clear",
+      "better_return": 0.5234995935445186,
+      "worse": "bomb_abuse",
+      "worse_return": -1.0937235371868195,
+      "margin": 1.617223130731338,
+      "pass": true
+     },
+     "terminal_bonus_is_not_negligible": {
+      "clear_decisions": 6598,
+      "terminal_discount_weight": 0.33298205922092694,
+      "clear_bonus_discounted": 0.33298205922092694,
+      "death_penalty_per_death": 0.25,
+      "pass": true,
+      "note": "γ^T decides whether a terminal clear bonus can be told apart from one death penalty"
+     },
+     "clear_terminal_visibility_floor": {
+      "clear_decisions": 6598,
+      "gamma_T": 0.33298205922092694,
+      "gamma_T_floor": 0.3,
+      "clear_bonus": 1.0,
+      "clear_bonus_at_terminal_value": 0.33298205922092694,
+      "pass": true,
+      "note": "the weight a terminal clear bonus keeps must reach the pre-registered floor at the measured clear length; that is what 'the discount keeps the task objective visible' means numerically"
+     },
+     "clear_vs_early_death_discounted_margin": {
+      "clear_discounted_return": 0.5234995935445186,
+      "early_death_discounted_return": -0.2220786307208668,
+      "magnitude_ratio": 2.3572713495451585,
+      "magnitude_ratio_floor": 1.5,
+      "clear_gt_early_death": true,
+      "pass": true,
+      "note": "stated on magnitudes because the worse class' return is negative: the signed form is satisfied by any positive clear return and would not reject a too-short horizon"
+     }
+    },
+    "decisive_checks": [
+     "clear_gt_delay_discounted",
+     "clear_gt_early_death_discounted",
+     "clear_gt_bomb_abuse_discounted",
+     "terminal_bonus_is_not_negligible",
+     "clear_terminal_visibility_floor",
+     "clear_vs_early_death_discounted_margin"
+    ],
+    "floor": {
+     "gamma_T_clear_min": 0.3,
+     "clear_vs_early_death_discounted_ratio_min": 1.5,
+     "rule": "written before the revision was applied and frozen after it: the smallest tau in [200, 300, 400, 600] whose gamma^T at the measured clear length reaches gamma_T_clear_min, ties broken towards the shorter horizon",
+     "note": "this is the audit's explicit pass criterion for reward_discount_horizon. It is STRICTER than the criterion it replaces (stage_clear_bonus*gamma^T > death_penalty, i.e. gamma^T > 0.25), it rejects the replaced tau = 30 s by a factor of 458 (gamma^T = 6.55e-04), and a config may raise it but never lower it (resolve_discount_floor refuses relaxation)."
+    },
+    "observed_only": {
+     "delay_gt_early_death_undiscounted": {
+      "better": "delay",
+      "better_return": -0.7488162329987875,
+      "worse": "early_death",
+      "worse_return": -0.248944300247394,
+      "margin": -0.4998719327513935,
+      "pass": false,
+      "decisive": false
+     },
+     "delay_gt_early_death_discounted": {
+      "better": "delay",
+      "better_return": -0.6831000099064892,
+      "worse": "early_death",
+      "worse_return": -0.2220786307208668,
+      "margin": -0.4610213791856224,
+      "pass": false,
+      "decisive": false
+     },
+     "delay_gt_bomb_abuse_undiscounted": {
+      "better": "delay",
+      "better_return": -0.7488162329987875,
+      "worse": "bomb_abuse",
+      "worse_return": -1.1909178659512172,
+      "margin": 0.44210163295242966,
+      "pass": true,
+      "decisive": false
+     },
+     "delay_gt_bomb_abuse_discounted": {
+      "better": "delay",
+      "better_return": -0.6831000099064892,
+      "worse": "bomb_abuse",
+      "worse_return": -1.0937235371868195,
+      "margin": 0.41062352728033025,
+      "pass": true,
+      "decisive": false
+     }
+    },
+    "terminal_discount_weight_at_clear": 0.33298205922092694,
+    "clear_decisions": 6598,
+    "discount": {
+     "version": "v420-discount/2",
+     "version_legacy": "v420-discount/1",
+     "decision_frames": 2,
+     "frames_per_second": 60.0,
+     "delta_t_seconds": 0.03333333333333333,
+     "tau_seconds": 200.0,
+     "tau_seconds_legacy": 30.0,
+     "gamma": 0.9998333472214507,
+     "gamma_recomputed": true,
+     "gamma_published": 0.9998333472214507,
+     "gamma_legacy": 0.9988895059442793,
+     "gae_lambda": 0.95,
+     "effective_horizon_decisions": 6000.500013889792,
+     "effective_horizon_seconds": 200.01666712965974,
+     "clear_decisions_measured": 6598,
+     "gamma_T_at_clear": 0.33298205922092694,
+     "gamma_T_at_clear_legacy_tau": 0.0006548455765539476,
+     "floor": {
+      "gamma_T_clear_min": 0.3,
+      "clear_vs_early_death_discounted_ratio_min": 1.5,
+      "rule": "the smallest τ in TAU_CANDIDATE_SECONDS whose γ^T at the measured clear length T = 6598 decisions reaches gamma_T_clear_min; ties broken towards the shorter effective horizon (the smaller τ)",
+      "note": "written before the revision ran and frozen after it; the thresholds are a visibility floor for a terminal event, not a tolerance that was moved to let a run through"
+     },
+     "note": "Δt = 2/60 s is the physical clock; τ = 200 s is the single diagnosed revision of the τ = 30 s initial configuration (at 30 s the terminal weight over the measured 6,598-decision clear was 6.55e-04, i.e. a clear bonus worth 1/382 of one death penalty). γ is always recomputed from Δt/τ and never read from the config"
+    },
+    "comparison": "discounted (the protocol's γ)",
+    "note": "this item asks whether the frozen γ keeps the terminal clear observable over the real task length; it is a property of γ and the episode length, not of the reward coefficients.  The pass criterion is the explicit floor in the config, not an implicit comparison against a reward coefficient"
+   }
+  },
+  {
+   "id": "critic_warmup",
+   "status": "pass",
+   "pass": true,
+   "detail": {
+    "steps": 200,
+    "batch_size": 256,
+    "lr": 0.0003,
+    "frozen": [
+     "actor.parameters() (including the shared trunk/features)"
+    ],
+    "trained": [
+     "critic (Linear(128,1) on the frozen trunk output)"
+    ],
+    "value_loss_first": 3.191677477865085e-11,
+    "value_loss_last": 0.00014445175474975258,
+    "explained_variance_after": -43216.30885129447,
+    "actor_logits_before_sha256": "9f7dfc7d1542b3737b4c70a12eadb6356236d36b13b7fd8bf19ee85cf74f14a6",
+    "actor_logits_after_sha256": "9f7dfc7d1542b3737b4c70a12eadb6356236d36b13b7fd8bf19ee85cf74f14a6",
+    "actor_logits_max_abs_difference": 0.0,
+    "actor_logits_bitwise_identical": true,
+    "actor_parameter_change": {
+     "keys": 36,
+     "keys_changed": [],
+     "max_abs_difference": 0.0,
+     "bitwise_identical": true
+    },
+    "note": "the actor and its shared features are frozen; only the critic moves"
+   }
+  },
+  {
+   "id": "bomb_channel_zero",
+   "status": "pass",
+   "pass": true,
+   "detail": {
+    "bomb_constant": 0,
+    "n_actions": 18,
+    "note": "bomb is not trained this tier and no hidden event presses it; the audit trajectory that spends bombs does so through the explicit allow_bomb_override flag, and that flag is off for training"
+   }
+  },
+  {
+   "id": "forward_equivalence",
+   "status": "pass",
+   "pass": true,
+   "detail": {
+    "rows": 32,
+    "max_abs_difference": 0.0,
+    "bitwise_identical": true,
+    "device": "cpu",
+    "note": "the critic reads the actor's trunk output, so the explicit feature path has to be the frozen forward bit for bit or the warm-up would train on a different function"
+   }
+  }
+ ],
+ "main_episode": {
+  "end": "game_over",
+  "frames": 2186,
+  "decisions": 1093,
+  "first_death_frame": 1370,
+  "deaths": 3.0,
+  "score": 7830.0,
+  "reward_totals": {
+   "survive": 0.0,
+   "progress": 0.0014877842085862037,
+   "death": -0.75,
+   "bomb": 0.0,
+   "stage_clear": 0.0
+  },
+  "undiscounted_return": -0.7485122157914141,
+  "discounted_return": -0.6460742103118421,
+  "reward_terms_sample": {
+   "survive": 0.0,
+   "progress": 0.0,
+   "death": 0.0,
+   "bomb": 0.0,
+   "stage_clear": 0.0
+  }
+ },
+ "classes": {
+  "clear": {
+   "decisions": 6598,
+   "frames": 13195,
+   "end": "stage_clear",
+   "discounted_return": 0.5234995935445186,
+   "undiscounted_return": 1.5,
+   "reward_totals": {
+    "survive": 0.0,
+    "progress": 0.5,
+    "death": 0.0,
+    "bomb": 0.0,
+    "stage_clear": 1.0
+   },
+   "stage_clear": true,
+   "deaths": 0.0,
+   "score": 2631430.0
+  },
+  "early_death": {
+   "decisions": 685,
+   "frames": 1370,
+   "end": "first_death",
+   "discounted_return": -0.2220786307208668,
+   "undiscounted_return": -0.248944300247394,
+   "reward_totals": {
+    "survive": 0.0,
+    "progress": 0.001055699752605998,
+    "death": -0.25,
+    "bomb": 0.0,
+    "stage_clear": 0.0
+   },
+   "stage_clear": false,
+   "deaths": 1.0,
+   "score": 5556.0
+  },
+  "delay": {
+   "decisions": 752,
+   "frames": 1503,
+   "end": "game_over",
+   "discounted_return": -0.6831000099064892,
+   "undiscounted_return": -0.7488162329987875,
+   "reward_totals": {
+    "survive": 0.0,
+    "progress": 0.0011837670012122693,
+    "death": -0.75,
+    "bomb": 0.0,
+    "stage_clear": 0.0
+   },
+   "stage_clear": false,
+   "deaths": 3.0,
+   "score": 6230.0
+  },
+  "bomb_abuse": {
+   "decisions": 1000,
+   "frames": 2000,
+   "end": "cap",
+   "discounted_return": -1.0937235371868195,
+   "undiscounted_return": -1.1909178659512172,
+   "reward_totals": {
+    "survive": 0.0,
+    "progress": 0.00908213404878713,
+    "death": -0.5,
+    "bomb": -0.7,
+    "stage_clear": 0.0
+   },
+   "stage_clear": false,
+   "deaths": 2.0,
+   "score": 47798.0
+  }
+ },
+ "ordering_checks": {
+  "clear_gt_delay_undiscounted": {
+   "better": "clear",
+   "better_return": 1.5,
+   "worse": "delay",
+   "worse_return": -0.7488162329987875,
+   "margin": 2.2488162329987875,
+   "pass": true
+  },
+  "clear_gt_early_death_undiscounted": {
+   "better": "clear",
+   "better_return": 1.5,
+   "worse": "early_death",
+   "worse_return": -0.248944300247394,
+   "margin": 1.748944300247394,
+   "pass": true
+  },
+  "clear_gt_bomb_abuse_undiscounted": {
+   "better": "clear",
+   "better_return": 1.5,
+   "worse": "bomb_abuse",
+   "worse_return": -1.1909178659512172,
+   "margin": 2.690917865951217,
+   "pass": true
+  },
+  "clear_actually_cleared": {
+   "value": true,
+   "pass": true
+  },
+  "non_clear_upper_bound_below_clear": {
+   "non_clear_bound": 0.5,
+   "clear_undiscounted": 1.5,
+   "pass": true,
+   "note": "no survival constant and a hard progress cap mean the longest possible stall is bounded at progress_total, so 'survive forever' can never out-earn one clear in the table"
+  },
+  "survive_constant_absent": {
+   "survive_per_decision": 0.0,
+   "pass": true
+  },
+  "clear_gt_delay_discounted": {
+   "better": "clear",
+   "better_return": 0.5234995935445186,
+   "worse": "delay",
+   "worse_return": -0.6831000099064892,
+   "margin": 1.2065996034510078,
+   "pass": true
+  },
+  "clear_gt_early_death_discounted": {
+   "better": "clear",
+   "better_return": 0.5234995935445186,
+   "worse": "early_death",
+   "worse_return": -0.2220786307208668,
+   "margin": 0.7455782242653854,
+   "pass": true
+  },
+  "clear_gt_bomb_abuse_discounted": {
+   "better": "clear",
+   "better_return": 0.5234995935445186,
+   "worse": "bomb_abuse",
+   "worse_return": -1.0937235371868195,
+   "margin": 1.617223130731338,
+   "pass": true
+  },
+  "terminal_bonus_is_not_negligible": {
+   "clear_decisions": 6598,
+   "terminal_discount_weight": 0.33298205922092694,
+   "clear_bonus_discounted": 0.33298205922092694,
+   "death_penalty_per_death": 0.25,
+   "pass": true,
+   "note": "γ^T decides whether a terminal clear bonus can be told apart from one death penalty"
+  },
+  "clear_terminal_visibility_floor": {
+   "clear_decisions": 6598,
+   "gamma_T": 0.33298205922092694,
+   "gamma_T_floor": 0.3,
+   "clear_bonus": 1.0,
+   "clear_bonus_at_terminal_value": 0.33298205922092694,
+   "pass": true,
+   "note": "the weight a terminal clear bonus keeps must reach the pre-registered floor at the measured clear length; that is what 'the discount keeps the task objective visible' means numerically"
+  },
+  "clear_vs_early_death_discounted_margin": {
+   "clear_discounted_return": 0.5234995935445186,
+   "early_death_discounted_return": -0.2220786307208668,
+   "magnitude_ratio": 2.3572713495451585,
+   "magnitude_ratio_floor": 1.5,
+   "clear_gt_early_death": true,
+   "pass": true,
+   "note": "stated on magnitudes because the worse class' return is negative: the signed form is satisfied by any positive clear return and would not reject a too-short horizon"
+  },
+  "delay_gt_early_death_undiscounted": {
+   "better": "delay",
+   "better_return": -0.7488162329987875,
+   "worse": "early_death",
+   "worse_return": -0.248944300247394,
+   "margin": -0.4998719327513935,
+   "pass": false,
+   "decisive": false
+  },
+  "delay_gt_early_death_discounted": {
+   "better": "delay",
+   "better_return": -0.6831000099064892,
+   "worse": "early_death",
+   "worse_return": -0.2220786307208668,
+   "margin": -0.4610213791856224,
+   "pass": false,
+   "decisive": false
+  },
+  "delay_gt_bomb_abuse_undiscounted": {
+   "better": "delay",
+   "better_return": -0.7488162329987875,
+   "worse": "bomb_abuse",
+   "worse_return": -1.1909178659512172,
+   "margin": 0.44210163295242966,
+   "pass": true,
+   "decisive": false
+  },
+  "delay_gt_bomb_abuse_discounted": {
+   "better": "delay",
+   "better_return": -0.6831000099064892,
+   "worse": "bomb_abuse",
+   "worse_return": -1.0937235371868195,
+   "margin": 0.41062352728033025,
+   "pass": true,
+   "decisive": false
+  }
+ },
+ "zero_update": {
+  "policy_loss": 0.0,
+  "value_loss": 0.0,
+  "entropy": 2.5352911353111267,
+  "approx_kl": 5.820766091346741e-11,
+  "clip_fraction": 0.0,
+  "grad_norm": 0.005088445148430765,
+  "ratio_max_abs_deviation": 9.238719940185547e-07,
+  "minibatches": 4.0,
+  "samples": 256.0,
+  "epochs": 2.0,
+  "zero_update": true,
+  "actor_parameter_change": {
+   "keys": 36,
+   "keys_changed": [],
+   "max_abs_difference": 0.0,
+   "bitwise_identical": true
+  },
+  "critic_parameter_change": {
+   "keys": 2,
+   "keys_changed": [],
+   "max_abs_difference": 0.0,
+   "bitwise_identical": true
+  },
+  "ratio_before_update": {
+   "max_abs_ratio_minus_one": 9.5367431640625e-07,
+   "min_ratio": 0.9999990463256836,
+   "max_ratio": 1.0000009536743164
+  },
+  "ratio_zero_update_ok": true
+ },
+ "wall_seconds": 465.175,
+ "notes": [
+  "R2 uses engine-truth reward and termination, so it is a training-time privileged diagnostic: it is NOT strict pixel self-improvement (R1) and no result here may be reported as R1.",
+  "nothing in this run trains a policy: the only optimiser activity is the critic warm-up (on frozen features) and the zero-update path, which never steps",
+  "the four reward-comparison classes are all real engine trajectories: the clear class replays the one recorded real Stage-1 clear, the other three are fresh episodes on a private data dir",
+  "a fail in any check is the tier's stop condition; extending training does not repair a failing numeric audit"
+ ]
+}

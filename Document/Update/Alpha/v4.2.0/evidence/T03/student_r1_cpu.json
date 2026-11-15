@@ -1,0 +1,57 @@
+{
+  "schema": "v420-t03p-student/1",
+  "label": "r1_student_cpu",
+  "checkpoint": "/mnt/d/WorkShop/Touhou_RL/.tmp_v410_wp05_train_beta05_20k/b0_s0_dagger_step20000.pt",
+  "device": "cpu",
+  "seed": 10,
+  "decisions": 300,
+  "engine_side_note": "engine cost of the same slot is measured by 02_fork.py CHILD STEP 2",
+  "student_identity": {
+    "path": "/mnt/d/WorkShop/Touhou_RL/.tmp_v410_wp05_train_beta05_20k/b0_s0_dagger_step20000.pt",
+    "sha256": "15ae1fd5b9a6e0cbbddfd668bb342444bdb44db123b5f7e56abf3c5e7215bd95",
+    "family": "probe",
+    "arm": "B0",
+    "parameters": 731802,
+    "obs_spec_version": "obs-v3"
+  },
+  "obs_shapes": {
+    "play": [
+      3300,
+      4,
+      112,
+      96
+    ],
+    "hud": [
+      3300,
+      56,
+      160
+    ],
+    "act_hist": [
+      3300,
+      8,
+      18
+    ]
+  },
+  "decisions_timed": 300,
+  "decision_ms_p50": 1.035,
+  "decision_ms_p95": 5.644,
+  "decision_ms_mean": 1.933,
+  "decision_ms_max": 72.246,
+  "decisions_per_s": 517.39,
+  "all_actions_valid": true,
+  "problems": [],
+  "load": {
+    "loadavg_before": [
+      26.0,
+      24.5,
+      19.32
+    ],
+    "loadavg_after": [
+      26.0,
+      24.5,
+      19.32
+    ],
+    "cpu_count": 20
+  },
+  "exit_code": 0
+}

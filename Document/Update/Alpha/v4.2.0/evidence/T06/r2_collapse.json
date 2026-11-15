@@ -1,0 +1,754 @@
+{
+ "schema": "v420-r2-collapse-diagnosis/1",
+ "task": "T06 / WP420-05",
+ "question": "why does a 50,000-frame / 49-update R2 PPO run started from A0 move the 20-dev first-death mean from 1636.8 to 889.35 frames (-45.66%)?",
+ "declaration": "R2 uses engine-truth reward and termination, so this is a training-time privileged diagnostic; nothing here is R1 or a capability claim.",
+ "no_engine_used": true,
+ "no_training_used": true,
+ "headline": {
+  "R0_diag_frames_mean": 1636.8,
+  "R2_diag_frames_mean": 889.35,
+  "diag_relative_change": -0.4566532258064516,
+  "R0_s1n_frames_mean": 3011.5,
+  "R2_s1n_frames_mean": 1906.4,
+  "s1n_relative_change": -0.36695998671758256,
+  "paired_delta_frames_mean": -747.45,
+  "clears_R0": 0,
+  "clears_R2": 0,
+  "argmax_flip_rate_on_identical_pixels": 0.6171875,
+  "deployment_KL_A0_to_R2_nats": 3.275951515465665,
+  "reported_approx_kl_per_update_at_T8": 0.0045424999627023364,
+  "verdict": "composite cause: an unanchored, metric-blind but large function drift"
+ },
+ "inputs": {
+  "evidence_read": [
+   "Document/Update/Alpha/v4.2.0/evidence/T06/RL_AUDIT.md",
+   "Document/Update/Alpha/v4.2.0/evidence/T06/RL_PILOT.md",
+   "Document/Update/Alpha/v4.2.0/evidence/T06/RL_PILOT2.md",
+   "Document/Update/Alpha/v4.2.0/evidence/T06/DISCOUNT_REVISION.md",
+   "Document/Update/Alpha/v4.2.0/evidence/T06/rl_audit.json",
+   "Document/Update/Alpha/v4.2.0/evidence/T06/rl_pilot2.json",
+   "Document/Update/Alpha/v4.2.0/README.md (WP420-05, lines 223-247)",
+   "Document/Update/Alpha/v4.2.0/evidence/T04/VERIFIED_SET_IDLE.md",
+   "Document/Update/Alpha/v4.2.0/evidence/T04/ACTION_MIX.md",
+   "Document/Update/Alpha/v4.2.0/evidence/T04/dev_eval.json"
+  ],
+  "code_read": [
+   "touhou_rl/v420/rl.py",
+   "tools/rl/v410_student_eval.py",
+   "configs/v420/rl-engine-pilot.json",
+   "configs/v420/rl-engine-audit.json"
+  ],
+  "frozen_records_read_only": [
+   ".tmp_v420_data/T04/dataset/d1-s0d1-n3300-seed{10,12}-shard/obs/*.npy",
+   ".tmp_v420_data/T04/eval/A0-{diag,s1n}-s*.json",
+   ".tmp_v420_data/T06/dev2/R2-*.json",
+   ".tmp_v420_data/T06/dev/merged-R0.json",
+   ".tmp_v420_data/T06/pilot2.json",
+   ".tmp_v420_data/T06/checkpoints/*.pt",
+   ".tmp_v420_data/T04/evaldata",
+   ".tmp_v420_data/T06/engine-data-gamesrc"
+  ],
+  "scripts": [
+   ".tmp_v420_r2diag/analyze_actions.py",
+   ".tmp_v420_r2diag/analyze_pilot2.py",
+   ".tmp_v420_r2diag/analyze_series.py",
+   ".tmp_v420_r2diag/analyze_quarters.py",
+   ".tmp_v420_r2diag/forward_compare.py",
+   ".tmp_v420_r2diag/identity_checks.py",
+   ".tmp_v420_r2diag/data_dir_compare.py",
+   ".tmp_v420_r2diag/inspect_mutable_files.py",
+   ".tmp_v420_r2diag/check_kl_to_bc.py",
+   ".tmp_v420_r2diag/print_action_tables.py",
+   ".tmp_v420_r2diag/build_r2_collapse_json.py"
+  ],
+  "identity": {
+   "A0": {
+    "path": ".tmp_v420_data/T06/checkpoints/a0_seed0_step5000.pt",
+    "sha256": "96cb219eac83391f42b18ea656b5a6c5ac81e97cd1fd8c1e2c0d404aee6b89ad",
+    "declared": "96cb219eac83391f42b18ea656b5a6c5ac81e97cd1fd8c1e2c0d404aee6b89ad",
+    "match": true
+   },
+   "R2": {
+    "path": ".tmp_v420_data/T06/checkpoints/r2_seed0_50000f.pt",
+    "sha256": "aefcc083b42ed1e69c2590b9eebe932efc4e7b383118975b7e99b145737ba4e5",
+    "declared": "aefcc083b42ed1e69c2590b9eebe932efc4e7b383118975b7e99b145737ba4e5",
+    "match": true
+   }
+  },
+  "line_number_convention": "touhou_rl/v420/rl.py line numbers refer to sha256 c0a5b8e426b8e46e4b1dd7d21f02c4be2fcf73548a8fa5e9b9fcf3814ea8ed16 (3832 lines); the file was edited by another agent mid-session (3821 -> 3832 lines, an episode-seed reporting fix in collect_rollout), which shifted later line numbers by 0-11 lines. Every reference also quotes the code fragment, so the fragment is authoritative if the numbers drift.",
+  "code_sha256": {
+   "touhou_rl/v420/rl.py": "c0a5b8e426b8e46e4b1dd7d21f02c4be2fcf73548a8fa5e9b9fcf3814ea8ed16",
+   "tools/rl/v410_student_eval.py": "2db2caaf9089c1698cef9b6a682991a7594ebac47ae93244c3d9932591eddddc"
+  }
+ },
+ "hypotheses": [
+  {
+   "id": "H1",
+   "title": "sampling temperature vs training temperature mismatch",
+   "verdict": "excluded",
+   "one_line": "rollout sampling and the update's log_prob recomputation use the same temperature field, so the ratio and the gradient are not computed in different spaces; the zero-update audit proves it numerically.",
+   "evidence": [
+    {
+     "claim": "there is exactly one temperature on the policy",
+     "where": "touhou_rl/v420/rl.py:1217 (self.temperature), 1240-1245 (tempered)",
+     "value": 8.0
+    },
+    {
+     "claim": "rollout draws from log_softmax(logits / temperature)",
+     "where": "touhou_rl/v420/rl.py:1329 + 1333-1336 (multinomial)",
+     "value": "T=8.0"
+    },
+    {
+     "claim": "the recorded log_prob comes from the same expression",
+     "where": "touhou_rl/v420/rl.py:1340 -> 1469 (Transition.log_prob)",
+     "value": null
+    },
+    {
+     "claim": "the update recomputes it with the identical expression",
+     "where": "touhou_rl/v420/rl.py:1631 -> 1624-1625 (ratio)",
+     "value": null
+    },
+    {
+     "claim": "the zero-update audit uses the same expression and finds max|ratio-1| = 9.537e-07",
+     "where": "touhou_rl/v420/rl.py:1608-1610; RL_AUDIT.md:91,134-135",
+     "value": 9.537e-07
+    },
+    {
+     "claim": "the temperature is read once from the frozen config",
+     "where": "configs/v420/rl-engine-pilot.json:62; rl.py:3263-3265",
+     "value": 8.0
+    },
+    {
+     "claim": "deployment is argmax of the RAW logits with no temperature",
+     "where": "tools/rl/v410_student_eval.py:27-28,654-674 (argmax_action),738",
+     "value": null
+    }
+   ],
+   "residual_finding": "the temperature is not a ratio bug but it is a measurement bug: every logged health metric is computed on softmax(logits/8) while deployment is argmax(logits). See H4."
+  },
+  {
+   "id": "H2",
+   "title": "degenerate A0 plus 49 updates: how big is the damage per update?",
+   "verdict": "supported",
+   "one_line": "Adam leaves a full lr-sized step on every minibatch, so 392 steps move the weights by 3.37e-03 - which is a 3.86-mean |dlogit| and a 61.7% argmax flip; 'max parameter change 2.40e-04' is not a small-update measurement.",
+   "evidence": [
+    {
+     "claim": "A0 at T=1 is degenerate",
+     "where": "RL_AUDIT.md:174",
+     "value": {
+      "row_entropy_nats": 0.41264227,
+      "effective_actions": 1.5108
+     }
+    },
+    {
+     "claim": "the same on the frozen teacher slots (my forward)",
+     "where": "forward_compare.json primary_seed12.temperature_metrics.T1.A0",
+     "value": {
+      "row_entropy_nats": 0.23956877756684883,
+      "effective_actions": 1.3939835989467242
+     }
+    },
+    {
+     "claim": "adam steps in the run",
+     "where": "pilot_stats.json update_arithmetic",
+     "value": 392
+    },
+    {
+     "claim": "per update max |dW| divided by 8 minibatches equals the lr",
+     "where": "pilot_stats.json update_arithmetic",
+     "value": {
+      "per_update_mean": 0.00024031459862290292,
+      "divide_by_8": 3.0039324827862865e-05,
+      "actor_lr": 3e-05,
+      "ratio_to_lr": 1.0013108275954288
+     }
+    },
+    {
+     "claim": "measured cumulative max |dW| A0 -> R2",
+     "where": "forward_compare.json checkpoint_drift",
+     "value": {
+      "max_abs": 0.0033715309109538794,
+      "parameter": "play_readout.3.weight",
+      "no_reversal_bound": 0.01176
+     }
+    },
+    {
+     "claim": "the functional change is not small",
+     "where": "forward_compare.json primary_seed12.delta_logits / argmax",
+     "value": {
+      "mean_abs_dlogit": 3.858412027359009,
+      "rms_dlogit": 5.094712257385254,
+      "max_abs_dlogit": 33.94029235839844,
+      "A0_logit_sd": 7.152003765106201,
+      "A0_range_per_row_mean": 32.825965881347656,
+      "R2_range_per_row_mean": 26.766950607299805,
+      "A0_global_range": 79.5584945678711,
+      "R2_global_range": 46.746498107910156,
+      "argmax_flip_rate": 0.6171875,
+      "per_update_flip_rate": 0.012595663265306123
+     }
+    },
+    {
+     "claim": "once the policy has moved, the within-update importance ratio is already far from 1 inside a single update",
+     "where": "pilot_series.json within_update; rl.py:1652",
+     "value": {
+      "mean": 0.2560079972050628,
+      "sd": 0.06997282547135807,
+      "min": 0.15115080028772354,
+      "max": 0.47871747612953186,
+      "first": 0.2838488295674324,
+      "last": 0.21869365125894547
+     }
+    },
+    {
+     "claim": "a max ratio deviation of 0.257 is 0.229 nat at T=8",
+     "where": "pilot_series.json within_update.implied_max_abs_logratio_tempered",
+     "value": {
+      "T8_nats": 0.3911751419042779,
+      "T1_equivalent_nats": 3.129401135234223
+     }
+    },
+    {
+     "claim": "the drift is concentrated in the shared feature extractor, not in the linear head",
+     "where": "forward_compare.json checkpoint_drift + head.move_head",
+     "value": {
+      "max_moved_parameter": "play_readout.3.weight (128,2688)",
+      "top5": [
+       "play_readout.3.weight 3.372e-03",
+       "hist.1.weight 3.104e-03",
+       "hud.10.weight 3.066e-03",
+       "play.6.weight 3.030e-03",
+       "play.3.weight 2.825e-03"
+      ],
+      "move_head_weight_max": 0.0024,
+      "head_weight_change_explains_fraction_of_dlogit": 0.05716824595479386
+     }
+    },
+    {
+     "claim": "the critic shares the actor's trunk and back-propagates into it, so the value loss is a third gradient channel into the policy's features",
+     "where": "rl.py:1270-1271 (one trunk feeds both heads), 1586-1589 (two lr groups), 1629-1632 (loss = policy + 0.5*value - 0.001*entropy, then loss.backward())",
+     "value": {
+      "trunk_lr": 3e-05,
+      "critic_head_lr": 0.0003,
+      "value_loss_mean": 0.0078,
+      "note": "the value target is 99.8% a constant, so this channel carries no task signal either; it is consistent with the drift being concentrated in the feature layers, but it was not isolated in this round"
+     }
+    }
+   ],
+   "correction": "RL_PILOT2.md section 3.3 note 2 (line 243 at the time of writing) says the weights moved at most about 1.2e-2 from A0. That number is the no-sign-reversal bound 49 x 2.4031e-04 = 1.1775e-02; the measured cumulative maximum is 3.372e-03, i.e. the document overstates the weight drift by 3.5x. The correction does not weaken the diagnosis, because the functional drift is measured directly (61.7% argmax flips); the same note says 'argmax flips on many states' and this report replaces that with the measured 61.7%."
+  },
+  {
+   "id": "H3",
+   "title": "reward scale and advantage scale: is the advantage basically noise?",
+   "verdict": "supported",
+   "one_line": "all 24 episodes end in game_over, so the -0.75 death term is a constant and var(return) == var(progress); the reward prices a 29.3% loss of first-death survival at 0.24% of return, while the critic's rmse is 63x the return sd and advantage whitening removes the amplitude anyway.",
+   "evidence": [
+    {
+     "claim": "return spread across the 24 episodes",
+     "where": "pilot_stats.json return",
+     "value": {
+      "mean": -0.7474411964217178,
+      "sd": 0.00140405867788287,
+      "min": -0.7491795335615998,
+      "max": -0.7442696556625106,
+      "range": 0.004909877899089254
+     }
+    },
+    {
+     "claim": "the whole across-episode variance is the progress term",
+     "where": "pilot_stats.json variance_decomposition",
+     "value": {
+      "var_return": 1.971380770938193e-06,
+      "var_progress": 1.971380770938376e-06,
+      "var_death": 0.0,
+      "progress_share_of_return_variance": 1.0000000000000928,
+      "return_sd_over_mean": 0.001878487143342683
+     }
+    },
+    {
+     "claim": "progress is 0.34% of the return and is bounded by 0.5",
+     "where": "pilot_stats.json progress_term; RL_AUDIT.md:70-71",
+     "value": {
+      "progress_mean": 0.0025588035782825314,
+      "progress_bound": 0.5
+     }
+    },
+    {
+     "claim": "the reward barely ranks the metric the ruler measures",
+     "where": "pilot_stats.json correlations",
+     "value": {
+      "corr_return_frames": 0.7049492816896878,
+      "corr_progress_frames": 0.7049492816896766,
+      "corr_progress_first_death": 0.35453452204890584,
+      "corr_return_first_death": 0.3545345220489621,
+      "note": "the death term is -0.75 in all 24 episodes, so the whole across-episode variance of the return is the variance of the progress term"
+     }
+    },
+    {
+     "claim": "in-run degradation is almost free",
+     "where": "analyze_quarters output (pilot_series.json)",
+     "value": {
+      "first_death_Q1_to_Q4": 1207.8333333333333,
+      "first_death_Q4": 854.0,
+      "quarters": {
+       "Q1": {
+        "frames": 2291.7,
+        "first_death": 1207.8,
+        "return": -0.7465,
+        "progress": 0.0035
+       },
+       "Q2": {
+        "frames": 1949.5,
+        "first_death": 996.8,
+        "return": -0.7472,
+        "progress": 0.0028
+       },
+       "Q3": {
+        "frames": 1954.3,
+        "first_death": 950.5,
+        "return": -0.7477,
+        "progress": 0.0023
+       },
+       "Q4": {
+        "frames": 1993.2,
+        "first_death": 854.0,
+        "return": -0.7483,
+        "progress": 0.0017
+       }
+      },
+      "first_death_change_pct": -29.29,
+      "frames_change_pct": -13.03,
+      "return_change_pct_of_magnitude": 0.241
+     }
+    },
+    {
+     "claim": "the critic's error dwarfs the controlled quantity",
+     "where": "pilot_stats.json advantage_scale",
+     "value": {
+      "value_loss_mean": 0.0078001333438768765,
+      "value_loss_rmse": 0.08831836357109928,
+      "episode_return_sd": 0.00140405867788287,
+      "episode_return_range": 0.004909877899089254,
+      "rmse_over_return_sd": 62.90218846428227,
+      "rmse_over_return_range": 17.98789407522368,
+      "advantage_normalisation": true,
+      "note": "normalise_advantages divides by the rollout advantage sd (rl.py 1582-1585), so whatever amplitude the advantage had is removed; the critic's own rmse is the scale of the thing being normalised"
+     }
+    },
+    {
+     "claim": "advantages are whitened to unit variance, so amplitude cannot matter",
+     "where": "touhou_rl/v420/rl.py:1593-1596",
+     "value": {
+      "advantage_normalisation": true
+     }
+    }
+   ]
+  },
+  {
+   "id": "H4",
+   "title": "are clip fraction and KL misread?",
+   "verdict": "supported",
+   "one_line": "KL/entropy/clip are all computed on the T=8 tempered distribution, which understates the deployment (T=1) KL by the measured factor 11.6x; the deployed action distribution really did move (TV 0.42, idle 0.299 -> 0.511, 20/20 seeds), so this is a policy push and not an evaluation artefact.",
+   "evidence": [
+    {
+     "claim": "entropy, approx_kl and clip_fraction all come from the tempered probs",
+     "where": "touhou_rl/v420/rl.py:1631-1634 (probs/entropy), 1639-1640 (kl, clip)",
+     "value": {
+      "temperature": 8.0
+     }
+    },
+    {
+     "claim": "the same policy change measured in both spaces",
+     "where": "forward_compare.json temperature_metrics",
+     "value": {
+      "T1": {
+       "sym_kl": 3.275951515465665,
+       "tv": 0.604855533066596
+      },
+      "T8": {
+       "sym_kl": 0.2813645861435024,
+       "tv": 0.2822163696216281
+      },
+      "ratio": 11.643084015537244,
+      "second_order_limit": 64.0,
+      "replication": {
+       "T1_ratio": 12.59420841916302,
+       "T1_kl": 3.557111994800307,
+       "T8_kl": 0.2824402992559578
+      }
+     }
+    },
+    {
+     "claim": "the reported entropy is the tempered one, not the deployment one",
+     "where": "pilot2.json statistics.entropy vs forward T1 entropies",
+     "value": {
+      "reported_entropy_mean": 2.5110514833002675,
+      "deployment_T1_entropy_A0": 0.23956877756684883,
+      "deployment_T1_entropy_R2": 0.4109933788037969,
+      "tempered_T8_entropy_R2": 2.5573606454950015
+     }
+    },
+    {
+     "claim": "the deployed action mix moved, and the ruler is deterministic so it can only be the policy",
+     "where": "actions_compare.json",
+     "value": {
+      "diag": {
+       "R0_idle": 0.2989495541712471,
+       "R2_idle": 0.5112359550561798,
+       "R0_effective_actions": 6.8728427527137645,
+       "R2_effective_actions": 3.738020550415505,
+       "R0_row_entropy": 1.9275778128894911,
+       "R2_row_entropy": 1.3185562067217111,
+       "tv_aggregate": 0.42066849999999995,
+       "tv_per_seed_mean": 0.43363698804013573,
+       "idle_delta_positive_seeds": 20,
+       "top3_R0": [
+        [
+         "idle",
+         4895
+        ],
+        [
+         "W",
+         2802
+        ],
+        [
+         "SW",
+         2606
+        ]
+       ],
+       "top3_R2": [
+        [
+         "idle",
+         4550
+        ],
+        [
+         "focus-E",
+         2304
+        ],
+        [
+         "E",
+         1246
+        ]
+       ]
+      },
+      "s1n": {
+       "R0_idle": 0.33033401952320873,
+       "R2_idle": 0.4828255283444334,
+       "tv_aggregate": 0.39125099999999996,
+       "idle_delta_positive_seeds": 20
+      }
+     }
+    },
+    {
+     "claim": "the plan requires the KL to BC, and no such metric was ever recorded",
+     "where": "README.md:237 ('record the KL to BC and the actual gradient magnitude'); pilot2.json contains only approx_kl",
+     "value": {
+      "keys_in_payload": [
+       "approx_kl"
+      ],
+      "anchor_term_in_rl_py": false
+     }
+    }
+   ]
+  },
+  {
+   "id": "H5",
+   "title": "are the R0 and R2 evaluations comparable?",
+   "verdict": "excluded",
+   "one_line": "evaluator sha256, engine sha256, max-frames, obs-window, device, stage, difficulty and the 20 dev seeds are identical, and the gameplay-relevant engine data files are byte-identical; only the run-rewritten score.dat/modern-files.txt differ.",
+   "evidence": [
+    {
+     "claim": "evaluator sha256 matches the T04 declaration exactly",
+     "where": "data_dir_compare.json evaluator",
+     "value": {
+      "now": "2db2caaf9089c1698cef9b6a682991a7594ebac47ae93244c3d9932591eddddc",
+      "declared_by_T04": "2db2caaf9089c1698cef9b6a682991a7594ebac47ae93244c3d9932591eddddc"
+     }
+    },
+    {
+     "claim": "same engine on both sides",
+     "where": "data_dir_compare.json engine",
+     "value": {
+      "path": "/root/Touhou_RL/third_party/th08-rl/build/rl_v3/th08-modern",
+      "sha256_in_R0_record": "691bfd77b7eca3361aa8bb7af0977556a70cc73a070b29a2447222ba7a568ef6",
+      "sha256_in_R2_record": "691bfd77b7eca3361aa8bb7af0977556a70cc73a070b29a2447222ba7a568ef6"
+     }
+    },
+    {
+     "claim": "identical ruler arguments",
+     "where": "T04/eval/A0-diag-*.json argv vs T06/dev2/R2-diag_first_death-*.json argv",
+     "value": {
+      "max_frames": 19887,
+      "obs_window": "consecutive",
+      "device": "cpu",
+      "stage": 0,
+      "difficulty": "normal",
+      "seeds": "1000-1019",
+      "differences": [
+       "--data-dir path",
+       "--timeout 240.0 vs 600.0"
+      ]
+     }
+    },
+    {
+     "claim": "the two data dirs differ only in files the engine rewrites",
+     "where": "data_dir_compare.json",
+     "value": {
+      "differing_files": [
+       "modern-files.txt",
+       "score.dat"
+      ],
+      "gameplay_relevant_identical": true,
+      "R0_data_dir": ".tmp_v420_data/T04/evaldata",
+      "R2_data_dir": ".tmp_v420_data/T06/engine-data-gamesrc"
+     }
+    },
+    {
+     "claim": "modern-files.txt differs only in the thread id",
+     "where": "inspect_mutable_files output",
+     "value": {
+      "differing_lines": 78,
+      "differing_fields": "thread=<id> only"
+     }
+    },
+    {
+     "claim": "the ruler reproduces to 0.0 frames across campaigns",
+     "where": "evidence/T04/dev_eval.json historical_comparison",
+     "value": {
+      "B0": {
+       "historical": 1453.25,
+       "measured": 1453.25,
+       "delta": 0.0
+      },
+      "20k": {
+       "historical": 1714.65,
+       "measured": 1714.65,
+       "delta": 0.0
+      }
+     }
+    },
+    {
+     "claim": "zero errors and zero invalid episodes on both sides",
+     "where": "T04 dev_eval aggregate.errors=0; merged-R2 diag.invalid=0",
+     "value": {
+      "errors": 0,
+      "invalid": 0
+     }
+    },
+    {
+     "claim": "the record I compare against is the frozen R0 record",
+     "where": "identity_checks.json R0_cross_check",
+     "value": {
+      "seeds": 20,
+      "raw_equals_evidence": true,
+      "raw_equals_merged": true,
+      "mean": 1636.8
+     }
+    }
+   ],
+   "residual_risks": [
+    {
+     "risk": "score.dat is fully rewritten by every run (17785/17786 bytes differ) and is an opaque encrypted blob; it cannot be proven inert without the engine source",
+     "mitigation": "both copies were already dirty before the campaign (score.dat.orig differs from both), and T04 reproduced two checkpoints with delta 0.0 across campaigns",
+     "status": "not excluded by proof, excluded by measurement"
+    },
+    {
+     "risk": "--timeout differs (240 s vs 600 s)",
+     "mitigation": "no episode timed out on either side (errors 0, invalid 0)",
+     "status": "excluded"
+    },
+    {
+     "risk": "the training env pulses SHOOT (rl.py:760-774) while the frozen evaluator never releases it (v410_student_eval.py:967) - a train/deploy mismatch shared by both arms",
+     "mitigation": "1 frame in 96; it is the mechanism the audit says is required to reach stage_clear, so it can explain 0 clears but not a -46% first-death drop",
+     "status": "not quantified"
+    }
+   ]
+  },
+  {
+   "id": "H6",
+   "title": "does the resume= wiring introduce a new bias?",
+   "verdict": "excluded",
+   "one_line": "reset() clears every per-episode counter and the accountant, GAE splits at every terminal, truncated transitions bootstrap V(s_T) and there were zero of them; the only new property of resume= is that an episode now spans several updates.",
+   "evidence": [
+    {
+     "claim": "reset clears frames/decisions/executed/buffer and re-seeds the accountant from the engine's own score",
+     "where": "touhou_rl/v420/rl.py:704-746 (esp. 718-720, 739-740)",
+     "value": null
+    },
+    {
+     "claim": "the episode is restarted before the 'rollout full' break, so the carry is never a dead episode",
+     "where": "touhou_rl/v420/rl.py:1502-1511",
+     "value": null
+    },
+    {
+     "claim": "GAE never carries an advantage across a segment and bootstraps correctly",
+     "where": "touhou_rl/v420/rl.py:1088-1098; tail value 1505-1509",
+     "value": {
+      "truncated_transitions": 0,
+      "terminated_transitions": 24
+     }
+    },
+    {
+     "claim": "the truncation bootstrap is audited on a real truncated transition",
+     "where": "RL_AUDIT.md:94-95,160-165",
+     "value": {
+      "bootstrap": 1,
+      "advantage": -0.000166653
+     }
+    },
+    {
+     "claim": "the consequence that is real but not a defect",
+     "where": "rl.py:3289-3294",
+     "value": "an episode is 1415-2950 frames = 1.4-2.9 rollouts, so the behaviour policy changes inside an episode; old_log_prob is recorded per transition (rl.py:1476) so the ratio stays correct, but the value targets mix states produced by older policies"
+    }
+   ]
+  }
+ ],
+ "primary_cause": {
+  "type": "composite",
+  "agent": {
+   "name": "unanchored systematic function drift with no reward to resist it",
+   "measurements": {
+    "argmax_flip_rate": 0.6171875,
+    "replication_flip_rate": 0.6484375,
+    "per_action_mean_dlogit": {
+     "idle": -3.32304,
+     "N": -0.74852,
+     "NE": -1.73295,
+     "E": 4.47762,
+     "SE": 5.90235,
+     "S": 2.86052,
+     "SW": -2.41582,
+     "W": -6.0856,
+     "NW": -0.26637,
+     "focus-idle": 3.38361,
+     "focus-N": 2.85344,
+     "focus-NE": 0.19575,
+     "focus-E": 8.32871,
+     "focus-SE": 5.49446,
+     "focus-S": 1.06419,
+     "focus-SW": -4.9959,
+     "focus-W": -2.11731,
+     "focus-NW": 2.65916
+    },
+    "constant_share_of_dlogit_variance": 0.5818424224853516,
+    "flip_rate_from_the_constant_alone": 0.50390625,
+    "flip_rate_from_the_residual_alone": 0.30078125,
+    "replication_per_action_correlation": 0.999201995981213,
+    "direction_free_control_flip_rate": 0.3841796875,
+    "max_abs_weight_change": 0.0033715309109538794,
+    "max_abs_weight_change_parameter": "play_readout.3.weight",
+    "head_weight_change_explains_fraction_of_dlogit": 0.05716824595479386,
+    "deployment_KL": 3.275951515465665
+   },
+   "gradient_channels_into_the_actor": [
+    "policy loss with whitened advantages (rl.py:1593-1596, 1628)",
+    "value loss through the shared trunk (rl.py:1270-1271, 1629-1632)",
+    "entropy bonus with a fixed sign (rl.py:1641), which under Adam is a full-size step regardless of coef 0.001"
+   ]
+  },
+  "enabling_condition_1": {
+   "name": "the reward cannot see the quantity the ruler measures",
+   "measurements": {
+    "death_term_constant_in_all_24_episodes": -0.75,
+    "return_variance_share_from_progress": 1.0000000000000928,
+    "corr_return_first_death": 0.3545345220489621,
+    "corr_return_total_frames": 0.7049492816896878,
+    "in_run_first_death_change_pct": -29.29,
+    "in_run_return_change_pct_of_magnitude": 0.241,
+    "exchange_rate": "1% of first-death survival costs about 0.008% of return"
+   }
+  },
+  "enabling_condition_2": {
+   "name": "every health metric and the whole objective live in T=8 space",
+   "measurements": {
+    "kl_understatement_factor": 11.643084015537244,
+    "reported_kl_per_update": 0.0045424999627023364,
+    "deployment_kl_cumulative": 3.275951515465665,
+    "kl_to_BC_required_by_README_line_237_and_never_recorded": true
+   }
+  },
+  "excluded_causes": [
+   "rollout/log_prob temperature mismatch (H1)",
+   "evaluation-condition change (H5)",
+   "resume= state leakage or TD misalignment (H6)",
+   "truncation bootstrap (H6: 0 truncated transitions)"
+  ],
+  "relative_contribution": {
+   "measured_shares": {
+    "of the deployed function change": {
+     "state_independent_action_bias": 0.5818424224853516,
+     "state_dependent_residual": 0.41815757751464844
+    },
+    "of the R0/R2 dev difference": {
+     "policy": 1.0,
+     "evaluation_variance": 0.0
+    }
+   },
+   "not_available": "no additive split of the -747.45 frames exists in this evidence; any percentage would be invented. What the evidence fixes is the ordering: the reward's blindness is why nothing resisted the drift, advantage whitening plus Adam is why the drift is large, and the T=8 metrics are why it was invisible. The agent of the observed change is measured directly: 61.7% argmax flips of which 58.2% of the logit variance is a single global action preference."
+  }
+ },
+ "next_change": {
+  "single_change": "add one KL anchor to A0 computed on the UN-TEMPERED (T=1) logits: loss += beta * mean_t KL(softmax(z_A0) || softmax(z)), beta frozen at 1.0 before the run, with a fail-closed check that max_t KL_T1(A0 || pi_t) <= 0.05 nat over the 50,000 frames; beta may only be raised afterwards, never lowered.",
+  "explicitly_unchanged": {
+   "rollout_temperature": 8.0,
+   "actor_lr": 3e-05,
+   "reward_table": "unchanged",
+   "frame_budget": 50000,
+   "updates": 49
+  },
+  "why_this_one": [
+   "it restores the KL-to-BC measurement README.md:237 already required and the run never recorded; the only KL in the payload is the within-update approx_kl",
+   "it acts in deployment space, where the collapse happened (T=1 KL 3.276 nat vs T=8 0.281 nat)",
+   "it leaves the reward and the learning rate untouched, so it is the one change that can separate 'the drift is the agent' from 'the reward is the agent'",
+   "it is scale-free: a plain learning-rate cut would also shrink any real signal, and Adam makes the lr a step-size not an amplitude control"
+  ],
+  "not_recommended": [
+   "lengthen the run or add steps",
+   "raise or lower the frame budget",
+   "add a survival reward term in the same revision (that is a second change and it destroys the discrimination)"
+  ]
+ },
+ "falsifiable_prediction": {
+  "P1_mechanism": {
+   "claim": "max_t KL_T1(A0 || pi_t) <= 0.05 nat over 50,000 frames",
+   "now": 3.275951515465665
+  },
+  "P2_function": {
+   "claim": "on the same 2x256 frozen slots: argmax flip rate <= 0.10 and max_a |mean_s dlogit(a)| <= 0.5",
+   "now": {
+    "flip_rate": 0.6171875,
+    "max_abs_per_action_mean_dlogit": 8.32871
+   }
+  },
+  "P3_behaviour": {
+   "claim": "the 20-dev diag_first_death mean lands in 1473-1800 frames (+/-10% of R0's 1636.8) and s1n in 2710-3313 (+/-10% of 3011.5)",
+   "now": {
+    "diag": 889.35,
+    "s1n": 1906.4
+   },
+   "band_rationale": "the dev ruler is deterministic and paired on fixed seeds, so a departure from R0 is a policy difference, not measurement noise"
+  },
+  "P4_discrimination": {
+   "claim": "if P1 and P2 hold but the diag mean falls below 1473, the drift is exonerated and the next target is the reward/ruler misalignment quantified here (a 29.3% first-death loss cost 0.24% of return; corr(return, first_death) = 0.354 against corr(return, total frames) = 0.705)"
+  },
+  "what_the_change_cannot_do": "it cannot produce a clear; 0/20 is expected on both arms at 50k"
+ },
+ "not_claimed": [
+  "that the 61.7% flip rate measured on 2x256 D410-S1 seed-10/12 teacher slots equals the dev-level flip rate (the dev action mix is an on-policy measurement of a different state distribution)",
+  "any numeric split of the -747.45 frames into factors; the shares reported are shares of the measured logit variance and of the dev difference, not of the frame delta",
+  "that the KL anchor will improve capability; at 50k the most it can do is stop the drift",
+  "that score.dat is provably inert (the engine is a closed binary); it is empirically inert",
+  "that the train/eval SHOOT-pulse mismatch is quantified; it is identified in code only",
+  "that R0 was re-measured this round; R0 is the T04 frozen record, cross-checked byte-consistently across three files",
+  "any 1M-frame, 3-seed or R1 statement; R2 is a privileged diagnostic",
+  "that the run diverged in the PPO sense; KL and clip never blew up, this is silent drift",
+  "that the temperature is a ratio bug; H1 is excluded and the problem is the measurement space"
+ ],
+ "blocking": [
+  "a same-round A0 re-run on the 20 dev seeds was not allowed (it needs the engine); comparability is established by artefact identity, not by a live control",
+  "the score.dat inertness cannot be proven from the closed engine binary",
+  "no controlled ablation of the bias vs the reward was possible offline; that is what the P4 branch is for"
+ ]
+}

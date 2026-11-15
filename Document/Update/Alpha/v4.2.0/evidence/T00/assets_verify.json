@@ -1,0 +1,2225 @@
+{
+ "schema": "v420-t00-assets-verify/1",
+ "task": "T00 固定远端路径与历史参照",
+ "spec": [
+  "Document/Update/Alpha/v4.2.0/README.md section 2",
+  "Document/Update/Alpha/v4.2.0/首轮执行任务单.md section 2"
+ ],
+ "generated_at_utc": "2026-11-13T09:24:48Z",
+ "executor": {
+  "provider": "DeepSeek",
+  "model": "DeepSeek Flash",
+  "role": "v4.2.0 T00 execution agent"
+ },
+ "host": {
+  "asset_host": "WSL2 Ubuntu on the Windows edit machine",
+  "windows_repo": "D:\\WorkShop\\Touhou_RL",
+  "wsl_repo_mount": "/mnt/d/WorkShop/Touhou_RL",
+  "root420": "/mnt/d/WorkShop/Touhou_RL",
+  "py420": "/root/v400-venv/bin/python",
+  "engine420": "/root/Touhou_RL/third_party/th08-rl/build/rl_v3/th08-modern",
+  "engine420_laser": "/root/Touhou_RL/third_party/th08-rl/build/rl_laser/th08-modern",
+  "data_dir": "/root/v400-data/game",
+  "v420_data": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data",
+  "xvfb_prefix": "xvfb-run -a -s '-screen 0 1024x768x24'",
+  "python_version": "3.10.12",
+  "torch_version": "2.14.1+cu130",
+  "cuda_available": true,
+  "gpu": "NVIDIA GeForce RTX 4070 SUPER, 12282 MiB",
+  "git_head": "8684ae10482043a019262eb60cd92af8f58a274d",
+  "git_branch": "v400",
+  "git_describe": "8684ae1-dirty",
+  "git_tracked_dirty_entries": 3608,
+  "wsl_old_checkout": {
+   "path": "/root/Touhou_RL",
+   "git_head": "d55c26a6c465b26f11e26ba4fc1bdb888e8b130b",
+   "has_v410_code": false,
+   "note": "engines in this checkout are the verified builds; it has no v410/v420 code"
+  },
+  "disk": {
+   "mnt_d": {
+    "size": "1.9T",
+    "avail": "1.2T",
+    "use": "40%"
+   },
+   "root": {
+    "size": "1007G",
+    "avail": "898G",
+    "use": "7%"
+   }
+  }
+ },
+ "commands": [
+  {
+   "name": "py_version",
+   "purpose": "python interpreter identity on the asset host",
+   "argv": "/root/v400-venv/bin/python -V",
+   "cwd": "/mnt/d/WorkShop/Touhou_RL",
+   "exit_code": 0,
+   "expected_exit_note": null,
+   "duration_s": 0.004,
+   "output_written_utc": "2026-11-13T09:19:13Z",
+   "output_lines": 1,
+   "key_output": "Python 3.10.12",
+   "raw_output_excerpt": "Python 3.10.12\n"
+  },
+  {
+   "name": "py_version_full",
+   "purpose": "",
+   "argv": "/root/v400-venv/bin/python -c import\\ sys\\,platform\\;print\\(\\\"python\\\"\\,sys.version.replace\\(\\\"\\\\n\\\"\\,\\\"\\ \\\"\\)\\)\\;print\\(\\\"platform\\\"\\,platform.platform\\(\\)\\)",
+   "cwd": "/mnt/d/WorkShop/Touhou_RL",
+   "exit_code": 0,
+   "expected_exit_note": null,
+   "duration_s": 0.023,
+   "output_written_utc": "2026-11-13T09:19:13Z",
+   "output_lines": 2,
+   "key_output": "python 3.10.12 (main, Aug 31 2026, 10:18:17) [GCC 11.4.0]",
+   "raw_output_excerpt": "python 3.10.12 (main, Aug 31 2026, 10:18:17) [GCC 11.4.0]\nplatform Linux-6.18.58.1-microsoft-standard-WSL2-x86_64-with-glibc2.35\n"
+  },
+  {
+   "name": "engine_rl_v3_sha",
+   "purpose": "default student/DAgger engine identity",
+   "argv": "sha256sum /root/Touhou_RL/third_party/th08-rl/build/rl_v3/th08-modern",
+   "cwd": "/mnt/d/WorkShop/Touhou_RL",
+   "exit_code": 0,
+   "expected_exit_note": null,
+   "duration_s": 0.015,
+   "output_written_utc": "2026-11-13T09:19:13Z",
+   "output_lines": 1,
+   "key_output": "691bfd77b7eca3361aa8bb7af0977556a70cc73a070b29a2447222ba7a568ef6  /root/Touhou_RL/third_party/th08-rl/build/rl_v3/th08-modern",
+   "raw_output_excerpt": "691bfd77b7eca3361aa8bb7af0977556a70cc73a070b29a2447222ba7a568ef6  /root/Touhou_RL/third_party/th08-rl/build/rl_v3/th08-modern\n"
+  },
+  {
+   "name": "engine_rl_laser_sha",
+   "purpose": "teacher-confirmed engine identity",
+   "argv": "sha256sum /root/Touhou_RL/third_party/th08-rl/build/rl_laser/th08-modern",
+   "cwd": "/mnt/d/WorkShop/Touhou_RL",
+   "exit_code": 0,
+   "expected_exit_note": null,
+   "duration_s": 0.015,
+   "output_written_utc": "2026-11-13T09:19:13Z",
+   "output_lines": 1,
+   "key_output": "1462829ba756bab49aae0878686988687dbaa109ea1750729d1202b555340d2f  /root/Touhou_RL/third_party/th08-rl/build/rl_laser/th08-modern",
+   "raw_output_excerpt": "1462829ba756bab49aae0878686988687dbaa109ea1750729d1202b555340d2f  /root/Touhou_RL/third_party/th08-rl/build/rl_laser/th08-modern\n"
+  },
+  {
+   "name": "engine_stat",
+   "purpose": "",
+   "argv": "stat -c %n\\|%s\\|%y\\|%A /root/Touhou_RL/third_party/th08-rl/build/rl_v3/th08-modern /root/Touhou_RL/third_party/th08-rl/build/rl_laser/th08-modern",
+   "cwd": "/mnt/d/WorkShop/Touhou_RL",
+   "exit_code": 0,
+   "expected_exit_note": null,
+   "duration_s": 0.006,
+   "output_written_utc": "2026-11-13T09:19:13Z",
+   "output_lines": 2,
+   "key_output": "/root/Touhou_RL/third_party/th08-rl/build/rl_v3/th08-modern|4836008|2026-11-10 10:43:28.735592264 +0800|-rwxr-xr-x",
+   "raw_output_excerpt": "/root/Touhou_RL/third_party/th08-rl/build/rl_v3/th08-modern|4836008|2026-11-10 10:43:28.735592264 +0800|-rwxr-xr-x\n/root/Touhou_RL/third_party/th08-rl/build/rl_laser/th08-modern|4828752|2026-11-09 20:59:33.996583239 +0800|-rwxr-xr-x\n"
+  },
+  {
+   "name": "import_v410",
+   "purpose": "v4.1.0 package import from root420",
+   "argv": "/root/v400-venv/bin/python -c import\\ importlib.util\\,sys\\;\\ spec=importlib.util.find_spec\\(\\\"touhou_rl.v410\\\"\\)\\;\\ print\\(spec\\)\\;\\ sys.exit\\(0\\ if\\ spec\\ is\\ not\\ None\\ else\\ 2\\)",
+   "cwd": "/mnt/d/WorkShop/Touhou_RL",
+   "exit_code": 0,
+   "expected_exit_note": null,
+   "duration_s": 0.043,
+   "output_written_utc": "2026-11-13T09:19:13Z",
+   "output_lines": 1,
+   "key_output": "ModuleSpec(name='touhou_rl.v410', loader=<_frozen_importlib_external.SourceFileLoader object at 0x799b79a388e0>, origin='/mnt/d/WorkShop/Touhou_RL/touhou_rl/v410/__init__.py', submodule_search_locations=['/mnt/d/WorkShop",
+   "raw_output_excerpt": "ModuleSpec(name='touhou_rl.v410', loader=<_frozen_importlib_external.SourceFileLoader object at 0x799b79a388e0>, origin='/mnt/d/WorkShop/Touhou_RL/touhou_rl/v410/__init__.py', submodule_search_locations=['/mnt/d/WorkShop/Touhou_RL/touhou_rl/v410'])\n"
+  },
+  {
+   "name": "import_v410_noPYTHONPATH",
+   "purpose": "",
+   "argv": "/root/v400-venv/bin/python -c import\\ importlib.util\\,sys\\;\\ spec=importlib.util.find_spec\\(\\\"touhou_rl.v410\\\"\\)\\;\\ print\\(spec\\)\\;\\ sys.exit\\(0\\ if\\ spec\\ is\\ not\\ None\\ else\\ 2\\)",
+   "cwd": "/mnt/d/WorkShop/Touhou_RL",
+   "exit_code": 0,
+   "expected_exit_note": null,
+   "duration_s": 0.026,
+   "output_written_utc": "2026-11-13T09:19:13Z",
+   "output_lines": 1,
+   "key_output": "ModuleSpec(name='touhou_rl.v410', loader=<_frozen_importlib_external.SourceFileLoader object at 0x75ae684ac8e0>, origin='/mnt/d/WorkShop/Touhou_RL/touhou_rl/v410/__init__.py', submodule_search_locations=['/mnt/d/WorkShop/Touhou_RL/touhou_rl",
+   "raw_output_excerpt": "ModuleSpec(name='touhou_rl.v410', loader=<_frozen_importlib_external.SourceFileLoader object at 0x75ae684ac8e0>, origin='/mnt/d/WorkShop/Touhou_RL/touhou_rl/v410/__init__.py', submodule_search_locations=['/mnt/d/WorkShop/Touhou_RL/touhou_rl/v410'])\n"
+  },
+  {
+   "name": "import_v420_absent",
+   "purpose": "v4.2.0 package does not exist yet (expected exit 2)",
+   "argv": "/root/v400-venv/bin/python -c import\\ importlib.util\\,sys\\;\\ spec=importlib.util.find_spec\\(\\\"touhou_rl.v420\\\"\\)\\;\\ print\\(spec\\)\\;\\ sys.exit\\(0\\ if\\ spec\\ is\\ not\\ None\\ else\\ 2\\)",
+   "cwd": "/mnt/d/WorkShop/Touhou_RL",
+   "exit_code": 2,
+   "expected_exit_note": "expected: touhou_rl.v420 does not exist yet; exit 2 is the fail-closed signal T01 must flip",
+   "duration_s": 0.033,
+   "output_written_utc": "2026-11-13T09:19:13Z",
+   "output_lines": 1,
+   "key_output": "None",
+   "raw_output_excerpt": "None\n"
+  },
+  {
+   "name": "torch_version",
+   "purpose": "",
+   "argv": "/root/v400-venv/bin/python -c import\\ torch\\;print\\(\\\"torch\\\"\\,torch.__version__\\)\\;print\\(\\\"cuda_available\\\"\\,torch.cuda.is_available\\(\\)\\)\\;print\\(\\\"cuda_devices\\\"\\,torch.cuda.device_count\\(\\)\\)",
+   "cwd": "/mnt/d/WorkShop/Touhou_RL",
+   "exit_code": 0,
+   "expected_exit_note": null,
+   "duration_s": 1.57,
+   "output_written_utc": "2026-11-13T09:19:14Z",
+   "output_lines": 3,
+   "key_output": "torch 2.14.1+cu130",
+   "raw_output_excerpt": "torch 2.14.1+cu130\ncuda_available True\ncuda_devices 1\n"
+  },
+  {
+   "name": "git_head",
+   "purpose": "",
+   "argv": "git -C /mnt/d/WorkShop/Touhou_RL rev-parse HEAD",
+   "cwd": "/mnt/d/WorkShop/Touhou_RL",
+   "exit_code": 0,
+   "expected_exit_note": null,
+   "duration_s": 0.029,
+   "output_written_utc": "2026-11-13T09:19:15Z",
+   "output_lines": 1,
+   "key_output": "8684ae10482043a019262eb60cd92af8f58a274d",
+   "raw_output_excerpt": "8684ae10482043a019262eb60cd92af8f58a274d\n"
+  },
+  {
+   "name": "git_branch",
+   "purpose": "",
+   "argv": "git -C /mnt/d/WorkShop/Touhou_RL rev-parse --abbrev-ref HEAD",
+   "cwd": "/mnt/d/WorkShop/Touhou_RL",
+   "exit_code": 0,
+   "expected_exit_note": null,
+   "duration_s": 0.07,
+   "output_written_utc": "2026-11-13T09:19:15Z",
+   "output_lines": 1,
+   "key_output": "v400",
+   "raw_output_excerpt": "v400\n"
+  },
+  {
+   "name": "git_status_tracked",
+   "purpose": "",
+   "argv": "bash -c git\\ -C\\ /mnt/d/WorkShop/Touhou_RL\\ status\\ --porcelain\\ -uno\\ \\|\\ wc\\ -l",
+   "cwd": "/mnt/d/WorkShop/Touhou_RL",
+   "exit_code": 0,
+   "expected_exit_note": null,
+   "duration_s": 25.929,
+   "output_written_utc": "2026-11-13T09:19:40Z",
+   "output_lines": 1,
+   "key_output": "3608",
+   "raw_output_excerpt": "3608\n"
+  },
+  {
+   "name": "git_describe",
+   "purpose": "",
+   "argv": "git -C /mnt/d/WorkShop/Touhou_RL describe --always --dirty --tags",
+   "cwd": "/mnt/d/WorkShop/Touhou_RL",
+   "exit_code": 0,
+   "expected_exit_note": null,
+   "duration_s": 11.153,
+   "output_written_utc": "2026-11-13T09:19:52Z",
+   "output_lines": 1,
+   "key_output": "8684ae1-dirty",
+   "raw_output_excerpt": "8684ae1-dirty\n"
+  },
+  {
+   "name": "wsl_repo_head_readonly",
+   "purpose": "",
+   "argv": "git -C /root/Touhou_RL rev-parse HEAD",
+   "cwd": "/mnt/d/WorkShop/Touhou_RL",
+   "exit_code": 0,
+   "expected_exit_note": null,
+   "duration_s": 0.015,
+   "output_written_utc": "2026-11-13T09:19:52Z",
+   "output_lines": 1,
+   "key_output": "d55c26a6c465b26f11e26ba4fc1bdb888e8b130b",
+   "raw_output_excerpt": "d55c26a6c465b26f11e26ba4fc1bdb888e8b130b\n"
+  },
+  {
+   "name": "eval_script_sha",
+   "purpose": "",
+   "argv": "sha256sum tools/rl/v410_student_eval.py touhou_rl/v410/__init__.py ASSET_SYNC.sha256 ASSET_SYNC.md",
+   "cwd": "/mnt/d/WorkShop/Touhou_RL",
+   "exit_code": 0,
+   "expected_exit_note": null,
+   "duration_s": 0.016,
+   "output_written_utc": "2026-11-13T09:19:52Z",
+   "output_lines": 4,
+   "key_output": "2db2caaf9089c1698cef9b6a682991a7594ebac47ae93244c3d9932591eddddc  tools/rl/v410_student_eval.py ; f74199047c7c3103348fd9075bfd1cffdbe0dbadc9a5d6f06f10b2dec1f3aee2  touhou_rl/v410/__init__.py ; 22fe78b3d78a3aa92a06c0b0c02d6ad7cdefd66cb309ac50e6d4311cf1701bd2  ASSET_SYNC.sha256 ; 340fb22ba252e2679c84c69e355c3e9fe4ae0cbef781f3d50edc849f184c1801  ASSET_SYNC.md",
+   "raw_output_excerpt": "2db2caaf9089c1698cef9b6a682991a7594ebac47ae93244c3d9932591eddddc  tools/rl/v410_student_eval.py\nf74199047c7c3103348fd9075bfd1cffdbe0dbadc9a5d6f06f10b2dec1f3aee2  touhou_rl/v410/__init__.py\n22fe78b3d78a3aa92a06c0b0c02d6ad7cdefd66cb309ac50e6d4311cf1701bd2  ASSET_SYNC.sha256\n340fb22ba252e2679c84c69e355c3e9fe4ae0cbef781f3d50edc849f184c1801  ASSET_SYNC.md\n"
+  },
+  {
+   "name": "which_xvfb",
+   "purpose": "",
+   "argv": "bash -c command\\ -v\\ xvfb-run\\;\\ command\\ -v\\ Xvfb\\;\\ xvfb-run\\ --help\\ 2\\>\\&1\\ \\|\\ head\\ -3",
+   "cwd": "/mnt/d/WorkShop/Touhou_RL",
+   "exit_code": 0,
+   "expected_exit_note": null,
+   "duration_s": 0.011,
+   "output_written_utc": "2026-11-13T09:19:52Z",
+   "output_lines": 5,
+   "key_output": "/usr/bin/xvfb-run",
+   "raw_output_excerpt": "/usr/bin/xvfb-run\n/usr/bin/Xvfb\nUsage: xvfb-run [OPTION ...] COMMAND\nRun COMMAND (usually an X client) in a virtual X server environment.\nOptions:\n"
+  },
+  {
+   "name": "asset_sync_check",
+   "purpose": "sha256sum -c ASSET_SYNC.sha256, unmodified manifest",
+   "argv": "sha256sum -c ASSET_SYNC.sha256",
+   "cwd": "/mnt/d/WorkShop/Touhou_RL",
+   "exit_code": 0,
+   "expected_exit_note": null,
+   "duration_s": 0.335,
+   "output_written_utc": "2026-11-13T09:19:53Z",
+   "output_lines": 18,
+   "key_output": "18 OK / 0 FAILED / 0 missing-or-unreadable (per-line verdicts in objects[])",
+   "raw_output_excerpt": "Document/Update/Alpha/v4.1.0/README.md: OK\nDocument/Update/Alpha/v4.1.0/state.json: OK\nDocument/Update/Alpha/v4.1.0/journal.jsonl: OK\nDocument/Update/Alpha/v4.1.0/budget.jsonl: OK\nDocument/Update/Alpha/v4.1.0/evidence/WP01/g0.1-108.json: OK\nDocument/Update/Alpha/v4.1.0/evidence/WP02/G4101_100_TEACHER.md: OK\nDocument/Update/Alpha/v4.1.0/evidence/WP05/round1.json: OK\nDocument/Update/Alpha/v4.1.0/evidence/WP05/round2.json: OK\nDocument/Update/Alpha/v4.1.0/evidence/WP05/train_beta05_20k.json: OK\nDocument/Update/Alpha/v4.1.0/evidence/WP05/train_tiebreak.json: OK\n.tmp_v410_wp04_arms/b0_seed0_last.pt: OK\n.tmp_v410_wp05_train50k/b0_s0_dagger_step1000.pt: OK\n.tmp_v410_wp05_train_beta05_5k/b0_s0_dagger"
+  },
+  {
+   "name": "ckpt_sha",
+   "purpose": "B0 / 20k / classweight / tiebreak checkpoints",
+   "argv": "sha256sum .tmp_v410_wp04_arms/b0_seed0_last.pt .tmp_v410_wp05_train_beta05_20k/b0_s0_dagger_step20000.pt .tmp_v410_wp05_classweight/b0_s0_dagger_step5000.pt .tmp_v410_wp05_tiebreak/b0_s0_dagger_step5000.pt",
+   "cwd": "/mnt/d/WorkShop/Touhou_RL",
+   "exit_code": 0,
+   "expected_exit_note": null,
+   "duration_s": 0.217,
+   "output_written_utc": "2026-11-13T09:19:53Z",
+   "output_lines": 4,
+   "key_output": "3bc0ec4461701bebb2ffc551d61dffff77f15cd486125baf9db6eaafc741b3a6  .tmp_v410_wp04_arms/b0_seed0_last.pt ; 15ae1fd5b9a6e0cbbddfd668bb342444bdb44db123b5f7e56abf3c5e7215bd95  .tmp_v410_wp05_train_beta05_20k/b0_s0_dagger_step20000.pt ; f447664c660933af9c2840dd2c8e43051e9757c2f520fa9706178c92b53a4919  .tmp_v410_wp05_classweight/b0_s0_dagger_step5000.pt ; adc4fa9b8b5f2b57e059a99f81e0082156737593db92f962adabc1f07857e4d0  .tmp_v410_wp05_tiebreak/b0_s0_dagger_step5000.pt",
+   "raw_output_excerpt": "3bc0ec4461701bebb2ffc551d61dffff77f15cd486125baf9db6eaafc741b3a6  .tmp_v410_wp04_arms/b0_seed0_last.pt\n15ae1fd5b9a6e0cbbddfd668bb342444bdb44db123b5f7e56abf3c5e7215bd95  .tmp_v410_wp05_train_beta05_20k/b0_s0_dagger_step20000.pt\nf447664c660933af9c2840dd2c8e43051e9757c2f520fa9706178c92b53a4919  .tmp_v410_wp05_classweight/b0_s0_dagger_step5000.pt\nadc4fa9b8b5f2b57e059a99f81e0082156737593db92f962adabc1f07857e4d0  .tmp_v410_wp05_tiebreak/b0_s0_dagger_step5000.pt\n"
+  },
+  {
+   "name": "ckpt_stat",
+   "purpose": "",
+   "argv": "stat -c %n\\|%s\\|%y .tmp_v410_wp04_arms/b0_seed0_last.pt .tmp_v410_wp05_train_beta05_20k/b0_s0_dagger_step20000.pt .tmp_v410_wp05_classweight/b0_s0_dagger_step5000.pt .tmp_v410_wp05_tiebreak/b0_s0_dagger_step5000.pt",
+   "cwd": "/mnt/d/WorkShop/Touhou_RL",
+   "exit_code": 0,
+   "expected_exit_note": null,
+   "duration_s": 0.034,
+   "output_written_utc": "2026-11-13T09:19:53Z",
+   "output_lines": 4,
+   "key_output": ".tmp_v410_wp04_arms/b0_seed0_last.pt|2946867|2026-11-13 04:32:48.433606300 +0800",
+   "raw_output_excerpt": ".tmp_v410_wp04_arms/b0_seed0_last.pt|2946867|2026-11-13 04:32:48.433606300 +0800\n.tmp_v410_wp05_train_beta05_20k/b0_s0_dagger_step20000.pt|2941293|2026-11-13 14:50:42.917270000 +0800\n.tmp_v410_wp05_classweight/b0_s0_dagger_step5000.pt|2941699|2026-11-13 15:30:33.043141300 +0800\n.tmp_v410_wp05_tiebreak/b0_s0_dagger_step5000.pt|2941827|2026-11-13 16:04:30.718482600 +0800\n"
+  },
+  {
+   "name": "baseline_eval_sha",
+   "purpose": "",
+   "argv": "sha256sum Document/Update/Alpha/v4.1.0/evidence/WP04/eval_b0_20.json .tmp_v410_wp05_train_beta05_20k/eval_dev20.json",
+   "cwd": "/mnt/d/WorkShop/Touhou_RL",
+   "exit_code": 0,
+   "expected_exit_note": null,
+   "duration_s": 0.022,
+   "output_written_utc": "2026-11-13T09:19:53Z",
+   "output_lines": 2,
+   "key_output": "2cb3e0f73a12644fb86897631f459fe69a3b833fb6b4b50b34bdf031eaf4c64d  Document/Update/Alpha/v4.1.0/evidence/WP04/eval_b0_20.json ; 3ff8791d4e71f2b649e6d1102b3b4b4b35c64ff923516b133d45708d7b5aa19d  .tmp_v410_wp05_train_beta05_20k/eval_dev20.json",
+   "raw_output_excerpt": "2cb3e0f73a12644fb86897631f459fe69a3b833fb6b4b50b34bdf031eaf4c64d  Document/Update/Alpha/v4.1.0/evidence/WP04/eval_b0_20.json\n3ff8791d4e71f2b649e6d1102b3b4b4b35c64ff923516b133d45708d7b5aa19d  .tmp_v410_wp05_train_beta05_20k/eval_dev20.json\n"
+  },
+  {
+   "name": "disk_df_mnt_d",
+   "purpose": "free space, Windows-backed repo volume",
+   "argv": "df -h /mnt/d",
+   "cwd": "/mnt/d/WorkShop/Touhou_RL",
+   "exit_code": 0,
+   "expected_exit_note": null,
+   "duration_s": 0.006,
+   "output_written_utc": "2026-11-13T09:19:53Z",
+   "output_lines": 2,
+   "key_output": "Filesystem      Size  Used Avail Use% Mounted on | D:\\             1.9T  753G  1.2T  40% /mnt/d",
+   "raw_output_excerpt": "Filesystem      Size  Used Avail Use% Mounted on\nD:\\             1.9T  753G  1.2T  40% /mnt/d\n"
+  },
+  {
+   "name": "disk_df_root",
+   "purpose": "free space, WSL root volume",
+   "argv": "df -h /root",
+   "cwd": "/mnt/d/WorkShop/Touhou_RL",
+   "exit_code": 0,
+   "expected_exit_note": null,
+   "duration_s": 0.006,
+   "output_written_utc": "2026-11-13T09:19:53Z",
+   "output_lines": 2,
+   "key_output": "Filesystem      Size  Used Avail Use% Mounted on | /dev/sdd       1007G   58G  898G   7% /",
+   "raw_output_excerpt": "Filesystem      Size  Used Avail Use% Mounted on\n/dev/sdd       1007G   58G  898G   7% /\n"
+  },
+  {
+   "name": "disk_df_inodes",
+   "purpose": "",
+   "argv": "df -i /mnt/d /root",
+   "cwd": "/mnt/d/WorkShop/Touhou_RL",
+   "exit_code": 0,
+   "expected_exit_note": null,
+   "duration_s": 0.005,
+   "output_written_utc": "2026-11-13T09:19:53Z",
+   "output_lines": 3,
+   "key_output": "Filesystem       Inodes   IUsed    IFree IUse% Mounted on | D:\\                 999 -999001  1000000     - /mnt/d",
+   "raw_output_excerpt": "Filesystem       Inodes   IUsed    IFree IUse% Mounted on\nD:\\                 999 -999001  1000000     - /mnt/d\n/dev/sdd       67108864  144354 66964510    1% /\n"
+  },
+  {
+   "name": "running_procs",
+   "purpose": "live process check (collection state)",
+   "argv": "bash -c ps\\ -eo\\ pid\\,etimes\\,pcpu\\,cmd\\ \\|\\ grep\\ -E\\ \\\"dagger\\|v410_student_eval\\|v400_teacher\\|rl_v3\\\"\\ \\|\\ grep\\ -v\\ grep\\ \\|\\ head\\ -20\\;\\ echo\\ \\\"PROC_GREP_DONE\\\"",
+   "cwd": "/mnt/d/WorkShop/Touhou_RL",
+   "exit_code": 0,
+   "expected_exit_note": null,
+   "duration_s": 0.024,
+   "output_written_utc": "2026-11-13T09:19:53Z",
+   "output_lines": 9,
+   "key_output": "9 process line(s); first: 1884157    3079  0.0 /bin/sh /usr/bin/xvfb-run -a -s -screen 0 1024x768x24 /root/v400-venv/bin/python tools/rl/v410_dagger_collect.py --checkpoint .tmp_v410_wp05_train_beta05_20k/b",
+   "raw_output_excerpt": "1884157    3079  0.0 /bin/sh /usr/bin/xvfb-run -a -s -screen 0 1024x768x24 /root/v400-venv/bin/python tools/rl/v410_dagger_collect.py --checkpoint .tmp_v410_wp05_train_beta05_20k/b0_s0_dagger_step20000.pt --seeds 2044-2054 --beta 0.5 --decisions 3500 --max-frames 20000 --stage 0 --difficulty normal --mode fast --engine /root/Touhou_RL/third_party/th08-rl/build/rl_v3/th08-modern --data-dir /root/v400-data/game --data-root .tmp_v410_wp05_round3/data --shard-root .tmp_v410_wp05_round3 --work-dir .tmp_v410_wp05_round3/logs --continue-on-error --max-seconds 9000 --out .tmp_v410_wp05_round3/round3_batchB.json\n1884178    3078 1039 /root/v400-venv/bin/python tools/rl/v410_dagger_collect.py --checkpo"
+  },
+  {
+   "name": "nvidia_smi",
+   "purpose": "",
+   "argv": "bash -c command\\ -v\\ nvidia-smi\\ \\>/dev/null\\ \\&\\&\\ nvidia-smi\\ --query-gpu=name\\,memory.total\\,memory.used\\,utilization.gpu\\ --format=csv\\ \\|\\|\\ echo\\ \\\"nvidia-smi\\ absent\\\"",
+   "cwd": "/mnt/d/WorkShop/Touhou_RL",
+   "exit_code": 0,
+   "expected_exit_note": null,
+   "duration_s": 0.115,
+   "output_written_utc": "2026-11-13T09:19:53Z",
+   "output_lines": 2,
+   "key_output": "name, memory.total [MiB], memory.used [MiB], utilization.gpu [%]",
+   "raw_output_excerpt": "name, memory.total [MiB], memory.used [MiB], utilization.gpu [%]\nNVIDIA GeForce RTX 4070 SUPER, 12282 MiB, 1767 MiB, 25 %\n"
+  },
+  {
+   "name": "sha_table_independent",
+   "purpose": "",
+   "argv": "/root/v400-venv/bin/python .tmp_v420_t00/22_sha_table.py",
+   "cwd": "/mnt/d/WorkShop/Touhou_RL",
+   "exit_code": 0,
+   "expected_exit_note": null,
+   "duration_s": 0.259,
+   "output_written_utc": "2026-11-13T09:20:54Z",
+   "output_lines": 193,
+   "key_output": "independent sha256 pass: 18 OK / 0 FAILED / 0 MISSING (source ASSET_SYNC.sha256)",
+   "raw_output_excerpt": "{\n \"source\": \"ASSET_SYNC.sha256\",\n \"source_sha256\": \"22fe78b3d78a3aa92a06c0b0c02d6ad7cdefd66cb309ac50e6d4311cf1701bd2\",\n \"entries\": [\n  {\n   \"line\": 1,\n   \"path\": \"Document/Update/Alpha/v4.1.0/README.md\",\n   \"absolute_path\": \"/mnt/d/WorkShop/Touhou_RL/Document/Update/Alpha/v4.1.0/README.md\",\n   \"sha256_expected\": \"8fc51064e5e54e7cdf6e0b924dcaefd0b3020d148ceeaf5bc0deb9294ae4876c\",\n   \"exists\": true,\n   \"size_bytes\": 84790,\n   \"sha256_actual\": \"8fc51064e5e54e7cdf6e0b924dcaefd0b3020d148ceeaf5bc0deb9294ae4876c\",\n   \"verdict\": \"OK\"\n  },\n  {\n   \"line\": 2,\n   \"path\": \"Document/Update/Alpha/v4.1.0/state.json\",\n   \"absolute_path\": \"/mnt/d/WorkShop/Touhou_RL/Document/Update/Alpha/v4.1.0/state.json\",\n "
+  },
+  {
+   "name": "collection_procs",
+   "purpose": "",
+   "argv": "bash -c pgrep\\ -af\\ v410_dagger_collect\\ \\|\\|\\ echo\\ \\\"NO_DAGGER_PROCESS\\\"",
+   "cwd": "/mnt/d/WorkShop/Touhou_RL",
+   "exit_code": 0,
+   "expected_exit_note": null,
+   "duration_s": 0.007,
+   "output_written_utc": "2026-11-13T09:20:54Z",
+   "output_lines": 3,
+   "key_output": "3 process line(s); first: 1884157 /bin/sh /usr/bin/xvfb-run -a -s -screen 0 1024x768x24 /root/v400-venv/bin/python tools/rl/v410_dagger_collect.py --checkpoint .tmp_v410_wp05_train_beta05_20k/b0_s0_dagger_s",
+   "raw_output_excerpt": "1884157 /bin/sh /usr/bin/xvfb-run -a -s -screen 0 1024x768x24 /root/v400-venv/bin/python tools/rl/v410_dagger_collect.py --checkpoint .tmp_v410_wp05_train_beta05_20k/b0_s0_dagger_step20000.pt --seeds 2044-2054 --beta 0.5 --decisions 3500 --max-frames 20000 --stage 0 --difficulty normal --mode fast --engine /root/Touhou_RL/third_party/th08-rl/build/rl_v3/th08-modern --data-dir /root/v400-data/game --data-root .tmp_v410_wp05_round3/data --shard-root .tmp_v410_wp05_round3 --work-dir .tmp_v410_wp05_round3/logs --continue-on-error --max-seconds 9000 --out .tmp_v410_wp05_round3/round3_batchB.json\n1884178 /root/v400-venv/bin/python tools/rl/v410_dagger_collect.py --checkpoint .tmp_v410_wp05_train_b"
+  },
+  {
+   "name": "round3_partial_tree",
+   "purpose": "",
+   "argv": "bash -c ls\\ -la\\ .tmp_v410_wp05_round3\\;\\ echo\\ \\\"---\\ partial\\ obs\\ ---\\\"\\;\\ ls\\ -la\\ .tmp_v410_wp05_round3/.dagger-s0d1seed2051.partial/obs\\ 2\\>\\&1\\ \\|\\ head\\ -5\\;\\ echo\\ \\\"---\\ batchB\\ ---\\\"\\;\\ ls\\ -la\\ .tmp_v410_wp05_round3/round3_batchB.json\\ 2\\>\\&1",
+   "cwd": "/mnt/d/WorkShop/Touhou_RL",
+   "exit_code": 2,
+   "expected_exit_note": "expected: the final `ls` probes a not-yet-written round3_batchB.json, so this presence probe exits 2; the earlier `ls` of round3 and of .dagger-s0d1seed2051.partial/obs succeeded (empty obs dir)",
+   "duration_s": 0.066,
+   "output_written_utc": "2026-11-13T09:20:54Z",
+   "output_lines": 36,
+   "key_output": "total 224",
+   "raw_output_excerpt": "total 224\ndrwxrwxrwx 1 root root  4096 Nov 13 17:13 .\ndrwxrwxrwx 1 root root  4096 Nov 13 17:20 ..\ndrwxrwxrwx 1 root root  4096 Nov 13 17:13 .dagger-s0d1seed2051.partial\n-rwxrwxrwx 1 root root   791 Nov 13 16:07 abort_facts.sh\n-rwxrwxrwx 1 root root 19928 Nov 13 16:15 audit_round3.json\n-rwxrwxrwx 1 root root 27560 Nov 13 16:08 audit_round3.py\n-rwxrwxrwx 1 root root 19565 Nov 13 16:08 audit_round3_nostudent.json\n-rwxrwxrwx 1 root root   436 Nov 13 15:13 audit_timing_probe.sh\ndrwxrwxrwx 1 root root  4096 Nov 13 17:13 data\n-rwxrwxrwx 1 root root 39692 Nov 13 16:08 derive_dryrun.json\n-rwxrwxrwx 1 root root 22757 Nov 13 16:36 derive_round3.py\n-rwxrwxrwx 1 root root   737 Nov 13 15:45 diagnose_con"
+  },
+  {
+   "name": "round3_mtime",
+   "purpose": "",
+   "argv": "stat -c %n\\|%s\\|%y .tmp_v410_wp05_round3 .tmp_v410_wp05_round3/shards .tmp_v410_wp05_round3/data .tmp_v410_wp05_round3/logs",
+   "cwd": "/mnt/d/WorkShop/Touhou_RL",
+   "exit_code": 0,
+   "expected_exit_note": null,
+   "duration_s": 0.006,
+   "output_written_utc": "2026-11-13T09:20:54Z",
+   "output_lines": 4,
+   "key_output": ".tmp_v410_wp05_round3|4096|2026-11-13 17:13:20.233488000 +0800",
+   "raw_output_excerpt": ".tmp_v410_wp05_round3|4096|2026-11-13 17:13:20.233488000 +0800\n.tmp_v410_wp05_round3/shards|4096|2026-11-13 17:13:11.643800400 +0800\n.tmp_v410_wp05_round3/data|4096|2026-11-13 17:13:11.702201200 +0800\n.tmp_v410_wp05_round3/logs|4096|2026-11-13 17:13:11.688201900 +0800\n"
+  },
+  {
+   "name": "d1_gate_full_stat",
+   "purpose": "",
+   "argv": "stat -c %n\\|%s\\|%y .tmp_v400_d1/work/gate.full.json",
+   "cwd": "/mnt/d/WorkShop/Touhou_RL",
+   "exit_code": 0,
+   "expected_exit_note": null,
+   "duration_s": 0.006,
+   "output_written_utc": "2026-11-13T09:20:54Z",
+   "output_lines": 1,
+   "key_output": ".tmp_v400_d1/work/gate.full.json|263168|2026-11-12 04:54:47.750176300 +0800",
+   "raw_output_excerpt": ".tmp_v400_d1/work/gate.full.json|263168|2026-11-12 04:54:47.750176300 +0800\n"
+  },
+  {
+   "name": "eval_argv_b0",
+   "purpose": "",
+   "argv": "/root/v400-venv/bin/python -c import\\ json\\;d=json.load\\(open\\(\\\"Document/Update/Alpha/v4.1.0/evidence/WP04/eval_b0_20.json\\\"\\,encoding=\\\"utf-8\\\"\\)\\)\\;print\\(json.dumps\\(d\\[\\\"argv\\\"\\]\\)\\)\\;print\\(\\\"recorded_sha256_of_tool\\\"\\,d.get\\(\\\"tool\\\"\\)\\,d.get\\(\\\"generated_at\\\"\\)\\)",
+   "cwd": "/mnt/d/WorkShop/Touhou_RL",
+   "exit_code": 0,
+   "expected_exit_note": null,
+   "duration_s": 0.02,
+   "output_written_utc": "2026-11-13T09:20:54Z",
+   "output_lines": 2,
+   "key_output": "[\"--engine\", \"/root/Touhou_RL/third_party/th08-rl/build/rl_v3/th08-modern\", \"--data-dir\", \"/root/v400-data/game\", \"--checkpoint\", \".tmp_v410_wp04_arms/b0_seed0_last.pt\", \"--seeds\", \"1000-1019\", \"--stage\", \"0\", \"--difficulty\", \"normal\", \"--max-frames\", \"19887\",",
+   "raw_output_excerpt": "[\"--engine\", \"/root/Touhou_RL/third_party/th08-rl/build/rl_v3/th08-modern\", \"--data-dir\", \"/root/v400-data/game\", \"--checkpoint\", \".tmp_v410_wp04_arms/b0_seed0_last.pt\", \"--seeds\", \"1000-1019\", \"--stage\", \"0\", \"--difficulty\", \"normal\", \"--max-frames\", \"19887\", \"--stop-on-death\", \"--out\", \"Document/Update/Alpha/v4.1.0/evidence/WP04/eval_b0_20.json\"]\nrecorded_sha256_of_tool tools/rl/v410_student_eval.py 2026-11-12T21:12:08Z\n"
+  },
+  {
+   "name": "eval_argv_20k",
+   "purpose": "",
+   "argv": "/root/v400-venv/bin/python -c import\\ json\\;d=json.load\\(open\\(\\\".tmp_v410_wp05_train_beta05_20k/eval_dev20.json\\\"\\,encoding=\\\"utf-8\\\"\\)\\)\\;print\\(json.dumps\\(d\\[\\\"argv\\\"\\]\\)\\)\\;print\\(\\\"recorded_sha256_of_tool\\\"\\,d.get\\(\\\"tool\\\"\\)\\,d.get\\(\\\"generated_at\\\"\\)\\)",
+   "cwd": "/mnt/d/WorkShop/Touhou_RL",
+   "exit_code": 0,
+   "expected_exit_note": null,
+   "duration_s": 0.034,
+   "output_written_utc": "2026-11-13T09:20:55Z",
+   "output_lines": 2,
+   "key_output": "[\"--engine\", \"/root/Touhou_RL/third_party/th08-rl/build/rl_v3/th08-modern\", \"--data-dir\", \"/root/v400-data/game\", \"--checkpoint\", \".tmp_v410_wp05_train_beta05_20k/b0_s0_dagger_step20000.pt\", \"--seeds\", \"1000-1019\", \"--stage\", \"0\", \"--difficulty\", \"normal\", \"--",
+   "raw_output_excerpt": "[\"--engine\", \"/root/Touhou_RL/third_party/th08-rl/build/rl_v3/th08-modern\", \"--data-dir\", \"/root/v400-data/game\", \"--checkpoint\", \".tmp_v410_wp05_train_beta05_20k/b0_s0_dagger_step20000.pt\", \"--seeds\", \"1000-1019\", \"--stage\", \"0\", \"--difficulty\", \"normal\", \"--max-frames\", \"19887\", \"--stop-on-death\", \"--out\", \".tmp_v410_wp05_train_beta05_20k/eval_dev20.json\"]\nrecorded_sha256_of_tool tools/rl/v410_student_eval.py 2026-11-13T07:00:55Z\n"
+  },
+  {
+   "name": "teacher_confirm_seeds",
+   "purpose": "",
+   "argv": "/root/v400-venv/bin/python .tmp_v420_t00/24_teacher_seeds.py",
+   "cwd": "/mnt/d/WorkShop/Touhou_RL",
+   "exit_code": 0,
+   "expected_exit_note": null,
+   "duration_s": 0.086,
+   "output_written_utc": "2026-11-13T09:21:37Z",
+   "output_lines": 138,
+   "key_output": "teacher seeds 61300-61399 over 4 chunks",
+   "raw_output_excerpt": "{\n \"chunks\": [\n  {\n   \"summary\": \"Document/Update/Alpha/v4.1.0/evidence/WP02/g4101_s1n_chunk1_summary.json\",\n   \"exists\": true,\n   \"n_seed_fields\": 50,\n   \"seeds_unique\": 25,\n   \"seed_min\": 61300,\n   \"seed_max\": 61324,\n   \"seeds_head\": [\n    61300,\n    61301,\n    61302\n   ],\n   \"seeds_tail\": [\n    61322,\n    61323,\n    61324\n   ],\n   \"top_keys\": [\n    \"comparison_v2h\",\n    \"engine\",\n    \"fast_gate\",\n    \"g4101_chunk1\",\n    \"generated_at\",\n    \"mode\",\n    \"params\",\n    \"pass\",\n    \"runs\",\n    \"schema\",\n    \"seeds\",\n    \"status\",\n    \"summary\"\n   ]\n  },\n  {\n   \"summary\": \"Document/Update/Alpha/v4.1.0/evidence/WP02/g4101_s1n_chunk2_summary.json\",\n   \"exists\": true,\n   \"n_seed_fields\": 50,\n   \"s"
+  },
+  {
+   "name": "local_config_selftest",
+   "purpose": "",
+   "argv": "/root/v400-venv/bin/python -c import\\ json\\,sys\\;d=json.load\\(open\\(\\\"configs/v420/local.json\\\"\\,encoding=\\\"utf-8\\\"\\)\\)\\;assert\\ d\\[\\\"schema\\\"\\]==\\\"v420-local-config/1\\\"\\,d.get\\(\\\"schema\\\"\\)\\;bad=\\[k\\ for\\ k\\ in\\ \\(\\\"root420\\\"\\,\\\"py420\\\"\\,\\\"engine420\\\"\\,\\\"data_dir\\\"\\,\\\"v420_data\\\"\\)\\ if\\ not\\ str\\(d.get\\(k\\)\\ or\\ \\\"\\\"\\).strip\\(\\)\\]\\;print\\(\\\"empty_required_fields\\\"\\,bad\\)\\;sys.exit\\(2\\ if\\ bad\\ else\\ 0\\)",
+   "cwd": "/mnt/d/WorkShop/Touhou_RL",
+   "exit_code": 0,
+   "expected_exit_note": null,
+   "duration_s": 0.08,
+   "output_written_utc": "2026-11-13T09:24:02Z",
+   "output_lines": 1,
+   "key_output": "empty_required_fields []",
+   "raw_output_excerpt": "empty_required_fields []\n"
+  },
+  {
+   "name": "asset_sync_check_post_write",
+   "purpose": "",
+   "argv": "sha256sum -c ASSET_SYNC.sha256",
+   "cwd": "/mnt/d/WorkShop/Touhou_RL",
+   "exit_code": 0,
+   "expected_exit_note": null,
+   "duration_s": 0.304,
+   "output_written_utc": "2026-11-13T09:24:03Z",
+   "output_lines": 18,
+   "key_output": "Document/Update/Alpha/v4.1.0/README.md: OK",
+   "raw_output_excerpt": "Document/Update/Alpha/v4.1.0/README.md: OK\nDocument/Update/Alpha/v4.1.0/state.json: OK\nDocument/Update/Alpha/v4.1.0/journal.jsonl: OK\nDocument/Update/Alpha/v4.1.0/budget.jsonl: OK\nDocument/Update/Alpha/v4.1.0/evidence/WP01/g0.1-108.json: OK\nDocument/Update/Alpha/v4.1.0/evidence/WP02/G4101_100_TEACHER.md: OK\nDocument/Update/Alpha/v4.1.0/evidence/WP05/round1.json: OK\nDocument/Update/Alpha/v4.1.0/evidence/WP05/round2.json: OK\nDocument/Update/Alpha/v4.1.0/evidence/WP05/train_beta05_20k.json: OK\nDocument/Update/Alpha/v4.1.0/evidence/WP05/train_tiebreak.json: OK\n.tmp_v410_wp04_arms/b0_seed0_last.pt: OK\n.tmp_v410_wp05_train50k/b0_s0_dagger_step1000.pt: OK\n.tmp_v410_wp05_train_beta05_5k/b0_s0_dagger"
+  },
+  {
+   "name": "new_files_sha",
+   "purpose": "",
+   "argv": "sha256sum configs/v420/local.json Document/Update/Alpha/v4.2.0/evidence/T00/assets_verify.json Document/Update/Alpha/v4.2.0/evidence/T00/T00.md",
+   "cwd": "/mnt/d/WorkShop/Touhou_RL",
+   "exit_code": 0,
+   "expected_exit_note": null,
+   "duration_s": 0.019,
+   "output_written_utc": "2026-11-13T09:24:03Z",
+   "output_lines": 3,
+   "key_output": "6a104778f1c650b07c04a71013825c59a2a30cd3e88eced06f37c385e5fc4e05  configs/v420/local.json",
+   "raw_output_excerpt": "6a104778f1c650b07c04a71013825c59a2a30cd3e88eced06f37c385e5fc4e05  configs/v420/local.json\n39824f716ddcc249999a972b2e2f7c6672a9d5db62bdfefd5bb872ff75272c57  Document/Update/Alpha/v4.2.0/evidence/T00/assets_verify.json\n7eb057d91ad8ac34539ffa87f6531e6acd694ca31e32ede19ac0921aa47e8345  Document/Update/Alpha/v4.2.0/evidence/T00/T00.md\n"
+  },
+  {
+   "name": "git_state_post_write",
+   "purpose": "",
+   "argv": "bash -c git\\ -C\\ /mnt/d/WorkShop/Touhou_RL\\ status\\ --porcelain\\ --\\ configs/v420\\ Document/Update/Alpha/v4.2.0\\;\\ echo\\ \\\"---tracked_dirty_repo_wide---\\\"\\;\\ git\\ -C\\ /mnt/d/WorkShop/Touhou_RL\\ status\\ --porcelain\\ -uno\\ \\|\\ wc\\ -l",
+   "cwd": "/mnt/d/WorkShop/Touhou_RL",
+   "exit_code": 0,
+   "expected_exit_note": null,
+   "duration_s": 19.241,
+   "output_written_utc": "2026-11-13T09:24:21Z",
+   "output_lines": 7,
+   "key_output": " M Document/Update/Alpha/v4.2.0/README.md",
+   "raw_output_excerpt": " M Document/Update/Alpha/v4.2.0/README.md\n M \"Document/Update/Alpha/v4.2.0/\\351\\246\\226\\350\\275\\256\\346\\211\\247\\350\\241\\214\\344\\273\\273\\345\\212\\241\\345\\215\\225.md\"\n?? Document/Update/Alpha/v4.2.0/evidence/\n?? Document/Update/Alpha/v4.2.0/experiments/\n?? configs/v420/\n---tracked_dirty_repo_wide---\n3608\n"
+  },
+  {
+   "name": "leftover_probe",
+   "purpose": "",
+   "argv": "bash -c ls\\ -la\\ .tmp_v420_t00\\ \\|\\ head\\ -30\\;\\ echo\\ \\\"---\\ raw\\ count\\ ---\\\"\\;\\ ls\\ .tmp_v420_t00/raw\\ \\|\\ wc\\ -l",
+   "cwd": "/mnt/d/WorkShop/Touhou_RL",
+   "exit_code": 0,
+   "expected_exit_note": null,
+   "duration_s": 0.04,
+   "output_written_utc": "2026-11-13T09:24:21Z",
+   "output_lines": 32,
+   "key_output": "total 136",
+   "raw_output_excerpt": "total 136\ndrwxrwxrwx 1 root root  4096 Nov 13 17:24 .\ndrwxrwxrwx 1 root root  4096 Nov 13 17:24 ..\n-rwxrwxrwx 1 root root  1383 Nov 13 17:17 00_probe.sh\n-rwxrwxrwx 1 root root   979 Nov 13 17:17 01_schema.sh\n-rwxrwxrwx 1 root root   178 Nov 13 17:17 02_inspect.sh\n-rwxrwxrwx 1 root root   172 Nov 13 17:18 03_count.sh\n-rwxrwxrwx 1 root root  3791 Nov 13 17:19 10_core.sh\n-rwxrwxrwx 1 root root  1377 Nov 13 17:20 11_verify_objects.sh\n-rwxrwxrwx 1 root root   273 Nov 13 17:21 12_exposure.sh\n-rwxrwxrwx 1 root root  1209 Nov 13 17:24 13_final_check.sh\n-rwxrwxrwx 1 root root 10715 Nov 13 17:23 20_reconcile.py\n-rwxrwxrwx 1 root root   350 Nov 13 17:20 21_reconcile.sh\n-rwxrwxrwx 1 root root  2169 Nov "
+  }
+ ],
+ "objects": [
+  {
+   "path": "Document/Update/Alpha/v4.1.0/README.md",
+   "absolute_path": "/mnt/d/WorkShop/Touhou_RL/Document/Update/Alpha/v4.1.0/README.md",
+   "registered_in": "ASSET_SYNC.sha256",
+   "sha256_expected": "8fc51064e5e54e7cdf6e0b924dcaefd0b3020d148ceeaf5bc0deb9294ae4876c",
+   "sha256_actual": "8fc51064e5e54e7cdf6e0b924dcaefd0b3020d148ceeaf5bc0deb9294ae4876c",
+   "size_bytes": 84790,
+   "verdict": "OK"
+  },
+  {
+   "path": "Document/Update/Alpha/v4.1.0/state.json",
+   "absolute_path": "/mnt/d/WorkShop/Touhou_RL/Document/Update/Alpha/v4.1.0/state.json",
+   "registered_in": "ASSET_SYNC.sha256",
+   "sha256_expected": "13e0e31476f2f44bd0c5eb54c93574583e7b59e305edbb2da2eeff5d0e19962c",
+   "sha256_actual": "13e0e31476f2f44bd0c5eb54c93574583e7b59e305edbb2da2eeff5d0e19962c",
+   "size_bytes": 2465,
+   "verdict": "OK"
+  },
+  {
+   "path": "Document/Update/Alpha/v4.1.0/journal.jsonl",
+   "absolute_path": "/mnt/d/WorkShop/Touhou_RL/Document/Update/Alpha/v4.1.0/journal.jsonl",
+   "registered_in": "ASSET_SYNC.sha256",
+   "sha256_expected": "5ad6f2fdb9e8d6dc5a2e6422136422a41096e01d110814be7a74861a829d8f1d",
+   "sha256_actual": "5ad6f2fdb9e8d6dc5a2e6422136422a41096e01d110814be7a74861a829d8f1d",
+   "size_bytes": 67008,
+   "verdict": "OK"
+  },
+  {
+   "path": "Document/Update/Alpha/v4.1.0/budget.jsonl",
+   "absolute_path": "/mnt/d/WorkShop/Touhou_RL/Document/Update/Alpha/v4.1.0/budget.jsonl",
+   "registered_in": "ASSET_SYNC.sha256",
+   "sha256_expected": "2a766e230b6650328a4353d6512969f4fa8014ef6c17de6b96a5633ba54c11eb",
+   "sha256_actual": "2a766e230b6650328a4353d6512969f4fa8014ef6c17de6b96a5633ba54c11eb",
+   "size_bytes": 6630,
+   "verdict": "OK"
+  },
+  {
+   "path": "Document/Update/Alpha/v4.1.0/evidence/WP01/g0.1-108.json",
+   "absolute_path": "/mnt/d/WorkShop/Touhou_RL/Document/Update/Alpha/v4.1.0/evidence/WP01/g0.1-108.json",
+   "registered_in": "ASSET_SYNC.sha256",
+   "sha256_expected": "33274e174eda6cc4865b64ff359fd9587cc94f15bceca1a89caa4b1a6cc1c31f",
+   "sha256_actual": "33274e174eda6cc4865b64ff359fd9587cc94f15bceca1a89caa4b1a6cc1c31f",
+   "size_bytes": 74360,
+   "verdict": "OK"
+  },
+  {
+   "path": "Document/Update/Alpha/v4.1.0/evidence/WP02/G4101_100_TEACHER.md",
+   "absolute_path": "/mnt/d/WorkShop/Touhou_RL/Document/Update/Alpha/v4.1.0/evidence/WP02/G4101_100_TEACHER.md",
+   "registered_in": "ASSET_SYNC.sha256",
+   "sha256_expected": "aa3f5abcbd0f75a01b1b7e4413bb1b1933e84f097b64eec258dbd0e6d5956c49",
+   "sha256_actual": "aa3f5abcbd0f75a01b1b7e4413bb1b1933e84f097b64eec258dbd0e6d5956c49",
+   "size_bytes": 2279,
+   "verdict": "OK"
+  },
+  {
+   "path": "Document/Update/Alpha/v4.1.0/evidence/WP05/round1.json",
+   "absolute_path": "/mnt/d/WorkShop/Touhou_RL/Document/Update/Alpha/v4.1.0/evidence/WP05/round1.json",
+   "registered_in": "ASSET_SYNC.sha256",
+   "sha256_expected": "8cc68b54778c1cedad30acaf8216b15eedf1c49846b325248047572c3b2a4f09",
+   "sha256_actual": "8cc68b54778c1cedad30acaf8216b15eedf1c49846b325248047572c3b2a4f09",
+   "size_bytes": 70416,
+   "verdict": "OK"
+  },
+  {
+   "path": "Document/Update/Alpha/v4.1.0/evidence/WP05/round2.json",
+   "absolute_path": "/mnt/d/WorkShop/Touhou_RL/Document/Update/Alpha/v4.1.0/evidence/WP05/round2.json",
+   "registered_in": "ASSET_SYNC.sha256",
+   "sha256_expected": "81bf1a5a34befa5a6d74ca022e1b69af26c444b9d6b9b03e074d8f091d42fb6f",
+   "sha256_actual": "81bf1a5a34befa5a6d74ca022e1b69af26c444b9d6b9b03e074d8f091d42fb6f",
+   "size_bytes": 72152,
+   "verdict": "OK"
+  },
+  {
+   "path": "Document/Update/Alpha/v4.1.0/evidence/WP05/train_beta05_20k.json",
+   "absolute_path": "/mnt/d/WorkShop/Touhou_RL/Document/Update/Alpha/v4.1.0/evidence/WP05/train_beta05_20k.json",
+   "registered_in": "ASSET_SYNC.sha256",
+   "sha256_expected": "f5d9590534cc28aaf942137b90bd91ec08c13108acd6190a8093c36a5319c8bf",
+   "sha256_actual": "f5d9590534cc28aaf942137b90bd91ec08c13108acd6190a8093c36a5319c8bf",
+   "size_bytes": 91445,
+   "verdict": "OK"
+  },
+  {
+   "path": "Document/Update/Alpha/v4.1.0/evidence/WP05/train_tiebreak.json",
+   "absolute_path": "/mnt/d/WorkShop/Touhou_RL/Document/Update/Alpha/v4.1.0/evidence/WP05/train_tiebreak.json",
+   "registered_in": "ASSET_SYNC.sha256",
+   "sha256_expected": "d2698c359e89cad7c4a35575fd41b4e462244a844e4e321ec36f272d6ca5f62e",
+   "sha256_actual": "d2698c359e89cad7c4a35575fd41b4e462244a844e4e321ec36f272d6ca5f62e",
+   "size_bytes": 85818,
+   "verdict": "OK"
+  },
+  {
+   "path": ".tmp_v410_wp04_arms/b0_seed0_last.pt",
+   "absolute_path": "/mnt/d/WorkShop/Touhou_RL/.tmp_v410_wp04_arms/b0_seed0_last.pt",
+   "registered_in": "ASSET_SYNC.sha256",
+   "sha256_expected": "3bc0ec4461701bebb2ffc551d61dffff77f15cd486125baf9db6eaafc741b3a6",
+   "sha256_actual": "3bc0ec4461701bebb2ffc551d61dffff77f15cd486125baf9db6eaafc741b3a6",
+   "size_bytes": 2946867,
+   "verdict": "OK"
+  },
+  {
+   "path": ".tmp_v410_wp05_train50k/b0_s0_dagger_step1000.pt",
+   "absolute_path": "/mnt/d/WorkShop/Touhou_RL/.tmp_v410_wp05_train50k/b0_s0_dagger_step1000.pt",
+   "registered_in": "ASSET_SYNC.sha256",
+   "sha256_expected": "6ebe4ea91d81d9333bfa1ccc065fc3515bb25b1d3b90a2684cdaa8a0a69b8086",
+   "sha256_actual": "6ebe4ea91d81d9333bfa1ccc065fc3515bb25b1d3b90a2684cdaa8a0a69b8086",
+   "size_bytes": 2941187,
+   "verdict": "OK"
+  },
+  {
+   "path": ".tmp_v410_wp05_train_beta05_5k/b0_s0_dagger_step5000.pt",
+   "absolute_path": "/mnt/d/WorkShop/Touhou_RL/.tmp_v410_wp05_train_beta05_5k/b0_s0_dagger_step5000.pt",
+   "registered_in": "ASSET_SYNC.sha256",
+   "sha256_expected": "692fdc61dc473ff10657d2a0b1a37434d3b24561fedb9798a41a38086bdbd120",
+   "sha256_actual": "692fdc61dc473ff10657d2a0b1a37434d3b24561fedb9798a41a38086bdbd120",
+   "size_bytes": 2941187,
+   "verdict": "OK"
+  },
+  {
+   "path": ".tmp_v410_wp05_train_beta05_20k/b0_s0_dagger_step20000.pt",
+   "absolute_path": "/mnt/d/WorkShop/Touhou_RL/.tmp_v410_wp05_train_beta05_20k/b0_s0_dagger_step20000.pt",
+   "registered_in": "ASSET_SYNC.sha256",
+   "sha256_expected": "15ae1fd5b9a6e0cbbddfd668bb342444bdb44db123b5f7e56abf3c5e7215bd95",
+   "sha256_actual": "15ae1fd5b9a6e0cbbddfd668bb342444bdb44db123b5f7e56abf3c5e7215bd95",
+   "size_bytes": 2941293,
+   "verdict": "OK"
+  },
+  {
+   "path": ".tmp_v410_wp05_classweight/b0_s0_dagger_step5000.pt",
+   "absolute_path": "/mnt/d/WorkShop/Touhou_RL/.tmp_v410_wp05_classweight/b0_s0_dagger_step5000.pt",
+   "registered_in": "ASSET_SYNC.sha256",
+   "sha256_expected": "f447664c660933af9c2840dd2c8e43051e9757c2f520fa9706178c92b53a4919",
+   "sha256_actual": "f447664c660933af9c2840dd2c8e43051e9757c2f520fa9706178c92b53a4919",
+   "size_bytes": 2941699,
+   "verdict": "OK"
+  },
+  {
+   "path": ".tmp_v410_wp05_tiebreak/b0_s0_dagger_step5000.pt",
+   "absolute_path": "/mnt/d/WorkShop/Touhou_RL/.tmp_v410_wp05_tiebreak/b0_s0_dagger_step5000.pt",
+   "registered_in": "ASSET_SYNC.sha256",
+   "sha256_expected": "adc4fa9b8b5f2b57e059a99f81e0082156737593db92f962adabc1f07857e4d0",
+   "sha256_actual": "adc4fa9b8b5f2b57e059a99f81e0082156737593db92f962adabc1f07857e4d0",
+   "size_bytes": 2941827,
+   "verdict": "OK"
+  },
+  {
+   "path": "/root/Touhou_RL/third_party/th08-rl/build/rl_v3/th08-modern",
+   "absolute_path": "/root/Touhou_RL/third_party/th08-rl/build/rl_v3/th08-modern",
+   "registered_in": "ASSET_SYNC.sha256",
+   "sha256_expected": "691bfd77b7eca3361aa8bb7af0977556a70cc73a070b29a2447222ba7a568ef6",
+   "sha256_actual": "691bfd77b7eca3361aa8bb7af0977556a70cc73a070b29a2447222ba7a568ef6",
+   "size_bytes": 4836008,
+   "verdict": "OK"
+  },
+  {
+   "path": "/root/Touhou_RL/third_party/th08-rl/build/rl_laser/th08-modern",
+   "absolute_path": "/root/Touhou_RL/third_party/th08-rl/build/rl_laser/th08-modern",
+   "registered_in": "ASSET_SYNC.sha256",
+   "sha256_expected": "1462829ba756bab49aae0878686988687dbaa109ea1750729d1202b555340d2f",
+   "sha256_actual": "1462829ba756bab49aae0878686988687dbaa109ea1750729d1202b555340d2f",
+   "size_bytes": 4828752,
+   "verdict": "OK"
+  },
+  {
+   "path": "tools/rl/v410_student_eval.py",
+   "absolute_path": "/mnt/d/WorkShop/Touhou_RL/tools/rl/v410_student_eval.py",
+   "registered_in": null,
+   "sha256_expected": null,
+   "sha256_actual": "2db2caaf9089c1698cef9b6a682991a7594ebac47ae93244c3d9932591eddddc",
+   "size_bytes": 91689,
+   "verdict": "OK (computed, not registered)"
+  },
+  {
+   "path": "touhou_rl/v410/__init__.py",
+   "absolute_path": "/mnt/d/WorkShop/Touhou_RL/touhou_rl/v410/__init__.py",
+   "registered_in": null,
+   "sha256_expected": null,
+   "sha256_actual": "f74199047c7c3103348fd9075bfd1cffdbe0dbadc9a5d6f06f10b2dec1f3aee2",
+   "size_bytes": 618,
+   "verdict": "OK (computed, not registered)"
+  },
+  {
+   "path": "ASSET_SYNC.sha256",
+   "absolute_path": "/mnt/d/WorkShop/Touhou_RL/ASSET_SYNC.sha256",
+   "registered_in": null,
+   "sha256_expected": null,
+   "sha256_actual": "22fe78b3d78a3aa92a06c0b0c02d6ad7cdefd66cb309ac50e6d4311cf1701bd2",
+   "size_bytes": 2135,
+   "verdict": "OK (computed, not registered)"
+  },
+  {
+   "path": "ASSET_SYNC.md",
+   "absolute_path": "/mnt/d/WorkShop/Touhou_RL/ASSET_SYNC.md",
+   "registered_in": null,
+   "sha256_expected": null,
+   "sha256_actual": "340fb22ba252e2679c84c69e355c3e9fe4ae0cbef781f3d50edc849f184c1801",
+   "size_bytes": 9780,
+   "verdict": "OK (computed, not registered)"
+  },
+  {
+   "path": "Document/Update/Alpha/v4.1.0/evidence/WP04/eval_b0_20.json",
+   "absolute_path": "/mnt/d/WorkShop/Touhou_RL/Document/Update/Alpha/v4.1.0/evidence/WP04/eval_b0_20.json",
+   "registered_in": null,
+   "sha256_expected": null,
+   "sha256_actual": "2cb3e0f73a12644fb86897631f459fe69a3b833fb6b4b50b34bdf031eaf4c64d",
+   "size_bytes": 77815,
+   "verdict": "OK (computed, not registered)"
+  },
+  {
+   "path": ".tmp_v410_wp05_train_beta05_20k/eval_dev20.json",
+   "absolute_path": "/mnt/d/WorkShop/Touhou_RL/.tmp_v410_wp05_train_beta05_20k/eval_dev20.json",
+   "registered_in": null,
+   "sha256_expected": null,
+   "sha256_actual": "3ff8791d4e71f2b649e6d1102b3b4b4b35c64ff923516b133d45708d7b5aa19d",
+   "size_bytes": 103314,
+   "verdict": "OK (computed, not registered)"
+  }
+ ],
+ "datasets": {
+  "observed_at_utc": "2026-11-13T09:23:12Z",
+  "d1_canonical": {
+   "manifest": ".tmp_v400_d1/d1/manifest.json",
+   "manifest_entries_declared": 147,
+   "manifest_totals": {
+    "shards": 147,
+    "decisions": 502605,
+    "obs_bytes": 26191981962,
+    "stage_frames": 2010420,
+    "updated_at": "2026-11-12T04:45:46"
+   },
+   "entries_present_on_disk": 137,
+   "entries_missing_on_disk": 10,
+   "on_disk_shard_dirs_regular": 137,
+   "on_disk_hidden_partial_dirs": [
+    ".d1-s1d1-n4000-seed1-shard.partial",
+    ".d1-s1d1-n4000-seed5-shard.partial.failed-20261112T012955",
+    ".d1-s1d1-n4000-seed6-shard.partial.failed-20261112T013634",
+    ".d1-s1d1-n4000-seed7-shard.partial.failed-20261112T013637",
+    ".d1-s1d1-n4000-seed8-shard.partial.failed-20261112T013637"
+   ],
+   "present_decisions_sum": 469216,
+   "present_stage_frames_sum": 1876864,
+   "missing_entries_decisions_sum": 33389,
+   "missing_entries": [
+    {
+     "shard": "d1-s0d1-n3371-seed1-shard-i008",
+     "seed": 1,
+     "decisions": 3370
+    },
+    {
+     "shard": "d1-s0d1-n3371-seed1-shard-i016",
+     "seed": 1,
+     "decisions": 3370
+    },
+    {
+     "shard": "d1-s0d1-n3371-seed2-shard-i009",
+     "seed": 2,
+     "decisions": 3322
+    },
+    {
+     "shard": "d1-s0d1-n3371-seed2-shard-i017",
+     "seed": 2,
+     "decisions": 3322
+    },
+    {
+     "shard": "d1-s0d1-n3371-seed3-shard-i010",
+     "seed": 3,
+     "decisions": 3346
+    },
+    {
+     "shard": "d1-s0d1-n3371-seed3-shard-i018",
+     "seed": 3,
+     "decisions": 3346
+    },
+    {
+     "shard": "d1-s0d1-n3371-seed5-shard-i012",
+     "seed": 5,
+     "decisions": 3371
+    },
+    {
+     "shard": "d1-s0d1-n3371-seed6-shard-i013",
+     "seed": 6,
+     "decisions": 3274
+    },
+    {
+     "shard": "d1-s0d1-n3371-seed7-shard-i014",
+     "seed": 7,
+     "decisions": 3346
+    },
+    {
+     "shard": "d1-s0d1-n3371-seed8-shard-i015",
+     "seed": 8,
+     "decisions": 3322
+    }
+   ],
+   "reconciles_137_shards_469216_decisions": true,
+   "reconciles_1876864_frames": true,
+   "gate_full": {
+    "path": ".tmp_v400_d1/work/gate.full.json",
+    "exists": true,
+    "keys": [
+     "actions",
+     "created_at",
+     "decisions",
+     "frames",
+     "hash",
+     "load_gate",
+     "out_dir",
+     "per_stage",
+     "plan",
+     "planned_missing",
+     "planned_shards",
+     "schema",
+     "shard_reports",
+     "shards"
+    ],
+    "shards": 137,
+    "decisions": 469216,
+    "frames": 1876864,
+    "load_gate": "obj",
+    "planned_missing": []
+   }
+  },
+  "d1_legacy_round1": {
+   "manifest": ".tmp_v400_d1/d1-round1/manifest.json",
+   "manifest_entries_declared": 9,
+   "manifest_totals": {
+    "shards": 9,
+    "decisions": 4500,
+    "obs_bytes": 234518094,
+    "stage_frames": 18000,
+    "updated_at": "2026-11-12T00:21:42"
+   },
+   "note": "superceded by .tmp_v400_d1/d1; listed only for ancestry, not a v4.2.0 training input"
+  },
+  "s1_d410": {
+   "manifest": ".tmp_v410_s1c/d1/manifest.json",
+   "dir": ".tmp_v410_s1c/d1",
+   "manifest_totals": {
+    "shards": 12,
+    "decisions": 39518,
+    "obs_bytes": 2059380808,
+    "stage_frames": 158072,
+    "updated_at": "2026-11-13T03:49:48"
+   },
+   "shards_in_this_dir": 12,
+   "decisions_in_this_dir": 39518,
+   "seeds_in_this_dir": [
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+   ],
+   "legacy_seed_1_8_shards": [
+    {
+     "shard": "d1-s0d1-n3371-seed1-shard",
+     "seed": 1,
+     "decisions": 3370
+    },
+    {
+     "shard": "d1-s0d1-n3371-seed2-shard",
+     "seed": 2,
+     "decisions": 3322
+    },
+    {
+     "shard": "d1-s0d1-n3371-seed3-shard",
+     "seed": 3,
+     "decisions": 3346
+    },
+    {
+     "shard": "d1-s0d1-n3371-seed4-shard",
+     "seed": 4,
+     "decisions": 3274
+    },
+    {
+     "shard": "d1-s0d1-n3371-seed5-shard",
+     "seed": 5,
+     "decisions": 3371
+    },
+    {
+     "shard": "d1-s0d1-n3371-seed6-shard",
+     "seed": 6,
+     "decisions": 3274
+    },
+    {
+     "shard": "d1-s0d1-n3371-seed7-shard",
+     "seed": 7,
+     "decisions": 3346
+    },
+    {
+     "shard": "d1-s0d1-n3371-seed8-shard",
+     "seed": 8,
+     "decisions": 3322
+    }
+   ],
+   "legacy_seed_1_8_decisions": 26625,
+   "combined_decisions": 66143,
+   "matches_66143": true,
+   "per_shard": [
+    {
+     "shard": "d1-s0d1-n3300-seed10-shard",
+     "seed": 10,
+     "decisions": 3300
+    },
+    {
+     "shard": "d1-s0d1-n3300-seed11-shard",
+     "seed": 11,
+     "decisions": 3300
+    },
+    {
+     "shard": "d1-s0d1-n3300-seed12-shard",
+     "seed": 12,
+     "decisions": 3298
+    },
+    {
+     "shard": "d1-s0d1-n3300-seed13-shard",
+     "seed": 13,
+     "decisions": 3274
+    },
+    {
+     "shard": "d1-s0d1-n3300-seed14-shard",
+     "seed": 14,
+     "decisions": 3300
+    },
+    {
+     "shard": "d1-s0d1-n3300-seed15-shard",
+     "seed": 15,
+     "decisions": 3300
+    },
+    {
+     "shard": "d1-s0d1-n3300-seed16-shard",
+     "seed": 16,
+     "decisions": 3300
+    },
+    {
+     "shard": "d1-s0d1-n3300-seed17-shard",
+     "seed": 17,
+     "decisions": 3274
+    },
+    {
+     "shard": "d1-s0d1-n3300-seed18-shard",
+     "seed": 18,
+     "decisions": 3298
+    },
+    {
+     "shard": "d1-s0d1-n3300-seed19-shard",
+     "seed": 19,
+     "decisions": 3300
+    },
+    {
+     "shard": "d1-s0d1-n3300-seed20-shard",
+     "seed": 20,
+     "decisions": 3274
+    },
+    {
+     "shard": "d1-s0d1-n3300-seed9-shard",
+     "seed": 9,
+     "decisions": 3300
+    }
+   ]
+  },
+  "dagger": {
+   "round1": {
+    "dir": ".tmp_v410_wp05_round1",
+    "shard_dirs": 16,
+    "data_env_dirs": 16,
+    "decisions_sum": 56000,
+    "betas": [
+     "1.0"
+    ],
+    "incomplete_shards": [],
+    "hidden_dirs": [],
+    "per_shard": [
+     {
+      "shard": "dagger-s0d1seed2000",
+      "seed": 2000,
+      "decisions": 3500,
+      "beta": 1.0,
+      "complete": true,
+      "stop_reason": "decisions",
+      "created_at": "2026-11-12T21:39:56Z"
+     },
+     {
+      "shard": "dagger-s0d1seed2001",
+      "seed": 2001,
+      "decisions": 3500,
+      "beta": 1.0,
+      "complete": true,
+      "stop_reason": "decisions",
+      "created_at": "2026-11-12T21:50:47Z"
+     },
+     {
+      "shard": "dagger-s0d1seed2002",
+      "seed": 2002,
+      "decisions": 3500,
+      "beta": 1.0,
+      "complete": true,
+      "stop_reason": "decisions",
+      "created_at": "2026-11-12T22:09:43Z"
+     },
+     {
+      "shard": "dagger-s0d1seed2003",
+      "seed": 2003,
+      "decisions": 3500,
+      "beta": 1.0,
+      "complete": true,
+      "stop_reason": "decisions",
+      "created_at": "2026-11-12T22:31:02Z"
+     },
+     {
+      "shard": "dagger-s0d1seed2004",
+      "seed": 2004,
+      "decisions": 3500,
+      "beta": 1.0,
+      "complete": true,
+      "stop_reason": "decisions",
+      "created_at": "2026-11-12T22:52:36Z"
+     },
+     {
+      "shard": "dagger-s0d1seed2005",
+      "seed": 2005,
+      "decisions": 3500,
+      "beta": 1.0,
+      "complete": true,
+      "stop_reason": "decisions",
+      "created_at": "2026-11-12T23:13:42Z"
+     },
+     {
+      "shard": "dagger-s0d1seed2006",
+      "seed": 2006,
+      "decisions": 3500,
+      "beta": 1.0,
+      "complete": true,
+      "stop_reason": "decisions",
+      "created_at": "2026-11-12T23:24:43Z"
+     },
+     {
+      "shard": "dagger-s0d1seed2007",
+      "seed": 2007,
+      "decisions": 3500,
+      "beta": 1.0,
+      "complete": true,
+      "stop_reason": "decisions",
+      "created_at": "2026-11-12T23:35:16Z"
+     },
+     {
+      "shard": "dagger-s0d1seed2008",
+      "seed": 2008,
+      "decisions": 3500,
+      "beta": 1.0,
+      "complete": true,
+      "stop_reason": "decisions",
+      "created_at": "2026-11-12T23:53:59Z"
+     },
+     {
+      "shard": "dagger-s0d1seed2009",
+      "seed": 2009,
+      "decisions": 3500,
+      "beta": 1.0,
+      "complete": true,
+      "stop_reason": "decisions",
+      "created_at": "2026-11-13T00:03:18Z"
+     },
+     {
+      "shard": "dagger-s0d1seed2010",
+      "seed": 2010,
+      "decisions": 3500,
+      "beta": 1.0,
+      "complete": true,
+      "stop_reason": "decisions",
+      "created_at": "2026-11-13T00:11:52Z"
+     },
+     {
+      "shard": "dagger-s0d1seed2020",
+      "seed": 2020,
+      "decisions": 3500,
+      "beta": 1.0,
+      "complete": true,
+      "stop_reason": "decisions",
+      "created_at": "2026-11-13T00:20:11Z"
+     },
+     {
+      "shard": "dagger-s0d1seed2021",
+      "seed": 2021,
+      "decisions": 3500,
+      "beta": 1.0,
+      "complete": true,
+      "stop_reason": "decisions",
+      "created_at": "2026-11-13T00:28:38Z"
+     },
+     {
+      "shard": "dagger-s0d1seed2022",
+      "seed": 2022,
+      "decisions": 3500,
+      "beta": 1.0,
+      "complete": true,
+      "stop_reason": "decisions",
+      "created_at": "2026-11-13T00:36:51Z"
+     },
+     {
+      "shard": "dagger-s0d1seed2023",
+      "seed": 2023,
+      "decisions": 3500,
+      "beta": 1.0,
+      "complete": true,
+      "stop_reason": "decisions",
+      "created_at": "2026-11-13T00:45:08Z"
+     },
+     {
+      "shard": "dagger-s0d1seed2024",
+      "seed": 2024,
+      "decisions": 3500,
+      "beta": 1.0,
+      "complete": true,
+      "stop_reason": "decisions",
+      "created_at": "2026-11-13T00:53:52Z"
+     }
+    ]
+   },
+   "round2": {
+    "dir": ".tmp_v410_wp05_round2",
+    "shard_dirs": 15,
+    "data_env_dirs": 15,
+    "decisions_sum": 52500,
+    "betas": [
+     "0.5"
+    ],
+    "incomplete_shards": [],
+    "hidden_dirs": [],
+    "per_shard": [
+     {
+      "shard": "dagger-s0d1seed2025",
+      "seed": 2025,
+      "decisions": 3500,
+      "beta": 0.5,
+      "complete": true,
+      "stop_reason": "decisions",
+      "created_at": "2026-11-13T02:28:02Z"
+     },
+     {
+      "shard": "dagger-s0d1seed2026",
+      "seed": 2026,
+      "decisions": 3500,
+      "beta": 0.5,
+      "complete": true,
+      "stop_reason": "decisions",
+      "created_at": "2026-11-13T02:35:20Z"
+     },
+     {
+      "shard": "dagger-s0d1seed2027",
+      "seed": 2027,
+      "decisions": 3500,
+      "beta": 0.5,
+      "complete": true,
+      "stop_reason": "decisions",
+      "created_at": "2026-11-13T03:29:53Z"
+     },
+     {
+      "shard": "dagger-s0d1seed2028",
+      "seed": 2028,
+      "decisions": 3500,
+      "beta": 0.5,
+      "complete": true,
+      "stop_reason": "decisions",
+      "created_at": "2026-11-13T03:37:25Z"
+     },
+     {
+      "shard": "dagger-s0d1seed2029",
+      "seed": 2029,
+      "decisions": 3500,
+      "beta": 0.5,
+      "complete": true,
+      "stop_reason": "decisions",
+      "created_at": "2026-11-13T03:45:00Z"
+     },
+     {
+      "shard": "dagger-s0d1seed2030",
+      "seed": 2030,
+      "decisions": 3500,
+      "beta": 0.5,
+      "complete": true,
+      "stop_reason": "decisions",
+      "created_at": "2026-11-13T03:52:33Z"
+     },
+     {
+      "shard": "dagger-s0d1seed2031",
+      "seed": 2031,
+      "decisions": 3500,
+      "beta": 0.5,
+      "complete": true,
+      "stop_reason": "decisions",
+      "created_at": "2026-11-13T04:00:02Z"
+     },
+     {
+      "shard": "dagger-s0d1seed2032",
+      "seed": 2032,
+      "decisions": 3500,
+      "beta": 0.5,
+      "complete": true,
+      "stop_reason": "decisions",
+      "created_at": "2026-11-13T04:10:26Z"
+     },
+     {
+      "shard": "dagger-s0d1seed2033",
+      "seed": 2033,
+      "decisions": 3500,
+      "beta": 0.5,
+      "complete": true,
+      "stop_reason": "decisions",
+      "created_at": "2026-11-13T04:17:39Z"
+     },
+     {
+      "shard": "dagger-s0d1seed2034",
+      "seed": 2034,
+      "decisions": 3500,
+      "beta": 0.5,
+      "complete": true,
+      "stop_reason": "decisions",
+      "created_at": "2026-11-13T04:24:53Z"
+     },
+     {
+      "shard": "dagger-s0d1seed2035",
+      "seed": 2035,
+      "decisions": 3500,
+      "beta": 0.5,
+      "complete": true,
+      "stop_reason": "decisions",
+      "created_at": "2026-11-13T04:32:00Z"
+     },
+     {
+      "shard": "dagger-s0d1seed2036",
+      "seed": 2036,
+      "decisions": 3500,
+      "beta": 0.5,
+      "complete": true,
+      "stop_reason": "decisions",
+      "created_at": "2026-11-13T04:39:11Z"
+     },
+     {
+      "shard": "dagger-s0d1seed2037",
+      "seed": 2037,
+      "decisions": 3500,
+      "beta": 0.5,
+      "complete": true,
+      "stop_reason": "decisions",
+      "created_at": "2026-11-13T04:46:21Z"
+     },
+     {
+      "shard": "dagger-s0d1seed2038",
+      "seed": 2038,
+      "decisions": 3500,
+      "beta": 0.5,
+      "complete": true,
+      "stop_reason": "decisions",
+      "created_at": "2026-11-13T04:53:36Z"
+     },
+     {
+      "shard": "dagger-s0d1seed2039",
+      "seed": 2039,
+      "decisions": 3500,
+      "beta": 0.5,
+      "complete": true,
+      "stop_reason": "decisions",
+      "created_at": "2026-11-13T05:00:52Z"
+     }
+    ]
+   },
+   "round3": {
+    "dir": ".tmp_v410_wp05_round3",
+    "shard_dirs": 12,
+    "data_env_dirs": 13,
+    "decisions_sum": 40287,
+    "betas": [
+     "0.5"
+    ],
+    "incomplete_shards": [],
+    "hidden_dirs": [
+     ".dagger-s0d1seed2052.partial"
+    ],
+    "per_shard": [
+     {
+      "shard": "dagger-s0d1seed2040",
+      "seed": 2040,
+      "decisions": 3500,
+      "beta": 0.5,
+      "complete": true,
+      "stop_reason": "decisions",
+      "created_at": "2026-11-13T07:20:19Z"
+     },
+     {
+      "shard": "dagger-s0d1seed2041",
+      "seed": 2041,
+      "decisions": 3500,
+      "beta": 0.5,
+      "complete": true,
+      "stop_reason": "decisions",
+      "created_at": "2026-11-13T07:30:35Z"
+     },
+     {
+      "shard": "dagger-s0d1seed2042",
+      "seed": 2042,
+      "decisions": 3500,
+      "beta": 0.5,
+      "complete": true,
+      "stop_reason": "decisions",
+      "created_at": "2026-11-13T07:49:21Z"
+     },
+     {
+      "shard": "dagger-s0d1seed2043",
+      "seed": 2043,
+      "decisions": 3500,
+      "beta": 0.5,
+      "complete": true,
+      "stop_reason": "decisions",
+      "created_at": "2026-11-13T07:59:02Z"
+     },
+     {
+      "shard": "dagger-s0d1seed2044",
+      "seed": 2044,
+      "decisions": 3500,
+      "beta": 0.5,
+      "complete": true,
+      "stop_reason": "decisions",
+      "created_at": "2026-11-13T08:33:32Z"
+     },
+     {
+      "shard": "dagger-s0d1seed2045",
+      "seed": 2045,
+      "decisions": 3500,
+      "beta": 0.5,
+      "complete": true,
+      "stop_reason": "decisions",
+      "created_at": "2026-11-13T08:40:47Z"
+     },
+     {
+      "shard": "dagger-s0d1seed2046",
+      "seed": 2046,
+      "decisions": 3500,
+      "beta": 0.5,
+      "complete": true,
+      "stop_reason": "decisions",
+      "created_at": "2026-11-13T08:47:57Z"
+     },
+     {
+      "shard": "dagger-s0d1seed2047",
+      "seed": 2047,
+      "decisions": 3500,
+      "beta": 0.5,
+      "complete": true,
+      "stop_reason": "decisions",
+      "created_at": "2026-11-13T08:55:03Z"
+     },
+     {
+      "shard": "dagger-s0d1seed2048",
+      "seed": 2048,
+      "decisions": 1787,
+      "beta": 0.5,
+      "complete": true,
+      "stop_reason": "death_stop",
+      "created_at": "2026-11-13T08:58:57Z"
+     },
+     {
+      "shard": "dagger-s0d1seed2049",
+      "seed": 2049,
+      "decisions": 3500,
+      "beta": 0.5,
+      "complete": true,
+      "stop_reason": "decisions",
+      "created_at": "2026-11-13T09:06:04Z"
+     },
+     {
+      "shard": "dagger-s0d1seed2050",
+      "seed": 2050,
+      "decisions": 3500,
+      "beta": 0.5,
+      "complete": true,
+      "stop_reason": "decisions",
+      "created_at": "2026-11-13T09:13:11Z"
+     },
+     {
+      "shard": "dagger-s0d1seed2051",
+      "seed": 2051,
+      "decisions": 3500,
+      "beta": 0.5,
+      "complete": true,
+      "stop_reason": "decisions",
+      "created_at": "2026-11-13T09:22:06Z"
+     }
+    ]
+   }
+  }
+ },
+ "baselines": {
+  "b0_20dev": {
+   "path": "Document/Update/Alpha/v4.1.0/evidence/WP04/eval_b0_20.json",
+   "generated_at": "2026-11-12T21:12:08Z",
+   "checkpoint_path": ".tmp_v410_wp04_arms/b0_seed0_last.pt",
+   "checkpoint_sha256": "3bc0ec4461701bebb2ffc551d61dffff77f15cd486125baf9db6eaafc741b3a6",
+   "engine_sha256": "691bfd77b7eca3361aa8bb7af0977556a70cc73a070b29a2447222ba7a568ef6",
+   "suite": {
+    "name": "S1N",
+    "stage": 0,
+    "difficulty": "normal",
+    "max_frames": 19887,
+    "stop_on_death": true,
+    "decision_frames": null
+   },
+   "seed_policy": {
+    "allowed": "1000-1099 (dev)",
+    "refused": [
+     "60000-60199 (confirm)",
+     "1-20 (D410-S1 corpus: train 1-14 / val 15-17 / test 18-20)"
+    ],
+    "seeds_requested": [
+     1000,
+     1001,
+     1002,
+     1003,
+     1004,
+     1005,
+     1006,
+     1007,
+     1008,
+     1009,
+     1010,
+     1011,
+     1012,
+     1013,
+     1014,
+     1015,
+     1016,
+     1017,
+     1018,
+     1019
+    ]
+   },
+   "aggregate_frames_mean": 1453.25,
+   "aggregate_frames_min": 815,
+   "aggregate_frames_max": 2386,
+   "aggregate_deaths_mean": 1.0,
+   "aggregate_clears": 0,
+   "aggregate_clear_rate": 0.0,
+   "aggregate_stop_reasons": {
+    "death_stop": 20
+   },
+   "per_seed": [
+    {
+     "seed": 1000,
+     "frames": 1398,
+     "deaths": 1.0,
+     "stop_reason": "death_stop",
+     "stage_clear": false,
+     "score": 13102,
+     "action0_share": 0.422031,
+     "unique_actions": 12,
+     "error": null
+    },
+    {
+     "seed": 1001,
+     "frames": 818,
+     "deaths": 1.0,
+     "stop_reason": "death_stop",
+     "stage_clear": false,
+     "score": 1512,
+     "action0_share": 0.508557,
+     "unique_actions": 8,
+     "error": null
+    },
+    {
+     "seed": 1002,
+     "frames": 1251,
+     "deaths": 1.0,
+     "stop_reason": "death_stop",
+     "stage_clear": false,
+     "score": 7438,
+     "action0_share": 0.496805,
+     "unique_actions": 11,
+     "error": null
+    },
+    {
+     "seed": 1003,
+     "frames": 815,
+     "deaths": 1.0,
+     "stop_reason": "death_stop",
+     "stage_clear": false,
+     "score": 1507,
+     "action0_share": 0.615196,
+     "unique_actions": 7,
+     "error": null
+    },
+    {
+     "seed": 1004,
+     "frames": 2386,
+     "deaths": 1.0,
+     "stop_reason": "death_stop",
+     "stage_clear": false,
+     "score": 30207,
+     "action0_share": 0.440905,
+     "unique_actions": 14,
+     "error": null
+    },
+    {
+     "seed": 1005,
+     "frames": 1379,
+     "deaths": 1.0,
+     "stop_reason": "death_stop",
+     "stage_clear": false,
+     "score": 5165,
+     "action0_share": 0.385507,
+     "unique_actions": 13,
+     "error": null
+    },
+    {
+     "seed": 1006,
+     "frames": 1369,
+     "deaths": 1.0,
+     "stop_reason": "death_stop",
+     "stage_clear": false,
+     "score": 5030,
+     "action0_share": 0.474453,
+     "unique_actions": 9,
+     "error": null
+    },
+    {
+     "seed": 1007,
+     "frames": 1664,
+     "deaths": 1.0,
+     "stop_reason": "death_stop",
+     "stage_clear": false,
+     "score": 8774,
+     "action0_share": 0.5,
+     "unique_actions": 14,
+     "error": null
+    },
+    {
+     "seed": 1008,
+     "frames": 1476,
+     "deaths": 1.0,
+     "stop_reason": "death_stop",
+     "stage_clear": false,
+     "score": 8520,
+     "action0_share": 0.397019,
+     "unique_actions": 11,
+     "error": null
+    },
+    {
+     "seed": 1009,
+     "frames": 1457,
+     "deaths": 1.0,
+     "stop_reason": "death_stop",
+     "stage_clear": false,
+     "score": 5629,
+     "action0_share": 0.384088,
+     "unique_actions": 10,
+     "error": null
+    },
+    {
+     "seed": 1010,
+     "frames": 1214,
+     "deaths": 1.0,
+     "stop_reason": "death_stop",
+     "stage_clear": false,
+     "score": 5414,
+     "action0_share": 0.454695,
+     "unique_actions": 12,
+     "error": null
+    },
+    {
+     "seed": 1011,
+     "frames": 1224,
+     "deaths": 1.0,
+     "stop_reason": "death_stop",
+     "stage_clear": false,
+     "score": 7589,
+     "action0_share": 0.348039,
+     "unique_actions": 9,
+     "error": null
+    },
+    {
+     "seed": 1012,
+     "frames": 1214,
+     "deaths": 1.0,
+     "stop_reason": "death_stop",
+     "stage_clear": false,
+     "score": 7456,
+     "action0_share": 0.497529,
+     "unique_actions": 10,
+     "error": null
+    },
+    {
+     "seed": 1013,
+     "frames": 2239,
+     "deaths": 1.0,
+     "stop_reason": "death_stop",
+     "stage_clear": false,
+     "score": 33295,
+     "action0_share": 0.491071,
+     "unique_actions": 14,
+     "error": null
+    },
+    {
+     "seed": 1014,
+     "frames": 1256,
+     "deaths": 1.0,
+     "stop_reason": "death_stop",
+     "stage_clear": false,
+     "score": 9512,
+     "action0_share": 0.453822,
+     "unique_actions": 11,
+     "error": null
+    },
+    {
+     "seed": 1015,
+     "frames": 1361,
+     "deaths": 1.0,
+     "stop_reason": "death_stop",
+     "stage_clear": false,
+     "score": 8167,
+     "action0_share": 0.483113,
+     "unique_actions": 11,
+     "error": null
+    },
+    {
+     "seed": 1016,
+     "frames": 1486,
+     "deaths": 1.0,
+     "stop_reason": "death_stop",
+     "stage_clear": false,
+     "score": 8924,
+     "action0_share": 0.504711,
+     "unique_actions": 8,
+     "error": null
+    },
+    {
+     "seed": 1017,
+     "frames": 1894,
+     "deaths": 1.0,
+     "stop_reason": "death_stop",
+     "stage_clear": false,
+     "score": 24666,
+     "action0_share": 0.49208,
+     "unique_actions": 13,
+     "error": null
+    },
+    {
+     "seed": 1018,
+     "frames": 1231,
+     "deaths": 1.0,
+     "stop_reason": "death_stop",
+     "stage_clear": false,
+     "score": 7475,
+     "action0_share": 0.436688,
+     "unique_actions": 9,
+     "error": null
+    },
+    {
+     "seed": 1019,
+     "frames": 1933,
+     "deaths": 1.0,
+     "stop_reason": "death_stop",
+     "stage_clear": false,
+     "score": 19457,
+     "action0_share": 0.438469,
+     "unique_actions": 12,
+     "error": null
+    }
+   ],
+   "historical_argv": [
+    "--engine",
+    "/root/Touhou_RL/third_party/th08-rl/build/rl_v3/th08-modern",
+    "--data-dir",
+    "/root/v400-data/game",
+    "--checkpoint",
+    ".tmp_v410_wp04_arms/b0_seed0_last.pt",
+    "--seeds",
+    "1000-1019",
+    "--stage",
+    "0",
+    "--difficulty",
+    "normal",
+    "--max-frames",
+    "19887",
+    "--stop-on-death",
+    "--out",
+    "Document/Update/Alpha/v4.1.0/evidence/WP04/eval_b0_20.json"
+   ]
+  },
+  "20k_20dev": {
+   "path": ".tmp_v410_wp05_train_beta05_20k/eval_dev20.json",
+   "generated_at": "2026-11-13T07:00:55Z",
+   "checkpoint_path": ".tmp_v410_wp05_train_beta05_20k/b0_s0_dagger_step20000.pt",
+   "checkpoint_sha256": "15ae1fd5b9a6e0cbbddfd668bb342444bdb44db123b5f7e56abf3c5e7215bd95",
+   "engine_sha256": "691bfd77b7eca3361aa8bb7af0977556a70cc73a070b29a2447222ba7a568ef6",
+   "suite": {
+    "name": "S1N",
+    "stage": 0,
+    "difficulty": "normal",
+    "max_frames": 19887,
+    "stop_on_death": true,
+    "decision_frames": null
+   },
+   "seed_policy": {
+    "allowed": "1000-1099 (dev)",
+    "refused": [
+     "60000-60199 (confirm)",
+     "1-20 (D410-S1 corpus: train 1-14 / val 15-17 / test 18-20)"
+    ],
+    "seeds_requested": [
+     1000,
+     1001,
+     1002,
+     1003,
+     1004,
+     1005,
+     1006,
+     1007,
+     1008,
+     1009,
+     1010,
+     1011,
+     1012,
+     1013,
+     1014,
+     1015,
+     1016,
+     1017,
+     1018,
+     1019
+    ]
+   },
+   "aggregate_frames_mean": 1714.65,
+   "aggregate_frames_min": 1523,
+   "aggregate_frames_max": 2332,
+   "aggregate_deaths_mean": 1.0,
+   "aggregate_clears": 0,
+   "aggregate_clear_rate": 0.0,
+   "aggregate_stop_reasons": {
+    "death_stop": 20
+   },
+   "per_seed": [
+    {
+     "seed": 1000,
+     "frames": 1612,
+     "deaths": 1.0,
+     "stop_reason": "death_stop",
+     "stage_clear": false,
+     "score": 12471,
+     "action0_share": 0.60794,
+     "unique_actions": 15,
+     "error": null
+    },
+    {
+     "seed": 1001,
+     "frames": 1970,
+     "deaths": 1.0,
+     "stop_reason": "death_stop",
+     "stage_clear": false,
+     "score": 18920,
+     "action0_share": 0.640609,
+     "unique_actions": 14,
+     "error": null
+    },
+    {
+     "seed": 1002,
+     "frames": 1532,
+     "deaths": 1.0,
+     "stop_reason": "death_stop",
+     "stage_clear": false,
+     "score": 12124,
+     "action0_share": 0.650131,
+     "unique_actions": 11,
+     "error": null
+    },
+    {
+     "seed": 1003,
+     "frames": 1762,
+     "deaths": 1.0,
+     "stop_reason": "death_stop",
+     "stage_clear": false,
+     "score": 15428,
+     "action0_share": 0.629966,
+     "unique_actions": 12,
+     "error": null
+    },
+    {
+     "seed": 1004,
+     "frames": 1627,
+     "deaths": 1.0,
+     "stop_reason": "death_stop",
+     "stage_clear": false,
+     "score": 13677,
+     "action0_share": 0.603194,
+     "unique_actions": 11,
+     "error": null
+    },
+    {
+     "seed": 1005,
+     "frames": 1597,
+     "deaths": 1.0,
+     "stop_reason": "death_stop",
+     "stage_clear": false,
+     "score": 13187,
+     "action0_share": 0.629537,
+     "unique_actions": 12,
+     "error": null
+    },
+    {
+     "seed": 1006,
+     "frames": 1683,
+     "deaths": 1.0,
+     "stop_reason": "death_stop",
+     "stage_clear": false,
+     "score": 14616,
+     "action0_share": 0.615202,
+     "unique_actions": 12,
+     "error": null
+    },
+    {
+     "seed": 1007,
+     "frames": 1764,
+     "deaths": 1.0,
+     "stop_reason": "death_stop",
+     "stage_clear": false,
+     "score": 15495,
+     "action0_share": 0.642857,
+     "unique_actions": 13,
+     "error": null
+    },
+    {
+     "seed": 1008,
+     "frames": 1687,
+     "deaths": 1.0,
+     "stop_reason": "death_stop",
+     "stage_clear": false,
+     "score": 16245,
+     "action0_share": 0.554502,
+     "unique_actions": 12,
+     "error": null
+    },
+    {
+     "seed": 1009,
+     "frames": 1962,
+     "deaths": 1.0,
+     "stop_reason": "death_stop",
+     "stage_clear": false,
+     "score": 33718,
+     "action0_share": 0.570846,
+     "unique_actions": 15,
+     "error": null
+    },
+    {
+     "seed": 1010,
+     "frames": 1589,
+     "deaths": 1.0,
+     "stop_reason": "death_stop",
+     "stage_clear": false,
+     "score": 9669,
+     "action0_share": 0.628931,
+     "unique_actions": 13,
+     "error": null
+    },
+    {
+     "seed": 1011,
+     "frames": 1540,
+     "deaths": 1.0,
+     "stop_reason": "death_stop",
+     "stage_clear": false,
+     "score": 11983,
+     "action0_share": 0.6,
+     "unique_actions": 12,
+     "error": null
+    },
+    {
+     "seed": 1012,
+     "frames": 1571,
+     "deaths": 1.0,
+     "stop_reason": "death_stop",
+     "stage_clear": false,
+     "score": 11735,
+     "action0_share": 0.629771,
+     "unique_actions": 12,
+     "error": null
+    },
+    {
+     "seed": 1013,
+     "frames": 1588,
+     "deaths": 1.0,
+     "stop_reason": "death_stop",
+     "stage_clear": false,
+     "score": 13228,
+     "action0_share": 0.629723,
+     "unique_actions": 13,
+     "error": null
+    },
+    {
+     "seed": 1014,
+     "frames": 1849,
+     "deaths": 1.0,
+     "stop_reason": "death_stop",
+     "stage_clear": false,
+     "score": 17149,
+     "action0_share": 0.583784,
+     "unique_actions": 12,
+     "error": null
+    },
+    {
+     "seed": 1015,
+     "frames": 1523,
+     "deaths": 1.0,
+     "stop_reason": "death_stop",
+     "stage_clear": false,
+     "score": 10969,
+     "action0_share": 0.646982,
+     "unique_actions": 10,
+     "error": null
+    },
+    {
+     "seed": 1016,
+     "frames": 1959,
+     "deaths": 1.0,
+     "stop_reason": "death_stop",
+     "stage_clear": false,
+     "score": 18866,
+     "action0_share": 0.568367,
+     "unique_actions": 14,
+     "error": null
+    },
+    {
+     "seed": 1017,
+     "frames": 1538,
+     "deaths": 1.0,
+     "stop_reason": "death_stop",
+     "stage_clear": false,
+     "score": 11960,
+     "action0_share": 0.648895,
+     "unique_actions": 9,
+     "error": null
+    },
+    {
+     "seed": 1018,
+     "frames": 1608,
+     "deaths": 1.0,
+     "stop_reason": "death_stop",
+     "stage_clear": false,
+     "score": 12578,
+     "action0_share": 0.621891,
+     "unique_actions": 11,
+     "error": null
+    },
+    {
+     "seed": 1019,
+     "frames": 2332,
+     "deaths": 1.0,
+     "stop_reason": "death_stop",
+     "stage_clear": false,
+     "score": 32014,
+     "action0_share": 0.525729,
+     "unique_actions": 16,
+     "error": null
+    }
+   ],
+   "historical_argv": [
+    "--engine",
+    "/root/Touhou_RL/third_party/th08-rl/build/rl_v3/th08-modern",
+    "--data-dir",
+    "/root/v400-data/game",
+    "--checkpoint",
+    ".tmp_v410_wp05_train_beta05_20k/b0_s0_dagger_step20000.pt",
+    "--seeds",
+    "1000-1019",
+    "--stage",
+    "0",
+    "--difficulty",
+    "normal",
+    "--max-frames",
+    "19887",
+    "--stop-on-death",
+    "--out",
+    ".tmp_v410_wp05_train_beta05_20k/eval_dev20.json"
+   ]
+  }
+ },
+ "seed_exposure": {
+  "source_of_truth": [
+   "Document/Update/Alpha/v4.1.0/README.md section 4.3 (seed assignment table)",
+   "tools/rl/v410_student_eval.py seed_policy recorded in each eval JSON",
+   "Document/Update/Alpha/v4.1.0/budget.jsonl teacher chunk notes"
+  ],
+  "train_allowed": "1-49999 excluding 1000-1099 and 60000-60199",
+  "dev_used": "1000-1019 (all recorded student evals request exactly these 20)",
+  "dev_candidate_selection_reserved": "1020-1039 (reserved, not used in v4.1.0 evidence)",
+  "dev_reserved": "1040-1099 (reserved, not used)",
+  "confirm_reserved": "61000-61499",
+  "confirm_exposed": {
+   "range": "61300-61399",
+   "who": "G410-1 teacher only (4 chunks x 25 episodes, 100/100 clears)",
+   "student_use": false,
+   "chunks": [
+    {
+     "summary": "Document/Update/Alpha/v4.1.0/evidence/WP02/g4101_s1n_chunk1_summary.json",
+     "seed_min": 61300,
+     "seed_max": 61324,
+     "seeds_unique": 25
+    },
+    {
+     "summary": "Document/Update/Alpha/v4.1.0/evidence/WP02/g4101_s1n_chunk2_summary.json",
+     "seed_min": 61325,
+     "seed_max": 61349,
+     "seeds_unique": 25
+    },
+    {
+     "summary": "Document/Update/Alpha/v4.1.0/evidence/WP02/g4101_s1n_chunk3_summary.json",
+     "seed_min": 61350,
+     "seed_max": 61374,
+     "seeds_unique": 25
+    },
+    {
+     "summary": "Document/Update/Alpha/v4.1.0/evidence/WP02/g4101_s1n_chunk4_summary.json",
+     "seed_min": 61375,
+     "seed_max": 61399,
+     "seeds_unique": 25
+    }
+   ]
+  },
+  "confirm_unexposed": [
+   "61000-61299",
+   "61400-61499"
+  ],
+  "forbidden_for_train": "60000-60199",
+  "datasets": {
+   "s1_d410_seeds": "1-20 (train 1-14 / val 15-17 / test 18-20 per eval seed_policy)",
+   "dagger_round1_seeds": "2000, 2001, ..., 2024 (16 shards)",
+   "dagger_round2_seeds": "2025-2039 (15 shards)",
+   "dagger_round3_seeds": "2040-2050 complete, 2051 partial, planned 2052-2054 (collection alive at T00)"
+  },
+  "correction_to_task_assumption": "The task brief said confirm 61000-61499 was unused. That is true for student/confirm episodes, but 61300-61399 was consumed by the G410-1 teacher confirmation batch. Any new confirm batch must therefore start at 62000 per the v4.2.0 plan, and 61000-61299 / 61400-61499 remain unexposed."
+ },
+ "budget": {
+  "source": "Document/Update/Alpha/v4.1.0/budget.jsonl",
+  "rows": 19,
+  "first_at": "2026-11-13T00:00:04+08:00",
+  "last_at": "2026-11-13T15:52:00+08:00",
+  "sums": {
+   "gpu_h": {
+    "n": 19,
+    "sum": 3.985,
+    "null_or_missing": 0
+   },
+   "wall_h": {
+    "n": 18,
+    "sum": 61.814,
+    "null_or_missing": 1
+   },
+   "cpu_h": {
+    "n": 18,
+    "sum": 61.814,
+    "null_or_missing": 1
+   },
+   "disk_gb": {
+    "n": 18,
+    "sum": 7.61,
+    "null_or_missing": 1
+   }
+  },
+  "state_budget": {
+   "authorized_remaining_gpu_h": 160,
+   "authorized_remaining_disk_gb": 150,
+   "spent_gpu_h": 0.22,
+   "spent_wall_h": null,
+   "human_minutes": null,
+   "note": "160 GPU-h / 150 GB 是 v4.1.0 首轮自设上限；D-05 历史授权为 400 GPU-h / 300 GB；spent_gpu_h=0.22 来自 v4.0.0/budget.jsonl 的 P3 汇总，其余未知消耗记 null，不冒充零。"
+  },
+  "state_updated_at": "2026-11-13T15:58:00+08:00",
+  "state_running_jobs": [
+   {
+    "id": "WP05.13",
+    "kind": "eval",
+    "status": "running",
+    "started_at": "2026-11-13T15:58:00+08:00",
+    "evidence": "Document/Update/Alpha/v4.1.0/evidence/WP05/train_tiebreak.json",
+    "note": "tie-nonidle 5k train done; 20dev eval now; exploratory"
+   },
+   {
+    "id": "WP05.10",
+    "kind": "daemon_collection",
+    "status": "paused",
+    "started_at": "2026-11-13T15:13:00+08:00",
+    "evidence": ".tmp_v410_wp05_round3",
+    "note": "paused after 4 shards to let tiebreak eval; restart later"
+   }
+  ],
+  "v420_plan_caps": {
+   "source": "Document/Update/Alpha/v4.2.0/README.md section 8",
+   "first_round_gpu_h": 48,
+   "first_round_wall_h": 96,
+   "main_env_frames": 12000000,
+   "counterfactual_frames": 1500000,
+   "teacher_internal_frames": 64000000,
+   "teacher_queries": 650000,
+   "new_disk_gb": 40,
+   "windows_session_h": 8
+  }
+ },
+ "discrepancies": [
+  {
+   "id": "D-T00-1",
+   "what": "DAgger round3 size recorded in README/AGENTS/ASSET_SYNC vs on disk",
+   "documented": "4 shards / 14,000 decisions (seeds 2040-2043)",
+   "observed": "12 complete shards / 40287 decisions (seeds 2040-2051); dirs=12; hidden=['.dagger-s0d1seed2052.partial']",
+   "evidence": ".tmp_v410_wp05_round3/shards/*/shard.json (read-only metadata)",
+   "action": "recorded as a moving-target snapshot; old v4.1.0 documents were NOT edited"
+  },
+  {
+   "id": "D-T00-2",
+   "what": "v4.1.0 state.json WP05.10 says round3 collection is paused",
+   "documented": "state.json updated_at 2026-11-13T15:58+08:00, running_jobs[1].status=paused",
+   "observed": "v410_dagger_collect.py --seeds 2044-2054 --beta 0.5 is alive (pids 1884157/1884178) during T00; journal.jsonl 16:18 line already says 'round3 resumed seeds2044-2054'",
+   "evidence": "T00 raw/collection_procs.out, T00 raw/running_procs.out",
+   "action": "T00 did not start, stop, pause or modify that process; no training/collection was launched"
+  },
+  {
+   "id": "D-T00-3",
+   "what": "state.json budget spent_gpu_h is stale relative to v4.1.0 budget.jsonl",
+   "documented": "spent_gpu_h=0.22",
+   "observed": "budget.jsonl 19 rows sum gpu_h=3.985 (wall_h 61.814 over 18 rows)",
+   "evidence": "Document/Update/Alpha/v4.1.0/budget.jsonl (sha256 registered and OK)",
+   "action": "both numbers quoted; unlogged history stays unknown, not zero"
+  },
+  {
+   "id": "D-T00-4",
+   "what": "D1 manifest declares 147 entries but only 137 shard dirs exist",
+   "documented": "manifest totals 147 shards / 502,605 decisions",
+   "observed": "137 present entries = 469,216 decisions / 1,876,864 frames (exact); 10 '-iNNN' entries are duplicate/quarantine records absent from disk and account for 33,389 decisions",
+   "evidence": ".tmp_v400_d1/d1/manifest.json + work/gate.full.json (137/469216/1876864)",
+   "action": "already explained in v4.1.0 WP00 assets.json; T00 independently reproduced it"
+  }
+ ],
+ "artifacts": {
+  "local_json": {
+   "path": "configs/v420/local.json",
+   "sha256": "6a104778f1c650b07c04a71013825c59a2a30cd3e88eced06f37c385e5fc4e05"
+  },
+  "t00_report": {
+   "path": "Document/Update/Alpha/v4.2.0/evidence/T00/T00.md",
+   "sha256": "77f9ed49408d596f957432d28a19491c271acee9fbdb20043b10fbfb0273b62e"
+  },
+  "note": "assets_verify.json cannot hash itself; hash it externally after this build"
+ },
+ "counts": {
+  "registered_objects_total": 18,
+  "registered_objects_verified": 18,
+  "registered_objects_failed": 0,
+  "registered_objects_missing": 0,
+  "unregistered_objects_hashed": 6,
+  "sha256sum_c_failed_lines": 0,
+  "unexplained_objects": 0,
+  "documented_state_discrepancies": 4,
+  "commands_recorded": 38,
+  "commands_nonzero_exit": [
+   "import_v420_absent",
+   "round3_partial_tree"
+  ]
+ },
+ "limits": [
+  "T00 did not start any engine, training or collection run; no asset was modified, moved or deleted.",
+  "Large datasets were checked from manifest/shard metadata only; no bulk re-hash of obs bytes.",
+  "round3 is a moving target while its collection process is alive; its numbers are a timestamped snapshot.",
+  "RSS/credentials are not recorded anywhere in this file."
+ ]
+}

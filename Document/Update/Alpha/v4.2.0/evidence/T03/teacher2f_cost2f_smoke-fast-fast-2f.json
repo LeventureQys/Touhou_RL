@@ -1,0 +1,460 @@
+{
+  "tag": "smoke-fast-fast-2f",
+  "label": "",
+  "mode": "fast",
+  "smoke": false,
+  "profile": {
+    "mode": "fast",
+    "horizon": 32,
+    "beam": 24,
+    "verify_k": 1,
+    "max_iterations": 1,
+    "decision_frames": 2,
+    "replan_decisions": 1,
+    "frames_per_query": 2,
+    "slots": 16,
+    "durations": [
+      1,
+      2
+    ],
+    "shoot_pulse_period": 24,
+    "replan_decisions_default": 2
+  },
+  "corpus": {
+    "shard": "/mnt/d/WorkShop/Touhou_RL/.tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed10-shard",
+    "seed": 10,
+    "stage": 0,
+    "difficulty": 1,
+    "team": 0,
+    "prefix_decisions": 100,
+    "prefix_frames": 400
+  },
+  "requested": {
+    "queries": 3,
+    "warmup": 0,
+    "outer_frames": 6
+  },
+  "loadavg_before": [
+    12.87,
+    17.45,
+    18.02
+  ],
+  "sha_before": {
+    "labels": "011f6c1cc3db232ca296177b9afc445a",
+    "shard": "883f3c56f94cda60f38232d12f0a1442",
+    "src_score": "d7089834a69881151a0524fcea36b75e"
+  },
+  "python": "3.10.12",
+  "engine": "/root/Touhou_RL/third_party/th08-rl/build/rl_v3/th08-modern",
+  "data_dir": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_teacher2f/data/s10-smoke-fast-fast-2f",
+  "startup": {
+    "start_hello_ms": 1313.812,
+    "reset_ms": 592.054,
+    "hello": {
+      "_verb": "OK",
+      "proto": "1",
+      "harness": "1",
+      "role": "shadow",
+      "frames": "0"
+    },
+    "reset": {
+      "_verb": "OK",
+      "reset": "1",
+      "ready": "1",
+      "setup_frames": "396",
+      "frames": "0",
+      "stage": "0",
+      "difficulty": "1",
+      "team": "0",
+      "seed": "10",
+      "setup_state": "0",
+      "hash": "c2b684a7a564c2d3",
+      "mode": "cold",
+      "state_published": "1"
+    },
+    "frame": 0,
+    "hash": "c2b684a7a564c2d3",
+    "corpus_hash_pre": "c2b684a7a564c2d3",
+    "hash_matches_corpus": true
+  },
+  "prefix": {
+    "commands": 400,
+    "advanced": 400,
+    "expect_frame": 400,
+    "frame": 400,
+    "hash": "7b22ff41d6d9e8b7",
+    "expect_hash_post": "7b22ff41d6d9e8b7",
+    "expect_hash_next_pre": "7b22ff41d6d9e8b7",
+    "hash_matches_row_post": true,
+    "hash_matches_row_next_pre": true,
+    "replay_s": 0.0316,
+    "replay_fps": 12661.78
+  },
+  "capabilities": {
+    "probe_ms": 7.47,
+    "child_hazards": {
+      "available": true,
+      "reason": "CHILD <h> HAZARDS accepted",
+      "reply": "OK frames=400 nb=1 nl=0 ne=1 bullets=1536:6:0:00000000:00000000:00000000:00000000:00000000:0:00000000:0 lasers= enemies=0:1000005d:41f00000:c1800000:00000000:00"
+    },
+    "capabilities": {
+      "role": "shadow",
+      "protocol": "1",
+      "branch_fields": [
+        "_verb",
+        "advanced",
+        "branch",
+        "child_us",
+        "fork_us",
+        "hash",
+        "parent_frame",
+        "pid",
+        "trace"
+      ],
+      "branch_carries_hazards": false,
+      "state_fields": [
+        "_verb",
+        "f0",
+        "f1",
+        "f10",
+        "f11",
+        "f12",
+        "f13",
+        "f14",
+        "f15",
+        "f16",
+        "f17",
+        "f18",
+        "f19",
+        "f2",
+        "f20",
+        "f21",
+        "f22",
+        "f23",
+        "f24",
+        "f3",
+        "f4",
+        "f5",
+        "f6",
+        "f7",
+        "f8",
+        "f9",
+        "frames"
+      ],
+      "state_has_frame_event_flags": false,
+      "hazards_limit_1024_ok": true,
+      "child_hazards": "OK",
+      "child_state_ok": true
+    }
+  },
+  "queries": [
+    {
+      "index": 0,
+      "warmup": false,
+      "frame": 402,
+      "release": false,
+      "query_ms": 404.595,
+      "commit_ms": 1.098,
+      "step_ms": 405.692,
+      "advanced": 2,
+      "expected_advanced": 2,
+      "exited": false,
+      "bomb": 0,
+      "chosen": 11,
+      "chosen_slots": 16,
+      "slots_committed": 1,
+      "mask_committed": [
+        149
+      ],
+      "verified_n": 1,
+      "verified_cands": [
+        11
+      ],
+      "verified_died": [
+        false
+      ],
+      "verify_frames": 32,
+      "death_refined": 0,
+      "record_frames": 32,
+      "record_steps": 31,
+      "record_commands": 96,
+      "record_spawn_ms": 0.856,
+      "record_advance_ms": 12.734,
+      "timing_ms": {
+        "record": 15.455,
+        "search": 377.702,
+        "verify": 11.295,
+        "events": 0.05
+      },
+      "expansions": 206712,
+      "roots": 36,
+      "events": [
+        "survive",
+        "death_bomb_no_player_hit"
+      ],
+      "deaths": 0.0,
+      "lives": 2.0,
+      "bombs": 3.0,
+      "stage": 0,
+      "px": 32.644657135009766,
+      "py": 419.3553771972656,
+      "internal_frames": 64,
+      "internal_frames_upper": 64
+    },
+    {
+      "index": 1,
+      "warmup": false,
+      "frame": 404,
+      "release": false,
+      "query_ms": 52.154,
+      "commit_ms": 0.872,
+      "step_ms": 53.027,
+      "advanced": 2,
+      "expected_advanced": 2,
+      "exited": false,
+      "bomb": 0,
+      "chosen": 0,
+      "chosen_slots": 16,
+      "slots_committed": 1,
+      "mask_committed": [
+        1
+      ],
+      "verified_n": 1,
+      "verified_cands": [
+        0
+      ],
+      "verified_died": [
+        false
+      ],
+      "verify_frames": 32,
+      "death_refined": 0,
+      "record_frames": 32,
+      "record_steps": 31,
+      "record_commands": 96,
+      "record_spawn_ms": 2.521,
+      "record_advance_ms": 15.997,
+      "timing_ms": {
+        "record": 23.872,
+        "search": 22.806,
+        "verify": 5.353,
+        "events": 0.04
+      },
+      "expansions": 206712,
+      "roots": 36,
+      "events": [
+        "survive",
+        "death_bomb_no_player_hit"
+      ],
+      "deaths": 0.0,
+      "lives": 2.0,
+      "bombs": 3.0,
+      "stage": 0,
+      "px": 34.05887222290039,
+      "py": 417.941162109375,
+      "internal_frames": 64,
+      "internal_frames_upper": 64
+    },
+    {
+      "index": 2,
+      "warmup": false,
+      "frame": 406,
+      "release": false,
+      "query_ms": 78.726,
+      "commit_ms": 0.836,
+      "step_ms": 79.562,
+      "advanced": 2,
+      "expected_advanced": 2,
+      "exited": false,
+      "bomb": 0,
+      "chosen": 6,
+      "chosen_slots": 16,
+      "slots_committed": 1,
+      "mask_committed": [
+        97
+      ],
+      "verified_n": 1,
+      "verified_cands": [
+        6
+      ],
+      "verified_died": [
+        false
+      ],
+      "verify_frames": 32,
+      "death_refined": 0,
+      "record_frames": 32,
+      "record_steps": 31,
+      "record_commands": 96,
+      "record_spawn_ms": 0.668,
+      "record_advance_ms": 21.189,
+      "timing_ms": {
+        "record": 24.525,
+        "search": 43.453,
+        "verify": 10.588,
+        "events": 0.076
+      },
+      "expansions": 206712,
+      "roots": 36,
+      "events": [
+        "survive",
+        "death_bomb_no_player_hit"
+      ],
+      "deaths": 0.0,
+      "lives": 2.0,
+      "bombs": 3.0,
+      "stage": 0,
+      "px": 31.230445861816406,
+      "py": 420.76959228515625,
+      "internal_frames": 64,
+      "internal_frames_upper": 64
+    }
+  ],
+  "completed_queries": 3,
+  "events": [],
+  "error": null,
+  "exit_code": 0,
+  "wall_s": 2.54,
+  "loadavg_after": [
+    12.87,
+    17.45,
+    18.02
+  ],
+  "sha_after": {
+    "labels": "011f6c1cc3db232ca296177b9afc445a",
+    "shard": "883f3c56f94cda60f38232d12f0a1442",
+    "src_score": "d7089834a69881151a0524fcea36b75e"
+  },
+  "aggregates": {
+    "query_ms": {
+      "n": 3,
+      "sum_ms": 535.475,
+      "mean_ms": 178.492,
+      "p50_ms": 78.726,
+      "p95_ms": 404.595,
+      "max_ms": 404.595,
+      "min_ms": 52.154
+    },
+    "step_ms": {
+      "n": 3,
+      "sum_ms": 538.281,
+      "mean_ms": 179.427,
+      "p50_ms": 79.562,
+      "p95_ms": 405.692,
+      "max_ms": 405.692,
+      "min_ms": 53.027
+    },
+    "query_wall_s": 0.5355,
+    "step_wall_s": 0.5383,
+    "s_per_query": 0.178492,
+    "queries_per_s": 5.6025,
+    "s_per_outer_frame": 0.089246,
+    "internal_frames_per_query": 64.0,
+    "internal_frames_per_outer_frame": 32.0,
+    "totals": {
+      "outer_frames": 6,
+      "queries": 3,
+      "internal_frames": 192,
+      "internal_frames_upper": 192,
+      "record_frames": 96,
+      "verify_frames": 96,
+      "verified_n": 3,
+      "death_refined": 0,
+      "deaths_monotonic": 0.0
+    },
+    "timing_ms": {
+      "events": {
+        "n": 3,
+        "sum_ms": 0.166,
+        "mean_ms": 0.055,
+        "p50_ms": 0.05,
+        "p95_ms": 0.076,
+        "max_ms": 0.076,
+        "min_ms": 0.04
+      },
+      "record": {
+        "n": 3,
+        "sum_ms": 63.852,
+        "mean_ms": 21.284,
+        "p50_ms": 23.872,
+        "p95_ms": 24.525,
+        "max_ms": 24.525,
+        "min_ms": 15.455
+      },
+      "search": {
+        "n": 3,
+        "sum_ms": 443.961,
+        "mean_ms": 147.987,
+        "p50_ms": 43.453,
+        "p95_ms": 377.702,
+        "max_ms": 377.702,
+        "min_ms": 22.806
+      },
+      "verify": {
+        "n": 3,
+        "sum_ms": 27.236,
+        "mean_ms": 9.079,
+        "p50_ms": 10.588,
+        "p95_ms": 11.295,
+        "max_ms": 11.295,
+        "min_ms": 5.353
+      }
+    }
+  },
+  "engine_stats": {
+    "calls": 749,
+    "seconds": 2.0304,
+    "per_command": {
+      "HELLO": {
+        "calls": 2,
+        "sum_ms": 1312.475
+      },
+      "RESET": {
+        "calls": 1,
+        "sum_ms": 592.024
+      },
+      "FRAME": {
+        "calls": 2,
+        "sum_ms": 0.077
+      },
+      "HASH": {
+        "calls": 2,
+        "sum_ms": 0.047
+      },
+      "STEP": {
+        "calls": 403,
+        "sum_ms": 33.84
+      },
+      "BRANCH": {
+        "calls": 1,
+        "sum_ms": 2.751
+      },
+      "STATE": {
+        "calls": 4,
+        "sum_ms": 0.127
+      },
+      "HAZARDS": {
+        "calls": 1,
+        "sum_ms": 0.06
+      },
+      "PARK": {
+        "calls": 5,
+        "sum_ms": 8.855
+      },
+      "SPAWN": {
+        "calls": 8,
+        "sum_ms": 9.048
+      },
+      "CHILD": {
+        "calls": 316,
+        "sum_ms": 71.011
+      },
+      "EVENTS": {
+        "calls": 3,
+        "sum_ms": 0.101
+      },
+      "QUIT": {
+        "calls": 1,
+        "sum_ms": 0.016
+      }
+    }
+  }
+}

@@ -1,0 +1,34 @@
+== raw throughput reports ==
+file                         exit  frames  timed_s       fps  corpus HASH reset==pre
+r1_shadow_f1                    0    2000    0.695   2879.33      500/500       True
+r1_env_f1                       0    2000   27.328     73.18      500/500       True
+r1_shadow_b4                    0    2000    0.673   2971.92      500/500       True
+r1_shadow_runs                  0    2000    0.579   3456.35      500/500       True
+r1_shadow_runsfull              0    2000    0.433   4620.23      320/320       True
+r2_shadow_f1                    0    2000    0.684   2924.68      500/500       True
+r2_env_f1                       0    2000   25.789     77.55      500/500       True
+r2_shadow_b4                    0    2000    0.536   3733.62      500/500       True
+r2_shadow_runs                  0    2000    0.513   3901.06      500/500       True
+r2_shadow_runsfull              0    2000    0.465   4297.35      320/320       True
+
+== shadow vs env, per-frame HASH ==
+r1: compared=2000 equal=2000 first_mismatch=None
+r2: compared=2000 equal=2000 first_mismatch=None
+
+== fork reports ==
+file         exit prefix f prefix_s branch ok single==BRANCH dyn cand0 replay==BRANCH dyn ms/branch
+fa_d100         0      400    0.060     18/18          18/18      True           True        48.485
+fa_d200         0      800    0.131     18/18          18/18      True           True        44.963
+fa_d400         0     1600    0.282     18/18          18/18      True           True        56.984
+fb_d100         0      400    0.100     18/18          18/18      True           True        48.374
+fb_d200         0      800    0.132     18/18          18/18      True           True        55.917
+fb_d400         0     1600    0.340     18/18          18/18      True           True        63.907
+
+== student continuation decisions ==
+file         exit     n   p50 ms   mean ms             sha256
+r1_cpu          0   300    1.035     1.933   15ae1fd5b9a6e0cb
+r1_cuda         0   300    1.404     1.717   15ae1fd5b9a6e0cb
+r2_cpu          0   300    1.123     2.794   15ae1fd5b9a6e0cb
+r2_cuda         0   300    1.500     1.745   15ae1fd5b9a6e0cb
+
+ALL CHECKS PASSED: every claim above is recomputed from the raw reports

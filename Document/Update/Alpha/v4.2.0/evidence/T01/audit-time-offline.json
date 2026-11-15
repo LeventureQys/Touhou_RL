@@ -1,0 +1,890 @@
+{
+  "schema": "v420-audit-time/1",
+  "mode": "dry-run",
+  "offline_only": true,
+  "engine_started": false,
+  "execute_requested": false,
+  "contract": "v420-contract/1",
+  "obs_contract": "obs-v420-2f",
+  "action_contract": "action-v420-2f",
+  "config": "configs/v420/audit-time.json",
+  "local_config": {
+    "path": "/mnt/d/WorkShop/Touhou_RL/configs/v420/local.json",
+    "status": "applied",
+    "keys": [
+      "root420",
+      "py420",
+      "engine420",
+      "data_dir",
+      "v420_data"
+    ]
+  },
+  "frames_per_decision": 2,
+  "decision_frames": 2,
+  "train_seeds": [
+    1,
+    2,
+    3
+  ],
+  "repeats": 2,
+  "frames": 2000,
+  "shards": [
+    {
+      "schema": "v420-legacy-shard-audit/1",
+      "shard_dir": "/mnt/d/WorkShop/Touhou_RL/.tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed10-shard",
+      "shard_key": "d1-s0d1-n3300-seed10-shard",
+      "status": "fail",
+      "contract_ready": false,
+      "unexplained_diffs": 0,
+      "failures": [
+        "row_frame_semantics",
+        "slot_coverage",
+        "label_coverage",
+        "decision_frame_stride",
+        "label_scope",
+        "history_stride_frames",
+        "history_contains_slot1_action",
+        "mask_decode_slot1_tail",
+        "slot_registry"
+      ],
+      "counts": {
+        "rows": 3300,
+        "slots_expected": 6600,
+        "slots_with_own_obs": 3300,
+        "slots_with_own_label": 3300
+      },
+      "facts": {
+        "schema": "v400-teacher-obs-shard-1",
+        "seed": 10,
+        "stage": 0,
+        "difficulty": 1,
+        "decision_count": 3300,
+        "frames_committed": 13200,
+        "frames_per_decision": 4,
+        "decision_frames": 2,
+        "slots_per_row": 2,
+        "mask_decode_mismatches": {
+          "slot0_mismatch": 0,
+          "slot1_lead_mismatch": 0,
+          "slot1_tail_mismatch": 137
+        },
+        "slots": {
+          "slots_total": 6600,
+          "slots_with_own_label": 3300,
+          "slots_action_only": 3300,
+          "slots_play_reconstructible": 3299,
+          "slots_play_reconstructible_including_boundary": 3300,
+          "slots_hud_missing": 3300
+        },
+        "first_decision_frame": 0,
+        "last_decision_frame": 13196,
+        "obs_spec_version": "obs-v3",
+        "obs_spec_digest": "ef2fbd15385f26f425db2bfe855d105ee009023acb08c26916e811963553a105",
+        "legacy_declared": true,
+        "alignment": {
+          "observation_time": "decision_time_before_commit",
+          "observation_time_note": "the 4 most recent rendered frames at the instant the teacher is queried, before the decision's STEP; newest render = decision_frame - 1 because AfterDrawFrame publishes before ++g_frameCount",
+          "label_time": "scores[18] ranks the plan's first student decision (slot 0), applied to frames [decision_frame, decision_frame + decision_frames)",
+          "label_is_first_slot_not_continuation": true,
+          "stack_order": "oldest-first t-3,t-2,t-1,t",
+          "stack": 4,
+          "hud": "green channel of the score/lives/bombs bands of the newest render (t)",
+          "hud_frames": 1,
+          "decision_frames": 2,
+          "teacher_duration_units": "decision slots (1 slot = DECISION_FRAMES logic frames)",
+          "p3_window": "frames[i-3..i] -> mask[i+1] with i = decision_frame - 1; the stored label is the action applied after i, so a teacher sample IS a P3 window",
+          "p3_window_last_row": "i = decision_frame - 1",
+          "p3_label_frame": "i + 1 = decision_frame",
+          "episode_start_padding": "repeat the earliest available render until the stack is full (obs-spec-v1 §2); decision 0 stores the last RESET setup render 4x with pad=3",
+          "frame_unit": "engine logic frames (FrameCount, reset to 0 by RESET)",
+          "obs_spec_version": "obs-v3",
+          "play_plane": "play96x112: 112 rows x 96 cols uint8, 4x4 integer block mean of the native 384x448 playfield (EXP-P3-010 input B)",
+          "play_plane_note": "obs-v1's observation instant, label time, stack order and HUD are unchanged; only the playfield resolution and the added action history differ",
+          "action_history": "act_hist (8,18) uint8: one-hot of the 8 actions executed at decisions t-8..t-1 (oldest first), reconstructed from the same label rows (chosen_plan.first_action for a teacher-driven shard, dagger.executed_cand for a DAgger shard) and cleared at the shard start and at every stage change",
+          "action_history_excludes_current_action": true,
+          "action_history_pad": "all-zero row",
+          "pixel_source": "env_replay",
+          "label_source": "shadow_teacher",
+          "start_mode": "shard",
+          "start_frame": 0,
+          "hash_alignment": "hash-checkpoint",
+          "alignment_method": "hash-checkpoint",
+          "hash_checkpoints": {
+            "method": "hash-checkpoint",
+            "boundaries": 6600,
+            "decisions": 3300,
+            "checkpoints_equal": 6600,
+            "checkpoints_mismatched": 0,
+            "first_mismatch": null,
+            "trimmed_transition": null
+          }
+        },
+        "hash_alignment": {
+          "method": "hash-checkpoint",
+          "boundaries": 6600,
+          "decisions": 3300,
+          "checkpoints_equal": 6600,
+          "checkpoints_mismatched": 0,
+          "first_mismatch": null,
+          "trimmed_transition": null
+        },
+        "deaths_observed": 0,
+        "stage_clear": false,
+        "stop_reason": "max_frames",
+        "decision_frame_stride_histogram": {
+          "4": 3299
+        },
+        "history_actions": "chosen_plan.first_action",
+        "history_span_frames": 32,
+        "contract_history_span_frames": 16,
+        "contract_version": "v420-contract/1",
+        "obs_contract": "obs-v420-2f",
+        "action_contract": "action-v420-2f"
+      },
+      "findings": {
+        "row_count": {
+          "check": "row_count",
+          "count": 3300,
+          "verdict": "record",
+          "expected": "3300 labels rows",
+          "is_failure": false,
+          "is_unexplained": false,
+          "explanation": null,
+          "detail": {
+            "decision_count": 3300,
+            "frames_committed": 13200,
+            "seed": 10,
+            "stage": 0
+          },
+          "samples": []
+        },
+        "row_frame_semantics": {
+          "check": "row_frame_semantics",
+          "count": 3300,
+          "verdict": "explained",
+          "expected": "frames_per_decision == decision_frames == 2",
+          "is_failure": true,
+          "is_unexplained": false,
+          "explanation": "one row commits 4 logical frames (2 slots) while its label covers only the first slot's 2 frames; the row records both numbers because they answer different questions, so the pair is a documented legacy semantic, not a malformed record",
+          "detail": {
+            "frames_per_decision": 4,
+            "decision_frames": 2,
+            "rows": 3300,
+            "reading": "frames_per_decision is the row *stride* (4 frames committed per label row); decision_frames is the span the recorded label action covers (2 frames, slot 0). Both are true of the legacy writer and the row is not self-contradictory -- but only the 2-frame field names the contract this data is audited against"
+          },
+          "samples": [
+            {
+              "row": 0,
+              "frames_per_decision": 4,
+              "decision_frames": 2
+            },
+            {
+              "row": 1,
+              "frames_per_decision": 4,
+              "decision_frames": 2
+            },
+            {
+              "row": 2,
+              "frames_per_decision": 4,
+              "decision_frames": 2
+            },
+            {
+              "row": 3,
+              "frames_per_decision": 4,
+              "decision_frames": 2
+            },
+            {
+              "row": 4,
+              "frames_per_decision": 4,
+              "decision_frames": 2
+            }
+          ]
+        },
+        "slot_coverage": {
+          "check": "slot_coverage",
+          "count": 3300,
+          "verdict": "explained",
+          "expected": "6600 slots with their own observation",
+          "is_failure": true,
+          "is_unexplained": false,
+          "explanation": "a legacy 4-frame block stores one observation per block, so 3300 of 6600 two-frame slots have their own observation (50.0%); the second slot was executed but never observed",
+          "detail": {
+            "slots_expected": 6600,
+            "slots_with_own_obs": 3300,
+            "slots_per_row": 2,
+            "coverage": 0.5,
+            "legacy_declared": true
+          },
+          "samples": [
+            {
+              "row": 0
+            },
+            {
+              "row": 1
+            },
+            {
+              "row": 2
+            },
+            {
+              "row": 3
+            },
+            {
+              "row": 4
+            }
+          ]
+        },
+        "label_coverage": {
+          "check": "label_coverage",
+          "count": 3300,
+          "verdict": "explained",
+          "expected": "6600 slots with their own label",
+          "is_failure": true,
+          "is_unexplained": false,
+          "explanation": "one 18-way score vector per block covers only the first slot (shard.json alignment.label_is_first_slot_not_continuation=true): 3300 of 6600 slots carry their own label",
+          "detail": {
+            "slots_expected": 6600,
+            "slots_with_own_label": 3300,
+            "slots_per_row": 2,
+            "coverage": 0.5,
+            "legacy_declared": true
+          },
+          "samples": []
+        },
+        "decision_frame_stride": {
+          "check": "decision_frame_stride",
+          "count": 3299,
+          "verdict": "explained",
+          "expected": "every stride == DECISION_FRAMES (2)",
+          "is_failure": true,
+          "is_unexplained": false,
+          "explanation": "the legacy writer commits one 4-frame block per row, so consecutive decision_frame values are 4 apart; a 2-frame decision cannot start on these frames",
+          "detail": {
+            "histogram": {
+              "4": 3299
+            },
+            "distinct_strides": [
+              4
+            ]
+          },
+          "samples": [
+            {
+              "row": 0,
+              "decision_frame": 0,
+              "next": 4,
+              "stride": 4
+            },
+            {
+              "row": 1,
+              "decision_frame": 4,
+              "next": 8,
+              "stride": 4
+            },
+            {
+              "row": 2,
+              "decision_frame": 8,
+              "next": 12,
+              "stride": 4
+            },
+            {
+              "row": 3,
+              "decision_frame": 12,
+              "next": 16,
+              "stride": 4
+            },
+            {
+              "row": 4,
+              "decision_frame": 16,
+              "next": 20,
+              "stride": 4
+            }
+          ]
+        },
+        "label_scope": {
+          "check": "label_scope",
+          "count": 3300,
+          "verdict": "explained",
+          "expected": "every one of the 2 slots covered by 2 label frames",
+          "is_failure": true,
+          "is_unexplained": false,
+          "explanation": "the label is the teacher's first-slot decision and applies to frames [d, d+2) only; the block's second slot is unlabelled, which the shard declares explicitly",
+          "detail": {
+            "rows_with_narrow_label": 3300,
+            "slots_per_row": 2,
+            "label_scope": true
+          },
+          "samples": [
+            {
+              "row": 0,
+              "label_frames": [
+                0,
+                1
+              ],
+              "slots_per_row": 2
+            },
+            {
+              "row": 1,
+              "label_frames": [
+                4,
+                5
+              ],
+              "slots_per_row": 2
+            },
+            {
+              "row": 2,
+              "label_frames": [
+                8,
+                9
+              ],
+              "slots_per_row": 2
+            },
+            {
+              "row": 3,
+              "label_frames": [
+                12,
+                13
+              ],
+              "slots_per_row": 2
+            },
+            {
+              "row": 4,
+              "label_frames": [
+                16,
+                17
+              ],
+              "slots_per_row": 2
+            }
+          ]
+        },
+        "label_reuse_slot1_from_slot0": {
+          "check": "label_reuse_slot1_from_slot0",
+          "count": 0,
+          "verdict": "pass",
+          "expected": "either 2 label frames (slot 0 only) or one score vector per labelled slot",
+          "is_failure": false,
+          "is_unexplained": false,
+          "explanation": null,
+          "detail": {
+            "rows": 3300,
+            "rows_claiming_extra_label_frames": 0,
+            "forbidden_by": "alignment.label_policy / label_bleed_allowed=false"
+          },
+          "samples": []
+        },
+        "slot1_action_recoverable": {
+          "check": "slot1_action_recoverable",
+          "count": 3300,
+          "verdict": "record",
+          "expected": "recorded only: the action is recoverable, the label is not",
+          "is_failure": false,
+          "is_unexplained": false,
+          "explanation": null,
+          "detail": {
+            "recoverable": 3300,
+            "distinguishable_from_slot0": 1740,
+            "note": "a recoverable action without an observation, a score vector or a verification result is not a training sample"
+          },
+          "samples": [
+            {
+              "row": 0,
+              "slots": [
+                7,
+                7
+              ]
+            },
+            {
+              "row": 1,
+              "slots": [
+                7,
+                7
+              ]
+            },
+            {
+              "row": 2,
+              "slots": [
+                7,
+                7
+              ]
+            },
+            {
+              "row": 3,
+              "slots": [
+                7,
+                7
+              ]
+            },
+            {
+              "row": 4,
+              "slots": [
+                7,
+                7
+              ]
+            }
+          ]
+        },
+        "history_stride_frames": {
+          "check": "history_stride_frames",
+          "count": 4,
+          "verdict": "explained",
+          "expected": "2 frames per history decision",
+          "is_failure": true,
+          "is_unexplained": false,
+          "explanation": "each history entry is one 4-frame block decision, so the 8-entry buffer spans 32 logical frames where the deployment beats 8 two-frame decisions = 16 frames",
+          "detail": {
+            "history_stride_frames": 4,
+            "history_span_frames": 32,
+            "contract_span_frames": 16,
+            "decisions": 8
+          },
+          "samples": []
+        },
+        "history_reconstruction": {
+          "check": "history_reconstruction",
+          "count": 0,
+          "verdict": "pass",
+          "expected": "every buffer equals the last 8 executed actions, oldest first",
+          "is_failure": false,
+          "is_unexplained": false,
+          "explanation": null,
+          "detail": {
+            "rows": 3300,
+            "mismatched": 0,
+            "missing_plane_rows": 0
+          },
+          "samples": []
+        },
+        "history_contains_current_or_future": {
+          "check": "history_contains_current_or_future",
+          "count": 0,
+          "verdict": "pass",
+          "expected": "0 buffers ending on the current decision's action",
+          "is_failure": false,
+          "is_unexplained": false,
+          "explanation": null,
+          "detail": {
+            "leak_rows": 0,
+            "other_mismatches": 0
+          },
+          "samples": []
+        },
+        "history_contains_slot1_action": {
+          "check": "history_contains_slot1_action",
+          "count": 0,
+          "verdict": "fail",
+          "expected": "the 8 entries are 8 executed decisions, so slot 1's executed action appears too",
+          "is_failure": true,
+          "is_unexplained": false,
+          "explanation": "the buffer is built from chosen_plan.first_action only (shard.json act_hist.source), i.e. slot 0 of each block; 1740 rows have a slot-1 action distinguishable from their slot-0 action and none of them ever enters the buffer, so half of the executed decisions are invisible to the policy's own history",
+          "detail": {
+            "entries_from_slot1": 0,
+            "distinguishable_slot1_rows": 1740,
+            "act_hist_source": "chosen_plan.first_action (teacher-driven dual shard; the action the teacher committed at that decision)",
+            "act_hist_excludes_current": true
+          },
+          "samples": []
+        },
+        "hash_chain_breaks": {
+          "check": "hash_chain_breaks",
+          "count": 0,
+          "verdict": "pass",
+          "expected": "hash_post[i] == hash_pre[i+1] for every adjacent pair",
+          "is_failure": false,
+          "is_unexplained": false,
+          "explanation": null,
+          "detail": {
+            "pairs": 3299,
+            "breaks": 0
+          },
+          "samples": []
+        },
+        "mask_decode_slot0": {
+          "check": "mask_decode_slot0",
+          "count": 0,
+          "verdict": "pass",
+          "expected": "cand_to_mask(slots[0], bomb) reproduces step_frames[0:2]",
+          "is_failure": false,
+          "is_unexplained": false,
+          "explanation": null,
+          "detail": {
+            "rows": 3300,
+            "slot0_mismatch": 0,
+            "bomb_nonzero": 0
+          },
+          "samples": [
+            {
+              "row": 23,
+              "slot": 1,
+              "frame": "tail",
+              "expected": 133,
+              "got": 132,
+              "shoot_release": true
+            },
+            {
+              "row": 47,
+              "slot": 1,
+              "frame": "tail",
+              "expected": 65,
+              "got": 64,
+              "shoot_release": true
+            },
+            {
+              "row": 71,
+              "slot": 1,
+              "frame": "tail",
+              "expected": 65,
+              "got": 64,
+              "shoot_release": true
+            },
+            {
+              "row": 95,
+              "slot": 1,
+              "frame": "tail",
+              "expected": 65,
+              "got": 64,
+              "shoot_release": true
+            },
+            {
+              "row": 119,
+              "slot": 1,
+              "frame": "tail",
+              "expected": 97,
+              "got": 96,
+              "shoot_release": true
+            }
+          ]
+        },
+        "mask_decode_slot1_lead": {
+          "check": "mask_decode_slot1_lead",
+          "count": 0,
+          "verdict": "pass",
+          "expected": "cand_to_mask(slots[1], 0) reproduces step_frames[2]",
+          "is_failure": false,
+          "is_unexplained": false,
+          "explanation": null,
+          "detail": {
+            "rows": 3300,
+            "slot1_lead_mismatch": 0,
+            "note": "step_frames[2] is the frame the second slot's action is always transmitted on, so it must equal the decoded mask"
+          },
+          "samples": [
+            {
+              "row": 23,
+              "slot": 1,
+              "frame": "tail",
+              "expected": 133,
+              "got": 132,
+              "shoot_release": true
+            },
+            {
+              "row": 47,
+              "slot": 1,
+              "frame": "tail",
+              "expected": 65,
+              "got": 64,
+              "shoot_release": true
+            },
+            {
+              "row": 71,
+              "slot": 1,
+              "frame": "tail",
+              "expected": 65,
+              "got": 64,
+              "shoot_release": true
+            },
+            {
+              "row": 95,
+              "slot": 1,
+              "frame": "tail",
+              "expected": 65,
+              "got": 64,
+              "shoot_release": true
+            },
+            {
+              "row": 119,
+              "slot": 1,
+              "frame": "tail",
+              "expected": 97,
+              "got": 96,
+              "shoot_release": true
+            }
+          ]
+        },
+        "mask_decode_slot1_tail": {
+          "check": "mask_decode_slot1_tail",
+          "count": 137,
+          "verdict": "explained",
+          "expected": "cand_to_mask(slots[1], 0) reproduces step_frames[3]",
+          "is_failure": true,
+          "is_unexplained": false,
+          "explanation": "all 137 mismatches are shoot_release rows and each one differs from the decoded mask by exactly the SHOOT bit (0x01): the release rule clears the shoot bit once per 4-frame block, i.e. only on step_frames[3], a block-period event with no counterpart at a 2-frame beat",
+          "detail": {
+            "rows": 3300,
+            "slot1_tail_mismatch": 137,
+            "mismatched_with_shoot_release": 137,
+            "mismatched_by_clearing_shoot_only": 137,
+            "block_internal_frame": 3,
+            "shoot_bit": 1
+          },
+          "samples": [
+            {
+              "row": 23,
+              "slot": 1,
+              "frame": "tail",
+              "expected": 133,
+              "got": 132,
+              "shoot_release": true
+            },
+            {
+              "row": 47,
+              "slot": 1,
+              "frame": "tail",
+              "expected": 65,
+              "got": 64,
+              "shoot_release": true
+            },
+            {
+              "row": 71,
+              "slot": 1,
+              "frame": "tail",
+              "expected": 65,
+              "got": 64,
+              "shoot_release": true
+            },
+            {
+              "row": 95,
+              "slot": 1,
+              "frame": "tail",
+              "expected": 65,
+              "got": 64,
+              "shoot_release": true
+            },
+            {
+              "row": 119,
+              "slot": 1,
+              "frame": "tail",
+              "expected": 97,
+              "got": 96,
+              "shoot_release": true
+            }
+          ]
+        },
+        "slot_registry": {
+          "check": "slot_registry",
+          "count": 3300,
+          "verdict": "explained",
+          "expected": "6600 slots, each with label + play + HUD + executed action",
+          "is_failure": true,
+          "is_unexplained": false,
+          "explanation": "the second slot of every block is action-only: its executed candidate is recoverable from step_frames[2] (3300 rows) but it carries no teacher label, no scores and no HUD row, so it is not a training sample; 3299 of its play windows can be reassembled from adjacent stored blocks",
+          "detail": {
+            "slots_total": 6600,
+            "slots_with_own_label": 3300,
+            "slots_action_only": 3300,
+            "slots_play_reconstructible": 3299,
+            "slots_play_reconstructible_including_boundary": 3300,
+            "slots_play_boundary_missing_successor": 1,
+            "slots_hud_missing": 3300,
+            "slot0_slots": 3300,
+            "slot1_slots": 3300,
+            "hud_rows_stored": 3300,
+            "hud_convention": "one HUD row per 4-frame block, taken from the window's newest frame (d-1); slot 1 would need the HUD of frame d+1, which is never stored",
+            "play_convention": "one 4-frame play row per block, frames d-4..d-1; slot 1's window d-2..d+1 is concat(play[i][2:4], play[i+1][0:2])"
+          },
+          "samples": [
+            {
+              "row": 0,
+              "decision_frame": 2,
+              "slot1_cand": 7,
+              "label_source": "none"
+            },
+            {
+              "row": 1,
+              "decision_frame": 6,
+              "slot1_cand": 7,
+              "label_source": "none"
+            },
+            {
+              "row": 2,
+              "decision_frame": 10,
+              "slot1_cand": 7,
+              "label_source": "none"
+            },
+            {
+              "row": 3,
+              "decision_frame": 14,
+              "slot1_cand": 7,
+              "label_source": "none"
+            },
+            {
+              "row": 4,
+              "decision_frame": 18,
+              "slot1_cand": 7,
+              "label_source": "none"
+            }
+          ]
+        },
+        "bomb_nonzero": {
+          "check": "bomb_nonzero",
+          "count": 0,
+          "verdict": "record",
+          "expected": "recorded only: B0 has no usable bomb policy, so bomb is fixed at 0",
+          "is_failure": false,
+          "is_unexplained": false,
+          "explanation": null,
+          "detail": {
+            "rows": 3300,
+            "bomb_nonzero": 0
+          },
+          "samples": []
+        },
+        "obs_newest_render_frame": {
+          "check": "obs_newest_render_frame",
+          "count": 0,
+          "verdict": "pass",
+          "expected": "newest_render_frame == decision_frame - 1",
+          "is_failure": false,
+          "is_unexplained": false,
+          "explanation": null,
+          "detail": {
+            "rows": 3300,
+            "violations": 0,
+            "distinct_render_frames": [
+              [
+                0,
+                0,
+                0,
+                0
+              ],
+              [
+                0,
+                1,
+                2,
+                3
+              ],
+              [
+                4,
+                5,
+                6,
+                7
+              ],
+              [
+                8,
+                9,
+                10,
+                11
+              ],
+              [
+                12,
+                13,
+                14,
+                15
+              ],
+              [
+                16,
+                17,
+                18,
+                19
+              ],
+              [
+                20,
+                21,
+                22,
+                23
+              ],
+              [
+                24,
+                25,
+                26,
+                27
+              ],
+              [
+                28,
+                29,
+                30,
+                31
+              ],
+              [
+                32,
+                33,
+                34,
+                35
+              ],
+              [
+                36,
+                37,
+                38,
+                39
+              ],
+              [
+                40,
+                41,
+                42,
+                43
+              ],
+              [
+                44,
+                45,
+                46,
+                47
+              ],
+              [
+                48,
+                49,
+                50,
+                51
+              ],
+              [
+                52,
+                53,
+                54,
+                55
+              ],
+              [
+                56,
+                57,
+                58,
+                59
+              ]
+            ]
+          },
+          "samples": []
+        },
+        "obs_render_window": {
+          "check": "obs_render_window",
+          "count": 0,
+          "verdict": "pass",
+          "expected": "render_frames == [d-4, d-1], strictly contiguous",
+          "is_failure": false,
+          "is_unexplained": false,
+          "explanation": null,
+          "detail": {
+            "rows": 3300,
+            "violations": 0,
+            "startup_padded_rows": 1,
+            "note": "the first decision's stack is startup padding and is counted separately; every other row must be the literal four consecutive frames before the decision"
+          },
+          "samples": []
+        }
+      },
+      "limits": [
+        "offline only: this audits stored shards, no engine is started",
+        "status=fail with unexplained_diffs=0 is the expected legacy outcome; it is not G420-0 passing (that needs the new two-frame sample leg too)",
+        "pixel planes are not decoded here; only act_hist.npy is read"
+      ],
+      "available": true
+    }
+  ],
+  "unexplained_diffs": 0,
+  "contract_ready": false,
+  "status": "fail",
+  "live_leg": {
+    "status": "not_requested",
+    "implemented_by": "T02",
+    "note": "--execute would run the online leg (T02)"
+  },
+  "exit_code": 0,
+  "notes": [
+    "the offline audit re-reads stored shards; it starts no engine",
+    "status=fail with unexplained_diffs=0 is the expected result for legacy four-frame data and is not G420-0 passing",
+    "the online leg (audit_live_episode) is T02 and refuses in T01"
+  ]
+}

@@ -1,0 +1,70 @@
+# T01 CLI — `--help` and the unimplemented subcommands
+
+- host: WSL asset host, python `/root/v400-venv/bin/python` 3.10.12
+- command (verbatim):
+
+```bash
+cd /mnt/d/WorkShop/Touhou_RL && PYTHONPATH=/mnt/d/WorkShop/Touhou_RL /root/v400-venv/bin/python tools/rl/v420.py --help
+```
+
+- exit code: **0**
+- stderr: (empty)
+
+## stdout (verbatim)
+
+```text
+usage: v420.py [-h]
+               {audit-assets,audit-time,counterfactual,train,collect,rl,evaluate,summarize}
+               ...
+
+v4.2.0 thin CLI: eight subcommands, no platform.
+
+``v420.py`` is the only entry point v4.2.0 adds.  It dispatches to
+:mod:`touhou_rl.v420` and never contains experiment logic of its own:
+
+* ``audit-assets`` — verify the objects a run consumes, reusing the v4.1.0
+  verifier (``touhou_rl.v410.evidence``); ``ASSET_SYNC.sha256`` is read only.
+* ``audit-time`` — the offline half of the time audit: re-read a legacy shard and
+  count every deviation from ``obs-v420-2f`` / ``action-v420-2f``.  The online
+  half needs a real engine run and is T02's.
+* ``evaluate`` — build the argv of the reused ``tools/rl/v410_student_eval.py``,
+  dry run by default, ``--execute`` for a real run.
+* ``summarize`` — merge evaluator summaries, Wilson interval, G420-4 conditions.
+* ``counterfactual`` / ``train`` / ``collect`` / ``rl`` — report
+  ``not_implemented`` and exit 3 until their owner lands.
+
+Every subcommand is a dry run unless ``--execute`` is given.  Exit codes follow
+v4.1.0: ``0`` ok, ``2`` argument/protocol error, ``3`` evidence or dependency not
+satisfied, ``4`` environment or external resource missing, ``5`` run failed or
+timed out, ``6`` budget insufficient.
+
+positional arguments:
+  {audit-assets,audit-time,counterfactual,train,collect,rl,evaluate,summarize}
+    audit-assets        verify the assets a run consumes (reuses the v4.1.0
+                        verifier)
+    audit-time          audit the legacy four-frame shard against obs-v420-2f
+    counterfactual      branch validation over real failure states (WP420-02)
+                        (owner: T03)
+    train               controlled learning arms A0/A1/A2 (WP420-03) (owner:
+                        T04)
+    collect             bounded three-round DAgger collection (WP420-04)
+                        (owner: T05)
+    rl                  engine-reward RL diagnostic (WP420-05) (owner: T06)
+    evaluate            run the reused v4.1.0 evaluator (dry run unless
+                        --execute)
+    summarize           merge evaluator summaries, Wilson interval, G420-4
+
+options:
+  -h, --help            show this help message and exit
+```
+
+## Unimplemented subcommands (each must exit non-zero)
+
+| subcommand | owner | status | exit code |
+|---|---|---|---|
+| `counterfactual` | T03 | `not_implemented` | 3 |
+| `train` | T04 | `not_implemented` | 3 |
+| `collect` | T05 | `not_implemented` | 3 |
+| `rl` | T06 | `not_implemented` | 3 |
+
+Each one prints `{"status": "not_implemented", "implemented_by": ...}` on stdout and exits 3, so an unimplemented subcommand can never be mistaken for a result.

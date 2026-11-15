@@ -1,0 +1,793 @@
+{
+  "schema": "v420-t02a-legacy-reproduce/1",
+  "task": "v4.2.0 / WP420-00 — T02a legacy student reproduction leg",
+  "scope": "re-runs the existing tools/rl/v410_student_eval.py only; no new evaluator code, no protocol/ABI change",
+  "observed_under_contention": true,
+  "contention_note": "a separate v4.1.0 v410_dagger_collect.py process (PID 1884178) was running concurrently; wall-clock values are observed under contention",
+  "fields_compared": [
+    "frames",
+    "steps",
+    "score",
+    "stop_reason",
+    "deaths",
+    "action_sequence_sha256",
+    "policy_input_sha256"
+  ],
+  "verdict_fields": [
+    "frames",
+    "score",
+    "action_sequence_sha256",
+    "stop_reason",
+    "deaths"
+  ],
+  "seeds": [
+    1000,
+    1001,
+    1002
+  ],
+  "runs": [
+    {
+      "arm": "b0",
+      "repetition": "rep1",
+      "out": ".tmp_v420_data/T02/b0_dev3_rep1.json",
+      "exists": true,
+      "exit_code": 0,
+      "start_utc": "2026-11-13T09:24:41Z",
+      "end_utc": "2026-11-13T09:27:04Z",
+      "wall_s": 142.974,
+      "loadavg_after": "25.09 19.00 15.20 25/680 3285428",
+      "checkpoint": ".tmp_v410_wp04_arms/b0_seed0_last.pt",
+      "stdout_log": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_t02a/b0_dev3_rep1.stdout.log",
+      "stderr_log": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_t02a/b0_dev3_rep1.stderr.log",
+      "argv_file": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_t02a/b0_dev3_rep1.argv.txt",
+      "reconstructed_argv": [
+        "tools/rl/v410_student_eval.py",
+        "--engine",
+        "/root/Touhou_RL/third_party/th08-rl/build/rl_v3/th08-modern",
+        "--data-dir",
+        "/root/v400-data/game",
+        "--checkpoint",
+        ".tmp_v410_wp04_arms/b0_seed0_last.pt",
+        "--seeds",
+        "1000,1001,1002",
+        "--stage",
+        "0",
+        "--difficulty",
+        "normal",
+        "--max-frames",
+        "19887",
+        "--stop-on-death",
+        "--device",
+        "cpu",
+        "--out",
+        "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T02/b0_dev3_rep1.json"
+      ],
+      "summary_exit_code": 0,
+      "argv": [
+        "--engine",
+        "/root/Touhou_RL/third_party/th08-rl/build/rl_v3/th08-modern",
+        "--data-dir",
+        "/root/v400-data/game",
+        "--checkpoint",
+        ".tmp_v410_wp04_arms/b0_seed0_last.pt",
+        "--seeds",
+        "1000,1001,1002",
+        "--stage",
+        "0",
+        "--difficulty",
+        "normal",
+        "--max-frames",
+        "19887",
+        "--stop-on-death",
+        "--device",
+        "cpu",
+        "--out",
+        "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T02/b0_dev3_rep1.json"
+      ],
+      "checkpoint_sha256": "3bc0ec4461701bebb2ffc551d61dffff77f15cd486125baf9db6eaafc741b3a6",
+      "engine_sha256": "691bfd77b7eca3361aa8bb7af0977556a70cc73a070b29a2447222ba7a568ef6",
+      "generated_at": "2026-11-13T09:27:04Z",
+      "observed_checkpoint": ".tmp_v410_wp04_arms/b0_seed0_last.pt"
+    },
+    {
+      "arm": "b0",
+      "repetition": "rep2",
+      "out": ".tmp_v420_data/T02/b0_dev3_rep2.json",
+      "exists": true,
+      "exit_code": 0,
+      "start_utc": "2026-11-13T09:27:04Z",
+      "end_utc": "2026-11-13T09:29:22Z",
+      "wall_s": 137.819,
+      "loadavg_after": "23.71 20.52 16.25 23/679 3304816",
+      "checkpoint": ".tmp_v410_wp04_arms/b0_seed0_last.pt",
+      "stdout_log": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_t02a/b0_dev3_rep2.stdout.log",
+      "stderr_log": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_t02a/b0_dev3_rep2.stderr.log",
+      "argv_file": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_t02a/b0_dev3_rep2.argv.txt",
+      "reconstructed_argv": [
+        "tools/rl/v410_student_eval.py",
+        "--engine",
+        "/root/Touhou_RL/third_party/th08-rl/build/rl_v3/th08-modern",
+        "--data-dir",
+        "/root/v400-data/game",
+        "--checkpoint",
+        ".tmp_v410_wp04_arms/b0_seed0_last.pt",
+        "--seeds",
+        "1000,1001,1002",
+        "--stage",
+        "0",
+        "--difficulty",
+        "normal",
+        "--max-frames",
+        "19887",
+        "--stop-on-death",
+        "--device",
+        "cpu",
+        "--out",
+        "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T02/b0_dev3_rep2.json"
+      ],
+      "summary_exit_code": 0,
+      "argv": [
+        "--engine",
+        "/root/Touhou_RL/third_party/th08-rl/build/rl_v3/th08-modern",
+        "--data-dir",
+        "/root/v400-data/game",
+        "--checkpoint",
+        ".tmp_v410_wp04_arms/b0_seed0_last.pt",
+        "--seeds",
+        "1000,1001,1002",
+        "--stage",
+        "0",
+        "--difficulty",
+        "normal",
+        "--max-frames",
+        "19887",
+        "--stop-on-death",
+        "--device",
+        "cpu",
+        "--out",
+        "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T02/b0_dev3_rep2.json"
+      ],
+      "checkpoint_sha256": "3bc0ec4461701bebb2ffc551d61dffff77f15cd486125baf9db6eaafc741b3a6",
+      "engine_sha256": "691bfd77b7eca3361aa8bb7af0977556a70cc73a070b29a2447222ba7a568ef6",
+      "generated_at": "2026-11-13T09:29:22Z",
+      "observed_checkpoint": ".tmp_v410_wp04_arms/b0_seed0_last.pt"
+    },
+    {
+      "arm": "beta20k",
+      "repetition": "rep1",
+      "out": ".tmp_v420_data/T02/beta20k_dev3_rep1.json",
+      "exists": true,
+      "exit_code": 0,
+      "start_utc": "2026-11-13T09:29:22Z",
+      "end_utc": "2026-11-13T09:32:41Z",
+      "wall_s": 198.367,
+      "loadavg_after": "25.89 22.92 18.01 3/660 3333177",
+      "checkpoint": ".tmp_v410_wp05_train_beta05_20k/b0_s0_dagger_step20000.pt",
+      "stdout_log": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_t02a/beta20k_dev3_rep1.stdout.log",
+      "stderr_log": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_t02a/beta20k_dev3_rep1.stderr.log",
+      "argv_file": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_t02a/beta20k_dev3_rep1.argv.txt",
+      "reconstructed_argv": [
+        "tools/rl/v410_student_eval.py",
+        "--engine",
+        "/root/Touhou_RL/third_party/th08-rl/build/rl_v3/th08-modern",
+        "--data-dir",
+        "/root/v400-data/game",
+        "--checkpoint",
+        ".tmp_v410_wp05_train_beta05_20k/b0_s0_dagger_step20000.pt",
+        "--seeds",
+        "1000,1001,1002",
+        "--stage",
+        "0",
+        "--difficulty",
+        "normal",
+        "--max-frames",
+        "19887",
+        "--stop-on-death",
+        "--device",
+        "cpu",
+        "--out",
+        "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T02/beta20k_dev3_rep1.json"
+      ],
+      "summary_exit_code": 0,
+      "argv": [
+        "--engine",
+        "/root/Touhou_RL/third_party/th08-rl/build/rl_v3/th08-modern",
+        "--data-dir",
+        "/root/v400-data/game",
+        "--checkpoint",
+        ".tmp_v410_wp05_train_beta05_20k/b0_s0_dagger_step20000.pt",
+        "--seeds",
+        "1000,1001,1002",
+        "--stage",
+        "0",
+        "--difficulty",
+        "normal",
+        "--max-frames",
+        "19887",
+        "--stop-on-death",
+        "--device",
+        "cpu",
+        "--out",
+        "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T02/beta20k_dev3_rep1.json"
+      ],
+      "checkpoint_sha256": "15ae1fd5b9a6e0cbbddfd668bb342444bdb44db123b5f7e56abf3c5e7215bd95",
+      "engine_sha256": "691bfd77b7eca3361aa8bb7af0977556a70cc73a070b29a2447222ba7a568ef6",
+      "generated_at": "2026-11-13T09:32:40Z",
+      "observed_checkpoint": ".tmp_v410_wp05_train_beta05_20k/b0_s0_dagger_step20000.pt"
+    },
+    {
+      "arm": "beta20k",
+      "repetition": "rep2",
+      "out": ".tmp_v420_data/T02/beta20k_dev3_rep2.json",
+      "exists": true,
+      "exit_code": 0,
+      "start_utc": "2026-11-13T09:32:41Z",
+      "end_utc": "2026-11-13T09:36:00Z",
+      "wall_s": 198.973,
+      "loadavg_after": "21.06 23.60 19.30 2/631 3363232",
+      "checkpoint": ".tmp_v410_wp05_train_beta05_20k/b0_s0_dagger_step20000.pt",
+      "stdout_log": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_t02a/beta20k_dev3_rep2.stdout.log",
+      "stderr_log": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_t02a/beta20k_dev3_rep2.stderr.log",
+      "argv_file": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_t02a/beta20k_dev3_rep2.argv.txt",
+      "reconstructed_argv": [
+        "tools/rl/v410_student_eval.py",
+        "--engine",
+        "/root/Touhou_RL/third_party/th08-rl/build/rl_v3/th08-modern",
+        "--data-dir",
+        "/root/v400-data/game",
+        "--checkpoint",
+        ".tmp_v410_wp05_train_beta05_20k/b0_s0_dagger_step20000.pt",
+        "--seeds",
+        "1000,1001,1002",
+        "--stage",
+        "0",
+        "--difficulty",
+        "normal",
+        "--max-frames",
+        "19887",
+        "--stop-on-death",
+        "--device",
+        "cpu",
+        "--out",
+        "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T02/beta20k_dev3_rep2.json"
+      ],
+      "summary_exit_code": 0,
+      "argv": [
+        "--engine",
+        "/root/Touhou_RL/third_party/th08-rl/build/rl_v3/th08-modern",
+        "--data-dir",
+        "/root/v400-data/game",
+        "--checkpoint",
+        ".tmp_v410_wp05_train_beta05_20k/b0_s0_dagger_step20000.pt",
+        "--seeds",
+        "1000,1001,1002",
+        "--stage",
+        "0",
+        "--difficulty",
+        "normal",
+        "--max-frames",
+        "19887",
+        "--stop-on-death",
+        "--device",
+        "cpu",
+        "--out",
+        "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T02/beta20k_dev3_rep2.json"
+      ],
+      "checkpoint_sha256": "15ae1fd5b9a6e0cbbddfd668bb342444bdb44db123b5f7e56abf3c5e7215bd95",
+      "engine_sha256": "691bfd77b7eca3361aa8bb7af0977556a70cc73a070b29a2447222ba7a568ef6",
+      "generated_at": "2026-11-13T09:35:59Z",
+      "observed_checkpoint": ".tmp_v410_wp05_train_beta05_20k/b0_s0_dagger_step20000.pt"
+    }
+  ],
+  "comparisons": [
+    {
+      "arm": "b0",
+      "checkpoint": ".tmp_v410_wp04_arms/b0_seed0_last.pt",
+      "seed": 1000,
+      "expected_baseline": {
+        "frames": 1398,
+        "steps": 699,
+        "score": 13102,
+        "stop_reason": "death_stop",
+        "deaths": 1.0,
+        "action_sequence_sha256": "85a528fd29c83f513d1464f8a9bf3ef20de52c352ed8aa64bc366d8b59cedac6",
+        "policy_input_sha256": "41d171cccc2d9486dc5ac5de85216f2f59c7be389e38410746112a4dbb442b15"
+      },
+      "observed": {
+        "rep1": {
+          "frames": 1398,
+          "steps": 699,
+          "score": 13102,
+          "stop_reason": "death_stop",
+          "deaths": 1.0,
+          "action_sequence_sha256": "85a528fd29c83f513d1464f8a9bf3ef20de52c352ed8aa64bc366d8b59cedac6",
+          "policy_input_sha256": "41d171cccc2d9486dc5ac5de85216f2f59c7be389e38410746112a4dbb442b15"
+        },
+        "rep2": {
+          "frames": 1398,
+          "steps": 699,
+          "score": 13102,
+          "stop_reason": "death_stop",
+          "deaths": 1.0,
+          "action_sequence_sha256": "85a528fd29c83f513d1464f8a9bf3ef20de52c352ed8aa64bc366d8b59cedac6",
+          "policy_input_sha256": "41d171cccc2d9486dc5ac5de85216f2f59c7be389e38410746112a4dbb442b15"
+        }
+      },
+      "baseline_source": ".tmp_v410_wp04_eval_arms/B0_seed0_full.json",
+      "match": {
+        "baseline_vs_rep1": {
+          "frames": true,
+          "steps": true,
+          "score": true,
+          "stop_reason": true,
+          "deaths": true,
+          "action_sequence_sha256": true,
+          "policy_input_sha256": true
+        },
+        "baseline_vs_rep2": {
+          "frames": true,
+          "steps": true,
+          "score": true,
+          "stop_reason": true,
+          "deaths": true,
+          "action_sequence_sha256": true,
+          "policy_input_sha256": true
+        },
+        "rep1_vs_rep2": {
+          "frames": true,
+          "steps": true,
+          "score": true,
+          "stop_reason": true,
+          "deaths": true,
+          "action_sequence_sha256": true,
+          "policy_input_sha256": true
+        }
+      },
+      "verdict_fields_all_match": {
+        "baseline_vs_rep1": true,
+        "baseline_vs_rep2": true,
+        "rep1_vs_rep2": true
+      },
+      "row_reproduced": true,
+      "strict_all_fields_all_match": {
+        "baseline_vs_rep1": true,
+        "baseline_vs_rep2": true,
+        "rep1_vs_rep2": true
+      },
+      "strict_row_reproduced": true,
+      "differences": [],
+      "wall_s_observed": {
+        "rep1": 50.37,
+        "rep2": 53.623
+      }
+    },
+    {
+      "arm": "b0",
+      "checkpoint": ".tmp_v410_wp04_arms/b0_seed0_last.pt",
+      "seed": 1001,
+      "expected_baseline": {
+        "frames": 818,
+        "steps": 409,
+        "score": 1512,
+        "stop_reason": "death_stop",
+        "deaths": 1.0,
+        "action_sequence_sha256": "57f61f9958f4b4e567372c227ec38fc3f888033cdf851317f896724dc92c93fe",
+        "policy_input_sha256": "cad86d0e35787943731ada4c6089f6d47dcee6683f1d38259b0403516821f8cf"
+      },
+      "observed": {
+        "rep1": {
+          "frames": 818,
+          "steps": 409,
+          "score": 1512,
+          "stop_reason": "death_stop",
+          "deaths": 1.0,
+          "action_sequence_sha256": "57f61f9958f4b4e567372c227ec38fc3f888033cdf851317f896724dc92c93fe",
+          "policy_input_sha256": "cad86d0e35787943731ada4c6089f6d47dcee6683f1d38259b0403516821f8cf"
+        },
+        "rep2": {
+          "frames": 818,
+          "steps": 409,
+          "score": 1512,
+          "stop_reason": "death_stop",
+          "deaths": 1.0,
+          "action_sequence_sha256": "57f61f9958f4b4e567372c227ec38fc3f888033cdf851317f896724dc92c93fe",
+          "policy_input_sha256": "cad86d0e35787943731ada4c6089f6d47dcee6683f1d38259b0403516821f8cf"
+        }
+      },
+      "baseline_source": ".tmp_v410_wp04_eval_arms/B0_seed0_full.json",
+      "match": {
+        "baseline_vs_rep1": {
+          "frames": true,
+          "steps": true,
+          "score": true,
+          "stop_reason": true,
+          "deaths": true,
+          "action_sequence_sha256": true,
+          "policy_input_sha256": true
+        },
+        "baseline_vs_rep2": {
+          "frames": true,
+          "steps": true,
+          "score": true,
+          "stop_reason": true,
+          "deaths": true,
+          "action_sequence_sha256": true,
+          "policy_input_sha256": true
+        },
+        "rep1_vs_rep2": {
+          "frames": true,
+          "steps": true,
+          "score": true,
+          "stop_reason": true,
+          "deaths": true,
+          "action_sequence_sha256": true,
+          "policy_input_sha256": true
+        }
+      },
+      "verdict_fields_all_match": {
+        "baseline_vs_rep1": true,
+        "baseline_vs_rep2": true,
+        "rep1_vs_rep2": true
+      },
+      "row_reproduced": true,
+      "strict_all_fields_all_match": {
+        "baseline_vs_rep1": true,
+        "baseline_vs_rep2": true,
+        "rep1_vs_rep2": true
+      },
+      "strict_row_reproduced": true,
+      "differences": [],
+      "wall_s_observed": {
+        "rep1": 36.134,
+        "rep2": 30.238
+      }
+    },
+    {
+      "arm": "b0",
+      "checkpoint": ".tmp_v410_wp04_arms/b0_seed0_last.pt",
+      "seed": 1002,
+      "expected_baseline": {
+        "frames": 1251,
+        "steps": 626,
+        "score": 7438,
+        "stop_reason": "death_stop",
+        "deaths": 1.0,
+        "action_sequence_sha256": "864101aed6fe0d13736477e6d9402f1fd0bd4e8eb3281a135bbb443f165e3827",
+        "policy_input_sha256": "bff6d25adfd3b8eb7230dc02cba7e1bc4729f9ae8b27065ddba9c3ed3771c7c1"
+      },
+      "observed": {
+        "rep1": {
+          "frames": 1251,
+          "steps": 626,
+          "score": 7438,
+          "stop_reason": "death_stop",
+          "deaths": 1.0,
+          "action_sequence_sha256": "864101aed6fe0d13736477e6d9402f1fd0bd4e8eb3281a135bbb443f165e3827",
+          "policy_input_sha256": "bff6d25adfd3b8eb7230dc02cba7e1bc4729f9ae8b27065ddba9c3ed3771c7c1"
+        },
+        "rep2": {
+          "frames": 1251,
+          "steps": 626,
+          "score": 7438,
+          "stop_reason": "death_stop",
+          "deaths": 1.0,
+          "action_sequence_sha256": "864101aed6fe0d13736477e6d9402f1fd0bd4e8eb3281a135bbb443f165e3827",
+          "policy_input_sha256": "bff6d25adfd3b8eb7230dc02cba7e1bc4729f9ae8b27065ddba9c3ed3771c7c1"
+        }
+      },
+      "baseline_source": ".tmp_v410_wp04_eval_arms/B0_seed0_full.json",
+      "match": {
+        "baseline_vs_rep1": {
+          "frames": true,
+          "steps": true,
+          "score": true,
+          "stop_reason": true,
+          "deaths": true,
+          "action_sequence_sha256": true,
+          "policy_input_sha256": true
+        },
+        "baseline_vs_rep2": {
+          "frames": true,
+          "steps": true,
+          "score": true,
+          "stop_reason": true,
+          "deaths": true,
+          "action_sequence_sha256": true,
+          "policy_input_sha256": true
+        },
+        "rep1_vs_rep2": {
+          "frames": true,
+          "steps": true,
+          "score": true,
+          "stop_reason": true,
+          "deaths": true,
+          "action_sequence_sha256": true,
+          "policy_input_sha256": true
+        }
+      },
+      "verdict_fields_all_match": {
+        "baseline_vs_rep1": true,
+        "baseline_vs_rep2": true,
+        "rep1_vs_rep2": true
+      },
+      "row_reproduced": true,
+      "strict_all_fields_all_match": {
+        "baseline_vs_rep1": true,
+        "baseline_vs_rep2": true,
+        "rep1_vs_rep2": true
+      },
+      "strict_row_reproduced": true,
+      "differences": [],
+      "wall_s_observed": {
+        "rep1": 47.974,
+        "rep2": 45.237
+      }
+    },
+    {
+      "arm": "beta20k",
+      "checkpoint": ".tmp_v410_wp05_train_beta05_20k/b0_s0_dagger_step20000.pt",
+      "seed": 1000,
+      "expected_baseline": {
+        "frames": 1612,
+        "steps": 806,
+        "score": 12471,
+        "stop_reason": "death_stop",
+        "deaths": 1.0,
+        "action_sequence_sha256": "c2ee8fc1335dbfa7d487f79fbefb119615e3326e029471cdd871581fcefb4c30",
+        "policy_input_sha256": "79adb9a5ca13ec0fe6c2fbe57f2d9a93051303ef50a388815d55ad02f4799fe9"
+      },
+      "observed": {
+        "rep1": {
+          "frames": 1612,
+          "steps": 806,
+          "score": 12471,
+          "stop_reason": "death_stop",
+          "deaths": 1.0,
+          "action_sequence_sha256": "c2ee8fc1335dbfa7d487f79fbefb119615e3326e029471cdd871581fcefb4c30",
+          "policy_input_sha256": "79adb9a5ca13ec0fe6c2fbe57f2d9a93051303ef50a388815d55ad02f4799fe9"
+        },
+        "rep2": {
+          "frames": 1612,
+          "steps": 806,
+          "score": 12471,
+          "stop_reason": "death_stop",
+          "deaths": 1.0,
+          "action_sequence_sha256": "c2ee8fc1335dbfa7d487f79fbefb119615e3326e029471cdd871581fcefb4c30",
+          "policy_input_sha256": "79adb9a5ca13ec0fe6c2fbe57f2d9a93051303ef50a388815d55ad02f4799fe9"
+        }
+      },
+      "baseline_source": ".tmp_v410_wp05_train_beta05_20k/eval_dev20.json",
+      "match": {
+        "baseline_vs_rep1": {
+          "frames": true,
+          "steps": true,
+          "score": true,
+          "stop_reason": true,
+          "deaths": true,
+          "action_sequence_sha256": true,
+          "policy_input_sha256": true
+        },
+        "baseline_vs_rep2": {
+          "frames": true,
+          "steps": true,
+          "score": true,
+          "stop_reason": true,
+          "deaths": true,
+          "action_sequence_sha256": true,
+          "policy_input_sha256": true
+        },
+        "rep1_vs_rep2": {
+          "frames": true,
+          "steps": true,
+          "score": true,
+          "stop_reason": true,
+          "deaths": true,
+          "action_sequence_sha256": true,
+          "policy_input_sha256": true
+        }
+      },
+      "verdict_fields_all_match": {
+        "baseline_vs_rep1": true,
+        "baseline_vs_rep2": true,
+        "rep1_vs_rep2": true
+      },
+      "row_reproduced": true,
+      "strict_all_fields_all_match": {
+        "baseline_vs_rep1": true,
+        "baseline_vs_rep2": true,
+        "rep1_vs_rep2": true
+      },
+      "strict_row_reproduced": true,
+      "differences": [],
+      "wall_s_observed": {
+        "rep1": 60.989,
+        "rep2": 57.234
+      }
+    },
+    {
+      "arm": "beta20k",
+      "checkpoint": ".tmp_v410_wp05_train_beta05_20k/b0_s0_dagger_step20000.pt",
+      "seed": 1001,
+      "expected_baseline": {
+        "frames": 1970,
+        "steps": 985,
+        "score": 18920,
+        "stop_reason": "death_stop",
+        "deaths": 1.0,
+        "action_sequence_sha256": "d2cd9917d99b151e1f479ec94857caa2b7cbe866d6e70f2cd4b96e10aea116c5",
+        "policy_input_sha256": "6a51026c142093252534a3c9efe71d960c395cfb32d3369c8b816af9e2a32258"
+      },
+      "observed": {
+        "rep1": {
+          "frames": 1970,
+          "steps": 985,
+          "score": 18920,
+          "stop_reason": "death_stop",
+          "deaths": 1.0,
+          "action_sequence_sha256": "d2cd9917d99b151e1f479ec94857caa2b7cbe866d6e70f2cd4b96e10aea116c5",
+          "policy_input_sha256": "6a51026c142093252534a3c9efe71d960c395cfb32d3369c8b816af9e2a32258"
+        },
+        "rep2": {
+          "frames": 1970,
+          "steps": 985,
+          "score": 18920,
+          "stop_reason": "death_stop",
+          "deaths": 1.0,
+          "action_sequence_sha256": "d2cd9917d99b151e1f479ec94857caa2b7cbe866d6e70f2cd4b96e10aea116c5",
+          "policy_input_sha256": "6a51026c142093252534a3c9efe71d960c395cfb32d3369c8b816af9e2a32258"
+        }
+      },
+      "baseline_source": ".tmp_v410_wp05_train_beta05_20k/eval_dev20.json",
+      "match": {
+        "baseline_vs_rep1": {
+          "frames": true,
+          "steps": true,
+          "score": true,
+          "stop_reason": true,
+          "deaths": true,
+          "action_sequence_sha256": true,
+          "policy_input_sha256": true
+        },
+        "baseline_vs_rep2": {
+          "frames": true,
+          "steps": true,
+          "score": true,
+          "stop_reason": true,
+          "deaths": true,
+          "action_sequence_sha256": true,
+          "policy_input_sha256": true
+        },
+        "rep1_vs_rep2": {
+          "frames": true,
+          "steps": true,
+          "score": true,
+          "stop_reason": true,
+          "deaths": true,
+          "action_sequence_sha256": true,
+          "policy_input_sha256": true
+        }
+      },
+      "verdict_fields_all_match": {
+        "baseline_vs_rep1": true,
+        "baseline_vs_rep2": true,
+        "rep1_vs_rep2": true
+      },
+      "row_reproduced": true,
+      "strict_all_fields_all_match": {
+        "baseline_vs_rep1": true,
+        "baseline_vs_rep2": true,
+        "rep1_vs_rep2": true
+      },
+      "strict_row_reproduced": true,
+      "differences": [],
+      "wall_s_observed": {
+        "rep1": 67.88,
+        "rep2": 69.809
+      }
+    },
+    {
+      "arm": "beta20k",
+      "checkpoint": ".tmp_v410_wp05_train_beta05_20k/b0_s0_dagger_step20000.pt",
+      "seed": 1002,
+      "expected_baseline": {
+        "frames": 1532,
+        "steps": 766,
+        "score": 12124,
+        "stop_reason": "death_stop",
+        "deaths": 1.0,
+        "action_sequence_sha256": "e86f54d5964fb63cfdf54d7df50f429e03c5b0db44391a80a4a5c2b76b12cfa3",
+        "policy_input_sha256": "e796af3763a4a7a796b31f469e0a24e8ffd39e6e297d44f5663a87cb2a07614e"
+      },
+      "observed": {
+        "rep1": {
+          "frames": 1532,
+          "steps": 766,
+          "score": 12124,
+          "stop_reason": "death_stop",
+          "deaths": 1.0,
+          "action_sequence_sha256": "e86f54d5964fb63cfdf54d7df50f429e03c5b0db44391a80a4a5c2b76b12cfa3",
+          "policy_input_sha256": "e796af3763a4a7a796b31f469e0a24e8ffd39e6e297d44f5663a87cb2a07614e"
+        },
+        "rep2": {
+          "frames": 1532,
+          "steps": 766,
+          "score": 12124,
+          "stop_reason": "death_stop",
+          "deaths": 1.0,
+          "action_sequence_sha256": "e86f54d5964fb63cfdf54d7df50f429e03c5b0db44391a80a4a5c2b76b12cfa3",
+          "policy_input_sha256": "e796af3763a4a7a796b31f469e0a24e8ffd39e6e297d44f5663a87cb2a07614e"
+        }
+      },
+      "baseline_source": ".tmp_v410_wp05_train_beta05_20k/eval_dev20.json",
+      "match": {
+        "baseline_vs_rep1": {
+          "frames": true,
+          "steps": true,
+          "score": true,
+          "stop_reason": true,
+          "deaths": true,
+          "action_sequence_sha256": true,
+          "policy_input_sha256": true
+        },
+        "baseline_vs_rep2": {
+          "frames": true,
+          "steps": true,
+          "score": true,
+          "stop_reason": true,
+          "deaths": true,
+          "action_sequence_sha256": true,
+          "policy_input_sha256": true
+        },
+        "rep1_vs_rep2": {
+          "frames": true,
+          "steps": true,
+          "score": true,
+          "stop_reason": true,
+          "deaths": true,
+          "action_sequence_sha256": true,
+          "policy_input_sha256": true
+        }
+      },
+      "verdict_fields_all_match": {
+        "baseline_vs_rep1": true,
+        "baseline_vs_rep2": true,
+        "rep1_vs_rep2": true
+      },
+      "row_reproduced": true,
+      "strict_all_fields_all_match": {
+        "baseline_vs_rep1": true,
+        "baseline_vs_rep2": true,
+        "rep1_vs_rep2": true
+      },
+      "strict_row_reproduced": true,
+      "differences": [],
+      "wall_s_observed": {
+        "rep1": 58.193,
+        "rep2": 60.199
+      }
+    }
+  ],
+  "checks": {
+    "all_four_exit_codes_zero": true,
+    "all_four_artifacts_present": true,
+    "checkpoint_sha256_matches_expected": {
+      "b0": true,
+      "beta20k": true
+    },
+    "engine_sha256_all_691bfd77": true,
+    "rows_reproduced": {
+      "b0": true,
+      "beta20k": true
+    },
+    "rows_reproduced_all": true,
+    "strict_all_fields_rows_reproduced": {
+      "b0": true,
+      "beta20k": true
+    },
+    "strict_all_fields_all_rows": true
+  },
+  "verdict": "REPRODUCED",
+  "verdict_cn": "复现成立",
+  "strict_note": "all seven compared fields also match (steps and policy_input_sha256 included)",
+  "generated_at": "2026-11-13T09:36:22Z"
+}

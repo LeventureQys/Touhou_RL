@@ -1,0 +1,32 @@
+{
+  "corpus": [
+    {
+      "path": "/mnt/d/WorkShop/Touhou_RL/.tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed10-shard/labels.jsonl",
+      "mtime": 1794512018.0714808,
+      "size": 5741707,
+      "sha256": "011f6c1cc3db232ca296177b9afc445a4922e94b1d5513f4e5746350cff622a0"
+    },
+    {
+      "path": "/mnt/d/WorkShop/Touhou_RL/.tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed10-shard/shard.json",
+      "mtime": 1794512018.7834308,
+      "size": 1296743,
+      "sha256": "883f3c56f94cda60f38232d12f0a1442859d326b8f2a986b73dcfeea182254ff"
+    }
+  ],
+  "source_data": [
+    {
+      "path": "/root/v400-data/s1c/d1-s0d1-n3300-seed10-shard/env/score.dat",
+      "mtime": 1794511888.3002317,
+      "size": 17784,
+      "sha256": "d7089834a69881151a0524fcea36b75e3a7a392da2ffa48b4279522fd81ae786"
+    }
+  ],
+  "source_dir_listing": "total 40\ndrwxr-xr-x 3 root root  4096 Nov 13 03:31 .\ndrwxr-xr-x 4 root root  4096 Nov 13 03:31 ..\ndrwxr-xr-x 2 root root  4096 Nov 13 03:31 backup\n-rw-r--r-- 1 root root  2714 Nov 13 03:31 modern-files.txt\n-rwxr-xr-x 1 root root 17784 Nov 13 03:31 score.dat\n-rwxr-xr-x 1 root root    60 Nov 13 03:31 th08.cfg\nlrwxrwxrwx 1 root root    29 Nov 13 03:31 th08.dat -> /root/v400-data/game/th08.dat\nlrwxrwxrwx 1 root root    30 Nov 13 03:31 thbgm.dat -> /root/v400-data/game/thbgm.dat",
+  "collector_process": "PID     ELAPSED %CPU STAT CMD\n1884178    01:21:50 1106 Sl+  /root/v400-venv/bin/python tools/rl/v410_dagger_collect.py --checkpoint .tmp_v410_wp05_train_beta05_20k/b0_s0_dagger_step20000.pt --seeds 2044-2054 --beta 0.5 --decisions 3500 --max-frames 20000 --stage 0 --difficulty normal --mode fast --engine /root/Touhou_RL/third_party/th08-rl/build/rl_v3/th08-modern --data-dir /root/v400-data/game --data-root .tmp_v410_wp05_round3/data --shard-root .tmp_v410_wp05_round3 --work-dir .tmp_v410_wp05_round3/logs --continue-on-error --max-seconds 9000 --out .tmp_v410_wp05_round3/round3_batchB.json",
+  "collector_signals_sent": false,
+  "our_write_root": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_teacher2f",
+  "our_write_bytes": "1960867\t/mnt/d/WorkShop/Touhou_RL/.tmp_v420_teacher2f",
+  "engine_processes_left": "1884157 /bin/sh /usr/bin/xvfb-run -a -s -screen 0 1024x768x24 /root/v400-venv/bin/python tools/rl/v410_dagger_collect.py --checkpoint .tmp_v410_wp05_train_beta05_20k/b0_s0_dagger_step20000.pt --seeds 2044-2054 --beta 0.5 --decisions 3500 --max-frames 20000 --stage 0 --difficulty normal --mode fast --engine /root/Touhou_RL/third_party/th08-rl/build/rl_v3/th08-modern --data-dir /root/v400-data/game --data-root .tmp_v410_wp05_round3/data --shard-root .tmp_v410_wp05_round3 --work-dir .tmp_v410_wp05_round3/logs --continue-on-error --max-seconds 9000 --out .tmp_v410_wp05_round3/round3_batchB.json\n1884178 /root/v400-venv/bin/python tools/rl/v410_dagger_collect.py --checkpoint .tmp_v410_wp05_train_beta05_20k/b0_s0_dagger_step20000.pt --seeds 2044-2054 --beta 0.5 --decisions 3500 --max-frames 20000 --stage 0 --difficulty normal --mode fast --engine /root/Touhou_RL/third_party/th08-rl/build/rl_v3/th08-modern --data-dir /root/v400-data/game --data-root .tmp_v410_wp05_round3/data --shard-root .tmp_v410_wp05_round3 --work-dir .tmp_v410_wp05_round3/logs --continue-on-error --max-seconds 9000 --out .tmp_v410_wp05_round3/round3_batchB.json\n3584217 /root/Touhou_RL/third_party/th08-rl/build/rl_v3/th08-modern --data-dir .tmp_v410_wp05_round3/data/env-2054 --rl-control 0,1 --rl-role env\n3584266 /root/Touhou_RL/third_party/th08-rl/build/rl_v3/th08-modern --data-dir .tmp_v410_wp05_round3/data/shadow-2054 --rl-control 0,1 --rl-role shadow\n3617398 /root/Touhou_RL/third_party/th08-rl/build/rl_v3/th08-modern --data-dir /mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T02c/replay_data/d1-s0d1-n3300-seed11-shard --rl-control 0,1\n3634816 /root/Touhou_RL/third_party/th08-rl/build/rl_v3/th08-modern --data-dir .tmp_v410_wp05_round3/data/shadow-2054 --rl-control 0,1 --rl-role shadow",
+  "uptime": "17:51:52 up 1 day, 17:15,  1 user,  load average: 20.69, 20.95, 19.57",
+  "note": "read-only on .tmp_v410_s1c/** and /root/v400-data/**; the engine wrote only into .tmp_v420_teacher2f/data/<tag>/** copies"
+}

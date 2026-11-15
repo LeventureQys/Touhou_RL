@@ -1,0 +1,2790 @@
+{
+  "schema": "v420-t06-budget-200k/1",
+  "generated_at": "2026-11-13T23:23:58Z",
+  "what_this_is": "the one remaining single-variable experiment of WP420-05: the r3 reward table and the KL anchor at 200,000 frames instead of 50,000, everything else copied value-for-value; measured with the same frozen evaluator and the same 20 dev seeds as every other arm",
+  "declaration": {
+    "declaration": "this experiment changes exactly one variable: pilot.frame_budget 50000 -> 200000. It adds no second factor: the reward table, the KL anchor (beta 1.0, T=1, gate_mode diagnostic_only), every PPO coefficient, the rollout length, the temperature, the discount and the train seeds are byte-identical to rl-engine-r3-pilot.json. The only other differences are output naming and the private cp -a data dir.",
+    "the_one_changed_variable": {
+      "key": "pilot.frame_budget",
+      "from": 50000,
+      "to": 200000,
+      "source_config": "configs/v420/rl-engine-r3-pilot.json",
+      "source_config_sha256": "83f16c8a34090ae2994e51835624fb2e9252adc9e668a4b653ac0ba4d1f0673c",
+      "everything_else": "copied value-for-value from the frozen 50k config; the unit test asserts the diff is this key plus output naming"
+    },
+    "frozen_before_run": true,
+    "reference_measurements": {
+      "note": "measured before this run and only quoted here; they are the fixed comparison the prediction is stated in",
+      "r0_untrained_anchored_A0": {
+        "diag_first_death_mean_frames": 1636.8,
+        "s1n_mean_frames": 3011.5,
+        "n": 20,
+        "clears": 0,
+        "checkpoint_sha256": "96cb219eac83391f42b18ea656b5a6c5ac81e97cd1fd8c1e2c0d404aee6b89ad"
+      },
+      "r3_50k": {
+        "diag_first_death_mean_frames": 1589.2,
+        "s1n_mean_frames": 2891.6,
+        "n": 20,
+        "clears": 0,
+        "updates": 49,
+        "episodes": 22,
+        "checkpoint_sha256": "83f1ac4436c7c0bcb3e03296b24dad915eecffa4a57f3e301f68927e4a4b4685"
+      },
+      "four_arms_diag_s1n": {
+        "R0": [
+          1636.8,
+          3011.5
+        ],
+        "R2_no_anchor": [
+          889.35,
+          1906.4
+        ],
+        "R2_plus_KL": [
+          1512.1,
+          2626.0
+        ],
+        "R3_50k": [
+          1589.2,
+          2891.6
+        ]
+      },
+      "gap_closed_by_r3_50k_vs_R2_no_anchor": {
+        "diag": 0.936,
+        "s1n": 0.892
+      }
+    },
+    "prediction": {
+      "text": "the 200k checkpoint reaches R0 on BOTH dev rulers: diag_first_death mean >= 1636.8 frames AND s1n mean >= 3011.5 frames, each n=20 over dev seeds 1000-1019",
+      "diag_first_death_min_frames": 1636.8,
+      "s1n_min_frames": 3011.5,
+      "n": 20,
+      "hold_if": "both legs >= their threshold",
+      "fail_if": "either leg below its threshold",
+      "note": "the same two thresholds the r3 50k prediction used (REWARD_R3.md 5 / 8.4), so 50k -> 200k is measured on the same instrument"
+    },
+    "decision_rule": {
+      "if_both_legs_hold": "the 49-update budget, not the reward visibility, was the binding constraint: the r3 ordering signal converts into frames once the budget is 4x, and 200k -> 1M needs its own budget",
+      "if_either_leg_fails": "reward visibility is NOT the main cause of the remaining gap to R0: the 200k checkpoint still does not reach the untrained-but-anchored reference, so the next question is the policy side (advantage normalisation, rollout length) or the reward table, each needing its own pre-registration before its own run",
+      "no_tuning": "no epsilon / delta / beta / lr / temperature / gamma / reward table / rollout length is changed in response to any number in this experiment, whatever the verdict"
+    },
+    "expected_cost": {
+      "frame_budget": 200000,
+      "frames_per_second_reference": 49.39,
+      "wall_seconds_arithmetic": 4049.4,
+      "note": "arithmetic only, from the r3 50k run at 49.39 fps under load 4.4-7.1; NOT a result and not a schedule promise"
+    },
+    "pre_registered_budget_curve": {
+      "what": "50k -> 200k diag/s1n change, gap closed against the R2 -> R0 gap, and marginal frames per +10,000 frames",
+      "reported_even_if_the_run_fails": true
+    }
+  },
+  "config": {
+    "path": "configs/v420/rl-engine-r3-pilot200k.json",
+    "sha256": "a341f0ad78ba469bd3cd31b923dc010facad0aac3d35d4a71211cd7b41679e26",
+    "source_50k": "configs/v420/rl-engine-r3-pilot.json",
+    "source_50k_sha256": "83f16c8a34090ae2994e51835624fb2e9252adc9e668a4b653ac0ba4d1f0673c",
+    "rl_py_sha256": "8b201a35be27b91b77717999575496cd34db1706ae3d98a1ea4a16236f13ba11",
+    "diff": "only pilot.frame_budget (50000 -> 200000), output naming and the private data dir; tests/test_v420_rl.py asserts it leaf by leaf"
+  },
+  "run": {
+    "schema": "v420-rl-pilot/1",
+    "run_seed": 0,
+    "frame_budget": 200000,
+    "game_frames": 200000,
+    "decisions": 100018,
+    "episodes": 90,
+    "updates": 196,
+    "wall_seconds": 3735.497,
+    "collect_seconds": 3096.839,
+    "update_seconds": 277.437,
+    "fps": 53.54,
+    "decisions_per_second": 26.775,
+    "episode_ends": {
+      "game_over": 90
+    },
+    "game_over_episodes": 90,
+    "stage_clear_episodes": 0,
+    "terminated_transitions": 90,
+    "truncated_transitions": 0,
+    "terminal_reward_events": 90,
+    "reward_totals": {
+      "stage_clear": 0.0,
+      "death": -67.5,
+      "bomb": 0.0,
+      "progress": 0.2721159217611715,
+      "survive": 1.1893679999999915,
+      "first_life": 2.1092755380418535
+    },
+    "episode_frames": {
+      "count": 90,
+      "mean": 2202.133333333333,
+      "sd": 351.33156656201754,
+      "median": 2175.0,
+      "min": 1760,
+      "max": 3810,
+      "first": 1992,
+      "last": 2186
+    },
+    "episode_return": {
+      "count": 90,
+      "mean": -0.7103248948910731,
+      "sd": 0.007156593164294438,
+      "median": -0.7120539994649144,
+      "min": -0.722122268638627,
+      "max": -0.673452409794059,
+      "first": -0.7188087066046387,
+      "last": -0.7084013865018353
+    },
+    "first_death": {
+      "count": 90,
+      "mean": 1236.611111111111,
+      "sd": 249.094345848281,
+      "median": 1171.5,
+      "min": 650.0,
+      "max": 2516.0,
+      "first": 806.0,
+      "last": 1395.0
+    },
+    "episode_deaths_mean": 3.0,
+    "seeds_used": [
+      3000,
+      3001,
+      3002,
+      3003,
+      3004
+    ],
+    "statistics": {
+      "approx_kl": {
+        "count": 196,
+        "mean": 0.0012377217430259073,
+        "sd": 0.0002924034679619182,
+        "min": 0.0006448380881920457,
+        "max": 0.0026619736017892137,
+        "first": 0.000731220658053644,
+        "last": 0.0011026396678062156
+      },
+      "entropy": {
+        "count": 196,
+        "mean": 2.527308220157818,
+        "sd": 0.046698195606879024,
+        "min": 2.287504255771637,
+        "max": 2.7309904396533966,
+        "first": 2.4484109580516815,
+        "last": 2.581845700740814
+      },
+      "clip_fraction": {
+        "count": 196,
+        "mean": 0.0030691964285714285,
+        "sd": 0.003236625645314678,
+        "min": 0.0,
+        "max": 0.0146484375,
+        "first": 0.0,
+        "last": 0.0
+      },
+      "policy_loss": {
+        "count": 196,
+        "mean": -0.007209278016507968,
+        "sd": 0.0025130424138327125,
+        "min": -0.024206013418734074,
+        "max": -0.0012426066678017378,
+        "first": -0.006252182822208852,
+        "last": -0.024206013418734074
+      },
+      "value_loss": {
+        "count": 196,
+        "mean": 0.007420918206476852,
+        "sd": 0.0019274058913714741,
+        "min": 0.0025841140595730394,
+        "max": 0.012191625544801354,
+        "first": 0.008673540040035732,
+        "last": 0.010220494063105434
+      },
+      "grad_norm": {
+        "count": 196,
+        "mean": 8.504639426816484,
+        "sd": 1.4422200826208382,
+        "min": 5.302308619022369,
+        "max": 12.895385146141052,
+        "first": 8.638603121042252,
+        "last": 8.51758086681366
+      },
+      "actor_parameter_change": {
+        "count": 196,
+        "mean": 0.00023798076015699903,
+        "sd": 8.577377070952322e-06,
+        "min": 0.00012032687664031982,
+        "max": 0.0002420591190457344,
+        "first": 0.00023810938000679016,
+        "last": 0.00012032687664031982
+      },
+      "episode_frames": {
+        "count": 90,
+        "mean": 2202.133333333333,
+        "sd": 351.33156656201754,
+        "min": 1760.0,
+        "max": 3810.0,
+        "first": 1992.0,
+        "last": 2186.0
+      },
+      "episode_return": {
+        "count": 90,
+        "mean": -0.710324894891073,
+        "sd": 0.007156593164294438,
+        "min": -0.722122268638627,
+        "max": -0.673452409794059,
+        "first": -0.7188087066046387,
+        "last": -0.7084013865018353
+      },
+      "episode_ends": {
+        "game_over": 90
+      },
+      "total_updates": 196,
+      "total_episodes": 90
+    },
+    "kl_anchor": {
+      "gate_mode": "diagnostic_only",
+      "max_t_over_run": 1.0529637871122248,
+      "threshold_nats": 0.05,
+      "statistics": {
+        "count": 196,
+        "mean": 0.44101766006323434,
+        "sd": 0.17076507381703976,
+        "min": 0.18765554214833607,
+        "max": 1.0529637871122248,
+        "first": 0.2762018325623627,
+        "last": 0.2402696914214672
+      },
+      "over_threshold_rollouts": 196,
+      "gate": {
+        "check": "max_t KL_T1(A0 || pi_t) <= threshold_nats",
+        "space": "T1",
+        "observed_max_nats": 1.0529637871122248,
+        "threshold_nats": 0.05,
+        "margin_nats": -1.0029637871122248,
+        "finite": true,
+        "passed": false,
+        "status": "fail",
+        "note": "recorded for diagnosis; the run is not failed by this bound (see criterion_revision)",
+        "mode": "diagnostic_only",
+        "decisive": false
+      },
+      "exit_code_effect": true
+    },
+    "critic": {
+      "value_loss_mean": 0.007420918206476852,
+      "critic_rmse": 0.08614475147376567,
+      "return_sd": 0.007156593164294438,
+      "rmse_over_return_sd": 12.037117312125233,
+      "reference": {
+        "r2_50k_ratio": 62.9,
+        "r3_50k_ratio": 18.0,
+        "source": "RL_PILOT2.md 2 / REWARD_R3.md 7"
+      }
+    },
+    "quarters": [
+      {
+        "quarter": "Q1",
+        "episodes": 22,
+        "frames_mean": 2212.0,
+        "return_mean": -0.7093046354250899,
+        "first_life": 0.024237716663452036,
+        "survive": 0.013274181818181708,
+        "progress": 0.0031834660932717872,
+        "death": -0.75,
+        "stage_clear": 0.0,
+        "first_death_mean": 1278.909090909091,
+        "n_first_death": 22
+      },
+      {
+        "quarter": "Q2",
+        "episodes": 23,
+        "frames_mean": 2229.0434782608695,
+        "return_mean": -0.7102638681160357,
+        "first_life": 0.02302245739815779,
+        "survive": 0.013377391304347737,
+        "progress": 0.003336283181454156,
+        "death": -0.75,
+        "stage_clear": 0.0,
+        "first_death_mean": 1214.7391304347825,
+        "n_first_death": 23
+      },
+      {
+        "quarter": "Q3",
+        "episodes": 22,
+        "frames_mean": 2090.318181818182,
+        "return_mean": -0.7119271037733399,
+        "first_life": 0.022720383587313212,
+        "survive": 0.01254327272727261,
+        "progress": 0.002809239912069932,
+        "death": -0.75,
+        "stage_clear": 0.0,
+        "first_death_mean": 1198.9545454545455,
+        "n_first_death": 22
+      },
+      {
+        "quarter": "Q4",
+        "episodes": 23,
+        "frames_mean": 2272.7391304347825,
+        "return_mean": -0.7098292743983607,
+        "first_life": 0.02376873097249519,
+        "survive": 0.013639304347826026,
+        "progress": 0.0027626902813134,
+        "death": -0.75,
+        "stage_clear": 0.0,
+        "first_death_mean": 1254.0434782608695,
+        "n_first_death": 23
+      }
+    ],
+    "quarter_change": {
+      "first_death_pct": -1.9442830475578357,
+      "return_pct": -0.07396525372436064,
+      "frames_pct": 2.745891972639354,
+      "abs_return_over_abs_first_death": 0.03804243102220456
+    },
+    "checkpoint": {
+      "path": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/checkpoints/r3b200_seed0_200000f.pt",
+      "sha256": "35e92dfe90053a2dcee47bcf0f2d956efb5cd5d04a3ffa046ba2722b3dd09b01",
+      "critic_sha256": "f7ef3df5595da53b21de3f8796157fbcabfd737cd227c05e97cd6124dc2692e1",
+      "parameters": 731802,
+      "loadback": {
+        "loaded": true,
+        "arm": "B0",
+        "family": "probe",
+        "parameters": 731802,
+        "parameters_pinned": 731802,
+        "rows": 16,
+        "logit_max_abs_diff": 0.0,
+        "bitwise_identical": true,
+        "loader": "tools/rl/v410_student_eval.py"
+      }
+    },
+    "rollout_shards": {
+      "count": 195,
+      "wall": {
+        "count": 195,
+        "mean": 18.93199487179487,
+        "sd": 4.430373051590828,
+        "median": 18.193,
+        "min": 4.711,
+        "max": 25.765,
+        "first": 24.832,
+        "last": 4.711
+      },
+      "first_five": [
+        {
+          "update": 1,
+          "frames": 2048,
+          "at": 1794606612.634,
+          "wall_seconds": 24.832
+        },
+        {
+          "update": 2,
+          "frames": 3072,
+          "at": 1794606627.665,
+          "wall_seconds": 15.031
+        },
+        {
+          "update": 3,
+          "frames": 4095,
+          "at": 1794606652.275,
+          "wall_seconds": 24.61
+        },
+        {
+          "update": 4,
+          "frames": 5119,
+          "at": 1794606667.466,
+          "wall_seconds": 15.191
+        },
+        {
+          "update": 5,
+          "frames": 6142,
+          "at": 1794606691.674,
+          "wall_seconds": 24.208
+        }
+      ],
+      "last_five": [
+        {
+          "update": 191,
+          "frames": 196572,
+          "at": 1794610224.152,
+          "wall_seconds": 19.382
+        },
+        {
+          "update": 192,
+          "frames": 197596,
+          "at": 1794610239.731,
+          "wall_seconds": 15.579
+        },
+        {
+          "update": 193,
+          "frames": 198620,
+          "at": 1794610259.023,
+          "wall_seconds": 19.292
+        },
+        {
+          "update": 194,
+          "frames": 199644,
+          "at": 1794610274.83,
+          "wall_seconds": 15.807
+        },
+        {
+          "update": 195,
+          "frames": 200000,
+          "at": 1794610279.541,
+          "wall_seconds": 4.711
+        }
+      ]
+    },
+    "data_dir_check": {
+      "data_dir": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/engine-data-r3b200",
+      "fail_closed": true,
+      "forbidden_markers": [
+        "/root/v400-data",
+        ".tmp_v400_",
+        ".tmp_v410_",
+        "Document/Update/Alpha/v4.0.0",
+        "Document/Update/Alpha/v4.1.0",
+        "Document/Update/Alpha/v4.2.0/evidence/T02",
+        "Document/Update/Alpha/v4.2.0/evidence/T03",
+        "Document/Update/Alpha/v4.2.0/evidence/T04",
+        "Document/Update/Alpha/v4.2.0/evidence/T05"
+      ]
+    },
+    "declaration": "R2 uses engine-truth reward and termination, so it is a training-time privileged diagnostic: it is NOT strict pixel self-improvement (R1) and no result here may be reported as R1."
+  },
+  "dev": {
+    "arms": {
+      "R0": {
+        "diag_first_death": {
+          "seeds": {
+            "1000": 1409,
+            "1001": 1728,
+            "1002": 1499,
+            "1003": 1557,
+            "1004": 1410,
+            "1005": 1605,
+            "1006": 1397,
+            "1007": 1408,
+            "1008": 1431,
+            "1009": 1492,
+            "1010": 1588,
+            "1011": 1413,
+            "1012": 1897,
+            "1013": 1640,
+            "1014": 2138,
+            "1015": 2185,
+            "1016": 1567,
+            "1017": 1494,
+            "1018": 2085,
+            "1019": 1793
+          },
+          "mean": 1636.8,
+          "sd": 254.8109,
+          "median": 1562.0,
+          "min": 1397,
+          "max": 2185,
+          "first": 1409,
+          "last": 1793,
+          "count": 20,
+          "clears": 0,
+          "invalid": 0,
+          "ends": {
+            "death_stop": 20
+          },
+          "deaths_mean": 1.0,
+          "errors": 0,
+          "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev/merged-R0.json"
+        },
+        "s1n": {
+          "seeds": {
+            "1000": 2137,
+            "1001": 3430,
+            "1002": 2185,
+            "1003": 2731,
+            "1004": 2456,
+            "1005": 2579,
+            "1006": 2572,
+            "1007": 3280,
+            "1008": 3181,
+            "1009": 3940,
+            "1010": 2528,
+            "1011": 2540,
+            "1012": 3080,
+            "1013": 3034,
+            "1014": 3078,
+            "1015": 4964,
+            "1016": 2886,
+            "1017": 3472,
+            "1018": 3092,
+            "1019": 3065
+          },
+          "mean": 3011.5,
+          "sd": 643.5314,
+          "median": 3049.5,
+          "min": 2137,
+          "max": 4964,
+          "first": 2137,
+          "last": 3065,
+          "count": 20,
+          "clears": 0,
+          "invalid": 0,
+          "ends": {
+            "game_over": 20
+          },
+          "deaths_mean": 3.0,
+          "errors": 0,
+          "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev/merged-R0.json"
+        }
+      },
+      "R2_no_anchor": {
+        "diag_first_death": {
+          "seeds": {
+            "1000": 1017,
+            "1001": 763,
+            "1002": 834,
+            "1003": 733,
+            "1004": 975,
+            "1005": 949,
+            "1006": 737,
+            "1007": 751,
+            "1008": 950,
+            "1009": 733,
+            "1010": 754,
+            "1011": 834,
+            "1012": 1365,
+            "1013": 947,
+            "1014": 742,
+            "1015": 829,
+            "1016": 959,
+            "1017": 1096,
+            "1018": 1086,
+            "1019": 733
+          },
+          "mean": 889.35,
+          "sd": 166.7195,
+          "median": 834.0,
+          "min": 733,
+          "max": 1365,
+          "first": 1017,
+          "last": 733,
+          "count": 20,
+          "clears": 0,
+          "invalid": 0,
+          "ends": {
+            "death_stop": 20
+          },
+          "deaths_mean": 1.0,
+          "errors": 0,
+          "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev2/merged-R2.json"
+        },
+        "s1n": {
+          "seeds": {
+            "1000": 1835,
+            "1001": 1667,
+            "1002": 2102,
+            "1003": 1879,
+            "1004": 1773,
+            "1005": 1818,
+            "1006": 1868,
+            "1007": 1724,
+            "1008": 1788,
+            "1009": 1636,
+            "1010": 2023,
+            "1011": 1827,
+            "1012": 2215,
+            "1013": 2182,
+            "1014": 1813,
+            "1015": 1874,
+            "1016": 1798,
+            "1017": 2337,
+            "1018": 2094,
+            "1019": 1875
+          },
+          "mean": 1906.4,
+          "sd": 189.6144,
+          "median": 1851.5,
+          "min": 1636,
+          "max": 2337,
+          "first": 1835,
+          "last": 1875,
+          "count": 20,
+          "clears": 0,
+          "invalid": 0,
+          "ends": {
+            "game_over": 20
+          },
+          "deaths_mean": 3.0,
+          "errors": 0,
+          "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev2/merged-R2.json"
+        }
+      },
+      "R2_plus_KL": {
+        "diag_first_death": {
+          "seeds": {
+            "1000": 1425,
+            "1001": 1655,
+            "1002": 1408,
+            "1003": 1384,
+            "1004": 1481,
+            "1005": 1423,
+            "1006": 1743,
+            "1007": 1751,
+            "1008": 1433,
+            "1009": 1417,
+            "1010": 1613,
+            "1011": 1117,
+            "1012": 1412,
+            "1013": 1410,
+            "1014": 1564,
+            "1015": 1555,
+            "1016": 1734,
+            "1017": 1621,
+            "1018": 1699,
+            "1019": 1397
+          },
+          "mean": 1512.1,
+          "sd": 160.6549,
+          "median": 1457.0,
+          "min": 1117,
+          "max": 1751,
+          "first": 1425,
+          "last": 1397,
+          "count": 20,
+          "clears": 0,
+          "invalid": 0,
+          "ends": {
+            "death_stop": 20
+          },
+          "deaths_mean": 1.0,
+          "errors": 0,
+          "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/r3/kl_arm_reference.json"
+        },
+        "s1n": {
+          "seeds": {
+            "1000": 2070,
+            "1001": 3479,
+            "1002": 2254,
+            "1003": 3022,
+            "1004": 2213,
+            "1005": 2388,
+            "1006": 2949,
+            "1007": 3053,
+            "1008": 2692,
+            "1009": 2292,
+            "1010": 2688,
+            "1011": 2134,
+            "1012": 2317,
+            "1013": 2407,
+            "1014": 2414,
+            "1015": 2583,
+            "1016": 3292,
+            "1017": 2730,
+            "1018": 2502,
+            "1019": 3041
+          },
+          "mean": 2626.0,
+          "sd": 399.9897,
+          "median": 2542.5,
+          "min": 2070,
+          "max": 3479,
+          "first": 2070,
+          "last": 3041,
+          "count": 20,
+          "clears": 0,
+          "invalid": 0,
+          "ends": {
+            "game_over": 20
+          },
+          "deaths_mean": 3.0,
+          "errors": 0,
+          "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/r3/kl_arm_reference.json"
+        }
+      },
+      "R3_50k": {
+        "diag_first_death": {
+          "seeds": {
+            "1000": 1788,
+            "1001": 816,
+            "1002": 1929,
+            "1003": 1494,
+            "1004": 1410,
+            "1005": 1492,
+            "1006": 1945,
+            "1007": 1546,
+            "1008": 1816,
+            "1009": 1489,
+            "1010": 1363,
+            "1011": 1485,
+            "1012": 1500,
+            "1013": 1568,
+            "1014": 1971,
+            "1015": 1295,
+            "1016": 2392,
+            "1017": 1495,
+            "1018": 1544,
+            "1019": 1446
+          },
+          "mean": 1589.2,
+          "sd": 322.1679,
+          "median": 1497.5,
+          "min": 816,
+          "max": 2392,
+          "first": 1788,
+          "last": 1446,
+          "count": 20,
+          "clears": 0,
+          "invalid": 0,
+          "ends": {
+            "death_stop": 20
+          },
+          "deaths_mean": 1.0,
+          "errors": 0,
+          "source": "T06/dev-r3/R3-*.json (4 batches/ruler)"
+        },
+        "s1n": {
+          "seeds": {
+            "1000": 3022,
+            "1001": 1920,
+            "1002": 4701,
+            "1003": 2407,
+            "1004": 2210,
+            "1005": 2480,
+            "1006": 3418,
+            "1007": 2889,
+            "1008": 3509,
+            "1009": 2373,
+            "1010": 2180,
+            "1011": 3578,
+            "1012": 3391,
+            "1013": 2537,
+            "1014": 3270,
+            "1015": 2704,
+            "1016": 3566,
+            "1017": 2258,
+            "1018": 3007,
+            "1019": 2412
+          },
+          "mean": 2891.6,
+          "sd": 675.1858,
+          "median": 2796.5,
+          "min": 1920,
+          "max": 4701,
+          "first": 3022,
+          "last": 2412,
+          "count": 20,
+          "clears": 0,
+          "invalid": 0,
+          "ends": {
+            "game_over": 20
+          },
+          "deaths_mean": 3.0,
+          "errors": 0,
+          "source": "T06/dev-r3/R3-*.json (4 batches/ruler)"
+        }
+      },
+      "R3B200": {
+        "diag_first_death": {
+          "seeds": {
+            "1000": 1306,
+            "1001": 1990,
+            "1002": 1599,
+            "1003": 1411,
+            "1004": 1409,
+            "1005": 1945,
+            "1006": 1691,
+            "1007": 1370,
+            "1008": 1384,
+            "1009": 1961,
+            "1010": 1407,
+            "1011": 1413,
+            "1012": 1407,
+            "1013": 1412,
+            "1014": 1442,
+            "1015": 1968,
+            "1016": 1413,
+            "1017": 1612,
+            "1018": 1939,
+            "1019": 1425
+          },
+          "count": 20,
+          "mean": 1575.2,
+          "sd": 245.1078,
+          "median": 1419.0,
+          "min": 1306,
+          "max": 1990,
+          "clears": 0,
+          "invalid": 0,
+          "ends": {
+            "death_stop": 20
+          },
+          "deaths_mean": 1.0,
+          "errors": 0,
+          "files": [
+            "R3B200-diag_first_death-1000-1001-1002-1003-1004.json",
+            "R3B200-diag_first_death-1005-1006-1007-1008-1009.json",
+            "R3B200-diag_first_death-1010-1011-1012-1013-1014.json",
+            "R3B200-diag_first_death-1015-1016-1017-1018-1019.json",
+            "R3B200-s1n-1000-1001-1002-1003-1004.json",
+            "R3B200-s1n-1005-1006-1007-1008-1009.json",
+            "R3B200-s1n-1010-1011-1012-1013-1014.json",
+            "R3B200-s1n-1015-1016-1017-1018-1019.json"
+          ]
+        },
+        "s1n": {
+          "seeds": {
+            "1000": 2482,
+            "1001": 3038,
+            "1002": 3141,
+            "1003": 2155,
+            "1004": 3505,
+            "1005": 2717,
+            "1006": 3520,
+            "1007": 2501,
+            "1008": 3355,
+            "1009": 3251,
+            "1010": 2800,
+            "1011": 2339,
+            "1012": 2317,
+            "1013": 3148,
+            "1014": 2452,
+            "1015": 3033,
+            "1016": 2143,
+            "1017": 3010,
+            "1018": 3076,
+            "1019": 2189
+          },
+          "count": 20,
+          "mean": 2808.6,
+          "sd": 457.6421,
+          "median": 2905.0,
+          "min": 2143,
+          "max": 3520,
+          "clears": 0,
+          "invalid": 0,
+          "ends": {
+            "game_over": 20
+          },
+          "deaths_mean": 3.0,
+          "errors": 0,
+          "files": [
+            "R3B200-diag_first_death-1000-1001-1002-1003-1004.json",
+            "R3B200-diag_first_death-1005-1006-1007-1008-1009.json",
+            "R3B200-diag_first_death-1010-1011-1012-1013-1014.json",
+            "R3B200-diag_first_death-1015-1016-1017-1018-1019.json",
+            "R3B200-s1n-1000-1001-1002-1003-1004.json",
+            "R3B200-s1n-1005-1006-1007-1008-1009.json",
+            "R3B200-s1n-1010-1011-1012-1013-1014.json",
+            "R3B200-s1n-1015-1016-1017-1018-1019.json"
+          ]
+        }
+      }
+    },
+    "per_seed": {
+      "R3B200-R0-diag_first_death": {
+        "seeds": [
+          1000,
+          1001,
+          1002,
+          1003,
+          1004,
+          1005,
+          1006,
+          1007,
+          1008,
+          1009,
+          1010,
+          1011,
+          1012,
+          1013,
+          1014,
+          1015,
+          1016,
+          1017,
+          1018,
+          1019
+        ],
+        "delta": [
+          -103,
+          262,
+          100,
+          -146,
+          -1,
+          340,
+          294,
+          -38,
+          -47,
+          469,
+          -181,
+          0,
+          -490,
+          -228,
+          -696,
+          -217,
+          -154,
+          118,
+          -146,
+          -368
+        ],
+        "mean": -61.6,
+        "median": -75.0,
+        "positive": 6,
+        "negative": 13,
+        "zero": 1,
+        "min": -696,
+        "max": 469,
+        "paired_inference": {
+          "n": 20,
+          "mean": -61.6,
+          "sd": 282.01,
+          "standard_error": 63.059,
+          "t": -0.977,
+          "t_critical_95": 2.093,
+          "ci95_low": -193.583,
+          "ci95_high": 70.383,
+          "ci95_excludes_zero": false
+        },
+        "pairs": [
+          [
+            1000,
+            1306,
+            1409,
+            -103
+          ],
+          [
+            1001,
+            1990,
+            1728,
+            262
+          ],
+          [
+            1002,
+            1599,
+            1499,
+            100
+          ],
+          [
+            1003,
+            1411,
+            1557,
+            -146
+          ],
+          [
+            1004,
+            1409,
+            1410,
+            -1
+          ],
+          [
+            1005,
+            1945,
+            1605,
+            340
+          ],
+          [
+            1006,
+            1691,
+            1397,
+            294
+          ],
+          [
+            1007,
+            1370,
+            1408,
+            -38
+          ],
+          [
+            1008,
+            1384,
+            1431,
+            -47
+          ],
+          [
+            1009,
+            1961,
+            1492,
+            469
+          ],
+          [
+            1010,
+            1407,
+            1588,
+            -181
+          ],
+          [
+            1011,
+            1413,
+            1413,
+            0
+          ],
+          [
+            1012,
+            1407,
+            1897,
+            -490
+          ],
+          [
+            1013,
+            1412,
+            1640,
+            -228
+          ],
+          [
+            1014,
+            1442,
+            2138,
+            -696
+          ],
+          [
+            1015,
+            1968,
+            2185,
+            -217
+          ],
+          [
+            1016,
+            1413,
+            1567,
+            -154
+          ],
+          [
+            1017,
+            1612,
+            1494,
+            118
+          ],
+          [
+            1018,
+            1939,
+            2085,
+            -146
+          ],
+          [
+            1019,
+            1425,
+            1793,
+            -368
+          ]
+        ]
+      },
+      "R3B200-R0-s1n": {
+        "seeds": [
+          1000,
+          1001,
+          1002,
+          1003,
+          1004,
+          1005,
+          1006,
+          1007,
+          1008,
+          1009,
+          1010,
+          1011,
+          1012,
+          1013,
+          1014,
+          1015,
+          1016,
+          1017,
+          1018,
+          1019
+        ],
+        "delta": [
+          345,
+          -392,
+          956,
+          -576,
+          1049,
+          138,
+          948,
+          -779,
+          174,
+          -689,
+          272,
+          -201,
+          -763,
+          114,
+          -626,
+          -1931,
+          -743,
+          -462,
+          -16,
+          -876
+        ],
+        "mean": -202.9,
+        "median": -296.5,
+        "positive": 8,
+        "negative": 12,
+        "zero": 0,
+        "min": -1931,
+        "max": 1049,
+        "paired_inference": {
+          "n": 20,
+          "mean": -202.9,
+          "sd": 732.276,
+          "standard_error": 163.742,
+          "t": -1.239,
+          "t_critical_95": 2.093,
+          "ci95_low": -545.612,
+          "ci95_high": 139.812,
+          "ci95_excludes_zero": false
+        },
+        "pairs": [
+          [
+            1000,
+            2482,
+            2137,
+            345
+          ],
+          [
+            1001,
+            3038,
+            3430,
+            -392
+          ],
+          [
+            1002,
+            3141,
+            2185,
+            956
+          ],
+          [
+            1003,
+            2155,
+            2731,
+            -576
+          ],
+          [
+            1004,
+            3505,
+            2456,
+            1049
+          ],
+          [
+            1005,
+            2717,
+            2579,
+            138
+          ],
+          [
+            1006,
+            3520,
+            2572,
+            948
+          ],
+          [
+            1007,
+            2501,
+            3280,
+            -779
+          ],
+          [
+            1008,
+            3355,
+            3181,
+            174
+          ],
+          [
+            1009,
+            3251,
+            3940,
+            -689
+          ],
+          [
+            1010,
+            2800,
+            2528,
+            272
+          ],
+          [
+            1011,
+            2339,
+            2540,
+            -201
+          ],
+          [
+            1012,
+            2317,
+            3080,
+            -763
+          ],
+          [
+            1013,
+            3148,
+            3034,
+            114
+          ],
+          [
+            1014,
+            2452,
+            3078,
+            -626
+          ],
+          [
+            1015,
+            3033,
+            4964,
+            -1931
+          ],
+          [
+            1016,
+            2143,
+            2886,
+            -743
+          ],
+          [
+            1017,
+            3010,
+            3472,
+            -462
+          ],
+          [
+            1018,
+            3076,
+            3092,
+            -16
+          ],
+          [
+            1019,
+            2189,
+            3065,
+            -876
+          ]
+        ]
+      },
+      "R3B200-R2_no_anchor-diag_first_death": {
+        "seeds": [
+          1000,
+          1001,
+          1002,
+          1003,
+          1004,
+          1005,
+          1006,
+          1007,
+          1008,
+          1009,
+          1010,
+          1011,
+          1012,
+          1013,
+          1014,
+          1015,
+          1016,
+          1017,
+          1018,
+          1019
+        ],
+        "delta": [
+          289,
+          1227,
+          765,
+          678,
+          434,
+          996,
+          954,
+          619,
+          434,
+          1228,
+          653,
+          579,
+          42,
+          465,
+          700,
+          1139,
+          454,
+          516,
+          853,
+          692
+        ],
+        "mean": 685.85,
+        "median": 665.5,
+        "positive": 20,
+        "negative": 0,
+        "zero": 0,
+        "min": 42,
+        "max": 1228,
+        "paired_inference": {
+          "n": 20,
+          "mean": 685.85,
+          "sd": 311.359,
+          "standard_error": 69.622,
+          "t": 9.851,
+          "t_critical_95": 2.093,
+          "ci95_low": 540.131,
+          "ci95_high": 831.569,
+          "ci95_excludes_zero": true
+        },
+        "pairs": [
+          [
+            1000,
+            1306,
+            1017,
+            289
+          ],
+          [
+            1001,
+            1990,
+            763,
+            1227
+          ],
+          [
+            1002,
+            1599,
+            834,
+            765
+          ],
+          [
+            1003,
+            1411,
+            733,
+            678
+          ],
+          [
+            1004,
+            1409,
+            975,
+            434
+          ],
+          [
+            1005,
+            1945,
+            949,
+            996
+          ],
+          [
+            1006,
+            1691,
+            737,
+            954
+          ],
+          [
+            1007,
+            1370,
+            751,
+            619
+          ],
+          [
+            1008,
+            1384,
+            950,
+            434
+          ],
+          [
+            1009,
+            1961,
+            733,
+            1228
+          ],
+          [
+            1010,
+            1407,
+            754,
+            653
+          ],
+          [
+            1011,
+            1413,
+            834,
+            579
+          ],
+          [
+            1012,
+            1407,
+            1365,
+            42
+          ],
+          [
+            1013,
+            1412,
+            947,
+            465
+          ],
+          [
+            1014,
+            1442,
+            742,
+            700
+          ],
+          [
+            1015,
+            1968,
+            829,
+            1139
+          ],
+          [
+            1016,
+            1413,
+            959,
+            454
+          ],
+          [
+            1017,
+            1612,
+            1096,
+            516
+          ],
+          [
+            1018,
+            1939,
+            1086,
+            853
+          ],
+          [
+            1019,
+            1425,
+            733,
+            692
+          ]
+        ]
+      },
+      "R3B200-R2_no_anchor-s1n": {
+        "seeds": [
+          1000,
+          1001,
+          1002,
+          1003,
+          1004,
+          1005,
+          1006,
+          1007,
+          1008,
+          1009,
+          1010,
+          1011,
+          1012,
+          1013,
+          1014,
+          1015,
+          1016,
+          1017,
+          1018,
+          1019
+        ],
+        "delta": [
+          647,
+          1371,
+          1039,
+          276,
+          1732,
+          899,
+          1652,
+          777,
+          1567,
+          1615,
+          777,
+          512,
+          102,
+          966,
+          639,
+          1159,
+          345,
+          673,
+          982,
+          314
+        ],
+        "mean": 902.2,
+        "median": 838.0,
+        "positive": 20,
+        "negative": 0,
+        "zero": 0,
+        "min": 102,
+        "max": 1732,
+        "paired_inference": {
+          "n": 20,
+          "mean": 902.2,
+          "sd": 490.71,
+          "standard_error": 109.726,
+          "t": 8.222,
+          "t_critical_95": 2.093,
+          "ci95_low": 672.543,
+          "ci95_high": 1131.857,
+          "ci95_excludes_zero": true
+        },
+        "pairs": [
+          [
+            1000,
+            2482,
+            1835,
+            647
+          ],
+          [
+            1001,
+            3038,
+            1667,
+            1371
+          ],
+          [
+            1002,
+            3141,
+            2102,
+            1039
+          ],
+          [
+            1003,
+            2155,
+            1879,
+            276
+          ],
+          [
+            1004,
+            3505,
+            1773,
+            1732
+          ],
+          [
+            1005,
+            2717,
+            1818,
+            899
+          ],
+          [
+            1006,
+            3520,
+            1868,
+            1652
+          ],
+          [
+            1007,
+            2501,
+            1724,
+            777
+          ],
+          [
+            1008,
+            3355,
+            1788,
+            1567
+          ],
+          [
+            1009,
+            3251,
+            1636,
+            1615
+          ],
+          [
+            1010,
+            2800,
+            2023,
+            777
+          ],
+          [
+            1011,
+            2339,
+            1827,
+            512
+          ],
+          [
+            1012,
+            2317,
+            2215,
+            102
+          ],
+          [
+            1013,
+            3148,
+            2182,
+            966
+          ],
+          [
+            1014,
+            2452,
+            1813,
+            639
+          ],
+          [
+            1015,
+            3033,
+            1874,
+            1159
+          ],
+          [
+            1016,
+            2143,
+            1798,
+            345
+          ],
+          [
+            1017,
+            3010,
+            2337,
+            673
+          ],
+          [
+            1018,
+            3076,
+            2094,
+            982
+          ],
+          [
+            1019,
+            2189,
+            1875,
+            314
+          ]
+        ]
+      },
+      "R3B200-R2_plus_KL-diag_first_death": {
+        "seeds": [
+          1000,
+          1001,
+          1002,
+          1003,
+          1004,
+          1005,
+          1006,
+          1007,
+          1008,
+          1009,
+          1010,
+          1011,
+          1012,
+          1013,
+          1014,
+          1015,
+          1016,
+          1017,
+          1018,
+          1019
+        ],
+        "delta": [
+          -119,
+          335,
+          191,
+          27,
+          -72,
+          522,
+          -52,
+          -381,
+          -49,
+          544,
+          -206,
+          296,
+          -5,
+          2,
+          -122,
+          413,
+          -321,
+          -9,
+          240,
+          28
+        ],
+        "mean": 63.1,
+        "median": -1.5,
+        "positive": 10,
+        "negative": 10,
+        "zero": 0,
+        "min": -381,
+        "max": 544,
+        "paired_inference": {
+          "n": 20,
+          "mean": 63.1,
+          "sd": 260.048,
+          "standard_error": 58.148,
+          "t": 1.085,
+          "t_critical_95": 2.093,
+          "ci95_low": -58.605,
+          "ci95_high": 184.805,
+          "ci95_excludes_zero": false
+        },
+        "pairs": [
+          [
+            1000,
+            1306,
+            1425,
+            -119
+          ],
+          [
+            1001,
+            1990,
+            1655,
+            335
+          ],
+          [
+            1002,
+            1599,
+            1408,
+            191
+          ],
+          [
+            1003,
+            1411,
+            1384,
+            27
+          ],
+          [
+            1004,
+            1409,
+            1481,
+            -72
+          ],
+          [
+            1005,
+            1945,
+            1423,
+            522
+          ],
+          [
+            1006,
+            1691,
+            1743,
+            -52
+          ],
+          [
+            1007,
+            1370,
+            1751,
+            -381
+          ],
+          [
+            1008,
+            1384,
+            1433,
+            -49
+          ],
+          [
+            1009,
+            1961,
+            1417,
+            544
+          ],
+          [
+            1010,
+            1407,
+            1613,
+            -206
+          ],
+          [
+            1011,
+            1413,
+            1117,
+            296
+          ],
+          [
+            1012,
+            1407,
+            1412,
+            -5
+          ],
+          [
+            1013,
+            1412,
+            1410,
+            2
+          ],
+          [
+            1014,
+            1442,
+            1564,
+            -122
+          ],
+          [
+            1015,
+            1968,
+            1555,
+            413
+          ],
+          [
+            1016,
+            1413,
+            1734,
+            -321
+          ],
+          [
+            1017,
+            1612,
+            1621,
+            -9
+          ],
+          [
+            1018,
+            1939,
+            1699,
+            240
+          ],
+          [
+            1019,
+            1425,
+            1397,
+            28
+          ]
+        ]
+      },
+      "R3B200-R2_plus_KL-s1n": {
+        "seeds": [
+          1000,
+          1001,
+          1002,
+          1003,
+          1004,
+          1005,
+          1006,
+          1007,
+          1008,
+          1009,
+          1010,
+          1011,
+          1012,
+          1013,
+          1014,
+          1015,
+          1016,
+          1017,
+          1018,
+          1019
+        ],
+        "delta": [
+          412,
+          -441,
+          887,
+          -867,
+          1292,
+          329,
+          571,
+          -552,
+          663,
+          959,
+          112,
+          205,
+          0,
+          741,
+          38,
+          450,
+          -1149,
+          280,
+          574,
+          -852
+        ],
+        "mean": 182.6,
+        "median": 304.5,
+        "positive": 14,
+        "negative": 5,
+        "zero": 1,
+        "min": -1149,
+        "max": 1292,
+        "paired_inference": {
+          "n": 20,
+          "mean": 182.6,
+          "sd": 659.541,
+          "standard_error": 147.478,
+          "t": 1.238,
+          "t_critical_95": 2.093,
+          "ci95_low": -126.071,
+          "ci95_high": 491.271,
+          "ci95_excludes_zero": false
+        },
+        "pairs": [
+          [
+            1000,
+            2482,
+            2070,
+            412
+          ],
+          [
+            1001,
+            3038,
+            3479,
+            -441
+          ],
+          [
+            1002,
+            3141,
+            2254,
+            887
+          ],
+          [
+            1003,
+            2155,
+            3022,
+            -867
+          ],
+          [
+            1004,
+            3505,
+            2213,
+            1292
+          ],
+          [
+            1005,
+            2717,
+            2388,
+            329
+          ],
+          [
+            1006,
+            3520,
+            2949,
+            571
+          ],
+          [
+            1007,
+            2501,
+            3053,
+            -552
+          ],
+          [
+            1008,
+            3355,
+            2692,
+            663
+          ],
+          [
+            1009,
+            3251,
+            2292,
+            959
+          ],
+          [
+            1010,
+            2800,
+            2688,
+            112
+          ],
+          [
+            1011,
+            2339,
+            2134,
+            205
+          ],
+          [
+            1012,
+            2317,
+            2317,
+            0
+          ],
+          [
+            1013,
+            3148,
+            2407,
+            741
+          ],
+          [
+            1014,
+            2452,
+            2414,
+            38
+          ],
+          [
+            1015,
+            3033,
+            2583,
+            450
+          ],
+          [
+            1016,
+            2143,
+            3292,
+            -1149
+          ],
+          [
+            1017,
+            3010,
+            2730,
+            280
+          ],
+          [
+            1018,
+            3076,
+            2502,
+            574
+          ],
+          [
+            1019,
+            2189,
+            3041,
+            -852
+          ]
+        ]
+      },
+      "R3B200-R3_50k-diag_first_death": {
+        "seeds": [
+          1000,
+          1001,
+          1002,
+          1003,
+          1004,
+          1005,
+          1006,
+          1007,
+          1008,
+          1009,
+          1010,
+          1011,
+          1012,
+          1013,
+          1014,
+          1015,
+          1016,
+          1017,
+          1018,
+          1019
+        ],
+        "delta": [
+          -482,
+          1174,
+          -330,
+          -83,
+          -1,
+          453,
+          -254,
+          -176,
+          -432,
+          472,
+          44,
+          -72,
+          -93,
+          -156,
+          -529,
+          673,
+          -979,
+          117,
+          395,
+          -21
+        ],
+        "mean": -14.0,
+        "median": -77.5,
+        "positive": 7,
+        "negative": 13,
+        "zero": 0,
+        "min": -979,
+        "max": 1174,
+        "paired_inference": {
+          "n": 20,
+          "mean": -14.0,
+          "sd": 477.606,
+          "standard_error": 106.796,
+          "t": -0.131,
+          "t_critical_95": 2.093,
+          "ci95_low": -237.524,
+          "ci95_high": 209.524,
+          "ci95_excludes_zero": false
+        },
+        "pairs": [
+          [
+            1000,
+            1306,
+            1788,
+            -482
+          ],
+          [
+            1001,
+            1990,
+            816,
+            1174
+          ],
+          [
+            1002,
+            1599,
+            1929,
+            -330
+          ],
+          [
+            1003,
+            1411,
+            1494,
+            -83
+          ],
+          [
+            1004,
+            1409,
+            1410,
+            -1
+          ],
+          [
+            1005,
+            1945,
+            1492,
+            453
+          ],
+          [
+            1006,
+            1691,
+            1945,
+            -254
+          ],
+          [
+            1007,
+            1370,
+            1546,
+            -176
+          ],
+          [
+            1008,
+            1384,
+            1816,
+            -432
+          ],
+          [
+            1009,
+            1961,
+            1489,
+            472
+          ],
+          [
+            1010,
+            1407,
+            1363,
+            44
+          ],
+          [
+            1011,
+            1413,
+            1485,
+            -72
+          ],
+          [
+            1012,
+            1407,
+            1500,
+            -93
+          ],
+          [
+            1013,
+            1412,
+            1568,
+            -156
+          ],
+          [
+            1014,
+            1442,
+            1971,
+            -529
+          ],
+          [
+            1015,
+            1968,
+            1295,
+            673
+          ],
+          [
+            1016,
+            1413,
+            2392,
+            -979
+          ],
+          [
+            1017,
+            1612,
+            1495,
+            117
+          ],
+          [
+            1018,
+            1939,
+            1544,
+            395
+          ],
+          [
+            1019,
+            1425,
+            1446,
+            -21
+          ]
+        ]
+      },
+      "R3B200-R3_50k-s1n": {
+        "seeds": [
+          1000,
+          1001,
+          1002,
+          1003,
+          1004,
+          1005,
+          1006,
+          1007,
+          1008,
+          1009,
+          1010,
+          1011,
+          1012,
+          1013,
+          1014,
+          1015,
+          1016,
+          1017,
+          1018,
+          1019
+        ],
+        "delta": [
+          -540,
+          1118,
+          -1560,
+          -252,
+          1295,
+          237,
+          102,
+          -388,
+          -154,
+          878,
+          620,
+          -1239,
+          -1074,
+          611,
+          -818,
+          329,
+          -1423,
+          752,
+          69,
+          -223
+        ],
+        "mean": -83.0,
+        "median": -42.5,
+        "positive": 10,
+        "negative": 10,
+        "zero": 0,
+        "min": -1560,
+        "max": 1295,
+        "paired_inference": {
+          "n": 20,
+          "mean": -83.0,
+          "sd": 841.621,
+          "standard_error": 188.192,
+          "t": -0.441,
+          "t_critical_95": 2.093,
+          "ci95_low": -476.886,
+          "ci95_high": 310.886,
+          "ci95_excludes_zero": false
+        },
+        "pairs": [
+          [
+            1000,
+            2482,
+            3022,
+            -540
+          ],
+          [
+            1001,
+            3038,
+            1920,
+            1118
+          ],
+          [
+            1002,
+            3141,
+            4701,
+            -1560
+          ],
+          [
+            1003,
+            2155,
+            2407,
+            -252
+          ],
+          [
+            1004,
+            3505,
+            2210,
+            1295
+          ],
+          [
+            1005,
+            2717,
+            2480,
+            237
+          ],
+          [
+            1006,
+            3520,
+            3418,
+            102
+          ],
+          [
+            1007,
+            2501,
+            2889,
+            -388
+          ],
+          [
+            1008,
+            3355,
+            3509,
+            -154
+          ],
+          [
+            1009,
+            3251,
+            2373,
+            878
+          ],
+          [
+            1010,
+            2800,
+            2180,
+            620
+          ],
+          [
+            1011,
+            2339,
+            3578,
+            -1239
+          ],
+          [
+            1012,
+            2317,
+            3391,
+            -1074
+          ],
+          [
+            1013,
+            3148,
+            2537,
+            611
+          ],
+          [
+            1014,
+            2452,
+            3270,
+            -818
+          ],
+          [
+            1015,
+            3033,
+            2704,
+            329
+          ],
+          [
+            1016,
+            2143,
+            3566,
+            -1423
+          ],
+          [
+            1017,
+            3010,
+            2258,
+            752
+          ],
+          [
+            1018,
+            3076,
+            3007,
+            69
+          ],
+          [
+            1019,
+            2189,
+            2412,
+            -223
+          ]
+        ]
+      }
+    },
+    "pairing": {},
+    "frame_reference_fix": {}
+  },
+  "budget_curve": {
+    "means": {
+      "R0": {
+        "diag_first_death": 1636.8,
+        "s1n": 3011.5
+      },
+      "R2_no_anchor": {
+        "diag_first_death": 889.35,
+        "s1n": 1906.4
+      },
+      "R2_plus_KL": {
+        "diag_first_death": 1512.1,
+        "s1n": 2626.0
+      },
+      "R3_50k": {
+        "diag_first_death": 1589.2,
+        "s1n": 2891.6
+      },
+      "R3B200": {
+        "diag_first_death": 1575.2,
+        "s1n": 2808.6
+      }
+    },
+    "published_reference": {
+      "R0": {
+        "diag_first_death": 1636.8,
+        "s1n": 3011.5
+      },
+      "R2_no_anchor": {
+        "diag_first_death": 889.35,
+        "s1n": 1906.4
+      },
+      "R2_plus_KL": {
+        "diag_first_death": 1512.1,
+        "s1n": 2626.0
+      },
+      "R3_50k": {
+        "diag_first_death": 1589.2,
+        "s1n": 2891.6
+      }
+    },
+    "crosscheck": {
+      "R0": {
+        "diag_first_death": 0.0,
+        "s1n": 0.0
+      },
+      "R2_no_anchor": {
+        "diag_first_death": 0.0,
+        "s1n": 0.0
+      },
+      "R2_plus_KL": {
+        "diag_first_death": 0.0,
+        "s1n": 0.0
+      },
+      "R3_50k": {
+        "diag_first_death": 0.0,
+        "s1n": 0.0
+      }
+    },
+    "diag_first_death": {
+      "r0": 1636.8,
+      "r2_no_anchor": 889.35,
+      "r3_50k": 1589.2,
+      "r3b200_mean": 1575.2,
+      "delta_50k_to_200k": -14.0,
+      "delta_pct": -0.881,
+      "gap_r2_to_r0": 747.45,
+      "gap_closed_50k": 0.9363,
+      "gap_closed_200k": 0.9176,
+      "gap_closed_change": -0.0187,
+      "vs_r0": -61.6,
+      "vs_r0_pct": -3.763,
+      "vs_50k": -14.0,
+      "marginal_frames_per_10000_frames": -0.933,
+      "r3_50k_marginal_frames_per_10000_from_zero": 139.97
+    },
+    "s1n": {
+      "r0": 3011.5,
+      "r2_no_anchor": 1906.4,
+      "r3_50k": 2891.6,
+      "r3b200_mean": 2808.6,
+      "delta_50k_to_200k": -83.0,
+      "delta_pct": -2.87,
+      "gap_r2_to_r0": 1105.1,
+      "gap_closed_50k": 0.8915,
+      "gap_closed_200k": 0.8164,
+      "gap_closed_change": -0.0751,
+      "vs_r0": -202.9,
+      "vs_r0_pct": -6.738,
+      "vs_50k": -83.0,
+      "marginal_frames_per_10000_frames": -5.533,
+      "r3_50k_marginal_frames_per_10000_from_zero": 197.04
+    }
+  },
+  "prediction": {
+    "rule": "diag_first_death mean >= 1636.8 AND s1n mean >= 3011.5, n=20 each",
+    "legs": {
+      "diag_first_death": {
+        "threshold_frames": 1636.8,
+        "observed_frames": 1575.2,
+        "deviation_frames": -61.6,
+        "deviation_pct": -3.763,
+        "verdict": "fail"
+      },
+      "s1n": {
+        "threshold_frames": 3011.5,
+        "observed_frames": 2808.6,
+        "deviation_frames": -202.9,
+        "deviation_pct": -6.738,
+        "verdict": "fail"
+      }
+    },
+    "verdict": "fail",
+    "reading": "reward visibility is NOT the main cause of the remaining gap to R0: the 200k checkpoint still does not reach the untrained-but-anchored reference, so the next question is the policy side (advantage normalisation, rollout length) or the reward table, each needing its own pre-registration before its own run"
+  },
+  "five_arms": {
+    "R0": {
+      "diag_first_death_mean_frames": 1636.8,
+      "s1n_mean_frames": 3011.5,
+      "diag_clears": 0,
+      "s1n_clears": 0,
+      "n": 20,
+      "what": "the untrained anchored A0 checkpoint (T04, frozen)"
+    },
+    "R2_no_anchor": {
+      "diag_first_death_mean_frames": 889.35,
+      "s1n_mean_frames": 1906.4,
+      "diag_clears": 0,
+      "s1n_clears": 0,
+      "n": 20,
+      "what": "the 50k r2 run without the KL anchor"
+    },
+    "R2_plus_KL": {
+      "diag_first_death_mean_frames": 1512.1,
+      "s1n_mean_frames": 2626.0,
+      "diag_clears": 0,
+      "s1n_clears": 0,
+      "n": 20,
+      "what": "the 50k r2 run with the KL anchor"
+    },
+    "R3_50k": {
+      "diag_first_death_mean_frames": 1589.2,
+      "s1n_mean_frames": 2891.6,
+      "diag_clears": 0,
+      "s1n_clears": 0,
+      "n": 20,
+      "what": "the 50k r3 run with the KL anchor"
+    },
+    "R3B200": {
+      "diag_first_death_mean_frames": 1575.2,
+      "s1n_mean_frames": 2808.6,
+      "diag_clears": 0,
+      "s1n_clears": 0,
+      "n": 20,
+      "what": "the 200k r3 run with the KL anchor (this tier)"
+    }
+  },
+  "dev_batches": {
+    "count": 8,
+    "batches": [
+      {
+        "tag": "R3B200-diag_first_death-1000-1001-1002-1003-1004",
+        "ruler": "diag_first_death",
+        "seeds": [
+          1000,
+          1001,
+          1002,
+          1003,
+          1004
+        ],
+        "stream": "diag",
+        "returncode": 0,
+        "wall_seconds": 143.527,
+        "frames": [
+          1306,
+          1990,
+          1599,
+          1411,
+          1409
+        ],
+        "checkpoint_sha256": "35e92dfe90053a2dcee47bcf0f2d956efb5cd5d04a3ffa046ba2722b3dd09b01",
+        "summary_sha256": "7a6f168b366c2c6690056c9559688b4a22e213bf614a9b502f0719a22f3df693",
+        "loadavg_before": 3.4091796875
+      },
+      {
+        "tag": "R3B200-diag_first_death-1005-1006-1007-1008-1009",
+        "ruler": "diag_first_death",
+        "seeds": [
+          1005,
+          1006,
+          1007,
+          1008,
+          1009
+        ],
+        "stream": "diag",
+        "returncode": 0,
+        "wall_seconds": 154.854,
+        "frames": [
+          1945,
+          1691,
+          1370,
+          1384,
+          1961
+        ],
+        "checkpoint_sha256": "35e92dfe90053a2dcee47bcf0f2d956efb5cd5d04a3ffa046ba2722b3dd09b01",
+        "summary_sha256": "431e58e321acab018f8363c89c5bb9a4f9eccca2f262dc330e42cf86546b0881",
+        "loadavg_before": 4.0830078125
+      },
+      {
+        "tag": "R3B200-diag_first_death-1010-1011-1012-1013-1014",
+        "ruler": "diag_first_death",
+        "seeds": [
+          1010,
+          1011,
+          1012,
+          1013,
+          1014
+        ],
+        "stream": "diag",
+        "returncode": 0,
+        "wall_seconds": 137.501,
+        "frames": [
+          1407,
+          1413,
+          1407,
+          1412,
+          1442
+        ],
+        "checkpoint_sha256": "35e92dfe90053a2dcee47bcf0f2d956efb5cd5d04a3ffa046ba2722b3dd09b01",
+        "summary_sha256": "12581adc0505b2933877c65fe8210ba29a132b9c5430a2784240454fa7617bbf",
+        "loadavg_before": 3.06396484375
+      },
+      {
+        "tag": "R3B200-diag_first_death-1015-1016-1017-1018-1019",
+        "ruler": "diag_first_death",
+        "seeds": [
+          1015,
+          1016,
+          1017,
+          1018,
+          1019
+        ],
+        "stream": "diag",
+        "returncode": 0,
+        "wall_seconds": 137.161,
+        "frames": [
+          1968,
+          1413,
+          1612,
+          1939,
+          1425
+        ],
+        "checkpoint_sha256": "35e92dfe90053a2dcee47bcf0f2d956efb5cd5d04a3ffa046ba2722b3dd09b01",
+        "summary_sha256": "0be36ad3867b2257e3a41d1d9e65b7a3117b6727b8dbf94ac908ff08f579e6a1",
+        "loadavg_before": 1.65283203125
+      },
+      {
+        "tag": "R3B200-s1n-1000-1001-1002-1003-1004",
+        "ruler": "s1n",
+        "seeds": [
+          1000,
+          1001,
+          1002,
+          1003,
+          1004
+        ],
+        "stream": "s1n",
+        "returncode": 0,
+        "wall_seconds": 222.309,
+        "frames": [
+          2482,
+          3038,
+          3141,
+          2155,
+          3505
+        ],
+        "checkpoint_sha256": "35e92dfe90053a2dcee47bcf0f2d956efb5cd5d04a3ffa046ba2722b3dd09b01",
+        "summary_sha256": "5f000dec6733d36e083e6895ea45e31e5ed05aacb32aeb6a6e30715551082680",
+        "loadavg_before": 2.060546875
+      },
+      {
+        "tag": "R3B200-s1n-1005-1006-1007-1008-1009",
+        "ruler": "s1n",
+        "seeds": [
+          1005,
+          1006,
+          1007,
+          1008,
+          1009
+        ],
+        "stream": "s1n",
+        "returncode": 0,
+        "wall_seconds": 235.764,
+        "frames": [
+          2717,
+          3520,
+          2501,
+          3355,
+          3251
+        ],
+        "checkpoint_sha256": "35e92dfe90053a2dcee47bcf0f2d956efb5cd5d04a3ffa046ba2722b3dd09b01",
+        "summary_sha256": "4543eb74af36bda81f5e0ff15f193951d815231ea206e2558fa7dc1b90fa3ca7",
+        "loadavg_before": 2.91845703125
+      },
+      {
+        "tag": "R3B200-s1n-1010-1011-1012-1013-1014",
+        "ruler": "s1n",
+        "seeds": [
+          1010,
+          1011,
+          1012,
+          1013,
+          1014
+        ],
+        "stream": "s1n",
+        "returncode": 0,
+        "wall_seconds": 250.45,
+        "frames": [
+          2800,
+          2339,
+          2317,
+          3148,
+          2452
+        ],
+        "checkpoint_sha256": "35e92dfe90053a2dcee47bcf0f2d956efb5cd5d04a3ffa046ba2722b3dd09b01",
+        "summary_sha256": "efd2154032403c3b31226f91c1f5d7c3e5fa4a9d6d97737e6e6cc987dbcd6179",
+        "loadavg_before": 6.5654296875
+      },
+      {
+        "tag": "R3B200-s1n-1015-1016-1017-1018-1019",
+        "ruler": "s1n",
+        "seeds": [
+          1015,
+          1016,
+          1017,
+          1018,
+          1019
+        ],
+        "stream": "s1n",
+        "returncode": 0,
+        "wall_seconds": 258.202,
+        "frames": [
+          3033,
+          2143,
+          3010,
+          3076,
+          2189
+        ],
+        "checkpoint_sha256": "35e92dfe90053a2dcee47bcf0f2d956efb5cd5d04a3ffa046ba2722b3dd09b01",
+        "summary_sha256": "ebb6f0f734c24553e59b71e013898b607c81e1a2def551c0068b5c2ea5784dbb",
+        "loadavg_before": 6.87841796875
+      }
+    ],
+    "walls": {
+      "count": 8,
+      "mean": 192.471,
+      "sd": 53.90225243107061,
+      "median": 188.5815,
+      "min": 137.161,
+      "max": 258.202,
+      "first": 143.527,
+      "last": 258.202
+    },
+    "non_zero": [],
+    "total_wall_seconds": 1539.768
+  },
+  "sources": {
+    "r0": {
+      "path": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev/merged-R0.json",
+      "sha256": "625f1163e89ea95b4527672041417d7b99b072a021f105691a22c7e0e426626d"
+    },
+    "r2_no_anchor": {
+      "path": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev2/merged-R2.json",
+      "sha256": "0c2092a59f438720df78fec7e670373756d3a0a6ed7b2bb639ba647318cb7c1a"
+    },
+    "r2_plus_KL": {
+      "path": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/r3/kl_arm_reference.json",
+      "sha256": "0f3cb1d56f7d685824ec79a0859c4068195d6ab823a3625576a57f33aaf6c85c"
+    },
+    "r3_50k": {
+      "files": [
+        "R3-diag_first_death-1000-1001-1002-1003-1004.json",
+        "R3-diag_first_death-1005-1006-1007-1008-1009.json",
+        "R3-diag_first_death-1010-1011-1012-1013-1014.json",
+        "R3-diag_first_death-1015-1016-1017-1018-1019.json",
+        "R3-s1n-1000-1001-1002-1003-1004.json",
+        "R3-s1n-1005-1006-1007-1008-1009.json",
+        "R3-s1n-1010-1011-1012-1013-1014.json",
+        "R3-s1n-1015-1016-1017-1018-1019.json"
+      ],
+      "dir": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-r3"
+    },
+    "r3b200": {
+      "files": [
+        "R3B200-diag_first_death-1000-1001-1002-1003-1004.json",
+        "R3B200-diag_first_death-1005-1006-1007-1008-1009.json",
+        "R3B200-diag_first_death-1010-1011-1012-1013-1014.json",
+        "R3B200-diag_first_death-1015-1016-1017-1018-1019.json",
+        "R3B200-s1n-1000-1001-1002-1003-1004.json",
+        "R3B200-s1n-1005-1006-1007-1008-1009.json",
+        "R3B200-s1n-1010-1011-1012-1013-1014.json",
+        "R3B200-s1n-1015-1016-1017-1018-1019.json"
+      ],
+      "dir": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-r3b200"
+    },
+    "pilot": {
+      "path": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/b200/pilot-r3b200-a.json",
+      "sha256": "393cf2f4437380f326d36b2222c7c64ab74742cb12288541508fb9b0def18815"
+    },
+    "log": {
+      "path": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_b200/logs/pilot-a.log",
+      "sha256": "0fbde813c5bb283e7796ede01411542d0c9a87c6949075199b4b4e03d4d7ba9f"
+    }
+  }
+}

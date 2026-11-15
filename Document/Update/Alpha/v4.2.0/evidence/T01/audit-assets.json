@@ -1,0 +1,176 @@
+{
+  "schema": "v420-asset-audit/1",
+  "status": "pass",
+  "exit_code": 0,
+  "contract": "v420-contract/1",
+  "checks": [
+    {
+      "object": "py420",
+      "kind": "environment",
+      "path": "/root/v400-venv/bin/python",
+      "exists": true,
+      "status": "present-unhashed"
+    },
+    {
+      "object": "engine420",
+      "kind": "environment",
+      "path": "/root/Touhou_RL/third_party/th08-rl/build/rl_v3/th08-modern",
+      "exists": true,
+      "sha256_expected": "691bfd77b7eca3361aa8bb7af0977556a70cc73a070b29a2447222ba7a568ef6",
+      "sha256_observed": "691bfd77b7eca3361aa8bb7af0977556a70cc73a070b29a2447222ba7a568ef6",
+      "status": "verified"
+    },
+    {
+      "object": "data_dir",
+      "kind": "environment",
+      "path": "/root/v400-data/game",
+      "exists": true,
+      "status": "present-unhashed"
+    },
+    {
+      "object": "evaluator",
+      "kind": "evidence",
+      "path": "/mnt/d/WorkShop/Touhou_RL/tools/rl/v410_student_eval.py",
+      "exists": true,
+      "sha256_expected": "2db2caaf9089c1698cef9b6a682991a7594ebac47ae93244c3d9932591eddddc",
+      "sha256_observed": "2db2caaf9089c1698cef9b6a682991a7594ebac47ae93244c3d9932591eddddc",
+      "status": "verified"
+    },
+    {
+      "object": "v420_data",
+      "kind": "environment",
+      "path": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data",
+      "exists": true,
+      "status": "present-unhashed"
+    },
+    {
+      "object": "checkpoint:B0",
+      "kind": "evidence",
+      "path": "/mnt/d/WorkShop/Touhou_RL/.tmp_v410_wp04_arms/b0_seed0_last.pt",
+      "exists": true,
+      "sha256_expected": "3bc0ec4461701bebb2ffc551d61dffff77f15cd486125baf9db6eaafc741b3a6",
+      "sha256_observed": "3bc0ec4461701bebb2ffc551d61dffff77f15cd486125baf9db6eaafc741b3a6",
+      "status": "verified"
+    },
+    {
+      "object": "checkpoint:20k",
+      "kind": "evidence",
+      "path": "/mnt/d/WorkShop/Touhou_RL/.tmp_v410_wp05_train_beta05_20k/b0_s0_dagger_step20000.pt",
+      "exists": true,
+      "sha256_expected": "15ae1fd5b9a6e0cbbddfd668bb342444bdb44db123b5f7e56abf3c5e7215bd95",
+      "sha256_observed": "15ae1fd5b9a6e0cbbddfd668bb342444bdb44db123b5f7e56abf3c5e7215bd95",
+      "status": "verified"
+    }
+  ],
+  "checks_by_object": {
+    "py420": {
+      "object": "py420",
+      "kind": "environment",
+      "path": "/root/v400-venv/bin/python",
+      "exists": true,
+      "status": "present-unhashed"
+    },
+    "engine420": {
+      "object": "engine420",
+      "kind": "environment",
+      "path": "/root/Touhou_RL/third_party/th08-rl/build/rl_v3/th08-modern",
+      "exists": true,
+      "sha256_expected": "691bfd77b7eca3361aa8bb7af0977556a70cc73a070b29a2447222ba7a568ef6",
+      "sha256_observed": "691bfd77b7eca3361aa8bb7af0977556a70cc73a070b29a2447222ba7a568ef6",
+      "status": "verified"
+    },
+    "data_dir": {
+      "object": "data_dir",
+      "kind": "environment",
+      "path": "/root/v400-data/game",
+      "exists": true,
+      "status": "present-unhashed"
+    },
+    "evaluator": {
+      "object": "evaluator",
+      "kind": "evidence",
+      "path": "/mnt/d/WorkShop/Touhou_RL/tools/rl/v410_student_eval.py",
+      "exists": true,
+      "sha256_expected": "2db2caaf9089c1698cef9b6a682991a7594ebac47ae93244c3d9932591eddddc",
+      "sha256_observed": "2db2caaf9089c1698cef9b6a682991a7594ebac47ae93244c3d9932591eddddc",
+      "status": "verified"
+    },
+    "v420_data": {
+      "object": "v420_data",
+      "kind": "environment",
+      "path": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data",
+      "exists": true,
+      "status": "present-unhashed"
+    },
+    "checkpoint:B0": {
+      "object": "checkpoint:B0",
+      "kind": "evidence",
+      "path": "/mnt/d/WorkShop/Touhou_RL/.tmp_v410_wp04_arms/b0_seed0_last.pt",
+      "exists": true,
+      "sha256_expected": "3bc0ec4461701bebb2ffc551d61dffff77f15cd486125baf9db6eaafc741b3a6",
+      "sha256_observed": "3bc0ec4461701bebb2ffc551d61dffff77f15cd486125baf9db6eaafc741b3a6",
+      "status": "verified"
+    },
+    "checkpoint:20k": {
+      "object": "checkpoint:20k",
+      "kind": "evidence",
+      "path": "/mnt/d/WorkShop/Touhou_RL/.tmp_v410_wp05_train_beta05_20k/b0_s0_dagger_step20000.pt",
+      "exists": true,
+      "sha256_expected": "15ae1fd5b9a6e0cbbddfd668bb342444bdb44db123b5f7e56abf3c5e7215bd95",
+      "sha256_observed": "15ae1fd5b9a6e0cbbddfd668bb342444bdb44db123b5f7e56abf3c5e7215bd95",
+      "status": "verified"
+    }
+  },
+  "missing_environment": [],
+  "missing_evidence": [],
+  "missing": [],
+  "sha_mismatches": [],
+  "wp00": {
+    "schema": "v410-wp00-check/1",
+    "wp": "WP00",
+    "status": "pass_with_host_mismatch",
+    "exit_code": 0,
+    "missing": [],
+    "invalid": [],
+    "warnings": [
+      "windows_checkout: 工作树不干净：21 tracked modified + 513 untracked；只登记，不清理。",
+      "wsl_checkout: WSL 检出 HEAD 与 Windows 检出不同（d55c26a vs ca1ae8b）；两份分开登记。",
+      "d1_dataset: manifest 有 147 条：137 条与磁盘分片一一对应，另 10 条 -iNNN 为重复/隔离条目，磁盘上不存在；469216/1876864 只按 137 条计。",
+      "d1_dataset: 顶层 report.full.json/report.full.md 是 smoke 结果（8 片/16000 帧），不是完整 gate；完整 gate 在 work/gate.full.json。",
+      "d1_dataset: WSL /root/v400-data/d1 是 175 条/约 495MB 的陈旧镜像，不是 canonical。",
+      "assets.json has non-required assets: ['canonical_build', 'd0_dataset', 'd0_summary', 'engine_rl', 'fence_build', 'fence_map', 'g0_report', 'g0_trace_journal', 'game_data_th08', 'game_data_thbgm', 'm1_episodes', 'm1_summary', 'v3_bench', 'v3_eval_full_episodes', 'v3_eval_full_summary', 'v3_eval_s1n_episodes', 'v3_eval_s1n_summary', 'v3_regress', 'v3_split_bc1', 'v3_split_bc2', 'v3_split_full', 'v3_train_bc1', 'v3_train_bc2', 'v3_train_full', 'wp00_exposure']"
+    ],
+    "resummed": "verified",
+    "message": "every required asset is present; 2 register entries name the other host's absolute path",
+    "host_mismatch": [
+      "windows_checkout: path does not exist: /mnt/d/WorkShop/Touhou_RL/D:\\WorkShop\\Touhou_RL",
+      "python_env: path does not exist: /mnt/d/WorkShop/Touhou_RL/C:\\Users\\a5935\\AppData\\Local\\Programs\\Python\\Python312\\python.exe"
+    ]
+  },
+  "wp00_status": "pass_with_host_mismatch",
+  "asset_sync": {
+    "path": "/mnt/d/WorkShop/Touhou_RL/ASSET_SYNC.sha256",
+    "exists": true,
+    "sha256": "22fe78b3d78a3aa92a06c0b0c02d6ad7cdefd66cb309ac50e6d4311cf1701bd2",
+    "modified_by_this_command": false
+  },
+  "local_config": {
+    "path": "/mnt/d/WorkShop/Touhou_RL/configs/v420/local.json",
+    "status": "applied",
+    "keys": [
+      "root420",
+      "py420",
+      "engine420",
+      "data_dir",
+      "v420_data"
+    ]
+  },
+  "notes": [
+    "reuses touhou_rl.v410.evidence.sha256_file / check_wp00; the SHA logic is not reimplemented",
+    "ASSET_SYNC.sha256 is read for identity only and never rewritten",
+    "no asset is created, moved, deleted or repaired",
+    "the WP00 register is v4.1.0's own gate and is reported for reference; an entry naming the other host's absolute path is a host mismatch, not a missing asset, and never changes this command's exit code"
+  ],
+  "mode": "audit",
+  "config": "configs/v420/legacy-reproduce.json"
+}

@@ -1,0 +1,1107 @@
+{
+  "schema": "v420-execution-state/1",
+  "spec": "Document/Update/Alpha/v4.2.0/README.md",
+  "task_sheet": "Document/Update/Alpha/v4.2.0/首轮执行任务单.md",
+  "created_at": "2026-11-13T17:20:00+08:00",
+  "project_objective": "active",
+  "round": "first-round",
+  "host_id": "wsl2-ubuntu-asset-host",
+  "root420": "/mnt/d/WorkShop/Touhou_RL",
+  "source": {
+    "windows_head": "c3e116fd45d708dc8cbe73d4bb49cd960f835405",
+    "branch": "v400",
+    "windows_dirty_tracked_entries": 3514,
+    "wsl_old_checkout_head": "d55c26a6c465b26f11e26ba4fc1bdb888e8b130b",
+    "wsl_old_checkout_role": "engine/game-data host only; never runs v4.2.0 code",
+    "new_module_dirs": [
+      "touhou_rl/v420",
+      "configs/v420",
+      "tests/test_v420_*.py",
+      "tools/rl/v420.py"
+    ],
+    "windows_head_at_t00": "8684ae10482043a019262eb60cd92af8f58a274d",
+    "head_moved_by": "commit c3e116f docs: update asset inventory after round3 completion, made by the user at 2026-11-13T18:09 +08:00 during this session; it added round3.json and ROUND3.md to ASSET_SYNC.sha256, whose manifest now verifies 22/22 OK exit 0"
+  },
+  "assets": {
+    "engine_rl_v3_sha256": "691bfd77b7eca3361aa8bb7af0977556a70cc73a070b29a2447222ba7a568ef6",
+    "engine_rl_laser_sha256": "1462829ba756bab49aae0878686988687dbaa109ea1750729d1202b555340d2f",
+    "legacy_evaluator_sha256": "2db2caaf9089c1698cef9b6a682991a7594ebac47ae93244c3d9932591eddddc",
+    "asset_sync_check": "18/18 OK, exit 0, no hash edited",
+    "asset_sync_sha256_file_sha256": "22fe78b3d78a3aa92a06c0b0c02d6ad7cdefd66cb309ac50e6d4311cf1701bd2",
+    "evidence": "Document/Update/Alpha/v4.2.0/evidence/T00/assets_verify.json"
+  },
+  "gates": {
+    "G420-0": "passed",
+    "G420-1": "failed_valid",
+    "G420-2": "failed_valid",
+    "G420-3": "failed_valid",
+    "G420-R": "in_progress",
+    "G420-4": "failed_valid",
+    "G420-5": "not_started"
+  },
+  "work_packages": {
+    "WP420-00": "completed",
+    "WP420-01": "completed",
+    "WP420-02": "in_progress",
+    "WP420-03": "in_progress",
+    "WP420-04": "in_progress",
+    "WP420-05": "in_progress",
+    "WP420-06": "not_started",
+    "WP420-07": "not_started"
+  },
+  "tasks": {
+    "T00": "completed",
+    "T01": "completed",
+    "T02-reproduce-leg": "completed",
+    "T02-time-leg": "completed",
+    "T02c-2f-rebuild": "completed",
+    "T02d-2f-teacher-relabel": "completed",
+    "T03-cost-pilot": "completed",
+    "T03-teacher-2f-cost": "completed",
+    "T04a-2f-dataset-join": "completed",
+    "T03": "in_progress",
+    "T04": "in_progress",
+    "T05": "in_progress",
+    "T06": "in_progress",
+    "T07": "not_started",
+    "T01b-contract-label-sources": "completed",
+    "T03-counterfactual-pilot": "completed",
+    "T04-controlled-learning-round1": "completed",
+    "G420-0-readjudication": "completed",
+    "T03-student-continuation": "completed",
+    "T05-dagger-D1": "completed",
+    "T06-zero-update-audit": "completed_failed",
+    "T06-reaudit-and-pilot": "completed_with_deviation",
+    "T05-dagger-D2": "completed",
+    "T06-round1": "completed_with_1_fail",
+    "T06b-discount-revision": "completed",
+    "T06-r3": "in_progress_provenance_fix",
+    "T08-A1-safe-set-pilot": "completed"
+  },
+  "gate_verdicts": {
+    "G420-0": {
+      "status": "passed",
+      "re_adjudicated_at": "2026-11-13T21:05:00+08:00",
+      "legs": {
+        "l1_time_action_index": "pass on the corpus that was actually consumed: 19772 slots, 29 criteria / 573355 assertions / 0 violations, plus a re-run self-check of 36 checks / 514117 assertions / 0 violations",
+        "l2_hash_reconstruction": "pass: online leg 6048/6048 pairs, PREFLIGHT 12000 frames 0 mismatches, T02c 9898/9898 hash_post, plus the consumed-corpus hash chain",
+        "l3_deploy_input_boundary": "pass: 60000 online assertions 0 violations, 6000/6000 bit-identical forward, and the same boundary re-checked on the consumed corpus"
+      },
+      "denominator_changed": true,
+      "old_corpus_still_fails_l1": true,
+      "consumption_proof": "eight independent links recorded, including the sample-count arithmetic correction (train split 15819 rows, steps_per_epoch 124, samples_seen 637880 not 640000, epochs 41 consistent) and a forward reproduction through the frozen loader with holdout loss delta <= 3.4e-06 and top1 delta 0.0",
+      "cannot_claim": [
+        "G420-0 passed does not mean the first-stage ability is achieved: G420-4 is still 0/20 on four checkpoints and G420-5 has not started",
+        "A0/A0v are not capability (0/20 on both rulers, held-out CE near ln18)",
+        "L2 does not generalise to untested states (3 trajectories, stage 0 / Normal / team 0 only)",
+        "L3 is an input-boundary check, not a real-time capture or retail timing check",
+        "cross-device bit-identity is untested",
+        "each slot has exactly one verified action (verify_k=1), not 18",
+        "the scope is train seeds 10/11/12 only",
+        "the engine was not re-run in this review"
+      ],
+      "evidence": [
+        "Document/Update/Alpha/v4.2.0/evidence/T02/G420_0_READJUDICATED.md",
+        "Document/Update/Alpha/v4.2.0/evidence/T02/g420_0_readjudicated.json"
+      ]
+    },
+    "G420-1": {
+      "status": "failed_valid",
+      "detail": "24/200 states, 3 first actions per state rather than 18, 6 discriminating states against 100, 3/10 ancestors, 3/3 repeat pairs against 200, 24/50 student-continuation comparisons. The blocker changed shape: under teacher continuation proper is identically 0, but under the frozen student continuation 6 of 24 states show both a death and a survival among their 3 arms, and the 2x2 against the teacher round finds 4 states where the teacher survives every first action while the student dies on some. Two decisions are pushed to an owner: (a) the gate 100-state criterion is defined over 18-candidate verification, so the main 200x18 pass either moves to student continuation (about 13.8 h and roughly 50 proper states by the 25 pc rate, still under 100) or the protocol has to change; (b) a verified third arm does not exist structurally because every row has exactly one verified action which is the teacher own choice.",
+      "evidence": [
+        "Document/Update/Alpha/v4.2.0/evidence/T03/COUNTERFACTUAL_PILOT.md",
+        "Document/Update/Alpha/v4.2.0/evidence/T03/STUDENT_CONTINUATION.md"
+      ],
+      "a1_full": "pass on all stated criteria: 200/200 states, 3600/3600 arms, 0 unknown, 0 invalid, 50 training ancestors, 178 proper states (89.0 pc) against the 100 threshold, discriminating rate 92.0 pc"
+    },
+    "G420-2": {
+      "status": "not_passed",
+      "detail": "A0 and A0v trained 5000 steps seed 0 on the 2-frame corpus; layer-1 proper safe set 256/256 with held-out CE 12.455/12.882 (memorisation); A1 not done and currently has no usable training signal because T03 produced proper=0; A2 not built; the 2/3-training-run improvement condition is unmet with only seed 0.",
+      "evidence": "Document/Update/Alpha/v4.2.0/evidence/T04/G420_2.md"
+    },
+    "G420-3": {
+      "status": "failed_valid",
+      "detail": "three bounded DAgger rounds complete. D1 beta 0.25 5000 decisions; D2 beta 0 24671; D3 beta 0 27000 over 27 seeds 3042-3068 with 54432 frames, 108432 hash checks 0 mismatches, injection_rate 0.0, checkpoint 91d11d22187bc25b15bc6eb36932aaf30f30c548ffa7ce076e7a57fbdd68a603 reloading with logit difference 0. Aggregation 27000/16200/10800 = 0.500000/0.300000/0.200000 exactly, with history taken entirely from D2 and top-up 0, so the three sources are independent for the first time. Cumulative beta=0 is 51671 against the 50000 target, so the decision-count half is closed and the round count is 2/2. Two rulers, 20 dev episodes each: DIAG 1716.45 (0/20), S1N 3025.20 (0/20), Wilson upper 0.1611. Paired against A0, DIAG +79.65 = +4.87 pc (13W-7L) and S1N +13.70 = +0.45 pc (11W-9L); against D2, DIAG -185.65 = -9.76 pc so D3 is worse than D2.",
+      "provenance_hazard": "T05 named its new D1 checkpoint T05/checkpoints/a0_seed0_step5000.pt, which collides with the T04 A0 checkpoint filename but has different content (64509851... vs 96cb219e...); always cite full path plus sha256, never the bare filename.",
+      "evidence": [
+        "Document/Update/Alpha/v4.2.0/evidence/T05/dagger_d1.json"
+      ],
+      "dev_progression": {
+        "diag_first_death": {
+          "B0": 1453.25,
+          "A0": 1636.8,
+          "D1": 1687.25,
+          "D2": 1902.1,
+          "D2v": 1916.05
+        },
+        "standard_s1n": {
+          "B0": 2880.95,
+          "A0": 3011.5,
+          "D1": 3028.1,
+          "D2": 3185.7
+        },
+        "clears": "0/20 on every arm and ruler",
+        "d2_vs_a0_diag_pct": 16.2,
+        "stop_condition_threshold_pct": 30,
+        "stop_condition_status": "trending to trigger; D3 must be judged against the same 30 pc threshold",
+        "note": "these numbers were aggregated by the main agent from the raw evaluator JSONs, not taken from the agent narrative"
+      },
+      "d3_progress_verified_by_main_agent": {
+        "segments_completed": 21,
+        "pilot_segments": 2,
+        "pilot_decisions_excluded": 2500,
+        "main_segments": 19,
+        "train_seeds": "3042-3060",
+        "main_decisions": 19000,
+        "injections_total": 0,
+        "hash_mismatches": 0,
+        "all_exit_codes_zero": true,
+        "cumulative_beta0": 43671,
+        "gate_target": 50000,
+        "gap": 6329,
+        "frozen_plan": "27 main seeds 3042-3068 at 1000 each = 27000, bringing cumulative to 51671 with a 1671 margin",
+        "accepted_by_main_agent": true,
+        "note": "the main agent first mis-counted 21500 by including the two pilot segments; the agent correction is accepted and the pilot exclusion matches the D2 rule"
+      },
+      "d3_collection": {
+        "main_segments": 27,
+        "train_seeds": "3042-3068",
+        "main_decisions": 27000,
+        "cumulative_beta0": 51671,
+        "gate_target": 50000,
+        "margin": 1671,
+        "decision_count_half": "closed",
+        "still_open": [
+          "curriculum start kinds teacher-mid 0 and previous-failure 0",
+          "no stage clear on any arm",
+          "lineage and label-correction rate",
+          "stop-condition verdict awaiting D3 dev numbers"
+        ]
+      },
+      "d3_dev": {
+        "diag_n": 20,
+        "diag_mean": 1716.45,
+        "clears": 0,
+        "vs_A0_pct": 4.87,
+        "vs_D2_pct": -9.76
+      },
+      "stop_condition": {
+        "triggered": true,
+        "rounds_pct": {
+          "D1": 3.08,
+          "D2": 16.21,
+          "D3": 4.87
+        },
+        "threshold_pct": 30,
+        "clears": "0/120 across three rounds",
+        "best_round": "D2 at +16.21 pc, 13.79 pp short of the threshold",
+        "decision": "the current DAgger recipe ends"
+      },
+      "decision_count_half": "closed: cumulative beta=0 is 51671 against a 50000 target",
+      "remaining_gaps": [
+        "curriculum start kinds teacher-mid 0 and previous-failure 0",
+        "no full stage clear on any arm or ruler (0/120 across the three DAgger rounds)",
+        "single training seed and 20 dev episodes, so no interval conclusion"
+      ],
+      "next_branch": "per the plan the DAgger recipe ends; move to a registered branch (label/input or RL). The RL branch is currently blocked by P3 s1n being 84 frames short and by r3 pending.",
+      "next_branches_in_order": [
+        "WP420-02 label branch (preferred): engine-verified candidates plus continuation verification producing a safe-set target A1, because copying the single chosen action has been shown insufficient",
+        "WP420-03 input branch: single-factor input change (192x224 / RGB / local high-resolution window) or privileged state A2",
+        "WP420-05 engine-reward RL diagnostics (already registered, can run in parallel)"
+      ]
+    },
+    "G420-R": {
+      "status": "in_progress",
+      "detail": "audit is 17/17 pass with exit code 0 after the single pre-registered tau revision (tau=200 s, gamma^T at clear 0.33298 versus 6.548e-04 before). The corrected 50000-frame run is admissible: 24 episodes all ending in game_over, 24 terminal reward events, 0 truncated, 25007 decisions, 49 updates, 61.611 fps, checkpoint aefcc083... reloading bit-identically. Its dev result remains negative and is now diagnosed rather than unexplained: DIAG 0/20 with 889.35 against R0 1636.8 (paired -747.45, 0/20 positive) and S1N 0/20 with 1906.4 against 3011.5 (paired -1105.1). The composite cause is an unanchored systematic function drift that no reward resists: 58.2 pc of the delta-logit variance is a state-independent global action preference, the reward cannot see first-death survival (a 29.29 pc loss cost 0.24 pc of return), and all reported health metrics are computed on the T=8 tempered distribution while deployment is T=1 (11.6x understatement, 3.276 nats deployment KL, and the KL-to-BC measurement the plan requires was never recorded).",
+      "blocking": [
+        "apply the KL anchor revision and re-run the 50000-frame pilot against the four falsifiable predictions",
+        "do not spend any 1M frames before that",
+        "then the 3 seed x 1M tier (14.0 h clean, 31.6 h contended) with its own budget line"
+      ],
+      "evidence": [
+        "Document/Update/Alpha/v4.2.0/evidence/T06/RL_AUDIT.md",
+        "Document/Update/Alpha/v4.2.0/evidence/T06/rl_audit.json"
+      ],
+      "discount_revision": {
+        "from_tau_seconds": 30,
+        "to_tau_seconds": 200,
+        "gamma": 0.9998333472214507,
+        "effective_horizon_decisions": 6000.500013889792,
+        "gamma_T_at_clear": 0.33298205922092694,
+        "rule": "smallest tau in 200/300/400/600 whose gamma^T at T=6598 decisions reaches 0.30, written before the run",
+        "reward_coefficients_changed": false,
+        "old_config_rejected_by_factor": 458.1232747706975,
+        "floor_refuses_relaxation": true,
+        "check_status": "reward_discount_horizon now pass on all six decisive checks",
+        "evidence": "Document/Update/Alpha/v4.2.0/evidence/T06/discount_revision.json"
+      },
+      "audit": "17/17 PASS after the tau revision (v420-discount/2, tau=200 s, gamma=0.9998333472214507); the reward gate that blocked rounds 4 and 5 is cleared",
+      "collapse_diagnosis": {
+        "verdict": "composite: unanchored systematic function drift with no reward to resist it",
+        "supported": [
+          "H2 Adam full-size steps: 392 steps move weights 3.37e-03 giving mean |dlogit| 3.86 and 61.7 pc argmax flip",
+          "H3 the reward cannot see what the ruler measures: death term is a constant -0.75 in all 24 episodes, var(return)=var(progress), a 29.3 pc first-death loss costs 0.24 pc of return",
+          "H4 KL/entropy/clip measured on the T=8 tempered distribution understate the deployment T=1 KL by 11.6x: 3.276 nats deployment vs 0.00454 reported approx_kl"
+        ],
+        "excluded": [
+          "H1 temperature mismatch",
+          "H5 evaluation conditions differ",
+          "H6 resume= introduced the bias"
+        ],
+        "next_single_change": "KL anchor to A0 on un-tempered T=1 logits, beta frozen at 1.0, fail-closed if max_t KL_T1 exceeds 0.05 nat; rollout T, lr, reward table, frame budget and update count all unchanged",
+        "falsifiable": [
+          "KL_T1 <= 0.05 nat (now 3.276)",
+          "argmax flip <= 0.10 and max |mean dlogit| <= 0.5 (now 0.617 and 8.33)",
+          "dev diag in 1473-1800 and s1n in 2710-3313 (now 889.35 and 1906.4)"
+        ],
+        "evidence": "Document/Update/Alpha/v4.2.0/evidence/T06/R2_COLLAPSE_DIAGNOSIS.md"
+      },
+      "single_revision_in_flight": "KL anchor to A0 on un-tempered T=1 logits, beta frozen at 1.0, fail-closed if max_t KL_T1 exceeds 0.05 nat; rollout temperature, lr, reward table, frame budget and update count all unchanged. Falsifiable: P1 KL_T1 <= 0.05 (now 3.276), P2 argmax flip <= 0.10 and max |mean dlogit| <= 0.5 (now 0.617 and 8.33), P3 dev diag in 1473-1800 and s1n in 2710-3313 (now 889.35 and 1906.4), P4 if P1/P2 hold but diag falls below 1473 then the drift is exonerated and the next target is reward/ruler misalignment.",
+      "kl_anchor_result": {
+        "P1_max_t_KL_T1": {
+          "observed": 0.8793413160101484,
+          "threshold": 0.05,
+          "verdict": "fail",
+          "note": "all 49 rollouts over; fail-closed, no tolerance band, no post-hoc relaxation"
+        },
+        "P2_final_policy_drift": {
+          "argmax_flip_rate": 0.05092592592592592,
+          "ceiling": 0.1,
+          "verdict": "hold",
+          "note": "down from 0.617 before the anchor, a 92 pc reduction; final-policy KL mean 0.016757 nats max 0.319510 nats"
+        },
+        "P3_dev_eval": "pending (needs the two-ruler 20 dev runs on checkpoint 07fa0c69...)",
+        "interpretation": "the anchor works in deployment space; the 0.05 nat worst-case ceiling is unreachable because the maximum is taken over individual trajectory states far from the BC distribution rather than over the policy on the comparison set. That is a criterion problem, not an implementation problem, and the run is marked failed as the frozen gate dictates."
+      },
+      "collapse_attribution": {
+        "unanchored_R2_diag": 889.35,
+        "KL_anchored_R2_diag": 1425.0,
+        "R0_diag": 1636.8,
+        "frames_recovered_by_anchor": 535.65,
+        "lost_frames_before_anchor": 747.45,
+        "share_of_collapse_attributable_to_drift_pct": 71.66,
+        "remaining_deficit_pct_vs_R0": 12.96,
+        "reading": "about 72 pc of the collapse was the unanchored function drift, which the anchor fixed in deployment space (argmax flip 0.617 to 0.0509 and P2 held); the residual 13 pc deficit is what the P4 rule attributes to the reward/ruler mismatch, where a 29.29 pc first-death loss costs only 0.24 pc of return."
+      },
+      "p3_status": "fail by the pre-registered conjunction (synthesis ruling): DIAG n=20 mean 1512.1 hold; S1N n=20 mean 2626.0 fail by 84 frames = 3.1 pc below the 2710 floor, cited from RL_KL_ANCHOR.md because that agent owns a complete 20/20 on the same checkpoint, evaluator and seeds; the P3 agent own 10-episode s1n mean 2499.80 is also below the floor, so two independent executions both fall short. Band is a point-estimate comparison, not a significance test (20-episode SE about 35.9 frames against a 10 pc half-width).",
+      "p2_status": "fail by conjunction: frozen-slot argmax flip 0.011719 (3/256) holds and is -98 pc vs r2 0.617 same-space; max_a |mean_s dlogit| 1.5156 exceeds 0.5",
+      "p4_status": "not_authorized_premise_false: P4 premise diag<1473 is false at 1512.1, so neither branch is authorised",
+      "retracted": [
+        "P3 = fail (was based on n=1, seed 1000 only)",
+        "P4 = reward_ruler_mismatch (premise diag<1473 does not hold)",
+        "P2 hold via flip 0.0509 (cross-space comparison against frozen-slot numbers)"
+      ],
+      "four_arm": {
+        "R0": {
+          "diag": 1636.8,
+          "s1n": 3011.5
+        },
+        "r2_unanchored": {
+          "diag": 889.35,
+          "s1n": 1906.4
+        },
+        "r2_kl_anchor": {
+          "diag": 1512.1,
+          "s1n": 2626.0
+        },
+        "r3": "pending",
+        "paired_vs_r2": {
+          "diag": 622.75,
+          "s1n": 719.6,
+          "positive": "20/20 both"
+        },
+        "paired_vs_R0": {
+          "diag": -124.7,
+          "s1n": -385.5
+        },
+        "recovery_share_pct": {
+          "diag": 83.3,
+          "s1n": 88.9
+        }
+      },
+      "p1_status": "fail: 0.8793 nat vs 0.05, 49/49 rollouts over, smallest 3.99x over -> unreachable criterion by construction",
+      "r3_status": "report exists but NOT accepted: cites superseded P4 branch and the n=1 P3 value; experiment stands as a new registered reward version pending framing correction and explicit two-ruler 20 dev for the r3 checkpoint",
+      "next_preregistered_revisions": [
+        "move the KL bound from the single-trajectory max_t to a comparison-set policy KL (mean and p99) and demote max_t to a reported quantity; beta stays 1.0 and may only increase",
+        "split P2 into two independent predictions because its two halves measure different things and the conjunction masked the flip half holding",
+        "judge P3 per ruler rather than as a conjunction, since the DIAG ruler already lands inside its band",
+        "any 1M attempt must first reproduce the new criteria at 50k without adding a second factor"
+      ],
+      "r3_result": {
+        "audit": "18/18 pass including the new first-death-visibility criterion",
+        "diag_n": 20,
+        "diag_mean": 1589.2,
+        "s1n_n": 20,
+        "s1n_mean": 2891.6,
+        "clears": "0/20 both rulers",
+        "prediction": "diag >= 1636.8 and s1n >= 3011.5",
+        "verdict": "fail",
+        "deviation": {
+          "diag_frames": -47.6,
+          "diag_pct": -2.91,
+          "s1n_frames": -119.9,
+          "s1n_pct": -3.98
+        },
+        "checkpoint_sha": "83f1ac44...4b4685"
+      },
+      "four_arm_final": {
+        "R0": {
+          "diag": 1636.8,
+          "s1n": 3011.5
+        },
+        "r2_unanchored": {
+          "diag": 889.35,
+          "s1n": 1906.4
+        },
+        "r2_kl_anchor": {
+          "diag": 1512.1,
+          "s1n": 2626.0
+        },
+        "r3": {
+          "diag": 1589.2,
+          "s1n": 2891.6
+        },
+        "gap_closure_pct": {
+          "r2_kl": {
+            "diag": 83.3,
+            "s1n": 65.1
+          },
+          "r3": {
+            "diag": 93.6,
+            "s1n": 89.2
+          }
+        },
+        "clears": "0/20 on every arm and ruler"
+      },
+      "recovery_share_pct_corrected": {
+        "diag": 83.32,
+        "s1n": 65.12,
+        "note": "the earlier 88.9/89 s1n figure was an arithmetic error; 719.60/1105.10 = 65.12 pc"
+      },
+      "all_capability_hypotheses_closed": "H-a falsified by 0/20 clears across every arm; H-c falsified by the DAgger stop condition firing; H-d falsified by the tau revision leaving capability unchanged; H-e supported on mechanism only (83 pc of the diag collapse recovered, still 7.6 pc short); H-f now falsified too: r3 made first-death survival visible in the reward, verified structurally, and behaviour still did not recover (1589.2, -2.9 pc vs R0)",
+      "next_single_variable": "budget only: same reward table and same anchor at 200k. Rationale from the agent: reward visibility is now demonstrated (visibility criterion 0.9485 against the 0.3545 control, training first-death collapse -7.86 pc against r2 -29.29 pc, critic signal-to-noise 18x against 62.9x) yet it is still 3-4 pc short, so the only untested variable left is whether 49 updates is enough to convert the ordering into frames. Do not tune epsilon or delta to chase the 47.6 frames.",
+      "budget_200k_result": {
+        "status": "complete and double-sourced (payload and document agree); the earlier 1866.2/3317.3 claim is retracted",
+        "diag": {
+          "n": 20,
+          "mean": 1575.2,
+          "clears": 0
+        },
+        "s1n": {
+          "n": 20,
+          "mean": 2808.6,
+          "clears": 0
+        },
+        "prediction": "diag >= 1636.8 and s1n >= 3011.5",
+        "verdict": "both legs FAIL",
+        "paired_vs_50k": {
+          "diag": -14.0,
+          "s1n": -83.0
+        },
+        "percent_vs_50k": {
+          "diag": -0.88,
+          "s1n": -2.87
+        },
+        "reading": "budget times four made both rulers slightly worse, so budget is definitively not the binding constraint"
+      },
+      "five_arm_final": {
+        "R0": {
+          "diag": 1636.8,
+          "s1n": 3011.5
+        },
+        "r2_unanchored": {
+          "diag": 889.35,
+          "s1n": 1906.4
+        },
+        "r2_kl_anchor": {
+          "diag": 1512.1,
+          "s1n": 2626.0
+        },
+        "r3_50k": {
+          "diag": 1589.2,
+          "s1n": 2891.6
+        },
+        "r3_200k": {
+          "diag": 1575.2,
+          "s1n": 2808.6
+        }
+      },
+      "one_m_criteria": {
+        "criterion_1": "DIAG mean >= 2053.0 frames (1866.2 x 1.10)",
+        "criterion_2": "at least 1 stage clear across the 20 dev episodes per ruler",
+        "decision_rule": {
+          "both": "first capability evidence, subject to engine_truth and single-seed caveats",
+          "only_1": "first-death frames decoupled from clearing; budget is not the only constraint",
+          "only_2": "clearing needs a qualitative change, not budget",
+          "neither": "budget path excluded"
+        }
+      },
+      "budget_path": "CLOSED: 50k to 200k gave -0.881 pc diag and -2.870 pc s1n with paired 95 pc intervals containing zero; marginal per +10k frames is -0.933 / -5.533 against +139.97 / +197.04 from R2 to the 50k point. Effective range is 0 to 50k; past 50k the dimension is saturated. The 1M run was stopped before completion because it was dispatched on the retracted +14 pc premise and would only reconfirm a measured negative at the cost of 14.0 to 31.6 hours.",
+      "next_lever": "strategy side: advantage_normalisation (named as the second mechanism in R2_COLLAPSE_DIAGNOSIS.md) and/or rollout length, both needing their own pre-registration. A1 set supervision remains the only formally different signal class still alive.",
+      "advnorm_off_result": {
+        "verdict": "R4",
+        "diag": {
+          "n": 20,
+          "mean": 1481.9,
+          "clears": 0
+        },
+        "s1n": {
+          "n": 20,
+          "mean": 2660.65,
+          "clears": 0
+        },
+        "clears_total": "0/40",
+        "vs_R0_diag": {
+          "delta": -154.9,
+          "t": -2.194,
+          "ci95": [
+            -302.68,
+            -7.12
+          ],
+          "contains_zero": false
+        },
+        "reading": "the only arm of six significantly worse than R0 on DIAG, so whitening is load-bearing in the helpful direction and removing it is not a route to closing the gap",
+        "p_n1_falsified": {
+          "first_death_quarter": "+4.79 pc round / +10.87 pc floor, opposite of predicted degradation",
+          "entropy_mean": 2.51921,
+          "note": "above the predicted 2.4945, so spec section 1.3 common-mode re-injection narrative is void"
+        },
+        "section7_check": "passes: mean step 2.323776e-04 inside [2.261e-04, 2.499e-04], so not retroactively an lr revision; but mean is 2.36 pc below the earlier arms floor and 2/49 updates fall outside the hard band on the low side"
+      },
+      "ppo_coefficients": "EXHAUSTED: R4 means the PPO coefficient list is closed. Four non-coefficient paths remain: quantify and fix the SHOOT pulse train versus deployment mismatch; multi-seed; reproduce after the KL criterion revision; change the observation representation.",
+      "six_arm": {
+        "R0": {
+          "diag": 1636.8,
+          "s1n": 3011.5,
+          "clears": 0
+        },
+        "r2_unanchored": {
+          "diag": 889.35,
+          "s1n": 1906.4,
+          "clears": 0
+        },
+        "r2_kl": {
+          "diag": 1512.1,
+          "s1n": 2626.0,
+          "clears": 0
+        },
+        "r3_50k": {
+          "diag": 1589.2,
+          "s1n": 2891.6,
+          "clears": 0
+        },
+        "r3_200k": {
+          "diag": 1575.2,
+          "s1n": 2808.6,
+          "clears": 0
+        },
+        "advnorm_off": {
+          "diag": 1481.9,
+          "s1n": 2660.65,
+          "clears": 0
+        }
+      }
+    },
+    "G420-4": {
+      "status": "failed_valid",
+      "detail": "standard S1N over four checkpoints is 0/20 each with 20/20 game_over and Wilson upper bound 0.1611; DIAG-FIRST-DEATH is also 0/20 each",
+      "evidence": "Document/Update/Alpha/v4.2.0/evidence/T04/DEV_EVAL.md",
+      "evaluator_defect": "stage_clear is structurally unreportable through the evaluator channel, but no existing number is affected because every graded episode died at or below 4964 frames against the 13195 needed. The defect blocks all future clear-based grading until fixed.",
+      "evidence_base": "0/160 clears on the validated v420_eval_shoot instrument, deepest episode 3914 frames against the 13195 needed, shortfall 9281"
+    },
+    "G420-5": "not_started"
+  },
+  "new_assets": {
+    "two_frame_corpus": ".tmp_v420_data/T02c/rebuild/<shard-key>/2f/ (19772 slots, ~1000 MiB, 3 train-split shards)",
+    "two_frame_teacher_labels": ".tmp_v420_data/T02d/reslot/<shard-key>/teacher_2f.jsonl (19796 slots, 18 scores each, 0 hash mismatch)",
+    "note": "new v4.2.0 assets outside every .tmp_v4xx_ legacy directory; none of the legacy assets was written or moved. ASSET_SYNC.md and ASSET_SYNC.sha256 were deliberately not edited by v4.2.0 because the asset-host owner registers new objects at takeover.",
+    "two_frame_dataset": ".tmp_v420_data/T04/dataset (v420-2f-dataset/1, 19772 slots, join key shard_key+slot_id, 0 self-check violations)",
+    "two_frame_checkpoints": ".tmp_v420_data/T04/checkpoints/{a0_seed0_step5000.pt sha 96cb219e..., a0v_seed0_step5000.pt sha f7188c0d...} in the v410-wp04-bc-arm-checkpoint/1 schema",
+    "dev_eval": ".tmp_v420_data/T04/eval/ (160 episodes over four checkpoints and two rulers, 364629 frames)"
+  },
+  "accepted_results": [
+    {
+      "id": "T02-reproduce-leg",
+      "verdict": "REPRODUCED",
+      "detail": "B0 3bc0ec44 and DAgger-20k 15ae1fd5 reproduce dev seeds 1000/1001/1002 bit-exactly in two independent repeats: frames 1398/818/1251 and 1612/1970/1532, scores 13102/1512/7438 and 12471/18920/12124, action_sequence_sha256 and policy_input_sha256 identical to the stored v4.1.0 references in all 6 cells x 7 fields; main agent cross-checked all 6 cells from the raw evaluator JSON",
+      "exit_codes": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "evidence": "Document/Update/Alpha/v4.2.0/evidence/T02/legacy_reproduce.json"
+    },
+    {
+      "id": "T03-cost-pilot",
+      "verdict": "measured",
+      "detail": "shadow role 2,879-2,925 fps vs env 73.18-77.55 fps over 2,000 frames (39.3x/37.7x); shadow and env are per-frame HASH identical (2,000/2,000 in both repeats) and both reproduce the corpus's 500 decision boundaries 500/500; 120-frame branch 43.7-61.4 ms on the real teacher beat; 200x18x120 = 432,000 outer frames costs 208-240 s on continuous-trajectory evaluation vs 340-656 s with a per-state prefix replay; PARK/BRANCH require the shadow role and fork children cannot emit pixels",
+      "exit_codes": [
+        0
+      ],
+      "evidence": "Document/Update/Alpha/v4.2.0/evidence/T03/PILOT_COST.md"
+    }
+  ],
+  "running_jobs": [],
+  "state_conflicts": [
+    {
+      "id": "D-T02-1",
+      "what": "v4.1.0 state.json says WP05.10 paused with 4 shards / 14,000 decisions",
+      "observed": "a v410_dagger_collect.py process (pids 1884157/1884178, seeds 2044-2054) was alive during the whole v4.2.0 session; round3 grew to 12 complete shards / 40,287 decisions at 2026-11-13T09:23:12Z and keeps growing",
+      "action": "recorded only; v4.1.0 state/journal/budget untouched; process not started, stopped or modified by v4.2.0",
+      "consequence": "any round3 number quoted here is a snapshot; wall-clock measurements in this version are contention-affected observations, not throughput promises"
+    },
+    {
+      "id": "D-T02-2",
+      "what": "the B0 20-dev reference (v4.1.0 WP04) was produced by an older evaluator blob c63100ea that is not in the current tree",
+      "observed": "the current evaluator 2db2caaf reproduces B0 seed 1000/1001/1002 and 20k seed 1000/1001/1002 bit-exactly in two independent repeats each (frames, score, action_sequence_sha256, policy_input_sha256)",
+      "action": "declared as an entry-point version gap; reproduction verified empirically on 6 cells rather than assumed",
+      "evidence": "Document/Update/Alpha/v4.2.0/evidence/T02/legacy_reproduce.json"
+    },
+    {
+      "id": "D-T02-3",
+      "what": "the task sheet says confirm seeds 61000-61499 are unused",
+      "observed": "61300-61399 were consumed by the G410-1 teacher confirmation (4 chunks x 25 episodes); only 61000-61299 and 61400-61499 are unexposed",
+      "action": "any new confirmation batch must be checked against the T00 exposure table first",
+      "evidence": "Document/Update/Alpha/v4.2.0/evidence/T00/T00.md section 9"
+    },
+    {
+      "id": "D-T02-4",
+      "what": "task-sheet module paths touhou_rl/v410/{s1_data,bc,train}.py do not exist",
+      "observed": "real paths are touhou_rl/v410/student/s1_data.py, touhou_rl/v410/student/bc.py, touhou_rl/v410/dagger/train.py",
+      "action": "recorded in the recon memo; v4.2.0 code imports the real paths",
+      "evidence": "Document/Update/Alpha/v4.2.0/experiments/recon-v410-contracts.md B1"
+    },
+    {
+      "id": "D-T02-5",
+      "what": "the asset manifest grew from 18 to 22 entries because round3 completed (15 shards / 50,787 decisions) and the user committed the new inventory",
+      "observed": "HEAD moved 8684ae10 -> c3e116fd at 18:09; sha256sum -c ASSET_SYNC.sha256 now reports 22/22 OK exit 0; the 4 original v4.1.0 document/checkpoint entries are unchanged",
+      "action": "re-verified after the move; no v4.2.0 file was added to the manifest and no old hash was edited",
+      "evidence": [
+        "ASSET_SYNC.sha256"
+      ]
+    }
+  ],
+  "blockers": [],
+  "next_actions": [
+    "T04: consume the v420-2f-dataset/1 corpus in a real A0 training run (this is what closes G420-0 L1) and then run the controlled A0/A1/A2 comparison",
+    "T03: 200-state x 18-candidate branch validation, cost already measured at 208-240 s for the branch side and 3.93 h for real teacher continuation",
+    "T02c/T02d extension to train seeds 13-20 (about 52800 more teacher queries, cumulative 43.88 pc of the cap)",
+    "T05/T06 per the plan; T07 still has no candidate so G420-4/G420-5 stay not_started"
+  ],
+  "evidence_index": "Document/Update/Alpha/v4.2.0/evidence/",
+  "budget_ref": "Document/Update/Alpha/v4.2.0/budget.jsonl",
+  "journal": "Document/Update/Alpha/v4.2.0/journal.jsonl",
+  "updated_at": "2026-11-14T14:25:00+08:00",
+  "final_acceptance": {
+    "at": "2026-11-14T19:28:00+08:00",
+    "wsl_pytest": "469 passed, 2 skipped, exit 0 (12 files)",
+    "single_file_setsup": "35 passed, 2 skipped, exit 0",
+    "asset_manifest": "46 OK, 0 FAILED, exit 0",
+    "tracked_files_modified": 2,
+    "skip_reason": "expansion corpus still being generated: 20 of 750 states merged, 161 of 750 raw shards written",
+    "skip_is_conditional": "proved by sim_short (status pass, 750/750 states, only 14 proper) still failing with assert 14 >= 600, exit 1",
+    "tracked_change_reason": "ASSET_SYNC.md and ASSET_SYNC.sha256 only; these are the only 2 of 117 modified tracked files that this session touched (both mtime 2026-11-15 07:40). The other 115 modifications have mtimes 2026-11-08..2026-11-13, before the session, and the checkout also carries 3493 pre-existing deletions (including a wholly absent Document/Dialogs tree) plus 200 untracked files that are this version new sources."
+  },
+  "operational_constraints": [
+    "two engine instances cannot run concurrently: the later RESET fails with harness closed the control pipe, evidenced in .tmp_v420_data/T04/eval/pilot/ and never counted in any denominator",
+    "standard S1N (no --stop-on-death) and DIAG-FIRST-DEATH are different rulers; every historical 20-dev number is first-death-stopped"
+  ],
+  "gate_vocabulary_note": "gates uses the v4.1.0 vocabulary (not_started / in_progress / passed / failed_valid / invalid / blocked / budget_limited). failed_valid means a measured, valid negative result: G420-1 proper 0/100 with a proven death detector, G420-2 only A0/A0v with 0/20 on both rulers and unmet 2/3 condition, G420-4 four checkpoints all 0/20 with Wilson upper bound 0.1611.",
+  "tasks_note": "the coarse Tnn keys mirror the task sheet; the detailed keys above them record what each round actually closed. T03 main body (200 states x 18 candidates) and T04 A1/A2 and T05 D2/D3 are still open; T06 and T07 have not started.",
+  "open_items": [
+    "T06: repair the reward table and re-audit; the 50000-frame pilot is inadmissible and must be re-run",
+    "T05: finish D2 (beta=0) then D3 to reach 50000 beta=0 decisions",
+    "G420-1: protocol decision needed on whether the 200x18 main pass moves to student continuation (~13.8 h) or the gate changes",
+    "T07: no candidate exists, G420-4 is 0/20 on four checkpoints",
+    "cleanup: .tmp_v420_data/tests holds 1.1 GB of pytest basetemp, reclaimable at session end"
+  ],
+  "in_flight": [
+    "corpus expansion resumed after host reboot: pid 397 ALIVE, 3 workers, 68/750 shards pass, mean 231.1 s/state, 682 remaining, ETA about 14.6 h"
+  ],
+  "round_note": "rounds 13 and 14 arrived within about one minute of wall time each, which is far shorter than the two in-flight engine runs need (T05 D3 collection is roughly a 1.7 h job; the KL-anchor 50k pilot plus two-ruler dev eval is roughly 40-60 min under current load). No gate can move on that cadence, so the honest status is unchanged: waiting on T05 D3 and on the KL-anchor revision. Polling again will not produce new evidence.",
+  "pickup_notes": "To resume: read ROUTE_CONCLUSION.md (344 lines) first, then this file. Gate vocabulary: passed / failed_valid / in_progress / not_started. G420-0 is the only passed gate and its evidence is T02/G420_0.md plus the re-adjudication. The four-arm RL table and the three-round DAgger table are both final. Do not add steps or tune epsilon/delta/beta to chase the remaining 47.6 frames; r3 recommendation is budget-only, then advantage_normalisation.",
+  "a1_pilot": {
+    "states": 40,
+    "arms": 720,
+    "unknown": 0,
+    "engine_alive": 476,
+    "engine_death": 244,
+    "set_size_histogram": {
+      "18": 15,
+      "17": 2,
+      "14": 1,
+      "13": 2,
+      "12": 2,
+      "11": 2,
+      "9": 3,
+      "8": 2,
+      "7": 3,
+      "5": 2,
+      "3": 2,
+      "2": 3,
+      "0": 1
+    },
+    "ratios": {
+      "full_18_pct": 37.5,
+      "partial_pct": 60.0,
+      "singleton_pct": 0.0,
+      "empty_pct": 2.5
+    },
+    "discriminating_rate_pct": 60.0,
+    "verdict": "A1 feasible (MET): 60 pc against a 5 pc threshold with 3 non-empty buckets",
+    "mechanism": "branch from states within 121 frames before the first death (90 pc discriminating) instead of a fixed-frame grid (11 pc)",
+    "cost": {
+      "arms_total_s": 9068.959,
+      "per_arm_p50_s": 12.4147,
+      "longest_command_s": 361.18,
+      "full_200x18_hours": {
+        "best": 4.309,
+        "median": 12.415,
+        "worst": 19.131
+      },
+      "three_worker_minutes": 60.5
+    },
+    "identity_check": "dev first-death mean 1636.8, digit-for-digit equal to the T04 A0 record"
+  },
+  "clear_reachability": {
+    "verdict": "CONFIRMED: stage_clear is structurally unreportable through the evaluator action channel",
+    "same_trajectory": {
+      "with_shoot_pulse": {
+        "stage_clear": true,
+        "score": 2631430,
+        "frames": 13195,
+        "rising_edges": 138
+      },
+      "evaluator_channel": {
+        "stage_clear": false,
+        "score": 163945,
+        "frames": 15564,
+        "stop_reason": "game_over",
+        "rising_edges": 1
+      },
+      "score_at_frame_13195_in_eval_mode": 141379
+    },
+    "impact": "affected existing numbers is the EMPTY SET: deepest evaluated episode is 4964 frames against the 13195 needed, a shortfall of 8231 frames, so no graded episode ever reached the regime where the missing pulse matters",
+    "consequence": "G420-4 stays failed_valid, NOT invalid. The defect is a hard blocker on all FUTURE clear-based grading and must be fixed (pulse plus episode-identity field plus merge refusal) before any further clear claim.",
+    "correction": "the round-74 escalation to invalid was too strong and is retracted"
+  },
+  "eval_shoot_pulse": {
+    "instrument": "tools/rl/v420_eval_shoot.py sha 7dbc2a31...6e8519",
+    "positive_control": {
+      "stage_clear": true,
+      "frames": 13195,
+      "score": 2631430,
+      "mask_trace_sha256": "66c81344..."
+    },
+    "negative_control": {
+      "stage_clear": false,
+      "score_at_13195": 141379,
+      "stop_reason": "game_over",
+      "mask_trace_sha256": "92cea74d..."
+    },
+    "causal_control": "the two mask traces are bitwise identical to the two channels of the independent clear-reachability replay implementation, so the difference is exactly and only the pulse",
+    "compatibility": "episode records 61 to 62 fields, summaries 28 to 29, shoot_pulse_period the only addition, validation delegates to the frozen v410 validator",
+    "old_instruments_untouched": {
+      "v410_sha256": "2db2caaf9089c1698cef9b6a682991a7594ebac47ae93244c3d9932591eddddc",
+      "v400_sha256": "7bccf2409cd31065a4e0e3148f03672fc764b1e562986e47404ed989e843c1a2",
+      "tests": "152 passed on both sides"
+    },
+    "instruments_measure_different_games": "on the same R0 checkpoint and command, seeds 1000/1002/1004 are frame-identical between instruments while 1001 (3430 vs 2654) and 1003 (2731 vs 2741) diverge, so the pulse changes the trajectory from about 2000 frames on; old 0/5 and new 0/5 clears, means 2587.8 vs 2434.6",
+    "constraints": [
+      "shoot-pulse-period must be at least 1, 0 is refused in arithmetic, validator and CLI",
+      "obs-window must be consecutive, strided silently drops release frames and is refused",
+      "replay-tape shard is pinned to the single f759de7d known-clearing recording"
+    ]
+  },
+  "a1_full": {
+    "status": "pass",
+    "exit_code": 0,
+    "states": 200,
+    "arms": 3600,
+    "invalid_states": 0,
+    "unknown_arms": 0,
+    "engine_death": 1899,
+    "engine_alive": 1701,
+    "distinct_seed_ancestors": 50,
+    "train_seeds": "3042-3091",
+    "histogram": {
+      "0": 11,
+      "1": 6,
+      "2": 6,
+      "3": 15,
+      "4": 10,
+      "5": 18,
+      "6": 17,
+      "7": 10,
+      "8": 8,
+      "9": 11,
+      "10": 13,
+      "11": 9,
+      "12": 12,
+      "13": 14,
+      "14": 11,
+      "15": 13,
+      "16": 8,
+      "17": 3,
+      "18": 5
+    },
+    "ratios": {
+      "S=0_pct": 5.5,
+      "S=1_pct": 3.0,
+      "proper_1_lt_S_lt_18_pct": 89.0,
+      "S=18_pct": 2.5
+    },
+    "discriminating_rate_pct": 92.0,
+    "proper_states": 178,
+    "threshold": 100,
+    "verdict": "A1 dataset is USABLE: 178 proper states against the 100 threshold, 50 training ancestors against the 10 required, 0 unknown and 0 invalid",
+    "offset_stratification_pct": {
+      "30": 86.0,
+      "60": 96.0,
+      "90": 96.0,
+      "120": 90.0
+    },
+    "offset_note": "all four offsets are strong and offset 30 is the WEAKEST, so the planned fallback of using only the first two offsets is not supported",
+    "wilson95": [
+      0.87401,
+      0.95016
+    ],
+    "wall": {
+      "process_internal_h": 12.8645,
+      "three_worker_h": 5.0068,
+      "per_arm_p50_s": 12.2637,
+      "longest_command_s": 515.292,
+      "timeouts": 0,
+      "inside_pilot_extrapolation": true
+    },
+    "deviations": [
+      "env -u DISPLAY shadow mode cannot produce observations because obs-v3 is built from shm.pixels and role shadow is a null device, so xvfb-run is used",
+      "headless env role is 2.14x slower with bitwise identical traces"
+    ]
+  },
+  "a1_setsup": {
+    "verdict": "branch four: set supervision is not sufficient at this scale, and more precisely it is HARMFUL",
+    "setsup": {
+      "diag": {
+        "n": 20,
+        "mean": 669.0,
+        "clears": 0
+      },
+      "s1n": {
+        "n": 20,
+        "mean": 1859.35,
+        "clears": 0
+      }
+    },
+    "r0_new_instrument": {
+      "diag": {
+        "n": 20,
+        "mean": 1650.4,
+        "clears": 0
+      },
+      "s1n": {
+        "n": 20,
+        "mean": 2824.35,
+        "clears": 0
+      }
+    },
+    "deltas_pct": {
+      "diag": -59.5,
+      "s1n": -32.3
+    },
+    "clears_total": "0/40",
+    "mechanism": "the loss maximises total probability mass on the safe set, and at states 30 to 120 frames before a first death that set is dominated by merely survivable and often passive actions, so the gradient rewards passivity and the policy dies at about 669 frames instead of 1650",
+    "calibration": "compared new-instrument to new-instrument because the new evaluator measures R0 at 1650.4 on DIAG rather than the old 1636.8; the two instruments measure different games from about frame 2000",
+    "holdout": {
+      "train_L_set": 1.96e-07,
+      "train_hit": 1.0,
+      "holdout_L_set": 3.5435,
+      "holdout_hit": 0.55,
+      "uniform_random_reference": 0.5389,
+      "a0_start": {
+        "train_L_set": 7.3358,
+        "train_hit": 0.109,
+        "holdout_L_set": 5.7666,
+        "holdout_hit": 0.2
+      },
+      "reading": "memorisation: holdout sits at chance, 138 training states with 40 held out cannot support generalisation"
+    },
+    "collapse": "collapse to a CONSTANT policy: all 20 DIAG episodes are exactly 669 frames, score 600, 335 decisions, with NE at 58.7 pc against A0 idle 29.3 pc. Identical length across 20 seeds means the policy is state-independent, which is what maximising total safe-set mass rewards when one action appears in many safe sets."
+  },
+  "clear_remeasure": {
+    "verdict": "branch two, with mandatory discount",
+    "episodes": 160,
+    "clears": 0,
+    "arms": {
+      "D2": {
+        "diag": 1757.5,
+        "s1n": 3010.3,
+        "clears": 0
+      },
+      "D3": {
+        "diag": 1707.5,
+        "s1n": 2943.8,
+        "clears": 0
+      },
+      "r3_50k": {
+        "diag": 1597.9,
+        "s1n": 2765.1,
+        "clears": 0
+      },
+      "R0": {
+        "diag": 1650.4,
+        "s1n": 2824.35,
+        "clears": 0
+      }
+    },
+    "deepest_episode_frames": 3914,
+    "clears_needed_frames": 13195,
+    "shortfall_frames": 9281,
+    "discount": "all paired 95 pc CIs cross zero and restricting R0 to n=15 makes r3 flip above R0, so the arm ordering is descriptive only; any claim that DAgger genuinely beats the BC prior is withdrawn at the statistical level",
+    "what_survives": [
+      "zero clears in 160 episodes on a validated instrument",
+      "a survival shortfall of about 9281 frames that sampling cannot explain"
+    ]
+  },
+  "setloss_form": {
+    "loss_mode": "uniform_in_set",
+    "train_set_hit": 1.0,
+    "holdout_set_hit": 0.45,
+    "prev_set_mass_holdout_set_hit": 0.55,
+    "uniform_reference_L_set": 2.8904,
+    "holdout_L_set": 5.6374,
+    "prev_holdout_L_set": 3.5435,
+    "mechanism_criterion": {
+      "threshold": 0.6389,
+      "observed": 0.45,
+      "verdict": "fail in the opposite direction"
+    },
+    "collapse_resolved": true,
+    "train_argmax_histogram_distinct_actions": 16,
+    "branch": "branch two: collapse was a property of the set_mass loss form and is fixed by uniform_in_set; generalisation failure survives the change and therefore belongs to the data, not the loss",
+    "dev": {
+      "diag": {
+        "n": 20,
+        "mean": 1139.9,
+        "clears": 0
+      },
+      "s1n": {
+        "n": 20,
+        "mean": 2110.95,
+        "clears": 0
+      }
+    },
+    "clears_total": "0/40",
+    "deepest_episode_frames": 2791,
+    "vs_R0": {
+      "diag": -510.5,
+      "s1n": -713.4
+    },
+    "vs_set_mass": {
+      "diag": 470.9,
+      "s1n": 251.6
+    },
+    "collapse_fixed": true,
+    "collapse_detail": "DIAG lengths went from 1 distinct (all 669 frames, NE 0.587) to 19 distinct spanning 661-1647, NE 0.1326, 17.3 of 18 distinct actions",
+    "three_arm_ladder_diag": {
+      "set_mass": 669.0,
+      "uniform_in_set": 1139.9,
+      "R0": 1650.4
+    }
+  },
+  "set_supervision_conclusion": "two independent defects, now separated: collapse is a property of the set_mass loss form and uniform_in_set fixes it (+470.9 frames), while the residual 510.5-frame shortfall against R0 is generalisation, which is a DATA SCALE problem because the BC prior saw 19772 slots and this arm sees 138 states. Next action is therefore to enlarge the A1 corpus, not to change the loss again.",
+  "corpus_expansion_spec": {
+    "path": "Document/Update/Alpha/v4.2.0/experiments/T08-corpus-expansion-spec.md",
+    "status": "spec written, NOT dispatched",
+    "single_factor": "corpus scale 178 -> >=600 proper states only",
+    "cost": {
+      "arms": 10800,
+      "process_hours": 38.6,
+      "three_worker_hours": 15.0,
+      "budget_after_pct": 37
+    },
+    "criteria": {
+      "D1": "holdout set-hit > 0.6389",
+      "D2": "hit must exceed 0.450 (else scale is ineffective)",
+      "D3": "no collapse: >=3 distinct lengths and NE < 50 pc",
+      "D4": "DIAG >= 1139.9",
+      "D5": "DIAG >= 1650.4 or S1N >= 2824.35",
+      "D6": "at least 1 clear in 40"
+    },
+    "branches": {
+      "1": "scale is the constraint and 178->600 crossed it",
+      "2": "scale helps but not enough",
+      "3": "hit rises but stays under threshold -> extrapolate required scale",
+      "4": "hit does not rise -> DATA SCALE IS NOT THE CONSTRAINT, close the corpus-expansion route",
+      "5": "first capability evidence"
+    },
+    "execution": {
+      "states_total": 750,
+      "seeds": 50,
+      "states_per_seed": 15,
+      "offset_grid": "multiples of 6 in [36,138], explicitly avoiding 30/60/90/120 so overlap with the frozen 200 states is zero BY CONSTRUCTION",
+      "cost_model_per_state_s_3workers": 90.13,
+      "projected_hours": 18.8,
+      "proper_states_min": 600,
+      "shortfall_policy": "a shortfall is reported as a shortfall, never rounded up",
+      "dataset_usable_when": "proper >= 600 and training ancestors >= 10 and state overlap 0 and unknown/invalid shares 0"
+    }
+  },
+  "host_reboot": {
+    "at": "2026-11-14T16:31",
+    "cause": "Windows Update initiated restart (event 1074 MoUsoCoreWorker.exe then TrustedInstaller.exe on behalf of SYSTEM; event 109 Kernel API reboot)",
+    "not_cause": [
+      "OOM (no oom-kill in WSL logs)",
+      "crash (no event 41; last one 2026-11-11)",
+      "load"
+    ],
+    "impact": "all processes died; zero file corruption; 68 states re-parsed OK",
+    "resource_criticism_valid_partly": true,
+    "disk_before_gb": 28,
+    "disk_after_gb": 15,
+    "replicas_removed": 13
+  },
+  "reward_r4": {
+    "reward_version": "v420-reward-r4/1",
+    "power_gain": 0.0003906,
+    "power_max": 128.0,
+    "dev": {
+      "diag": {
+        "n": 20,
+        "mean": 1650.05,
+        "clears": 0,
+        "range": [
+          1300,
+          2365
+        ]
+      },
+      "s1n": {
+        "n": 20,
+        "mean": 2837.05,
+        "clears": 0,
+        "range": [
+          2280,
+          3863
+        ]
+      }
+    },
+    "clears_total": "0/40",
+    "vs_r3_50k": {
+      "diag": 52.15,
+      "s1n": 71.95
+    },
+    "vs_R0": {
+      "diag": -0.35,
+      "s1n": 12.7
+    },
+    "criteria": {
+      "P1": "FAIL: delta power 14.5909 -> 17.5455 (+2.9545 = +20.25 pc) but Welch t 1.2056, p 0.1140 normal and 0.1196 permutation; not significant",
+      "P2": "HOLD but weak: 1650.05 > 1589.2 (+60.85, +3.83 pc) yet only 0.85 mean standard errors; vs same-instrument r3 1597.9 it is +52.15; vs R0 1650.4 it is -0.35",
+      "P3": "FAIL: 0 of 40 clears, deepest 3863 frames = 29.3 pc of the 13195 needed"
+    },
+    "branch": "branch THREE: only P2 holds (P1 not significant, P3 fails)",
+    "shortfall_frames": 11545,
+    "note": "r4 essentially matches the BC prior on DIAG (-0.35 frames) and slightly exceeds it on S1N (+12.70), the best RL result of the session, and still 0/40 clears",
+    "self_payment": "of the +0.007182 per-episode return difference, 0.006853 is the new term paying itself and only 0.000329 is behaviour, so 96.4 pc of the return gain is accounting"
+  },
+  "observability_corrected": {
+    "verdict": "POWER IS NOT IN THE OBSERVATION",
+    "evidence": [
+      "positive control power_band R2 0.99999999 MAE 0.0023 (probe sound)",
+      "power pixels live in rows 136-151, cols 488-605 per Gui.cpp 1348-1387",
+      "play crops x32-416 and hud crops rows 48-112, so neither crop covers rows 136-151",
+      "shuffle null: hud real 0.6638 vs shuffled 0.7246; play real 0.8373 vs shuffled 0.8793, so the plane does worse than a shuffled power vector"
+    ],
+    "prior_claim_retracted": "the main agent round-133 claim that power is legible at R2 0.83 is retracted; the 0.66/0.84 were time confounding",
+    "criterion_defect": "the pre-registered floor of 0.5 did not fire because 0.66 and 0.84 exceed it, so the criterion itself permitted the misreading",
+    "provenance": "the extra controls are marked observability_provenance.post_hoc"
+  },
+  "power_observation_spec": {
+    "path": "Document/Update/Alpha/v4.2.0/experiments/T08-power-observation-spec.md",
+    "status": "spec written, NOT dispatched",
+    "options": {
+      "A": "new pixel channel hud_power (1,24,160) from panel rows 128-152, keeps R1 possibility",
+      "B": "privileged scalar next to act_hist, forfeits R1 irreversibly"
+    },
+    "recommended": "A",
+    "blocking_fact": "must verify whether T02c recorded frames keep FULL panel rows or only cropped 112x96 tensors; first case costs under 1 h, second costs 3-5 h of re-recording",
+    "criteria": {
+      "O1": "out-of-sample R2 > 0.90",
+      "O2": "MUST beat the shuffle null by >= 0.20, without O2 the experiment may not run",
+      "O3": "positive control R2 > 0.99",
+      "B1": "delta power per episode significant at p<0.05 both Welch and permutation",
+      "B2": "DIAG > 1650.05",
+      "B3": "at least 1 clear in 40"
+    },
+    "branches": {
+      "1": "observation is the bottleneck",
+      "2": "power readable but unlearnable -> credit assignment is the bottleneck",
+      "3": "observation hypothesis falsified",
+      "4": "first capability evidence",
+      "5": "more P collected but survival not improved -> power is not the survival bottleneck, test the auto-collect-line mechanism",
+      "6": "channel has relative info but insufficient absolute precision"
+    },
+    "blocking_fact_resolved": {
+      "finding": "T02c stores only cropped tensors, so panel rows 128-152 are absent",
+      "evidence": {
+        "play96x112_bytes": 283508864,
+        "play_frames": 6592,
+        "shape": "4x112x96",
+        "hud_bytes": 59064448,
+        "hud_frames": 6592,
+        "hud_shape": "1x56x160 which is panel rows 48-112",
+        "power_band": "panel rows 136-151"
+      },
+      "consequence": "offline numpy cropping is impossible; the recording must be re-run, so the cost is the pessimistic 3-5 h branch and the whole experiment is about 5-6 h",
+      "mitigating": "slot records carry obs_render_frames and last_visible_render_frame so re-capture is deterministic and well defined",
+      "sequencing": "must wait for the corpus expansion at 158/750 to finish; both compete for engines and disk"
+    }
+  },
+  "outstanding_work": [
+    "corpus expansion to 750/750 then 50_merge.sh then the twelve-file suite then uniform_in_set training and two-ruler evaluation then D1-D6 adjudication",
+    "power-observation experiment per experiments/T08-power-observation-spec.md, blocked on the expansion because both contend for engines and disk"
+  ],
+  "asset_manifest": {
+    "before_entries": 20,
+    "after_entries": 46,
+    "added": 26,
+    "c_check": "46 OK, 0 FAILED",
+    "v420_named_entries": 21,
+    "md_v420_mentions": 13,
+    "first20_preserved_sha256": "73ccf480d5dbd5ddc5d81d4d87b2ef15d204b76d111631ad99b2f19540637373",
+    "appended_not_rewritten": true,
+    "tracked_files_modified": 2,
+    "tracked_change_reason": "the manifest pair was updated BY DESIGN under AGENTS.md 8.2 because 15 GB of load-bearing v4.2.0 artifacts had no checksum record; no asset and no evidence was modified"
+  },
+  "adjudicators": {
+    "corpus_gate": {
+      "path": ".tmp_v420_adjudicate/adjudicate_corpus.py",
+      "exit_codes": {
+        "0": "gate passed",
+        "3": "gate FAILED",
+        "2": "refused (incomplete or malformed)"
+      },
+      "tested": "5/5 cases",
+      "test": ".tmp_v420_adjudicate/test_adjudicator.py"
+    },
+    "model_side": {
+      "path": ".tmp_v420_adjudicate/adjudicate_model.py",
+      "args": [
+        "--diag",
+        "--s1n",
+        "--holdout-hit",
+        "--lengths",
+        "--ne-share",
+        "--clears"
+      ],
+      "exit_codes": {
+        "0": "route still alive",
+        "3": "corpus_expansion_route_closed"
+      },
+      "tested": "3/3 branches (capability, closed, data_scale_confirmed)"
+    },
+    "order": "corpus gate first (no training on a dirty corpus), model side only after both rulers complete 20 episodes each",
+    "trap": "exit codes must be captured inside a bash script file; an inline PowerShell string renders the question-mark variable as True for every code"
+  }
+}

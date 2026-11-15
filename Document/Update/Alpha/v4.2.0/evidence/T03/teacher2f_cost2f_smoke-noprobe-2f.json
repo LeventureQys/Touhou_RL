@@ -1,0 +1,184 @@
+{
+  "tag": "smoke-noprobe-2f",
+  "label": "",
+  "mode": "fast",
+  "smoke": false,
+  "profile": {
+    "mode": "fast",
+    "horizon": 32,
+    "beam": 24,
+    "verify_k": 1,
+    "max_iterations": 1,
+    "decision_frames": 2,
+    "replan_decisions": 1,
+    "frames_per_query": 2,
+    "slots": 16,
+    "durations": [
+      1,
+      2
+    ],
+    "shoot_pulse_period": 24,
+    "replan_decisions_default": 2
+  },
+  "corpus": {
+    "shard": "/mnt/d/WorkShop/Touhou_RL/.tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed10-shard",
+    "seed": 10,
+    "stage": 0,
+    "difficulty": 1,
+    "team": 0,
+    "prefix_decisions": 100,
+    "prefix_frames": 400
+  },
+  "requested": {
+    "queries": 2,
+    "warmup": 0,
+    "outer_frames": 4
+  },
+  "loadavg_before": [
+    20.45,
+    20.74,
+    19.34
+  ],
+  "sha_before": {
+    "labels": "011f6c1cc3db232ca296177b9afc445a",
+    "shard": "883f3c56f94cda60f38232d12f0a1442",
+    "src_score": "d7089834a69881151a0524fcea36b75e"
+  },
+  "python": "3.10.12",
+  "engine": "/root/Touhou_RL/third_party/th08-rl/build/rl_v3/th08-modern",
+  "data_dir": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_teacher2f/data/s10-smoke-noprobe-2f",
+  "startup": {
+    "start_hello_ms": 1370.065,
+    "reset_ms": 670.923,
+    "hello": {
+      "_verb": "OK",
+      "proto": "1",
+      "harness": "1",
+      "role": "shadow",
+      "frames": "0"
+    },
+    "reset": {
+      "_verb": "OK",
+      "reset": "1",
+      "ready": "1",
+      "setup_frames": "417",
+      "frames": "0",
+      "stage": "0",
+      "difficulty": "1",
+      "team": "0",
+      "seed": "10",
+      "setup_state": "0",
+      "hash": "c2b684a7a564c2d3",
+      "mode": "cold",
+      "state_published": "1"
+    },
+    "frame": 0,
+    "hash": "c2b684a7a564c2d3",
+    "corpus_hash_pre": "c2b684a7a564c2d3",
+    "hash_matches_corpus": true
+  },
+  "prefix": {
+    "commands": 400,
+    "advanced": 400,
+    "expect_frame": 400,
+    "frame": 400,
+    "hash": "7b22ff41d6d9e8b7",
+    "expect_hash_post": "7b22ff41d6d9e8b7",
+    "expect_hash_next_pre": "7b22ff41d6d9e8b7",
+    "hash_matches_row_post": true,
+    "hash_matches_row_next_pre": true,
+    "replay_s": 0.0315,
+    "replay_fps": 12712.15
+  },
+  "capabilities": {
+    "skipped": true
+  },
+  "queries": [],
+  "completed_queries": 0,
+  "events": [],
+  "error": "EngineError: 'SPAWN 1' -> ERR spawn-template expected=2",
+  "exit_code": 4,
+  "wall_s": 2.191,
+  "loadavg_after": [
+    18.81,
+    20.39,
+    19.23
+  ],
+  "sha_after": {
+    "labels": "011f6c1cc3db232ca296177b9afc445a",
+    "shard": "883f3c56f94cda60f38232d12f0a1442",
+    "src_score": "d7089834a69881151a0524fcea36b75e"
+  },
+  "aggregates": {
+    "query_ms": {
+      "n": 0
+    },
+    "step_ms": {
+      "n": 0
+    },
+    "query_wall_s": 0.0,
+    "step_wall_s": 0.0,
+    "s_per_query": null,
+    "queries_per_s": null,
+    "s_per_outer_frame": null,
+    "internal_frames_per_query": null,
+    "internal_frames_per_outer_frame": null,
+    "totals": {
+      "outer_frames": 0,
+      "queries": 0,
+      "internal_frames": 0,
+      "internal_frames_upper": 0,
+      "record_frames": 0,
+      "verify_frames": 0,
+      "verified_n": 0,
+      "death_refined": 0,
+      "deaths_monotonic": null
+    }
+  },
+  "engine_stats": {
+    "calls": 414,
+    "seconds": 2.0769,
+    "per_command": {
+      "HELLO": {
+        "calls": 1,
+        "sum_ms": 1367.252
+      },
+      "RESET": {
+        "calls": 1,
+        "sum_ms": 670.898
+      },
+      "FRAME": {
+        "calls": 2,
+        "sum_ms": 0.039
+      },
+      "HASH": {
+        "calls": 2,
+        "sum_ms": 0.017
+      },
+      "STEP": {
+        "calls": 400,
+        "sum_ms": 28.33
+      },
+      "EVENTS": {
+        "calls": 1,
+        "sum_ms": 0.01
+      },
+      "PARK": {
+        "calls": 2,
+        "sum_ms": 8.937
+      },
+      "SPAWN": {
+        "calls": 2,
+        "sum_ms": 0.669
+      },
+      "CHILD": {
+        "calls": 2,
+        "sum_ms": 0.698
+      },
+      "QUIT": {
+        "calls": 1,
+        "sum_ms": 0.026
+      }
+    }
+  }
+}

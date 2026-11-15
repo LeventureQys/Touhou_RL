@@ -1,0 +1,1855 @@
+{
+  "generated_from": "raw/cost2f_*.json",
+  "runs": [
+    {
+      "tag": "fast-2f-d1650",
+      "mode": "fast",
+      "prefix_decisions": 1650,
+      "replan_decisions": 1,
+      "frames_per_query": 2,
+      "horizon": 32,
+      "beam": 24,
+      "verify_k": 1,
+      "queries": 100,
+      "outer_frames": 200,
+      "internal_frames": 6400,
+      "internal_frames_upper": 6400,
+      "record_frames": 3200,
+      "verify_frames": 3200,
+      "death_refined": 0,
+      "query_ms": {
+        "n": 100,
+        "sum_ms": 8618.383,
+        "mean_ms": 86.184,
+        "p50_ms": 83.043,
+        "p95_ms": 120.307,
+        "max_ms": 568.587,
+        "min_ms": 32.801
+      },
+      "step_ms": {
+        "n": 100,
+        "sum_ms": 8827.191,
+        "mean_ms": 88.272,
+        "p50_ms": 85.737,
+        "p95_ms": 121.441,
+        "max_ms": 569.649,
+        "min_ms": 34.181
+      },
+      "query_wall_s": 8.6184,
+      "step_wall_s": 8.8272,
+      "s_per_query": 0.086184,
+      "queries_per_s": 11.6031,
+      "s_per_outer_frame": 0.043092,
+      "internal_per_query": 64.0,
+      "internal_per_outer_frame": 32.0,
+      "prefix_hash": "fb590e924e379e3c",
+      "prefix_hash_ok": true,
+      "start_hash_ok": true,
+      "prefix_replay_s": 1.1379,
+      "startup_ms": 2121.428,
+      "wall_s": 12.351,
+      "exit_code": 0,
+      "error": null,
+      "deaths": 0.0,
+      "end_frame": 6806,
+      "loadavg_before": [
+        19.84,
+        18.96,
+        18.49
+      ],
+      "loadavg_after": [
+        24.05,
+        19.91,
+        18.81
+      ],
+      "sha_invariant": true,
+      "phases": {
+        "events": {
+          "n": 100,
+          "sum_ms": 10.172,
+          "mean_ms": 0.102,
+          "p50_ms": 0.052,
+          "p95_ms": 0.143,
+          "max_ms": 2.994,
+          "min_ms": 0.03
+        },
+        "record": {
+          "n": 100,
+          "sum_ms": 2555.795,
+          "mean_ms": 25.558,
+          "p50_ms": 23.999,
+          "p95_ms": 38.341,
+          "max_ms": 54.15,
+          "min_ms": 14.356
+        },
+        "search": {
+          "n": 100,
+          "sum_ms": 4833.869,
+          "mean_ms": 48.339,
+          "p50_ms": 46.542,
+          "p95_ms": 79.14,
+          "max_ms": 542.297,
+          "min_ms": 6.085
+        },
+        "verify": {
+          "n": 100,
+          "sum_ms": 1206.74,
+          "mean_ms": 12.067,
+          "p50_ms": 11.314,
+          "p95_ms": 21.022,
+          "max_ms": 29.987,
+          "min_ms": 5.907
+        }
+      },
+      "engine_calls": 17691,
+      "engine_seconds": 6.9321,
+      "engine_per_command": {
+        "HELLO": 2,
+        "RESET": 1,
+        "FRAME": 2,
+        "HASH": 2,
+        "STEP": 6707,
+        "BRANCH": 1,
+        "STATE": 104,
+        "HAZARDS": 1,
+        "PARK": 105,
+        "SPAWN": 208,
+        "CHILD": 10454,
+        "EVENTS": 103,
+        "QUIT": 1
+      }
+    },
+    {
+      "tag": "fast-2f-r1",
+      "mode": "fast",
+      "prefix_decisions": 100,
+      "replan_decisions": 1,
+      "frames_per_query": 2,
+      "horizon": 32,
+      "beam": 24,
+      "verify_k": 1,
+      "queries": 100,
+      "outer_frames": 200,
+      "internal_frames": 6400,
+      "internal_frames_upper": 6400,
+      "record_frames": 3200,
+      "verify_frames": 3200,
+      "death_refined": 0,
+      "query_ms": {
+        "n": 100,
+        "sum_ms": 6825.22,
+        "mean_ms": 68.252,
+        "p50_ms": 66.334,
+        "p95_ms": 101.951,
+        "max_ms": 107.433,
+        "min_ms": 27.964
+      },
+      "step_ms": {
+        "n": 100,
+        "sum_ms": 6958.949,
+        "mean_ms": 69.589,
+        "p50_ms": 67.031,
+        "p95_ms": 103.657,
+        "max_ms": 109.7,
+        "min_ms": 29.037
+      },
+      "query_wall_s": 6.8252,
+      "step_wall_s": 6.9589,
+      "s_per_query": 0.068252,
+      "queries_per_s": 14.6515,
+      "s_per_outer_frame": 0.034126,
+      "internal_per_query": 64.0,
+      "internal_per_outer_frame": 32.0,
+      "prefix_hash": "7b22ff41d6d9e8b7",
+      "prefix_hash_ok": true,
+      "start_hash_ok": true,
+      "prefix_replay_s": 0.0312,
+      "startup_ms": 1914.334,
+      "wall_s": 9.573,
+      "exit_code": 0,
+      "error": null,
+      "deaths": 0.0,
+      "end_frame": 606,
+      "loadavg_before": [
+        12.45,
+        17.21,
+        17.93
+      ],
+      "loadavg_after": [
+        13.56,
+        17.27,
+        17.94
+      ],
+      "sha_invariant": true,
+      "phases": {
+        "events": {
+          "n": 100,
+          "sum_ms": 8.042,
+          "mean_ms": 0.08,
+          "p50_ms": 0.053,
+          "p95_ms": 0.098,
+          "max_ms": 2.538,
+          "min_ms": 0.027
+        },
+        "record": {
+          "n": 100,
+          "sum_ms": 2012.365,
+          "mean_ms": 20.124,
+          "p50_ms": 20.119,
+          "p95_ms": 26.146,
+          "max_ms": 29.246,
+          "min_ms": 11.688
+        },
+        "search": {
+          "n": 100,
+          "sum_ms": 3790.441,
+          "mean_ms": 37.904,
+          "p50_ms": 39.722,
+          "p95_ms": 68.39,
+          "max_ms": 79.443,
+          "min_ms": 5.756
+        },
+        "verify": {
+          "n": 100,
+          "sum_ms": 1003.768,
+          "mean_ms": 10.038,
+          "p50_ms": 9.801,
+          "p95_ms": 15.827,
+          "max_ms": 20.378,
+          "min_ms": 5.746
+        }
+      },
+      "engine_calls": 11781,
+      "engine_seconds": 4.8901,
+      "engine_per_command": {
+        "HELLO": 2,
+        "RESET": 1,
+        "FRAME": 2,
+        "HASH": 2,
+        "STEP": 507,
+        "BRANCH": 1,
+        "STATE": 104,
+        "HAZARDS": 1,
+        "PARK": 105,
+        "SPAWN": 208,
+        "CHILD": 10744,
+        "EVENTS": 103,
+        "QUIT": 1
+      }
+    },
+    {
+      "tag": "fast-2f-r2",
+      "mode": "fast",
+      "prefix_decisions": 100,
+      "replan_decisions": 1,
+      "frames_per_query": 2,
+      "horizon": 32,
+      "beam": 24,
+      "verify_k": 1,
+      "queries": 100,
+      "outer_frames": 200,
+      "internal_frames": 6400,
+      "internal_frames_upper": 6400,
+      "record_frames": 3200,
+      "verify_frames": 3200,
+      "death_refined": 0,
+      "query_ms": {
+        "n": 100,
+        "sum_ms": 6491.177,
+        "mean_ms": 64.912,
+        "p50_ms": 66.237,
+        "p95_ms": 97.301,
+        "max_ms": 168.703,
+        "min_ms": 28.243
+      },
+      "step_ms": {
+        "n": 100,
+        "sum_ms": 6611.763,
+        "mean_ms": 66.118,
+        "p50_ms": 68.393,
+        "p95_ms": 98.538,
+        "max_ms": 169.611,
+        "min_ms": 29.241
+      },
+      "query_wall_s": 6.4912,
+      "step_wall_s": 6.6118,
+      "s_per_query": 0.064912,
+      "queries_per_s": 15.4055,
+      "s_per_outer_frame": 0.032456,
+      "internal_per_query": 64.0,
+      "internal_per_outer_frame": 32.0,
+      "prefix_hash": "7b22ff41d6d9e8b7",
+      "prefix_hash_ok": true,
+      "start_hash_ok": true,
+      "prefix_replay_s": 0.0486,
+      "startup_ms": 1888.515,
+      "wall_s": 9.201,
+      "exit_code": 0,
+      "error": null,
+      "deaths": 0.0,
+      "end_frame": 606,
+      "loadavg_before": [
+        12.56,
+        17.0,
+        17.85
+      ],
+      "loadavg_after": [
+        15.83,
+        17.56,
+        18.02
+      ],
+      "sha_invariant": true,
+      "phases": {
+        "events": {
+          "n": 100,
+          "sum_ms": 5.454,
+          "mean_ms": 0.055,
+          "p50_ms": 0.051,
+          "p95_ms": 0.101,
+          "max_ms": 0.132,
+          "min_ms": 0.025
+        },
+        "record": {
+          "n": 100,
+          "sum_ms": 1912.324,
+          "mean_ms": 19.123,
+          "p50_ms": 18.435,
+          "p95_ms": 25.001,
+          "max_ms": 27.157,
+          "min_ms": 11.77
+        },
+        "search": {
+          "n": 100,
+          "sum_ms": 3654.044,
+          "mean_ms": 36.54,
+          "p50_ms": 39.492,
+          "p95_ms": 63.747,
+          "max_ms": 123.15,
+          "min_ms": 5.696
+        },
+        "verify": {
+          "n": 100,
+          "sum_ms": 909.25,
+          "mean_ms": 9.092,
+          "p50_ms": 8.555,
+          "p95_ms": 13.762,
+          "max_ms": 22.79,
+          "min_ms": 5.497
+        }
+      },
+      "engine_calls": 11781,
+      "engine_seconds": 4.7103,
+      "engine_per_command": {
+        "HELLO": 2,
+        "RESET": 1,
+        "FRAME": 2,
+        "HASH": 2,
+        "STEP": 507,
+        "BRANCH": 1,
+        "STATE": 104,
+        "HAZARDS": 1,
+        "PARK": 105,
+        "SPAWN": 208,
+        "CHILD": 10744,
+        "EVENTS": 103,
+        "QUIT": 1
+      }
+    },
+    {
+      "tag": "smoke-fast-fast-2f",
+      "mode": "fast",
+      "prefix_decisions": 100,
+      "replan_decisions": 1,
+      "frames_per_query": 2,
+      "horizon": 32,
+      "beam": 24,
+      "verify_k": 1,
+      "queries": 3,
+      "outer_frames": 6,
+      "internal_frames": 192,
+      "internal_frames_upper": 192,
+      "record_frames": 96,
+      "verify_frames": 96,
+      "death_refined": 0,
+      "query_ms": {
+        "n": 3,
+        "sum_ms": 535.475,
+        "mean_ms": 178.492,
+        "p50_ms": 78.726,
+        "p95_ms": 404.595,
+        "max_ms": 404.595,
+        "min_ms": 52.154
+      },
+      "step_ms": {
+        "n": 3,
+        "sum_ms": 538.281,
+        "mean_ms": 179.427,
+        "p50_ms": 79.562,
+        "p95_ms": 405.692,
+        "max_ms": 405.692,
+        "min_ms": 53.027
+      },
+      "query_wall_s": 0.5355,
+      "step_wall_s": 0.5383,
+      "s_per_query": 0.178492,
+      "queries_per_s": 5.6025,
+      "s_per_outer_frame": 0.089246,
+      "internal_per_query": 64.0,
+      "internal_per_outer_frame": 32.0,
+      "prefix_hash": "7b22ff41d6d9e8b7",
+      "prefix_hash_ok": true,
+      "start_hash_ok": true,
+      "prefix_replay_s": 0.0316,
+      "startup_ms": 1905.866,
+      "wall_s": 2.54,
+      "exit_code": 0,
+      "error": null,
+      "deaths": 0.0,
+      "end_frame": 406,
+      "loadavg_before": [
+        12.87,
+        17.45,
+        18.02
+      ],
+      "loadavg_after": [
+        12.87,
+        17.45,
+        18.02
+      ],
+      "sha_invariant": true,
+      "phases": {
+        "events": {
+          "n": 3,
+          "sum_ms": 0.166,
+          "mean_ms": 0.055,
+          "p50_ms": 0.05,
+          "p95_ms": 0.076,
+          "max_ms": 0.076,
+          "min_ms": 0.04
+        },
+        "record": {
+          "n": 3,
+          "sum_ms": 63.852,
+          "mean_ms": 21.284,
+          "p50_ms": 23.872,
+          "p95_ms": 24.525,
+          "max_ms": 24.525,
+          "min_ms": 15.455
+        },
+        "search": {
+          "n": 3,
+          "sum_ms": 443.961,
+          "mean_ms": 147.987,
+          "p50_ms": 43.453,
+          "p95_ms": 377.702,
+          "max_ms": 377.702,
+          "min_ms": 22.806
+        },
+        "verify": {
+          "n": 3,
+          "sum_ms": 27.236,
+          "mean_ms": 9.079,
+          "p50_ms": 10.588,
+          "p95_ms": 11.295,
+          "max_ms": 11.295,
+          "min_ms": 5.353
+        }
+      },
+      "engine_calls": 749,
+      "engine_seconds": 2.0304,
+      "engine_per_command": {
+        "HELLO": 2,
+        "RESET": 1,
+        "FRAME": 2,
+        "HASH": 2,
+        "STEP": 403,
+        "BRANCH": 1,
+        "STATE": 4,
+        "HAZARDS": 1,
+        "PARK": 5,
+        "SPAWN": 8,
+        "CHILD": 316,
+        "EVENTS": 3,
+        "QUIT": 1
+      }
+    },
+    {
+      "tag": "smoke-noprobe-2f",
+      "mode": "fast",
+      "prefix_decisions": 100,
+      "replan_decisions": 1,
+      "frames_per_query": 2,
+      "horizon": 32,
+      "beam": 24,
+      "verify_k": 1,
+      "queries": 0,
+      "outer_frames": 0,
+      "internal_frames": 0,
+      "internal_frames_upper": 0,
+      "record_frames": 0,
+      "verify_frames": 0,
+      "death_refined": 0,
+      "query_ms": {
+        "n": 0,
+        "sum_ms": 0.0,
+        "mean_ms": 0.0,
+        "p50_ms": 0.0,
+        "p95_ms": 0.0,
+        "max_ms": 0.0,
+        "min_ms": 0.0
+      },
+      "step_ms": {
+        "n": 0,
+        "sum_ms": 0.0,
+        "mean_ms": 0.0,
+        "p50_ms": 0.0,
+        "p95_ms": 0.0,
+        "max_ms": 0.0,
+        "min_ms": 0.0
+      },
+      "query_wall_s": 0.0,
+      "step_wall_s": 0.0,
+      "s_per_query": null,
+      "queries_per_s": null,
+      "s_per_outer_frame": null,
+      "internal_per_query": null,
+      "internal_per_outer_frame": null,
+      "prefix_hash": "7b22ff41d6d9e8b7",
+      "prefix_hash_ok": true,
+      "start_hash_ok": true,
+      "prefix_replay_s": 0.0315,
+      "startup_ms": 2040.988,
+      "wall_s": 2.191,
+      "exit_code": 4,
+      "error": "EngineError: 'SPAWN 1' -> ERR spawn-template expected=2",
+      "deaths": null,
+      "end_frame": null,
+      "loadavg_before": [
+        20.45,
+        20.74,
+        19.34
+      ],
+      "loadavg_after": [
+        18.81,
+        20.39,
+        19.23
+      ],
+      "sha_invariant": true,
+      "phases": {},
+      "engine_calls": 414,
+      "engine_seconds": 2.0769,
+      "engine_per_command": {
+        "HELLO": 1,
+        "RESET": 1,
+        "FRAME": 2,
+        "HASH": 2,
+        "STEP": 400,
+        "EVENTS": 1,
+        "PARK": 2,
+        "SPAWN": 2,
+        "CHILD": 2,
+        "QUIT": 1
+      }
+    },
+    {
+      "tag": "fast-4f-r1",
+      "mode": "fast",
+      "prefix_decisions": 100,
+      "replan_decisions": 2,
+      "frames_per_query": 4,
+      "horizon": 32,
+      "beam": 24,
+      "verify_k": 1,
+      "queries": 50,
+      "outer_frames": 200,
+      "internal_frames": 3200,
+      "internal_frames_upper": 3200,
+      "record_frames": 1600,
+      "verify_frames": 1600,
+      "death_refined": 0,
+      "query_ms": {
+        "n": 50,
+        "sum_ms": 3031.099,
+        "mean_ms": 60.622,
+        "p50_ms": 59.723,
+        "p95_ms": 94.942,
+        "max_ms": 97.897,
+        "min_ms": 26.885
+      },
+      "step_ms": {
+        "n": 50,
+        "sum_ms": 3105.788,
+        "mean_ms": 62.116,
+        "p50_ms": 60.868,
+        "p95_ms": 96.212,
+        "max_ms": 99.453,
+        "min_ms": 27.811
+      },
+      "query_wall_s": 3.0311,
+      "step_wall_s": 3.1058,
+      "s_per_query": 0.060622,
+      "queries_per_s": 16.4957,
+      "s_per_outer_frame": 0.015155,
+      "internal_per_query": 64.0,
+      "internal_per_outer_frame": 16.0,
+      "prefix_hash": "7b22ff41d6d9e8b7",
+      "prefix_hash_ok": true,
+      "start_hash_ok": true,
+      "prefix_replay_s": 0.0289,
+      "startup_ms": 1846.235,
+      "wall_s": 5.629,
+      "exit_code": 0,
+      "error": null,
+      "deaths": 0.0,
+      "end_frame": 612,
+      "loadavg_before": [
+        15.83,
+        17.56,
+        18.02
+      ],
+      "loadavg_after": [
+        18.65,
+        18.12,
+        18.2
+      ],
+      "sha_invariant": true,
+      "phases": {
+        "events": {
+          "n": 50,
+          "sum_ms": 3.967,
+          "mean_ms": 0.079,
+          "p50_ms": 0.051,
+          "p95_ms": 0.121,
+          "max_ms": 1.073,
+          "min_ms": 0.03
+        },
+        "record": {
+          "n": 50,
+          "sum_ms": 998.926,
+          "mean_ms": 19.979,
+          "p50_ms": 19.233,
+          "p95_ms": 27.159,
+          "max_ms": 34.731,
+          "min_ms": 12.769
+        },
+        "search": {
+          "n": 50,
+          "sum_ms": 1559.721,
+          "mean_ms": 31.194,
+          "p50_ms": 30.435,
+          "p95_ms": 62.044,
+          "max_ms": 70.892,
+          "min_ms": 5.547
+        },
+        "verify": {
+          "n": 50,
+          "sum_ms": 463.35,
+          "mean_ms": 9.267,
+          "p50_ms": 8.986,
+          "p95_ms": 14.35,
+          "max_ms": 19.961,
+          "min_ms": 5.377
+        }
+      },
+      "engine_calls": 6298,
+      "engine_seconds": 3.344,
+      "engine_per_command": {
+        "HELLO": 2,
+        "RESET": 1,
+        "FRAME": 2,
+        "HASH": 2,
+        "STEP": 508,
+        "BRANCH": 1,
+        "STATE": 54,
+        "HAZARDS": 1,
+        "PARK": 55,
+        "SPAWN": 108,
+        "CHILD": 5510,
+        "EVENTS": 53,
+        "QUIT": 1
+      }
+    },
+    {
+      "tag": "fast-4f-r2",
+      "mode": "fast",
+      "prefix_decisions": 100,
+      "replan_decisions": 2,
+      "frames_per_query": 4,
+      "horizon": 32,
+      "beam": 24,
+      "verify_k": 1,
+      "queries": 50,
+      "outer_frames": 200,
+      "internal_frames": 3200,
+      "internal_frames_upper": 3200,
+      "record_frames": 1600,
+      "verify_frames": 1600,
+      "death_refined": 0,
+      "query_ms": {
+        "n": 50,
+        "sum_ms": 2997.664,
+        "mean_ms": 59.953,
+        "p50_ms": 58.291,
+        "p95_ms": 95.741,
+        "max_ms": 104.575,
+        "min_ms": 29.565
+      },
+      "step_ms": {
+        "n": 50,
+        "sum_ms": 3077.786,
+        "mean_ms": 61.556,
+        "p50_ms": 59.968,
+        "p95_ms": 96.939,
+        "max_ms": 106.401,
+        "min_ms": 30.484
+      },
+      "query_wall_s": 2.9977,
+      "step_wall_s": 3.0778,
+      "s_per_query": 0.059953,
+      "queries_per_s": 16.6797,
+      "s_per_outer_frame": 0.014988,
+      "internal_per_query": 64.0,
+      "internal_per_outer_frame": 16.0,
+      "prefix_hash": "7b22ff41d6d9e8b7",
+      "prefix_hash_ok": true,
+      "start_hash_ok": true,
+      "prefix_replay_s": 0.0306,
+      "startup_ms": 1890.696,
+      "wall_s": 5.676,
+      "exit_code": 0,
+      "error": null,
+      "deaths": 0.0,
+      "end_frame": 612,
+      "loadavg_before": [
+        18.65,
+        18.12,
+        18.2
+      ],
+      "loadavg_after": [
+        16.17,
+        17.6,
+        18.03
+      ],
+      "sha_invariant": true,
+      "phases": {
+        "events": {
+          "n": 50,
+          "sum_ms": 3.038,
+          "mean_ms": 0.061,
+          "p50_ms": 0.053,
+          "p95_ms": 0.117,
+          "max_ms": 0.125,
+          "min_ms": 0.027
+        },
+        "record": {
+          "n": 50,
+          "sum_ms": 1015.694,
+          "mean_ms": 20.314,
+          "p50_ms": 19.804,
+          "p95_ms": 27.614,
+          "max_ms": 31.405,
+          "min_ms": 11.371
+        },
+        "search": {
+          "n": 50,
+          "sum_ms": 1496.082,
+          "mean_ms": 29.922,
+          "p50_ms": 27.413,
+          "p95_ms": 61.878,
+          "max_ms": 64.054,
+          "min_ms": 5.696
+        },
+        "verify": {
+          "n": 50,
+          "sum_ms": 473.485,
+          "mean_ms": 9.47,
+          "p50_ms": 8.968,
+          "p95_ms": 14.235,
+          "max_ms": 17.909,
+          "min_ms": 5.289
+        }
+      },
+      "engine_calls": 6298,
+      "engine_seconds": 3.4681,
+      "engine_per_command": {
+        "HELLO": 2,
+        "RESET": 1,
+        "FRAME": 2,
+        "HASH": 2,
+        "STEP": 508,
+        "BRANCH": 1,
+        "STATE": 54,
+        "HAZARDS": 1,
+        "PARK": 55,
+        "SPAWN": 108,
+        "CHILD": 5510,
+        "EVENTS": 53,
+        "QUIT": 1
+      }
+    },
+    {
+      "tag": "v2h-2f-d1650",
+      "mode": "v2h",
+      "prefix_decisions": 1650,
+      "replan_decisions": 1,
+      "frames_per_query": 2,
+      "horizon": 48,
+      "beam": 64,
+      "verify_k": 3,
+      "queries": 100,
+      "outer_frames": 200,
+      "internal_frames": 19200,
+      "internal_frames_upper": 19200,
+      "record_frames": 4800,
+      "verify_frames": 14400,
+      "death_refined": 0,
+      "query_ms": {
+        "n": 100,
+        "sum_ms": 16922.542,
+        "mean_ms": 169.225,
+        "p50_ms": 166.663,
+        "p95_ms": 226.824,
+        "max_ms": 627.538,
+        "min_ms": 82.952
+      },
+      "step_ms": {
+        "n": 100,
+        "sum_ms": 17152.557,
+        "mean_ms": 171.526,
+        "p50_ms": 168.478,
+        "p95_ms": 231.276,
+        "max_ms": 629.956,
+        "min_ms": 84.113
+      },
+      "query_wall_s": 16.9225,
+      "step_wall_s": 17.1526,
+      "s_per_query": 0.169225,
+      "queries_per_s": 5.9093,
+      "s_per_outer_frame": 0.084613,
+      "internal_per_query": 192.0,
+      "internal_per_outer_frame": 96.0,
+      "prefix_hash": "fb590e924e379e3c",
+      "prefix_hash_ok": true,
+      "start_hash_ok": true,
+      "prefix_replay_s": 1.1442,
+      "startup_ms": 2099.571,
+      "wall_s": 20.879,
+      "exit_code": 0,
+      "error": null,
+      "deaths": 0.0,
+      "end_frame": 6806,
+      "loadavg_before": [
+        24.05,
+        19.91,
+        18.81
+      ],
+      "loadavg_after": [
+        27.96,
+        21.02,
+        19.19
+      ],
+      "sha_invariant": true,
+      "phases": {
+        "events": {
+          "n": 100,
+          "sum_ms": 8.765,
+          "mean_ms": 0.088,
+          "p50_ms": 0.058,
+          "p95_ms": 0.145,
+          "max_ms": 1.005,
+          "min_ms": 0.03
+        },
+        "record": {
+          "n": 100,
+          "sum_ms": 3619.64,
+          "mean_ms": 36.196,
+          "p50_ms": 34.227,
+          "p95_ms": 59.776,
+          "max_ms": 82.743,
+          "min_ms": 17.775
+        },
+        "search": {
+          "n": 100,
+          "sum_ms": 8449.945,
+          "mean_ms": 84.499,
+          "p50_ms": 84.839,
+          "p95_ms": 128.828,
+          "max_ms": 563.174,
+          "min_ms": 19.899
+        },
+        "verify": {
+          "n": 100,
+          "sum_ms": 4829.125,
+          "mean_ms": 48.291,
+          "p50_ms": 46.52,
+          "p95_ms": 71.95,
+          "max_ms": 84.403,
+          "min_ms": 23.905
+        }
+      },
+      "engine_calls": 24417,
+      "engine_seconds": 11.0617,
+      "engine_per_command": {
+        "HELLO": 2,
+        "RESET": 1,
+        "FRAME": 2,
+        "HASH": 2,
+        "STEP": 6707,
+        "BRANCH": 1,
+        "STATE": 104,
+        "HAZARDS": 1,
+        "PARK": 105,
+        "SPAWN": 414,
+        "CHILD": 16974,
+        "EVENTS": 103,
+        "QUIT": 1
+      }
+    },
+    {
+      "tag": "v2h-2f-r1",
+      "mode": "v2h",
+      "prefix_decisions": 100,
+      "replan_decisions": 1,
+      "frames_per_query": 2,
+      "horizon": 48,
+      "beam": 64,
+      "verify_k": 3,
+      "queries": 100,
+      "outer_frames": 200,
+      "internal_frames": 19200,
+      "internal_frames_upper": 19200,
+      "record_frames": 4800,
+      "verify_frames": 14400,
+      "death_refined": 0,
+      "query_ms": {
+        "n": 100,
+        "sum_ms": 12895.725,
+        "mean_ms": 128.957,
+        "p50_ms": 137.079,
+        "p95_ms": 169.506,
+        "max_ms": 191.822,
+        "min_ms": 73.411
+      },
+      "step_ms": {
+        "n": 100,
+        "sum_ms": 13035.426,
+        "mean_ms": 130.354,
+        "p50_ms": 138.393,
+        "p95_ms": 171.813,
+        "max_ms": 194.88,
+        "min_ms": 74.365
+      },
+      "query_wall_s": 12.8957,
+      "step_wall_s": 13.0354,
+      "s_per_query": 0.128957,
+      "queries_per_s": 7.7545,
+      "s_per_outer_frame": 0.064479,
+      "internal_per_query": 192.0,
+      "internal_per_outer_frame": 96.0,
+      "prefix_hash": "7b22ff41d6d9e8b7",
+      "prefix_hash_ok": true,
+      "start_hash_ok": true,
+      "prefix_replay_s": 0.0589,
+      "startup_ms": 2044.357,
+      "wall_s": 16.061,
+      "exit_code": 0,
+      "error": null,
+      "deaths": 0.0,
+      "end_frame": 606,
+      "loadavg_before": [
+        16.17,
+        17.6,
+        18.03
+      ],
+      "loadavg_after": [
+        18.13,
+        17.98,
+        18.15
+      ],
+      "sha_invariant": true,
+      "phases": {
+        "events": {
+          "n": 100,
+          "sum_ms": 6.123,
+          "mean_ms": 0.061,
+          "p50_ms": 0.051,
+          "p95_ms": 0.108,
+          "max_ms": 0.532,
+          "min_ms": 0.029
+        },
+        "record": {
+          "n": 100,
+          "sum_ms": 2637.012,
+          "mean_ms": 26.37,
+          "p50_ms": 25.702,
+          "p95_ms": 35.221,
+          "max_ms": 50.645,
+          "min_ms": 15.162
+        },
+        "search": {
+          "n": 100,
+          "sum_ms": 6718.254,
+          "mean_ms": 67.183,
+          "p50_ms": 73.368,
+          "p95_ms": 100.608,
+          "max_ms": 104.586,
+          "min_ms": 18.585
+        },
+        "verify": {
+          "n": 100,
+          "sum_ms": 3521.993,
+          "mean_ms": 35.22,
+          "p50_ms": 34.616,
+          "p95_ms": 56.971,
+          "max_ms": 68.787,
+          "min_ms": 21.685
+        }
+      },
+      "engine_calls": 18751,
+      "engine_seconds": 7.8265,
+      "engine_per_command": {
+        "HELLO": 2,
+        "RESET": 1,
+        "FRAME": 2,
+        "HASH": 2,
+        "STEP": 507,
+        "BRANCH": 1,
+        "STATE": 104,
+        "HAZARDS": 1,
+        "PARK": 105,
+        "SPAWN": 414,
+        "CHILD": 17508,
+        "EVENTS": 103,
+        "QUIT": 1
+      }
+    },
+    {
+      "tag": "v2h-2f-r2",
+      "mode": "v2h",
+      "prefix_decisions": 100,
+      "replan_decisions": 1,
+      "frames_per_query": 2,
+      "horizon": 48,
+      "beam": 64,
+      "verify_k": 3,
+      "queries": 100,
+      "outer_frames": 200,
+      "internal_frames": 19200,
+      "internal_frames_upper": 19200,
+      "record_frames": 4800,
+      "verify_frames": 14400,
+      "death_refined": 0,
+      "query_ms": {
+        "n": 100,
+        "sum_ms": 12029.754,
+        "mean_ms": 120.298,
+        "p50_ms": 124.938,
+        "p95_ms": 159.671,
+        "max_ms": 167.525,
+        "min_ms": 70.263
+      },
+      "step_ms": {
+        "n": 100,
+        "sum_ms": 12155.218,
+        "mean_ms": 121.552,
+        "p50_ms": 125.964,
+        "p95_ms": 160.374,
+        "max_ms": 169.067,
+        "min_ms": 71.125
+      },
+      "query_wall_s": 12.0298,
+      "step_wall_s": 12.1552,
+      "s_per_query": 0.120298,
+      "queries_per_s": 8.3127,
+      "s_per_outer_frame": 0.060149,
+      "internal_per_query": 192.0,
+      "internal_per_outer_frame": 96.0,
+      "prefix_hash": "7b22ff41d6d9e8b7",
+      "prefix_hash_ok": true,
+      "start_hash_ok": true,
+      "prefix_replay_s": 0.0399,
+      "startup_ms": 1901.133,
+      "wall_s": 14.904,
+      "exit_code": 0,
+      "error": null,
+      "deaths": 0.0,
+      "end_frame": 606,
+      "loadavg_before": [
+        17.5,
+        17.85,
+        18.1
+      ],
+      "loadavg_after": [
+        16.25,
+        17.53,
+        18.0
+      ],
+      "sha_invariant": true,
+      "phases": {
+        "events": {
+          "n": 100,
+          "sum_ms": 9.9,
+          "mean_ms": 0.099,
+          "p50_ms": 0.049,
+          "p95_ms": 0.147,
+          "max_ms": 3.868,
+          "min_ms": 0.029
+        },
+        "record": {
+          "n": 100,
+          "sum_ms": 2357.646,
+          "mean_ms": 23.576,
+          "p50_ms": 23.335,
+          "p95_ms": 30.384,
+          "max_ms": 44.427,
+          "min_ms": 14.851
+        },
+        "search": {
+          "n": 100,
+          "sum_ms": 6366.033,
+          "mean_ms": 63.66,
+          "p50_ms": 68.072,
+          "p95_ms": 97.807,
+          "max_ms": 108.788,
+          "min_ms": 19.011
+        },
+        "verify": {
+          "n": 100,
+          "sum_ms": 3284.049,
+          "mean_ms": 32.84,
+          "p50_ms": 33.35,
+          "p95_ms": 43.68,
+          "max_ms": 55.799,
+          "min_ms": 21.16
+        }
+      },
+      "engine_calls": 18751,
+      "engine_seconds": 7.1798,
+      "engine_per_command": {
+        "HELLO": 2,
+        "RESET": 1,
+        "FRAME": 2,
+        "HASH": 2,
+        "STEP": 507,
+        "BRANCH": 1,
+        "STATE": 104,
+        "HAZARDS": 1,
+        "PARK": 105,
+        "SPAWN": 414,
+        "CHILD": 17508,
+        "EVENTS": 103,
+        "QUIT": 1
+      }
+    },
+    {
+      "tag": "v2h-4f-r1",
+      "mode": "v2h",
+      "prefix_decisions": 100,
+      "replan_decisions": 2,
+      "frames_per_query": 4,
+      "horizon": 48,
+      "beam": 64,
+      "verify_k": 3,
+      "queries": 50,
+      "outer_frames": 200,
+      "internal_frames": 9600,
+      "internal_frames_upper": 9600,
+      "record_frames": 2400,
+      "verify_frames": 7200,
+      "death_refined": 0,
+      "query_ms": {
+        "n": 50,
+        "sum_ms": 6207.245,
+        "mean_ms": 124.145,
+        "p50_ms": 125.719,
+        "p95_ms": 173.545,
+        "max_ms": 179.156,
+        "min_ms": 62.294
+      },
+      "step_ms": {
+        "n": 50,
+        "sum_ms": 6278.737,
+        "mean_ms": 125.575,
+        "p50_ms": 128.237,
+        "p95_ms": 176.132,
+        "max_ms": 181.494,
+        "min_ms": 65.019
+      },
+      "query_wall_s": 6.2072,
+      "step_wall_s": 6.2787,
+      "s_per_query": 0.124145,
+      "queries_per_s": 8.0551,
+      "s_per_outer_frame": 0.031036,
+      "internal_per_query": 192.0,
+      "internal_per_outer_frame": 48.0,
+      "prefix_hash": "7b22ff41d6d9e8b7",
+      "prefix_hash_ok": true,
+      "start_hash_ok": true,
+      "prefix_replay_s": 0.036,
+      "startup_ms": 1885.516,
+      "wall_s": 9.083,
+      "exit_code": 0,
+      "error": null,
+      "deaths": 0.0,
+      "end_frame": 612,
+      "loadavg_before": [
+        16.84,
+        17.71,
+        18.06
+      ],
+      "loadavg_after": [
+        17.5,
+        17.85,
+        18.1
+      ],
+      "sha_invariant": true,
+      "phases": {
+        "events": {
+          "n": 50,
+          "sum_ms": 2.87,
+          "mean_ms": 0.057,
+          "p50_ms": 0.05,
+          "p95_ms": 0.123,
+          "max_ms": 0.167,
+          "min_ms": 0.029
+        },
+        "record": {
+          "n": 50,
+          "sum_ms": 1221.01,
+          "mean_ms": 24.42,
+          "p50_ms": 24.572,
+          "p95_ms": 34.145,
+          "max_ms": 36.669,
+          "min_ms": 15.079
+        },
+        "search": {
+          "n": 50,
+          "sum_ms": 3400.079,
+          "mean_ms": 68.002,
+          "p50_ms": 73.153,
+          "p95_ms": 113.611,
+          "max_ms": 120.032,
+          "min_ms": 19.604
+        },
+        "verify": {
+          "n": 50,
+          "sum_ms": 1577.746,
+          "mean_ms": 31.555,
+          "p50_ms": 30.851,
+          "p95_ms": 43.453,
+          "max_ms": 46.028,
+          "min_ms": 21.019
+        }
+      },
+      "engine_calls": 9918,
+      "engine_seconds": 4.6063,
+      "engine_per_command": {
+        "HELLO": 2,
+        "RESET": 1,
+        "FRAME": 2,
+        "HASH": 2,
+        "STEP": 508,
+        "BRANCH": 1,
+        "STATE": 54,
+        "HAZARDS": 1,
+        "PARK": 55,
+        "SPAWN": 214,
+        "CHILD": 9024,
+        "EVENTS": 53,
+        "QUIT": 1
+      }
+    },
+    {
+      "tag": "v3b-2f-smoke",
+      "mode": "v3b",
+      "prefix_decisions": 100,
+      "replan_decisions": 1,
+      "frames_per_query": 2,
+      "horizon": 64,
+      "beam": 128,
+      "verify_k": 4,
+      "queries": 20,
+      "outer_frames": 40,
+      "internal_frames": 6400,
+      "internal_frames_upper": 6400,
+      "record_frames": 1280,
+      "verify_frames": 5120,
+      "death_refined": 0,
+      "query_ms": {
+        "n": 20,
+        "sum_ms": 4784.455,
+        "mean_ms": 239.223,
+        "p50_ms": 239.354,
+        "p95_ms": 269.116,
+        "max_ms": 270.852,
+        "min_ms": 213.918
+      },
+      "step_ms": {
+        "n": 20,
+        "sum_ms": 4807.123,
+        "mean_ms": 240.356,
+        "p50_ms": 240.332,
+        "p95_ms": 269.838,
+        "max_ms": 271.568,
+        "min_ms": 214.723
+      },
+      "query_wall_s": 4.7845,
+      "step_wall_s": 4.8071,
+      "s_per_query": 0.239223,
+      "queries_per_s": 4.1802,
+      "s_per_outer_frame": 0.119611,
+      "internal_per_query": 320.0,
+      "internal_per_outer_frame": 160.0,
+      "prefix_hash": "7b22ff41d6d9e8b7",
+      "prefix_hash_ok": true,
+      "start_hash_ok": true,
+      "prefix_replay_s": 0.032,
+      "startup_ms": 1915.27,
+      "wall_s": 7.702,
+      "exit_code": 0,
+      "error": null,
+      "deaths": 0.0,
+      "end_frame": 444,
+      "loadavg_before": [
+        16.25,
+        17.53,
+        18.0
+      ],
+      "loadavg_after": [
+        18.23,
+        17.91,
+        18.11
+      ],
+      "sha_invariant": true,
+      "phases": {
+        "events": {
+          "n": 20,
+          "sum_ms": 1.108,
+          "mean_ms": 0.055,
+          "p50_ms": 0.043,
+          "p95_ms": 0.105,
+          "max_ms": 0.205,
+          "min_ms": 0.024
+        },
+        "record": {
+          "n": 20,
+          "sum_ms": 607.961,
+          "mean_ms": 30.398,
+          "p50_ms": 30.086,
+          "p95_ms": 38.963,
+          "max_ms": 41.079,
+          "min_ms": 20.343
+        },
+        "search": {
+          "n": 20,
+          "sum_ms": 3046.633,
+          "mean_ms": 152.332,
+          "p50_ms": 154.523,
+          "p95_ms": 170.338,
+          "max_ms": 172.422,
+          "min_ms": 119.942
+        },
+        "verify": {
+          "n": 20,
+          "sum_ms": 1125.212,
+          "mean_ms": 56.261,
+          "p50_ms": 56.788,
+          "p95_ms": 67.637,
+          "max_ms": 89.635,
+          "min_ms": 38.842
+        }
+      },
+      "engine_calls": 5676,
+      "engine_seconds": 3.6225,
+      "engine_per_command": {
+        "HELLO": 2,
+        "RESET": 1,
+        "FRAME": 2,
+        "HASH": 2,
+        "STEP": 422,
+        "BRANCH": 1,
+        "STATE": 23,
+        "HAZARDS": 1,
+        "PARK": 24,
+        "SPAWN": 112,
+        "CHILD": 5063,
+        "EVENTS": 22,
+        "QUIT": 1
+      }
+    }
+  ],
+  "pairs": {
+    "fast": {
+      "2f": {
+        "runs": [
+          "fast-2f-r1",
+          "fast-2f-r2"
+        ],
+        "repeats": 2,
+        "s_per_query_median": 0.066582,
+        "queries_per_s_median": 15.0285,
+        "s_per_outer_frame_median": 0.033291,
+        "internal_per_query": 64.0,
+        "internal_per_outer_frame": 32.0,
+        "query_p50_ms": 66.285,
+        "query_p95_ms": 99.626,
+        "query_max_ms": 168.703,
+        "horizon": 32,
+        "verify_k": 1,
+        "beam": 24,
+        "queries_per_run": [
+          100,
+          100
+        ],
+        "outer_frames_per_run": [
+          200,
+          200
+        ],
+        "repeat_spread_pct": 4.89
+      },
+      "4f": {
+        "runs": [
+          "fast-4f-r1",
+          "fast-4f-r2"
+        ],
+        "repeats": 2,
+        "s_per_query_median": 0.060288,
+        "queries_per_s_median": 16.5877,
+        "s_per_outer_frame_median": 0.015071,
+        "internal_per_query": 64.0,
+        "internal_per_outer_frame": 16.0,
+        "query_p50_ms": 59.007,
+        "query_p95_ms": 95.341,
+        "query_max_ms": 104.575,
+        "horizon": 32,
+        "verify_k": 1,
+        "beam": 24,
+        "queries_per_run": [
+          50,
+          50
+        ],
+        "outer_frames_per_run": [
+          200,
+          200
+        ],
+        "repeat_spread_pct": 1.1
+      },
+      "ratio_2f_over_4f": {
+        "s_per_query": 1.104,
+        "s_per_outer_frame": 2.209,
+        "internal_per_outer_frame": 2.0
+      }
+    },
+    "v2h": {
+      "2f": {
+        "runs": [
+          "v2h-2f-r1",
+          "v2h-2f-r2"
+        ],
+        "repeats": 2,
+        "s_per_query_median": 0.124628,
+        "queries_per_s_median": 8.0336,
+        "s_per_outer_frame_median": 0.062314,
+        "internal_per_query": 192.0,
+        "internal_per_outer_frame": 96.0,
+        "query_p50_ms": 131.008,
+        "query_p95_ms": 164.589,
+        "query_max_ms": 191.822,
+        "horizon": 48,
+        "verify_k": 3,
+        "beam": 64,
+        "queries_per_run": [
+          100,
+          100
+        ],
+        "outer_frames_per_run": [
+          200,
+          200
+        ],
+        "repeat_spread_pct": 6.71
+      },
+      "4f": {
+        "runs": [
+          "v2h-4f-r1"
+        ],
+        "repeats": 1,
+        "s_per_query_median": 0.124145,
+        "queries_per_s_median": 8.0551,
+        "s_per_outer_frame_median": 0.031036,
+        "internal_per_query": 192.0,
+        "internal_per_outer_frame": 48.0,
+        "query_p50_ms": 125.719,
+        "query_p95_ms": 173.545,
+        "query_max_ms": 179.156,
+        "horizon": 48,
+        "verify_k": 3,
+        "beam": 64,
+        "queries_per_run": [
+          50
+        ],
+        "outer_frames_per_run": [
+          200
+        ],
+        "repeat_spread_pct": 0.0
+      },
+      "ratio_2f_over_4f": {
+        "s_per_query": 1.004,
+        "s_per_outer_frame": 2.008,
+        "internal_per_outer_frame": 2.0
+      }
+    },
+    "v3b": {
+      "2f": {
+        "runs": [
+          "v3b-2f-smoke"
+        ],
+        "repeats": 1,
+        "s_per_query_median": 0.239223,
+        "queries_per_s_median": 4.1802,
+        "s_per_outer_frame_median": 0.119611,
+        "internal_per_query": 320.0,
+        "internal_per_outer_frame": 160.0,
+        "query_p50_ms": 239.354,
+        "query_p95_ms": 269.116,
+        "query_max_ms": 270.852,
+        "horizon": 64,
+        "verify_k": 4,
+        "beam": 128,
+        "queries_per_run": [
+          20
+        ],
+        "outer_frames_per_run": [
+          40
+        ],
+        "repeat_spread_pct": 0.0
+      }
+    }
+  },
+  "depth_sensitivity": {
+    "fast": {
+      "prefix_100": {
+        "runs": [
+          "fast-2f-r1",
+          "fast-2f-r2"
+        ],
+        "s_per_query": 0.066582,
+        "query_p50_ms": 66.285
+      },
+      "prefix_1650": {
+        "runs": [
+          "fast-2f-d1650"
+        ],
+        "s_per_query": 0.086184,
+        "query_p50_ms": 83.043
+      },
+      "growth_pct": 29.44
+    },
+    "v2h": {
+      "prefix_100": {
+        "runs": [
+          "v2h-2f-r1",
+          "v2h-2f-r2"
+        ],
+        "s_per_query": 0.124628,
+        "query_p50_ms": 131.008
+      },
+      "prefix_1650": {
+        "runs": [
+          "v2h-2f-d1650"
+        ],
+        "s_per_query": 0.169225,
+        "query_p50_ms": 166.663
+      },
+      "growth_pct": 35.78
+    }
+  },
+  "extrapolations": {
+    "fast_2f": {
+      "s_per_query": 0.066582,
+      "internal_frames_per_query": 64.0,
+      "t03_queries": 212400,
+      "t03_wall_s": 14142.0,
+      "t03_wall_h": 3.928,
+      "t03_internal_frames": 13593600,
+      "reslot_queries": 6600,
+      "reslot_wall_s": 439.4,
+      "reslot_wall_min": 7.32,
+      "reslot_internal_frames": 422400,
+      "query_cap_used_by_t03_pct": 32.68,
+      "query_cap_left_after_t03": 437600,
+      "query_cap_left_after_t03_and_reslot": 431000,
+      "internal_cap_used_by_t03_pct": 21.24,
+      "internal_cap_left_after_t03": 50406400,
+      "internal_cap_left_after_t03_and_reslot": 49984000,
+      "internal_frame_formula": "horizon + verify_k*horizon = 32 + 1*32 = 64",
+      "internal_frame_formula_value": 64,
+      "internal_frame_measured": 64.0
+    },
+    "fast_4f": {
+      "s_per_query": 0.060288,
+      "internal_frames_per_query": 64.0,
+      "t03_queries": 212400,
+      "t03_wall_s": 12805.2,
+      "t03_wall_h": 3.557,
+      "t03_internal_frames": 13593600,
+      "reslot_queries": 6600,
+      "reslot_wall_s": 397.9,
+      "reslot_wall_min": 6.63,
+      "reslot_internal_frames": 422400,
+      "query_cap_used_by_t03_pct": 32.68,
+      "query_cap_left_after_t03": 437600,
+      "query_cap_left_after_t03_and_reslot": 431000,
+      "internal_cap_used_by_t03_pct": 21.24,
+      "internal_cap_left_after_t03": 50406400,
+      "internal_cap_left_after_t03_and_reslot": 49984000,
+      "internal_frame_formula": "horizon + verify_k*horizon = 32 + 1*32 = 64",
+      "internal_frame_formula_value": 64,
+      "internal_frame_measured": 64.0
+    },
+    "v2h_2f": {
+      "s_per_query": 0.124628,
+      "internal_frames_per_query": 192.0,
+      "t03_queries": 212400,
+      "t03_wall_s": 26471.0,
+      "t03_wall_h": 7.353,
+      "t03_internal_frames": 40780800,
+      "reslot_queries": 6600,
+      "reslot_wall_s": 822.5,
+      "reslot_wall_min": 13.71,
+      "reslot_internal_frames": 1267200,
+      "query_cap_used_by_t03_pct": 32.68,
+      "query_cap_left_after_t03": 437600,
+      "query_cap_left_after_t03_and_reslot": 431000,
+      "internal_cap_used_by_t03_pct": 63.72,
+      "internal_cap_left_after_t03": 23219200,
+      "internal_cap_left_after_t03_and_reslot": 21952000,
+      "internal_frame_formula": "horizon + verify_k*horizon = 48 + 3*48 = 192",
+      "internal_frame_formula_value": 192,
+      "internal_frame_measured": 192.0
+    },
+    "v2h_4f": {
+      "s_per_query": 0.124145,
+      "internal_frames_per_query": 192.0,
+      "t03_queries": 212400,
+      "t03_wall_s": 26368.4,
+      "t03_wall_h": 7.325,
+      "t03_internal_frames": 40780800,
+      "reslot_queries": 6600,
+      "reslot_wall_s": 819.4,
+      "reslot_wall_min": 13.66,
+      "reslot_internal_frames": 1267200,
+      "query_cap_used_by_t03_pct": 32.68,
+      "query_cap_left_after_t03": 437600,
+      "query_cap_left_after_t03_and_reslot": 431000,
+      "internal_cap_used_by_t03_pct": 63.72,
+      "internal_cap_left_after_t03": 23219200,
+      "internal_cap_left_after_t03_and_reslot": 21952000,
+      "internal_frame_formula": "horizon + verify_k*horizon = 48 + 3*48 = 192",
+      "internal_frame_formula_value": 192,
+      "internal_frame_measured": 192.0
+    },
+    "budget_constants": {
+      "t03_branches": 3600,
+      "t03_queries_per_branch": 59,
+      "t03_queries": 212400,
+      "reslot_queries": 6600,
+      "cap_teacher_queries": 650000,
+      "cap_teacher_internal_frames": 64000000,
+      "source": "Document/Update/Alpha/v4.2.0/README.md §5 WP420-02 + §8 budget line"
+    }
+  },
+  "feasibility": {
+    "fast-2f-d1650": {
+      "mode": "fast",
+      "replan_decisions": 1,
+      "frames_per_query": 2,
+      "queries": 100,
+      "outer_frames": 200,
+      "expected_outer_frames": 200,
+      "frames_match": true,
+      "exit_code": 0,
+      "error": null,
+      "deaths": 0.0,
+      "start_hash_ok": true,
+      "prefix_hash_ok": true,
+      "end_frame": 6806,
+      "sha_invariant": true
+    },
+    "fast-2f-r1": {
+      "mode": "fast",
+      "replan_decisions": 1,
+      "frames_per_query": 2,
+      "queries": 100,
+      "outer_frames": 200,
+      "expected_outer_frames": 200,
+      "frames_match": true,
+      "exit_code": 0,
+      "error": null,
+      "deaths": 0.0,
+      "start_hash_ok": true,
+      "prefix_hash_ok": true,
+      "end_frame": 606,
+      "sha_invariant": true
+    },
+    "fast-2f-r2": {
+      "mode": "fast",
+      "replan_decisions": 1,
+      "frames_per_query": 2,
+      "queries": 100,
+      "outer_frames": 200,
+      "expected_outer_frames": 200,
+      "frames_match": true,
+      "exit_code": 0,
+      "error": null,
+      "deaths": 0.0,
+      "start_hash_ok": true,
+      "prefix_hash_ok": true,
+      "end_frame": 606,
+      "sha_invariant": true
+    },
+    "smoke-fast-fast-2f": {
+      "mode": "fast",
+      "replan_decisions": 1,
+      "frames_per_query": 2,
+      "queries": 3,
+      "outer_frames": 6,
+      "expected_outer_frames": 6,
+      "frames_match": true,
+      "exit_code": 0,
+      "error": null,
+      "deaths": 0.0,
+      "start_hash_ok": true,
+      "prefix_hash_ok": true,
+      "end_frame": 406,
+      "sha_invariant": true
+    },
+    "smoke-noprobe-2f": {
+      "mode": "fast",
+      "replan_decisions": 1,
+      "frames_per_query": 2,
+      "queries": 0,
+      "outer_frames": 0,
+      "expected_outer_frames": 0,
+      "frames_match": true,
+      "exit_code": 4,
+      "error": "EngineError: 'SPAWN 1' -> ERR spawn-template expected=2",
+      "deaths": null,
+      "start_hash_ok": true,
+      "prefix_hash_ok": true,
+      "end_frame": null,
+      "sha_invariant": true
+    },
+    "fast-4f-r1": {
+      "mode": "fast",
+      "replan_decisions": 2,
+      "frames_per_query": 4,
+      "queries": 50,
+      "outer_frames": 200,
+      "expected_outer_frames": 200,
+      "frames_match": true,
+      "exit_code": 0,
+      "error": null,
+      "deaths": 0.0,
+      "start_hash_ok": true,
+      "prefix_hash_ok": true,
+      "end_frame": 612,
+      "sha_invariant": true
+    },
+    "fast-4f-r2": {
+      "mode": "fast",
+      "replan_decisions": 2,
+      "frames_per_query": 4,
+      "queries": 50,
+      "outer_frames": 200,
+      "expected_outer_frames": 200,
+      "frames_match": true,
+      "exit_code": 0,
+      "error": null,
+      "deaths": 0.0,
+      "start_hash_ok": true,
+      "prefix_hash_ok": true,
+      "end_frame": 612,
+      "sha_invariant": true
+    },
+    "v2h-2f-d1650": {
+      "mode": "v2h",
+      "replan_decisions": 1,
+      "frames_per_query": 2,
+      "queries": 100,
+      "outer_frames": 200,
+      "expected_outer_frames": 200,
+      "frames_match": true,
+      "exit_code": 0,
+      "error": null,
+      "deaths": 0.0,
+      "start_hash_ok": true,
+      "prefix_hash_ok": true,
+      "end_frame": 6806,
+      "sha_invariant": true
+    },
+    "v2h-2f-r1": {
+      "mode": "v2h",
+      "replan_decisions": 1,
+      "frames_per_query": 2,
+      "queries": 100,
+      "outer_frames": 200,
+      "expected_outer_frames": 200,
+      "frames_match": true,
+      "exit_code": 0,
+      "error": null,
+      "deaths": 0.0,
+      "start_hash_ok": true,
+      "prefix_hash_ok": true,
+      "end_frame": 606,
+      "sha_invariant": true
+    },
+    "v2h-2f-r2": {
+      "mode": "v2h",
+      "replan_decisions": 1,
+      "frames_per_query": 2,
+      "queries": 100,
+      "outer_frames": 200,
+      "expected_outer_frames": 200,
+      "frames_match": true,
+      "exit_code": 0,
+      "error": null,
+      "deaths": 0.0,
+      "start_hash_ok": true,
+      "prefix_hash_ok": true,
+      "end_frame": 606,
+      "sha_invariant": true
+    },
+    "v2h-4f-r1": {
+      "mode": "v2h",
+      "replan_decisions": 2,
+      "frames_per_query": 4,
+      "queries": 50,
+      "outer_frames": 200,
+      "expected_outer_frames": 200,
+      "frames_match": true,
+      "exit_code": 0,
+      "error": null,
+      "deaths": 0.0,
+      "start_hash_ok": true,
+      "prefix_hash_ok": true,
+      "end_frame": 612,
+      "sha_invariant": true
+    },
+    "v3b-2f-smoke": {
+      "mode": "v3b",
+      "replan_decisions": 1,
+      "frames_per_query": 2,
+      "queries": 20,
+      "outer_frames": 40,
+      "expected_outer_frames": 40,
+      "frames_match": true,
+      "exit_code": 0,
+      "error": null,
+      "deaths": 0.0,
+      "start_hash_ok": true,
+      "prefix_hash_ok": true,
+      "end_frame": 444,
+      "sha_invariant": true
+    }
+  }
+}

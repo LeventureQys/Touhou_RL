@@ -1,0 +1,633 @@
+{
+  "schema": "v420-eval-shoot-pulse-evidence/1",
+  "task": "T08 — a v4.2.0 evaluator with the SHOOT pulse, so stage_clear can be reported; v4.1.0 stays read-only",
+  "shoot_pulse_period": 48,
+  "period_source": {
+    "configs/v420/rl-engine-audit.json": 48,
+    "configs/v420/rl-engine-pilot.json": 48,
+    "training_module": "touhou_rl/v420/rl.py::SHOOT_PULSE_PERIOD",
+    "decisions_times_frames": "48 decisions x 2 frames",
+    "note": "the teacher default 24 is for 4-frame decisions and is not used here"
+  },
+  "old_instrument": {
+    "path": "tools/rl/v410_student_eval.py",
+    "sha256": {
+      "v410_student_eval": "2db2caaf9089c1698cef9b6a682991a7594ebac47ae93244c3d9932591eddddc",
+      "v400_student_eval": "7bccf2409cd31065a4e0e3148f03672fc764b1e562986e47404ed989e843c1a2"
+    },
+    "pinned_sha256": {
+      "v410_student_eval": "2db2caaf9089c1698cef9b6a682991a7594ebac47ae93244c3d9932591eddddc",
+      "v400_student_eval": "7bccf2409cd31065a4e0e3148f03672fc764b1e562986e47404ed989e843c1a2"
+    },
+    "git_status": {
+      "v410_student_eval": {
+        "available": true,
+        "porcelain": "?? tools/rl/v410_student_eval.py"
+      },
+      "v400_student_eval": {
+        "available": true,
+        "porcelain": ""
+      }
+    },
+    "unchanged": true,
+    "release_path_search": {
+      "tokens": [
+        "shoot",
+        "pulse",
+        "btn_",
+        "release_due"
+      ],
+      "case_insensitive_matches": {
+        "v410_student_eval": {
+          "shoot": 0,
+          "pulse": 0,
+          "btn_": 0,
+          "release_due": 0
+        },
+        "v400_student_eval": {
+          "shoot": 0,
+          "pulse": 0,
+          "btn_": 0,
+          "release_due": 0
+        }
+      },
+      "note": "the frozen ruler has no SHOOT release path by construction"
+    },
+    "bound_numbers": {
+      "claim": "every number written before this task stays bound to this exact file: the new ruler writes its own schema and never reuses the v4.1.0 controller name",
+      "reader_rule": "a v4.2.0 row says controller=tools/rl/v420_eval_shoot.py, schema=v420-eval-shoot-episode/1 and carries shoot_pulse_period 48; a v4.1.0 row carries none of those"
+    },
+    "rerun_reproduces_the_frozen_t06_rows": {
+      "1000": {
+        "t06_frozen_frames": 2137,
+        "old_instrument_frames": 2137,
+        "match": true
+      },
+      "1001": {
+        "t06_frozen_frames": 3430,
+        "old_instrument_frames": 3430,
+        "match": true
+      },
+      "1002": {
+        "t06_frozen_frames": 2185,
+        "old_instrument_frames": 2185,
+        "match": true
+      },
+      "1003": {
+        "t06_frozen_frames": 2731,
+        "old_instrument_frames": 2731,
+        "match": true
+      },
+      "1004": {
+        "t06_frozen_frames": 2456,
+        "old_instrument_frames": 2456,
+        "match": true
+      }
+    }
+  },
+  "new_instrument": {
+    "path": "tools/rl/v420_eval_shoot.py",
+    "sha256": "7dbc2a3145562e54f4a7397fa63c8391938b6f6982f5d4b495a66b28fc6e8519",
+    "reuses": [
+      "tools/rl/v410_student_eval.py::EnvHarnessClient (v410 reuses v400)",
+      "tools/rl/v410_student_eval.py::decision_steps (v410 reuses v400)",
+      "tools/rl/v410_student_eval.py::load_v410_checkpoint",
+      "tools/rl/v410_student_eval.py::ProbePolicy",
+      "tools/rl/v410_student_eval.py::check_seed_policy/parse_seeds",
+      "tools/rl/v410_student_eval.py::validate_episode_record",
+      "tools/rl/v410_student_eval.py::summarise/summarise_arm"
+    ],
+    "one_behaviour_difference": "every shoot_pulse_period decisions, the decision's last STEP frame carries mask & ~(BTN_SHOOT|BTN_BOMB); implemented by pulse_step_mask over the frozen release_due(i, period) rule",
+    "no_off_switch": "--shoot-pulse-period 0/negative/None is refused before any engine starts; the strided obs window is refused because it cannot carry the release frame; no flag changes the candidate set",
+    "tests": "tests/test_v420_eval_shoot.py"
+  },
+  "field_isomorphism": {
+    "episode": {
+      "old_fields": 61,
+      "new_fields": 62,
+      "new_only_fields": [
+        "shoot_pulse_period"
+      ],
+      "missing_fields": []
+    },
+    "summary": {
+      "old_fields": 28,
+      "new_fields": 29,
+      "new_only_fields": [
+        "shoot_pulse_period"
+      ],
+      "missing_fields": []
+    },
+    "new_only_fields": [
+      "shoot_pulse_period"
+    ],
+    "missing_fields": [],
+    "identity_value_differences_by_seed": {
+      "1000": [
+        "controller",
+        "schema",
+        "shoot_pulse_period"
+      ],
+      "1001": [
+        "controller",
+        "schema",
+        "shoot_pulse_period"
+      ],
+      "1002": [
+        "controller",
+        "schema",
+        "shoot_pulse_period"
+      ],
+      "1003": [
+        "controller",
+        "schema",
+        "shoot_pulse_period"
+      ],
+      "1004": [
+        "controller",
+        "schema",
+        "shoot_pulse_period"
+      ]
+    },
+    "measurements_that_differ_by_seed": {
+      "1000": [
+        "wall_s"
+      ],
+      "1001": [
+        "action_sequence_sha256",
+        "actions",
+        "frames",
+        "gameplay_frame",
+        "policy_input_sha256",
+        "renders",
+        "score",
+        "state_frame",
+        "steps",
+        "wall_s"
+      ],
+      "1002": [
+        "wall_s"
+      ],
+      "1003": [
+        "action_sequence_sha256",
+        "actions",
+        "frames",
+        "gameplay_frame",
+        "policy_input_sha256",
+        "renders",
+        "score",
+        "state_frame",
+        "steps",
+        "wall_s"
+      ],
+      "1004": [
+        "wall_s"
+      ]
+    },
+    "allowed_identity_value_differences": [
+      "controller",
+      "schema",
+      "shoot_pulse_period"
+    ],
+    "note": "the only field either record adds is shoot_pulse_period; the only identity values that differ are schema/controller (the instrument) and shoot_pulse_period (the channel); every other identity value is byte-equal"
+  },
+  "dev": {
+    "what": "R0 = the T04 A0 BC checkpoint (B0, 731,802 parameters, sha256 96cb219e...), 5 dev seeds 1000-1004, stage 0, difficulty normal, max_frames 19887, obs_window consecutive; one command per instrument with identical evaluation flags",
+    "checkpoint": {
+      "path": ".tmp_v420_data/T06/checkpoints/a0_seed0_step5000.pt",
+      "sha256": "96cb219eac83391f42b18ea656b5a6c5ac81e97cd1fd8c1e2c0d404aee6b89ad",
+      "arm": "B0",
+      "parameters": 731802
+    },
+    "commands": {
+      "old_instrument": "xvfb-run -a -s \"-screen 0 1024x768x24\" /root/v400-venv/bin/python tools/rl/v410_student_eval.py --engine /root/Touhou_RL/third_party/th08-rl/build/rl_v3/th08-modern --data-dir .tmp_v420_data/T08/evalpulse-dev-data --checkpoint .tmp_v420_data/T06/checkpoints/a0_seed0_step5000.pt --seeds 1000-1004 --stage 0 --difficulty normal --max-frames 19887 --obs-window consecutive --device cpu --timeout 240 --shm-prefix evalpulse-old --out .tmp_v420_data/T08/evalpulse-dev/R0-old-1000-1004.json",
+      "new_instrument": "xvfb-run -a -s \"-screen 0 1024x768x24\" /root/v400-venv/bin/python tools/rl/v420_eval_shoot.py --engine /root/Touhou_RL/third_party/th08-rl/build/rl_v3/th08-modern --data-dir .tmp_v420_data/T08/evalpulse-dev-data --checkpoint .tmp_v420_data/T06/checkpoints/a0_seed0_step5000.pt --seeds 1000-1004 --stage 0 --difficulty normal --max-frames 19887 --obs-window consecutive --device cpu --timeout 240 --shoot-pulse-period 48 --shm-prefix evalpulse-new --out .tmp_v420_data/T08/evalpulse-dev/R0-new-1000-1004.json"
+    },
+    "old_instrument": {
+      "summary": ".tmp_v420_data/T08/evalpulse-dev/R0-old-1000-1004.json",
+      "sha256": "a4e1d0596282336771556494d9986a7171e4bab296ef3778cea27301f3e7f869",
+      "schema": "v410-student-eval-smoke/1",
+      "tool": "tools/rl/v410_student_eval.py",
+      "exit_code_in_summary": 0,
+      "clears": 0,
+      "episodes": [
+        {
+          "seed": 1000,
+          "frames": 2137,
+          "steps": 1069,
+          "deaths": 3.0,
+          "stop_reason": "game_over",
+          "stage_start": 0,
+          "stage_end": 0,
+          "stage_clear": false,
+          "score": 18951,
+          "exit": "game_over",
+          "shoot_pulse_period": null,
+          "action_sequence_sha256": "88b4d3c2cc9245d86f7cce848a5b4fa38ccff11e0f0e981ac9aa5007c6264eb8",
+          "policy_input_sha256": "af18d021b4804721e33bd909ee902e8122c04d8ce4cf15fbeb35d14bdf482eca",
+          "error": null,
+          "releases_derived": 0,
+          "releases_derived_note": "the v4.1.0 ruler has no release frame at all (no SHOOT/pulse code)"
+        },
+        {
+          "seed": 1001,
+          "frames": 3430,
+          "steps": 1715,
+          "deaths": 3.0,
+          "stop_reason": "game_over",
+          "stage_start": 0,
+          "stage_end": 0,
+          "stage_clear": false,
+          "score": 26258,
+          "exit": "game_over",
+          "shoot_pulse_period": null,
+          "action_sequence_sha256": "ee6adbe38085618325c08644c4182a8eb4a3caefedd2bea632abfdf39759164e",
+          "policy_input_sha256": "738bc44e12345b32ffb60536b5f438795bdb47076e3abcb9761c40f7a53da1c8",
+          "error": null,
+          "releases_derived": 0,
+          "releases_derived_note": "the v4.1.0 ruler has no release frame at all (no SHOOT/pulse code)"
+        },
+        {
+          "seed": 1002,
+          "frames": 2185,
+          "steps": 1093,
+          "deaths": 3.0,
+          "stop_reason": "game_over",
+          "stage_start": 0,
+          "stage_end": 0,
+          "stage_clear": false,
+          "score": 7600,
+          "exit": "game_over",
+          "shoot_pulse_period": null,
+          "action_sequence_sha256": "51d21b58b21b031fe03ba6e0042c57c3b88717c870e2f8701b2994b5f8e5fb0e",
+          "policy_input_sha256": "8306d327b61f1f1405a22bcca274bdeb69a856374f6741213a20ac286c65db97",
+          "error": null,
+          "releases_derived": 0,
+          "releases_derived_note": "the v4.1.0 ruler has no release frame at all (no SHOOT/pulse code)"
+        },
+        {
+          "seed": 1003,
+          "frames": 2731,
+          "steps": 1366,
+          "deaths": 3.0,
+          "stop_reason": "game_over",
+          "stage_start": 0,
+          "stage_end": 0,
+          "stage_clear": false,
+          "score": 12827,
+          "exit": "game_over",
+          "shoot_pulse_period": null,
+          "action_sequence_sha256": "150c3d2cca2bfd0ff4c09fcb176cf1068687e1cb94bb9d44d9f5478b2560c278",
+          "policy_input_sha256": "610f859fd7239e7496acbe5cbcfdc661c95707ae0a7a9ddb236d345eb432fd0e",
+          "error": null,
+          "releases_derived": 0,
+          "releases_derived_note": "the v4.1.0 ruler has no release frame at all (no SHOOT/pulse code)"
+        },
+        {
+          "seed": 1004,
+          "frames": 2456,
+          "steps": 1228,
+          "deaths": 3.0,
+          "stop_reason": "game_over",
+          "stage_start": 0,
+          "stage_end": 0,
+          "stage_clear": false,
+          "score": 10878,
+          "exit": "game_over",
+          "shoot_pulse_period": null,
+          "action_sequence_sha256": "86709fcdd8bc79a7f93ad657125c21bd427ae0b06202028bfcdd15f96819bba2",
+          "policy_input_sha256": "ed8b64d34092394e8d79c21625e0a6b457775ead1b8f22c2e4dc3ef0e28691b8",
+          "error": null,
+          "releases_derived": 0,
+          "releases_derived_note": "the v4.1.0 ruler has no release frame at all (no SHOOT/pulse code)"
+        }
+      ],
+      "shoot_pulse_period": null
+    },
+    "new_instrument": {
+      "summary": ".tmp_v420_data/T08/evalpulse-dev/R0-new-1000-1004.json",
+      "sha256": "1d7cf90a94ab5bd2f04c0001014578a16e019f7c2b4139e5fad9b9e544e30c02",
+      "schema": "v420-eval-shoot-summary/1",
+      "tool": "tools/rl/v420_eval_shoot.py",
+      "exit_code_in_summary": 0,
+      "clears": 0,
+      "episodes": [
+        {
+          "seed": 1000,
+          "frames": 2137,
+          "steps": 1069,
+          "deaths": 3.0,
+          "stop_reason": "game_over",
+          "stage_start": 0,
+          "stage_end": 0,
+          "stage_clear": false,
+          "score": 18951,
+          "exit": "game_over",
+          "shoot_pulse_period": 48,
+          "action_sequence_sha256": "88b4d3c2cc9245d86f7cce848a5b4fa38ccff11e0f0e981ac9aa5007c6264eb8",
+          "policy_input_sha256": "af18d021b4804721e33bd909ee902e8122c04d8ce4cf15fbeb35d14bdf482eca",
+          "error": null,
+          "releases_derived": 22,
+          "releases_derived_note": "steps // shoot_pulse_period: decisions whose last STEP frame carried mask & ~(BTN_SHOOT|BTN_BOMB) by the frozen rule"
+        },
+        {
+          "seed": 1001,
+          "frames": 2654,
+          "steps": 1327,
+          "deaths": 3.0,
+          "stop_reason": "game_over",
+          "stage_start": 0,
+          "stage_end": 0,
+          "stage_clear": false,
+          "score": 22263,
+          "exit": "game_over",
+          "shoot_pulse_period": 48,
+          "action_sequence_sha256": "1055b148c0f526d8aa9dece85c81bd71a55089bb46ab30a7b0edaa65367f88f0",
+          "policy_input_sha256": "0a348d6212b9c82d5330ddca61e1e1d8cb36bfaba2bd68eb367524290570b9eb",
+          "error": null,
+          "releases_derived": 27,
+          "releases_derived_note": "steps // shoot_pulse_period: decisions whose last STEP frame carried mask & ~(BTN_SHOOT|BTN_BOMB) by the frozen rule"
+        },
+        {
+          "seed": 1002,
+          "frames": 2185,
+          "steps": 1093,
+          "deaths": 3.0,
+          "stop_reason": "game_over",
+          "stage_start": 0,
+          "stage_end": 0,
+          "stage_clear": false,
+          "score": 7600,
+          "exit": "game_over",
+          "shoot_pulse_period": 48,
+          "action_sequence_sha256": "51d21b58b21b031fe03ba6e0042c57c3b88717c870e2f8701b2994b5f8e5fb0e",
+          "policy_input_sha256": "8306d327b61f1f1405a22bcca274bdeb69a856374f6741213a20ac286c65db97",
+          "error": null,
+          "releases_derived": 22,
+          "releases_derived_note": "steps // shoot_pulse_period: decisions whose last STEP frame carried mask & ~(BTN_SHOOT|BTN_BOMB) by the frozen rule"
+        },
+        {
+          "seed": 1003,
+          "frames": 2741,
+          "steps": 1371,
+          "deaths": 3.0,
+          "stop_reason": "game_over",
+          "stage_start": 0,
+          "stage_end": 0,
+          "stage_clear": false,
+          "score": 12465,
+          "exit": "game_over",
+          "shoot_pulse_period": 48,
+          "action_sequence_sha256": "c50f370a0a43579626092fcc0b6e4bd819108dbfe96e500c2014f3344b38a63c",
+          "policy_input_sha256": "e61a6a8a32596414810cb5368753965a83d2337ee85892d8a32ddff877493863",
+          "error": null,
+          "releases_derived": 28,
+          "releases_derived_note": "steps // shoot_pulse_period: decisions whose last STEP frame carried mask & ~(BTN_SHOOT|BTN_BOMB) by the frozen rule"
+        },
+        {
+          "seed": 1004,
+          "frames": 2456,
+          "steps": 1228,
+          "deaths": 3.0,
+          "stop_reason": "game_over",
+          "stage_start": 0,
+          "stage_end": 0,
+          "stage_clear": false,
+          "score": 10878,
+          "exit": "game_over",
+          "shoot_pulse_period": 48,
+          "action_sequence_sha256": "86709fcdd8bc79a7f93ad657125c21bd427ae0b06202028bfcdd15f96819bba2",
+          "policy_input_sha256": "ed8b64d34092394e8d79c21625e0a6b457775ead1b8f22c2e4dc3ef0e28691b8",
+          "error": null,
+          "releases_derived": 25,
+          "releases_derived_note": "steps // shoot_pulse_period: decisions whose last STEP frame carried mask & ~(BTN_SHOOT|BTN_BOMB) by the frozen rule"
+        }
+      ],
+      "shoot_pulse_period": 48
+    },
+    "per_seed": {
+      "1000": {
+        "old": {
+          "frames": 2137,
+          "score": 18951,
+          "stop_reason": "game_over",
+          "stage_clear": false
+        },
+        "new": {
+          "frames": 2137,
+          "score": 18951,
+          "stop_reason": "game_over",
+          "stage_clear": false
+        },
+        "identical": true
+      },
+      "1001": {
+        "old": {
+          "frames": 3430,
+          "score": 26258,
+          "stop_reason": "game_over",
+          "stage_clear": false
+        },
+        "new": {
+          "frames": 2654,
+          "score": 22263,
+          "stop_reason": "game_over",
+          "stage_clear": false
+        },
+        "identical": false
+      },
+      "1002": {
+        "old": {
+          "frames": 2185,
+          "score": 7600,
+          "stop_reason": "game_over",
+          "stage_clear": false
+        },
+        "new": {
+          "frames": 2185,
+          "score": 7600,
+          "stop_reason": "game_over",
+          "stage_clear": false
+        },
+        "identical": true
+      },
+      "1003": {
+        "old": {
+          "frames": 2731,
+          "score": 12827,
+          "stop_reason": "game_over",
+          "stage_clear": false
+        },
+        "new": {
+          "frames": 2741,
+          "score": 12465,
+          "stop_reason": "game_over",
+          "stage_clear": false
+        },
+        "identical": false
+      },
+      "1004": {
+        "old": {
+          "frames": 2456,
+          "score": 10878,
+          "stop_reason": "game_over",
+          "stage_clear": false
+        },
+        "new": {
+          "frames": 2456,
+          "score": 10878,
+          "stop_reason": "game_over",
+          "stage_clear": false
+        },
+        "identical": true
+      }
+    },
+    "clears": {
+      "old": 0,
+      "new": 0,
+      "note": "R0 dies at 2,137-3,430 frames, far short of the 13,195-frame clear; the pulse does not create a clear for a policy that dies early"
+    }
+  },
+  "positive_control": {
+    "what": "the one recorded real Stage-1 clear tape replayed through the new ruler's channel with shoot_pulse_period=48",
+    "record": ".tmp_v420_evalpulse/positive_control.json",
+    "sha256": "9cdd90335edcc5a5d2afcf3b1e18d7713e921099967dbf4c62b5b84ef3dbaf63",
+    "tape_shard_sha256": "f759de7dacc78343dec8825da5de14942e749b8a5a2c5319304e513d1618b7b9",
+    "tape_schedule_decisions": 6660,
+    "stage_clear": true,
+    "frames": 13195,
+    "score": 2631430,
+    "stop_reason": "stage_clear",
+    "exit": "controller",
+    "deaths": 0.0,
+    "decisions": 6598,
+    "score_at_frame_13195": 2631430,
+    "shoot_pulse_period": 48,
+    "releases_planned": 137,
+    "releases_applied": 137,
+    "shoot_frames": 13058,
+    "no_shoot_frames": 137,
+    "shoot_rising_edges": 138,
+    "mask_trace_sha256": "66c81344b00f8766f7d9e860d1874b1141c699122f491ed1a8ed0aea9f179924",
+    "matches_t08_pulse_run": {
+      "frames": true,
+      "score": true,
+      "stage_clear": true,
+      "mask_trace_sha256": true,
+      "releases_applied": true,
+      "shoot_rising_edges": true
+    },
+    "t08_pulse_run": {
+      "stage_clear": true,
+      "frames": 13195,
+      "score_final": 2631430,
+      "releases_applied": 137,
+      "shoot_rising_edges": 138,
+      "mask_trace_sha256": "66c81344b00f8766f7d9e860d1874b1141c699122f491ed1a8ed0aea9f179924"
+    }
+  },
+  "negative_control": {
+    "what": "the same tape, same channel, same horizon, only the period is a value the episode never reaches (1000000007), so the pulse never fires",
+    "record": ".tmp_v420_evalpulse/negative_control.json",
+    "sha256": "ecb58cb40e2c1fe9a3baf75daa24865606fc69a73be12cdc1ce933b394f50643",
+    "tape_shard_sha256": "f759de7dacc78343dec8825da5de14942e749b8a5a2c5319304e513d1618b7b9",
+    "stage_clear": false,
+    "frames": 15564,
+    "score_at_frame_13195": 141379,
+    "score": 163945,
+    "stop_reason": "game_over",
+    "exit": "game_over",
+    "deaths": 3.0,
+    "decisions": 7782,
+    "shoot_pulse_period": 1000000007,
+    "releases_planned": 0,
+    "releases_applied": 0,
+    "shoot_frames": 15564,
+    "no_shoot_frames": 0,
+    "shoot_rising_edges": 1,
+    "mask_trace_sha256": "92cea74d6f2b51663ef692cc0f360aec06a64923044120fc8b5d390cd1feba10",
+    "matches_t08_eval_run": {
+      "frames": true,
+      "score": true,
+      "score_at_frame_13195": true,
+      "stop_reason": true,
+      "mask_trace_sha256": true,
+      "no_shoot_frames": true
+    },
+    "t08_eval_run": {
+      "stage_clear": false,
+      "frames": 15564,
+      "score_final": 163945,
+      "score_at_frame_13195": 141379,
+      "no_shoot_frames": 0,
+      "mask_trace_sha256": "92cea74d6f2b51663ef692cc0f360aec06a64923044120fc8b5d390cd1feba10"
+    }
+  },
+  "three_numbers": {
+    "positive": {
+      "stage_clear": true,
+      "frames": 13195,
+      "score": 2631430
+    },
+    "negative": {
+      "stage_clear": false,
+      "score_at_frame_13195": 141379,
+      "stop_reason": "game_over"
+    },
+    "difference_is_the_pulse": "the two runs differ only in shoot_pulse_period (48 vs 1000000007); the action table, the channel, the horizon and the observation window are identical"
+  },
+  "mixed_table_refusal": {
+    "rule": "a table that pools rows from different shoot_pulse_period values is refused; a v4.1.0 summary has no period at all and is refused too",
+    "existing_merge_tool": {
+      "path": "touhou_rl/v420/eval.py::load_summary",
+      "accepts_schemas": [
+        "v410-student-eval-smoke/1",
+        "v410-student-eval-arms/1"
+      ],
+      "why_it_cannot_mix": "the new summary schema is v420-eval-shoot-summary/1, which that loader refuses as a foreign schema; no touhou_rl/** change was needed or made"
+    },
+    "different_periods_refused": true,
+    "v410_summary_refused": true,
+    "missing_period_refused": true,
+    "period_zero_refused": true,
+    "strided_window_refused": true,
+    "error_messages": {
+      "mixed_periods": "refusing to merge summaries with different shoot_pulse_period values: [24, 48]; rows produced by different pulse periods are not comparable (re-run, never mix)",
+      "v410_summary": "summary /mnt/d/WorkShop/Touhou_RL/.tmp_v420_evalpulse/v410_summary_probe.json schema 'v410-student-eval-smoke/1' != 'v420-eval-shoot-summary/1'; this merge reads tools/rl/v420_eval_shoot.py output only (a v4.1.0 summary has no shoot_pulse_period and is not comparable)",
+      "missing_period": "summary /mnt/d/WorkShop/Touhou_RL/.tmp_v420_evalpulse/v410_summary_probe.json has no shoot_pulse_period; refusing an un-identified instrument",
+      "period_zero": "shoot_pulse_period must be >= 1, got 0: 0/negative would silently disable the SHOOT release frame, and this ruler has no 'pulse off' mode",
+      "strided_window": "obs_window 'strided' is refused by this ruler: the SHOOT release frame is a decision's last STEP frame, and that window collapses a decision into a single multi-frame STEP, so period 48 could not be applied without changing the observation contract (use 'consecutive')"
+    },
+    "probe_file": ".tmp_v420_evalpulse/v410_summary_probe.json",
+    "probe_sha256": "e255a112b59940ee826f78ab6f92ac3cc6a00c3add67af65206556a57daff097"
+  },
+  "not_claimed": [
+    "not a capability result: the pulse only makes a clear reportable",
+    "the 5+5 dev rows are descriptive smoke rows, not a gate, not a development score, not a clear rate",
+    "the recorded tape is a teacher recording, not a policy",
+    "no confirm seed (60000-60199), no corpus seed (1-20), no training, no 1M run"
+  ],
+  "env": {
+    "python": "3.10.12",
+    "platform": "Linux-6.18.58.1-microsoft-standard-WSL2-x86_64-with-glibc2.35",
+    "engine": "/root/Touhou_RL/third_party/th08-rl/build/rl_v3/th08-modern",
+    "engine_sha256": "691bfd77b7eca3361aa8bb7af0977556a70cc73a070b29a2447222ba7a568ef6",
+    "repo_root": "/mnt/d/WorkShop/Touhou_RL"
+  },
+  "artifacts": {
+    "scripts": [
+      ".tmp_v420_evalpulse/00_setup_data.sh",
+      ".tmp_v420_evalpulse/10_dev_old.sh",
+      ".tmp_v420_evalpulse/11_dev_new.sh",
+      ".tmp_v420_evalpulse/20_control_pulse.sh",
+      ".tmp_v420_evalpulse/21_control_nopulse.sh",
+      ".tmp_v420_evalpulse/30_emit_evidence.py",
+      ".tmp_v420_evalpulse/40_verify.py"
+    ],
+    "logs": [
+      ".tmp_v420_evalpulse/logs/positive_control.log",
+      ".tmp_v420_evalpulse/logs/negative_control.log"
+    ],
+    "tests": "tests/test_v420_eval_shoot.py"
+  }
+}

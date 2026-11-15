@@ -1,0 +1,1232 @@
+{
+  "schema": "v420-g420-0-readjudication/1",
+  "gate": "G420-0",
+  "title": "explicit, re-computable re-adjudication of G420-0 after the consumed corpus changed",
+  "generated_at": "2026-11-13T12:58:07Z",
+  "generated_by": "Provider=DeepSeek / DeepSeek Flash subagent (T02 re-audit)",
+  "host": {
+    "repo_root": "/mnt/d/WorkShop/Touhou_RL",
+    "python": "3.10.12",
+    "note": "asset host WSL2, cwd=/mnt/d/WorkShop/Touhou_RL"
+  },
+  "verdict": {
+    "status": "passed",
+    "legs": {
+      "l1_time_action_index": "pass (re-adjudicated on the corpus that was actually consumed)",
+      "l2_hash_reconstruction": "pass (unchanged: three/four independent measurements)",
+      "l3_deploy_input_boundary": "pass (unchanged, plus the same boundary re-checked on the consumed corpus)"
+    },
+    "one_line": "every sample the A0/A0v training run consumed is a 2-frame slot with its own observation, its own executed action, 8 real 2-frame history entries and its own verified teacher label; replayed prefixes rebuild the same HASH chain with zero unexplained diffs; the deployment input boundary holds",
+    "denominator_changed": true,
+    "old_corpus_still_fails_l1": true
+  },
+  "original_verdict": {
+    "file": "Document/Update/Alpha/v4.2.0/evidence/T02/G420_0.md",
+    "sha256": "c94f5afd440bceeebcd20a805ce107e182c446496a081581907cd08645426b0e",
+    "status": "not passed",
+    "legs": {
+      "l1": "fail",
+      "l2": "pass",
+      "l3": "pass"
+    },
+    "kept_as_history": true,
+    "note": "G420_0.md is NOT modified. Its L1 fail was correct for the denominator it used (the v4.1.0 four-frame corpus). This re-adjudication replaces the denominator and re-measures; it does not rewrite the old file."
+  },
+  "denominator_change": {
+    "what_changed": "The set 'every consumed sample' moved from the legacy four-frame S1c corpus to the joined two-frame corpus that the A0/A0v run actually trained on.",
+    "old_denominator": {
+      "corpus": "v4.1.0 D410-S1 / .tmp_v410_s1c four-frame shards",
+      "logical_slots": 6600,
+      "registered_rows": 3300,
+      "slots_with_own_observation": 3300,
+      "slots_with_own_hud": 3300,
+      "slots_with_own_label": 3300,
+      "history_span_frames": 32,
+      "deploy_history_span_frames": 16,
+      "verdict_then_and_now": "fail: the four-frame write format structurally cannot carry slot 1's observation, HUD or label",
+      "status": "read-only historical material; still not L1-conformant"
+    },
+    "new_denominator": {
+      "corpus": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T04/dataset",
+      "version": "v420-2f-dataset/1",
+      "slots": 19772,
+      "slots_by_seed": {
+        "10": 6592,
+        "11": 6592,
+        "12": 6588
+      },
+      "train_rows": 15819,
+      "holdout_rows": 3953,
+      "every_slot": "own 4-frame play stack (d-4..d-1), own HUD (frame d-1), own executed action, 8 real 2-frame history (d-16..d-2), 18 teacher scores + 1 verified candidate",
+      "consumed_by": "touhou_rl/v420/train.py A0/A0v, 5,000 steps x batch 128, seed 0, on 15,819 train rows"
+    },
+    "is_this_a_relaxation": false,
+    "why_not": [
+      "no criterion was loosened: the 2-frame stride requires every slot to carry its own observation and label, which the legacy format cannot express at all",
+      "the old corpus was not counted as conformant and was not merged into the new denominator",
+      "the new corpus is measured independently here (parts B/C), not inferred from the documents that produced it",
+      "the 24 cold-start boundaries are excluded, not filled, and are not consumed samples"
+    ]
+  },
+  "consumed": {
+    "question": "did the A0/A0v training run really read this dataset?",
+    "answer": "yes — established six ways, all re-computable (part A)",
+    "chain": {
+      "1_command_line": {
+        "runner": ".tmp_v420_t04/train.sh",
+        "argv": "tools/rl/v420.py train --config \"$CONFIG\" --out \"$OUT\" --execute \\",
+        "config_used": "configs/v420/learn-controlled.json",
+        "config_sha256": "cc1ae9dcda76ad11de298b9c8722c80438ac8e87f606bcc19427fe2030d0577c",
+        "note": "the runner exports PYTHONPATH=<repo> and passes --config/--out explicitly"
+      },
+      "2_input_path_parameter": {
+        "config_has_dataset_dir_key": false,
+        "path_rule": "Dataset2FConfig.dataset_root = <v420_data>/<dataset_run_id>/dataset (dataset_2f.py L207-209); train.py L413-415 only type-checks config.dataset_dir and never uses it",
+        "v420_data": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data",
+        "dataset_run_id": "T04",
+        "derived": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T04/dataset",
+        "equals_published_corpus": true,
+        "train_log_line": "[train] loading /mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T04/dataset"
+      },
+      "3_corpus_identity_recorded_by_the_run": {
+        "dataset_root": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T04/dataset",
+        "dataset_version": "v420-2f-dataset/1",
+        "slots": 19772,
+        "index_sha256_recorded": "dbb17ec201a63a0c91112739c80e44de2cbd55d3712a25271ed17770672b09a8",
+        "index_sha256_recomputed": "dbb17ec201a63a0c91112739c80e44de2cbd55d3712a25271ed17770672b09a8",
+        "index_matches": true,
+        "dataset_build_sha256": "3f48d9779cd06f4b0f88e773eb1c38225703c4df6988b662939d213ed1e414ed",
+        "shards": [
+          {
+            "shard_key": "d1-s0d1-n3300-seed10-shard",
+            "slots": 6592,
+            "meta_sha256": "321ca74c9bd874e42dba4cc2f7de43508c9b24cc49dd51f4faf6d2d785a2007c",
+            "slots_sha256": "52402de44692fa2decd019da9701f57de6e27f193aea01c1e19d2b69fab781a2",
+            "both_recomputed_equal": true
+          },
+          {
+            "shard_key": "d1-s0d1-n3300-seed11-shard",
+            "slots": 6592,
+            "meta_sha256": "04ed2f115aae7b95389eaa0872755911f56893149660960b0e3bcb0e489057b4",
+            "slots_sha256": "f75e632ba6990a372b4bae614f51bbc74049a75296380491b558b9071f09eb9e",
+            "both_recomputed_equal": true
+          },
+          {
+            "shard_key": "d1-s0d1-n3300-seed12-shard",
+            "slots": 6588,
+            "meta_sha256": "11d30d315bdc41b7495e63d8ffba02ba87367e5a0a0ca8f2726b9bac90e92bc1",
+            "slots_sha256": "f759de7dacc78343dec8825da5de14942e749b8a5a2c5319304e513d1618b7b9",
+            "both_recomputed_equal": true
+          }
+        ]
+      },
+      "4_split_reproduced": {
+        "rule": "row_index % 5 == 4 per shard",
+        "recorded": {
+          "train_slots": 15819,
+          "holdout_slots": 3953,
+          "holdout_fraction": 0.199929
+        },
+        "recomputed": {
+          "train_slots": 15819,
+          "holdout_slots": 3953
+        },
+        "holdout_rows_not_matching_rule": 0,
+        "train_holdout_overlap": 0
+      },
+      "5_sample_arithmetic": {
+        "steps": 5000,
+        "batch_size": 128,
+        "train_rows": 15819,
+        "steps_per_epoch": 124,
+        "last_batch_rows": 75,
+        "complete_epochs_in_5000_steps": 40,
+        "remainder_steps": 40,
+        "samples_seen_analytic": 637880,
+        "samples_seen_recorded": {
+          "A0": 637880,
+          "A0v": 637880
+        },
+        "samples_seen_matches": true,
+        "epochs_analytic": 41,
+        "epochs_recorded_checkpoint": {
+          "A0": 41,
+          "A0v": 41
+        },
+        "epochs_matches": true,
+        "the_640k_misreading": {
+          "naive": 640000,
+          "why_wrong": "5,000 x 128 = 640,000 assumes every batch is full. The 20 % holdout is never trained on, so the epoch is 15,819 rows: ceil(15,819/128) = 124 steps, and a complete epoch's last batch has 75 rows. 40 complete epochs x 15,819 + 40 steps x 128 = 637,880.",
+          "full_corpus_ratio": "19,772/128 = 154.47 (155 if rounded up); that is the corpus-wide figure, NOT the epoch the run used",
+          "self_consistent_with_epochs_41": "ceil(5,000/124) = 41, which is exactly the checkpoint's epochs/last_epoch",
+          "unknown": "none: every term is recorded or recomputed"
+        }
+      },
+      "6_checkpoints": {
+        "A0": {
+          "path": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T04/checkpoints/a0_seed0_step5000.pt",
+          "bytes": 2940699,
+          "sha256": "96cb219eac83391f42b18ea656b5a6c5ac81e97cd1fd8c1e2c0d404aee6b89ad",
+          "schema": "v410-wp04-bc-arm-checkpoint/1",
+          "epochs": 41,
+          "last_epoch": 41,
+          "budget": {
+            "epochs": 41,
+            "batch_size": 128,
+            "steps_per_epoch": 124,
+            "steps": 5000,
+            "samples_seen": 637880,
+            "optimiser": "adam",
+            "lr": 0.0001,
+            "weight_decay": 0.0,
+            "grad_clip": 0.5,
+            "seed": 0
+          },
+          "dataset_block": {
+            "dataset_version": "v420-2f-dataset/1",
+            "seeds": [
+              10,
+              11,
+              12
+            ],
+            "slots": 19772
+          },
+          "split": {
+            "train_slots": 15819,
+            "holdout_slots": 3953,
+            "rule": "row_index % 5 == 4"
+          }
+        },
+        "A0v": {
+          "path": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T04/checkpoints/a0v_seed0_step5000.pt",
+          "bytes": 2940741,
+          "sha256": "f7188c0d773e1085299e797327fd62a2bcec35bf50c115cb203d2ad2fa1f4fd9",
+          "schema": "v410-wp04-bc-arm-checkpoint/1",
+          "epochs": 41,
+          "last_epoch": 41,
+          "budget": {
+            "epochs": 41,
+            "batch_size": 128,
+            "steps_per_epoch": 124,
+            "steps": 5000,
+            "samples_seen": 637880,
+            "optimiser": "adam",
+            "lr": 0.0001,
+            "weight_decay": 0.0,
+            "grad_clip": 0.5,
+            "seed": 0
+          },
+          "dataset_block": {
+            "dataset_version": "v420-2f-dataset/1",
+            "seeds": [
+              10,
+              11,
+              12
+            ],
+            "slots": 19772
+          },
+          "split": {
+            "train_slots": 15819,
+            "holdout_slots": 3953,
+            "rule": "row_index % 5 == 4"
+          }
+        }
+      },
+      "7_forward_reproduction": {
+        "what": "the two checkpoints were re-read with the frozen load_v410_checkpoint and re-scored on today's corpus, CPU, forward only (no optimiser step)",
+        "arms": {
+          "A0": {
+            "reproduced": true,
+            "holdout_recorded": {
+              "loss": 2.802158335165189,
+              "top1": 0.5378193776878321,
+              "macro_recall": 0.28615023377492393,
+              "samples": 3953
+            },
+            "holdout_recomputed_cpu": {
+              "loss": 2.8021581137549676,
+              "top1": 0.5378193776878321,
+              "macro_recall": 0.28615023377492393,
+              "samples": 3953
+            },
+            "holdout_loss_delta": 2.2141022126831444e-07,
+            "holdout_top1_delta": 0.0,
+            "train_loss_delta": 1.8314801148583415e-07,
+            "train_top1_delta": 0.0,
+            "proper_safe_set_rate": {
+              "recorded_holdout": 0.4386541866936504,
+              "recomputed_holdout": 0.4386541866936504
+            }
+          },
+          "A0v": {
+            "reproduced": true,
+            "holdout_recorded": {
+              "loss": 2.64209283814292,
+              "top1": 0.5621047305843663,
+              "macro_recall": 0.2392121778982552,
+              "samples": 3953
+            },
+            "holdout_recomputed_cpu": {
+              "loss": 2.642096250339191,
+              "top1": 0.5621047305843663,
+              "macro_recall": 0.2392121778982552,
+              "samples": 3953
+            },
+            "holdout_loss_delta": 3.4121962713129506e-06,
+            "holdout_top1_delta": 0.0,
+            "train_loss_delta": 4.800182212272297e-07,
+            "train_top1_delta": 0.0,
+            "proper_safe_set_rate": {
+              "recorded_holdout": 0.5621047305843663,
+              "recomputed_holdout": 0.5621047305843663
+            }
+          }
+        },
+        "tolerances": {
+          "loss_abs": 0.0005,
+          "top1_abs": 6.321512105695683e-05,
+          "why": "the recorded metrics were measured on CUDA and this re-forward runs on CPU; the claim is 'same corpus to float32 noise', not bit equality"
+        }
+      },
+      "8_mtime_order": {
+        "note": "weak corroboration, not proof: observation mtimes precede the join, which precedes the config, which precedes the checkpoints, which precede the report",
+        "observed_utc": {
+          "obs_npy": [
+            "2026-11-13T09:50:03Z (seed 10)",
+            "2026-11-13T09:54:06Z (seed 11)",
+            "2026-11-13T09:58:22Z (seed 12)"
+          ],
+          "dataset_slots_targets_meta": "2026-11-13T10:38:21Z .. 10:38:30Z",
+          "index_and_build_report": "2026-11-13T10:38:32Z",
+          "config": "2026-11-13T10:49:05Z",
+          "runner_script": "2026-11-13T10:51:38Z",
+          "a0_checkpoint": "2026-11-13T10:54:29Z",
+          "a0v_checkpoint": "2026-11-13T10:56:31Z",
+          "train_json_and_log": "2026-11-13T10:59:04Z"
+        }
+      }
+    }
+  },
+  "self_check_rerun": {
+    "entry": ".tmp_v420_g420re/b_selfcheck.py (dataset_2f has no CLI)",
+    "module": "touhou_rl.v420.dataset_2f",
+    "module_sha256": "94341de6de35b25c7d9199d783f79b269b5dae5aa6bcc1bb5500bbd80e2cdbc9",
+    "checker": "dataset_2f.self_check_dataset",
+    "verify_obs": true,
+    "engine_started": false,
+    "training_started": false,
+    "shards": [
+      {
+        "shard_key": "d1-s0d1-n3300-seed10-shard",
+        "seed": 10,
+        "rows": 6592,
+        "targets_rows_checked": 6592,
+        "violations_total": 0,
+        "unexplained_diffs": 0,
+        "passed": true,
+        "hash_pairs": 6592,
+        "verified_flags_total": 6592,
+        "label_source_counts": {
+          "teacher_2f": 6592
+        }
+      },
+      {
+        "shard_key": "d1-s0d1-n3300-seed11-shard",
+        "seed": 11,
+        "rows": 6592,
+        "targets_rows_checked": 6592,
+        "violations_total": 0,
+        "unexplained_diffs": 0,
+        "passed": true,
+        "hash_pairs": 6592,
+        "verified_flags_total": 6592,
+        "label_source_counts": {
+          "teacher_2f": 6592
+        }
+      },
+      {
+        "shard_key": "d1-s0d1-n3300-seed12-shard",
+        "seed": 12,
+        "rows": 6588,
+        "targets_rows_checked": 6588,
+        "violations_total": 0,
+        "unexplained_diffs": 0,
+        "passed": true,
+        "hash_pairs": 6588,
+        "verified_flags_total": 6588,
+        "label_source_counts": {
+          "teacher_2f": 6588
+        }
+      }
+    ],
+    "totals": {
+      "rows": 19772,
+      "targets_rows": 19772,
+      "violations_total": 0,
+      "unexplained_diffs": 0,
+      "hash_pairs": 19772,
+      "verified_flags_total": 19772,
+      "label_source_counts": {
+        "teacher_2f": 19772
+      },
+      "checks": 36,
+      "assertions": 514117
+    },
+    "per_check": {
+      "chosen_matches_teacher": {
+        "checked": 19772,
+        "violations": 0
+      },
+      "chosen_verified_argmax": {
+        "checked": 19772,
+        "violations": 0
+      },
+      "chosen_verified_flag": {
+        "checked": 19772,
+        "violations": 0
+      },
+      "commit_frames": {
+        "checked": 19772,
+        "violations": 0
+      },
+      "contract_tags": {
+        "checked": 19772,
+        "violations": 0
+      },
+      "decision_frame_rule": {
+        "checked": 19772,
+        "violations": 0
+      },
+      "decision_span": {
+        "checked": 19772,
+        "violations": 0
+      },
+      "episode_seed": {
+        "checked": 19772,
+        "violations": 0
+      },
+      "executed_mask_roundtrip": {
+        "checked": 19772,
+        "violations": 0
+      },
+      "hash_chain": {
+        "checked": 19772,
+        "violations": 0
+      },
+      "hash_reconcile": {
+        "checked": 3,
+        "violations": 0
+      },
+      "history_excludes_current": {
+        "checked": 19772,
+        "violations": 0
+      },
+      "history_frames": {
+        "checked": 19772,
+        "violations": 0
+      },
+      "history_length": {
+        "checked": 19772,
+        "violations": 0
+      },
+      "history_no_future": {
+        "checked": 19772,
+        "violations": 0
+      },
+      "history_plane": {
+        "checked": 19772,
+        "violations": 0
+      },
+      "join_duplicate_label": {
+        "checked": 3,
+        "violations": 0
+      },
+      "join_missing_label": {
+        "checked": 3,
+        "violations": 0
+      },
+      "join_orphan_label": {
+        "checked": 3,
+        "violations": 0
+      },
+      "label_source": {
+        "checked": 19772,
+        "violations": 0
+      },
+      "label_verified": {
+        "checked": 19772,
+        "violations": 0
+      },
+      "no_fabricated_verified": {
+        "checked": 19772,
+        "violations": 0
+      },
+      "obs_blank_hud": {
+        "checked": 3,
+        "violations": 0
+      },
+      "obs_blank_play": {
+        "checked": 3,
+        "violations": 0
+      },
+      "obs_render_frames": {
+        "checked": 19772,
+        "violations": 0
+      },
+      "obs_rows": {
+        "checked": 3,
+        "violations": 0
+      },
+      "obs_shape_dtype": {
+        "checked": 9,
+        "violations": 0
+      },
+      "provenance": {
+        "checked": 19772,
+        "violations": 0
+      },
+      "scores_finite": {
+        "checked": 19772,
+        "violations": 0
+      },
+      "scores_length": {
+        "checked": 19772,
+        "violations": 0
+      },
+      "slot_id_order": {
+        "checked": 19772,
+        "violations": 0
+      },
+      "source_unchanged": {
+        "checked": 12,
+        "violations": 0
+      },
+      "targets_rows": {
+        "checked": 3,
+        "violations": 0
+      },
+      "targets_separation": {
+        "checked": 19772,
+        "violations": 0
+      },
+      "verified_count": {
+        "checked": 19772,
+        "violations": 0
+      },
+      "verified_mask_length": {
+        "checked": 19772,
+        "violations": 0
+      }
+    },
+    "exit_code": 0
+  },
+  "l1_criteria": {
+    "scope": "the 19,772 slots of the corpus the A0/A0v run consumed",
+    "engine_started": false,
+    "criteria": {
+      "C1_2f_slot": {
+        "checked": 19772,
+        "violations": 0,
+        "ok": true,
+        "samples": []
+      },
+      "C1_commit_span": {
+        "checked": 19772,
+        "violations": 0,
+        "ok": true,
+        "samples": []
+      },
+      "C1_consecutive_delta": {
+        "checked": 19769,
+        "violations": 0,
+        "ok": true,
+        "samples": []
+      },
+      "C2_adjacent_overlap": {
+        "checked": 19769,
+        "violations": 0,
+        "ok": true,
+        "samples": []
+      },
+      "C2_obs_window": {
+        "checked": 19772,
+        "violations": 0,
+        "ok": true,
+        "samples": []
+      },
+      "C2_play_nonblank": {
+        "checked": 19772,
+        "violations": 0,
+        "ok": true,
+        "samples": []
+      },
+      "C3_act_hist_is_history_onehot": {
+        "checked": 19772,
+        "violations": 0,
+        "ok": true,
+        "samples": []
+      },
+      "C3_executed_matches_record": {
+        "checked": 19772,
+        "violations": 0,
+        "ok": true,
+        "samples": []
+      },
+      "C3_hud_row": {
+        "checked": 19772,
+        "violations": 0,
+        "ok": true,
+        "samples": []
+      },
+      "C4_history_domain": {
+        "checked": 19772,
+        "violations": 0,
+        "ok": true,
+        "samples": []
+      },
+      "C4_history_ends_before_current": {
+        "checked": 19772,
+        "violations": 0,
+        "ok": true,
+        "samples": []
+      },
+      "C4_history_length": {
+        "checked": 19772,
+        "violations": 0,
+        "ok": true,
+        "samples": []
+      },
+      "C4_history_matches_earlier_slots": {
+        "checked": 19748,
+        "violations": 0,
+        "ok": true,
+        "samples": []
+      },
+      "C4_history_no_future": {
+        "checked": 19772,
+        "violations": 0,
+        "ok": true,
+        "samples": []
+      },
+      "C4_history_window": {
+        "checked": 19772,
+        "violations": 0,
+        "ok": true,
+        "samples": []
+      },
+      "C5_mask_roundtrip": {
+        "checked": 19772,
+        "violations": 0,
+        "ok": true,
+        "samples": []
+      },
+      "C6_chosen_is_verified_argmax": {
+        "checked": 19772,
+        "violations": 0,
+        "ok": true,
+        "samples": []
+      },
+      "C6_chosen_score": {
+        "checked": 19772,
+        "violations": 0,
+        "ok": true,
+        "samples": []
+      },
+      "C6_chosen_verified_flag": {
+        "checked": 19772,
+        "violations": 0,
+        "ok": true,
+        "samples": []
+      },
+      "C6_label_flags": {
+        "checked": 19772,
+        "violations": 0,
+        "ok": true,
+        "samples": []
+      },
+      "C6_scores_finite": {
+        "checked": 19772,
+        "violations": 0,
+        "ok": true,
+        "samples": []
+      },
+      "C6_scores_length": {
+        "checked": 19772,
+        "violations": 0,
+        "ok": true,
+        "samples": []
+      },
+      "C6_slot_has_a_verified_action": {
+        "checked": 19772,
+        "violations": 0,
+        "ok": true,
+        "samples": []
+      },
+      "C6_verified_count": {
+        "checked": 19772,
+        "violations": 0,
+        "ok": true,
+        "samples": []
+      },
+      "C6_verified_mask_length": {
+        "checked": 19772,
+        "violations": 0,
+        "ok": true,
+        "samples": []
+      },
+      "C7_hash_chain": {
+        "checked": 19769,
+        "violations": 0,
+        "ok": true,
+        "samples": []
+      },
+      "C7_hash_shape": {
+        "checked": 19772,
+        "violations": 0,
+        "ok": true,
+        "samples": []
+      },
+      "C8_label_source_known": {
+        "checked": 19772,
+        "violations": 0,
+        "ok": true,
+        "samples": []
+      },
+      "C9_targets_rows": {
+        "checked": 19772,
+        "violations": 0,
+        "ok": true,
+        "samples": []
+      }
+    },
+    "totals": {
+      "slots": 19772,
+      "criteria": 29,
+      "criteria_with_violations": [],
+      "assertions_executed": 573355,
+      "violations_total": 0
+    },
+    "exit_code": 0,
+    "criterion_map": {
+      "C1_2f_slot / C1_commit_span / C1_consecutive_delta": "every 2 logical frames a slot: decision_frame = 16 + 2*slot_id, commit_frames = [d, d+2), duration 2, consecutive slots 2 frames apart",
+      "C2_obs_window / C2_adjacent_overlap / C2_play_nonblank": "obs = 4 consecutive frames d-4..d-1 and adjacent slots share exactly 2 frames (the stride is real)",
+      "C3_hud_row / C3_executed_matches_record / C3_act_hist_is_history_onehot": "own HUD row for frame d-1, own executed action, stored act_hist row == one-hot(history)",
+      "C4_*": "8 history entries spanning d-16..d-2, none at or after d, all in the 18-candidate domain, and slot s's history == the executed actions of slots s-8..s-1",
+      "C5_mask_roundtrip": "mask <-> (cand, bomb) both directions",
+      "C6_*": "18 finite scores, 18 flags, verified_count == sum, chosen == verified argmax (ties -> lowest index), chosen_score/label_verified consistent, every slot has at least one verified candidate",
+      "C7_hash_shape / C7_hash_chain": "16-hex state hashes and hash_pre == previous hash_post",
+      "C8_label_source_known": "label_source in contracts.LABEL_SOURCES (the 5-source tuple)",
+      "C9_targets_rows": "targets.jsonl keeps executed_cand and chosen_verified_cand separate and equal to the record"
+    }
+  },
+  "l2_hash_reconstruction": {
+    "status": "pass",
+    "measurements": [
+      {
+        "source": "T02 online leg, two independent runs per seed",
+        "scale": "3 seeds x 2,016 frames = 6,048 pairs",
+        "mismatches": 0,
+        "record": ".tmp_v420_data/T02/time.json -> g420_0.legs.l2_hash_reconstruction"
+      },
+      {
+        "source": "PREFLIGHT_REPLAY (legacy prefix replay)",
+        "scale": "3 seeds x 2 runs x 2,000 frames = 12,000 frames",
+        "mismatches": 0,
+        "record": "evidence/PREFLIGHT/PREFLIGHT_REPLAY.md"
+      },
+      {
+        "source": "T02c rebuild (corpus boundary re-check)",
+        "scale": "hash_post 9,898/9,898 + 39,592 frame hashes",
+        "mismatches": 0,
+        "record": "evidence/T02c/REBUILD_2F.md"
+      },
+      {
+        "source": "T02d reslot (per-slot label replay)",
+        "scale": "29,694 boundary checks + 79,184 frame hashes",
+        "mismatches": 0,
+        "record": "evidence/T02d/RESLOT_2F.md"
+      },
+      {
+        "source": "this re-audit, part B/C (corpus-level chain)",
+        "scale": "19,772 hash pairs, 0 chain breaks, reconciled against both source metas",
+        "mismatches": 0,
+        "record": ".tmp_v420_g420re/b_selfcheck.json, c_l1_audit.json"
+      }
+    ],
+    "recorded_in_the_original_audit": {
+      "status": "pass",
+      "measured": {
+        "frames_compared": 6048,
+        "mismatches": 0,
+        "comparisons": 3
+      },
+      "conditions": [
+        {
+          "id": "online_repeat_hash_equal",
+          "required": "the two runs of the same prefix produce the same per-frame HASH",
+          "observed": {
+            "frames_compared": 6048,
+            "mismatches": 0
+          },
+          "met": true
+        }
+      ]
+    },
+    "note": "no tolerance was widened; the cross-device column stays unavailable and is not counted"
+  },
+  "l3_deploy_input_boundary": {
+    "status": "pass",
+    "measurements": [
+      {
+        "source": "T02 online leg",
+        "scale": "60,000 per-slot assertions (10 checks x 6,000 slots), 0 violations; online/offline forward 6,000/6,000 bitwise equal on cpu, max abs diff 0.0",
+        "record": ".tmp_v420_data/T02/time.json -> g420_0.legs.l3_deploy_input_boundary"
+      },
+      {
+        "source": "this re-audit, part C (same boundary on the consumed corpus)",
+        "scale": "19,772 slots: 4-frame contiguous obs + 2-frame adjacent overlap, 8x2 history, no future, mask round-trip, shape/dtype (4,112,96)/(56,160)/(8,18) uint8",
+        "record": ".tmp_v420_g420re/c_l1_audit.json"
+      },
+      {
+        "source": "this re-audit, part D (frozen model on that input)",
+        "scale": "A0/A0v re-scored on 15,819 train + 3,953 holdout slots, CPU, forward only",
+        "record": ".tmp_v420_g420re/d_forward_repro.json"
+      }
+    ],
+    "recorded_in_the_original_audit": {
+      "status": "pass",
+      "measured": {
+        "checks": {
+          "check_decision_span": 6000,
+          "check_history_length": 6000,
+          "check_history_frames": 6000,
+          "check_no_future": 6000,
+          "check_history_excludes_current": 6000,
+          "check_contiguous_render_frames": 6000,
+          "check_key_timing": 6000,
+          "cand_to_mask_round_trip": 6000,
+          "mask_stable_within_slot": 6000,
+          "slot_record_consistent": 6000
+        },
+        "violations": {
+          "check_decision_span": 0,
+          "check_history_length": 0,
+          "check_history_frames": 0,
+          "check_no_future": 0,
+          "check_history_excludes_current": 0,
+          "check_contiguous_render_frames": 0,
+          "check_key_timing": 0,
+          "cand_to_mask_round_trip": 0,
+          "mask_stable_within_slot": 0,
+          "slot_record_consistent": 0
+        },
+        "forward_mismatches": 0
+      },
+      "conditions": [
+        {
+          "id": "no_contract_violation",
+          "required": "every two-frame slot passes all contract checks",
+          "observed": {
+            "violations": 0,
+            "checks_passed": 60000
+          },
+          "met": true
+        },
+        {
+          "id": "forward_consistent_on_one_device",
+          "required": "the online and offline forward passes agree bitwise on cpu",
+          "observed": {
+            "rows_compared": 6000,
+            "mismatches": 0,
+            "device": "cpu"
+          },
+          "met": true
+        }
+      ]
+    },
+    "boundary_note": "what is claimed is the input boundary (frames, history, shapes, no future, model forward), not real-time acquisition, staleness or retail-client latency"
+  },
+  "gate_requirement_mapping": [
+    {
+      "requirement": "remote reproduction of the original model",
+      "evidence": "T02 reproduction leg: 4 calls / 12 episodes, exit 0, 6/6 (checkpoint, seed) x 7 fields identical to the historical baseline, action_sequence_sha256 identical",
+      "record": "evidence/T02/LEGACY_REPRODUCE.md, PROGRESS.md 3.3",
+      "measured_here": false,
+      "met": true
+    },
+    {
+      "requirement": "two-frame samples / history / input / pixels consistent",
+      "evidence": "L1 (parts A/B/C on the consumed corpus) + L3",
+      "record": "this file, sections l1_criteria / self_check_rerun",
+      "measured_here": true,
+      "met": true
+    },
+    {
+      "requirement": "zero unexplained HASH differences",
+      "evidence": "L2: five independent measurements, 0 mismatches",
+      "record": "this file, section l2_hash_reconstruction",
+      "measured_here": true,
+      "met": true
+    }
+  ],
+  "artifacts": {
+    "corpus": {
+      "dataset_root": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T04/dataset",
+      "index_json": {
+        "path": ".tmp_v420_data/T04/dataset/index.json",
+        "bytes": 3941,
+        "sha256": "dbb17ec201a63a0c91112739c80e44de2cbd55d3712a25271ed17770672b09a8"
+      },
+      "dataset_build_json": {
+        "path": ".tmp_v420_data/T04/dataset_build.json",
+        "bytes": 36789,
+        "sha256": "3f48d9779cd06f4b0f88e773eb1c38225703c4df6988b662939d213ed1e414ed"
+      },
+      "shards": [
+        {
+          "shard_key": "d1-s0d1-n3300-seed10-shard",
+          "seed": 10,
+          "slots": 6592,
+          "slots_jsonl": {
+            "path": ".tmp_v420_data/T04/dataset/d1-s0d1-n3300-seed10-shard/slots.jsonl",
+            "bytes": 10100966,
+            "sha256": "52402de44692fa2decd019da9701f57de6e27f193aea01c1e19d2b69fab781a2"
+          },
+          "targets_jsonl": {
+            "path": ".tmp_v420_data/T04/dataset/d1-s0d1-n3300-seed10-shard/targets.jsonl",
+            "bytes": 1630901,
+            "sha256": "65cdc4dba54b7bc6c9e404ebd309cc0e4f0f94d381827497dceeb961aba467e4"
+          },
+          "meta_json": {
+            "path": ".tmp_v420_data/T04/dataset/d1-s0d1-n3300-seed10-shard/meta.json",
+            "bytes": 6066,
+            "sha256": "321ca74c9bd874e42dba4cc2f7de43508c9b24cc49dd51f4faf6d2d785a2007c"
+          },
+          "obs": {
+            "play96x112.npy": {
+              "path": ".tmp_v420_data/T04/dataset/d1-s0d1-n3300-seed10-shard/obs/play96x112.npy",
+              "bytes": 283508864,
+              "sha256": "5d3cf82a1ed70ca05e0dc1667c8b466016e461cb08c515b78ba51a07f0cf4eaf"
+            },
+            "hud.npy": {
+              "path": ".tmp_v420_data/T04/dataset/d1-s0d1-n3300-seed10-shard/obs/hud.npy",
+              "bytes": 59064448,
+              "sha256": "2577d705f57ca50902cb28bb26386de4a867320b66086d4d0c3903614470de77"
+            },
+            "act_hist.npy": {
+              "path": ".tmp_v420_data/T04/dataset/d1-s0d1-n3300-seed10-shard/obs/act_hist.npy",
+              "bytes": 949376,
+              "sha256": "f286b4f391c7a7068971da898b5c1589fadad078a54ce5c8d0c8c309bd014769"
+            },
+            "SOURCE.json": {
+              "path": ".tmp_v420_data/T04/dataset/d1-s0d1-n3300-seed10-shard/obs/SOURCE.json",
+              "bytes": 1144,
+              "sha256": "a87653677bf6919b77f2a60b5ea609a9e45c81d277149bb8e5dab70e5299abf0"
+            }
+          }
+        },
+        {
+          "shard_key": "d1-s0d1-n3300-seed11-shard",
+          "seed": 11,
+          "slots": 6592,
+          "slots_jsonl": {
+            "path": ".tmp_v420_data/T04/dataset/d1-s0d1-n3300-seed11-shard/slots.jsonl",
+            "bytes": 10104250,
+            "sha256": "f75e632ba6990a372b4bae614f51bbc74049a75296380491b558b9071f09eb9e"
+          },
+          "targets_jsonl": {
+            "path": ".tmp_v420_data/T04/dataset/d1-s0d1-n3300-seed11-shard/targets.jsonl",
+            "bytes": 1630899,
+            "sha256": "8fbc1d16426d3aa5e8a445421443b596078c83c3e6d0ea15c3d35cf691335337"
+          },
+          "meta_json": {
+            "path": ".tmp_v420_data/T04/dataset/d1-s0d1-n3300-seed11-shard/meta.json",
+            "bytes": 6066,
+            "sha256": "04ed2f115aae7b95389eaa0872755911f56893149660960b0e3bcb0e489057b4"
+          },
+          "obs": {
+            "play96x112.npy": {
+              "path": ".tmp_v420_data/T04/dataset/d1-s0d1-n3300-seed11-shard/obs/play96x112.npy",
+              "bytes": 283508864,
+              "sha256": "e94d6e8fcae1e6f7dabd1a2d93b86610292f76fcf42f768f4f155e29cfd78473"
+            },
+            "hud.npy": {
+              "path": ".tmp_v420_data/T04/dataset/d1-s0d1-n3300-seed11-shard/obs/hud.npy",
+              "bytes": 59064448,
+              "sha256": "a34f076ceb4e608df27af1f15dd54e9bc6001451d57e715035243ec81f788b01"
+            },
+            "act_hist.npy": {
+              "path": ".tmp_v420_data/T04/dataset/d1-s0d1-n3300-seed11-shard/obs/act_hist.npy",
+              "bytes": 949376,
+              "sha256": "6f2357f7c4dde7441b03c494691340c05b1ac0686303c5d49719eb3b08c03f46"
+            },
+            "SOURCE.json": {
+              "path": ".tmp_v420_data/T04/dataset/d1-s0d1-n3300-seed11-shard/obs/SOURCE.json",
+              "bytes": 1144,
+              "sha256": "9f104a83f18d01f2e502664af0c73fe24d272ec1a1b1660897e864a81c418aac"
+            }
+          }
+        },
+        {
+          "shard_key": "d1-s0d1-n3300-seed12-shard",
+          "seed": 12,
+          "slots": 6588,
+          "slots_jsonl": {
+            "path": ".tmp_v420_data/T04/dataset/d1-s0d1-n3300-seed12-shard/slots.jsonl",
+            "bytes": 10097148,
+            "sha256": "f759de7dacc78343dec8825da5de14942e749b8a5a2c5319304e513d1618b7b9"
+          },
+          "targets_jsonl": {
+            "path": ".tmp_v420_data/T04/dataset/d1-s0d1-n3300-seed12-shard/targets.jsonl",
+            "bytes": 1629886,
+            "sha256": "b69928e9b788f32fb1cd3d16109051ab685527dbb52ed64aa62d39e0ce343798"
+          },
+          "meta_json": {
+            "path": ".tmp_v420_data/T04/dataset/d1-s0d1-n3300-seed12-shard/meta.json",
+            "bytes": 6066,
+            "sha256": "11d30d315bdc41b7495e63d8ffba02ba87367e5a0a0ca8f2726b9bac90e92bc1"
+          },
+          "obs": {
+            "play96x112.npy": {
+              "path": ".tmp_v420_data/T04/dataset/d1-s0d1-n3300-seed12-shard/obs/play96x112.npy",
+              "bytes": 283336832,
+              "sha256": "e88be0561452287a57e0d1e9d3bf57771af48d2d10ab39c9b77ab84755f80ff1"
+            },
+            "hud.npy": {
+              "path": ".tmp_v420_data/T04/dataset/d1-s0d1-n3300-seed12-shard/obs/hud.npy",
+              "bytes": 59028608,
+              "sha256": "6a8c3566c6e80772ab264062dfe11d33671c4c552e993cc82c5206fdd6a2b57a"
+            },
+            "act_hist.npy": {
+              "path": ".tmp_v420_data/T04/dataset/d1-s0d1-n3300-seed12-shard/obs/act_hist.npy",
+              "bytes": 948800,
+              "sha256": "53f1ce16f211c23b488217fc3f1dcd5e2b737a28ce29dbc6c3f9c6c820f3088d"
+            },
+            "SOURCE.json": {
+              "path": ".tmp_v420_data/T04/dataset/d1-s0d1-n3300-seed12-shard/obs/SOURCE.json",
+              "bytes": 1144,
+              "sha256": "903515feaf87566ae95a5526ea39489d2f9c8b290464e84648ca05423e11a330"
+            }
+          }
+        }
+      ]
+    },
+    "run": {
+      "config": {
+        "path": "configs/v420/learn-controlled.json",
+        "bytes": 4477,
+        "sha256": "cc1ae9dcda76ad11de298b9c8722c80438ac8e87f606bcc19427fe2030d0577c"
+      },
+      "runner": {
+        "path": ".tmp_v420_t04/train.sh",
+        "bytes": 717,
+        "sha256": "e65e0ca300ab542a4e85479dcef81ce880cdd6c8caf5454310682ca65be96693"
+      },
+      "train_json": {
+        "path": ".tmp_v420_data/T04/train.json",
+        "bytes": 167645,
+        "sha256": "72afc751c783f7185e1e1e7c5e15a83b6153a32b83ad83a87b4bae6318f353b9"
+      },
+      "train_log": {
+        "path": ".tmp_v420_data/T04/train.log",
+        "bytes": 176386,
+        "sha256": "846b4cdb3b3c98c0f526e23635c4c7d524796ab4ad05f1feb25c9c6e111b07c6"
+      },
+      "checkpoints": {
+        "A0": {
+          "path": ".tmp_v420_data/T04/checkpoints/a0_seed0_step5000.pt",
+          "bytes": 2940699,
+          "sha256": "96cb219eac83391f42b18ea656b5a6c5ac81e97cd1fd8c1e2c0d404aee6b89ad"
+        },
+        "A0v": {
+          "path": ".tmp_v420_data/T04/checkpoints/a0v_seed0_step5000.pt",
+          "bytes": 2940741,
+          "sha256": "f7188c0d773e1085299e797327fd62a2bcec35bf50c115cb203d2ad2fa1f4fd9"
+        }
+      }
+    },
+    "code": {
+      "touhou_rl/v420/dataset_2f.py": {
+        "path": "touhou_rl/v420/dataset_2f.py",
+        "bytes": 87280,
+        "sha256": "94341de6de35b25c7d9199d783f79b269b5dae5aa6bcc1bb5500bbd80e2cdbc9"
+      },
+      "touhou_rl/v420/batch_2f.py": {
+        "path": "touhou_rl/v420/batch_2f.py",
+        "bytes": 26375,
+        "sha256": "fb711625571262d8e62003b1f4a27cda6288891589899a0f02e220bf74bdaf16"
+      },
+      "touhou_rl/v420/train.py": {
+        "path": "touhou_rl/v420/train.py",
+        "bytes": 55803,
+        "sha256": "bf4c2c1bf99015536127e5bf4f28b804ebcb74645b23b187011a722a4849a7b9"
+      },
+      "touhou_rl/v420/diagnostics.py": {
+        "path": "touhou_rl/v420/diagnostics.py",
+        "bytes": 13957,
+        "sha256": "85f557d836768f6964c4f51d3611b36048db0723b18ea796c58ef5263bfb9a2f"
+      },
+      "touhou_rl/v420/contracts.py": {
+        "path": "touhou_rl/v420/contracts.py",
+        "bytes": 56321,
+        "sha256": "1357c69c32a74fda20553a3e6b290ca2102b7cc5c52e47e9fdc6eb9e08c946c1"
+      },
+      "tools/rl/v420.py": {
+        "path": "tools/rl/v420.py",
+        "bytes": 25981,
+        "sha256": "9858069a2f6cddc993152c808849bc4cf34b5035cfbc25bff3b38b05ba8eded1"
+      }
+    },
+    "cited_evidence": {
+      "Document/Update/Alpha/v4.2.0/README.md": {
+        "path": "Document/Update/Alpha/v4.2.0/README.md",
+        "bytes": 34662,
+        "sha256": "5cbe94b6b508f253acdc11600bf207c133f5d14685a69fa417cdd23b03ef3e17"
+      },
+      "Document/Update/Alpha/v4.2.0/PROGRESS.md": {
+        "path": "Document/Update/Alpha/v4.2.0/PROGRESS.md",
+        "bytes": 26861,
+        "sha256": "8d2bdb0dce6c79fa94d5df9271ef6477736fd1ca20c6c4765d1caa71a14fd254"
+      },
+      "Document/Update/Alpha/v4.2.0/evidence/T02/G420_0.md": {
+        "path": "Document/Update/Alpha/v4.2.0/evidence/T02/G420_0.md",
+        "bytes": 26388,
+        "sha256": "c94f5afd440bceeebcd20a805ce107e182c446496a081581907cd08645426b0e"
+      },
+      "Document/Update/Alpha/v4.2.0/evidence/T02c/REBUILD_2F.md": {
+        "path": "Document/Update/Alpha/v4.2.0/evidence/T02c/REBUILD_2F.md",
+        "bytes": 20691,
+        "sha256": "d677d79dc01c72d2231cd32cbdfb92b5572a6ea3f3083b72aaaffcb4917e53a7"
+      },
+      "Document/Update/Alpha/v4.2.0/evidence/T02d/RESLOT_2F.md": {
+        "path": "Document/Update/Alpha/v4.2.0/evidence/T02d/RESLOT_2F.md",
+        "bytes": 30508,
+        "sha256": "55ba82ec935278265b38c615054e8e496a1ceb980c6255292e6369831da8c66b"
+      },
+      "Document/Update/Alpha/v4.2.0/evidence/T04/DATASET_2F.md": {
+        "path": "Document/Update/Alpha/v4.2.0/evidence/T04/DATASET_2F.md",
+        "bytes": 26524,
+        "sha256": "066f5d5e45f8c0dc2df257819a7c81b326d1ab04954e4cf71561632d9f99e329"
+      },
+      "Document/Update/Alpha/v4.2.0/evidence/T04/TRAIN_CONTROLLED.md": {
+        "path": "Document/Update/Alpha/v4.2.0/evidence/T04/TRAIN_CONTROLLED.md",
+        "bytes": 12897,
+        "sha256": "fc4dddf77609eaaee44c4b16b0daf95b2295ad289fc469e71ba8ab088ca72219"
+      },
+      "Document/Update/Alpha/v4.2.0/evidence/T04/LAYER1.md": {
+        "path": "Document/Update/Alpha/v4.2.0/evidence/T04/LAYER1.md",
+        "bytes": 4934,
+        "sha256": "9d73f0b606f376d63c93370f9618f90656f16535c72541e90ec53eb15c1bdb22"
+      }
+    }
+  },
+  "reproduce": [
+    {
+      "command": "wsl -e bash /mnt/d/WorkShop/Touhou_RL/.tmp_v420_g420re/run_all.sh",
+      "parts": [
+        "a_consume_chain",
+        "b_selfcheck",
+        "c_l1_audit",
+        "d_forward_repro",
+        "e_provenance"
+      ],
+      "exit_codes": {
+        "a_consume_chain": 0,
+        "b_selfcheck": 0,
+        "c_l1_audit": 0,
+        "d_forward_repro": 0,
+        "e_provenance": 0
+      },
+      "note": "read-only: no engine, no training, no write outside .tmp_v420_g420re/"
+    },
+    {
+      "command": "wsl -e bash /mnt/d/WorkShop/Touhou_RL/.tmp_v420_g420re/f_write_evidence.py",
+      "note": "re-derives this JSON from the five part reports; refuses to write if any part fails"
+    }
+  ],
+  "part_reports": {
+    "a_consume_chain": {
+      "script": ".tmp_v420_g420re/a_consume_chain.py",
+      "report": ".tmp_v420_g420re/a_consume_chain.json",
+      "report_sha256": "48a56f55ca4d9b75e42b8aca7dba98398375fa9de3b4094b12779859c21b7326",
+      "log": ".tmp_v420_g420re/a_consume_chain.log",
+      "exit_code": 0,
+      "ok": true
+    },
+    "b_selfcheck": {
+      "script": ".tmp_v420_g420re/b_selfcheck.py",
+      "report": ".tmp_v420_g420re/b_selfcheck.json",
+      "report_sha256": "2a3d289021ee20f1772735ce67d03cf8f90ef7793d6bd926536a5f7236981482",
+      "log": ".tmp_v420_g420re/b_selfcheck.log",
+      "exit_code": 0,
+      "ok": true
+    },
+    "c_l1_audit": {
+      "script": ".tmp_v420_g420re/c_l1_audit.py",
+      "report": ".tmp_v420_g420re/c_l1_audit.json",
+      "report_sha256": "92b9403ea2b44f8f267c7d4aa44911432a94de9aa92558994b6e97e9c13a58f4",
+      "log": ".tmp_v420_g420re/c_l1_audit.log",
+      "exit_code": 0,
+      "ok": true
+    },
+    "d_forward_repro": {
+      "script": ".tmp_v420_g420re/d_forward_repro.py",
+      "report": ".tmp_v420_g420re/d_forward_repro.json",
+      "report_sha256": "51e9bfbecd747d8944d25c9c6df3540d1df23c6d6abbafcc238b8561d9f23387",
+      "log": ".tmp_v420_g420re/d_forward_repro.log",
+      "exit_code": 0,
+      "ok": true
+    },
+    "e_provenance": {
+      "script": ".tmp_v420_g420re/e_provenance.py",
+      "report": ".tmp_v420_g420re/e_provenance.json",
+      "report_sha256": "094ead9327e0951cf0a55979fd0d96a62004cf36e8d91b9aa9fd03e416ca8891",
+      "log": ".tmp_v420_g420re/e_provenance.log",
+      "exit_code": 0,
+      "ok": true
+    }
+  },
+  "cannot_claim": [
+    "G420-0 passed does NOT mean the v4.2.0 first-face ability is reached. The version plan requires G420-0, G420-4 and G420-5 together; G420-4 is not passed (four arms 0/20 on standard S1N, Wilson upper bound 0.1611) and G420-5 has not started.",
+    "it is not a capability statement about A0/A0v: both are 0/20 on DIAG-FIRST-DEATH and 0/20 on standard S1N, holdout top-1 is 0.54/0.56 with holdout CE near the uniform baseline ln18 = 2.8904, and A0v is below B0 on both rulers.",
+    "the L2 pass does not generalise to untested states. The hashes prove same-prefix replay of the recorded trajectories of three shards (stage 0 / Normal / team 0, seeds 10/11/12, seed 12 ending in stage_changed). Nothing is claimed about other seeds, later stages, other difficulty/team settings, or another engine build.",
+    "the L3 pass is about the deployment input boundary (4+1 frames, 8x2 history, shapes/dtypes, no future, the frozen model's forward on that input). It says nothing about whether the pixels are sufficient to play, nor about real-time acquisition, screenshot staleness, scaling/colour or retail-client input latency.",
+    "the forward consistency is a cpu/cpu and cpu-vs-recorded-cuda comparison. Bitwise cross-device equality was never measured and is not claimed (the original audit's forward_cross_device is available=false and is not counted).",
+    "nothing about the learning target: the corpus has exactly one engine-verified candidate per slot (verify_k=1), so 1/18 of the score vector is verified and the other 17 carry a -5.0 unverified discount. 'Every slot has its own verified label' is true; '18-way verified ranking' is false.",
+    "L1 is scoped to the corpus that was consumed: seeds 10/11/12, 9,898 decisions, 19,772 slots. The other S1c shards (13-20) are neither rebuilt nor reslotted, so this is not 'all S1 data conforms'.",
+    "the 24 cold-start boundaries (decision frames 0..14, 8 per shard) were queried but excluded from the corpus. They are not consumed samples and they were not filled, interpolated or padded.",
+    "the audit does not re-run the engines. It re-reads and re-checks the published bytes, re-runs the contract checker and the frozen model's forward. It cannot claim 'the engine still produces these pixels today'.",
+    "the corpus's obs planes are symlinks into the T02c products. The identity holds at the sha256 values recorded here; moving or re-encoding T02c's .npy files invalidates it."
+  ],
+  "remaining_blocks": [
+    "G420-1 not passed: 20/200 states, proper 0/100, ancestors 3/10 — the same-kind expansion cannot reach it, a different state population or continuation policy is needed",
+    "G420-2 not passed: A1 has no usable signal (T03 proper=0), A2 not built, only seed 0",
+    "G420-3 / G420-R not started",
+    "G420-4 not passed: 0/20 on standard S1N for all four arms",
+    "G420-5 not started (no candidate)",
+    "scale gap: the corpus covers 3 of the S1c shards; seeds 13-20 need a rebuild + reslot (approximately +52,800 teacher queries, 43.88% of the 650k ceiling)"
+  ],
+  "read_only_footprint": {
+    "modified": [
+      "Document/Update/Alpha/v4.2.0/evidence/T02/G420_0_READJUDICATED.md",
+      "Document/Update/Alpha/v4.2.0/evidence/T02/g420_0_readjudicated.json",
+      ".tmp_v420_g420re/ (scripts and part reports)"
+    ],
+    "explicitly_not_modified": [
+      "Document/Update/Alpha/v4.2.0/evidence/T02/G420_0.md",
+      "Document/Update/Alpha/v4.2.0/evidence/T03/**",
+      "Document/Update/Alpha/v4.2.0/evidence/T04/**",
+      "touhou_rl/**",
+      "tools/**",
+      "configs/**",
+      "tests/**",
+      ".tmp_v420_data/T02c|T02d|T04/** (read only)",
+      "Document/Update/Alpha/v4.1.0/**",
+      "ASSET_SYNC.*"
+    ],
+    "no_engine": true,
+    "no_training": true,
+    "no_git_write": true,
+    "original_record_sha256_at_read_time": "c94f5afd440bceeebcd20a805ce107e182c446496a081581907cd08645426b0e"
+  }
+}

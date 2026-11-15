@@ -1,0 +1,554 @@
+{
+  "schema": "v420-teacher-2f/1/report",
+  "config": {
+    "schema": "v420-teacher-2f/1/config",
+    "repo_root": "/mnt/d/WorkShop/Touhou_RL",
+    "engine": "/root/Touhou_RL/third_party/th08-rl/build/rl_v3/th08-modern",
+    "v420_data": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data",
+    "shard_root": "/mnt/d/WorkShop/Touhou_RL/.tmp_v410_s1c/d1/shards",
+    "source_env_root": "/root/v400-data/s1c",
+    "seeds": [
+      10
+    ],
+    "decisions": null,
+    "run_id": "T02d",
+    "output_kind": "reslot",
+    "profile": "fast",
+    "replan_decisions": 1,
+    "shoot_pulse_period": 48,
+    "committed_mode": "previous_slot",
+    "role": "shadow",
+    "first_decision_frame": 16,
+    "cold_start_decision_frames": [
+      0,
+      2,
+      4,
+      6,
+      8,
+      10,
+      12,
+      14
+    ]
+  },
+  "contract": {
+    "contract_version": "v420-contract/1",
+    "obs_contract": "obs-v420-2f",
+    "action_contract": "action-v420-2f",
+    "decision_frames": 2,
+    "frame_stack": 4,
+    "n_move_focus": 18,
+    "bomb_binary": 2,
+    "action_history": 8,
+    "play_shape": [
+      112,
+      96
+    ],
+    "hud_shape": [
+      56,
+      160
+    ],
+    "legacy_block_frames": 4,
+    "termination_kinds": [
+      "first_death",
+      "game_over",
+      "stage_clear",
+      "cap",
+      "error"
+    ],
+    "branch_outcomes": [
+      "queried",
+      "executed",
+      "engine_death",
+      "engine_alive",
+      "unknown"
+    ],
+    "label_sources": [
+      "teacher_slot0",
+      "teacher_slot1",
+      "none"
+    ],
+    "history_span_frames": 16,
+    "seed_ranges": {
+      "train": [
+        1,
+        49999
+      ],
+      "dev": [
+        1000,
+        1099
+      ],
+      "confirm": [
+        61000,
+        61499
+      ]
+    },
+    "seed_excluded": {
+      "train": [
+        [
+          1000,
+          1099
+        ],
+        [
+          60000,
+          60199
+        ]
+      ],
+      "dev": [],
+      "confirm": []
+    },
+    "legacy_confirm_seeds": [
+      60000,
+      60199
+    ],
+    "first_decision_frame": 16,
+    "cold_start_decision_frames": [
+      0,
+      2,
+      4,
+      6,
+      8,
+      10,
+      12,
+      14
+    ],
+    "label_file": "teacher_2f.jsonl",
+    "slot_id_rule": "slot_id = (decision_frame - 16) // 2",
+    "profile": "fast",
+    "replan_decisions": 1
+  },
+  "profile": {
+    "mode": "fast",
+    "horizon": 32,
+    "decision_frames": 2,
+    "slots_per_horizon": 16,
+    "beam": 24,
+    "verify_k": 1,
+    "max_iterations": 1,
+    "replan_decisions": 1,
+    "durations": [
+      1,
+      2
+    ],
+    "shoot_pulse_period": 48,
+    "shoot_pulse_frames": 96,
+    "record_items": false,
+    "bomb_active": true,
+    "bomb_death": true,
+    "internal_frames_per_query": 64,
+    "internal_frames_formula": "horizon * (1 + verify_k)",
+    "commit_frames_per_query": 2,
+    "fields": {
+      "mode": "fast",
+      "horizon": 32,
+      "beam": 24,
+      "verify_k": 1,
+      "max_iterations": 1,
+      "replan_decisions": 1,
+      "decision_frames": 2,
+      "durations": [
+        1,
+        2
+      ],
+      "border_x": [
+        8.0,
+        376.0
+      ],
+      "border_y": [
+        16.0,
+        432.0
+      ],
+      "weights": {
+        "base": 100.0,
+        "margin_cap": 16.0,
+        "align_weight": 4.0,
+        "items_weight": 2.0,
+        "items_cap": 1.0,
+        "edge_penalty": 1.0,
+        "edge_band": 24.0,
+        "high_penalty": 3.0,
+        "high_y": 200.0,
+        "death_scale": 10.0,
+        "unverified_discount": 5.0,
+        "align_range": 192.0,
+        "bottom_y": 400.0,
+        "bottom_span": 32.0,
+        "bottom_penalty": 0.0,
+        "bottom_extra_y": 420.0,
+        "bottom_extra_span": 12.0,
+        "bottom_extra_penalty": 0.0,
+        "escape_weight": 0.0,
+        "escape_span": 32.0,
+        "boss_penalty": 0.0,
+        "boss_radius": 48.0,
+        "top_penalty": 0.0,
+        "top_y": 200.0,
+        "top_span": 180.0,
+        "corner_penalty": 0.0,
+        "corner_x": [
+          64.0,
+          312.0
+        ],
+        "laser_penalty": 0.0,
+        "laser_band": 8.0
+      },
+      "record_items": false,
+      "bomb_active": true,
+      "bomb_death": true,
+      "bomb_rule1_max_death_frame": null,
+      "bomb_rule1_min_bombs_left": 0,
+      "bomb_rule1_max_margin": null,
+      "clip_y": null,
+      "shoot_always": true,
+      "shoot_pulse_period": 48
+    },
+    "sha256": "5545c1993ddcbf5e6f0fa401bd28806e183cfd0be66f348c217dc86838bb3db2"
+  },
+  "wall_s": 534.124,
+  "totals": {
+    "shards": 1,
+    "seeds": [
+      10
+    ],
+    "decisions": 3300,
+    "frames": 13200,
+    "slots_expected": 6600,
+    "slots_queried": 6600,
+    "slots_written": 6600,
+    "slots_emitted": 6592,
+    "slots_cold_start": 8,
+    "slots_with_scores": 6600,
+    "slots_with_verified": 6600,
+    "verified_flags_total": 6600,
+    "verified_coverage": 0.055556,
+    "verified_slot_coverage": 1.0,
+    "hash_pre_checks": 3300,
+    "hash_post_checks": 3300,
+    "hash_frame_checks": 13200,
+    "hash_mismatches": 0,
+    "reset_hash_matches": true,
+    "teacher_queries": 6600,
+    "teacher_internal_frames": 422400,
+    "engine_frames_advanced": 13200,
+    "self_check_violations": 0,
+    "self_check_passed": true,
+    "wall_s": 533.366
+  },
+  "shards": [
+    {
+      "schema": "v420-teacher-2f/1/shard",
+      "seed": 10,
+      "shard_key": "d1-s0d1-n3300-seed10-shard",
+      "shard_dir": "/mnt/d/WorkShop/Touhou_RL/.tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed10-shard",
+      "slot_dir": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T02d/reslot/d1-s0d1-n3300-seed10-shard",
+      "label_file": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T02d/reslot/d1-s0d1-n3300-seed10-shard/teacher_2f.jsonl",
+      "decisions": 3300,
+      "frames": 13200,
+      "counts": {
+        "slots_expected": 6600,
+        "slots_queried": 6600,
+        "slots_written": 6600,
+        "slots_emitted": 6592,
+        "slots_cold_start": 8,
+        "slots_with_scores": 6600,
+        "slots_with_verified": 6600,
+        "verified_flags_total": 6600,
+        "verified_coverage": 0.055556,
+        "verified_slot_coverage": 1.0
+      },
+      "hash": {
+        "reset_hash_matches_first_pre": true,
+        "hash_pre_checks": 3300,
+        "hash_post_checks": 3300,
+        "frame_hashes_observed": 13200,
+        "mismatches": 0,
+        "first_mismatch": null
+      },
+      "teacher": {
+        "queries": 6600,
+        "internal_frames": 422400,
+        "engine_frames_advanced": 13200,
+        "profile": {
+          "mode": "fast",
+          "horizon": 32,
+          "decision_frames": 2,
+          "slots_per_horizon": 16,
+          "beam": 24,
+          "verify_k": 1,
+          "max_iterations": 1,
+          "replan_decisions": 1,
+          "durations": [
+            1,
+            2
+          ],
+          "shoot_pulse_period": 48,
+          "shoot_pulse_frames": 96,
+          "record_items": false,
+          "bomb_active": true,
+          "bomb_death": true,
+          "internal_frames_per_query": 64,
+          "internal_frames_formula": "horizon * (1 + verify_k)",
+          "commit_frames_per_query": 2,
+          "fields": {
+            "mode": "fast",
+            "horizon": 32,
+            "beam": 24,
+            "verify_k": 1,
+            "max_iterations": 1,
+            "replan_decisions": 1,
+            "decision_frames": 2,
+            "durations": [
+              1,
+              2
+            ],
+            "border_x": [
+              8.0,
+              376.0
+            ],
+            "border_y": [
+              16.0,
+              432.0
+            ],
+            "weights": {
+              "base": 100.0,
+              "margin_cap": 16.0,
+              "align_weight": 4.0,
+              "items_weight": 2.0,
+              "items_cap": 1.0,
+              "edge_penalty": 1.0,
+              "edge_band": 24.0,
+              "high_penalty": 3.0,
+              "high_y": 200.0,
+              "death_scale": 10.0,
+              "unverified_discount": 5.0,
+              "align_range": 192.0,
+              "bottom_y": 400.0,
+              "bottom_span": 32.0,
+              "bottom_penalty": 0.0,
+              "bottom_extra_y": 420.0,
+              "bottom_extra_span": 12.0,
+              "bottom_extra_penalty": 0.0,
+              "escape_weight": 0.0,
+              "escape_span": 32.0,
+              "boss_penalty": 0.0,
+              "boss_radius": 48.0,
+              "top_penalty": 0.0,
+              "top_y": 200.0,
+              "top_span": 180.0,
+              "corner_penalty": 0.0,
+              "corner_x": [
+                64.0,
+                312.0
+              ],
+              "laser_penalty": 0.0,
+              "laser_band": 8.0
+            },
+            "record_items": false,
+            "bomb_active": true,
+            "bomb_death": true,
+            "bomb_rule1_max_death_frame": null,
+            "bomb_rule1_min_bombs_left": 0,
+            "bomb_rule1_max_margin": null,
+            "clip_y": null,
+            "shoot_always": true,
+            "shoot_pulse_period": 48
+          },
+          "sha256": "5545c1993ddcbf5e6f0fa401bd28806e183cfd0be66f348c217dc86838bb3db2"
+        }
+      },
+      "engine": {
+        "path": "/root/Touhou_RL/third_party/th08-rl/build/rl_v3/th08-modern",
+        "sha256": "691bfd77b7eca3361aa8bb7af0977556a70cc73a070b29a2447222ba7a568ef6",
+        "expected": null,
+        "match": false,
+        "role": "shadow",
+        "recorded_sha256": "691bfd77b7eca3361aa8bb7af0977556a70cc73a070b29a2447222ba7a568ef6"
+      },
+      "data_dir": {
+        "source": "/root/v400-data/s1c/d1-s0d1-n3300-seed10-shard/env",
+        "copy": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T02d/data/d1-s0d1-n3300-seed10-shard",
+        "files": [
+          {
+            "name": "backup",
+            "kind": "dir"
+          },
+          {
+            "name": "modern-files.txt",
+            "kind": "copy",
+            "sha256": "c43e1c3ae72251c8f1c068c2ea8f65542138fd3ea9cdd9ad822c537895238307",
+            "size": 2714
+          },
+          {
+            "name": "score.dat",
+            "kind": "copy",
+            "sha256": "d7089834a69881151a0524fcea36b75e3a7a392da2ffa48b4279522fd81ae786",
+            "size": 17784
+          },
+          {
+            "name": "th08.cfg",
+            "kind": "copy",
+            "sha256": "48bf7621da5879ef5ec1392fcac2cc0a85c313912a24fb33b4cddccf0d28f07a",
+            "size": 60
+          },
+          {
+            "name": "th08.dat",
+            "kind": "symlink",
+            "target": "/root/v400-data/game/th08.dat"
+          },
+          {
+            "name": "thbgm.dat",
+            "kind": "symlink",
+            "target": "/root/v400-data/game/thbgm.dat"
+          }
+        ],
+        "copied": true
+      },
+      "source_identity": {
+        "repo_root": "/mnt/d/WorkShop/Touhou_RL",
+        "git_head": "c3e116fd45d708dc8cbe73d4bb49cd960f835405",
+        "python": "3.10.12",
+        "platform": "Linux-6.18.58.1-microsoft-standard-WSL2-x86_64-with-glibc2.35",
+        "hostname": "ubuntu",
+        "modules": {
+          "touhou_rl/v420/reslot.py": "f4af917da7a81b1c4f540dc8688e987fd4146038d356d196de4931494eb3ed83",
+          "touhou_rl/v420/contracts.py": "2040baa12585b1a84728b4f8015d2519af1b00faada6b2456e32908a55d0bbbe",
+          "touhou_rl/v400/teacher/decide.py": "9d93bbf9c46e63bad4b0159c0c8cb1fd0a9360c4cfa2f7dde956a80e33c911db",
+          "touhou_rl/v400/teacher/config.py": "8aac92f04d21a8061bc9bdf9ebd7e3bee0cac18cedf890d49111feb0b7896c25",
+          "touhou_rl/v400/teacher/engine.py": "f86ac40f6b324b772b87d6181641843e287ce4973aab8e3e0cfb0745d61af6ce",
+          "touhou_rl/v400/teacher/child_record.py": "667186f992680f590a40eca155999c6e425ccbd49900a4538cac754e8cca5429",
+          "touhou_rl/v400/teacher/hazard_tape.py": "b84b303dfa48b7ddbe08f1bec5a551db122b9a23c99dcc626302e4545a7611b7",
+          "touhou_rl/v400/teacher/search.py": "49b4504c7d17fc23391df5309b9c92d7ae3ef41288f584868352f14cdaaea787",
+          "touhou_rl/v400/teacher/verify.py": "a4583bcff1d9ab58c498ced4b703bc4f9027c0ab688e645148702d7d383bd670",
+          "touhou_rl/v400/gym/actions.py": "a67145b2bec7c96b3aacaa2514e78cdadf50b056473d15b4ae8122c19c393eff"
+        },
+        "engine_binary": {
+          "path": "/root/Touhou_RL/third_party/th08-rl/build/rl_v3/th08-modern",
+          "sha256": "691bfd77b7eca3361aa8bb7af0977556a70cc73a070b29a2447222ba7a568ef6",
+          "expected": null,
+          "match": false,
+          "role": "shadow",
+          "recorded_sha256": "691bfd77b7eca3361aa8bb7af0977556a70cc73a070b29a2447222ba7a568ef6"
+        },
+        "source_score_dat_before": {
+          "path": "/root/v400-data/s1c/d1-s0d1-n3300-seed10-shard/env/score.dat",
+          "sha256": "d7089834a69881151a0524fcea36b75e3a7a392da2ffa48b4279522fd81ae786",
+          "size": 17784,
+          "mtime": 1794511888
+        },
+        "source_score_dat_after": {
+          "path": "/root/v400-data/s1c/d1-s0d1-n3300-seed10-shard/env/score.dat",
+          "sha256": "d7089834a69881151a0524fcea36b75e3a7a392da2ffa48b4279522fd81ae786",
+          "size": 17784,
+          "mtime": 1794511888
+        },
+        "source_score_dat_unchanged": true
+      },
+      "self_check": {
+        "schema": "v420-teacher-2f/1/self-check",
+        "path": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T02d/reslot/teacher_2f.jsonl.tmp-3734900",
+        "rows": 6600,
+        "slots": 6600,
+        "slots_emitted": 6592,
+        "slots_cold_start": 8,
+        "slots_with_scores": 6600,
+        "slots_with_verified": 6600,
+        "verified_flags_total": 6600,
+        "checks": {
+          "bomb": {
+            "checked": 6600,
+            "violations": 0,
+            "samples": []
+          },
+          "chosen_range": {
+            "checked": 6600,
+            "violations": 0,
+            "samples": []
+          },
+          "commit_frames": {
+            "checked": 6600,
+            "violations": 0,
+            "samples": []
+          },
+          "decision_frame": {
+            "checked": 6600,
+            "violations": 0,
+            "samples": []
+          },
+          "duration": {
+            "checked": 6600,
+            "violations": 0,
+            "samples": []
+          },
+          "executed_mask": {
+            "checked": 6600,
+            "violations": 0,
+            "samples": []
+          },
+          "executed_matches_corpus": {
+            "checked": 6600,
+            "violations": 0,
+            "samples": []
+          },
+          "margin": {
+            "checked": 6600,
+            "violations": 0,
+            "samples": []
+          },
+          "scores_finite": {
+            "checked": 6600,
+            "violations": 0,
+            "samples": []
+          },
+          "scores_length": {
+            "checked": 6600,
+            "violations": 0,
+            "samples": []
+          },
+          "slot_id": {
+            "checked": 6600,
+            "violations": 0,
+            "samples": []
+          },
+          "teacher_profile": {
+            "checked": 6600,
+            "violations": 0,
+            "samples": []
+          },
+          "verified_argmax": {
+            "checked": 6600,
+            "violations": 0,
+            "samples": []
+          },
+          "verified_count": {
+            "checked": 6600,
+            "violations": 0,
+            "samples": []
+          },
+          "verified_mask": {
+            "checked": 6600,
+            "violations": 0,
+            "samples": []
+          }
+        },
+        "violations": {},
+        "violations_total": 0,
+        "passed": true
+      },
+      "wall_s": 533.366,
+      "ms_per_query": 80.813,
+      "queries_per_second": 12.374,
+      "exit_code": 0,
+      "limits": [
+        "the labels are NEW two-frame-beat queries (replan_decisions=1), not a shift or an interpolation of the legacy four-frame label; scores are not comparable value by value with a legacy row's scores",
+        "the committed masks of this run always come from the corpus's step_frames; the teacher's chosen action is recorded and never executed (replay + requery, not re-drive)",
+        "verified coverage is bounded by verify_k=1: at most one of the 18 candidates per slot can carry an engine verdict, so 17 scores carry the -5.0 unverified discount",
+        "the eight cold-start boundaries (frames 0..14) are queried for completeness (2 * decisions labels) but are not training samples: their observation or history window would start before frame 0"
+      ]
+    }
+  ],
+  "limits": [
+    "the labels are NEW two-frame-beat queries (replan_decisions=1), not a shift or an interpolation of the legacy four-frame label; scores are not comparable value by value with a legacy row's scores",
+    "the committed masks of this run always come from the corpus's step_frames; the teacher's chosen action is recorded and never executed (replay + requery, not re-drive)",
+    "verified coverage is bounded by verify_k=1: at most one of the 18 candidates per slot can carry an engine verdict, so 17 scores carry the -5.0 unverified discount",
+    "the eight cold-start boundaries (frames 0..14) are queried for completeness (2 * decisions labels) but are not training samples: their observation or history window would start before frame 0"
+  ]
+}

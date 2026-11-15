@@ -1,0 +1,2790 @@
+{
+  "schema": "v420-reward-r4-evidence/1",
+  "tier": "T06 / WP420-05 fourth tier",
+  "reward_version": "v420-reward-r4/1",
+  "generated_at": "2026-11-14T19:10:13Z",
+  "not_r1": "R4 uses engine-truth reward and termination, so it is a training-time privileged diagnostic: it is NOT strict pixel self-improvement (R1) and no result here may be reported as R1.",
+  "declaration": "R2 uses engine-truth reward and termination, so it is a training-time privileged diagnostic: it is NOT strict pixel self-improvement (R1) and no result here may be reported as R1.",
+  "reward_table": {
+    "version": "v420-reward-r4/1",
+    "source": "engine_truth",
+    "stage_clear_bonus": 1.0,
+    "death_penalty": 0.25,
+    "bomb_penalty": 0.1,
+    "progress_total": 0.5,
+    "progress_score_full": 2631430.0,
+    "survive_per_decision": 1.2e-05,
+    "first_life_per_decision": 3.7890269778720825e-05,
+    "first_life_cap": 0.25,
+    "power_gain": 0.0003906,
+    "power_max": 128.0,
+    "units": {
+      "stage_clear_bonus": {
+        "unit": "reward per first-face completion",
+        "role": "primary positive event",
+        "event": "engine stage index advances (stage_clear)",
+        "counted": "once per episode",
+        "versions": [
+          "v420-reward-r2/1",
+          "v420-reward-r3/1"
+        ]
+      },
+      "death_penalty": {
+        "unit": "reward per engine death event",
+        "role": "auxiliary",
+        "event": "globals.deaths increases",
+        "counted": "once per death, a first death does not end the episode",
+        "versions": [
+          "v420-reward-r2/1",
+          "v420-reward-r3/1"
+        ]
+      },
+      "bomb_penalty": {
+        "unit": "reward per bomb spent",
+        "role": "auxiliary",
+        "event": "globals.bombsRemaining decreases",
+        "counted": "once per bomb",
+        "versions": [
+          "v420-reward-r2/1",
+          "v420-reward-r3/1"
+        ]
+      },
+      "progress_total": {
+        "unit": "reward for traversing the whole first face by score",
+        "role": "bounded progress",
+        "event": "score increases, normalised by progress_score_full",
+        "counted": "cumulative, hard-capped at progress_total per episode",
+        "versions": [
+          "v420-reward-r2/1",
+          "v420-reward-r3/1"
+        ]
+      },
+      "progress_score_full": {
+        "unit": "score points",
+        "role": "normaliser",
+        "event": "the score a real first-face clear reaches",
+        "counted": "measured, see evidence/T06/RL_AUDIT.md",
+        "versions": [
+          "v420-reward-r2/1",
+          "v420-reward-r3/1"
+        ]
+      },
+      "survive_per_decision": {
+        "unit": "reward per decision at the two-frame beat",
+        "role": "explicitly zero in r2; the bounded survival constant \u03b5 in r3",
+        "event": "every decision the engine is alive",
+        "counted": "r2: 0.0, because at \u03b3 = 0.999833 (\u03c4 = 200 s) the discounted sum of a constant c is c/(1-\u03b3) \u2248 6001\u00b7c and a long stall would out-earn a clear.  r3: \u03b5 > 0 but bounded by the declared assertion \u03b5\u00b7T_max \u2264 0.25\u00b7progress_total, which the config validator recomputes and refuses to load without",
+        "versions": [
+          "v420-reward-r2/1",
+          "v420-reward-r3/1"
+        ]
+      },
+      "first_life_per_decision": {
+        "unit": "reward per decision the first life is alive",
+        "role": "bounded first-death survival signal (r3 only)",
+        "event": "every decision taken while globals.deaths == 0, i.e. before the first death; a decision on which the first death happens still pays, because the life was alive when the action was chosen",
+        "counted": "per decision, hard-capped per episode at first_life_cap; \u03b4 is derived from first_life_cap / the measured clear length (6598 decisions), so the cap is reached exactly at a clear",
+        "versions": [
+          "v420-reward-r3/1"
+        ]
+      },
+      "first_life_cap": {
+        "unit": "reward (the episode cap of first_life_per_decision)",
+        "role": "bound (r3 only)",
+        "event": "never paid directly; it caps the first-life term",
+        "counted": "once per episode at most",
+        "versions": [
+          "v420-reward-r3/1"
+        ]
+      },
+      "power_gain": {
+        "unit": "reward per unit of power gained",
+        "role": "bounded power signal (r4 only), never a penalty",
+        "event": "globals.playerPower increases between two decisions (w_power x the positive increment)",
+        "counted": "only on the decisions whose power increment is > 0; a power loss is counted for the diagnostic and pays nothing, so the term is monotone and cannot be farmed by dying and re-collecting",
+        "versions": [
+          "v420-reward-r4/1"
+        ]
+      },
+      "power_max": {
+        "unit": "power units (the top of the TH08 scale)",
+        "role": "bound (r4 only)",
+        "event": "never paid directly; it is the scale the bound is stated on",
+        "counted": "once, at config load: power_gain x power_max <= 0.25 x progress_total, recomputed and fail-closed.  Power is an inventory, so the horizon does NOT multiply it (the r3 survival constant is per-decision and its own bound keeps T_max)",
+        "versions": [
+          "v420-reward-r4/1"
+        ]
+      }
+    },
+    "progress_bound": {
+      "cumulative_cap": 0.5,
+      "per_decision_rate": 1.9001075460871086e-07,
+      "meaning": "a trajectory can never earn more than progress_total from progress, however long it stalls"
+    },
+    "survival_bound": {
+      "assertion": "survive_per_decision * T_max <= 0.25 * progress_total",
+      "survive_per_decision": 1.2e-05,
+      "t_max_decisions": 9943.5,
+      "survive_total_at_horizon": 0.119322,
+      "share_of_progress_total": 0.25,
+      "bound": 0.125,
+      "margin": 0.0056780000000000025,
+      "pass": true,
+      "first_life_per_decision": 3.7890269778720825e-05,
+      "first_life_cap": 0.25,
+      "combined_survival_total": 0.369322,
+      "combined_bound": 0.5,
+      "combined_pass": true,
+      "clear_bonus": 1.0,
+      "survival_below_clear": true
+    },
+    "first_life_derivation": {
+      "rule": "first_life_per_decision * CLEAR_DECISIONS_MEASURED == first_life_cap",
+      "first_life_per_decision": 3.7890269778720825e-05,
+      "clear_decisions_measured": 6598,
+      "product": 0.25,
+      "first_life_cap": 0.25,
+      "residual": 0.0,
+      "pass": true
+    },
+    "horizon_decisions": 9943.5,
+    "power_bound": {
+      "assertion": "power_gain * power_max <= 0.25 * progress_total",
+      "power_gain": 0.0003906,
+      "power_max": 128.0,
+      "power_max_source": "TH08 src/Gui.cpp:1381-1387 prints the number below 128 and 'MAX' from 128; src/ItemManager.cpp:53,408,423 stop collecting power items at >= 128; src/Gui.cpp:1348-1354 draws the bar GetPower() px wide; src/ItemManager.cpp:17 thresholds {8,24,48,80,128,999}",
+      "max_episode_power_reward": 0.0499968,
+      "share_of_progress_total": 0.25,
+      "bound": 0.125,
+      "margin": 0.07500319999999999,
+      "pass": true,
+      "fraction_of_progress_total": 0.0999936,
+      "fraction_of_death_penalty": 0.1999872,
+      "t_max_decisions_not_used": 9943.5,
+      "why_no_t_max": "power is an inventory: one episode can gain a whole scale once, not once per decision, so the horizon does not multiply this term.  The r3 survival constant is per-decision and its own bound keeps T_max"
+    }
+  },
+  "power_bound": {
+    "assertion": "power_gain * power_max <= 0.25 * progress_total",
+    "power_gain": 0.0003906,
+    "power_max": 128.0,
+    "power_max_source": "TH08 src/Gui.cpp:1381-1387 prints the number below 128 and 'MAX' from 128; src/ItemManager.cpp:53,408,423 stop collecting power items at >= 128; src/Gui.cpp:1348-1354 draws the bar GetPower() px wide; src/ItemManager.cpp:17 thresholds {8,24,48,80,128,999}",
+    "max_episode_power_reward": 0.0499968,
+    "share_of_progress_total": 0.25,
+    "bound": 0.125,
+    "margin": 0.07500319999999999,
+    "pass": true,
+    "fraction_of_progress_total": 0.0999936,
+    "fraction_of_death_penalty": 0.1999872,
+    "t_max_decisions_not_used": 9943.5,
+    "why_no_t_max": "power is an inventory: one episode can gain a whole scale once, not once per decision, so the horizon does not multiply this term.  The r3 survival constant is per-decision and its own bound keeps T_max"
+  },
+  "power_bound_recomputed": {
+    "assertion": "power_gain * power_max <= 0.25 * progress_total",
+    "power_gain": 0.0003906,
+    "power_max": 128.0,
+    "product": 0.0499968,
+    "bound": 0.125,
+    "margin": 0.07500319999999999,
+    "admissible_max": 0.0009765625,
+    "fraction_of_progress_total": 0.0999936,
+    "fraction_of_death_penalty": 0.1999872,
+    "why_no_t_max": "power is an inventory: one episode can gain a whole scale once, not once per decision, so the horizon does not multiply this term.  The r3 survival constant is per-decision and its own bound keeps T_max",
+    "non_clear_upper_bound": 0.8720028001666774,
+    "non_clear_upper_bound_with_eps_at_tmax": 0.9193188,
+    "verdict": "pass"
+  },
+  "voided_first_attempt": {
+    "path": ".tmp_v420_data/T06/r4/pilot-r4-VOID-w9e-08.json",
+    "sha256": "d9790fe1c40e28f64cf6c2f1b9145be5c81b6ec53b188dbf96a93719f0f383d6",
+    "reward_version": "v420-reward-r4/1",
+    "power_gain": 9e-08,
+    "episodes": 23,
+    "updates": 49,
+    "game_frames": 50001,
+    "delta_power": {
+      "count": 23,
+      "mean": 13.826086956521738,
+      "sd": 7.383348426838251,
+      "median": 13.0,
+      "min": 4.0,
+      "max": 30.0,
+      "sum": 318.0
+    },
+    "power_final": {
+      "count": 23,
+      "mean": 0.0,
+      "sd": 0.0,
+      "median": 0.0,
+      "min": 0.0,
+      "max": 0.0,
+      "sum": 0.0
+    },
+    "episode_return": {
+      "count": 23,
+      "mean": -0.7109462051578537,
+      "sd": 0.004576503995754714,
+      "median": -0.7119599863848601,
+      "min": -0.7204449567605625,
+      "max": -0.6997383903891361,
+      "sum": -16.351762718630635
+    },
+    "episode_frames": {
+      "count": 23,
+      "mean": 2171.521739130435,
+      "sd": 264.28804354430093,
+      "median": 2103.0,
+      "min": 1808.0,
+      "max": 2982.0,
+      "sum": 49945.0
+    },
+    "reward_from_power_total": 2.8620000000000004e-05,
+    "status": "VOID: power_gain = 9e-08 followed a bound that multiplied an inventory quantity by T_max, which capped the whole episode at 1.152e-05 reward - four orders of magnitude below every other term.  It is kept as a record and is NOT evidence about power."
+  },
+  "r3_coefficients_unchanged": {
+    "stage_clear_bonus": 1.0,
+    "death_penalty": 0.25,
+    "bomb_penalty": 0.1,
+    "progress_total": 0.5,
+    "progress_score_full": 2631430.0,
+    "survive_per_decision": 1.2e-05,
+    "first_life_per_decision": 3.7890269778720825e-05,
+    "first_life_cap": 0.25
+  },
+  "survival_bound": {
+    "assertion": "survive_per_decision * T_max <= 0.25 * progress_total",
+    "survive_per_decision": 1.2e-05,
+    "t_max_decisions": 9943.5,
+    "survive_total_at_horizon": 0.119322,
+    "share_of_progress_total": 0.25,
+    "bound": 0.125,
+    "margin": 0.0056780000000000025,
+    "pass": true,
+    "first_life_per_decision": 3.7890269778720825e-05,
+    "first_life_cap": 0.25,
+    "combined_survival_total": 0.369322,
+    "combined_bound": 0.5,
+    "combined_pass": true,
+    "clear_bonus": 1.0,
+    "survival_below_clear": true
+  },
+  "power_max_source": "TH08 src/Gui.cpp:1381-1387 prints the number below 128 and 'MAX' from 128; src/ItemManager.cpp:53,408,423 stop collecting power items at >= 128; src/Gui.cpp:1348-1354 draws the bar GetPower() px wide; src/ItemManager.cpp:17 thresholds {8,24,48,80,128,999}",
+  "prediction": {
+    "frozen_before_run": true,
+    "where": "configs/v420/rl-engine-r4-pilot.json#power_criteria and #power_readability, written before the 50k run started; sha256 and mtime below",
+    "config_sha256": "2a7763adf3191b3a1905475d5e102788025947b839d737820a2144943b84f37d",
+    "config_mtime_utc": "2026-11-14T18:05:58Z",
+    "criteria": {
+      "frozen_before_run": true,
+      "written_where": "here and in Document/Update/Alpha/v4.2.0/evidence/T06/reward_r4.json#prediction before the 50k run started",
+      "bound": {
+        "assertion": "power_gain * power_max <= 0.25 * progress_total",
+        "power_gain": 0.0003906,
+        "power_max": 128.0,
+        "product": 0.0499968,
+        "bound": 0.125,
+        "why_no_t_max": "power is an inventory (one scale per episode), not a per-decision stream; the r3 survival bound keeps T_max because it is paid per decision",
+        "voided_first_attempt": {
+          "power_gain": 9e-08,
+          "assertion": "power_gain * power_max * T_max <= 0.25 * progress_total",
+          "max_episode_power_reward": 1.152e-05,
+          "ratio_to_current": 4340.0,
+          "status": "VOID: the term was four orders of magnitude below every other term and could not move a policy, so its P1/P2 result could not distinguish 'power is not the bottleneck' from 'the term was too small to see'"
+        }
+      },
+      "arms": {
+        "r4": "configs/v420/rl-engine-r4-pilot.json (r3 table + power_gain)",
+        "r3_control": ".tmp_v420_r4/r3-control-pilot.json (the r3 table, byte-identical coefficients, checkpoint_tag r4ctl)"
+      },
+      "p1_behaviour": {
+        "text": "training-internal delta_power_per_episode(r4) is significantly greater than delta_power_per_episode(r3 control)",
+        "metric": "mean over episodes of sum(max(0, d(power)))",
+        "test": "one-sided Welch t on the per-episode values plus a one-sided permutation test (10,000 relabellings) on the difference of means",
+        "alpha": 0.05,
+        "r3_reference": "measured by the r3 control arm in this tier: the r3 50k payload (T06/r3/pilot-r3-a.json) has no power field at all, so P1 needs the control arm; cost +1 x 50k"
+      },
+      "p2_survival": {
+        "text": "diag_first_death mean over 20 dev seeds > 1589.2 frames",
+        "threshold": 1589.2,
+        "source": "r3@50k, same checkpoint family, n=20 (REWARD_R3.md 8.2)",
+        "instrument_note": "1589.2 was measured with tools/rl/v410_student_eval.py (no SHOOT release); this tier evaluates with tools/rl/v420_eval_shoot.py --shoot-pulse-period 48, which re-measured the SAME r3 checkpoint at 1597.9 (T08 CLEAR_REMEASURE.md 3).  The frozen threshold 1589.2 is the stricter of the two; both are reported."
+      },
+      "p3_capability": {
+        "text": "stage_clear >= 1 in the 40 dev episodes (2 rulers x 20 seeds)",
+        "threshold": 1,
+        "note": "all four T08 arms are 0/160 on this instrument, so one clear would be the first"
+      },
+      "branches": {
+        "1": "P1 and P2 -> power is a survival bottleneck, keep adding",
+        "2": "P1 only -> power went up but survival did not improve -> power is not the bottleneck",
+        "3": "P2 only -> survival improved without learning to collect power -> another path",
+        "4": "neither -> the reward's blindness to power is not the cause"
+      },
+      "decisive_limit": "the observation readability probe is half of this experiment: if R^2 < 0.5 on hud (1,56,160) or play (4,112,96), the observation does not carry power, so no reward term can teach it and a P1/P2 failure says nothing about the reward table"
+    },
+    "readability": {
+      "frozen_before_run": true,
+      "instrument": "real observations: the obs-v3 planes the policy receives, sampled on the same decision as engine-truth power (STATE player_power)",
+      "samples_required": 50,
+      "probe": "linear least squares with intercept + best single pixel, scored out of sample (odd/even split, both directions), with a 20-permutation null",
+      "floor_r2": 0.5,
+      "planes": [
+        "hud (1,56,160)",
+        "play (4,112,96)"
+      ],
+      "positive_control": "power_band = screen rows 128-150, columns 480-640 (green channel), the region Gui.cpp:1348-1387 draws power in: if the probe cannot read power there either, the probe is broken, not the observation",
+      "decisive_if_failed": "R^2 < 0.5 on either policy plane means the observation cannot carry power, so an r4 power term cannot be learned regardless of its weight; that is a decisive limit of this experiment and it is reported as one"
+    },
+    "p1_behaviour": {
+      "text": "training-internal delta_power_per_episode(r4) is significantly greater than delta_power_per_episode(r3 control)",
+      "observed": {
+        "metric": "delta_power_per_episode = mean over episodes of sum(max(0, d power))",
+        "r4": {
+          "count": 22,
+          "mean": 17.545454545454547,
+          "sd": 8.511769290236693,
+          "median": 15.0,
+          "min": 4.0,
+          "max": 35.0,
+          "sum": 386.0
+        },
+        "r3_control": {
+          "count": 22,
+          "mean": 14.590909090909092,
+          "sd": 7.7254008427924425,
+          "median": 14.0,
+          "min": 3.0,
+          "max": 28.0,
+          "sum": 321.0
+        },
+        "r4_power_final": {
+          "count": 22,
+          "mean": 0.0,
+          "sd": 0.0,
+          "median": 0.0,
+          "min": 0.0,
+          "max": 0.0,
+          "sum": 0.0
+        },
+        "r3_control_power_final": {
+          "count": 22,
+          "mean": 0.0,
+          "sd": 0.0,
+          "median": 0.0,
+          "min": 0.0,
+          "max": 0.0,
+          "sum": 0.0
+        },
+        "welch": {
+          "difference_of_means": 2.954545454545455,
+          "welch_t": 1.2055853308014155,
+          "welch_df": 41.611430026883546,
+          "p_one_sided_normal_approx": 0.11398870905927172,
+          "treatment_mean": 17.545454545454547,
+          "control_mean": 14.590909090909092,
+          "treatment_n": 22,
+          "control_n": 22
+        },
+        "permutation": {
+          "draws": 10000,
+          "observed_difference": 2.954545454545455,
+          "p_one_sided": 0.11958804119588042,
+          "seed": 0
+        },
+        "pass": false,
+        "per_episode": {
+          "r4": [
+            4.0,
+            15.0,
+            20.0,
+            18.0,
+            35.0,
+            14.0,
+            35.0,
+            32.0,
+            18.0,
+            14.0,
+            15.0,
+            11.0,
+            15.0,
+            11.0,
+            19.0,
+            22.0,
+            26.0,
+            11.0,
+            10.0,
+            22.0,
+            5.0,
+            14.0
+          ],
+          "r3_control": [
+            5.0,
+            3.0,
+            9.0,
+            19.0,
+            22.0,
+            28.0,
+            6.0,
+            13.0,
+            27.0,
+            11.0,
+            24.0,
+            21.0,
+            8.0,
+            12.0,
+            3.0,
+            15.0,
+            21.0,
+            20.0,
+            20.0,
+            10.0,
+            7.0,
+            17.0
+          ],
+          "r4_returns": [
+            -0.7183264661224683,
+            -0.6974628829049717,
+            -0.7081880921818472,
+            -0.7140805747659424,
+            -0.6950702261950525,
+            -0.6972575681482425,
+            -0.6951416310004895,
+            -0.6792157543610713,
+            -0.7063942934330346,
+            -0.7075322801831898,
+            -0.7002884649216096,
+            -0.705387200008286,
+            -0.7093932628097261,
+            -0.7080717260474836,
+            -0.706940287960884,
+            -0.6963845580291015,
+            -0.7033597148153539,
+            -0.710864596942691,
+            -0.7062353581825755,
+            -0.7081133591537405,
+            -0.7141443751310199,
+            -0.712536945486992
+          ],
+          "r3_control_returns": [
+            -0.713026289987057,
+            -0.7062728712562814,
+            -0.714863329578315,
+            -0.715871368320318,
+            -0.7056993479622895,
+            -0.7162067266502424,
+            -0.7115348111776358,
+            -0.7092749424129149,
+            -0.6955212200120262,
+            -0.7143707122290996,
+            -0.7180550603487073,
+            -0.7077762395130003,
+            -0.7232610898532059,
+            -0.6969041482484643,
+            -0.7254389392976613,
+            -0.7102505358408968,
+            -0.7111529148105342,
+            -0.7164045311663467,
+            -0.7117142533494836,
+            -0.7161790585532268,
+            -0.7112107226123177,
+            -0.7073948207687462
+          ]
+        }
+      },
+      "verdict": "fail"
+    },
+    "p2_survival": {
+      "threshold": 1589.2,
+      "observed_diag_mean": 1650.05,
+      "margin": 60.84999999999991,
+      "verdict": "hold"
+    },
+    "p3_capability": {
+      "threshold": 1,
+      "observed_clears": 0,
+      "episodes": 40,
+      "verdict": "fail"
+    },
+    "branch_taken": "3",
+    "branch_text": "P2 only -> survival improved without learning to collect power -> another path"
+  },
+  "observability": {
+    "instrument": "real observations: the obs-v3 planes the policy receives, sampled on the same decision as engine-truth power (STATE player_power)",
+    "samples": 900,
+    "distinct_power_levels": 12,
+    "power_range": [
+      0.0,
+      23.0
+    ],
+    "floor_r2": 0.5,
+    "probes": {
+      "hud": {
+        "source": "hud",
+        "samples": 900,
+        "patches": 8960,
+        "power_distinct": 12,
+        "power_range": [
+          0.0,
+          23.0
+        ],
+        "folds": [
+          {
+            "train_n": 450,
+            "test_n": 450,
+            "in_sample_r2": 0.906409040055183,
+            "test_r2": 0.6323772548301833,
+            "test_mae": 2.3705333887456295,
+            "single_pixel": {
+              "pixel": [
+                15,
+                66
+              ],
+              "train_corr": 0.75393959047976,
+              "test_r2": 0.5852291461087263,
+              "test_mae": 2.6979790068168414
+            }
+          },
+          {
+            "train_n": 450,
+            "test_n": 450,
+            "in_sample_r2": 0.901938263882765,
+            "test_r2": 0.6637730348861777,
+            "test_mae": 2.1954875920150325,
+            "single_pixel": {
+              "pixel": [
+                15,
+                66
+              ],
+              "train_corr": 0.7651578439371255,
+              "test_r2": 0.568185305664118,
+              "test_mae": 2.7136666141501267
+            }
+          }
+        ],
+        "r2_test_mean": 0.6480751448581805,
+        "r2_test_best": 0.6637730348861777,
+        "mae_test_mean": 2.283010490380331,
+        "r2_in_sample_mean": 0.904173651968974,
+        "null_r2": {
+          "permutations": 20,
+          "mean": -0.9885240984165264,
+          "max": -0.6657508331614412
+        },
+        "readable": true,
+        "floor": 0.5,
+        "claim": "a linear/nearest-pixel probe fitted on one half of the real samples reads power out of this plane on the other half"
+      },
+      "play": {
+        "source": "play",
+        "samples": 900,
+        "patches": 10752,
+        "power_distinct": 12,
+        "power_range": [
+          0.0,
+          23.0
+        ],
+        "folds": [
+          {
+            "train_n": 450,
+            "test_n": 450,
+            "in_sample_r2": 1.0,
+            "test_r2": 0.8233672099979147,
+            "test_mae": 1.7459141250558272,
+            "single_pixel": {
+              "pixel": [
+                31,
+                20
+              ],
+              "train_corr": 0.6388260252763985,
+              "test_r2": 0.4237271085373675,
+              "test_mae": 3.103459647168629
+            }
+          },
+          {
+            "train_n": 450,
+            "test_n": 450,
+            "in_sample_r2": 1.0,
+            "test_r2": 0.8372511064633784,
+            "test_mae": 1.681734024092732,
+            "single_pixel": {
+              "pixel": [
+                29,
+                21
+              ],
+              "train_corr": 0.6711893313915666,
+              "test_r2": 0.38403899713882905,
+              "test_mae": 3.1218311896437667
+            }
+          }
+        ],
+        "r2_test_mean": 0.8303091582306465,
+        "r2_test_best": 0.8372511064633784,
+        "mae_test_mean": 1.7138240745742797,
+        "r2_in_sample_mean": 1.0,
+        "null_r2": {
+          "permutations": 20,
+          "mean": -0.9259394625415517,
+          "max": -0.6679173184673111
+        },
+        "readable": true,
+        "floor": 0.5,
+        "claim": "a linear/nearest-pixel probe fitted on one half of the real samples reads power out of this plane on the other half"
+      },
+      "power_band": {
+        "source": "power_band",
+        "samples": 450,
+        "patches": 3520,
+        "power_distinct": 10,
+        "power_range": [
+          0.0,
+          23.0
+        ],
+        "folds": [
+          {
+            "train_n": 225,
+            "test_n": 225,
+            "in_sample_r2": 1.0,
+            "test_r2": 0.9999197565026994,
+            "test_mae": 0.004531496151229804,
+            "single_pixel": {
+              "pixel": [
+                15,
+                14
+              ],
+              "train_corr": 0.912356045823191,
+              "test_r2": 0.8573274906831253,
+              "test_mae": 1.5550583137837273
+            }
+          },
+          {
+            "train_n": 225,
+            "test_n": 225,
+            "in_sample_r2": 1.0,
+            "test_r2": 0.9999999947988591,
+            "test_mae": 7.674999093704887e-05,
+            "single_pixel": {
+              "pixel": [
+                15,
+                14
+              ],
+              "train_corr": 0.926297297424959,
+              "test_r2": 0.8316775292411634,
+              "test_mae": 1.5055094378298282
+            }
+          }
+        ],
+        "r2_test_mean": 0.9999598756507793,
+        "r2_test_best": 0.9999999947988591,
+        "mae_test_mean": 0.0023041230710834264,
+        "r2_in_sample_mean": 1.0,
+        "null_r2": {
+          "permutations": 20,
+          "mean": -1.017112571423212,
+          "max": -0.873391140482692
+        },
+        "readable": true,
+        "floor": 0.5,
+        "claim": "a linear/nearest-pixel probe fitted on one half of the real samples reads power out of this plane on the other half"
+      }
+    },
+    "time_baseline": {
+      "model": "power ~ 1 + episode + decision_index",
+      "samples": 900,
+      "corr_power_vs_decision": 0.7545294246383599,
+      "r2_test_mean": 0.5927677784236085,
+      "r2_test_best": 0.5944472264662384,
+      "null_r2": {
+        "permutations": 20,
+        "mean": -0.6143328586182427,
+        "max": -0.47553892235770356
+      },
+      "claim": "if a pixel plane's probe R2 does not beat this baseline, the probe read the clock, not power"
+    },
+    "shift_null": {
+      "hud": {
+        "source": "hud",
+        "real_r2_test_best": 0.6637730348861777,
+        "shifts": [
+          {
+            "shift_decisions": 37,
+            "r2_test_best": 0.6255948435416929,
+            "mae_test_mean": 2.685238711277096,
+            "distinct_power_levels": 12
+          },
+          {
+            "shift_decisions": 89,
+            "r2_test_best": 0.6244122120430913,
+            "mae_test_mean": 3.1600304059622886,
+            "distinct_power_levels": 12
+          },
+          {
+            "shift_decisions": 151,
+            "r2_test_best": 0.6922607631667481,
+            "mae_test_mean": 3.203928781658796,
+            "distinct_power_levels": 12
+          },
+          {
+            "shift_decisions": 211,
+            "r2_test_best": 0.7246284816661186,
+            "mae_test_mean": 3.4008413786419958,
+            "distinct_power_levels": 12
+          },
+          {
+            "shift_decisions": 307,
+            "r2_test_best": 0.6607662524494615,
+            "mae_test_mean": 3.9630824220115937,
+            "distinct_power_levels": 12
+          }
+        ],
+        "shift_r2_max": 0.7246284816661186,
+        "shift_r2_mean": 0.6655325105734226,
+        "beats_shift_null": false,
+        "claim": "a probe that cannot beat a time-shifted power series of the same smoothness is reading the clock, not the quantity"
+      },
+      "play": {
+        "source": "play",
+        "real_r2_test_best": 0.8372511064633784,
+        "shifts": [
+          {
+            "shift_decisions": 37,
+            "r2_test_best": 0.834969133350032,
+            "mae_test_mean": 1.8756366639472373,
+            "distinct_power_levels": 12
+          },
+          {
+            "shift_decisions": 89,
+            "r2_test_best": 0.8793011111844647,
+            "mae_test_mean": 1.756400255046859,
+            "distinct_power_levels": 12
+          },
+          {
+            "shift_decisions": 151,
+            "r2_test_best": 0.8316323033927037,
+            "mae_test_mean": 2.2262497620358257,
+            "distinct_power_levels": 12
+          },
+          {
+            "shift_decisions": 211,
+            "r2_test_best": 0.6222727162747919,
+            "mae_test_mean": 3.541792922634022,
+            "distinct_power_levels": 12
+          },
+          {
+            "shift_decisions": 307,
+            "r2_test_best": 0.6199752623657442,
+            "mae_test_mean": 3.6690810941444325,
+            "distinct_power_levels": 12
+          }
+        ],
+        "shift_r2_max": 0.8793011111844647,
+        "shift_r2_mean": 0.7576301053135474,
+        "beats_shift_null": false,
+        "claim": "a probe that cannot beat a time-shifted power series of the same smoothness is reading the clock, not the quantity"
+      }
+    },
+    "region": {
+      "pairs": 15,
+      "delta_power": {
+        "mean": 2.0,
+        "min": 1.0,
+        "max": 8.0
+      },
+      "threshold": 0.5,
+      "region": {
+        "rows": [
+          16,
+          463
+        ],
+        "cols": [
+          32,
+          607
+        ],
+        "pixels_moved": 163043,
+        "mean_abs_change_max": 150.46666666666667
+      },
+      "crops": {
+        "play_rows": [
+          16,
+          464
+        ],
+        "play_cols": [
+          32,
+          416
+        ],
+        "hud_rows": [
+          [
+            48,
+            72
+          ],
+          [
+            80,
+            96
+          ],
+          [
+            96,
+            112
+          ]
+        ],
+        "hud_cols": [
+          480,
+          640
+        ],
+        "pixels_inside_play_crop": 161541,
+        "pixels_inside_hud_crop": 701,
+        "region_inside_observation": 0.9950871855890777
+      },
+      "observable_in_observation": true,
+      "claim": "the screen area whose pixels move when the engine's power moves, and whether the two observation crops contain any of it",
+      "control": {
+        "pairs": 432,
+        "mean_abs_change_max": 74.81712962962963,
+        "background_note": "pairs whose power did not move: this is what the scrolling background does on its own"
+      },
+      "attributed": {
+        "threshold": 0.5,
+        "region": {
+          "rows": [
+            16,
+            463
+          ],
+          "cols": [
+            32,
+            606
+          ],
+          "pixels_moved": 58981,
+          "mean_abs_change_max": 150.0013888888889
+        },
+        "pixels_inside_play_crop": 57778,
+        "pixels_inside_hud_crop": 525,
+        "region_inside_observation": 0.9885047727234194,
+        "claim": "the part of the movement that is power-attributable rather than background scroll"
+      },
+      "power_attributable_observable": true
+    },
+    "panel_geometry": {
+      "pairs": 15,
+      "threshold_dn": 8.0,
+      "rows_per_pair": [
+        [
+          57,
+          151
+        ],
+        [
+          56,
+          151
+        ],
+        [
+          57,
+          151
+        ],
+        [
+          57,
+          151
+        ],
+        [
+          56,
+          151
+        ],
+        [
+          57,
+          151
+        ],
+        [
+          56,
+          151
+        ],
+        [
+          57,
+          151
+        ],
+        [
+          56,
+          182
+        ],
+        [
+          57,
+          151
+        ],
+        [
+          57,
+          151
+        ],
+        [
+          56,
+          151
+        ],
+        [
+          57,
+          151
+        ],
+        [
+          56,
+          198
+        ],
+        [
+          56,
+          151
+        ]
+      ],
+      "cols_per_pair": [
+        [
+          488,
+          605
+        ],
+        [
+          488,
+          605
+        ],
+        [
+          489,
+          605
+        ],
+        [
+          488,
+          605
+        ],
+        [
+          488,
+          592
+        ],
+        [
+          489,
+          605
+        ],
+        [
+          488,
+          605
+        ],
+        [
+          488,
+          605
+        ],
+        [
+          489,
+          605
+        ],
+        [
+          489,
+          606
+        ],
+        [
+          488,
+          605
+        ],
+        [
+          500,
+          605
+        ],
+        [
+          488,
+          592
+        ],
+        [
+          489,
+          605
+        ],
+        [
+          502,
+          605
+        ]
+      ],
+      "note": "rows/columns of the right-hand panel (x 480-640) that change when power rises, per pair; the panel has no scrolling background, so this is the power readout itself"
+    },
+    "collected": {
+      "seconds": 40.186,
+      "episodes": [
+        {
+          "episode": 0,
+          "seed": 3010,
+          "decisions_played": 900,
+          "samples": 450,
+          "frames": 1800,
+          "end": null,
+          "deaths": 2.0,
+          "power_first": 0.0,
+          "power_final": 23.0,
+          "power_gained": 30.0,
+          "power_lost": 7.0,
+          "power_max_seen": 23.0,
+          "records_full_screen": true
+        },
+        {
+          "episode": 1,
+          "seed": 3011,
+          "decisions_played": 900,
+          "samples": 450,
+          "frames": 1800,
+          "end": null,
+          "deaths": 2.0,
+          "power_first": 0.0,
+          "power_final": 13.0,
+          "power_gained": 23.0,
+          "power_lost": 10.0,
+          "power_max_seen": 13.0,
+          "records_full_screen": false
+        }
+      ],
+      "decisions_sampled": 900,
+      "distinct_power_levels": 12,
+      "power_min": 0.0,
+      "power_max": 23.0,
+      "power_mean": 4.216666666666667,
+      "full_screen_frames": 450,
+      "controller": "fixed script: 120 decisions up (cand 1), then sweep W/E every 25 decisions at the top (cand 7/3); shooting is always on in cand_to_mask, so items drop",
+      "controller_note": "a hovering controller collects nothing: an earlier run of 4 x 300 decisions cycling through all 18 candidates ended with power 0.0 throughout and could not answer the question at all, so the scripted sweep replaced it",
+      "env": "touhou_rl.v420.rl.GameEnv2F at the frozen two-frame beat, rollout.stage 0 / normal / team 0",
+      "plane_provenance": "hud/play are the obs-v3 planes taken from the environment's own observation dict; 'full' is the green channel of the same decision's 640x480 readback, and crop_consistency re-derives the planes from that readback with encode_planes_v3 to prove both refer to the same frame"
+    },
+    "crop_consistency": {
+      "checked": 11,
+      "all_play_equal": true,
+      "all_hud_equal": true,
+      "rows": [
+        {
+          "episode": 0,
+          "decision": 0,
+          "play_equal": true,
+          "hud_equal": true,
+          "power": 0.0
+        },
+        {
+          "episode": 0,
+          "decision": 82,
+          "play_equal": true,
+          "hud_equal": true,
+          "power": 0.0
+        },
+        {
+          "episode": 0,
+          "decision": 164,
+          "play_equal": true,
+          "hud_equal": true,
+          "power": 0.0
+        },
+        {
+          "episode": 0,
+          "decision": 246,
+          "play_equal": true,
+          "hud_equal": true,
+          "power": 1.0
+        },
+        {
+          "episode": 0,
+          "decision": 328,
+          "play_equal": true,
+          "hud_equal": true,
+          "power": 0.0
+        },
+        {
+          "episode": 0,
+          "decision": 410,
+          "play_equal": true,
+          "hud_equal": true,
+          "power": 0.0
+        },
+        {
+          "episode": 0,
+          "decision": 492,
+          "play_equal": true,
+          "hud_equal": true,
+          "power": 2.0
+        },
+        {
+          "episode": 0,
+          "decision": 574,
+          "play_equal": true,
+          "hud_equal": true,
+          "power": 1.0
+        }
+      ]
+    },
+    "verdict_block": {
+      "probe_readable": {
+        "hud": true,
+        "play": true
+      },
+      "probe_beats_time_baseline": {
+        "hud": true,
+        "play": true
+      },
+      "probe_beats_shift_null": {
+        "hud": false,
+        "play": false
+      },
+      "power_attributable_in_a_crop": true,
+      "policy_can_read_power": false
+    }
+  },
+  "observability_provenance": {
+    "pre_registered": [
+      "the R2 floor 0.5 on each policy plane",
+      "at least 50 real samples with engine-truth power",
+      "the power_band positive control"
+    ],
+    "post_hoc": [
+      "the linear time baseline",
+      "the time-shifted-series null",
+      "the paired delta control"
+    ],
+    "why": "the pre-registered R2 gate did NOT fire: 0.6638 and 0.8373 are both above the 0.5 floor, so the confound controls were added after seeing that.  The decisive argument is independent of any data: the engine draws power at rows 136-151 / cols 488-616 (Gui.cpp:1348-1387) and neither observation crop looks there",
+    "therefore": "'the observation cannot carry power' is established by the geometry plus the positive control plus the shift null, NOT by the pre-registered R2 < 0.5 route, and the report says so explicitly"
+  },
+  "arms": {
+    "r4": {
+      "path": ".tmp_v420_data/T06/r4/pilot-r4-b.json",
+      "reward_version": "v420-reward-r4/1",
+      "game_frames": 50001,
+      "decisions": 25003,
+      "episodes": 22,
+      "updates": 49,
+      "wall_seconds": 954.946,
+      "fps": 52.36,
+      "episode_return": {
+        "count": 22,
+        "mean": -0.7045631644902626,
+        "sd": 0.008645246315392246,
+        "median": -0.7066672906969593,
+        "min": -0.7183264661224683,
+        "max": -0.6792157543610713,
+        "sum": -15.500389618785777
+      },
+      "episode_frames": {
+        "count": 22,
+        "mean": 2194.7727272727275,
+        "sd": 352.0938635429319,
+        "median": 2157.0,
+        "min": 1784.0,
+        "max": 3125.0,
+        "sum": 48285.0
+      },
+      "terminal": {
+        "episodes": 22,
+        "episode_ends": {
+          "game_over": 22
+        },
+        "game_over_episodes": 22,
+        "stage_clear_episodes": 0,
+        "stage_clear_terminal_reward_sum": 0.0,
+        "terminated_transitions": 22,
+        "truncated_transitions": 0,
+        "terminal_reward_events": 22,
+        "episode_frames": [
+          {
+            "episode": 0,
+            "frames": 1840,
+            "decisions": 920,
+            "end": "game_over",
+            "return": -0.7183264661224683,
+            "stage_clear": false
+          },
+          {
+            "episode": 1,
+            "frames": 2630,
+            "decisions": 1315,
+            "end": "game_over",
+            "return": -0.6974628829049717,
+            "stage_clear": false
+          },
+          {
+            "episode": 2,
+            "frames": 1884,
+            "decisions": 942,
+            "end": "game_over",
+            "return": -0.7081880921818472,
+            "stage_clear": false
+          },
+          {
+            "episode": 3,
+            "frames": 1865,
+            "decisions": 933,
+            "end": "game_over",
+            "return": -0.7140805747659424,
+            "stage_clear": false
+          },
+          {
+            "episode": 4,
+            "frames": 2455,
+            "decisions": 1228,
+            "end": "game_over",
+            "return": -0.6950702261950525,
+            "stage_clear": false
+          },
+          {
+            "episode": 5,
+            "frames": 2362,
+            "decisions": 1181,
+            "end": "game_over",
+            "return": -0.6972575681482425,
+            "stage_clear": false
+          },
+          {
+            "episode": 6,
+            "frames": 2530,
+            "decisions": 1265,
+            "end": "game_over",
+            "return": -0.6951416310004895,
+            "stage_clear": false
+          },
+          {
+            "episode": 7,
+            "frames": 3125,
+            "decisions": 1563,
+            "end": "game_over",
+            "return": -0.6792157543610713,
+            "stage_clear": false
+          },
+          {
+            "episode": 8,
+            "frames": 1958,
+            "decisions": 979,
+            "end": "game_over",
+            "return": -0.7063942934330346,
+            "stage_clear": false
+          },
+          {
+            "episode": 9,
+            "frames": 2286,
+            "decisions": 1143,
+            "end": "game_over",
+            "return": -0.7075322801831898,
+            "stage_clear": false
+          },
+          {
+            "episode": 10,
+            "frames": 2338,
+            "decisions": 1169,
+            "end": "game_over",
+            "return": -0.7002884649216096,
+            "stage_clear": false
+          },
+          {
+            "episode": 11,
+            "frames": 2542,
+            "decisions": 1271,
+            "end": "game_over",
+            "return": -0.705387200008286,
+            "stage_clear": false
+          },
+          {
+            "episode": 12,
+            "frames": 1924,
+            "decisions": 962,
+            "end": "game_over",
+            "return": -0.7093932628097261,
+            "stage_clear": false
+          },
+          {
+            "episode": 13,
+            "frames": 2232,
+            "decisions": 1116,
+            "end": "game_over",
+            "return": -0.7080717260474836,
+            "stage_clear": false
+          },
+          {
+            "episode": 14,
+            "frames": 1806,
+            "decisions": 903,
+            "end": "game_over",
+            "return": -0.706940287960884,
+            "stage_clear": false
+          },
+          {
+            "episode": 15,
+            "frames": 2612,
+            "decisions": 1306,
+            "end": "game_over",
+            "return": -0.6963845580291015,
+            "stage_clear": false
+          },
+          {
+            "episode": 16,
+            "frames": 2028,
+            "decisions": 1014,
+            "end": "game_over",
+            "return": -0.7033597148153539,
+            "stage_clear": false
+          },
+          {
+            "episode": 17,
+            "frames": 2082,
+            "decisions": 1041,
+            "end": "game_over",
+            "return": -0.710864596942691,
+            "stage_clear": false
+          },
+          {
+            "episode": 18,
+            "frames": 2234,
+            "decisions": 1117,
+            "end": "game_over",
+            "return": -0.7062353581825755,
+            "stage_clear": false
+          },
+          {
+            "episode": 19,
+            "frames": 1887,
+            "decisions": 944,
+            "end": "game_over",
+            "return": -0.7081133591537405,
+            "stage_clear": false
+          },
+          {
+            "episode": 20,
+            "frames": 1881,
+            "decisions": 941,
+            "end": "game_over",
+            "return": -0.7141443751310199,
+            "stage_clear": false
+          },
+          {
+            "episode": 21,
+            "frames": 1784,
+            "decisions": 892,
+            "end": "game_over",
+            "return": -0.712536945486992,
+            "stage_clear": false
+          }
+        ],
+        "note": "a terminal reward only reaches PPO on a terminated transition, so both counters have to be > 0 for a training run to be about the task objective at all"
+      },
+      "reward_totals": {
+        "stage_clear": 0.0,
+        "death": -16.5,
+        "bomb": 0.0,
+        "progress": 0.06447919952269297,
+        "survive": 0.2897399999999977,
+        "first_life": 0.4946195816914267,
+        "power": 0.1507716
+      },
+      "power_diagnostics": {
+        "instrument": "engine truth: STATE field player_power (labels/state.py f9 = FloatBits(globals.playerPower)); the observation does not necessarily contain it",
+        "in_the_reward_table": true,
+        "power_gain": 0.0003906,
+        "power_max": 128.0,
+        "episodes_with_power": 22,
+        "power_final_mean": 0.0,
+        "power_final": {
+          "count": 22,
+          "mean": 0.0,
+          "sd": 0.0,
+          "min": 0.0,
+          "max": 0.0,
+          "sum": 0.0
+        },
+        "delta_power_per_episode": 17.545454545454547,
+        "delta_power": {
+          "count": 22,
+          "mean": 17.545454545454547,
+          "sd": 8.511769290236693,
+          "min": 4.0,
+          "max": 35.0,
+          "sum": 386.0
+        },
+        "power_lost_per_episode": 17.545454545454547,
+        "power_first_mean": 0.0,
+        "power_gain_decisions_per_episode": 10.181818181818182,
+        "reward_from_power_total": 0.1507716,
+        "power_bound": {
+          "assertion": "power_gain * power_max <= 0.25 * progress_total",
+          "power_gain": 0.0003906,
+          "power_max": 128.0,
+          "power_max_source": "TH08 src/Gui.cpp:1381-1387 prints the number below 128 and 'MAX' from 128; src/ItemManager.cpp:53,408,423 stop collecting power items at >= 128; src/Gui.cpp:1348-1354 draws the bar GetPower() px wide; src/ItemManager.cpp:17 thresholds {8,24,48,80,128,999}",
+          "max_episode_power_reward": 0.0499968,
+          "share_of_progress_total": 0.25,
+          "bound": 0.125,
+          "margin": 0.07500319999999999,
+          "pass": true,
+          "fraction_of_progress_total": 0.0999936,
+          "fraction_of_death_penalty": 0.1999872,
+          "t_max_decisions_not_used": 9943.5,
+          "why_no_t_max": "power is an inventory: one episode can gain a whole scale once, not once per decision, so the horizon does not multiply this term.  The r3 survival constant is per-decision and its own bound keeps T_max"
+        },
+        "not_a_gate": true,
+        "note": "diagnostics only: in r3 these numbers are recorded and never enter the return; in r4 only the positive increments are paid"
+      },
+      "statistics": {
+        "approx_kl": {
+          "count": 49,
+          "mean": 0.0013703525246641294,
+          "sd": 0.00031647629774810427,
+          "min": 0.0008207591890823096,
+          "max": 0.0023378879704978317,
+          "first": 0.0009004892926895991,
+          "last": 0.0015136707079363987
+        },
+        "entropy": {
+          "count": 49,
+          "mean": 2.517492822846588,
+          "sd": 0.0435966097593903,
+          "min": 2.420282393693924,
+          "max": 2.6180044412612915,
+          "first": 2.452417016029358,
+          "last": 2.4707514345645905
+        },
+        "clip_fraction": {
+          "count": 49,
+          "mean": 0.0034677933673469387,
+          "sd": 0.0037772756265445316,
+          "min": 0.0,
+          "max": 0.0166015625,
+          "first": 0.001953125,
+          "last": 0.0009765625
+        },
+        "policy_loss": {
+          "count": 49,
+          "mean": -0.008113050111688256,
+          "sd": 0.004226459354693739,
+          "min": -0.03268666425719857,
+          "max": -0.0033656618325039744,
+          "first": -0.007807051530107856,
+          "last": -0.03268666425719857
+        },
+        "value_loss": {
+          "count": 49,
+          "mean": 0.007784735328251762,
+          "sd": 0.0021333397277371446,
+          "min": 0.0022604374498769175,
+          "max": 0.011285909153230023,
+          "first": 0.007007762877037749,
+          "last": 0.009326323575805873
+        },
+        "grad_norm": {
+          "count": 49,
+          "mean": 8.938285539344866,
+          "sd": 1.1802535948379551,
+          "min": 6.724426686763763,
+          "max": 11.500133156776428,
+          "first": 8.803715169429779,
+          "last": 11.050602197647095
+        },
+        "actor_parameter_change": {
+          "count": 49,
+          "mean": 0.00023817921494494895,
+          "sd": 1.929525546121766e-06,
+          "min": 0.0002339901402592659,
+          "max": 0.0002418123185634613,
+          "first": 0.00023608095943927765,
+          "last": 0.00023422460071742535
+        },
+        "episode_frames": {
+          "count": 22,
+          "mean": 2194.7727272727275,
+          "sd": 352.0938635429319,
+          "min": 1784.0,
+          "max": 3125.0,
+          "first": 1840.0,
+          "last": 1784.0
+        },
+        "episode_return": {
+          "count": 22,
+          "mean": -0.7045631644902626,
+          "sd": 0.008645246315392246,
+          "min": -0.7183264661224683,
+          "max": -0.6792157543610713,
+          "first": -0.7183264661224683,
+          "last": -0.712536945486992
+        },
+        "episode_ends": {
+          "game_over": 22
+        },
+        "total_updates": 49,
+        "total_episodes": 22
+      },
+      "checkpoint_trained": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/checkpoints/r4_seed0_50001f.pt",
+      "checkpoint_sha256": null,
+      "kl_anchor": {
+        "max_t_over_run": 0.9494799375271987,
+        "statistics": {
+          "count": 49,
+          "mean": 0.44208637348325375,
+          "sd": 0.1814510796627835,
+          "min": 0.15685628718245348,
+          "max": 0.9494799375271987,
+          "first": 0.22464506399873435,
+          "last": 0.8539241483354195
+        },
+        "gate_mode": "diagnostic_only"
+      },
+      "statistics_quarters": {
+        "Q1": {
+          "episodes": 5,
+          "frames": 2134.8,
+          "first_death_frame": 1087.6,
+          "return": -0.7066256484340565,
+          "delta_power": 18.4,
+          "power_final": 0.0
+        },
+        "Q2": {
+          "episodes": 5,
+          "frames": 2452.2,
+          "first_death_frame": 1370.2,
+          "return": -0.6971083054252055,
+          "delta_power": 22.6,
+          "power_final": 0.0
+        },
+        "Q3": {
+          "episodes": 5,
+          "frames": 2168.4,
+          "first_death_frame": 1196.0,
+          "return": -0.7060161883495979,
+          "delta_power": 14.2,
+          "power_final": 0.0
+        },
+        "Q4": {
+          "episodes": 7,
+          "frames": 2072.5714285714284,
+          "first_death_frame": 1118.7142857142858,
+          "return": -0.7073769868202106,
+          "delta_power": 15.714285714285714,
+          "power_final": 0.0
+        }
+      },
+      "sha256": "983f6fc427aea72202d3793e4a48bf2bcf0fc01e2a3a717be7ec657d46508f9d"
+    },
+    "r3_control": {
+      "path": ".tmp_v420_data/T06/r4/pilot-r3ctl-a.json",
+      "reward_version": "v420-reward-r3/1",
+      "game_frames": 50000,
+      "decisions": 25004,
+      "episodes": 22,
+      "updates": 49,
+      "wall_seconds": 984.015,
+      "fps": 50.812,
+      "episode_return": {
+        "count": 22,
+        "mean": -0.7117447242703987,
+        "sd": 0.007071654084120794,
+        "median": -0.7116245322635597,
+        "min": -0.7254389392976613,
+        "max": -0.6955212200120262,
+        "sum": -15.658383933948771
+      },
+      "episode_frames": {
+        "count": 22,
+        "mean": 2208.3636363636365,
+        "sd": 373.47920774083076,
+        "median": 2192.0,
+        "min": 1692.0,
+        "max": 2969.0,
+        "sum": 48584.0
+      },
+      "terminal": {
+        "episodes": 22,
+        "episode_ends": {
+          "game_over": 22
+        },
+        "game_over_episodes": 22,
+        "stage_clear_episodes": 0,
+        "stage_clear_terminal_reward_sum": 0.0,
+        "terminated_transitions": 22,
+        "truncated_transitions": 0,
+        "terminal_reward_events": 22,
+        "episode_frames": [
+          {
+            "episode": 0,
+            "frames": 2523,
+            "decisions": 1262,
+            "end": "game_over",
+            "return": -0.713026289987057,
+            "stage_clear": false
+          },
+          {
+            "episode": 1,
+            "frames": 2401,
+            "decisions": 1201,
+            "end": "game_over",
+            "return": -0.7062728712562814,
+            "stage_clear": false
+          },
+          {
+            "episode": 2,
+            "frames": 1902,
+            "decisions": 951,
+            "end": "game_over",
+            "return": -0.714863329578315,
+            "stage_clear": false
+          },
+          {
+            "episode": 3,
+            "frames": 1917,
+            "decisions": 959,
+            "end": "game_over",
+            "return": -0.715871368320318,
+            "stage_clear": false
+          },
+          {
+            "episode": 4,
+            "frames": 2969,
+            "decisions": 1485,
+            "end": "game_over",
+            "return": -0.7056993479622895,
+            "stage_clear": false
+          },
+          {
+            "episode": 5,
+            "frames": 1847,
+            "decisions": 924,
+            "end": "game_over",
+            "return": -0.7162067266502424,
+            "stage_clear": false
+          },
+          {
+            "episode": 6,
+            "frames": 2294,
+            "decisions": 1147,
+            "end": "game_over",
+            "return": -0.7115348111776358,
+            "stage_clear": false
+          },
+          {
+            "episode": 7,
+            "frames": 2516,
+            "decisions": 1258,
+            "end": "game_over",
+            "return": -0.7092749424129149,
+            "stage_clear": false
+          },
+          {
+            "episode": 8,
+            "frames": 2696,
+            "decisions": 1348,
+            "end": "game_over",
+            "return": -0.6955212200120262,
+            "stage_clear": false
+          },
+          {
+            "episode": 9,
+            "frames": 2014,
+            "decisions": 1007,
+            "end": "game_over",
+            "return": -0.7143707122290996,
+            "stage_clear": false
+          },
+          {
+            "episode": 10,
+            "frames": 1859,
+            "decisions": 930,
+            "end": "game_over",
+            "return": -0.7180550603487073,
+            "stage_clear": false
+          },
+          {
+            "episode": 11,
+            "frames": 2196,
+            "decisions": 1098,
+            "end": "game_over",
+            "return": -0.7077762395130003,
+            "stage_clear": false
+          },
+          {
+            "episode": 12,
+            "frames": 1692,
+            "decisions": 846,
+            "end": "game_over",
+            "return": -0.7232610898532059,
+            "stage_clear": false
+          },
+          {
+            "episode": 13,
+            "frames": 2877,
+            "decisions": 1439,
+            "end": "game_over",
+            "return": -0.6969041482484643,
+            "stage_clear": false
+          },
+          {
+            "episode": 14,
+            "frames": 1712,
+            "decisions": 856,
+            "end": "game_over",
+            "return": -0.7254389392976613,
+            "stage_clear": false
+          },
+          {
+            "episode": 15,
+            "frames": 1966,
+            "decisions": 983,
+            "end": "game_over",
+            "return": -0.7102505358408968,
+            "stage_clear": false
+          },
+          {
+            "episode": 16,
+            "frames": 2188,
+            "decisions": 1094,
+            "end": "game_over",
+            "return": -0.7111529148105342,
+            "stage_clear": false
+          },
+          {
+            "episode": 17,
+            "frames": 1786,
+            "decisions": 893,
+            "end": "game_over",
+            "return": -0.7164045311663467,
+            "stage_clear": false
+          },
+          {
+            "episode": 18,
+            "frames": 2275,
+            "decisions": 1138,
+            "end": "game_over",
+            "return": -0.7117142533494836,
+            "stage_clear": false
+          },
+          {
+            "episode": 19,
+            "frames": 2022,
+            "decisions": 1011,
+            "end": "game_over",
+            "return": -0.7161790585532268,
+            "stage_clear": false
+          },
+          {
+            "episode": 20,
+            "frames": 2332,
+            "decisions": 1166,
+            "end": "game_over",
+            "return": -0.7112107226123177,
+            "stage_clear": false
+          },
+          {
+            "episode": 21,
+            "frames": 2600,
+            "decisions": 1300,
+            "end": "game_over",
+            "return": -0.7073948207687462,
+            "stage_clear": false
+          }
+        ],
+        "note": "a terminal reward only reaches PPO on a terminated transition, so both counters have to be > 0 for a training run to be about the task objective at all"
+      },
+      "reward_totals": {
+        "stage_clear": 0.0,
+        "death": -16.5,
+        "bomb": 0.0,
+        "progress": 0.06506861288348921,
+        "survive": 0.2915519999999978,
+        "first_life": 0.48499545316763126
+      },
+      "power_diagnostics": {
+        "instrument": "engine truth: STATE field player_power (labels/state.py f9 = FloatBits(globals.playerPower)); the observation does not necessarily contain it",
+        "in_the_reward_table": false,
+        "power_gain": 0.0,
+        "power_max": 128.0,
+        "episodes_with_power": 22,
+        "power_final_mean": 0.0,
+        "power_final": {
+          "count": 22,
+          "mean": 0.0,
+          "sd": 0.0,
+          "min": 0.0,
+          "max": 0.0,
+          "sum": 0.0
+        },
+        "delta_power_per_episode": 14.590909090909092,
+        "delta_power": {
+          "count": 22,
+          "mean": 14.590909090909092,
+          "sd": 7.7254008427924425,
+          "min": 3.0,
+          "max": 28.0,
+          "sum": 321.0
+        },
+        "power_lost_per_episode": 14.590909090909092,
+        "power_first_mean": 0.0,
+        "power_gain_decisions_per_episode": 8.409090909090908,
+        "reward_from_power_total": 0.0,
+        "power_bound": null,
+        "not_a_gate": true,
+        "note": "diagnostics only: in r3 these numbers are recorded and never enter the return; in r4 only the positive increments are paid"
+      },
+      "statistics": {
+        "approx_kl": {
+          "count": 49,
+          "mean": 0.0013460909884793646,
+          "sd": 0.00028829618995643,
+          "min": 0.0007063379016472027,
+          "max": 0.001974322134628892,
+          "first": 0.0007063379016472027,
+          "last": 0.0014666142960777506
+        },
+        "entropy": {
+          "count": 49,
+          "mean": 2.5043011137417386,
+          "sd": 0.046086355063570235,
+          "min": 2.409806936979294,
+          "max": 2.6147664189338684,
+          "first": 2.445389896631241,
+          "last": 2.468121498823166
+        },
+        "clip_fraction": {
+          "count": 49,
+          "mean": 0.00412547831632653,
+          "sd": 0.003948065706067418,
+          "min": 0.0,
+          "max": 0.0185546875,
+          "first": 0.0,
+          "last": 0.0029296875
+        },
+        "policy_loss": {
+          "count": 49,
+          "mean": -0.00706335736975568,
+          "sd": 0.00274051325515316,
+          "min": -0.012748373672366142,
+          "max": 0.0001545376144349575,
+          "first": -0.007382468553259969,
+          "last": -0.005857034004293382
+        },
+        "value_loss": {
+          "count": 49,
+          "mean": 0.008101418657894769,
+          "sd": 0.0020240740074859375,
+          "min": 0.0034737037058221176,
+          "max": 0.011755037761759013,
+          "first": 0.009416191562195309,
+          "last": 0.008985879685496911
+        },
+        "grad_norm": {
+          "count": 49,
+          "mean": 9.350039271675811,
+          "sd": 1.435910364719815,
+          "min": 7.008633494377136,
+          "max": 13.725931167602539,
+          "first": 8.409905642271042,
+          "last": 8.086815923452377
+        },
+        "actor_parameter_change": {
+          "count": 49,
+          "mean": 0.0002381361769132164,
+          "sd": 1.7451070532445487e-06,
+          "min": 0.0002340376377105713,
+          "max": 0.00024164654314517975,
+          "first": 0.0002355244942009449,
+          "last": 0.0002371063455939293
+        },
+        "episode_frames": {
+          "count": 22,
+          "mean": 2208.3636363636365,
+          "sd": 373.47920774083076,
+          "min": 1692.0,
+          "max": 2969.0,
+          "first": 2523.0,
+          "last": 2600.0
+        },
+        "episode_return": {
+          "count": 22,
+          "mean": -0.7117447242703987,
+          "sd": 0.007071654084120794,
+          "min": -0.7254389392976613,
+          "max": -0.6955212200120262,
+          "first": -0.713026289987057,
+          "last": -0.7073948207687462
+        },
+        "episode_ends": {
+          "game_over": 22
+        },
+        "total_updates": 49,
+        "total_episodes": 22
+      },
+      "checkpoint_trained": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/checkpoints/r4ctl_seed0_50000f.pt",
+      "checkpoint_sha256": null,
+      "kl_anchor": {
+        "max_t_over_run": 1.097321354088695,
+        "statistics": {
+          "count": 49,
+          "mean": 0.4329406336026138,
+          "sd": 0.20027052801498998,
+          "min": 0.15838842418985058,
+          "max": 1.097321354088695,
+          "first": 0.15838842418985058,
+          "last": 0.3072554117185071
+        },
+        "gate_mode": "diagnostic_only"
+      },
+      "statistics_quarters": {
+        "Q1": {
+          "episodes": 5,
+          "frames": 2342.4,
+          "first_death_frame": 1105.6,
+          "return": -0.7111466414208522,
+          "delta_power": 11.6,
+          "power_final": 0.0
+        },
+        "Q2": {
+          "episodes": 5,
+          "frames": 2273.4,
+          "first_death_frame": 1281.0,
+          "return": -0.7093816824963838,
+          "delta_power": 17.0,
+          "power_final": 0.0
+        },
+        "Q3": {
+          "episodes": 5,
+          "frames": 2067.2,
+          "first_death_frame": 1101.0,
+          "return": -0.7142870954522078,
+          "delta_power": 13.6,
+          "power_final": 0.0
+        },
+        "Q4": {
+          "episodes": 7,
+          "frames": 2167.0,
+          "first_death_frame": 1164.142857142857,
+          "return": -0.7120438338716503,
+          "delta_power": 15.714285714285714,
+          "power_final": 0.0
+        }
+      },
+      "sha256": "085efcb530d73d933b4112090353abca3be115b92fee6d695b3857c40c3487f3"
+    },
+    "r4_minus_r3_control": {
+      "episode_frames_change_pct": -0.6154289478017416,
+      "episode_return_change_pct": -1.0090077994603839,
+      "delta_power_difference": 2.954545454545455,
+      "power_final_difference": 0.0
+    },
+    "r3_replication": {
+      "original": "T06/r3/pilot-r3-a.json",
+      "original_episodes": 22,
+      "control_episodes": 22,
+      "identical_sequence": false,
+      "first_difference": {
+        "index": 0,
+        "r3": [
+          1867,
+          934,
+          "game_over",
+          -0.7186961381228636
+        ],
+        "control": [
+          2523,
+          1262,
+          "game_over",
+          -0.713026289987057
+        ]
+      }
+    }
+  },
+  "dev": {
+    "instrument": "tools/rl/v420_eval_shoot.py --shoot-pulse-period 48 (the T08 instrument), stage 0 / normal / max-frames 19887 / obs-window consecutive / device cpu",
+    "seeds": [
+      1000,
+      1001,
+      1002,
+      1003,
+      1004,
+      1005,
+      1006,
+      1007,
+      1008,
+      1009,
+      1010,
+      1011,
+      1012,
+      1013,
+      1014,
+      1015,
+      1016,
+      1017,
+      1018,
+      1019
+    ],
+    "batches": [
+      {
+        "path": ".tmp_v420_data/T06/dev-r4/R4-diag_first_death-1000-1001-1002-1003-1004.json",
+        "sha256": "4ff768e075429e6107955d9349722ed8d7fa9d5379df1b9d135015a38ca20aee",
+        "ruler": "diag_first_death",
+        "seeds": [
+          1000,
+          1001,
+          1002,
+          1003,
+          1004
+        ],
+        "tool": "tools/rl/v420_eval_shoot.py",
+        "shoot_pulse_period": 48,
+        "aggregate": {
+          "n": 5,
+          "n_measured": 5,
+          "frames": [
+            1495,
+            2365,
+            1496,
+            1300,
+            1480
+          ],
+          "frames_stats": {
+            "n": 5,
+            "mean": 1627.2,
+            "min": 1300,
+            "max": 2365,
+            "sd": 420.64438662604306,
+            "ci_reportable": false,
+            "note": "descriptive only; n < 20 -> no confidence interval and no claim"
+          },
+          "deaths": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "deaths_mean": 1.0,
+          "clears": 0,
+          "clear_rate": 0.0,
+          "stop_reasons": {
+            "death_stop": 5
+          },
+          "note": "descriptive only: this block is not a development score and its clear_rate is not a pass rate"
+        },
+        "exit_code": 0
+      },
+      {
+        "path": ".tmp_v420_data/T06/dev-r4/R4-diag_first_death-1005-1006-1007-1008-1009.json",
+        "sha256": "5fe97c1c9a615f58f2c3c388d4fc334fedd78e9549cfa2e389eac02f009632e2",
+        "ruler": "diag_first_death",
+        "seeds": [
+          1005,
+          1006,
+          1007,
+          1008,
+          1009
+        ],
+        "tool": "tools/rl/v420_eval_shoot.py",
+        "shoot_pulse_period": 48,
+        "aggregate": {
+          "n": 5,
+          "n_measured": 5,
+          "frames": [
+            1608,
+            1694,
+            1358,
+            1416,
+            2359
+          ],
+          "frames_stats": {
+            "n": 5,
+            "mean": 1687.0,
+            "min": 1358,
+            "max": 2359,
+            "sd": 399.8612259271959,
+            "ci_reportable": false,
+            "note": "descriptive only; n < 20 -> no confidence interval and no claim"
+          },
+          "deaths": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "deaths_mean": 1.0,
+          "clears": 0,
+          "clear_rate": 0.0,
+          "stop_reasons": {
+            "death_stop": 5
+          },
+          "note": "descriptive only: this block is not a development score and its clear_rate is not a pass rate"
+        },
+        "exit_code": 0
+      },
+      {
+        "path": ".tmp_v420_data/T06/dev-r4/R4-diag_first_death-1010-1011-1012-1013-1014.json",
+        "sha256": "82894b7cc5c0c12b9816269b7eba10aeaf3a63e709dab4be8085c21c15f4cd5a",
+        "ruler": "diag_first_death",
+        "seeds": [
+          1010,
+          1011,
+          1012,
+          1013,
+          1014
+        ],
+        "tool": "tools/rl/v420_eval_shoot.py",
+        "shoot_pulse_period": 48,
+        "aggregate": {
+          "n": 5,
+          "n_measured": 5,
+          "frames": [
+            1485,
+            1626,
+            1491,
+            1411,
+            1930
+          ],
+          "frames_stats": {
+            "n": 5,
+            "mean": 1588.6,
+            "min": 1411,
+            "max": 1930,
+            "sd": 206.0055824486317,
+            "ci_reportable": false,
+            "note": "descriptive only; n < 20 -> no confidence interval and no claim"
+          },
+          "deaths": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "deaths_mean": 1.0,
+          "clears": 0,
+          "clear_rate": 0.0,
+          "stop_reasons": {
+            "death_stop": 5
+          },
+          "note": "descriptive only: this block is not a development score and its clear_rate is not a pass rate"
+        },
+        "exit_code": 0
+      },
+      {
+        "path": ".tmp_v420_data/T06/dev-r4/R4-diag_first_death-1015-1016-1017-1018-1019.json",
+        "sha256": "a4bd940bf5fdc3f9e23bf2c0ad1b71efcf0f2ae5433ccd59a81a66ec0109d051",
+        "ruler": "diag_first_death",
+        "seeds": [
+          1015,
+          1016,
+          1017,
+          1018,
+          1019
+        ],
+        "tool": "tools/rl/v420_eval_shoot.py",
+        "shoot_pulse_period": 48,
+        "aggregate": {
+          "n": 5,
+          "n_measured": 5,
+          "frames": [
+            1356,
+            1981,
+            1360,
+            1945,
+            1845
+          ],
+          "frames_stats": {
+            "n": 5,
+            "mean": 1697.4,
+            "min": 1356,
+            "max": 1981,
+            "sd": 313.81252365066626,
+            "ci_reportable": false,
+            "note": "descriptive only; n < 20 -> no confidence interval and no claim"
+          },
+          "deaths": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "deaths_mean": 1.0,
+          "clears": 0,
+          "clear_rate": 0.0,
+          "stop_reasons": {
+            "death_stop": 5
+          },
+          "note": "descriptive only: this block is not a development score and its clear_rate is not a pass rate"
+        },
+        "exit_code": 0
+      },
+      {
+        "path": ".tmp_v420_data/T06/dev-r4/R4-s1n-1000-1001-1002-1003-1004.json",
+        "sha256": "bd07e89e2a921bb437a747962ee0962e30ef3490c60324a5cbbd1a84bf913a83",
+        "ruler": "s1n",
+        "seeds": [
+          1000,
+          1001,
+          1002,
+          1003,
+          1004
+        ],
+        "tool": "tools/rl/v420_eval_shoot.py",
+        "shoot_pulse_period": 48,
+        "aggregate": {
+          "n": 5,
+          "n_measured": 5,
+          "frames": [
+            3057,
+            3223,
+            2280,
+            2504,
+            3051
+          ],
+          "frames_stats": {
+            "n": 5,
+            "mean": 2823.0,
+            "min": 2280,
+            "max": 3223,
+            "sd": 407.23150663965083,
+            "ci_reportable": false,
+            "note": "descriptive only; n < 20 -> no confidence interval and no claim"
+          },
+          "deaths": [
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0
+          ],
+          "deaths_mean": 3.0,
+          "clears": 0,
+          "clear_rate": 0.0,
+          "stop_reasons": {
+            "game_over": 5
+          },
+          "note": "descriptive only: this block is not a development score and its clear_rate is not a pass rate"
+        },
+        "exit_code": 0
+      },
+      {
+        "path": ".tmp_v420_data/T06/dev-r4/R4-s1n-1005-1006-1007-1008-1009.json",
+        "sha256": "156b4e50355b2ed075bdf5b1817f7d9d3a8b7fe19cecd3c7aef5127f55223f3b",
+        "ruler": "s1n",
+        "seeds": [
+          1005,
+          1006,
+          1007,
+          1008,
+          1009
+        ],
+        "tool": "tools/rl/v420_eval_shoot.py",
+        "shoot_pulse_period": 48,
+        "aggregate": {
+          "n": 5,
+          "n_measured": 5,
+          "frames": [
+            3102,
+            3145,
+            2538,
+            2519,
+            3863
+          ],
+          "frames_stats": {
+            "n": 5,
+            "mean": 3033.4,
+            "min": 2519,
+            "max": 3863,
+            "sd": 551.2316210088097,
+            "ci_reportable": false,
+            "note": "descriptive only; n < 20 -> no confidence interval and no claim"
+          },
+          "deaths": [
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0
+          ],
+          "deaths_mean": 3.0,
+          "clears": 0,
+          "clear_rate": 0.0,
+          "stop_reasons": {
+            "game_over": 5
+          },
+          "note": "descriptive only: this block is not a development score and its clear_rate is not a pass rate"
+        },
+        "exit_code": 0
+      },
+      {
+        "path": ".tmp_v420_data/T06/dev-r4/R4-s1n-1010-1011-1012-1013-1014.json",
+        "sha256": "5c57b146a9fb278a748e65b7d54db2f2c1afbda951e65b475b1376ecf5141b6c",
+        "ruler": "s1n",
+        "seeds": [
+          1010,
+          1011,
+          1012,
+          1013,
+          1014
+        ],
+        "tool": "tools/rl/v420_eval_shoot.py",
+        "shoot_pulse_period": 48,
+        "aggregate": {
+          "n": 5,
+          "n_measured": 5,
+          "frames": [
+            3247,
+            2721,
+            2346,
+            2494,
+            3052
+          ],
+          "frames_stats": {
+            "n": 5,
+            "mean": 2772.0,
+            "min": 2346,
+            "max": 3247,
+            "sd": 375.9607692299823,
+            "ci_reportable": false,
+            "note": "descriptive only; n < 20 -> no confidence interval and no claim"
+          },
+          "deaths": [
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0
+          ],
+          "deaths_mean": 3.0,
+          "clears": 0,
+          "clear_rate": 0.0,
+          "stop_reasons": {
+            "game_over": 5
+          },
+          "note": "descriptive only: this block is not a development score and its clear_rate is not a pass rate"
+        },
+        "exit_code": 0
+      },
+      {
+        "path": ".tmp_v420_data/T06/dev-r4/R4-s1n-1015-1016-1017-1018-1019.json",
+        "sha256": "47d6a694c0a892d18453ecd116e2fad5a6acb81fcba3959f491c918139ef03c4",
+        "ruler": "s1n",
+        "seeds": [
+          1015,
+          1016,
+          1017,
+          1018,
+          1019
+        ],
+        "tool": "tools/rl/v420_eval_shoot.py",
+        "shoot_pulse_period": 48,
+        "aggregate": {
+          "n": 5,
+          "n_measured": 5,
+          "frames": [
+            2450,
+            3036,
+            2300,
+            2821,
+            2992
+          ],
+          "frames_stats": {
+            "n": 5,
+            "mean": 2719.8,
+            "min": 2300,
+            "max": 3036,
+            "sd": 329.14312996020436,
+            "ci_reportable": false,
+            "note": "descriptive only; n < 20 -> no confidence interval and no claim"
+          },
+          "deaths": [
+            3.0,
+            3.0,
+            3.0,
+            3.0,
+            3.0
+          ],
+          "deaths_mean": 3.0,
+          "clears": 0,
+          "clear_rate": 0.0,
+          "stop_reasons": {
+            "game_over": 5
+          },
+          "note": "descriptive only: this block is not a development score and its clear_rate is not a pass rate"
+        },
+        "exit_code": 0
+      }
+    ],
+    "arms": {
+      "diag_first_death": {
+        "n": 20,
+        "clears": 0,
+        "frames": {
+          "count": 20,
+          "mean": 1650.05,
+          "sd": 320.4040992904199,
+          "median": 1495.5,
+          "min": 1300.0,
+          "max": 2365.0,
+          "sum": 33001.0
+        },
+        "frames_list": [
+          {
+            "seed": 1000,
+            "frames": 1495,
+            "deaths": 1.0,
+            "stop_reason": "death_stop",
+            "stage_clear": false,
+            "score": 5605
+          },
+          {
+            "seed": 1001,
+            "frames": 2365,
+            "deaths": 1.0,
+            "stop_reason": "death_stop",
+            "stage_clear": false,
+            "score": 51446
+          },
+          {
+            "seed": 1002,
+            "frames": 1496,
+            "deaths": 1.0,
+            "stop_reason": "death_stop",
+            "stage_clear": false,
+            "score": 7434
+          },
+          {
+            "seed": 1003,
+            "frames": 1300,
+            "deaths": 1.0,
+            "stop_reason": "death_stop",
+            "stage_clear": false,
+            "score": 4776
+          },
+          {
+            "seed": 1004,
+            "frames": 1480,
+            "deaths": 1.0,
+            "stop_reason": "death_stop",
+            "stage_clear": false,
+            "score": 9429
+          },
+          {
+            "seed": 1005,
+            "frames": 1608,
+            "deaths": 1.0,
+            "stop_reason": "death_stop",
+            "stage_clear": false,
+            "score": 6644
+          },
+          {
+            "seed": 1006,
+            "frames": 1694,
+            "deaths": 1.0,
+            "stop_reason": "death_stop",
+            "stage_clear": false,
+            "score": 12361
+          },
+          {
+            "seed": 1007,
+            "frames": 1358,
+            "deaths": 1.0,
+            "stop_reason": "death_stop",
+            "stage_clear": false,
+            "score": 3077
+          },
+          {
+            "seed": 1008,
+            "frames": 1416,
+            "deaths": 1.0,
+            "stop_reason": "death_stop",
+            "stage_clear": false,
+            "score": 5891
+          },
+          {
+            "seed": 1009,
+            "frames": 2359,
+            "deaths": 1.0,
+            "stop_reason": "death_stop",
+            "stage_clear": false,
+            "score": 34129
+          },
+          {
+            "seed": 1010,
+            "frames": 1485,
+            "deaths": 1.0,
+            "stop_reason": "death_stop",
+            "stage_clear": false,
+            "score": 4668
+          },
+          {
+            "seed": 1011,
+            "frames": 1626,
+            "deaths": 1.0,
+            "stop_reason": "death_stop",
+            "stage_clear": false,
+            "score": 7145
+          },
+          {
+            "seed": 1012,
+            "frames": 1491,
+            "deaths": 1.0,
+            "stop_reason": "death_stop",
+            "stage_clear": false,
+            "score": 7547
+          },
+          {
+            "seed": 1013,
+            "frames": 1411,
+            "deaths": 1.0,
+            "stop_reason": "death_stop",
+            "stage_clear": false,
+            "score": 5333
+          },
+          {
+            "seed": 1014,
+            "frames": 1930,
+            "deaths": 1.0,
+            "stop_reason": "death_stop",
+            "stage_clear": false,
+            "score": 9100
+          },
+          {
+            "seed": 1015,
+            "frames": 1356,
+            "deaths": 1.0,
+            "stop_reason": "death_stop",
+            "stage_clear": false,
+            "score": 3446
+          },
+          {
+            "seed": 1016,
+            "frames": 1981,
+            "deaths": 1.0,
+            "stop_reason": "death_stop",
+            "stage_clear": false,
+            "score": 16617
+          },
+          {
+            "seed": 1017,
+            "frames": 1360,
+            "deaths": 1.0,
+            "stop_reason": "death_stop",
+            "stage_clear": false,
+            "score": 3232
+          },
+          {
+            "seed": 1018,
+            "frames": 1945,
+            "deaths": 1.0,
+            "stop_reason": "death_stop",
+            "stage_clear": false,
+            "score": 5810
+          },
+          {
+            "seed": 1019,
+            "frames": 1845,
+            "deaths": 1.0,
+            "stop_reason": "death_stop",
+            "stage_clear": false,
+            "score": 29719
+          }
+        ],
+        "stop_reasons": {
+          "death_stop": 20
+        },
+        "invalid": 0,
+        "errors": 0
+      },
+      "s1n": {
+        "n": 20,
+        "clears": 0,
+        "frames": {
+          "count": 20,
+          "mean": 2837.05,
+          "sd": 407.8925909960534,
+          "median": 2906.5,
+          "min": 2280.0,
+          "max": 3863.0,
+          "sum": 56741.0
+        },
+        "frames_list": [
+          {
+            "seed": 1000,
+            "frames": 3057,
+            "deaths": 3.0,
+            "stop_reason": "game_over",
+            "stage_clear": false,
+            "score": 45625
+          },
+          {
+            "seed": 1001,
+            "frames": 3223,
+            "deaths": 3.0,
+            "stop_reason": "game_over",
+            "stage_clear": false,
+            "score": 55024
+          },
+          {
+            "seed": 1002,
+            "frames": 2280,
+            "deaths": 3.0,
+            "stop_reason": "game_over",
+            "stage_clear": false,
+            "score": 16162
+          },
+          {
+            "seed": 1003,
+            "frames": 2504,
+            "deaths": 3.0,
+            "stop_reason": "game_over",
+            "stage_clear": false,
+            "score": 18040
+          },
+          {
+            "seed": 1004,
+            "frames": 3051,
+            "deaths": 3.0,
+            "stop_reason": "game_over",
+            "stage_clear": false,
+            "score": 31723
+          },
+          {
+            "seed": 1005,
+            "frames": 3102,
+            "deaths": 3.0,
+            "stop_reason": "game_over",
+            "stage_clear": false,
+            "score": 37394
+          },
+          {
+            "seed": 1006,
+            "frames": 3145,
+            "deaths": 3.0,
+            "stop_reason": "game_over",
+            "stage_clear": false,
+            "score": 32125
+          },
+          {
+            "seed": 1007,
+            "frames": 2538,
+            "deaths": 3.0,
+            "stop_reason": "game_over",
+            "stage_clear": false,
+            "score": 24589
+          },
+          {
+            "seed": 1008,
+            "frames": 2519,
+            "deaths": 3.0,
+            "stop_reason": "game_over",
+            "stage_clear": false,
+            "score": 23106
+          },
+          {
+            "seed": 1009,
+            "frames": 3863,
+            "deaths": 3.0,
+            "stop_reason": "game_over",
+            "stage_clear": false,
+            "score": 48301
+          },
+          {
+            "seed": 1010,
+            "frames": 3247,
+            "deaths": 3.0,
+            "stop_reason": "game_over",
+            "stage_clear": false,
+            "score": 28491
+          },
+          {
+            "seed": 1011,
+            "frames": 2721,
+            "deaths": 3.0,
+            "stop_reason": "game_over",
+            "stage_clear": false,
+            "score": 32447
+          },
+          {
+            "seed": 1012,
+            "frames": 2346,
+            "deaths": 3.0,
+            "stop_reason": "game_over",
+            "stage_clear": false,
+            "score": 15681
+          },
+          {
+            "seed": 1013,
+            "frames": 2494,
+            "deaths": 3.0,
+            "stop_reason": "game_over",
+            "stage_clear": false,
+            "score": 15493
+          },
+          {
+            "seed": 1014,
+            "frames": 3052,
+            "deaths": 3.0,
+            "stop_reason": "game_over",
+            "stage_clear": false,
+            "score": 21635
+          },
+          {
+            "seed": 1015,
+            "frames": 2450,
+            "deaths": 3.0,
+            "stop_reason": "game_over",
+            "stage_clear": false,
+            "score": 13293
+          },
+          {
+            "seed": 1016,
+            "frames": 3036,
+            "deaths": 3.0,
+            "stop_reason": "game_over",
+            "stage_clear": false,
+            "score": 34898
+          },
+          {
+            "seed": 1017,
+            "frames": 2300,
+            "deaths": 3.0,
+            "stop_reason": "game_over",
+            "stage_clear": false,
+            "score": 7838
+          },
+          {
+            "seed": 1018,
+            "frames": 2821,
+            "deaths": 3.0,
+            "stop_reason": "game_over",
+            "stage_clear": false,
+            "score": 12963
+          },
+          {
+            "seed": 1019,
+            "frames": 2992,
+            "deaths": 3.0,
+            "stop_reason": "game_over",
+            "stage_clear": false,
+            "score": 53047
+          }
+        ],
+        "stop_reasons": {
+          "game_over": 20
+        },
+        "invalid": 0,
+        "errors": 0
+      }
+    },
+    "r3_reference": {
+      "r3_own_dev_diag": 1589.2,
+      "r3_own_dev_s1n": 2891.6,
+      "instrument": "tools/rl/v410_student_eval.py (the older evaluator)",
+      "t08_same_checkpoint_diag": 1597.9,
+      "t08_same_checkpoint_s1n": 2765.1,
+      "source": [
+        "T06/REWARD_R3.md 8.2",
+        "T08/CLEAR_REMEASURE.md 3"
+      ],
+      "note": "the pre-registered 1589.2 is the stricter of the two r3 numbers and it was measured with an evaluator that never releases SHOOT; both are reported"
+    },
+    "four_arm_context": {
+      "D2_diag": 1757.5,
+      "D3_diag": 1707.5,
+      "R0_diag": 1650.4,
+      "R3_diag": 1597.9,
+      "D2_s1n": 3010.3,
+      "D3_s1n": 2943.8,
+      "R0_s1n": 2824.3,
+      "R3_s1n": 2765.1,
+      "clears_total_160": 0,
+      "source": "T08/CLEAR_REMEASURE.md"
+    }
+  },
+  "limits": [
+    "single seed (0), 50,000 frames, 49 updates: not the 1M tier and not three seeds",
+    "20 dev seeds per ruler, no confidence interval is claimed for a 20-episode mean",
+    "0 clears in the 40 dev episodes unless p3 says otherwise",
+    "the power term's size is set by the declared bound, not by the data: one full scale is worth 1.152e-05 reward",
+    "the observation readability probe says whether the term COULD be learned; it does not change the reward"
+  ],
+  "changed_files": [
+    "touhou_rl/v420/rl.py",
+    "configs/v420/rl-engine-r4-pilot.json",
+    "configs/v420/rl-engine-r4-aloudit.json",
+    "tests/test_v420_rl.py (append only)",
+    "Document/Update/Alpha/v4.2.0/evidence/T06/REWARD_R4.md",
+    "Document/Update/Alpha/v4.2.0/evidence/T06/reward_r4.json"
+  ]
+}

@@ -1,0 +1,53 @@
+# T01 pytest — WSL asset host (acceptance run)
+
+- host: WSL2 Ubuntu, python `/root/v400-venv/bin/python` 3.10.12
+- cwd: `/mnt/d/WorkShop/Touhou_RL`
+- command (verbatim):
+
+```bash
+cd /mnt/d/WorkShop/Touhou_RL && PYTHONPATH=/mnt/d/WorkShop/Touhou_RL /root/v400-venv/bin/python -m pytest -p no:cacheprovider --basetemp /mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/tests/T01 -q tests/test_v420_contracts.py tests/test_v420_replay_audit.py tests/test_v420_eval.py
+```
+
+- statistics line: `107 passed in 6.24s`
+- exit code: **0**
+- stdout tail:
+
+```text
+........................................................................ [ 67%]
+...................................                                      [100%]
+107 passed in 6.24s
+```
+
+- stderr tail:
+
+```text
+(empty)
+```
+
+## Windows cross-check (same test files, editor host)
+
+- command (verbatim):
+
+```powershell
+$env:PYTHONPATH='D:\WorkShop\Touhou_RL'; python -m compileall -q touhou_rl\v420
+$env:PYTHONPATH='D:\WorkShop\Touhou_RL'; python -m pytest -p no:cacheprovider --basetemp .tmp_v420_pytest_win -q tests/test_v420_contracts.py tests/test_v420_replay_audit.py tests/test_v420_eval.py
+```
+
+- python: 3.12.10 (numpy 2.5.4, pytest 9.1.1)
+- `compileall_exit_code=0`
+- statistics line: `107 passed in 1.14s`
+- exit code: **0**
+- stdout tail:
+
+```text
+........................................................................ [ 67%]
+...................................                                      [100%]
+107 passed in 1.14s
+pytest_exit_code=0
+```
+
+## What these tests do and do not prove
+
+- They prove the contract functions, the legacy-shard audit and the summary/gate arithmetic behave as specified on both hosts.
+- The real 3,300-row shard test is *not* skipped on either host (the shard is read from `.tmp_v410_s1c`), so the §0 counts are re-measured by every run.
+- They do **not** prove any engine capability: no episode was run, no checkpoint was evaluated, and `audit-time --execute` was not executed (T02).

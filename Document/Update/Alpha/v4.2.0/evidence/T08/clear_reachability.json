@@ -1,0 +1,509 @@
+{
+  "schema": "v420-clear-reachability/1",
+  "task": "T08 — is stage_clear reachable through the frozen evaluator's action channel (tools/rl/v410_student_eval.py)?",
+  "verdict": {
+    "stage_clear_reachable_through_evaluator_channel": false,
+    "one_line": "the evaluator's action channel is mechanically incapable of producing a SHOOT rising edge, so stage_clear cannot be reported; but no existing 0/N number is explained by it, because every evaluated episode ended in a death at <= 4964 frames, 8,000+ frames short of the clear",
+    "mechanism": "cand_to_mask ORs BTN_SHOOT into every mask and the evaluator has no release path, so SHOOT is held on every frame of every episode; the engine needs a SHOOT|ENTER rising edge to leave a wait state, and neither the evaluator nor the harness provides one",
+    "impact_on_existing_zero_clear_counts": "none measured: 1285 episode records, 1 clears, and the only record at or above 12,000 frames is the reward audit's own clear replay",
+    "capability_claim": "not_a_capability_result"
+  },
+  "q1_channel": {
+    "question": "which SHOOT state does the evaluator actually send?",
+    "answer": "every frame carries BTN_SHOOT (0x0001); the bit is decided by touhou_rl/v400/gym/actions.py::cand_to_mask, which ORs it unconditionally; the default is 'shoot on'; there is no release path in either evaluator",
+    "wire": "STEP <mask> <frames> on the harness stdin pipe; the mask is sent verbatim, the engine executes <frames> frames with it",
+    "citations": [
+      {
+        "file": "tools/rl/v410_student_eval.py",
+        "lines": [
+          967
+        ],
+        "text": "mask = gym_actions.cand_to_mask(cand, 0)",
+        "role": "the only mask the decision becomes"
+      },
+      {
+        "file": "tools/rl/v410_student_eval.py",
+        "lines": [
+          941
+        ],
+        "text": "warm = client.step(gym_actions.cand_to_mask(0, 0), 1)",
+        "role": "the pixel-warmup mask, same constructor"
+      },
+      {
+        "file": "tools/rl/v410_student_eval.py",
+        "lines": [
+          975
+        ],
+        "text": "step_reply = client.step(mask, want)",
+        "role": "the only STEP call in the loop"
+      },
+      {
+        "file": "touhou_rl/v400/gym/actions.py",
+        "lines": [
+          70
+        ],
+        "text": "mask = _MOVE_BITS[move] | BTN_SHOOT",
+        "role": "BTN_SHOOT is ORed unconditionally; `bomb` is the only tunable bit"
+      },
+      {
+        "file": "touhou_rl/v400/gym/actions.py",
+        "lines": [
+          58
+        ],
+        "text": "def cand_to_mask(cand: int, bomb: int = 0) -> int:",
+        "role": "there is no `shoot` argument to clear"
+      },
+      {
+        "file": "touhou_rl/v400/gym/protocol.py",
+        "lines": [
+          694
+        ],
+        "text": "fields = _parse(self.request(f\"STEP {mask} {frames}\"))",
+        "role": "the mask reaches the engine unmodified"
+      },
+      {
+        "file": "tools/rl/v400_student_eval.py",
+        "lines": [
+          168,
+          169
+        ],
+        "text": "argv = [str(self.binary), \"--data-dir\", str(self.data_dir), \"--rl-control\", \"0,1\", \"--rl-role\", \"env\"]",
+        "role": "the engine role/control the evaluator starts"
+      },
+      {
+        "file": "touhou_rl/v400/gym/actions.py",
+        "lines": [
+          86
+        ],
+        "text": "if not mask & BTN_SHOOT:",
+        "role": "the decoder refuses a mask without SHOOT at all: 'not representable as a candidate'"
+      },
+      {
+        "file": "Document/Update/Alpha/v4.0.0/10-P0-训练场.md",
+        "lines": [
+          235,
+          237
+        ],
+        "text": "- **智能体掩码的白名单**：`SHOOT|BOMB|FOCUS|UP|DOWN|LEFT|RIGHT`，即 `0x00F7`。MENU(0x8)、SKIP(0x100)、Q(0x200)、S(0x400)、HOME(0x800，Linux 上截图会污染下一帧)、ENTER(0x1000)、D(0x2000)、RESET(0x4000) 一律清掉。 | - **换面**：`GameManager.cpp:381-389` 需要 `g_CurFrameInput` 中出现 `SHOOT|ENTER` 的**上升沿**才会进入下一面；按住 SHOOT 不算上升沿。当处于等待换面的状态时，harness 每隔一帧注入一次 ENTER 脉冲。",
+        "role": "the agent mask whitelist (0x00F7) strips ENTER, and the transition needs a SHOOT|ENTER rising edge; the doc says the harness injects an ENTER pulse, the measurement below shows it does not happen"
+      }
+    ],
+    "mask_enumeration": {
+      "candidates": [
+        {
+          "cand": 0,
+          "bomb": 0,
+          "mask": 1,
+          "shoot": 1
+        },
+        {
+          "cand": 1,
+          "bomb": 0,
+          "mask": 17,
+          "shoot": 1
+        },
+        {
+          "cand": 2,
+          "bomb": 0,
+          "mask": 145,
+          "shoot": 1
+        },
+        {
+          "cand": 3,
+          "bomb": 0,
+          "mask": 129,
+          "shoot": 1
+        },
+        {
+          "cand": 4,
+          "bomb": 0,
+          "mask": 161,
+          "shoot": 1
+        },
+        {
+          "cand": 5,
+          "bomb": 0,
+          "mask": 33,
+          "shoot": 1
+        },
+        {
+          "cand": 6,
+          "bomb": 0,
+          "mask": 97,
+          "shoot": 1
+        },
+        {
+          "cand": 7,
+          "bomb": 0,
+          "mask": 65,
+          "shoot": 1
+        },
+        {
+          "cand": 8,
+          "bomb": 0,
+          "mask": 81,
+          "shoot": 1
+        },
+        {
+          "cand": 9,
+          "bomb": 0,
+          "mask": 5,
+          "shoot": 1
+        },
+        {
+          "cand": 10,
+          "bomb": 0,
+          "mask": 21,
+          "shoot": 1
+        },
+        {
+          "cand": 11,
+          "bomb": 0,
+          "mask": 149,
+          "shoot": 1
+        },
+        {
+          "cand": 12,
+          "bomb": 0,
+          "mask": 133,
+          "shoot": 1
+        },
+        {
+          "cand": 13,
+          "bomb": 0,
+          "mask": 165,
+          "shoot": 1
+        },
+        {
+          "cand": 14,
+          "bomb": 0,
+          "mask": 37,
+          "shoot": 1
+        },
+        {
+          "cand": 15,
+          "bomb": 0,
+          "mask": 101,
+          "shoot": 1
+        },
+        {
+          "cand": 16,
+          "bomb": 0,
+          "mask": 69,
+          "shoot": 1
+        },
+        {
+          "cand": 17,
+          "bomb": 0,
+          "mask": 85,
+          "shoot": 1
+        }
+      ],
+      "candidates_whose_mask_clears_shoot": [],
+      "note": "all 18 masks the evaluator can emit carry 0x0001; a release would have to come from code that does not exist"
+    },
+    "release_paths_searched": {
+      "grep": "grep -nE 'shoot|SHOOT|pulse|BTN_' on tools/rl/v410_student_eval.py and tools/rl/v400_student_eval.py",
+      "exit_codes": [
+        1,
+        1
+      ],
+      "matches": 0,
+      "release_due_call_sites": "grep -rn release_due --include=*.py touhou_rl tools -> 10 hits, all in teacher/collector/training code; none in either evaluator"
+    },
+    "harness_enter_pulse": {
+      "documented": "10-P0 §4.2 line 237 (the harness injects an ENTER pulse every other frame while waiting for the stage transition)",
+      "observed": "no ENTER bit ever appears on the wire: the masks are the 18 candidate masks (whitelist 0x00F7), and the evaluation holds for 15,564 frames",
+      "source_of_the_doubt": "touhou_rl/v400/teacher/shoot.py docstring: rlharness.cpp has no 0x1000 path"
+    }
+  },
+  "q2_experiment": {
+    "question": "does the evaluator's channel clear the recorded Stage-1 tape, and does a SHOOT pulse clear it?",
+    "input": {
+      "shard": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T04/dataset/d1-s0d1-n3300-seed12-shard/slots.jsonl",
+      "shard_sha256": "f759de7dacc78343dec8825da5de14942e749b8a5a2c5319304e513d1618b7b9",
+      "schedule_decisions": 6660,
+      "seed": 12,
+      "stage": 0,
+      "difficulty": "normal",
+      "engine_sha256": "691bfd77b7eca3361aa8bb7af0977556a70cc73a070b29a2447222ba7a568ef6",
+      "loader": "touhou_rl.v420.rl.load_clear_schedule (the audit's own)"
+    },
+    "channel": {
+      "client": "tools/rl/v400_student_eval.py::EnvHarnessClient",
+      "client_used_by": "tools/rl/v410_student_eval.py (line 222)",
+      "engine_argv": "/root/Touhou_RL/third_party/th08-rl/build/rl_v3/th08-modern --data-dir /mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T08/clearcheck-eval --rl-control 0,1 --rl-role env",
+      "mask_rule": "gym_actions.cand_to_mask(cand, 0)  [BTN_SHOOT always ORed]",
+      "decision_steps": "consecutive -> (2, 1): two STEP commands of 1 frame",
+      "state_after_every_frame": true,
+      "shoot_release": "none: every frame carries cand_to_mask(cand, 0)"
+    },
+    "runs": [
+      {
+        "mode": "eval",
+        "shoot_release": "none",
+        "stage_clear": false,
+        "frames": 15564,
+        "score_final": 163945,
+        "score_at_frame_13195": 141379,
+        "score_at_frame_13272": 141659,
+        "deaths": 3.0,
+        "stop_reason": "game_over",
+        "shoot_frames": 15564,
+        "no_shoot_frames": 0,
+        "shoot_rising_edges": 1,
+        "decisions": 7782,
+        "longest_constant_score": {
+          "score": 141379,
+          "floor_frame": 5058,
+          "until_frame": 13245,
+          "frames": 8187
+        },
+        "mask_trace_sha256": "92cea74d6f2b51663ef692cc0f360aec06a64923044120fc8b5d390cd1feba10"
+      },
+      {
+        "mode": "pulse",
+        "shoot_release": "release_due(i, 48) -> last frame of that decision drops SHOOT|BOMB",
+        "stage_clear": true,
+        "frames": 13195,
+        "score_final": 2631430,
+        "score_at_frame_13195": 2631430,
+        "deaths": 0.0,
+        "stop_reason": "stage_clear",
+        "shoot_frames": 13058,
+        "no_shoot_frames": 137,
+        "shoot_rising_edges": 138,
+        "releases_applied": 137,
+        "decisions": 6598,
+        "longest_constant_score": {
+          "score": 133676,
+          "floor_frame": 5058,
+          "until_frame": 6657,
+          "frames": 1599
+        },
+        "mask_trace_sha256": "66c81344b00f8766f7d9e860d1874b1141c699122f491ed1a8ed0aea9f179924"
+      }
+    ],
+    "three_numbers": {
+      "stage_clear": {
+        "eval_channel": false,
+        "pulse_channel": true
+      },
+      "frames": {
+        "eval_channel": 15564,
+        "pulse_channel": 13195
+      },
+      "score": {
+        "eval_channel_at_stop": 163945,
+        "eval_channel_at_frame_13195": 141379,
+        "pulse_channel": 2631430
+      }
+    },
+    "reproduces_the_documented_pair": {
+      "documented_pulse_frames": 13195,
+      "measured_pulse_frames": 13195,
+      "documented_pulse_score": 2631430,
+      "measured_pulse_score": 2631430,
+      "documented_pulse_decisions": 6598,
+      "measured_pulse_decisions": 6598,
+      "documented_no_pulse_score_plateau": 141379,
+      "measured_no_pulse_score_at_frame_13195": 141379,
+      "documented_no_pulse_frames": 13272,
+      "note": "the three pulse numbers match RL_AUDIT.md §4/§5.1 and reward_r3.json's clear class exactly; the no-pulse score plateau matches 141,379 but the frame at which the earlier ad-hoc measurement stopped (13,272) is a horizon choice, not a mechanism difference — this run continued to 15,564 frames and never cleared"
+    },
+    "first_score_divergence_frame": 2044,
+    "determinism": {
+      "pairs": [
+        {
+          "mode": "eval",
+          "run1": {
+            "frames": 15564,
+            "score": 163945,
+            "stop_reason": "game_over",
+            "stage_clear": false,
+            "mask_trace_sha256": "92cea74d6f2b51663ef692cc0f360aec06a64923044120fc8b5d390cd1feba10"
+          },
+          "run2": {
+            "frames": 15564,
+            "score": 163945,
+            "stop_reason": "game_over",
+            "stage_clear": false,
+            "mask_trace_sha256": "92cea74d6f2b51663ef692cc0f360aec06a64923044120fc8b5d390cd1feba10"
+          }
+        },
+        {
+          "mode": "pulse",
+          "run1": {
+            "frames": 13195,
+            "score": 2631430,
+            "stop_reason": "stage_clear",
+            "stage_clear": true,
+            "mask_trace_sha256": "66c81344b00f8766f7d9e860d1874b1141c699122f491ed1a8ed0aea9f179924"
+          },
+          "run2": {
+            "frames": 13195,
+            "score": 2631430,
+            "stop_reason": "stage_clear",
+            "stage_clear": true,
+            "mask_trace_sha256": "66c81344b00f8766f7d9e860d1874b1141c699122f491ed1a8ed0aea9f179924"
+          }
+        }
+      ],
+      "identical": true
+    }
+  },
+  "q3_fix": {
+    "status": "proposed only — tools/** is read-only for this task",
+    "where": "tools/rl/v410_student_eval.py::run_episode (the STEP loop at line 975) and tools/rl/v400_student_eval.py::run_episode (the same loop at line 511)",
+    "rule": "import release_due from touhou_rl.v400.teacher.shoot and BTN_SHOOT|BTN_BOMB from touhou_rl.spec; at decision i, if release_due(i, 48) and the decision has more than one frame, the last frame must carry mask & ~(BTN_SHOOT|BTN_BOMB). 48 decisions x 2 frames = the 96-frame period already frozen in configs/v420/rl-engine-{audit,pilot}.json rollout.shoot_pulse_period; the teacher default of 24 is for 4-frame decisions",
+    "must_also": [
+      "record shoot_pulse_period in the episode identity so a record states which channel produced it",
+      "refuse to merge summaries with different shoot_pulse_period values",
+      "re-run (never mix) any row that predates the fix if it is to be compared with post-fix rows"
+    ],
+    "minimal_verification": {
+      "what": "the `pulse` mode of .tmp_v420_clearcheck/replay_clear.py is that patch executed outside tools/: same client, same decision_steps, same mask, only the release frame differs",
+      "expected": {
+        "stage_clear": true,
+        "frames": 13195,
+        "score": 2631430
+      },
+      "measured": {
+        "stage_clear": true,
+        "frames": 13195,
+        "score": 2631430
+      },
+      "passed": true
+    },
+    "not_done": [
+      "no file under tools/ was modified",
+      "no evaluator re-run of any policy",
+      "no gate, no confirm split, no training"
+    ]
+  },
+  "impact": {
+    "method": "scanned every episode record the frozen evaluator wrote (87 files, per-shard and merged, confirm seeds skipped) and compared each episode's frame count with the 13,195 frames a clear needs",
+    "scan_scope": {
+      "included": [
+        "v4.1.0 WP04/WP05 evaluator summaries",
+        "v4.2.0 T06 dev* evaluator summaries and T06 evidence JSONs",
+        ".tmp_v410_wp04_eval_arms, .tmp_v410_wp05_eval20"
+      ],
+      "excluded_on_purpose": [
+        "teacher S1N summaries (G410-1, tools/rl/v400_teacher.py): a different channel that already applies release_due at tools/rl/v400_teacher.py:442, and those files carry confirm-split seeds 61000-61499, which this task must not read",
+        "training-side Dagger/RL rollouts (GameEnv2F): they already run with shout_pulse_period=48"
+      ],
+      "note": "no number from an excluded file is used anywhere in this document or in the JSON"
+    },
+    "scan_totals": {
+      "files": 87,
+      "episodes": 1285,
+      "clears": 1,
+      "episodes_at_or_above_12000_frames": 1,
+      "deepest_episode_frames": 13195,
+      "files_missing_or_skipped": 1
+    },
+    "deepest_non_clear_episode_frames": 4964,
+    "deepest_non_clear_episode": {
+      "label": "v420 T06 dev/merged-R0.json",
+      "frames_max": 4964,
+      "stop_reasons": {
+        "death_stop": 20,
+        "game_over": 20
+      }
+    },
+    "episodes_at_or_above_12000_frames": [
+      {
+        "label": "v420 T06 reward_r3",
+        "episodes": 66,
+        "frames_max": 13195,
+        "stop_reasons": {
+          "cap": 1,
+          "death_stop": 20,
+          "first_death": 1,
+          "game_over": 43,
+          "stage_clear": 1
+        }
+      }
+    ],
+    "rows_requiring_retest_because_of_this_bug": [],
+    "why_no_row_qualifies": "an episode can only be a false negative from the missing release if it reached the wait state; the deepest evaluator episode is 4964 frames, i.e. 8231 frames short of the clear length, and every one of them ended in death_stop / game_over",
+    "affected_numbers": [
+      {
+        "file": "Document/Update/Alpha/v4.1.0/evidence/WP04/EVALARMS.md",
+        "number": "0/80 clears (B0/B1/B2/B3, 20 dev seeds each)",
+        "measured_frames": "743-3,021",
+        "needs_retest": false,
+        "why": "all 80 episodes ended in death_stop at <= 3,021 frames"
+      },
+      {
+        "file": "Document/Update/Alpha/v4.1.0/evidence/WP05/EVAL_DAGGER.md",
+        "number": "0/20 clears (DAgger checkpoint, 20 dev seeds)",
+        "measured_frames": "743-4,048",
+        "needs_retest": false,
+        "why": "all 20 episodes ended in death_stop at <= 4,048 frames"
+      },
+      {
+        "file": "Document/Update/Alpha/v4.2.0/evidence/T06/RL_PILOT2.md",
+        "number": "R0 0/20 and R2 0/20 in both proxies (s1n / diag_first_death)",
+        "measured_frames": "733-4,964",
+        "needs_retest": false,
+        "why": "76 of 80 episodes ended in game_over/death_stop at <= 4,964 frames"
+      },
+      {
+        "file": "Document/Update/Alpha/v4.2.0/evidence/T06/*.json (r2_collapse, r2_kl_p3, rl_kl_anchor, advnorm_off, dev-kl, dev-r3, dev-r3b200)",
+        "number": "0 clears in every dev round",
+        "measured_frames": "816-4,701",
+        "needs_retest": false,
+        "why": "same bound"
+      },
+      {
+        "file": "Document/Update/Alpha/v4.2.0/evidence/T06/RL_AUDIT.md",
+        "number": "clear class 13,195 frames / 2,631,430 score",
+        "measured_frames": "13,195",
+        "needs_retest": false,
+        "why": "it was replayed through the training env (GameEnv2F, shoot_pulse_period=48), not the evaluator, so it already has the pulse; the evaluator-channel pulse run reproduces it exactly"
+      }
+    ],
+    "what_would_be_affected": "any future evaluator row whose policy survives to the wait state (~5,000+ frames on this tape, 13,195 for the clear): such a row would be reported as frame_cap/game_over with no clear even though the policy reached the stage end",
+    "positive_control": {
+      "channel": "the teacher's own runner tools/rl/v400_teacher.py, which applies release_due at line 442",
+      "already_published": "AGENTS.md §8.1: G410-1 teacher 100/100 on S1N; no number is re-read from the confirm-seed artifacts by this task",
+      "reading": "the only difference between the channel that clears 100/100 and the channel that never clears is the SHOOT release, which is this task's finding stated the other way round"
+    }
+  },
+  "cannot_claim": [
+    "this task did not re-measure any capability number: no policy, no checkpoint, no dev seed was evaluated here",
+    "the 0/N counts are unchanged and are still valid negative results for the reason they were reported (the policies die at 733-4,964 frames)",
+    "the recorded tape is a teacher recording, not a policy: replaying it through the evaluator channel proves the channel is broken, not that any student could clear",
+    "the fix, once applied, would not make any policy clear: it only makes a clear *reportable*",
+    "the experiment did not separate a dialogue-gated stall from the end-of-stage wait: it measured that the playfield stops scoring at frame 5,058 on both channels and that only the pulsed channel resumes and clears",
+    "no gate, no Wilson interval, no development score, no confirm split (60000-60199) and no corpus seed (1-20) was touched"
+  ],
+  "artifacts": {
+    "scripts": [
+      "32_masks.py",
+      "40_analyze.py",
+      "45_gapcheck.py",
+      "50_emit_evidence.py",
+      "replay_clear.py",
+      "scan_existing_evals.py",
+      "00_setup_data.sh",
+      "10_replay.sh",
+      "20_full.sh",
+      "21_repeat.sh",
+      "30_evidence_greps.sh",
+      "35_inventory.sh",
+      "60_blame.sh",
+      "99_verify.sh"
+    ],
+    "runs": {
+      "clear_eval.json": "7458106d632d9c34bdadd1839f70d3a66e5cd6ae69e76386e894f105c391a140",
+      "clear_pulse.json": "43f41a3ba5120fff883dca6ce425a32466debb0a7d01a31e653ac68a1f4bbf22",
+      "clear_eval_run1.json": "26c09032cd14afecb0ea773f4cc499ffca30c5b5bb4733f952a8b3f1dfbf888b",
+      "clear_pulse_run1.json": "238212d2c682ebaf400406c75b077c0012900bf00e1c7304c00986eb595ae8cd"
+    },
+    "scan": "existing_evals_scan.json",
+    "analysis": "analysis.json"
+  }
+}

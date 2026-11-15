@@ -1,0 +1,1082 @@
+{
+  "schema": "v420-rebuild-2f-evidence/1",
+  "created_at": "2026-11-13T17:59:03+0800",
+  "task": "T02c",
+  "work_package": "WP420-01 (G420-0 L1 leg: time/action index consistency)",
+  "method": {
+    "replay": "original per-frame masks (step_frames) through the rl_v3 engine",
+    "capture": "encode_planes_v3(shm.pixels()) after every single frame",
+    "slots": "two two-frame slots per legacy four-frame block (frames 4i and 4i+2)",
+    "labels": "slot 0 keeps the teacher's own scores/verified_mask (label_source=teacher_slot0); slot 1 is the executed candidate decoded from step_frames[2] (label_source=executed_slot1, label_verified=false, no score vector)",
+    "forbidden": [
+      "copying the previous label",
+      "interpolating logits",
+      "shifting slot 0's scores onto slot 1",
+      "padding the cold start"
+    ],
+    "data_dir": "private copy of /root/v400-data/s1c/<shard>/env per run (score.dat/th08.cfg copied, th08.dat/thbgm.dat symlinked)",
+    "role": "env (software rendering under xvfb); shadow cannot publish pixels"
+  },
+  "totals": {
+    "decisions": 9898,
+    "frames": 39592,
+    "slots_expected": 19796,
+    "slots_written": 19772,
+    "slots_cold_start_dropped": 24,
+    "slots_with_teacher_label": 9886,
+    "hash_checks": 9898,
+    "frame_hashes": 39592,
+    "legacy_play_compared": 9886,
+    "legacy_play_matches": 9886,
+    "legacy_hud_compared": 9886,
+    "legacy_hud_matches": 9886,
+    "self_check_violations": 0,
+    "self_check_unexplained_diffs": 0,
+    "shards": 3,
+    "seeds": [
+      10,
+      11,
+      12
+    ],
+    "label_source_counts": {
+      "executed_slot1": 9886,
+      "teacher_slot0": 9886
+    },
+    "verified_label_coverage": 0.499394,
+    "self_check_passed": true,
+    "wall_s": 688.681,
+    "frames_per_second_mean": 57.55
+  },
+  "g420_0_l1_leg": {
+    "criterion": [
+      "every two-frame slot has its own four consecutive rendered frames (d-4..d-1)",
+      "every two-frame slot has its own HUD of frame d-1",
+      "every two-frame slot has its own executed action",
+      "every two-frame slot has eight real executed history actions (d-16..d-2), interleaved a0,a1",
+      "slot span / history assertions: 0 violations",
+      "HASH rebuild: 0 mismatches (hash_post per decision + reset hash)"
+    ],
+    "verdict": "pass (for the rebuilt corpus of seeds 10, 11, 12)",
+    "evidence": {
+      "slots_written": 19772,
+      "slots_expected": 19796,
+      "slots_with_own_obs": 19772,
+      "slots_with_own_hud": 19772,
+      "slots_with_executed_action": 19772,
+      "hash_checks": 9898,
+      "hash_post_equal": 9898,
+      "frame_hashes": 39592,
+      "self_check_violations": 0,
+      "unexplained_diffs": 0,
+      "legacy_slot0_play_bytes_equal": 9886,
+      "legacy_slot0_play_compared": 9886
+    }
+  },
+  "boundaries": [
+    "slot 1's target is an executed (behaviour) action, not the teacher's 18-way ranking: usable as a BC behaviour target, must never be counted into G420-1's verified labels",
+    "verified-label coverage stays 50% (slot 0 only): replaying masks cannot manufacture a second score vector",
+    "the eight slots at decision frames 0..14 are excluded, not padded: their stack or eight-decision history starts before frame 0",
+    "no wall-clock timestamps exist for the original renders; the rebuild records logical frame indices only",
+    "contracts.LABEL_SOURCES does not name 'executed_slot1' yet, so contracts.build_slot_record() cannot express slot 1's honest pair; the rebuild validates the record field by field instead"
+  ],
+  "assets_readonly": {
+    "source_env_score_dat_unchanged": true,
+    "legacy_labels_mtime_unchanged": true,
+    "evidence": [
+      {
+        "seed": 10,
+        "score_dat_before": "d7089834a69881151a0524fcea36b75e3a7a392da2ffa48b4279522fd81ae786",
+        "score_dat_after": "d7089834a69881151a0524fcea36b75e3a7a392da2ffa48b4279522fd81ae786",
+        "labels_sha256": "011f6c1cc3db232ca296177b9afc445a4922e94b1d5513f4e5746350cff622a0"
+      },
+      {
+        "seed": 11,
+        "score_dat_before": "832f181377bf6bfc256229723fd31923a88ed139d00d02fdd5e67d22f3d4b1b6",
+        "score_dat_after": "832f181377bf6bfc256229723fd31923a88ed139d00d02fdd5e67d22f3d4b1b6",
+        "labels_sha256": "bc663759e3746742ee3e677ba716c286fe1633da04fdbf8047291d0977db149a"
+      },
+      {
+        "seed": 12,
+        "score_dat_before": "165fbd25873d99fc621f73c77c673267a18ffb40be38beaaa95120d205317036",
+        "score_dat_after": "165fbd25873d99fc621f73c77c673267a18ffb40be38beaaa95120d205317036",
+        "labels_sha256": "f79f8ab6cef1ca4ac5c9489e4eeca6f70b55a97d4de847bca66a923b0033d028"
+      }
+    ]
+  },
+  "disk_usage": {
+    "total_bytes": 1048346825,
+    "per_shard_bytes": {
+      "10": {
+        "slots.jsonl": 5984901,
+        "play96x112.npy": 283508864,
+        "hud.npy": 59064448,
+        "act_hist.npy": 949376,
+        "meta.json": 10760
+      },
+      "11": {
+        "slots.jsonl": 5987121,
+        "play96x112.npy": 283508864,
+        "hud.npy": 59064448,
+        "act_hist.npy": 949376,
+        "meta.json": 10760
+      },
+      "12": {
+        "slots.jsonl": 5982905,
+        "play96x112.npy": 283336832,
+        "hud.npy": 59028608,
+        "act_hist.npy": 948800,
+        "meta.json": 10762
+      }
+    }
+  },
+  "shards": [
+    {
+      "seed": 10,
+      "shard_key": "d1-s0d1-n3300-seed10-shard",
+      "slot_dir": ".tmp_v420_data/T02c/rebuild/d1-s0d1-n3300-seed10-shard/2f",
+      "report": {
+        "decisions": 3300,
+        "frames": 13200,
+        "slots_expected": 6600,
+        "slots_written": 6592,
+        "slots_cold_start_dropped": 8,
+        "cold_start_decision_frames": [
+          0,
+          2,
+          4,
+          6,
+          8,
+          10,
+          12,
+          14
+        ],
+        "slots_with_own_obs": 6592,
+        "slots_with_own_hud": 6592,
+        "slots_with_teacher_label": 3296,
+        "slots_with_executed_action": 6592,
+        "label_source_counts": {
+          "executed_slot1": 3296,
+          "teacher_slot0": 3296
+        },
+        "label_verified_counts": {
+          "executed_slot1:False": 3296,
+          "teacher_slot0:True": 3296
+        },
+        "verified_label_coverage": 0.499394,
+        "hash_checks": 3300,
+        "frame_hashes": 13200,
+        "hash_post_equal": 3300,
+        "hash_first_mismatch": null,
+        "reset_hash_matches": true,
+        "legacy_play_compared": 3296,
+        "legacy_play_matches": 3296,
+        "legacy_hud_compared": 3296,
+        "legacy_hud_matches": 3296,
+        "legacy_obs_mismatch_samples": [],
+        "plan_agreement": {
+          "rows": 3300,
+          "slot0_matches_first_action": 3300,
+          "slot1_matches_planned_slot1": 3300,
+          "slot1_distinct_from_slot0": 1740,
+          "slot0_teacher_verified": 3300,
+          "bomb_nonzero": 0,
+          "tail_mask_clears_shoot": 137
+        },
+        "wall_s": 221.071,
+        "frames_per_second": 59.709,
+        "meta_path": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T02c/rebuild/d1-s0d1-n3300-seed10-shard/2f/meta.json"
+      },
+      "engine": {
+        "path": "/root/Touhou_RL/third_party/th08-rl/build/rl_v3/th08-modern",
+        "sha256": "691bfd77b7eca3361aa8bb7af0977556a70cc73a070b29a2447222ba7a568ef6",
+        "size": 4836008,
+        "mtime": 1794278608
+      },
+      "data_dir": {
+        "source": "/root/v400-data/s1c/d1-s0d1-n3300-seed10-shard/env",
+        "copy": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T02c/replay_data/d1-s0d1-n3300-seed10-shard",
+        "files": [
+          {
+            "name": "backup",
+            "kind": "dir"
+          },
+          {
+            "name": "modern-files.txt",
+            "kind": "copy",
+            "sha256": "c43e1c3ae72251c8f1c068c2ea8f65542138fd3ea9cdd9ad822c537895238307",
+            "size": 2714
+          },
+          {
+            "name": "score.dat",
+            "kind": "copy",
+            "sha256": "d7089834a69881151a0524fcea36b75e3a7a392da2ffa48b4279522fd81ae786",
+            "size": 17784
+          },
+          {
+            "name": "th08.cfg",
+            "kind": "copy",
+            "sha256": "48bf7621da5879ef5ec1392fcac2cc0a85c313912a24fb33b4cddccf0d28f07a",
+            "size": 60
+          },
+          {
+            "name": "th08.dat",
+            "kind": "symlink",
+            "target": "/root/v400-data/game/th08.dat"
+          },
+          {
+            "name": "thbgm.dat",
+            "kind": "symlink",
+            "target": "/root/v400-data/game/thbgm.dat"
+          }
+        ],
+        "copied": true
+      },
+      "source_identity": {
+        "repo_root": "/mnt/d/WorkShop/Touhou_RL",
+        "git_head": "8684ae10482043a019262eb60cd92af8f58a274d",
+        "python": "3.10.12",
+        "platform": "Linux-6.18.58.1-microsoft-standard-WSL2-x86_64-with-glibc2.35",
+        "hostname": "ubuntu",
+        "modules": {
+          "touhou_rl/v420/rebuild.py": "727f47082ba678b00827c6c2a0e7544b3c4b9e2d0e3a6c5a18c64ed7a84dc572",
+          "touhou_rl/v420/contracts.py": "2040baa12585b1a84728b4f8015d2519af1b00faada6b2456e32908a55d0bbbe",
+          "touhou_rl/v400/student/obs_spec_v3.py": "6eabcb6c3792aa1605eb49907ef6afc87d5ce38f39decb874407d2e9adace92a",
+          "touhou_rl/v400/student/obs_spec.py": "0d47daf1bddc2b6fb8a33eb54a558f2d40f4a8c3b3d878155035d914d455578b",
+          "touhou_rl/v400/gym/env.py": "5db5a8d4e8fa80c501c3940f645e91d03bbf30caa64f185128175d80d03ae658",
+          "touhou_rl/v400/gym/actions.py": "a67145b2bec7c96b3aacaa2514e78cdadf50b056473d15b4ae8122c19c393eff",
+          "touhou_rl/v400/gym/shm.py": "8ef0954c9429e6a55c59b7e0580473ac44d9db0bc07c5d059d0523a83391b7b2",
+          "touhou_rl/spec.py": "b201066d944d746d78a009aef7fcd397d71ce94709b742e70db223a67692b6c7",
+          "tools/rl/v400_d1_collect.py": "c9d310f7bb7d3d1745a2efd12c7f0506fe226dff9da747b761bc41c024c908a1"
+        }
+      },
+      "source_score_dat_before": {
+        "path": "/root/v400-data/s1c/d1-s0d1-n3300-seed10-shard/env/score.dat",
+        "sha256": "d7089834a69881151a0524fcea36b75e3a7a392da2ffa48b4279522fd81ae786",
+        "size": 17784,
+        "mtime": 1794511888
+      },
+      "source_score_dat_after": {
+        "path": "/root/v400-data/s1c/d1-s0d1-n3300-seed10-shard/env/score.dat",
+        "sha256": "d7089834a69881151a0524fcea36b75e3a7a392da2ffa48b4279522fd81ae786",
+        "size": 17784,
+        "mtime": 1794511888
+      },
+      "source_score_dat_unchanged": true,
+      "self_check": {
+        "rows": 6592,
+        "violations_total": 0,
+        "unexplained_diffs": 0,
+        "passed": true,
+        "decision_frame_stride_histogram": {
+          "2": 6591
+        },
+        "label_source_counts": {
+          "executed_slot1": 3296,
+          "teacher_slot0": 3296
+        },
+        "label_verified_counts": {
+          "executed_slot1:False": 3296,
+          "teacher_slot0:True": 3296
+        },
+        "explained_checks": []
+      },
+      "hash": {
+        "decisions_replayed": 3300,
+        "frames_replayed": 13200,
+        "frame_hashes_observed": 13200,
+        "hash_post_checks": 3300,
+        "hash_post_equal": 3300,
+        "hash_first_mismatch": null,
+        "reset_hash_matches_first_pre": true
+      },
+      "contract": {
+        "contract_version": "v420-contract/1",
+        "obs_contract": "obs-v420-2f",
+        "action_contract": "action-v420-2f",
+        "decision_frames": 2,
+        "frame_stack": 4,
+        "action_history": 8,
+        "history_span_frames": 16,
+        "first_decision_frame": 16,
+        "cold_start_decision_frames": [
+          0,
+          2,
+          4,
+          6,
+          8,
+          10,
+          12,
+          14
+        ],
+        "contract_label_sources": [
+          "teacher_slot0",
+          "teacher_slot1",
+          "none"
+        ],
+        "executed_slot1_known": false
+      },
+      "corpus_scan": {
+        "rows": 6592,
+        "decision_frame_first": 16,
+        "decision_frame_last": 13198,
+        "decision_frame_stride_histogram": {
+          "2": 6591
+        },
+        "label_source_counts": {
+          "executed_slot1": 3296,
+          "teacher_slot0": 3296
+        },
+        "label_verified_counts": {
+          "executed_slot1:False": 3296,
+          "teacher_slot0:True": 3296
+        },
+        "history_length_ok": 6592,
+        "history_all_frames_before_current": 6592,
+        "history_window_first_frame_min": 0,
+        "history_window_last_minus_first": {
+          "14": 6592
+        },
+        "planes": {
+          "play": [
+            6592,
+            4,
+            112,
+            96
+          ],
+          "hud": [
+            6592,
+            56,
+            160
+          ],
+          "act_hist": [
+            6592,
+            8,
+            18
+          ],
+          "play_blank_rows": 0,
+          "hud_blank_rows": 0
+        },
+        "file_bytes": {
+          "slots.jsonl": 5984901,
+          "play96x112.npy": 283508864,
+          "hud.npy": 59064448,
+          "act_hist.npy": 949376,
+          "meta.json": 10760
+        }
+      },
+      "legacy_baseline": {
+        "shard": "/mnt/d/WorkShop/Touhou_RL/.tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed10-shard",
+        "labels_rows": 3300,
+        "decision_count": 3300,
+        "frames_committed": 13200,
+        "frames_per_decision": 4,
+        "decision_frames": 2,
+        "first_decision_frame": 0,
+        "last_decision_frame": 13196,
+        "stop_reason": "max_frames",
+        "stage_clear": false,
+        "deaths_observed": 0,
+        "two_frame_slots_total": 6600,
+        "hud_rows": 3300,
+        "play_rows": 3300,
+        "act_hist_rows": 3300,
+        "act_hist_span_frames": 32,
+        "decision_stride_frames": 4,
+        "shard_json_sha256": "883f3c56f94cda60f38232d12f0a1442859d326b8f2a986b73dcfeea182254ff",
+        "labels_sha256": "011f6c1cc3db232ca296177b9afc445a4922e94b1d5513f4e5746350cff622a0",
+        "labels_mtime": 1794512018,
+        "source_env_score_dat_sha256": "d7089834a69881151a0524fcea36b75e3a7a392da2ffa48b4279522fd81ae786",
+        "source_env_score_dat_mtime": 1794511888
+      }
+    },
+    {
+      "seed": 11,
+      "shard_key": "d1-s0d1-n3300-seed11-shard",
+      "slot_dir": ".tmp_v420_data/T02c/rebuild/d1-s0d1-n3300-seed11-shard/2f",
+      "report": {
+        "decisions": 3300,
+        "frames": 13200,
+        "slots_expected": 6600,
+        "slots_written": 6592,
+        "slots_cold_start_dropped": 8,
+        "cold_start_decision_frames": [
+          0,
+          2,
+          4,
+          6,
+          8,
+          10,
+          12,
+          14
+        ],
+        "slots_with_own_obs": 6592,
+        "slots_with_own_hud": 6592,
+        "slots_with_teacher_label": 3296,
+        "slots_with_executed_action": 6592,
+        "label_source_counts": {
+          "executed_slot1": 3296,
+          "teacher_slot0": 3296
+        },
+        "label_verified_counts": {
+          "executed_slot1:False": 3296,
+          "teacher_slot0:True": 3296
+        },
+        "verified_label_coverage": 0.499394,
+        "hash_checks": 3300,
+        "frame_hashes": 13200,
+        "hash_post_equal": 3300,
+        "hash_first_mismatch": null,
+        "reset_hash_matches": true,
+        "legacy_play_compared": 3296,
+        "legacy_play_matches": 3296,
+        "legacy_hud_compared": 3296,
+        "legacy_hud_matches": 3296,
+        "legacy_obs_mismatch_samples": [],
+        "plan_agreement": {
+          "rows": 3300,
+          "slot0_matches_first_action": 3300,
+          "slot1_matches_planned_slot1": 3300,
+          "slot1_distinct_from_slot0": 1734,
+          "slot0_teacher_verified": 3300,
+          "bomb_nonzero": 0,
+          "tail_mask_clears_shoot": 137
+        },
+        "wall_s": 228.362,
+        "frames_per_second": 57.803,
+        "meta_path": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T02c/rebuild/d1-s0d1-n3300-seed11-shard/2f/meta.json"
+      },
+      "engine": {
+        "path": "/root/Touhou_RL/third_party/th08-rl/build/rl_v3/th08-modern",
+        "sha256": "691bfd77b7eca3361aa8bb7af0977556a70cc73a070b29a2447222ba7a568ef6",
+        "size": 4836008,
+        "mtime": 1794278608
+      },
+      "data_dir": {
+        "source": "/root/v400-data/s1c/d1-s0d1-n3300-seed11-shard/env",
+        "copy": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T02c/replay_data/d1-s0d1-n3300-seed11-shard",
+        "files": [
+          {
+            "name": "backup",
+            "kind": "dir"
+          },
+          {
+            "name": "modern-files.txt",
+            "kind": "copy",
+            "sha256": "b49b978e2b7c560492b36a741c163e81df5fa8ac3a132e496831b406ce7c0918",
+            "size": 2714
+          },
+          {
+            "name": "score.dat",
+            "kind": "copy",
+            "sha256": "832f181377bf6bfc256229723fd31923a88ed139d00d02fdd5e67d22f3d4b1b6",
+            "size": 17783
+          },
+          {
+            "name": "th08.cfg",
+            "kind": "copy",
+            "sha256": "48bf7621da5879ef5ec1392fcac2cc0a85c313912a24fb33b4cddccf0d28f07a",
+            "size": 60
+          },
+          {
+            "name": "th08.dat",
+            "kind": "symlink",
+            "target": "/root/v400-data/game/th08.dat"
+          },
+          {
+            "name": "thbgm.dat",
+            "kind": "symlink",
+            "target": "/root/v400-data/game/thbgm.dat"
+          }
+        ],
+        "copied": true
+      },
+      "source_identity": {
+        "repo_root": "/mnt/d/WorkShop/Touhou_RL",
+        "git_head": "8684ae10482043a019262eb60cd92af8f58a274d",
+        "python": "3.10.12",
+        "platform": "Linux-6.18.58.1-microsoft-standard-WSL2-x86_64-with-glibc2.35",
+        "hostname": "ubuntu",
+        "modules": {
+          "touhou_rl/v420/rebuild.py": "727f47082ba678b00827c6c2a0e7544b3c4b9e2d0e3a6c5a18c64ed7a84dc572",
+          "touhou_rl/v420/contracts.py": "2040baa12585b1a84728b4f8015d2519af1b00faada6b2456e32908a55d0bbbe",
+          "touhou_rl/v400/student/obs_spec_v3.py": "6eabcb6c3792aa1605eb49907ef6afc87d5ce38f39decb874407d2e9adace92a",
+          "touhou_rl/v400/student/obs_spec.py": "0d47daf1bddc2b6fb8a33eb54a558f2d40f4a8c3b3d878155035d914d455578b",
+          "touhou_rl/v400/gym/env.py": "5db5a8d4e8fa80c501c3940f645e91d03bbf30caa64f185128175d80d03ae658",
+          "touhou_rl/v400/gym/actions.py": "a67145b2bec7c96b3aacaa2514e78cdadf50b056473d15b4ae8122c19c393eff",
+          "touhou_rl/v400/gym/shm.py": "8ef0954c9429e6a55c59b7e0580473ac44d9db0bc07c5d059d0523a83391b7b2",
+          "touhou_rl/spec.py": "b201066d944d746d78a009aef7fcd397d71ce94709b742e70db223a67692b6c7",
+          "tools/rl/v400_d1_collect.py": "c9d310f7bb7d3d1745a2efd12c7f0506fe226dff9da747b761bc41c024c908a1"
+        }
+      },
+      "source_score_dat_before": {
+        "path": "/root/v400-data/s1c/d1-s0d1-n3300-seed11-shard/env/score.dat",
+        "sha256": "832f181377bf6bfc256229723fd31923a88ed139d00d02fdd5e67d22f3d4b1b6",
+        "size": 17783,
+        "mtime": 1794511886
+      },
+      "source_score_dat_after": {
+        "path": "/root/v400-data/s1c/d1-s0d1-n3300-seed11-shard/env/score.dat",
+        "sha256": "832f181377bf6bfc256229723fd31923a88ed139d00d02fdd5e67d22f3d4b1b6",
+        "size": 17783,
+        "mtime": 1794511886
+      },
+      "source_score_dat_unchanged": true,
+      "self_check": {
+        "rows": 6592,
+        "violations_total": 0,
+        "unexplained_diffs": 0,
+        "passed": true,
+        "decision_frame_stride_histogram": {
+          "2": 6591
+        },
+        "label_source_counts": {
+          "executed_slot1": 3296,
+          "teacher_slot0": 3296
+        },
+        "label_verified_counts": {
+          "executed_slot1:False": 3296,
+          "teacher_slot0:True": 3296
+        },
+        "explained_checks": []
+      },
+      "hash": {
+        "decisions_replayed": 3300,
+        "frames_replayed": 13200,
+        "frame_hashes_observed": 13200,
+        "hash_post_checks": 3300,
+        "hash_post_equal": 3300,
+        "hash_first_mismatch": null,
+        "reset_hash_matches_first_pre": true
+      },
+      "contract": {
+        "contract_version": "v420-contract/1",
+        "obs_contract": "obs-v420-2f",
+        "action_contract": "action-v420-2f",
+        "decision_frames": 2,
+        "frame_stack": 4,
+        "action_history": 8,
+        "history_span_frames": 16,
+        "first_decision_frame": 16,
+        "cold_start_decision_frames": [
+          0,
+          2,
+          4,
+          6,
+          8,
+          10,
+          12,
+          14
+        ],
+        "contract_label_sources": [
+          "teacher_slot0",
+          "teacher_slot1",
+          "none"
+        ],
+        "executed_slot1_known": false
+      },
+      "corpus_scan": {
+        "rows": 6592,
+        "decision_frame_first": 16,
+        "decision_frame_last": 13198,
+        "decision_frame_stride_histogram": {
+          "2": 6591
+        },
+        "label_source_counts": {
+          "executed_slot1": 3296,
+          "teacher_slot0": 3296
+        },
+        "label_verified_counts": {
+          "executed_slot1:False": 3296,
+          "teacher_slot0:True": 3296
+        },
+        "history_length_ok": 6592,
+        "history_all_frames_before_current": 6592,
+        "history_window_first_frame_min": 0,
+        "history_window_last_minus_first": {
+          "14": 6592
+        },
+        "planes": {
+          "play": [
+            6592,
+            4,
+            112,
+            96
+          ],
+          "hud": [
+            6592,
+            56,
+            160
+          ],
+          "act_hist": [
+            6592,
+            8,
+            18
+          ],
+          "play_blank_rows": 0,
+          "hud_blank_rows": 0
+        },
+        "file_bytes": {
+          "slots.jsonl": 5987121,
+          "play96x112.npy": 283508864,
+          "hud.npy": 59064448,
+          "act_hist.npy": 949376,
+          "meta.json": 10760
+        }
+      },
+      "legacy_baseline": {
+        "shard": "/mnt/d/WorkShop/Touhou_RL/.tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed11-shard",
+        "labels_rows": 3300,
+        "decision_count": 3300,
+        "frames_committed": 13200,
+        "frames_per_decision": 4,
+        "decision_frames": 2,
+        "first_decision_frame": 0,
+        "last_decision_frame": 13196,
+        "stop_reason": "max_frames",
+        "stage_clear": false,
+        "deaths_observed": 0,
+        "two_frame_slots_total": 6600,
+        "hud_rows": 3300,
+        "play_rows": 3300,
+        "act_hist_rows": 3300,
+        "act_hist_span_frames": 32,
+        "decision_stride_frames": 4,
+        "shard_json_sha256": "98b4985ffd2caa07f2d11473c18d883f783f5f323193d92756f653acc84cbf07",
+        "labels_sha256": "bc663759e3746742ee3e677ba716c286fe1633da04fdbf8047291d0977db149a",
+        "labels_mtime": 1794512015,
+        "source_env_score_dat_sha256": "832f181377bf6bfc256229723fd31923a88ed139d00d02fdd5e67d22f3d4b1b6",
+        "source_env_score_dat_mtime": 1794511886
+      }
+    },
+    {
+      "seed": 12,
+      "shard_key": "d1-s0d1-n3300-seed12-shard",
+      "slot_dir": ".tmp_v420_data/T02c/rebuild/d1-s0d1-n3300-seed12-shard/2f",
+      "report": {
+        "decisions": 3298,
+        "frames": 13192,
+        "slots_expected": 6596,
+        "slots_written": 6588,
+        "slots_cold_start_dropped": 8,
+        "cold_start_decision_frames": [
+          0,
+          2,
+          4,
+          6,
+          8,
+          10,
+          12,
+          14
+        ],
+        "slots_with_own_obs": 6588,
+        "slots_with_own_hud": 6588,
+        "slots_with_teacher_label": 3294,
+        "slots_with_executed_action": 6588,
+        "label_source_counts": {
+          "executed_slot1": 3294,
+          "teacher_slot0": 3294
+        },
+        "label_verified_counts": {
+          "executed_slot1:False": 3294,
+          "teacher_slot0:True": 3294
+        },
+        "verified_label_coverage": 0.499394,
+        "hash_checks": 3298,
+        "frame_hashes": 13192,
+        "hash_post_equal": 3298,
+        "hash_first_mismatch": null,
+        "reset_hash_matches": true,
+        "legacy_play_compared": 3294,
+        "legacy_play_matches": 3294,
+        "legacy_hud_compared": 3294,
+        "legacy_hud_matches": 3294,
+        "legacy_obs_mismatch_samples": [],
+        "plan_agreement": {
+          "rows": 3298,
+          "slot0_matches_first_action": 3298,
+          "slot1_matches_planned_slot1": 3298,
+          "slot1_distinct_from_slot0": 1737,
+          "slot0_teacher_verified": 3298,
+          "bomb_nonzero": 0,
+          "tail_mask_clears_shoot": 137
+        },
+        "wall_s": 239.248,
+        "frames_per_second": 55.139,
+        "meta_path": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T02c/rebuild/d1-s0d1-n3300-seed12-shard/2f/meta.json"
+      },
+      "engine": {
+        "path": "/root/Touhou_RL/third_party/th08-rl/build/rl_v3/th08-modern",
+        "sha256": "691bfd77b7eca3361aa8bb7af0977556a70cc73a070b29a2447222ba7a568ef6",
+        "size": 4836008,
+        "mtime": 1794278608
+      },
+      "data_dir": {
+        "source": "/root/v400-data/s1c/d1-s0d1-n3300-seed12-shard/env",
+        "copy": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T02c/replay_data/d1-s0d1-n3300-seed12-shard",
+        "files": [
+          {
+            "name": "backup",
+            "kind": "dir"
+          },
+          {
+            "name": "modern-files.txt",
+            "kind": "copy",
+            "sha256": "82ffa10f5c45085ec972a84921c16f3d4302af4c4feade6bc91a98d302a065cf",
+            "size": 2746
+          },
+          {
+            "name": "score.dat",
+            "kind": "copy",
+            "sha256": "165fbd25873d99fc621f73c77c673267a18ffb40be38beaaa95120d205317036",
+            "size": 17786
+          },
+          {
+            "name": "th08.cfg",
+            "kind": "copy",
+            "sha256": "48bf7621da5879ef5ec1392fcac2cc0a85c313912a24fb33b4cddccf0d28f07a",
+            "size": 60
+          },
+          {
+            "name": "th08.dat",
+            "kind": "symlink",
+            "target": "/root/v400-data/game/th08.dat"
+          },
+          {
+            "name": "thbgm.dat",
+            "kind": "symlink",
+            "target": "/root/v400-data/game/thbgm.dat"
+          }
+        ],
+        "copied": true
+      },
+      "source_identity": {
+        "repo_root": "/mnt/d/WorkShop/Touhou_RL",
+        "git_head": "8684ae10482043a019262eb60cd92af8f58a274d",
+        "python": "3.10.12",
+        "platform": "Linux-6.18.58.1-microsoft-standard-WSL2-x86_64-with-glibc2.35",
+        "hostname": "ubuntu",
+        "modules": {
+          "touhou_rl/v420/rebuild.py": "727f47082ba678b00827c6c2a0e7544b3c4b9e2d0e3a6c5a18c64ed7a84dc572",
+          "touhou_rl/v420/contracts.py": "2040baa12585b1a84728b4f8015d2519af1b00faada6b2456e32908a55d0bbbe",
+          "touhou_rl/v400/student/obs_spec_v3.py": "6eabcb6c3792aa1605eb49907ef6afc87d5ce38f39decb874407d2e9adace92a",
+          "touhou_rl/v400/student/obs_spec.py": "0d47daf1bddc2b6fb8a33eb54a558f2d40f4a8c3b3d878155035d914d455578b",
+          "touhou_rl/v400/gym/env.py": "5db5a8d4e8fa80c501c3940f645e91d03bbf30caa64f185128175d80d03ae658",
+          "touhou_rl/v400/gym/actions.py": "a67145b2bec7c96b3aacaa2514e78cdadf50b056473d15b4ae8122c19c393eff",
+          "touhou_rl/v400/gym/shm.py": "8ef0954c9429e6a55c59b7e0580473ac44d9db0bc07c5d059d0523a83391b7b2",
+          "touhou_rl/spec.py": "b201066d944d746d78a009aef7fcd397d71ce94709b742e70db223a67692b6c7",
+          "tools/rl/v400_d1_collect.py": "c9d310f7bb7d3d1745a2efd12c7f0506fe226dff9da747b761bc41c024c908a1"
+        }
+      },
+      "source_score_dat_before": {
+        "path": "/root/v400-data/s1c/d1-s0d1-n3300-seed12-shard/env/score.dat",
+        "sha256": "165fbd25873d99fc621f73c77c673267a18ffb40be38beaaa95120d205317036",
+        "size": 17786,
+        "mtime": 1794511884
+      },
+      "source_score_dat_after": {
+        "path": "/root/v400-data/s1c/d1-s0d1-n3300-seed12-shard/env/score.dat",
+        "sha256": "165fbd25873d99fc621f73c77c673267a18ffb40be38beaaa95120d205317036",
+        "size": 17786,
+        "mtime": 1794511884
+      },
+      "source_score_dat_unchanged": true,
+      "self_check": {
+        "rows": 6588,
+        "violations_total": 0,
+        "unexplained_diffs": 0,
+        "passed": true,
+        "decision_frame_stride_histogram": {
+          "2": 6587
+        },
+        "label_source_counts": {
+          "executed_slot1": 3294,
+          "teacher_slot0": 3294
+        },
+        "label_verified_counts": {
+          "executed_slot1:False": 3294,
+          "teacher_slot0:True": 3294
+        },
+        "explained_checks": []
+      },
+      "hash": {
+        "decisions_replayed": 3298,
+        "frames_replayed": 13192,
+        "frame_hashes_observed": 13192,
+        "hash_post_checks": 3298,
+        "hash_post_equal": 3298,
+        "hash_first_mismatch": null,
+        "reset_hash_matches_first_pre": true
+      },
+      "contract": {
+        "contract_version": "v420-contract/1",
+        "obs_contract": "obs-v420-2f",
+        "action_contract": "action-v420-2f",
+        "decision_frames": 2,
+        "frame_stack": 4,
+        "action_history": 8,
+        "history_span_frames": 16,
+        "first_decision_frame": 16,
+        "cold_start_decision_frames": [
+          0,
+          2,
+          4,
+          6,
+          8,
+          10,
+          12,
+          14
+        ],
+        "contract_label_sources": [
+          "teacher_slot0",
+          "teacher_slot1",
+          "none"
+        ],
+        "executed_slot1_known": false
+      },
+      "corpus_scan": {
+        "rows": 6588,
+        "decision_frame_first": 16,
+        "decision_frame_last": 13190,
+        "decision_frame_stride_histogram": {
+          "2": 6587
+        },
+        "label_source_counts": {
+          "executed_slot1": 3294,
+          "teacher_slot0": 3294
+        },
+        "label_verified_counts": {
+          "executed_slot1:False": 3294,
+          "teacher_slot0:True": 3294
+        },
+        "history_length_ok": 6588,
+        "history_all_frames_before_current": 6588,
+        "history_window_first_frame_min": 0,
+        "history_window_last_minus_first": {
+          "14": 6588
+        },
+        "planes": {
+          "play": [
+            6588,
+            4,
+            112,
+            96
+          ],
+          "hud": [
+            6588,
+            56,
+            160
+          ],
+          "act_hist": [
+            6588,
+            8,
+            18
+          ],
+          "play_blank_rows": 0,
+          "hud_blank_rows": 0
+        },
+        "file_bytes": {
+          "slots.jsonl": 5982905,
+          "play96x112.npy": 283336832,
+          "hud.npy": 59028608,
+          "act_hist.npy": 948800,
+          "meta.json": 10762
+        }
+      },
+      "legacy_baseline": {
+        "shard": "/mnt/d/WorkShop/Touhou_RL/.tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed12-shard",
+        "labels_rows": 3298,
+        "decision_count": 3298,
+        "frames_committed": 13196,
+        "frames_per_decision": 4,
+        "decision_frames": 2,
+        "first_decision_frame": 0,
+        "last_decision_frame": 13188,
+        "stop_reason": "stage_changed",
+        "stage_clear": true,
+        "deaths_observed": 0,
+        "two_frame_slots_total": 6596,
+        "hud_rows": 3298,
+        "play_rows": 3298,
+        "act_hist_rows": 3298,
+        "act_hist_span_frames": 32,
+        "decision_stride_frames": 4,
+        "shard_json_sha256": "0c7b2b6e6d7af884db636ebbe7036ada8334b5404173f26633aadbf6fd18d320",
+        "labels_sha256": "f79f8ab6cef1ca4ac5c9489e4eeca6f70b55a97d4de847bca66a923b0033d028",
+        "labels_mtime": 1794512014,
+        "source_env_score_dat_sha256": "165fbd25873d99fc621f73c77c673267a18ffb40be38beaaa95120d205317036",
+        "source_env_score_dat_mtime": 1794511884
+      }
+    }
+  ],
+  "source": {
+    "collector": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_t02c/collect_evidence.py",
+    "git_head": "8684ae10482043a019262eb60cd92af8f58a274d",
+    "git_status_porcelain_new_files": "?? tests/test_v420_rebuild.py\n?? touhou_rl/v420/rebuild.py",
+    "host": "ubuntu",
+    "python": "3.10.12"
+  },
+  "independent_self_check": {
+    "schema": "v420-rebuild-2f-independent-selfcheck/1",
+    "checked_at": "2026-11-13T18:01:08+0800",
+    "process": {
+      "python": "3.10.12",
+      "cwd": "/mnt/d/WorkShop/Touhou_RL",
+      "note": "fresh process; the corpus was written by another run"
+    },
+    "totals": {
+      "slots": 19772,
+      "violations": 0,
+      "unexplained": 0,
+      "one_hot_rows": 19772,
+      "approved_act_hist": 19772
+    },
+    "passed": true,
+    "wall_s": 12.247,
+    "shards": [
+      {
+        "seed": 10,
+        "slot_dir": ".tmp_v420_data/T02c/rebuild/d1-s0d1-n3300-seed10-shard/2f",
+        "rows": 6592,
+        "violations_total": 0,
+        "unexplained_diffs": 0,
+        "passed": true,
+        "violations": {},
+        "decision_frame_stride_histogram": {
+          "2": 6591
+        },
+        "label_source_counts": {
+          "executed_slot1": 3296,
+          "teacher_slot0": 3296
+        },
+        "label_verified_counts": {
+          "executed_slot1:False": 3296,
+          "teacher_slot0:True": 3296
+        },
+        "planes": {
+          "play_shape": [
+            6592,
+            4,
+            112,
+            96
+          ],
+          "play_dtype": "uint8",
+          "hud_shape": [
+            6592,
+            56,
+            160
+          ],
+          "hud_dtype": "uint8",
+          "act_hist_shape": [
+            6592,
+            8,
+            18
+          ],
+          "act_hist_dtype": "uint8",
+          "act_hist_one_hot_rows": 6592
+        },
+        "contract_constants": {
+          "decision_frames": 2,
+          "frame_stack": 4,
+          "action_history": 8,
+          "history_span_frames": 16
+        }
+      },
+      {
+        "seed": 11,
+        "slot_dir": ".tmp_v420_data/T02c/rebuild/d1-s0d1-n3300-seed11-shard/2f",
+        "rows": 6592,
+        "violations_total": 0,
+        "unexplained_diffs": 0,
+        "passed": true,
+        "violations": {},
+        "decision_frame_stride_histogram": {
+          "2": 6591
+        },
+        "label_source_counts": {
+          "executed_slot1": 3296,
+          "teacher_slot0": 3296
+        },
+        "label_verified_counts": {
+          "executed_slot1:False": 3296,
+          "teacher_slot0:True": 3296
+        },
+        "planes": {
+          "play_shape": [
+            6592,
+            4,
+            112,
+            96
+          ],
+          "play_dtype": "uint8",
+          "hud_shape": [
+            6592,
+            56,
+            160
+          ],
+          "hud_dtype": "uint8",
+          "act_hist_shape": [
+            6592,
+            8,
+            18
+          ],
+          "act_hist_dtype": "uint8",
+          "act_hist_one_hot_rows": 6592
+        },
+        "contract_constants": {
+          "decision_frames": 2,
+          "frame_stack": 4,
+          "action_history": 8,
+          "history_span_frames": 16
+        }
+      },
+      {
+        "seed": 12,
+        "slot_dir": ".tmp_v420_data/T02c/rebuild/d1-s0d1-n3300-seed12-shard/2f",
+        "rows": 6588,
+        "violations_total": 0,
+        "unexplained_diffs": 0,
+        "passed": true,
+        "violations": {},
+        "decision_frame_stride_histogram": {
+          "2": 6587
+        },
+        "label_source_counts": {
+          "executed_slot1": 3294,
+          "teacher_slot0": 3294
+        },
+        "label_verified_counts": {
+          "executed_slot1:False": 3294,
+          "teacher_slot0:True": 3294
+        },
+        "planes": {
+          "play_shape": [
+            6588,
+            4,
+            112,
+            96
+          ],
+          "play_dtype": "uint8",
+          "hud_shape": [
+            6588,
+            56,
+            160
+          ],
+          "hud_dtype": "uint8",
+          "act_hist_shape": [
+            6588,
+            8,
+            18
+          ],
+          "act_hist_dtype": "uint8",
+          "act_hist_one_hot_rows": 6588
+        },
+        "contract_constants": {
+          "decision_frames": 2,
+          "frame_stack": 4,
+          "action_history": 8,
+          "history_span_frames": 16
+        }
+      }
+    ]
+  }
+}

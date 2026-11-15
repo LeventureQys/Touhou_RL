@@ -1,0 +1,3379 @@
+{
+  "tag": "v2h-4f-r1",
+  "label": "",
+  "mode": "v2h",
+  "smoke": false,
+  "profile": {
+    "mode": "v2h",
+    "horizon": 48,
+    "beam": 64,
+    "verify_k": 3,
+    "max_iterations": 3,
+    "decision_frames": 2,
+    "replan_decisions": 2,
+    "frames_per_query": 4,
+    "slots": 24,
+    "durations": [
+      1,
+      2
+    ],
+    "shoot_pulse_period": 24,
+    "replan_decisions_default": 2
+  },
+  "corpus": {
+    "shard": "/mnt/d/WorkShop/Touhou_RL/.tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed10-shard",
+    "seed": 10,
+    "stage": 0,
+    "difficulty": 1,
+    "team": 0,
+    "prefix_decisions": 100,
+    "prefix_frames": 400
+  },
+  "requested": {
+    "queries": 50,
+    "warmup": 3,
+    "outer_frames": 200
+  },
+  "loadavg_before": [
+    16.84,
+    17.71,
+    18.06
+  ],
+  "sha_before": {
+    "labels": "011f6c1cc3db232ca296177b9afc445a",
+    "shard": "883f3c56f94cda60f38232d12f0a1442",
+    "src_score": "d7089834a69881151a0524fcea36b75e"
+  },
+  "python": "3.10.12",
+  "engine": "/root/Touhou_RL/third_party/th08-rl/build/rl_v3/th08-modern",
+  "data_dir": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_teacher2f/data/s10-v2h-4f-r1",
+  "startup": {
+    "start_hello_ms": 1313.771,
+    "reset_ms": 571.745,
+    "hello": {
+      "_verb": "OK",
+      "proto": "1",
+      "harness": "1",
+      "role": "shadow",
+      "frames": "0"
+    },
+    "reset": {
+      "_verb": "OK",
+      "reset": "1",
+      "ready": "1",
+      "setup_frames": "394",
+      "frames": "0",
+      "stage": "0",
+      "difficulty": "1",
+      "team": "0",
+      "seed": "10",
+      "setup_state": "0",
+      "hash": "c2b684a7a564c2d3",
+      "mode": "cold",
+      "state_published": "1"
+    },
+    "frame": 0,
+    "hash": "c2b684a7a564c2d3",
+    "corpus_hash_pre": "c2b684a7a564c2d3",
+    "hash_matches_corpus": true
+  },
+  "prefix": {
+    "commands": 400,
+    "advanced": 400,
+    "expect_frame": 400,
+    "frame": 400,
+    "hash": "7b22ff41d6d9e8b7",
+    "expect_hash_post": "7b22ff41d6d9e8b7",
+    "expect_hash_next_pre": "7b22ff41d6d9e8b7",
+    "hash_matches_row_post": true,
+    "hash_matches_row_next_pre": true,
+    "replay_s": 0.036,
+    "replay_fps": 11122.93
+  },
+  "capabilities": {
+    "probe_ms": 15.608,
+    "child_hazards": {
+      "available": true,
+      "reason": "CHILD <h> HAZARDS accepted",
+      "reply": "OK frames=400 nb=1 nl=0 ne=1 bullets=1536:6:0:00000000:00000000:00000000:00000000:00000000:0:00000000:0 lasers= enemies=0:1000005d:41f00000:c1800000:00000000:00"
+    },
+    "capabilities": {
+      "role": "shadow",
+      "protocol": "1",
+      "branch_fields": [
+        "_verb",
+        "advanced",
+        "branch",
+        "child_us",
+        "fork_us",
+        "hash",
+        "parent_frame",
+        "pid",
+        "trace"
+      ],
+      "branch_carries_hazards": false,
+      "state_fields": [
+        "_verb",
+        "f0",
+        "f1",
+        "f10",
+        "f11",
+        "f12",
+        "f13",
+        "f14",
+        "f15",
+        "f16",
+        "f17",
+        "f18",
+        "f19",
+        "f2",
+        "f20",
+        "f21",
+        "f22",
+        "f23",
+        "f24",
+        "f3",
+        "f4",
+        "f5",
+        "f6",
+        "f7",
+        "f8",
+        "f9",
+        "frames"
+      ],
+      "state_has_frame_event_flags": false,
+      "hazards_limit_1024_ok": true,
+      "child_hazards": "OK",
+      "child_state_ok": true
+    }
+  },
+  "warmup_rows": [
+    {
+      "index": 0,
+      "warmup": true,
+      "frame": 404,
+      "release": false,
+      "query_ms": 530.722,
+      "commit_ms": 1.243,
+      "step_ms": 531.965,
+      "advanced": 4,
+      "expected_advanced": 4,
+      "exited": false,
+      "bomb": 0,
+      "chosen": 1,
+      "chosen_slots": 24,
+      "slots_committed": 2,
+      "mask_committed": [
+        17,
+        17
+      ],
+      "verified_n": 3,
+      "verified_cands": [
+        1,
+        8,
+        10
+      ],
+      "verified_died": [
+        false,
+        false,
+        false
+      ],
+      "verify_frames": 144,
+      "death_refined": 0,
+      "record_frames": 48,
+      "record_steps": 47,
+      "record_commands": 144,
+      "record_spawn_ms": 0.664,
+      "record_advance_ms": 18.734,
+      "timing_ms": {
+        "record": 25.614,
+        "search": 483.498,
+        "verify": 21.399,
+        "events": 0.128
+      },
+      "expansions": 862488,
+      "roots": 36,
+      "events": [
+        "survive",
+        "death_bomb_no_player_hit"
+      ],
+      "deaths": 0.0,
+      "lives": 2.0,
+      "bombs": 3.0,
+      "stage": 0,
+      "px": 31.23044204711914,
+      "py": 408.76959228515625,
+      "internal_frames": 192,
+      "internal_frames_upper": 192
+    },
+    {
+      "index": 1,
+      "warmup": true,
+      "frame": 408,
+      "release": false,
+      "query_ms": 142.207,
+      "commit_ms": 1.043,
+      "step_ms": 143.25,
+      "advanced": 4,
+      "expected_advanced": 4,
+      "exited": false,
+      "bomb": 0,
+      "chosen": 12,
+      "chosen_slots": 24,
+      "slots_committed": 2,
+      "mask_committed": [
+        133,
+        85
+      ],
+      "verified_n": 3,
+      "verified_cands": [
+        12,
+        17,
+        1
+      ],
+      "verified_died": [
+        false,
+        false,
+        false
+      ],
+      "verify_frames": 144,
+      "death_refined": 0,
+      "record_frames": 48,
+      "record_steps": 47,
+      "record_commands": 144,
+      "record_spawn_ms": 0.631,
+      "record_advance_ms": 16.971,
+      "timing_ms": {
+        "record": 21.87,
+        "search": 97.369,
+        "verify": 22.827,
+        "events": 0.047
+      },
+      "expansions": 862488,
+      "roots": 36,
+      "events": [
+        "survive",
+        "death_bomb_no_player_hit"
+      ],
+      "deaths": 0.0,
+      "lives": 2.0,
+      "bombs": 3.0,
+      "stage": 0,
+      "px": 33.816226959228516,
+      "py": 403.3553771972656,
+      "internal_frames": 192,
+      "internal_frames_upper": 192
+    },
+    {
+      "index": 2,
+      "warmup": true,
+      "frame": 412,
+      "release": false,
+      "query_ms": 133.474,
+      "commit_ms": 1.002,
+      "step_ms": 134.476,
+      "advanced": 4,
+      "expected_advanced": 4,
+      "exited": false,
+      "bomb": 0,
+      "chosen": 8,
+      "chosen_slots": 24,
+      "slots_committed": 2,
+      "mask_committed": [
+        81,
+        133
+      ],
+      "verified_n": 3,
+      "verified_cands": [
+        8,
+        12,
+        16
+      ],
+      "verified_died": [
+        false,
+        false,
+        false
+      ],
+      "verify_frames": 144,
+      "death_refined": 0,
+      "record_frames": 48,
+      "record_steps": 47,
+      "record_commands": 144,
+      "record_spawn_ms": 0.888,
+      "record_advance_ms": 24.696,
+      "timing_ms": {
+        "record": 35.764,
+        "search": 58.862,
+        "verify": 38.725,
+        "events": 0.027
+      },
+      "expansions": 862488,
+      "roots": 36,
+      "events": [
+        "survive",
+        "death_bomb_no_player_hit"
+      ],
+      "deaths": 0.0,
+      "lives": 2.0,
+      "bombs": 3.0,
+      "stage": 0,
+      "px": 28.745159149169922,
+      "py": 396.2843017578125,
+      "internal_frames": 192,
+      "internal_frames_upper": 192
+    }
+  ],
+  "queries": [
+    {
+      "index": 3,
+      "warmup": false,
+      "frame": 416,
+      "release": false,
+      "query_ms": 140.631,
+      "commit_ms": 0.869,
+      "step_ms": 141.5,
+      "advanced": 4,
+      "expected_advanced": 4,
+      "exited": false,
+      "bomb": 0,
+      "chosen": 2,
+      "chosen_slots": 24,
+      "slots_committed": 2,
+      "mask_committed": [
+        145,
+        65
+      ],
+      "verified_n": 3,
+      "verified_cands": [
+        2,
+        4,
+        7
+      ],
+      "verified_died": [
+        false,
+        false,
+        false
+      ],
+      "verify_frames": 144,
+      "death_refined": 0,
+      "record_frames": 48,
+      "record_steps": 47,
+      "record_commands": 144,
+      "record_spawn_ms": 0.761,
+      "record_advance_ms": 22.373,
+      "timing_ms": {
+        "record": 32.147,
+        "search": 84.162,
+        "verify": 24.122,
+        "events": 0.116
+      },
+      "expansions": 862488,
+      "roots": 36,
+      "events": [
+        "survive",
+        "death_bomb_no_player_hit"
+      ],
+      "deaths": 0.0,
+      "lives": 2.0,
+      "bombs": 3.0,
+      "stage": 0,
+      "px": 32.40201187133789,
+      "py": 390.62744140625,
+      "internal_frames": 192,
+      "internal_frames_upper": 192
+    },
+    {
+      "index": 4,
+      "warmup": false,
+      "frame": 420,
+      "release": false,
+      "query_ms": 118.139,
+      "commit_ms": 1.013,
+      "step_ms": 119.152,
+      "advanced": 4,
+      "expected_advanced": 4,
+      "exited": false,
+      "bomb": 0,
+      "chosen": 0,
+      "chosen_slots": 24,
+      "slots_committed": 2,
+      "mask_committed": [
+        1,
+        1
+      ],
+      "verified_n": 3,
+      "verified_cands": [
+        0,
+        1,
+        2
+      ],
+      "verified_died": [
+        false,
+        false,
+        false
+      ],
+      "verify_frames": 144,
+      "death_refined": 0,
+      "record_frames": 48,
+      "record_steps": 47,
+      "record_commands": 144,
+      "record_spawn_ms": 4.874,
+      "record_advance_ms": 20.33,
+      "timing_ms": {
+        "record": 33.477,
+        "search": 58.729,
+        "verify": 25.729,
+        "events": 0.108
+      },
+      "expansions": 862488,
+      "roots": 36,
+      "events": [
+        "survive",
+        "death_bomb_no_player_hit"
+      ],
+      "deaths": 0.0,
+      "lives": 2.0,
+      "bombs": 3.0,
+      "stage": 0,
+      "px": 28.40201187133789,
+      "py": 390.62744140625,
+      "internal_frames": 192,
+      "internal_frames_upper": 192
+    },
+    {
+      "index": 5,
+      "warmup": false,
+      "frame": 424,
+      "release": false,
+      "query_ms": 140.057,
+      "commit_ms": 2.143,
+      "step_ms": 142.2,
+      "advanced": 4,
+      "expected_advanced": 4,
+      "exited": false,
+      "bomb": 0,
+      "chosen": 3,
+      "chosen_slots": 24,
+      "slots_committed": 2,
+      "mask_committed": [
+        129,
+        129
+      ],
+      "verified_n": 3,
+      "verified_cands": [
+        3,
+        2,
+        4
+      ],
+      "verified_died": [
+        false,
+        false,
+        false
+      ],
+      "verify_frames": 144,
+      "death_refined": 0,
+      "record_frames": 48,
+      "record_steps": 47,
+      "record_commands": 144,
+      "record_spawn_ms": 0.593,
+      "record_advance_ms": 12.584,
+      "timing_ms": {
+        "record": 20.271,
+        "search": 74.546,
+        "verify": 45.065,
+        "events": 0.031
+      },
+      "expansions": 862488,
+      "roots": 36,
+      "events": [
+        "survive",
+        "death_bomb_no_player_hit"
+      ],
+      "deaths": 0.0,
+      "lives": 2.0,
+      "bombs": 3.0,
+      "stage": 0,
+      "px": 40.40201187133789,
+      "py": 390.62744140625,
+      "internal_frames": 192,
+      "internal_frames_upper": 192
+    },
+    {
+      "index": 6,
+      "warmup": false,
+      "frame": 428,
+      "release": false,
+      "query_ms": 108.71,
+      "commit_ms": 0.919,
+      "step_ms": 109.628,
+      "advanced": 4,
+      "expected_advanced": 4,
+      "exited": false,
+      "bomb": 0,
+      "chosen": 2,
+      "chosen_slots": 24,
+      "slots_committed": 2,
+      "mask_committed": [
+        145,
+        145
+      ],
+      "verified_n": 3,
+      "verified_cands": [
+        2,
+        4,
+        11
+      ],
+      "verified_died": [
+        false,
+        false,
+        false
+      ],
+      "verify_frames": 144,
+      "death_refined": 0,
+      "record_frames": 48,
+      "record_steps": 47,
+      "record_commands": 144,
+      "record_spawn_ms": 0.662,
+      "record_advance_ms": 23.329,
+      "timing_ms": {
+        "record": 27.572,
+        "search": 59.448,
+        "verify": 21.515,
+        "events": 0.054
+      },
+      "expansions": 862488,
+      "roots": 36,
+      "events": [
+        "survive",
+        "death_bomb_no_player_hit"
+      ],
+      "deaths": 0.0,
+      "lives": 2.0,
+      "bombs": 3.0,
+      "stage": 0,
+      "px": 52.887290954589844,
+      "py": 382.14215087890625,
+      "internal_frames": 192,
+      "internal_frames_upper": 192
+    },
+    {
+      "index": 7,
+      "warmup": false,
+      "frame": 432,
+      "release": false,
+      "query_ms": 131.028,
+      "commit_ms": 1.13,
+      "step_ms": 132.158,
+      "advanced": 4,
+      "expected_advanced": 4,
+      "exited": false,
+      "bomb": 0,
+      "chosen": 2,
+      "chosen_slots": 24,
+      "slots_committed": 2,
+      "mask_committed": [
+        145,
+        65
+      ],
+      "verified_n": 3,
+      "verified_cands": [
+        2,
+        4,
+        7
+      ],
+      "verified_died": [
+        false,
+        false,
+        false
+      ],
+      "verify_frames": 144,
+      "death_refined": 0,
+      "record_frames": 48,
+      "record_steps": 47,
+      "record_commands": 144,
+      "record_spawn_ms": 0.633,
+      "record_advance_ms": 13.148,
+      "timing_ms": {
+        "record": 19.655,
+        "search": 76.586,
+        "verify": 34.621,
+        "events": 0.07
+      },
+      "expansions": 862488,
+      "roots": 36,
+      "events": [
+        "survive",
+        "death_bomb_no_player_hit"
+      ],
+      "deaths": 0.0,
+      "lives": 2.0,
+      "bombs": 3.0,
+      "stage": 0,
+      "px": 57.3725700378418,
+      "py": 373.6568603515625,
+      "internal_frames": 192,
+      "internal_frames_upper": 192
+    },
+    {
+      "index": 8,
+      "warmup": false,
+      "frame": 436,
+      "release": false,
+      "query_ms": 169.75,
+      "commit_ms": 0.855,
+      "step_ms": 170.605,
+      "advanced": 4,
+      "expected_advanced": 4,
+      "exited": false,
+      "bomb": 0,
+      "chosen": 0,
+      "chosen_slots": 24,
+      "slots_committed": 2,
+      "mask_committed": [
+        1,
+        65
+      ],
+      "verified_n": 3,
+      "verified_cands": [
+        0,
+        1,
+        2
+      ],
+      "verified_died": [
+        false,
+        false,
+        false
+      ],
+      "verify_frames": 144,
+      "death_refined": 0,
+      "record_frames": 48,
+      "record_steps": 47,
+      "record_commands": 144,
+      "record_spawn_ms": 0.712,
+      "record_advance_ms": 31.512,
+      "timing_ms": {
+        "record": 36.295,
+        "search": 101.512,
+        "verify": 31.826,
+        "events": 0.033
+      },
+      "expansions": 862488,
+      "roots": 36,
+      "events": [
+        "survive",
+        "death_bomb_no_player_hit"
+      ],
+      "deaths": 0.0,
+      "lives": 2.0,
+      "bombs": 3.0,
+      "stage": 0,
+      "px": 49.3725700378418,
+      "py": 373.6568603515625,
+      "internal_frames": 192,
+      "internal_frames_upper": 192
+    },
+    {
+      "index": 9,
+      "warmup": false,
+      "frame": 440,
+      "release": false,
+      "query_ms": 143.136,
+      "commit_ms": 2.405,
+      "step_ms": 145.541,
+      "advanced": 4,
+      "expected_advanced": 4,
+      "exited": false,
+      "bomb": 0,
+      "chosen": 6,
+      "chosen_slots": 24,
+      "slots_committed": 2,
+      "mask_committed": [
+        97,
+        97
+      ],
+      "verified_n": 3,
+      "verified_cands": [
+        6,
+        8,
+        7
+      ],
+      "verified_died": [
+        false,
+        false,
+        false
+      ],
+      "verify_frames": 144,
+      "death_refined": 0,
+      "record_frames": 48,
+      "record_steps": 47,
+      "record_commands": 144,
+      "record_spawn_ms": 0.529,
+      "record_advance_ms": 18.981,
+      "timing_ms": {
+        "record": 22.398,
+        "search": 87.656,
+        "verify": 32.896,
+        "events": 0.046
+      },
+      "expansions": 862488,
+      "roots": 36,
+      "events": [
+        "survive",
+        "death_bomb_no_player_hit"
+      ],
+      "deaths": 0.0,
+      "lives": 2.0,
+      "bombs": 3.0,
+      "stage": 0,
+      "px": 36.887290954589844,
+      "py": 382.14215087890625,
+      "internal_frames": 192,
+      "internal_frames_upper": 192
+    },
+    {
+      "index": 10,
+      "warmup": false,
+      "frame": 444,
+      "release": false,
+      "query_ms": 112.816,
+      "commit_ms": 0.866,
+      "step_ms": 113.682,
+      "advanced": 4,
+      "expected_advanced": 4,
+      "exited": false,
+      "bomb": 0,
+      "chosen": 3,
+      "chosen_slots": 24,
+      "slots_committed": 2,
+      "mask_committed": [
+        129,
+        129
+      ],
+      "verified_n": 3,
+      "verified_cands": [
+        3,
+        2,
+        4
+      ],
+      "verified_died": [
+        false,
+        false,
+        false
+      ],
+      "verify_frames": 144,
+      "death_refined": 0,
+      "record_frames": 48,
+      "record_steps": 47,
+      "record_commands": 144,
+      "record_spawn_ms": 0.722,
+      "record_advance_ms": 19.545,
+      "timing_ms": {
+        "record": 26.181,
+        "search": 62.61,
+        "verify": 23.91,
+        "events": 0.03
+      },
+      "expansions": 862488,
+      "roots": 36,
+      "events": [
+        "survive",
+        "death_bomb_no_player_hit"
+      ],
+      "deaths": 0.0,
+      "lives": 2.0,
+      "bombs": 3.0,
+      "stage": 0,
+      "px": 46.05886459350586,
+      "py": 384.9705810546875,
+      "internal_frames": 192,
+      "internal_frames_upper": 192
+    },
+    {
+      "index": 11,
+      "warmup": false,
+      "frame": 448,
+      "release": false,
+      "query_ms": 159.261,
+      "commit_ms": 1.435,
+      "step_ms": 160.696,
+      "advanced": 4,
+      "expected_advanced": 4,
+      "exited": false,
+      "bomb": 0,
+      "chosen": 3,
+      "chosen_slots": 24,
+      "slots_committed": 2,
+      "mask_committed": [
+        129,
+        129
+      ],
+      "verified_n": 3,
+      "verified_cands": [
+        3,
+        2,
+        4
+      ],
+      "verified_died": [
+        false,
+        false,
+        false
+      ],
+      "verify_frames": 144,
+      "death_refined": 0,
+      "record_frames": 48,
+      "record_steps": 47,
+      "record_commands": 144,
+      "record_spawn_ms": 0.597,
+      "record_advance_ms": 20.635,
+      "timing_ms": {
+        "record": 24.247,
+        "search": 98.488,
+        "verify": 36.331,
+        "events": 0.053
+      },
+      "expansions": 862488,
+      "roots": 36,
+      "events": [
+        "survive",
+        "death_bomb_no_player_hit"
+      ],
+      "deaths": 0.0,
+      "lives": 2.0,
+      "bombs": 3.0,
+      "stage": 0,
+      "px": 62.05886459350586,
+      "py": 384.9705810546875,
+      "internal_frames": 192,
+      "internal_frames_upper": 192
+    },
+    {
+      "index": 12,
+      "warmup": false,
+      "frame": 452,
+      "release": false,
+      "query_ms": 148.872,
+      "commit_ms": 0.841,
+      "step_ms": 149.713,
+      "advanced": 4,
+      "expected_advanced": 4,
+      "exited": false,
+      "bomb": 0,
+      "chosen": 2,
+      "chosen_slots": 24,
+      "slots_committed": 2,
+      "mask_committed": [
+        145,
+        129
+      ],
+      "verified_n": 3,
+      "verified_cands": [
+        2,
+        3,
+        4
+      ],
+      "verified_died": [
+        false,
+        false,
+        false
+      ],
+      "verify_frames": 144,
+      "death_refined": 0,
+      "record_frames": 48,
+      "record_steps": 47,
+      "record_commands": 144,
+      "record_spawn_ms": 0.651,
+      "record_advance_ms": 23.651,
+      "timing_ms": {
+        "record": 29.908,
+        "search": 87.66,
+        "verify": 31.177,
+        "events": 0.046
+      },
+      "expansions": 862488,
+      "roots": 36,
+      "events": [
+        "survive",
+        "death_bomb_no_player_hit"
+      ],
+      "deaths": 0.0,
+      "lives": 2.0,
+      "bombs": 3.0,
+      "stage": 0,
+      "px": 75.71572875976562,
+      "py": 379.313720703125,
+      "internal_frames": 192,
+      "internal_frames_upper": 192
+    },
+    {
+      "index": 13,
+      "warmup": false,
+      "frame": 456,
+      "release": false,
+      "query_ms": 134.893,
+      "commit_ms": 1.921,
+      "step_ms": 136.814,
+      "advanced": 4,
+      "expected_advanced": 4,
+      "exited": false,
+      "bomb": 0,
+      "chosen": 0,
+      "chosen_slots": 24,
+      "slots_committed": 2,
+      "mask_committed": [
+        1,
+        145
+      ],
+      "verified_n": 3,
+      "verified_cands": [
+        0,
+        1,
+        2
+      ],
+      "verified_died": [
+        false,
+        false,
+        false
+      ],
+      "verify_frames": 144,
+      "death_refined": 0,
+      "record_frames": 48,
+      "record_steps": 47,
+      "record_commands": 144,
+      "record_spawn_ms": 0.58,
+      "record_advance_ms": 19.593,
+      "timing_ms": {
+        "record": 22.926,
+        "search": 76.234,
+        "verify": 35.566,
+        "events": 0.046
+      },
+      "expansions": 862488,
+      "roots": 36,
+      "events": [
+        "survive",
+        "death_bomb_no_player_hit"
+      ],
+      "deaths": 0.0,
+      "lives": 2.0,
+      "bombs": 3.0,
+      "stage": 0,
+      "px": 82.54415893554688,
+      "py": 376.48529052734375,
+      "internal_frames": 192,
+      "internal_frames_upper": 192
+    },
+    {
+      "index": 14,
+      "warmup": false,
+      "frame": 460,
+      "release": false,
+      "query_ms": 127.668,
+      "commit_ms": 1.902,
+      "step_ms": 129.57,
+      "advanced": 4,
+      "expected_advanced": 4,
+      "exited": false,
+      "bomb": 0,
+      "chosen": 0,
+      "chosen_slots": 24,
+      "slots_committed": 2,
+      "mask_committed": [
+        1,
+        101
+      ],
+      "verified_n": 3,
+      "verified_cands": [
+        0,
+        1,
+        5
+      ],
+      "verified_died": [
+        false,
+        false,
+        false
+      ],
+      "verify_frames": 144,
+      "death_refined": 0,
+      "record_frames": 48,
+      "record_steps": 47,
+      "record_commands": 144,
+      "record_spawn_ms": 0.878,
+      "record_advance_ms": 12.289,
+      "timing_ms": {
+        "record": 16.81,
+        "search": 69.467,
+        "verify": 41.211,
+        "events": 0.035
+      },
+      "expansions": 862488,
+      "roots": 36,
+      "events": [
+        "survive",
+        "death_bomb_no_player_hit"
+      ],
+      "deaths": 0.0,
+      "lives": 2.0,
+      "bombs": 3.0,
+      "stage": 0,
+      "px": 83.9583740234375,
+      "py": 375.0710754394531,
+      "internal_frames": 192,
+      "internal_frames_upper": 192
+    },
+    {
+      "index": 15,
+      "warmup": false,
+      "frame": 464,
+      "release": false,
+      "query_ms": 108.096,
+      "commit_ms": 1.608,
+      "step_ms": 109.704,
+      "advanced": 4,
+      "expected_advanced": 4,
+      "exited": false,
+      "bomb": 0,
+      "chosen": 0,
+      "chosen_slots": 24,
+      "slots_committed": 2,
+      "mask_committed": [
+        1,
+        97
+      ],
+      "verified_n": 3,
+      "verified_cands": [
+        0,
+        1,
+        5
+      ],
+      "verified_died": [
+        false,
+        false,
+        false
+      ],
+      "verify_frames": 144,
+      "death_refined": 0,
+      "record_frames": 48,
+      "record_steps": 47,
+      "record_commands": 144,
+      "record_spawn_ms": 0.837,
+      "record_advance_ms": 20.598,
+      "timing_ms": {
+        "record": 24.572,
+        "search": 58.999,
+        "verify": 24.308,
+        "events": 0.073
+      },
+      "expansions": 862488,
+      "roots": 36,
+      "events": [
+        "survive",
+        "death_bomb_no_player_hit"
+      ],
+      "deaths": 0.0,
+      "lives": 2.0,
+      "bombs": 3.0,
+      "stage": 0,
+      "px": 79.71572875976562,
+      "py": 379.313720703125,
+      "internal_frames": 192,
+      "internal_frames_upper": 192
+    },
+    {
+      "index": 16,
+      "warmup": false,
+      "frame": 468,
+      "release": false,
+      "query_ms": 136.854,
+      "commit_ms": 1.2,
+      "step_ms": 138.054,
+      "advanced": 4,
+      "expected_advanced": 4,
+      "exited": false,
+      "bomb": 0,
+      "chosen": 7,
+      "chosen_slots": 24,
+      "slots_committed": 2,
+      "mask_committed": [
+        65,
+        65
+      ],
+      "verified_n": 3,
+      "verified_cands": [
+        7,
+        6,
+        8
+      ],
+      "verified_died": [
+        false,
+        false,
+        false
+      ],
+      "verify_frames": 144,
+      "death_refined": 0,
+      "record_frames": 48,
+      "record_steps": 47,
+      "record_commands": 144,
+      "record_spawn_ms": 0.72,
+      "record_advance_ms": 12.398,
+      "timing_ms": {
+        "record": 17.975,
+        "search": 86.557,
+        "verify": 32.149,
+        "events": 0.063
+      },
+      "expansions": 862488,
+      "roots": 36,
+      "events": [
+        "survive",
+        "death_bomb_no_player_hit"
+      ],
+      "deaths": 0.0,
+      "lives": 2.0,
+      "bombs": 3.0,
+      "stage": 0,
+      "px": 64.88729858398438,
+      "py": 382.14215087890625,
+      "internal_frames": 192,
+      "internal_frames_upper": 192
+    },
+    {
+      "index": 17,
+      "warmup": false,
+      "frame": 472,
+      "release": false,
+      "query_ms": 141.316,
+      "commit_ms": 1.227,
+      "step_ms": 142.543,
+      "advanced": 4,
+      "expected_advanced": 4,
+      "exited": false,
+      "bomb": 0,
+      "chosen": 7,
+      "chosen_slots": 24,
+      "slots_committed": 2,
+      "mask_committed": [
+        65,
+        65
+      ],
+      "verified_n": 3,
+      "verified_cands": [
+        7,
+        6,
+        8
+      ],
+      "verified_died": [
+        false,
+        false,
+        false
+      ],
+      "verify_frames": 144,
+      "death_refined": 0,
+      "record_frames": 48,
+      "record_steps": 47,
+      "record_commands": 144,
+      "record_spawn_ms": 0.513,
+      "record_advance_ms": 23.292,
+      "timing_ms": {
+        "record": 27.2,
+        "search": 83.499,
+        "verify": 30.399,
+        "events": 0.104
+      },
+      "expansions": 862488,
+      "roots": 36,
+      "events": [
+        "survive",
+        "death_bomb_no_player_hit"
+      ],
+      "deaths": 0.0,
+      "lives": 2.0,
+      "bombs": 3.0,
+      "stage": 0,
+      "px": 48.887298583984375,
+      "py": 382.14215087890625,
+      "internal_frames": 192,
+      "internal_frames_upper": 192
+    },
+    {
+      "index": 18,
+      "warmup": false,
+      "frame": 476,
+      "release": false,
+      "query_ms": 139.585,
+      "commit_ms": 1.589,
+      "step_ms": 141.174,
+      "advanced": 4,
+      "expected_advanced": 4,
+      "exited": false,
+      "bomb": 0,
+      "chosen": 7,
+      "chosen_slots": 24,
+      "slots_committed": 2,
+      "mask_committed": [
+        65,
+        65
+      ],
+      "verified_n": 3,
+      "verified_cands": [
+        7,
+        16,
+        6
+      ],
+      "verified_died": [
+        false,
+        false,
+        false
+      ],
+      "verify_frames": 144,
+      "death_refined": 0,
+      "record_frames": 48,
+      "record_steps": 47,
+      "record_commands": 144,
+      "record_spawn_ms": 0.574,
+      "record_advance_ms": 11.895,
+      "timing_ms": {
+        "record": 15.683,
+        "search": 86.672,
+        "verify": 37.051,
+        "events": 0.035
+      },
+      "expansions": 862488,
+      "roots": 36,
+      "events": [
+        "survive",
+        "death_bomb_no_player_hit"
+      ],
+      "deaths": 0.0,
+      "lives": 2.0,
+      "bombs": 3.0,
+      "stage": 0,
+      "px": 32.887298583984375,
+      "py": 382.14215087890625,
+      "internal_frames": 192,
+      "internal_frames_upper": 192
+    },
+    {
+      "index": 19,
+      "warmup": false,
+      "frame": 480,
+      "release": false,
+      "query_ms": 136.973,
+      "commit_ms": 1.726,
+      "step_ms": 138.699,
+      "advanced": 4,
+      "expected_advanced": 4,
+      "exited": false,
+      "bomb": 0,
+      "chosen": 15,
+      "chosen_slots": 24,
+      "slots_committed": 2,
+      "mask_committed": [
+        101,
+        97
+      ],
+      "verified_n": 3,
+      "verified_cands": [
+        15,
+        17,
+        0
+      ],
+      "verified_died": [
+        false,
+        false,
+        false
+      ],
+      "verify_frames": 144,
+      "death_refined": 0,
+      "record_frames": 48,
+      "record_steps": 47,
+      "record_commands": 144,
+      "record_spawn_ms": 0.927,
+      "record_advance_ms": 23.698,
+      "timing_ms": {
+        "record": 29.516,
+        "search": 81.135,
+        "verify": 26.139,
+        "events": 0.045
+      },
+      "expansions": 862488,
+      "roots": 36,
+      "events": [
+        "survive",
+        "death_bomb_no_player_hit"
+      ],
+      "deaths": 0.0,
+      "lives": 2.0,
+      "bombs": 3.0,
+      "stage": 0,
+      "px": 23.230445861816406,
+      "py": 387.79901123046875,
+      "internal_frames": 192,
+      "internal_frames_upper": 192
+    },
+    {
+      "index": 20,
+      "warmup": false,
+      "frame": 484,
+      "release": false,
+      "query_ms": 176.796,
+      "commit_ms": 0.86,
+      "step_ms": 177.657,
+      "advanced": 4,
+      "expected_advanced": 4,
+      "exited": false,
+      "bomb": 0,
+      "chosen": 2,
+      "chosen_slots": 24,
+      "slots_committed": 2,
+      "mask_committed": [
+        145,
+        145
+      ],
+      "verified_n": 3,
+      "verified_cands": [
+        2,
+        4,
+        0
+      ],
+      "verified_died": [
+        false,
+        false,
+        false
+      ],
+      "verify_frames": 144,
+      "death_refined": 0,
+      "record_frames": 48,
+      "record_steps": 47,
+      "record_commands": 144,
+      "record_spawn_ms": 0.693,
+      "record_advance_ms": 24.104,
+      "timing_ms": {
+        "record": 29.39,
+        "search": 120.032,
+        "verify": 27.236,
+        "events": 0.052
+      },
+      "expansions": 862488,
+      "roots": 36,
+      "events": [
+        "survive",
+        "death_bomb_no_player_hit"
+      ],
+      "deaths": 0.0,
+      "lives": 2.0,
+      "bombs": 3.0,
+      "stage": 0,
+      "px": 28.887298583984375,
+      "py": 382.14215087890625,
+      "internal_frames": 192,
+      "internal_frames_upper": 192
+    },
+    {
+      "index": 21,
+      "warmup": false,
+      "frame": 488,
+      "release": false,
+      "query_ms": 121.503,
+      "commit_ms": 1.846,
+      "step_ms": 123.348,
+      "advanced": 4,
+      "expected_advanced": 4,
+      "exited": false,
+      "bomb": 0,
+      "chosen": 2,
+      "chosen_slots": 24,
+      "slots_committed": 2,
+      "mask_committed": [
+        145,
+        65
+      ],
+      "verified_n": 3,
+      "verified_cands": [
+        2,
+        4,
+        7
+      ],
+      "verified_died": [
+        false,
+        false,
+        false
+      ],
+      "verify_frames": 144,
+      "death_refined": 0,
+      "record_frames": 48,
+      "record_steps": 47,
+      "record_commands": 144,
+      "record_spawn_ms": 0.63,
+      "record_advance_ms": 27.346,
+      "timing_ms": {
+        "record": 30.923,
+        "search": 51.552,
+        "verify": 38.871,
+        "events": 0.06
+      },
+      "expansions": 862488,
+      "roots": 36,
+      "events": [
+        "survive",
+        "death_bomb_no_player_hit"
+      ],
+      "deaths": 0.0,
+      "lives": 2.0,
+      "bombs": 3.0,
+      "stage": 0,
+      "px": 33.37257766723633,
+      "py": 373.6568603515625,
+      "internal_frames": 192,
+      "internal_frames_upper": 192
+    },
+    {
+      "index": 22,
+      "warmup": false,
+      "frame": 492,
+      "release": false,
+      "query_ms": 153.508,
+      "commit_ms": 2.005,
+      "step_ms": 155.513,
+      "advanced": 4,
+      "expected_advanced": 4,
+      "exited": false,
+      "bomb": 0,
+      "chosen": 11,
+      "chosen_slots": 24,
+      "slots_committed": 2,
+      "mask_committed": [
+        149,
+        69
+      ],
+      "verified_n": 3,
+      "verified_cands": [
+        11,
+        13,
+        15
+      ],
+      "verified_died": [
+        false,
+        false,
+        false
+      ],
+      "verify_frames": 144,
+      "death_refined": 0,
+      "record_frames": 48,
+      "record_steps": 47,
+      "record_commands": 144,
+      "record_spawn_ms": 0.588,
+      "record_advance_ms": 12.482,
+      "timing_ms": {
+        "record": 15.921,
+        "search": 93.956,
+        "verify": 43.453,
+        "events": 0.035
+      },
+      "expansions": 862488,
+      "roots": 36,
+      "events": [
+        "survive",
+        "death_bomb_no_player_hit"
+      ],
+      "deaths": 0.0,
+      "lives": 2.0,
+      "bombs": 3.0,
+      "stage": 0,
+      "px": 30.201004028320312,
+      "py": 370.82843017578125,
+      "internal_frames": 192,
+      "internal_frames_upper": 192
+    },
+    {
+      "index": 23,
+      "warmup": false,
+      "frame": 496,
+      "release": true,
+      "query_ms": 100.243,
+      "commit_ms": 0.934,
+      "step_ms": 101.177,
+      "advanced": 4,
+      "expected_advanced": 4,
+      "exited": false,
+      "bomb": 0,
+      "chosen": 0,
+      "chosen_slots": 24,
+      "slots_committed": 2,
+      "mask_committed": [
+        1,
+        97,
+        96
+      ],
+      "verified_n": 3,
+      "verified_cands": [
+        0,
+        1,
+        3
+      ],
+      "verified_died": [
+        false,
+        false,
+        false
+      ],
+      "verify_frames": 144,
+      "death_refined": 0,
+      "record_frames": 48,
+      "record_steps": 47,
+      "record_commands": 144,
+      "record_spawn_ms": 0.698,
+      "record_advance_ms": 21.477,
+      "timing_ms": {
+        "record": 25.827,
+        "search": 52.089,
+        "verify": 22.173,
+        "events": 0.067
+      },
+      "expansions": 862488,
+      "roots": 36,
+      "events": [
+        "survive",
+        "death_bomb_no_player_hit"
+      ],
+      "deaths": 0.0,
+      "lives": 2.0,
+      "bombs": 3.0,
+      "stage": 0,
+      "px": 25.372577667236328,
+      "py": 373.6568603515625,
+      "internal_frames": 192,
+      "internal_frames_upper": 192
+    },
+    {
+      "index": 24,
+      "warmup": false,
+      "frame": 500,
+      "release": false,
+      "query_ms": 169.013,
+      "commit_ms": 1.662,
+      "step_ms": 170.675,
+      "advanced": 4,
+      "expected_advanced": 4,
+      "exited": false,
+      "bomb": 0,
+      "chosen": 11,
+      "chosen_slots": 24,
+      "slots_committed": 2,
+      "mask_committed": [
+        149,
+        133
+      ],
+      "verified_n": 3,
+      "verified_cands": [
+        11,
+        12,
+        13
+      ],
+      "verified_died": [
+        false,
+        false,
+        false
+      ],
+      "verify_frames": 144,
+      "death_refined": 0,
+      "record_frames": 48,
+      "record_steps": 47,
+      "record_commands": 144,
+      "record_spawn_ms": 3.714,
+      "record_advance_ms": 21.483,
+      "timing_ms": {
+        "record": 33.84,
+        "search": 101.242,
+        "verify": 33.673,
+        "events": 0.167
+      },
+      "expansions": 862488,
+      "roots": 36,
+      "events": [
+        "survive",
+        "death_bomb_no_player_hit"
+      ],
+      "deaths": 0.0,
+      "lives": 2.0,
+      "bombs": 3.0,
+      "stage": 0,
+      "px": 27.372577667236328,
+      "py": 373.6568603515625,
+      "internal_frames": 192,
+      "internal_frames_upper": 192
+    },
+    {
+      "index": 25,
+      "warmup": false,
+      "frame": 504,
+      "release": false,
+      "query_ms": 124.293,
+      "commit_ms": 1.212,
+      "step_ms": 125.505,
+      "advanced": 4,
+      "expected_advanced": 4,
+      "exited": false,
+      "bomb": 0,
+      "chosen": 3,
+      "chosen_slots": 24,
+      "slots_committed": 2,
+      "mask_committed": [
+        129,
+        129
+      ],
+      "verified_n": 3,
+      "verified_cands": [
+        3,
+        2,
+        4
+      ],
+      "verified_died": [
+        false,
+        false,
+        false
+      ],
+      "verify_frames": 144,
+      "death_refined": 0,
+      "record_frames": 48,
+      "record_steps": 47,
+      "record_commands": 144,
+      "record_spawn_ms": 0.597,
+      "record_advance_ms": 20.03,
+      "timing_ms": {
+        "record": 23.689,
+        "search": 62.413,
+        "verify": 38.025,
+        "events": 0.068
+      },
+      "expansions": 862488,
+      "roots": 36,
+      "events": [
+        "survive",
+        "death_bomb_no_player_hit"
+      ],
+      "deaths": 0.0,
+      "lives": 2.0,
+      "bombs": 3.0,
+      "stage": 0,
+      "px": 41.37257766723633,
+      "py": 373.6568603515625,
+      "internal_frames": 192,
+      "internal_frames_upper": 192
+    },
+    {
+      "index": 26,
+      "warmup": false,
+      "frame": 508,
+      "release": false,
+      "query_ms": 127.255,
+      "commit_ms": 1.674,
+      "step_ms": 128.929,
+      "advanced": 4,
+      "expected_advanced": 4,
+      "exited": false,
+      "bomb": 0,
+      "chosen": 3,
+      "chosen_slots": 24,
+      "slots_committed": 2,
+      "mask_committed": [
+        129,
+        129
+      ],
+      "verified_n": 3,
+      "verified_cands": [
+        3,
+        2,
+        4
+      ],
+      "verified_died": [
+        false,
+        false,
+        false
+      ],
+      "verify_frames": 144,
+      "death_refined": 0,
+      "record_frames": 48,
+      "record_steps": 47,
+      "record_commands": 144,
+      "record_spawn_ms": 0.591,
+      "record_advance_ms": 23.98,
+      "timing_ms": {
+        "record": 27.589,
+        "search": 73.986,
+        "verify": 25.506,
+        "events": 0.029
+      },
+      "expansions": 862488,
+      "roots": 36,
+      "events": [
+        "survive",
+        "death_bomb_no_player_hit"
+      ],
+      "deaths": 0.0,
+      "lives": 2.0,
+      "bombs": 3.0,
+      "stage": 0,
+      "px": 57.37257766723633,
+      "py": 373.6568603515625,
+      "internal_frames": 192,
+      "internal_frames_upper": 192
+    },
+    {
+      "index": 27,
+      "warmup": false,
+      "frame": 512,
+      "release": false,
+      "query_ms": 173.545,
+      "commit_ms": 2.587,
+      "step_ms": 176.132,
+      "advanced": 4,
+      "expected_advanced": 4,
+      "exited": false,
+      "bomb": 0,
+      "chosen": 3,
+      "chosen_slots": 24,
+      "slots_committed": 2,
+      "mask_committed": [
+        129,
+        129
+      ],
+      "verified_n": 3,
+      "verified_cands": [
+        3,
+        2,
+        4
+      ],
+      "verified_died": [
+        false,
+        false,
+        false
+      ],
+      "verify_frames": 144,
+      "death_refined": 0,
+      "record_frames": 48,
+      "record_steps": 47,
+      "record_commands": 144,
+      "record_spawn_ms": 0.679,
+      "record_advance_ms": 20.337,
+      "timing_ms": {
+        "record": 24.626,
+        "search": 113.792,
+        "verify": 34.93,
+        "events": 0.054
+      },
+      "expansions": 862488,
+      "roots": 36,
+      "events": [
+        "survive",
+        "death_bomb_no_player_hit"
+      ],
+      "deaths": 0.0,
+      "lives": 2.0,
+      "bombs": 3.0,
+      "stage": 0,
+      "px": 73.37257385253906,
+      "py": 373.6568603515625,
+      "internal_frames": 192,
+      "internal_frames_upper": 192
+    },
+    {
+      "index": 28,
+      "warmup": false,
+      "frame": 516,
+      "release": false,
+      "query_ms": 123.722,
+      "commit_ms": 1.008,
+      "step_ms": 124.73,
+      "advanced": 4,
+      "expected_advanced": 4,
+      "exited": false,
+      "bomb": 0,
+      "chosen": 2,
+      "chosen_slots": 24,
+      "slots_committed": 2,
+      "mask_committed": [
+        145,
+        149
+      ],
+      "verified_n": 3,
+      "verified_cands": [
+        2,
+        4,
+        11
+      ],
+      "verified_died": [
+        false,
+        false,
+        false
+      ],
+      "verify_frames": 144,
+      "death_refined": 0,
+      "record_frames": 48,
+      "record_steps": 47,
+      "record_commands": 144,
+      "record_spawn_ms": 0.801,
+      "record_advance_ms": 13.988,
+      "timing_ms": {
+        "record": 21.424,
+        "search": 72.335,
+        "verify": 29.836,
+        "events": 0.045
+      },
+      "expansions": 862488,
+      "roots": 36,
+      "events": [
+        "survive",
+        "death_bomb_no_player_hit"
+      ],
+      "deaths": 0.0,
+      "lives": 2.0,
+      "bombs": 3.0,
+      "stage": 0,
+      "px": 84.44364929199219,
+      "py": 366.5857849121094,
+      "internal_frames": 192,
+      "internal_frames_upper": 192
+    },
+    {
+      "index": 29,
+      "warmup": false,
+      "frame": 520,
+      "release": false,
+      "query_ms": 156.486,
+      "commit_ms": 1.313,
+      "step_ms": 157.799,
+      "advanced": 4,
+      "expected_advanced": 4,
+      "exited": false,
+      "bomb": 0,
+      "chosen": 7,
+      "chosen_slots": 24,
+      "slots_committed": 2,
+      "mask_committed": [
+        65,
+        149
+      ],
+      "verified_n": 3,
+      "verified_cands": [
+        7,
+        11,
+        13
+      ],
+      "verified_died": [
+        false,
+        false,
+        false
+      ],
+      "verify_frames": 144,
+      "death_refined": 0,
+      "record_frames": 48,
+      "record_steps": 47,
+      "record_commands": 144,
+      "record_spawn_ms": 0.513,
+      "record_advance_ms": 20.872,
+      "timing_ms": {
+        "record": 24.026,
+        "search": 94.996,
+        "verify": 37.305,
+        "events": 0.047
+      },
+      "expansions": 862488,
+      "roots": 36,
+      "events": [
+        "survive",
+        "death_bomb_no_player_hit"
+      ],
+      "deaths": 0.0,
+      "lives": 2.0,
+      "bombs": 3.0,
+      "stage": 0,
+      "px": 79.27207946777344,
+      "py": 363.7573547363281,
+      "internal_frames": 192,
+      "internal_frames_upper": 192
+    },
+    {
+      "index": 30,
+      "warmup": false,
+      "frame": 524,
+      "release": false,
+      "query_ms": 155.748,
+      "commit_ms": 0.933,
+      "step_ms": 156.681,
+      "advanced": 4,
+      "expected_advanced": 4,
+      "exited": false,
+      "bomb": 0,
+      "chosen": 0,
+      "chosen_slots": 24,
+      "slots_committed": 2,
+      "mask_committed": [
+        1,
+        149
+      ],
+      "verified_n": 3,
+      "verified_cands": [
+        0,
+        1,
+        2
+      ],
+      "verified_died": [
+        false,
+        false,
+        false
+      ],
+      "verify_frames": 144,
+      "death_refined": 0,
+      "record_frames": 48,
+      "record_steps": 47,
+      "record_commands": 144,
+      "record_spawn_ms": 1.824,
+      "record_advance_ms": 28.016,
+      "timing_ms": {
+        "record": 36.669,
+        "search": 90.193,
+        "verify": 28.769,
+        "events": 0.038
+      },
+      "expansions": 862488,
+      "roots": 36,
+      "events": [
+        "survive",
+        "death_bomb_no_player_hit"
+      ],
+      "deaths": 0.0,
+      "lives": 2.0,
+      "bombs": 3.0,
+      "stage": 0,
+      "px": 82.10050964355469,
+      "py": 360.9289245605469,
+      "internal_frames": 192,
+      "internal_frames_upper": 192
+    },
+    {
+      "index": 31,
+      "warmup": false,
+      "frame": 528,
+      "release": false,
+      "query_ms": 105.419,
+      "commit_ms": 1.276,
+      "step_ms": 106.695,
+      "advanced": 4,
+      "expected_advanced": 4,
+      "exited": false,
+      "bomb": 0,
+      "chosen": 0,
+      "chosen_slots": 24,
+      "slots_committed": 2,
+      "mask_committed": [
+        1,
+        65
+      ],
+      "verified_n": 3,
+      "verified_cands": [
+        0,
+        1,
+        2
+      ],
+      "verified_died": [
+        false,
+        false,
+        false
+      ],
+      "verify_frames": 144,
+      "death_refined": 0,
+      "record_frames": 48,
+      "record_steps": 47,
+      "record_commands": 144,
+      "record_spawn_ms": 0.55,
+      "record_advance_ms": 12.031,
+      "timing_ms": {
+        "record": 15.392,
+        "search": 60.082,
+        "verify": 29.722,
+        "events": 0.123
+      },
+      "expansions": 862488,
+      "roots": 36,
+      "events": [
+        "survive",
+        "death_bomb_no_player_hit"
+      ],
+      "deaths": 0.0,
+      "lives": 2.0,
+      "bombs": 3.0,
+      "stage": 0,
+      "px": 79.51472473144531,
+      "py": 359.51470947265625,
+      "internal_frames": 192,
+      "internal_frames_upper": 192
+    },
+    {
+      "index": 32,
+      "warmup": false,
+      "frame": 532,
+      "release": false,
+      "query_ms": 69.556,
+      "commit_ms": 0.834,
+      "step_ms": 70.389,
+      "advanced": 4,
+      "expected_advanced": 4,
+      "exited": false,
+      "bomb": 0,
+      "chosen": 7,
+      "chosen_slots": 24,
+      "slots_committed": 2,
+      "mask_committed": [
+        65,
+        65
+      ],
+      "verified_n": 3,
+      "verified_cands": [
+        7,
+        6,
+        8
+      ],
+      "verified_died": [
+        false,
+        false,
+        false
+      ],
+      "verify_frames": 144,
+      "death_refined": 0,
+      "record_frames": 48,
+      "record_steps": 47,
+      "record_commands": 144,
+      "record_spawn_ms": 0.572,
+      "record_advance_ms": 13.584,
+      "timing_ms": {
+        "record": 17.227,
+        "search": 24.9,
+        "verify": 27.315,
+        "events": 0.032
+      },
+      "expansions": 862488,
+      "roots": 36,
+      "events": [
+        "survive",
+        "death_bomb_no_player_hit"
+      ],
+      "deaths": 0.0,
+      "lives": 2.0,
+      "bombs": 3.0,
+      "stage": 0,
+      "px": 63.51472473144531,
+      "py": 359.51470947265625,
+      "internal_frames": 192,
+      "internal_frames_upper": 192
+    },
+    {
+      "index": 33,
+      "warmup": false,
+      "frame": 536,
+      "release": false,
+      "query_ms": 62.294,
+      "commit_ms": 2.725,
+      "step_ms": 65.019,
+      "advanced": 4,
+      "expected_advanced": 4,
+      "exited": false,
+      "bomb": 0,
+      "chosen": 7,
+      "chosen_slots": 24,
+      "slots_committed": 2,
+      "mask_committed": [
+        65,
+        65
+      ],
+      "verified_n": 3,
+      "verified_cands": [
+        7,
+        6,
+        8
+      ],
+      "verified_died": [
+        false,
+        false,
+        false
+      ],
+      "verify_frames": 144,
+      "death_refined": 0,
+      "record_frames": 48,
+      "record_steps": 47,
+      "record_commands": 144,
+      "record_spawn_ms": 0.521,
+      "record_advance_ms": 14.783,
+      "timing_ms": {
+        "record": 18.014,
+        "search": 20.794,
+        "verify": 23.344,
+        "events": 0.05
+      },
+      "expansions": 862488,
+      "roots": 36,
+      "events": [
+        "survive",
+        "death_bomb_no_player_hit"
+      ],
+      "deaths": 0.0,
+      "lives": 2.0,
+      "bombs": 3.0,
+      "stage": 0,
+      "px": 47.51472473144531,
+      "py": 359.51470947265625,
+      "internal_frames": 192,
+      "internal_frames_upper": 192
+    },
+    {
+      "index": 34,
+      "warmup": false,
+      "frame": 540,
+      "release": false,
+      "query_ms": 69.097,
+      "commit_ms": 2.038,
+      "step_ms": 71.134,
+      "advanced": 4,
+      "expected_advanced": 4,
+      "exited": false,
+      "bomb": 0,
+      "chosen": 6,
+      "chosen_slots": 24,
+      "slots_committed": 2,
+      "mask_committed": [
+        97,
+        97
+      ],
+      "verified_n": 3,
+      "verified_cands": [
+        6,
+        8,
+        7
+      ],
+      "verified_died": [
+        false,
+        false,
+        false
+      ],
+      "verify_frames": 144,
+      "death_refined": 0,
+      "record_frames": 48,
+      "record_steps": 47,
+      "record_commands": 144,
+      "record_spawn_ms": 0.571,
+      "record_advance_ms": 14.32,
+      "timing_ms": {
+        "record": 17.963,
+        "search": 22.902,
+        "verify": 28.092,
+        "events": 0.038
+      },
+      "expansions": 862488,
+      "roots": 36,
+      "events": [
+        "survive",
+        "death_bomb_no_player_hit"
+      ],
+      "deaths": 0.0,
+      "lives": 2.0,
+      "bombs": 3.0,
+      "stage": 0,
+      "px": 35.02944564819336,
+      "py": 368.0,
+      "internal_frames": 192,
+      "internal_frames_upper": 192
+    },
+    {
+      "index": 35,
+      "warmup": false,
+      "frame": 544,
+      "release": false,
+      "query_ms": 81.545,
+      "commit_ms": 0.96,
+      "step_ms": 82.505,
+      "advanced": 4,
+      "expected_advanced": 4,
+      "exited": false,
+      "bomb": 0,
+      "chosen": 0,
+      "chosen_slots": 24,
+      "slots_committed": 2,
+      "mask_committed": [
+        1,
+        101
+      ],
+      "verified_n": 3,
+      "verified_cands": [
+        0,
+        1,
+        5
+      ],
+      "verified_died": [
+        false,
+        false,
+        false
+      ],
+      "verify_frames": 144,
+      "death_refined": 0,
+      "record_frames": 48,
+      "record_steps": 47,
+      "record_commands": 144,
+      "record_spawn_ms": 0.489,
+      "record_advance_ms": 18.411,
+      "timing_ms": {
+        "record": 22.152,
+        "search": 27.404,
+        "verify": 31.797,
+        "events": 0.034
+      },
+      "expansions": 862488,
+      "roots": 36,
+      "events": [
+        "survive",
+        "death_bomb_no_player_hit"
+      ],
+      "deaths": 0.0,
+      "lives": 2.0,
+      "bombs": 3.0,
+      "stage": 0,
+      "px": 30.786806106567383,
+      "py": 372.2426452636719,
+      "internal_frames": 192,
+      "internal_frames_upper": 192
+    },
+    {
+      "index": 36,
+      "warmup": false,
+      "frame": 548,
+      "release": false,
+      "query_ms": 86.275,
+      "commit_ms": 1.543,
+      "step_ms": 87.818,
+      "advanced": 4,
+      "expected_advanced": 4,
+      "exited": false,
+      "bomb": 0,
+      "chosen": 0,
+      "chosen_slots": 24,
+      "slots_committed": 2,
+      "mask_committed": [
+        1,
+        69
+      ],
+      "verified_n": 3,
+      "verified_cands": [
+        0,
+        1,
+        2
+      ],
+      "verified_died": [
+        false,
+        false,
+        false
+      ],
+      "verify_frames": 144,
+      "death_refined": 0,
+      "record_frames": 48,
+      "record_steps": 47,
+      "record_commands": 144,
+      "record_spawn_ms": 0.591,
+      "record_advance_ms": 27.839,
+      "timing_ms": {
+        "record": 31.065,
+        "search": 19.604,
+        "verify": 35.409,
+        "events": 0.051
+      },
+      "expansions": 862488,
+      "roots": 36,
+      "events": [
+        "survive",
+        "death_bomb_no_player_hit"
+      ],
+      "deaths": 0.0,
+      "lives": 2.0,
+      "bombs": 3.0,
+      "stage": 0,
+      "px": 27.37259292602539,
+      "py": 373.6568603515625,
+      "internal_frames": 192,
+      "internal_frames_upper": 192
+    },
+    {
+      "index": 37,
+      "warmup": false,
+      "frame": 552,
+      "release": false,
+      "query_ms": 88.851,
+      "commit_ms": 1.351,
+      "step_ms": 90.202,
+      "advanced": 4,
+      "expected_advanced": 4,
+      "exited": false,
+      "bomb": 0,
+      "chosen": 6,
+      "chosen_slots": 24,
+      "slots_committed": 2,
+      "mask_committed": [
+        97,
+        97
+      ],
+      "verified_n": 3,
+      "verified_cands": [
+        6,
+        8,
+        3
+      ],
+      "verified_died": [
+        false,
+        false,
+        false
+      ],
+      "verify_frames": 144,
+      "death_refined": 0,
+      "record_frames": 48,
+      "record_steps": 47,
+      "record_commands": 144,
+      "record_spawn_ms": 0.671,
+      "record_advance_ms": 19.919,
+      "timing_ms": {
+        "record": 24.949,
+        "search": 34.759,
+        "verify": 29.013,
+        "events": 0.047
+      },
+      "expansions": 862488,
+      "roots": 36,
+      "events": [
+        "survive",
+        "death_bomb_no_player_hit"
+      ],
+      "deaths": 0.0,
+      "lives": 2.0,
+      "bombs": 3.0,
+      "stage": 0,
+      "px": 16.887313842773438,
+      "py": 382.14215087890625,
+      "internal_frames": 192,
+      "internal_frames_upper": 192
+    },
+    {
+      "index": 38,
+      "warmup": false,
+      "frame": 556,
+      "release": false,
+      "query_ms": 124.583,
+      "commit_ms": 1.169,
+      "step_ms": 125.753,
+      "advanced": 4,
+      "expected_advanced": 4,
+      "exited": false,
+      "bomb": 0,
+      "chosen": 2,
+      "chosen_slots": 24,
+      "slots_committed": 2,
+      "mask_committed": [
+        145,
+        133
+      ],
+      "verified_n": 3,
+      "verified_cands": [
+        2,
+        4,
+        11
+      ],
+      "verified_died": [
+        false,
+        false,
+        false
+      ],
+      "verify_frames": 144,
+      "death_refined": 0,
+      "record_frames": 48,
+      "record_steps": 47,
+      "record_commands": 144,
+      "record_spawn_ms": 0.774,
+      "record_advance_ms": 22.482,
+      "timing_ms": {
+        "record": 25.814,
+        "search": 62.922,
+        "verify": 35.696,
+        "events": 0.042
+      },
+      "expansions": 862488,
+      "roots": 36,
+      "events": [
+        "survive",
+        "death_bomb_no_player_hit"
+      ],
+      "deaths": 0.0,
+      "lives": 2.0,
+      "bombs": 3.0,
+      "stage": 0,
+      "px": 21.715740203857422,
+      "py": 379.313720703125,
+      "internal_frames": 192,
+      "internal_frames_upper": 192
+    },
+    {
+      "index": 39,
+      "warmup": false,
+      "frame": 560,
+      "release": false,
+      "query_ms": 77.077,
+      "commit_ms": 0.851,
+      "step_ms": 77.927,
+      "advanced": 4,
+      "expected_advanced": 4,
+      "exited": false,
+      "bomb": 0,
+      "chosen": 3,
+      "chosen_slots": 24,
+      "slots_committed": 2,
+      "mask_committed": [
+        129,
+        97
+      ],
+      "verified_n": 3,
+      "verified_cands": [
+        3,
+        6,
+        8
+      ],
+      "verified_died": [
+        false,
+        false,
+        false
+      ],
+      "verify_frames": 144,
+      "death_refined": 0,
+      "record_frames": 48,
+      "record_steps": 47,
+      "record_commands": 144,
+      "record_spawn_ms": 1.096,
+      "record_advance_ms": 21.446,
+      "timing_ms": {
+        "record": 28.487,
+        "search": 20.047,
+        "verify": 28.425,
+        "events": 0.029
+      },
+      "expansions": 862488,
+      "roots": 36,
+      "events": [
+        "survive",
+        "death_bomb_no_player_hit"
+      ],
+      "deaths": 0.0,
+      "lives": 2.0,
+      "bombs": 3.0,
+      "stage": 0,
+      "px": 28.887313842773438,
+      "py": 382.14215087890625,
+      "internal_frames": 192,
+      "internal_frames_upper": 192
+    },
+    {
+      "index": 40,
+      "warmup": false,
+      "frame": 564,
+      "release": false,
+      "query_ms": 88.047,
+      "commit_ms": 2.226,
+      "step_ms": 90.273,
+      "advanced": 4,
+      "expected_advanced": 4,
+      "exited": false,
+      "bomb": 0,
+      "chosen": 2,
+      "chosen_slots": 24,
+      "slots_committed": 2,
+      "mask_committed": [
+        145,
+        65
+      ],
+      "verified_n": 3,
+      "verified_cands": [
+        2,
+        4,
+        7
+      ],
+      "verified_died": [
+        false,
+        false,
+        false
+      ],
+      "verify_frames": 144,
+      "death_refined": 0,
+      "record_frames": 48,
+      "record_steps": 47,
+      "record_commands": 144,
+      "record_spawn_ms": 0.543,
+      "record_advance_ms": 21.361,
+      "timing_ms": {
+        "record": 25.543,
+        "search": 25.555,
+        "verify": 36.715,
+        "events": 0.051
+      },
+      "expansions": 862488,
+      "roots": 36,
+      "events": [
+        "survive",
+        "death_bomb_no_player_hit"
+      ],
+      "deaths": 0.0,
+      "lives": 2.0,
+      "bombs": 3.0,
+      "stage": 0,
+      "px": 27.715740203857422,
+      "py": 379.313720703125,
+      "internal_frames": 192,
+      "internal_frames_upper": 192
+    },
+    {
+      "index": 41,
+      "warmup": false,
+      "frame": 568,
+      "release": false,
+      "query_ms": 150.985,
+      "commit_ms": 1.553,
+      "step_ms": 152.538,
+      "advanced": 4,
+      "expected_advanced": 4,
+      "exited": false,
+      "bomb": 0,
+      "chosen": 11,
+      "chosen_slots": 24,
+      "slots_committed": 2,
+      "mask_committed": [
+        149,
+        69
+      ],
+      "verified_n": 3,
+      "verified_cands": [
+        11,
+        13,
+        16
+      ],
+      "verified_died": [
+        false,
+        false,
+        false
+      ],
+      "verify_frames": 144,
+      "death_refined": 0,
+      "record_frames": 48,
+      "record_steps": 47,
+      "record_commands": 144,
+      "record_spawn_ms": 0.685,
+      "record_advance_ms": 21.716,
+      "timing_ms": {
+        "record": 26.171,
+        "search": 86.047,
+        "verify": 38.578,
+        "events": 0.044
+      },
+      "expansions": 862488,
+      "roots": 36,
+      "events": [
+        "survive",
+        "death_bomb_no_player_hit"
+      ],
+      "deaths": 0.0,
+      "lives": 2.0,
+      "bombs": 3.0,
+      "stage": 0,
+      "px": 24.544166564941406,
+      "py": 376.48529052734375,
+      "internal_frames": 192,
+      "internal_frames_upper": 192
+    },
+    {
+      "index": 42,
+      "warmup": false,
+      "frame": 572,
+      "release": false,
+      "query_ms": 80.586,
+      "commit_ms": 0.869,
+      "step_ms": 81.454,
+      "advanced": 4,
+      "expected_advanced": 4,
+      "exited": false,
+      "bomb": 0,
+      "chosen": 0,
+      "chosen_slots": 24,
+      "slots_committed": 2,
+      "mask_committed": [
+        1,
+        129
+      ],
+      "verified_n": 3,
+      "verified_cands": [
+        0,
+        1,
+        2
+      ],
+      "verified_died": [
+        false,
+        false,
+        false
+      ],
+      "verify_frames": 144,
+      "death_refined": 0,
+      "record_frames": 48,
+      "record_steps": 47,
+      "record_commands": 144,
+      "record_spawn_ms": 0.811,
+      "record_advance_ms": 27.734,
+      "timing_ms": {
+        "record": 31.541,
+        "search": 27.88,
+        "verify": 21.019,
+        "events": 0.064
+      },
+      "expansions": 862488,
+      "roots": 36,
+      "events": [
+        "survive",
+        "death_bomb_no_player_hit"
+      ],
+      "deaths": 0.0,
+      "lives": 2.0,
+      "bombs": 3.0,
+      "stage": 0,
+      "px": 26.544166564941406,
+      "py": 376.48529052734375,
+      "internal_frames": 192,
+      "internal_frames_upper": 192
+    },
+    {
+      "index": 43,
+      "warmup": false,
+      "frame": 576,
+      "release": false,
+      "query_ms": 82.394,
+      "commit_ms": 1.589,
+      "step_ms": 83.983,
+      "advanced": 4,
+      "expected_advanced": 4,
+      "exited": false,
+      "bomb": 0,
+      "chosen": 0,
+      "chosen_slots": 24,
+      "slots_committed": 2,
+      "mask_committed": [
+        1,
+        145
+      ],
+      "verified_n": 3,
+      "verified_cands": [
+        0,
+        1,
+        2
+      ],
+      "verified_died": [
+        false,
+        false,
+        false
+      ],
+      "verify_frames": 144,
+      "death_refined": 0,
+      "record_frames": 48,
+      "record_steps": 47,
+      "record_commands": 144,
+      "record_spawn_ms": 0.962,
+      "record_advance_ms": 16.372,
+      "timing_ms": {
+        "record": 23.227,
+        "search": 23.575,
+        "verify": 35.339,
+        "events": 0.106
+      },
+      "expansions": 862488,
+      "roots": 36,
+      "events": [
+        "survive",
+        "death_bomb_no_player_hit"
+      ],
+      "deaths": 0.0,
+      "lives": 2.0,
+      "bombs": 3.0,
+      "stage": 0,
+      "px": 33.37259292602539,
+      "py": 373.6568603515625,
+      "internal_frames": 192,
+      "internal_frames_upper": 192
+    },
+    {
+      "index": 44,
+      "warmup": false,
+      "frame": 580,
+      "release": false,
+      "query_ms": 89.44,
+      "commit_ms": 0.878,
+      "step_ms": 90.318,
+      "advanced": 4,
+      "expected_advanced": 4,
+      "exited": false,
+      "bomb": 0,
+      "chosen": 11,
+      "chosen_slots": 24,
+      "slots_committed": 2,
+      "mask_committed": [
+        149,
+        69
+      ],
+      "verified_n": 3,
+      "verified_cands": [
+        11,
+        13,
+        15
+      ],
+      "verified_died": [
+        false,
+        false,
+        false
+      ],
+      "verify_frames": 144,
+      "death_refined": 0,
+      "record_frames": 48,
+      "record_steps": 47,
+      "record_commands": 144,
+      "record_spawn_ms": 0.729,
+      "record_advance_ms": 20.215,
+      "timing_ms": {
+        "record": 25.1,
+        "search": 35.534,
+        "verify": 28.672,
+        "events": 0.051
+      },
+      "expansions": 862488,
+      "roots": 36,
+      "events": [
+        "survive",
+        "death_bomb_no_player_hit"
+      ],
+      "deaths": 0.0,
+      "lives": 2.0,
+      "bombs": 3.0,
+      "stage": 0,
+      "px": 37.029449462890625,
+      "py": 368.0,
+      "internal_frames": 192,
+      "internal_frames_upper": 192
+    },
+    {
+      "index": 45,
+      "warmup": false,
+      "frame": 584,
+      "release": false,
+      "query_ms": 125.719,
+      "commit_ms": 2.518,
+      "step_ms": 128.237,
+      "advanced": 4,
+      "expected_advanced": 4,
+      "exited": false,
+      "bomb": 0,
+      "chosen": 7,
+      "chosen_slots": 24,
+      "slots_committed": 2,
+      "mask_committed": [
+        65,
+        65
+      ],
+      "verified_n": 3,
+      "verified_cands": [
+        7,
+        0,
+        1
+      ],
+      "verified_died": [
+        false,
+        false,
+        false
+      ],
+      "verify_frames": 144,
+      "death_refined": 0,
+      "record_frames": 48,
+      "record_steps": 47,
+      "record_commands": 144,
+      "record_spawn_ms": 0.61,
+      "record_advance_ms": 30.253,
+      "timing_ms": {
+        "record": 34.145,
+        "search": 61.476,
+        "verify": 29.938,
+        "events": 0.062
+      },
+      "expansions": 862488,
+      "roots": 36,
+      "events": [
+        "survive",
+        "death_bomb_no_player_hit"
+      ],
+      "deaths": 0.0,
+      "lives": 2.0,
+      "bombs": 3.0,
+      "stage": 0,
+      "px": 23.029449462890625,
+      "py": 368.0,
+      "internal_frames": 192,
+      "internal_frames_upper": 192
+    },
+    {
+      "index": 46,
+      "warmup": false,
+      "frame": 588,
+      "release": false,
+      "query_ms": 143.901,
+      "commit_ms": 0.913,
+      "step_ms": 144.813,
+      "advanced": 4,
+      "expected_advanced": 4,
+      "exited": false,
+      "bomb": 0,
+      "chosen": 2,
+      "chosen_slots": 24,
+      "slots_committed": 2,
+      "mask_committed": [
+        145,
+        145
+      ],
+      "verified_n": 3,
+      "verified_cands": [
+        2,
+        4,
+        0
+      ],
+      "verified_died": [
+        false,
+        false,
+        false
+      ],
+      "verify_frames": 144,
+      "death_refined": 0,
+      "record_frames": 48,
+      "record_steps": 47,
+      "record_commands": 144,
+      "record_spawn_ms": 0.58,
+      "record_advance_ms": 11.311,
+      "timing_ms": {
+        "record": 15.079,
+        "search": 92.19,
+        "verify": 36.506,
+        "events": 0.037
+      },
+      "expansions": 862488,
+      "roots": 36,
+      "events": [
+        "survive",
+        "death_bomb_no_player_hit"
+      ],
+      "deaths": 0.0,
+      "lives": 2.0,
+      "bombs": 3.0,
+      "stage": 0,
+      "px": 27.514728546142578,
+      "py": 359.51470947265625,
+      "internal_frames": 192,
+      "internal_frames_upper": 192
+    },
+    {
+      "index": 47,
+      "warmup": false,
+      "frame": 592,
+      "release": true,
+      "query_ms": 79.011,
+      "commit_ms": 2.453,
+      "step_ms": 81.464,
+      "advanced": 4,
+      "expected_advanced": 4,
+      "exited": false,
+      "bomb": 0,
+      "chosen": 11,
+      "chosen_slots": 24,
+      "slots_committed": 2,
+      "mask_committed": [
+        149,
+        69,
+        68
+      ],
+      "verified_n": 3,
+      "verified_cands": [
+        11,
+        13,
+        16
+      ],
+      "verified_died": [
+        false,
+        false,
+        false
+      ],
+      "verify_frames": 144,
+      "death_refined": 0,
+      "record_frames": 48,
+      "record_steps": 47,
+      "record_commands": 144,
+      "record_spawn_ms": 0.579,
+      "record_advance_ms": 19.659,
+      "timing_ms": {
+        "record": 23.091,
+        "search": 27.274,
+        "verify": 28.414,
+        "events": 0.129
+      },
+      "expansions": 862488,
+      "roots": 36,
+      "events": [
+        "survive",
+        "death_bomb_no_player_hit"
+      ],
+      "deaths": 0.0,
+      "lives": 2.0,
+      "bombs": 3.0,
+      "stage": 0,
+      "px": 31.171581268310547,
+      "py": 353.85784912109375,
+      "internal_frames": 192,
+      "internal_frames_upper": 192
+    },
+    {
+      "index": 48,
+      "warmup": false,
+      "frame": 596,
+      "release": false,
+      "query_ms": 139.854,
+      "commit_ms": 0.872,
+      "step_ms": 140.725,
+      "advanced": 4,
+      "expected_advanced": 4,
+      "exited": false,
+      "bomb": 0,
+      "chosen": 12,
+      "chosen_slots": 24,
+      "slots_committed": 2,
+      "mask_committed": [
+        133,
+        101
+      ],
+      "verified_n": 3,
+      "verified_cands": [
+        12,
+        15,
+        17
+      ],
+      "verified_died": [
+        false,
+        false,
+        false
+      ],
+      "verify_frames": 144,
+      "death_refined": 0,
+      "record_frames": 48,
+      "record_steps": 47,
+      "record_commands": 144,
+      "record_spawn_ms": 0.653,
+      "record_advance_ms": 11.875,
+      "timing_ms": {
+        "record": 16.053,
+        "search": 92.831,
+        "verify": 30.851,
+        "events": 0.032
+      },
+      "expansions": 862488,
+      "roots": 36,
+      "events": [
+        "survive",
+        "death_bomb_no_player_hit"
+      ],
+      "deaths": 0.0,
+      "lives": 2.0,
+      "bombs": 3.0,
+      "stage": 0,
+      "px": 31.757368087768555,
+      "py": 355.2720642089844,
+      "internal_frames": 192,
+      "internal_frames_upper": 192
+    },
+    {
+      "index": 49,
+      "warmup": false,
+      "frame": 600,
+      "release": false,
+      "query_ms": 179.156,
+      "commit_ms": 2.338,
+      "step_ms": 181.494,
+      "advanced": 4,
+      "expected_advanced": 4,
+      "exited": false,
+      "bomb": 0,
+      "chosen": 7,
+      "chosen_slots": 24,
+      "slots_committed": 2,
+      "mask_committed": [
+        65,
+        149
+      ],
+      "verified_n": 3,
+      "verified_cands": [
+        7,
+        11,
+        13
+      ],
+      "verified_died": [
+        false,
+        false,
+        false
+      ],
+      "verify_frames": 144,
+      "death_refined": 0,
+      "record_frames": 48,
+      "record_steps": 47,
+      "record_commands": 144,
+      "record_spawn_ms": 0.597,
+      "record_advance_ms": 15.73,
+      "timing_ms": {
+        "record": 19.366,
+        "search": 113.611,
+        "verify": 46.028,
+        "events": 0.051
+      },
+      "expansions": 862488,
+      "roots": 36,
+      "events": [
+        "survive",
+        "death_bomb_no_player_hit"
+      ],
+      "deaths": 0.0,
+      "lives": 2.0,
+      "bombs": 3.0,
+      "stage": 0,
+      "px": 23.757368087768555,
+      "py": 355.2720642089844,
+      "internal_frames": 192,
+      "internal_frames_upper": 192
+    },
+    {
+      "index": 50,
+      "warmup": false,
+      "frame": 604,
+      "release": false,
+      "query_ms": 122.737,
+      "commit_ms": 0.86,
+      "step_ms": 123.598,
+      "advanced": 4,
+      "expected_advanced": 4,
+      "exited": false,
+      "bomb": 0,
+      "chosen": 0,
+      "chosen_slots": 24,
+      "slots_committed": 2,
+      "mask_committed": [
+        1,
+        149
+      ],
+      "verified_n": 3,
+      "verified_cands": [
+        0,
+        1,
+        2
+      ],
+      "verified_died": [
+        false,
+        false,
+        false
+      ],
+      "verify_frames": 144,
+      "death_refined": 0,
+      "record_frames": 48,
+      "record_steps": 47,
+      "record_commands": 144,
+      "record_spawn_ms": 0.638,
+      "record_advance_ms": 21.104,
+      "timing_ms": {
+        "record": 26.883,
+        "search": 73.153,
+        "verify": 22.588,
+        "events": 0.032
+      },
+      "expansions": 862488,
+      "roots": 36,
+      "events": [
+        "survive",
+        "death_bomb_no_player_hit"
+      ],
+      "deaths": 0.0,
+      "lives": 2.0,
+      "bombs": 3.0,
+      "stage": 0,
+      "px": 26.58579444885254,
+      "py": 352.4436340332031,
+      "internal_frames": 192,
+      "internal_frames_upper": 192
+    },
+    {
+      "index": 51,
+      "warmup": false,
+      "frame": 608,
+      "release": false,
+      "query_ms": 162.558,
+      "commit_ms": 1.091,
+      "step_ms": 163.649,
+      "advanced": 4,
+      "expected_advanced": 4,
+      "exited": false,
+      "bomb": 0,
+      "chosen": 0,
+      "chosen_slots": 24,
+      "slots_committed": 2,
+      "mask_committed": [
+        1,
+        145
+      ],
+      "verified_n": 3,
+      "verified_cands": [
+        0,
+        1,
+        2
+      ],
+      "verified_died": [
+        false,
+        false,
+        false
+      ],
+      "verify_frames": 144,
+      "death_refined": 0,
+      "record_frames": 48,
+      "record_steps": 47,
+      "record_commands": 144,
+      "record_spawn_ms": 0.573,
+      "record_advance_ms": 12.584,
+      "timing_ms": {
+        "record": 16.186,
+        "search": 107.71,
+        "verify": 38.463,
+        "events": 0.053
+      },
+      "expansions": 862488,
+      "roots": 36,
+      "events": [
+        "survive",
+        "death_bomb_no_player_hit"
+      ],
+      "deaths": 0.0,
+      "lives": 2.0,
+      "bombs": 3.0,
+      "stage": 0,
+      "px": 30.828433990478516,
+      "py": 348.20098876953125,
+      "internal_frames": 192,
+      "internal_frames_upper": 192
+    },
+    {
+      "index": 52,
+      "warmup": false,
+      "frame": 612,
+      "release": false,
+      "query_ms": 118.263,
+      "commit_ms": 0.907,
+      "step_ms": 119.17,
+      "advanced": 4,
+      "expected_advanced": 4,
+      "exited": false,
+      "bomb": 0,
+      "chosen": 12,
+      "chosen_slots": 24,
+      "slots_committed": 2,
+      "mask_committed": [
+        133,
+        101
+      ],
+      "verified_n": 3,
+      "verified_cands": [
+        12,
+        15,
+        17
+      ],
+      "verified_died": [
+        false,
+        false,
+        false
+      ],
+      "verify_frames": 144,
+      "death_refined": 0,
+      "record_frames": 48,
+      "record_steps": 47,
+      "record_commands": 144,
+      "record_spawn_ms": 0.773,
+      "record_advance_ms": 12.638,
+      "timing_ms": {
+        "record": 16.805,
+        "search": 79.283,
+        "verify": 22.03,
+        "events": 0.062
+      },
+      "expansions": 862488,
+      "roots": 36,
+      "events": [
+        "survive",
+        "death_bomb_no_player_hit"
+      ],
+      "deaths": 0.0,
+      "lives": 2.0,
+      "bombs": 3.0,
+      "stage": 0,
+      "px": 36.242645263671875,
+      "py": 346.7867736816406,
+      "internal_frames": 192,
+      "internal_frames_upper": 192
+    }
+  ],
+  "completed_queries": 50,
+  "events": [],
+  "error": null,
+  "exit_code": 0,
+  "wall_s": 9.083,
+  "loadavg_after": [
+    17.5,
+    17.85,
+    18.1
+  ],
+  "sha_after": {
+    "labels": "011f6c1cc3db232ca296177b9afc445a",
+    "shard": "883f3c56f94cda60f38232d12f0a1442",
+    "src_score": "d7089834a69881151a0524fcea36b75e"
+  },
+  "aggregates": {
+    "query_ms": {
+      "n": 50,
+      "sum_ms": 6207.245,
+      "mean_ms": 124.145,
+      "p50_ms": 125.719,
+      "p95_ms": 173.545,
+      "max_ms": 179.156,
+      "min_ms": 62.294
+    },
+    "step_ms": {
+      "n": 50,
+      "sum_ms": 6278.737,
+      "mean_ms": 125.575,
+      "p50_ms": 128.237,
+      "p95_ms": 176.132,
+      "max_ms": 181.494,
+      "min_ms": 65.019
+    },
+    "query_wall_s": 6.2072,
+    "step_wall_s": 6.2787,
+    "s_per_query": 0.124145,
+    "queries_per_s": 8.0551,
+    "s_per_outer_frame": 0.031036,
+    "internal_frames_per_query": 192.0,
+    "internal_frames_per_outer_frame": 48.0,
+    "totals": {
+      "outer_frames": 200,
+      "queries": 50,
+      "internal_frames": 9600,
+      "internal_frames_upper": 9600,
+      "record_frames": 2400,
+      "verify_frames": 7200,
+      "verified_n": 150,
+      "death_refined": 0,
+      "deaths_monotonic": 0.0
+    },
+    "timing_ms": {
+      "events": {
+        "n": 50,
+        "sum_ms": 2.87,
+        "mean_ms": 0.057,
+        "p50_ms": 0.05,
+        "p95_ms": 0.123,
+        "max_ms": 0.167,
+        "min_ms": 0.029
+      },
+      "record": {
+        "n": 50,
+        "sum_ms": 1221.01,
+        "mean_ms": 24.42,
+        "p50_ms": 24.572,
+        "p95_ms": 34.145,
+        "max_ms": 36.669,
+        "min_ms": 15.079
+      },
+      "search": {
+        "n": 50,
+        "sum_ms": 3400.079,
+        "mean_ms": 68.002,
+        "p50_ms": 73.153,
+        "p95_ms": 113.611,
+        "max_ms": 120.032,
+        "min_ms": 19.604
+      },
+      "verify": {
+        "n": 50,
+        "sum_ms": 1577.746,
+        "mean_ms": 31.555,
+        "p50_ms": 30.851,
+        "p95_ms": 43.453,
+        "max_ms": 46.028,
+        "min_ms": 21.019
+      }
+    }
+  },
+  "engine_stats": {
+    "calls": 9918,
+    "seconds": 4.6063,
+    "per_command": {
+      "HELLO": {
+        "calls": 2,
+        "sum_ms": 1312.824
+      },
+      "RESET": {
+        "calls": 1,
+        "sum_ms": 571.714
+      },
+      "FRAME": {
+        "calls": 2,
+        "sum_ms": 0.037
+      },
+      "HASH": {
+        "calls": 2,
+        "sum_ms": 0.103
+      },
+      "STEP": {
+        "calls": 508,
+        "sum_ms": 97.942
+      },
+      "BRANCH": {
+        "calls": 1,
+        "sum_ms": 3.16
+      },
+      "STATE": {
+        "calls": 54,
+        "sum_ms": 11.946
+      },
+      "HAZARDS": {
+        "calls": 1,
+        "sum_ms": 0.097
+      },
+      "PARK": {
+        "calls": 55,
+        "sum_ms": 137.958
+      },
+      "SPAWN": {
+        "calls": 214,
+        "sum_ms": 266.899
+      },
+      "CHILD": {
+        "calls": 9024,
+        "sum_ms": 2201.66
+      },
+      "EVENTS": {
+        "calls": 53,
+        "sum_ms": 1.945
+      },
+      "QUIT": {
+        "calls": 1,
+        "sum_ms": 0.033
+      }
+    }
+  }
+}

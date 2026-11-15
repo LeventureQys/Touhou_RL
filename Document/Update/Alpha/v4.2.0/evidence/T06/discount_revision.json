@@ -1,0 +1,258 @@
+{
+  "schema": "v420-rl-discount-revision/1",
+  "source": ".tmp_v420_data/T06/audit2.json",
+  "wp": "WP420-05",
+  "task": "T06",
+  "protocol": {
+    "contract": "v420-rl/1",
+    "discount_version_before": "v420-discount/1",
+    "discount_version_after": "v420-discount/2",
+    "decision_frames": 2,
+    "frames_per_second": 60.0,
+    "delta_t_seconds": 0.03333333333333333,
+    "gae_lambda": 0.95,
+    "revisions_allowed": "one, with a concrete diagnostic (WP420-05 §5)",
+    "revisions_used": 1
+  },
+  "diagnostic": {
+    "why_a_revision_was_allowed": "WP420-05 §5 states Δt = 2/60 s, τ = 30 s, γ = exp(-Δt/τ) as the initial configuration and explicitly not as a claim about the optimum, and it allows one learning-rate/KL-style revision backed by a concrete diagnostic.  The failed item reward_discount_horizon is that diagnostic.",
+    "measured_task_length": {
+      "class": "the one real recorded Stage-1 clear (T04 shard, seed 12)",
+      "decisions": 6598,
+      "frames": 13195,
+      "seconds": 219.933
+    },
+    "failure_at_tau_30": {
+      "gamma": 0.9988895059442793,
+      "effective_horizon_decisions": 900.5000925925611,
+      "gamma_T_at_clear": 0.0006548455765539476,
+      "clear_bonus_at_terminal_value": 0.0006548455765539476,
+      "death_penalty": 0.25,
+      "how_many_times_smaller_than_one_death_penalty": 381.76939564224796,
+      "verdict": "the frozen τ = 30 s gives a 900.5-decision horizon against a 6,598-decision task: the terminal clear bonus is invisible"
+    }
+  },
+  "rule": {
+    "statement": "the smallest τ in TAU_CANDIDATE_SECONDS whose γ^T at the measured clear length T = 6598 decisions reaches gamma_T_clear_min; ties broken towards the shorter effective horizon (the smaller τ)",
+    "candidates_seconds": [
+      200.0,
+      300.0,
+      400.0,
+      600.0
+    ],
+    "thresholds": {
+      "gamma_T_clear_min": 0.3,
+      "clear_vs_early_death_discounted_ratio_min": 1.5
+    },
+    "written_before_the_run": true,
+    "changed_after_the_run": false,
+    "no_lookahead": "γ^T is a function of Δt, τ and the already-measured clear length only, so the table could be and was computed before any audit or training result existed; no result-dependent quantity enters the selection"
+  },
+  "candidates": [
+    {
+      "tau_seconds": 200.0,
+      "gamma": 0.9998333472214507,
+      "effective_horizon_decisions": 6000.500013889792,
+      "effective_horizon_seconds": 200.01666712965974,
+      "gamma_T_at_clear": 0.33298205922092694,
+      "clear_bonus_at_terminal_value": 0.33298205922092694,
+      "meets_gamma_T_floor": true
+    },
+    {
+      "tau_seconds": 300.0,
+      "gamma": 0.9998888950614998,
+      "effective_horizon_decisions": 9000.50000926147,
+      "effective_horizon_seconds": 300.01666697538235,
+      "gamma_T_at_clear": 0.48041204746150784,
+      "clear_bonus_at_terminal_value": 0.48041204746150784,
+      "meets_gamma_T_floor": true
+    },
+    {
+      "tau_seconds": 400.0,
+      "gamma": 0.9999166701387925,
+      "effective_horizon_decisions": 12000.500006950875,
+      "effective_horizon_seconds": 400.0166668983625,
+      "gamma_T_at_clear": 0.5770459766960238,
+      "clear_bonus_at_terminal_value": 0.5770459766960238,
+      "meets_gamma_T_floor": true
+    },
+    {
+      "tau_seconds": 600.0,
+      "gamma": 0.9999444459876258,
+      "effective_horizon_decisions": 18000.500004639547,
+      "effective_horizon_seconds": 600.0166668213183,
+      "gamma_T_at_clear": 0.6931176288781115,
+      "clear_bonus_at_terminal_value": 0.6931176288781115,
+      "meets_gamma_T_floor": true
+    }
+  ],
+  "selected": {
+    "tau_seconds": 200.0,
+    "gamma": 0.9998333472214507,
+    "selected_by": "the smallest candidate τ whose γ^T at the measured clear length reaches the floor; because both γ^T and the horizon grow monotonically with τ, this is also the minimal horizon extension the rule allows",
+    "margin_over_floor": 0.03298205922092695,
+    "admissible_alternatives": "300/400/600 s also clear the floor (γ^T = 0.480/0.577/0.693) and would have been chosen only by a rule that also demanded a longer horizon than the floor requires"
+  },
+  "rejected_initial_configuration": {
+    "tau_seconds": 30.0,
+    "gamma": 0.9988895059442793,
+    "effective_horizon_decisions": 900.5000925925611,
+    "gamma_T_at_clear": 0.0006548455765539476,
+    "meets_gamma_T_floor": false,
+    "why_rejected": "γ^T over the real task length is 6.55e-04, so a terminal clear bonus is smaller than one death penalty by three orders of magnitude"
+  },
+  "scope": {
+    "changed": [
+      "tau_seconds (30 -> 200)",
+      "gamma (recomputed exp(-Δt/τ))"
+    ],
+    "unchanged": {
+      "stage_clear_bonus": 1.0,
+      "death_penalty": 0.25,
+      "bomb_penalty": 0.1,
+      "progress_total": 0.5,
+      "progress_score_full": 2631430.0,
+      "survive_per_decision": 0.0,
+      "gae_lambda": 0.95,
+      "delta_t_seconds": 0.03333333333333333,
+      "clip": 0.2,
+      "actor_lr": 3e-05,
+      "critic_lr": 0.0003,
+      "entropy_coef": 0.001
+    },
+    "reward_table_byte_identical": true
+  },
+  "recomputed_after_revision": {
+    "gamma": 0.9998333472214507,
+    "effective_horizon_decisions": 6000.500013889792,
+    "effective_horizon_seconds": 200.01666712965974,
+    "gamma_T_at_clear": 0.33298205922092694,
+    "clear_bonus_at_terminal_value": 0.33298205922092694,
+    "classes": {
+      "clear": {
+        "decisions": 6598,
+        "frames": 13195,
+        "end": "stage_clear",
+        "discounted_return": 0.5234995935445186,
+        "undiscounted_return": 1.5,
+        "reward_totals": {
+          "survive": 0.0,
+          "progress": 0.5,
+          "death": 0.0,
+          "bomb": 0.0,
+          "stage_clear": 1.0
+        },
+        "discounted_return_at_tau_30_for_reference": null
+      },
+      "early_death": {
+        "decisions": 685,
+        "frames": 1370,
+        "end": "first_death",
+        "discounted_return": -0.2220786307208668,
+        "undiscounted_return": -0.248944300247394,
+        "reward_totals": {
+          "survive": 0.0,
+          "progress": 0.001055699752605998,
+          "death": -0.25,
+          "bomb": 0.0,
+          "stage_clear": 0.0
+        },
+        "discounted_return_at_tau_30_for_reference": null
+      },
+      "delay": {
+        "decisions": 752,
+        "frames": 1503,
+        "end": "game_over",
+        "discounted_return": -0.6831000099064892,
+        "undiscounted_return": -0.7488162329987875,
+        "reward_totals": {
+          "survive": 0.0,
+          "progress": 0.0011837670012122693,
+          "death": -0.75,
+          "bomb": 0.0,
+          "stage_clear": 0.0
+        },
+        "discounted_return_at_tau_30_for_reference": null
+      },
+      "bomb_abuse": {
+        "decisions": 1000,
+        "frames": 2000,
+        "end": "cap",
+        "discounted_return": -1.0937235371868195,
+        "undiscounted_return": -1.1909178659512172,
+        "reward_totals": {
+          "survive": 0.0,
+          "progress": 0.00908213404878713,
+          "death": -0.5,
+          "bomb": -0.7,
+          "stage_clear": 0.0
+        },
+        "discounted_return_at_tau_30_for_reference": null
+      }
+    },
+    "clear_margins_over_failure_classes": {
+      "over_delay_discounted": 1.2065996034510078,
+      "over_early_death_discounted": 0.7455782242653854,
+      "over_bomb_abuse_discounted": 1.617223130731338,
+      "magnitude_ratio_vs_early_death": 2.3572713495451585
+    }
+  },
+  "floor_is_not_a_relaxed_tolerance": {
+    "old_implicit_criterion": "stage_clear_bonus·γ^T > death_penalty, i.e. γ^T > 0.25 on the audited table",
+    "new_explicit_floor": 0.3,
+    "strictly_stricter": true,
+    "rejects_the_replaced_tau_30_by_factor": 458.1232747706975,
+    "second_threshold_is_new": "the old criterion said nothing about the class margin; the added |clear|/|early_death| ≥ 1.5 requirement is a criterion the previous verdict did not even check",
+    "cannot_be_lowered_by_a_config": "resolve_discount_floor refuses any value below the frozen floor, so a later run cannot relax the gate to pass it",
+    "why_the_ratio_is_stated_on_magnitudes": "the worse class' discounted return is negative, so the literal signed form clear ≥ 1.5·early_death is satisfied by any positive clear return and does NOT reject τ = 30 s (at τ = 30 s clear = 0.006047 and 1.5·early_death = -0.174366).  The magnitude form rejects it by 28x",
+    "what_it_would_reject_instead": "a τ that hides the terminal event (τ = 30 s), and a clear whose discounted return is less than 1.5x an early death's — both are real failure modes of credit assignment, not cosmetic thresholds"
+  },
+  "audit_outcome": {
+    "item": "reward_discount_horizon",
+    "status": "pass",
+    "decisive_checks": [
+      "clear_gt_delay_discounted",
+      "clear_gt_early_death_discounted",
+      "clear_gt_bomb_abuse_discounted",
+      "terminal_bonus_is_not_negligible",
+      "clear_terminal_visibility_floor",
+      "clear_vs_early_death_discounted_margin"
+    ],
+    "checks": {
+      "clear_gt_delay_discounted": {
+        "pass": true,
+        "margin": 1.2065996034510078
+      },
+      "clear_gt_early_death_discounted": {
+        "pass": true,
+        "margin": 0.7455782242653854
+      },
+      "clear_gt_bomb_abuse_discounted": {
+        "pass": true,
+        "margin": 1.617223130731338
+      },
+      "terminal_bonus_is_not_negligible": {
+        "pass": true,
+        "margin": null
+      },
+      "clear_terminal_visibility_floor": {
+        "pass": true,
+        "margin": null
+      },
+      "clear_vs_early_death_discounted_margin": {
+        "pass": true,
+        "margin": null
+      }
+    },
+    "items_total": 17,
+    "items_passed": 17,
+    "audit_status": "pass",
+    "audit_exit_code": 0
+  },
+  "notes": [
+    "only τ (and the γ it implies) changed; every reward coefficient is byte-identical to the table reward_ordering passed before the revision",
+    "the second threshold is stated on magnitudes because the signed form is vacuous when the worse class' return is negative",
+    "γ is always recomputed from Δt/τ by the module, and both the config loader and the audit refuse a published γ that disagrees with it",
+    "one revision was taken and no further τ will be tried: if the item had still failed the report would have said fail and stopped"
+  ]
+}

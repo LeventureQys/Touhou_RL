@@ -1,0 +1,4735 @@
+{
+  "schema": "v420-t06-advnorm-off/1",
+  "evidence": "Document/Update/Alpha/v4.2.0/evidence/T06/ADVNORM_OFF.md",
+  "spec": "Document/Update/Alpha/v4.2.0/experiments/T06-advantage-norm-spec.md (section 2.1(a) N-a2, recommended in section 3)",
+  "experiment": "N-a2 (ppo.advantage_normalisation true -> false)",
+  "not_r1": true,
+  "single_seed": true,
+  "n_dev": 20,
+  "config": {
+    "path": "configs/v420/rl-engine-advnorm-off.json",
+    "sha256": "ca1dca15393d7983b493f1f1fa5254d2c686f7ce7a27474febd95c5742bb9fbe",
+    "baseline": "configs/v420/rl-engine-r3-pilot.json",
+    "baseline_sha256": "83f16c8a34090ae2994e51835624fb2e9252adc9e668a4b653ac0ba4d1f0673c",
+    "the_one_changed_variable": {
+      "key": "ppo.advantage_normalisation",
+      "from": true,
+      "to": false,
+      "source_config": "configs/v420/rl-engine-r3-pilot.json",
+      "source_config_sha256": "83f16c8a34090ae2994e51835624fb2e9252adc9e668a4b653ac0ba4d1f0673c",
+      "effect": "rl.py:2171 `if normalise_advantages and count > 1:` goes false, so :2172-2174 (std, subtract the mean, divide by sd + 1e-8) never run and adv_t is used exactly as GAE produced it.  ret_t (the critic's target, :2169-2170 / :2236) was never whitened in either config.",
+      "everything_else": "copied value-for-value from the frozen 50k config; the unit test asserts the diff is exactly this key, the output naming (+ private data dir) and this advantage_norm_only block"
+    }
+  },
+  "run": {
+    "payload": ".tmp_v420_data/T06/advoff/pilot-advoff-a.json",
+    "payload_sha256": "d5c23faa6bd7604eb96182de9a22240e1b6a83b865916a220c4004560bcfadc5",
+    "checkpoint": ".tmp_v420_data/T06/checkpoints/advoff_seed0_50000f.pt",
+    "checkpoint_sha256": "f84e8b2e95a518d37f38d1552eca8065149c0b9b63ec63404a9ad86cf3cd4e73",
+    "checkpoint_loadback": {
+      "loaded": true,
+      "arm": "B0",
+      "family": "probe",
+      "parameters": 731802,
+      "parameters_pinned": 731802,
+      "rows": 16,
+      "logit_max_abs_diff": 0.0,
+      "bitwise_identical": true,
+      "loader": "tools/rl/v410_student_eval.py"
+    }
+  },
+  "training": {
+    "payload": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/advoff/pilot-advoff-a.json",
+    "payload_sha256": "d5c23faa6bd7604eb96182de9a22240e1b6a83b865916a220c4004560bcfadc5",
+    "schema": "v420-rl-pilot/1",
+    "reward_version": "v420-reward-r3/1",
+    "advantage_normalisation": false,
+    "ppo": {
+      "clip": 0.2,
+      "grad_clip": 0.5,
+      "actor_lr": 3e-05,
+      "critic_lr": 0.0003,
+      "entropy_coef": 0.001,
+      "value_coef": 0.5,
+      "epochs": 2,
+      "minibatch": 128,
+      "advantage_normalisation": false,
+      "temperature": 8.0
+    },
+    "minibatches_per_update": 8,
+    "frame_budget": 50000,
+    "game_frames": 50000,
+    "decisions": 25005,
+    "episodes": 22,
+    "updates": 49,
+    "episode_ends": {
+      "game_over": 22
+    },
+    "game_over_episodes": 22,
+    "stage_clear_episodes": 0,
+    "stage_clear_by_reward_totals": 0.0,
+    "deaths_total": -16.5,
+    "terminal_block": {
+      "episodes": 22,
+      "episode_ends": {
+        "game_over": 22
+      },
+      "game_over_episodes": 22,
+      "stage_clear_episodes": 0,
+      "stage_clear_terminal_reward_sum": 0.0,
+      "terminated_transitions": 22,
+      "truncated_transitions": 0,
+      "terminal_reward_events": 22,
+      "episode_frames": [
+        {
+          "episode": 0,
+          "frames": 1891,
+          "decisions": 946,
+          "end": "game_over",
+          "return": -0.7197896781676298,
+          "stage_clear": false
+        },
+        {
+          "episode": 1,
+          "frames": 2267,
+          "decisions": 1134,
+          "end": "game_over",
+          "return": -0.7062614926020616,
+          "stage_clear": false
+        },
+        {
+          "episode": 2,
+          "frames": 1857,
+          "decisions": 929,
+          "end": "game_over",
+          "return": -0.7136513847849145,
+          "stage_clear": false
+        },
+        {
+          "episode": 3,
+          "frames": 2124,
+          "decisions": 1062,
+          "end": "game_over",
+          "return": -0.7113957455745237,
+          "stage_clear": false
+        },
+        {
+          "episode": 4,
+          "frames": 2249,
+          "decisions": 1125,
+          "end": "game_over",
+          "return": -0.7084228000772218,
+          "stage_clear": false
+        },
+        {
+          "episode": 5,
+          "frames": 3377,
+          "decisions": 1689,
+          "end": "game_over",
+          "return": -0.6934216028051392,
+          "stage_clear": false
+        },
+        {
+          "episode": 6,
+          "frames": 2367,
+          "decisions": 1184,
+          "end": "game_over",
+          "return": -0.7129306921972892,
+          "stage_clear": false
+        },
+        {
+          "episode": 7,
+          "frames": 2263,
+          "decisions": 1132,
+          "end": "game_over",
+          "return": -0.7105885161804759,
+          "stage_clear": false
+        },
+        {
+          "episode": 8,
+          "frames": 2430,
+          "decisions": 1215,
+          "end": "game_over",
+          "return": -0.7050537355055568,
+          "stage_clear": false
+        },
+        {
+          "episode": 9,
+          "frames": 1926,
+          "decisions": 963,
+          "end": "game_over",
+          "return": -0.7143680778226551,
+          "stage_clear": false
+        },
+        {
+          "episode": 10,
+          "frames": 1895,
+          "decisions": 948,
+          "end": "game_over",
+          "return": -0.7150763183470161,
+          "stage_clear": false
+        },
+        {
+          "episode": 11,
+          "frames": 2454,
+          "decisions": 1227,
+          "end": "game_over",
+          "return": -0.6996123268998758,
+          "stage_clear": false
+        },
+        {
+          "episode": 12,
+          "frames": 1950,
+          "decisions": 975,
+          "end": "game_over",
+          "return": -0.7133949846425713,
+          "stage_clear": false
+        },
+        {
+          "episode": 13,
+          "frames": 2456,
+          "decisions": 1228,
+          "end": "game_over",
+          "return": -0.7093486905775369,
+          "stage_clear": false
+        },
+        {
+          "episode": 14,
+          "frames": 1544,
+          "decisions": 772,
+          "end": "game_over",
+          "return": -0.725616919188788,
+          "stage_clear": false
+        },
+        {
+          "episode": 15,
+          "frames": 2344,
+          "decisions": 1172,
+          "end": "game_over",
+          "return": -0.7048602778540436,
+          "stage_clear": false
+        },
+        {
+          "episode": 16,
+          "frames": 2292,
+          "decisions": 1146,
+          "end": "game_over",
+          "return": -0.7042228866131949,
+          "stage_clear": false
+        },
+        {
+          "episode": 17,
+          "frames": 2502,
+          "decisions": 1251,
+          "end": "game_over",
+          "return": -0.6995276152823238,
+          "stage_clear": false
+        },
+        {
+          "episode": 18,
+          "frames": 2657,
+          "decisions": 1329,
+          "end": "game_over",
+          "return": -0.7074813184880235,
+          "stage_clear": false
+        },
+        {
+          "episode": 19,
+          "frames": 2108,
+          "decisions": 1054,
+          "end": "game_over",
+          "return": -0.7091489010765282,
+          "stage_clear": false
+        },
+        {
+          "episode": 20,
+          "frames": 2234,
+          "decisions": 1117,
+          "end": "game_over",
+          "return": -0.7089885579234723,
+          "stage_clear": false
+        },
+        {
+          "episode": 21,
+          "frames": 1963,
+          "decisions": 982,
+          "end": "game_over",
+          "return": -0.7185614943433956,
+          "stage_clear": false
+        }
+      ],
+      "note": "a terminal reward only reaches PPO on a terminated transition, so both counters have to be > 0 for a training run to be about the task objective at all"
+    },
+    "wall_seconds": 1007.854,
+    "collect_seconds": 813.842,
+    "update_seconds": 71.921,
+    "fps": 49.61,
+    "episode_return": {
+      "n": 22,
+      "mean": -0.70962382,
+      "sd": 0.00721162,
+      "min": -0.725616919188788,
+      "max": -0.6934216028051392
+    },
+    "episode_first_death_frame": {
+      "n": 22,
+      "mean": 1252.5,
+      "min": 752.0,
+      "max": 1702.0
+    },
+    "quartiles": {
+      "index_round": {
+        "boundaries": [
+          0,
+          6,
+          11,
+          16,
+          22
+        ],
+        "sizes": [
+          6,
+          5,
+          5,
+          6
+        ],
+        "means": [
+          1253.167,
+          1181.8,
+          1249.6,
+          1313.167
+        ],
+        "q4_vs_q1_percent": 4.7879
+      },
+      "index_floor": {
+        "boundaries": [
+          0,
+          5,
+          11,
+          16,
+          22
+        ],
+        "sizes": [
+          5,
+          6,
+          5,
+          6
+        ],
+        "means": [
+          1184.4,
+          1251.0,
+          1249.6,
+          1313.167
+        ],
+        "q4_vs_q1_percent": 10.8719
+      }
+    },
+    "curves": {
+      "policy_loss": {
+        "n": 49,
+        "first": 0.008828862104564905,
+        "last": -0.005320480064256117,
+        "mean": 0.00373841,
+        "min": -0.017266469541937113,
+        "max": 0.023131356108933687,
+        "sd": 0.00958254
+      },
+      "value_loss": {
+        "n": 49,
+        "first": 0.01300328821525909,
+        "last": 0.008372294309083372,
+        "mean": 0.00742565,
+        "min": 0.0025392432653461583,
+        "max": 0.01300328821525909,
+        "sd": 0.00209319
+      },
+      "entropy": {
+        "n": 49,
+        "first": 2.451523244380951,
+        "last": 2.478451520204544,
+        "mean": 2.51920932,
+        "min": 2.3607009947299957,
+        "max": 2.6308166086673737,
+        "sd": 0.05088396
+      },
+      "approx_kl": {
+        "n": 49,
+        "first": 0.000358000528649427,
+        "last": 0.0010673437136574648,
+        "mean": 0.00118543,
+        "min": 0.000358000528649427,
+        "max": 0.0015785523573867977,
+        "sd": 0.00025378
+      },
+      "clip_fraction": {
+        "n": 49,
+        "first": 0.0,
+        "last": 0.001953125,
+        "mean": 0.00460379,
+        "min": 0.0,
+        "max": 0.0185546875,
+        "sd": 0.00512114
+      },
+      "grad_norm": {
+        "n": 49,
+        "first": 8.406402453780174,
+        "last": 9.49536019563675,
+        "mean": 9.06163602,
+        "min": 5.700303852558136,
+        "max": 13.4464812874794,
+        "sd": 1.55053559
+      },
+      "ratio_max_abs_deviation": {
+        "n": 49,
+        "first": 0.08171917498111725,
+        "last": 0.12997107952833176,
+        "mean": 0.14324939,
+        "min": 0.08171917498111725,
+        "max": 0.20655755698680878,
+        "sd": 0.02246492
+      }
+    },
+    "kl_anchor_curve": {
+      "n": 49,
+      "first": 0.35565684901976274,
+      "last": 0.5049636405784784,
+      "mean": 0.38982496,
+      "min": 0.1527519328502709,
+      "max": 0.9442372644905112,
+      "sd": 0.1776285
+    },
+    "actor_max_abs_parameter_change": {
+      "n": 49,
+      "quantity_compared": "mean over updates of the per-update actor_max_abs_parameter_change, divided by 8 x actor_lr (the form the four published arms use)",
+      "per_update_mean": 0.00023237764698747849,
+      "mean_ratio_over_eight_times_actor_lr": 0.9682401957811604,
+      "min": 0.00021915510296821594,
+      "max": 0.00023912638425827026,
+      "median": 0.0002324358,
+      "sd": 4.0127e-06,
+      "eight_times_actor_lr": 0.00024,
+      "hard_band_lower": 0.0002261,
+      "hard_band_upper": 0.0002499,
+      "hard_band_centre": 0.000238,
+      "measured_four_arm_band": [
+        0.000237984,
+        0.000240312
+      ],
+      "mean_in_hard_band": true,
+      "mean_in_measured_four_arm_band": false,
+      "updates_outside_hard_band": 2,
+      "outside_values": [
+        0.00021915510296821594,
+        0.0002225707285106182
+      ],
+      "p_n2_verdict": "hold",
+      "per_update": [
+        0.00021915510296821594,
+        0.0002300133928656578,
+        0.00023736758157610893,
+        0.0002348087728023529,
+        0.00023424997925758362,
+        0.000238069798797369,
+        0.00022706016898155212,
+        0.00023034773766994476,
+        0.0002324441447854042,
+        0.00023644976317882538,
+        0.00023258104920387268,
+        0.00023436546325683594,
+        0.00022653862833976746,
+        0.0002225707285106182,
+        0.0002352111041545868,
+        0.0002301149070262909,
+        0.00023756176233291626,
+        0.00023476779460906982,
+        0.00022880733013153076,
+        0.0002326243557035923,
+        0.0002316311001777649,
+        0.0002311207354068756,
+        0.00023866444826126099,
+        0.00023561343550682068,
+        0.00023032911121845245,
+        0.00023912638425827026,
+        0.0002342909574508667,
+        0.00023056380450725555,
+        0.00023340433835983276,
+        0.00023179082199931145,
+        0.00022916123270988464,
+        0.00023366355162579566,
+        0.00023749005049467087,
+        0.00023363158106803894,
+        0.00023243576288223267,
+        0.000228099524974823,
+        0.0002261437475681305,
+        0.00023038126528263092,
+        0.0002308310940861702,
+        0.0002311929129064083,
+        0.00023035332560539246,
+        0.00023426953703165054,
+        0.00023092050105333328,
+        0.00023835524916648865,
+        0.00023226533085107803,
+        0.00023653917014598846,
+        0.0002319812774658203,
+        0.00023483764380216599,
+        0.00023230724036693573
+      ]
+    },
+    "checkpoint_trained": {
+      "checkpoint": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/checkpoints/advoff_seed0_50000f.pt",
+      "checkpoint_sha256": "f84e8b2e95a518d37f38d1552eca8065149c0b9b63ec63404a9ad86cf3cd4e73",
+      "critic_sidecar": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/checkpoints/advoff_seed0_50000f.critic.pt",
+      "critic_sha256": "5ad5bdf480ba4d406c4a495ce0271ce46374c667d3af5c625a8453d56309065b",
+      "schema": "v410-wp04-bc-arm-checkpoint/1",
+      "parameters": 731802
+    },
+    "checkpoint_loadback": {
+      "loaded": true,
+      "arm": "B0",
+      "family": "probe",
+      "parameters": 731802,
+      "parameters_pinned": 731802,
+      "rows": 16,
+      "logit_max_abs_diff": 0.0,
+      "bitwise_identical": true,
+      "loader": "tools/rl/v410_student_eval.py"
+    },
+    "data_dir_check": {
+      "data_dir": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/engine-data-advoff",
+      "fail_closed": true,
+      "forbidden_markers": [
+        "/root/v400-data",
+        ".tmp_v400_",
+        ".tmp_v410_",
+        "Document/Update/Alpha/v4.0.0",
+        "Document/Update/Alpha/v4.1.0",
+        "Document/Update/Alpha/v4.2.0/evidence/T02",
+        "Document/Update/Alpha/v4.2.0/evidence/T03",
+        "Document/Update/Alpha/v4.2.0/evidence/T04",
+        "Document/Update/Alpha/v4.2.0/evidence/T05"
+      ]
+    },
+    "discount": {
+      "gamma": 0.9998333472214507,
+      "gae_lambda": 0.95,
+      "tau_seconds": 200.0
+    },
+    "reward": {
+      "version": "v420-reward-r3/1",
+      "source": "engine_truth",
+      "stage_clear_bonus": 1.0,
+      "death_penalty": 0.25,
+      "bomb_penalty": 0.1,
+      "progress_total": 0.5,
+      "progress_score_full": 2631430.0,
+      "survive_per_decision": 1.2e-05,
+      "first_life_per_decision": 3.7890269778720825e-05,
+      "first_life_cap": 0.25,
+      "units": {
+        "stage_clear_bonus": {
+          "unit": "reward per first-face completion",
+          "role": "primary positive event",
+          "event": "engine stage index advances (stage_clear)",
+          "counted": "once per episode",
+          "versions": [
+            "v420-reward-r2/1",
+            "v420-reward-r3/1"
+          ]
+        },
+        "death_penalty": {
+          "unit": "reward per engine death event",
+          "role": "auxiliary",
+          "event": "globals.deaths increases",
+          "counted": "once per death, a first death does not end the episode",
+          "versions": [
+            "v420-reward-r2/1",
+            "v420-reward-r3/1"
+          ]
+        },
+        "bomb_penalty": {
+          "unit": "reward per bomb spent",
+          "role": "auxiliary",
+          "event": "globals.bombsRemaining decreases",
+          "counted": "once per bomb",
+          "versions": [
+            "v420-reward-r2/1",
+            "v420-reward-r3/1"
+          ]
+        },
+        "progress_total": {
+          "unit": "reward for traversing the whole first face by score",
+          "role": "bounded progress",
+          "event": "score increases, normalised by progress_score_full",
+          "counted": "cumulative, hard-capped at progress_total per episode",
+          "versions": [
+            "v420-reward-r2/1",
+            "v420-reward-r3/1"
+          ]
+        },
+        "progress_score_full": {
+          "unit": "score points",
+          "role": "normaliser",
+          "event": "the score a real first-face clear reaches",
+          "counted": "measured, see evidence/T06/RL_AUDIT.md",
+          "versions": [
+            "v420-reward-r2/1",
+            "v420-reward-r3/1"
+          ]
+        },
+        "survive_per_decision": {
+          "unit": "reward per decision at the two-frame beat",
+          "role": "explicitly zero in r2; the bounded survival constant \u03b5 in r3",
+          "event": "every decision the engine is alive",
+          "counted": "r2: 0.0, because at \u03b3 = 0.999833 (\u03c4 = 200 s) the discounted sum of a constant c is c/(1-\u03b3) \u2248 6001\u00b7c and a long stall would out-earn a clear.  r3: \u03b5 > 0 but bounded by the declared assertion \u03b5\u00b7T_max \u2264 0.25\u00b7progress_total, which the config validator recomputes and refuses to load without",
+          "versions": [
+            "v420-reward-r2/1",
+            "v420-reward-r3/1"
+          ]
+        },
+        "first_life_per_decision": {
+          "unit": "reward per decision the first life is alive",
+          "role": "bounded first-death survival signal (r3 only)",
+          "event": "every decision taken while globals.deaths == 0, i.e. before the first death; a decision on which the first death happens still pays, because the life was alive when the action was chosen",
+          "counted": "per decision, hard-capped per episode at first_life_cap; \u03b4 is derived from first_life_cap / the measured clear length (6598 decisions), so the cap is reached exactly at a clear",
+          "versions": [
+            "v420-reward-r3/1"
+          ]
+        },
+        "first_life_cap": {
+          "unit": "reward (the episode cap of first_life_per_decision)",
+          "role": "bound (r3 only)",
+          "event": "never paid directly; it caps the first-life term",
+          "counted": "once per episode at most",
+          "versions": [
+            "v420-reward-r3/1"
+          ]
+        }
+      },
+      "progress_bound": {
+        "cumulative_cap": 0.5,
+        "per_decision_rate": 1.9001075460871086e-07,
+        "meaning": "a trajectory can never earn more than progress_total from progress, however long it stalls"
+      },
+      "survival_bound": {
+        "assertion": "survive_per_decision * T_max <= 0.25 * progress_total",
+        "survive_per_decision": 1.2e-05,
+        "t_max_decisions": 9943.5,
+        "survive_total_at_horizon": 0.119322,
+        "share_of_progress_total": 0.25,
+        "bound": 0.125,
+        "margin": 0.0056780000000000025,
+        "pass": true,
+        "first_life_per_decision": 3.7890269778720825e-05,
+        "first_life_cap": 0.25,
+        "combined_survival_total": 0.369322,
+        "combined_bound": 0.5,
+        "combined_pass": true,
+        "clear_bonus": 1.0,
+        "survival_below_clear": true
+      },
+      "first_life_derivation": {
+        "rule": "first_life_per_decision * CLEAR_DECISIONS_MEASURED == first_life_cap",
+        "first_life_per_decision": 3.7890269778720825e-05,
+        "clear_decisions_measured": 6598,
+        "product": 0.25,
+        "first_life_cap": 0.25,
+        "residual": 0.0,
+        "pass": true
+      },
+      "horizon_decisions": 9943.5
+    }
+  },
+  "training_references": {
+    "R2_no_anchor": {
+      "payload": "configs/v420/rl-engine-advnorm-off.json",
+      "payload_sha256": "ca1dca15393d7983b493f1f1fa5254d2c686f7ce7a27474febd95c5742bb9fbe",
+      "episodes": 24,
+      "updates": 49,
+      "mean_first_death_frame": 1002.292,
+      "quartiles": {
+        "index_round": {
+          "boundaries": [
+            0,
+            6,
+            12,
+            18,
+            24
+          ],
+          "sizes": [
+            6,
+            6,
+            6,
+            6
+          ],
+          "means": [
+            1207.833,
+            996.833,
+            950.5,
+            854.0
+          ],
+          "q4_vs_q1_percent": -29.2949
+        },
+        "index_floor": {
+          "boundaries": [
+            0,
+            6,
+            12,
+            18,
+            24
+          ],
+          "sizes": [
+            6,
+            6,
+            6,
+            6
+          ],
+          "means": [
+            1207.833,
+            996.833,
+            950.5,
+            854.0
+          ],
+          "q4_vs_q1_percent": -29.2949
+        }
+      },
+      "per_update_mean_abs_parameter_change": 0.00024031459862290292,
+      "mean_ratio_over_eight_times_actor_lr": 1.0013108275954288,
+      "stage_clear_episodes": 0
+    },
+    "R2_plus_KL": {
+      "payload": "configs/v420/rl-engine-advnorm-off.json",
+      "payload_sha256": "ca1dca15393d7983b493f1f1fa5254d2c686f7ce7a27474febd95c5742bb9fbe",
+      "episodes": 21,
+      "updates": 49,
+      "mean_first_death_frame": 1252.714,
+      "quartiles": {
+        "index_round": {
+          "boundaries": [
+            0,
+            5,
+            10,
+            16,
+            21
+          ],
+          "sizes": [
+            5,
+            5,
+            6,
+            5
+          ],
+          "means": [
+            1138.2,
+            1260.0,
+            1266.833,
+            1343.0
+          ],
+          "q4_vs_q1_percent": 17.9933
+        },
+        "index_floor": {
+          "boundaries": [
+            0,
+            5,
+            10,
+            15,
+            21
+          ],
+          "sizes": [
+            5,
+            5,
+            5,
+            6
+          ],
+          "means": [
+            1138.2,
+            1260.0,
+            1204.0,
+            1382.667
+          ],
+          "q4_vs_q1_percent": 21.4784
+        }
+      },
+      "per_update_mean_abs_parameter_change": 0.00023808721833083095,
+      "mean_ratio_over_eight_times_actor_lr": 0.9920300763784623,
+      "stage_clear_episodes": 0
+    },
+    "r3_50k": {
+      "payload": "configs/v420/rl-engine-advnorm-off.json",
+      "payload_sha256": "ca1dca15393d7983b493f1f1fa5254d2c686f7ce7a27474febd95c5742bb9fbe",
+      "episodes": 22,
+      "updates": 49,
+      "mean_first_death_frame": 1227.409,
+      "quartiles": {
+        "index_round": {
+          "boundaries": [
+            0,
+            6,
+            11,
+            16,
+            22
+          ],
+          "sizes": [
+            6,
+            5,
+            5,
+            6
+          ],
+          "means": [
+            1289.5,
+            1197.6,
+            1229.8,
+            1188.167
+          ],
+          "q4_vs_q1_percent": -7.8583
+        },
+        "index_floor": {
+          "boundaries": [
+            0,
+            5,
+            11,
+            16,
+            22
+          ],
+          "sizes": [
+            5,
+            6,
+            5,
+            6
+          ],
+          "means": [
+            1303.8,
+            1201.0,
+            1229.8,
+            1188.167
+          ],
+          "q4_vs_q1_percent": -8.8689
+        }
+      },
+      "per_update_mean_abs_parameter_change": 0.00023829198872423447,
+      "mean_ratio_over_eight_times_actor_lr": 0.9928832863509769,
+      "stage_clear_episodes": 0
+    },
+    "r3_200k": {
+      "payload": "configs/v420/rl-engine-advnorm-off.json",
+      "payload_sha256": "ca1dca15393d7983b493f1f1fa5254d2c686f7ce7a27474febd95c5742bb9fbe",
+      "episodes": 90,
+      "updates": 196,
+      "mean_first_death_frame": 1236.611,
+      "quartiles": {
+        "index_round": {
+          "boundaries": [
+            0,
+            22,
+            45,
+            68,
+            90
+          ],
+          "sizes": [
+            22,
+            23,
+            23,
+            22
+          ],
+          "means": [
+            1278.909,
+            1214.739,
+            1198.783,
+            1256.727
+          ],
+          "q4_vs_q1_percent": -1.7344
+        },
+        "index_floor": {
+          "boundaries": [
+            0,
+            22,
+            45,
+            67,
+            90
+          ],
+          "sizes": [
+            22,
+            23,
+            22,
+            23
+          ],
+          "means": [
+            1278.909,
+            1214.739,
+            1198.955,
+            1254.043
+          ],
+          "q4_vs_q1_percent": -1.9443
+        }
+      },
+      "per_update_mean_abs_parameter_change": 0.00023798076015699903,
+      "mean_ratio_over_eight_times_actor_lr": 0.9915865006541625,
+      "stage_clear_episodes": 0
+    }
+  },
+  "dev": {
+    "summary": {
+      "diag_first_death": {
+        "n": 20,
+        "seeds": [
+          1000,
+          1001,
+          1002,
+          1003,
+          1004,
+          1005,
+          1006,
+          1007,
+          1008,
+          1009,
+          1010,
+          1011,
+          1012,
+          1013,
+          1014,
+          1015,
+          1016,
+          1017,
+          1018,
+          1019
+        ],
+        "frames_mean": 1481.9,
+        "frames_sd": 271.174,
+        "frames_min": 818.0,
+        "frames_max": 1939.0,
+        "clears": 0,
+        "stage_clear_seeds": [],
+        "per_seed": {
+          "1000": {
+            "frames": 1480.0,
+            "clear": false,
+            "stop_reason": "death_stop",
+            "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-advoff/ADVOFF-diag_first_death-1000-1001-1002-1003-1004.json"
+          },
+          "1001": {
+            "frames": 839.0,
+            "clear": false,
+            "stop_reason": "death_stop",
+            "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-advoff/ADVOFF-diag_first_death-1000-1001-1002-1003-1004.json"
+          },
+          "1002": {
+            "frames": 1298.0,
+            "clear": false,
+            "stop_reason": "death_stop",
+            "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-advoff/ADVOFF-diag_first_death-1000-1001-1002-1003-1004.json"
+          },
+          "1003": {
+            "frames": 1480.0,
+            "clear": false,
+            "stop_reason": "death_stop",
+            "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-advoff/ADVOFF-diag_first_death-1000-1001-1002-1003-1004.json"
+          },
+          "1004": {
+            "frames": 818.0,
+            "clear": false,
+            "stop_reason": "death_stop",
+            "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-advoff/ADVOFF-diag_first_death-1000-1001-1002-1003-1004.json"
+          },
+          "1005": {
+            "frames": 1755.0,
+            "clear": false,
+            "stop_reason": "death_stop",
+            "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-advoff/ADVOFF-diag_first_death-1005-1006-1007-1008-1009.json"
+          },
+          "1006": {
+            "frames": 1615.0,
+            "clear": false,
+            "stop_reason": "death_stop",
+            "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-advoff/ADVOFF-diag_first_death-1005-1006-1007-1008-1009.json"
+          },
+          "1007": {
+            "frames": 1412.0,
+            "clear": false,
+            "stop_reason": "death_stop",
+            "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-advoff/ADVOFF-diag_first_death-1005-1006-1007-1008-1009.json"
+          },
+          "1008": {
+            "frames": 1431.0,
+            "clear": false,
+            "stop_reason": "death_stop",
+            "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-advoff/ADVOFF-diag_first_death-1005-1006-1007-1008-1009.json"
+          },
+          "1009": {
+            "frames": 1700.0,
+            "clear": false,
+            "stop_reason": "death_stop",
+            "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-advoff/ADVOFF-diag_first_death-1005-1006-1007-1008-1009.json"
+          },
+          "1010": {
+            "frames": 1411.0,
+            "clear": false,
+            "stop_reason": "death_stop",
+            "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-advoff/ADVOFF-diag_first_death-1010-1011-1012-1013-1014.json"
+          },
+          "1011": {
+            "frames": 1658.0,
+            "clear": false,
+            "stop_reason": "death_stop",
+            "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-advoff/ADVOFF-diag_first_death-1010-1011-1012-1013-1014.json"
+          },
+          "1012": {
+            "frames": 1939.0,
+            "clear": false,
+            "stop_reason": "death_stop",
+            "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-advoff/ADVOFF-diag_first_death-1010-1011-1012-1013-1014.json"
+          },
+          "1013": {
+            "frames": 1422.0,
+            "clear": false,
+            "stop_reason": "death_stop",
+            "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-advoff/ADVOFF-diag_first_death-1010-1011-1012-1013-1014.json"
+          },
+          "1014": {
+            "frames": 1577.0,
+            "clear": false,
+            "stop_reason": "death_stop",
+            "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-advoff/ADVOFF-diag_first_death-1010-1011-1012-1013-1014.json"
+          },
+          "1015": {
+            "frames": 1775.0,
+            "clear": false,
+            "stop_reason": "death_stop",
+            "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-advoff/ADVOFF-diag_first_death-1015-1016-1017-1018-1019.json"
+          },
+          "1016": {
+            "frames": 1475.0,
+            "clear": false,
+            "stop_reason": "death_stop",
+            "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-advoff/ADVOFF-diag_first_death-1015-1016-1017-1018-1019.json"
+          },
+          "1017": {
+            "frames": 1491.0,
+            "clear": false,
+            "stop_reason": "death_stop",
+            "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-advoff/ADVOFF-diag_first_death-1015-1016-1017-1018-1019.json"
+          },
+          "1018": {
+            "frames": 1449.0,
+            "clear": false,
+            "stop_reason": "death_stop",
+            "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-advoff/ADVOFF-diag_first_death-1015-1016-1017-1018-1019.json"
+          },
+          "1019": {
+            "frames": 1613.0,
+            "clear": false,
+            "stop_reason": "death_stop",
+            "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-advoff/ADVOFF-diag_first_death-1015-1016-1017-1018-1019.json"
+          }
+        }
+      },
+      "s1n": {
+        "n": 20,
+        "seeds": [
+          1000,
+          1001,
+          1002,
+          1003,
+          1004,
+          1005,
+          1006,
+          1007,
+          1008,
+          1009,
+          1010,
+          1011,
+          1012,
+          1013,
+          1014,
+          1015,
+          1016,
+          1017,
+          1018,
+          1019
+        ],
+        "frames_mean": 2660.65,
+        "frames_sd": 348.779,
+        "frames_min": 2184.0,
+        "frames_max": 3324.0,
+        "clears": 0,
+        "stage_clear_seeds": [],
+        "per_seed": {
+          "1000": {
+            "frames": 2487.0,
+            "clear": false,
+            "stop_reason": "game_over",
+            "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-advoff/ADVOFF-s1n-1000-1001-1002-1003-1004.json"
+          },
+          "1001": {
+            "frames": 2248.0,
+            "clear": false,
+            "stop_reason": "game_over",
+            "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-advoff/ADVOFF-s1n-1000-1001-1002-1003-1004.json"
+          },
+          "1002": {
+            "frames": 3129.0,
+            "clear": false,
+            "stop_reason": "game_over",
+            "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-advoff/ADVOFF-s1n-1000-1001-1002-1003-1004.json"
+          },
+          "1003": {
+            "frames": 2533.0,
+            "clear": false,
+            "stop_reason": "game_over",
+            "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-advoff/ADVOFF-s1n-1000-1001-1002-1003-1004.json"
+          },
+          "1004": {
+            "frames": 2400.0,
+            "clear": false,
+            "stop_reason": "game_over",
+            "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-advoff/ADVOFF-s1n-1000-1001-1002-1003-1004.json"
+          },
+          "1005": {
+            "frames": 2970.0,
+            "clear": false,
+            "stop_reason": "game_over",
+            "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-advoff/ADVOFF-s1n-1005-1006-1007-1008-1009.json"
+          },
+          "1006": {
+            "frames": 2530.0,
+            "clear": false,
+            "stop_reason": "game_over",
+            "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-advoff/ADVOFF-s1n-1005-1006-1007-1008-1009.json"
+          },
+          "1007": {
+            "frames": 2276.0,
+            "clear": false,
+            "stop_reason": "game_over",
+            "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-advoff/ADVOFF-s1n-1005-1006-1007-1008-1009.json"
+          },
+          "1008": {
+            "frames": 2263.0,
+            "clear": false,
+            "stop_reason": "game_over",
+            "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-advoff/ADVOFF-s1n-1005-1006-1007-1008-1009.json"
+          },
+          "1009": {
+            "frames": 2525.0,
+            "clear": false,
+            "stop_reason": "game_over",
+            "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-advoff/ADVOFF-s1n-1005-1006-1007-1008-1009.json"
+          },
+          "1010": {
+            "frames": 3015.0,
+            "clear": false,
+            "stop_reason": "game_over",
+            "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-advoff/ADVOFF-s1n-1010-1011-1012-1013-1014.json"
+          },
+          "1011": {
+            "frames": 3324.0,
+            "clear": false,
+            "stop_reason": "game_over",
+            "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-advoff/ADVOFF-s1n-1010-1011-1012-1013-1014.json"
+          },
+          "1012": {
+            "frames": 3152.0,
+            "clear": false,
+            "stop_reason": "game_over",
+            "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-advoff/ADVOFF-s1n-1010-1011-1012-1013-1014.json"
+          },
+          "1013": {
+            "frames": 2423.0,
+            "clear": false,
+            "stop_reason": "game_over",
+            "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-advoff/ADVOFF-s1n-1010-1011-1012-1013-1014.json"
+          },
+          "1014": {
+            "frames": 2952.0,
+            "clear": false,
+            "stop_reason": "game_over",
+            "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-advoff/ADVOFF-s1n-1010-1011-1012-1013-1014.json"
+          },
+          "1015": {
+            "frames": 2674.0,
+            "clear": false,
+            "stop_reason": "game_over",
+            "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-advoff/ADVOFF-s1n-1015-1016-1017-1018-1019.json"
+          },
+          "1016": {
+            "frames": 2184.0,
+            "clear": false,
+            "stop_reason": "game_over",
+            "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-advoff/ADVOFF-s1n-1015-1016-1017-1018-1019.json"
+          },
+          "1017": {
+            "frames": 2584.0,
+            "clear": false,
+            "stop_reason": "game_over",
+            "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-advoff/ADVOFF-s1n-1015-1016-1017-1018-1019.json"
+          },
+          "1018": {
+            "frames": 2486.0,
+            "clear": false,
+            "stop_reason": "game_over",
+            "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-advoff/ADVOFF-s1n-1015-1016-1017-1018-1019.json"
+          },
+          "1019": {
+            "frames": 3058.0,
+            "clear": false,
+            "stop_reason": "game_over",
+            "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-advoff/ADVOFF-s1n-1015-1016-1017-1018-1019.json"
+          }
+        }
+      }
+    },
+    "references": {
+      "R0_untrained_anchored": {
+        "diag_first_death": {
+          "n": 20,
+          "seeds": [
+            1000,
+            1001,
+            1002,
+            1003,
+            1004,
+            1005,
+            1006,
+            1007,
+            1008,
+            1009,
+            1010,
+            1011,
+            1012,
+            1013,
+            1014,
+            1015,
+            1016,
+            1017,
+            1018,
+            1019
+          ],
+          "frames_mean": 1636.8,
+          "frames_sd": 254.811,
+          "frames_min": 1397.0,
+          "frames_max": 2185.0,
+          "clears": 0,
+          "stage_clear_seeds": [],
+          "per_seed": {
+            "1000": {
+              "frames": 1409.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev/merged-R0.json"
+            },
+            "1001": {
+              "frames": 1728.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev/merged-R0.json"
+            },
+            "1002": {
+              "frames": 1499.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev/merged-R0.json"
+            },
+            "1003": {
+              "frames": 1557.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev/merged-R0.json"
+            },
+            "1004": {
+              "frames": 1410.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev/merged-R0.json"
+            },
+            "1005": {
+              "frames": 1605.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev/merged-R0.json"
+            },
+            "1006": {
+              "frames": 1397.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev/merged-R0.json"
+            },
+            "1007": {
+              "frames": 1408.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev/merged-R0.json"
+            },
+            "1008": {
+              "frames": 1431.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev/merged-R0.json"
+            },
+            "1009": {
+              "frames": 1492.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev/merged-R0.json"
+            },
+            "1010": {
+              "frames": 1588.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev/merged-R0.json"
+            },
+            "1011": {
+              "frames": 1413.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev/merged-R0.json"
+            },
+            "1012": {
+              "frames": 1897.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev/merged-R0.json"
+            },
+            "1013": {
+              "frames": 1640.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev/merged-R0.json"
+            },
+            "1014": {
+              "frames": 2138.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev/merged-R0.json"
+            },
+            "1015": {
+              "frames": 2185.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev/merged-R0.json"
+            },
+            "1016": {
+              "frames": 1567.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev/merged-R0.json"
+            },
+            "1017": {
+              "frames": 1494.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev/merged-R0.json"
+            },
+            "1018": {
+              "frames": 2085.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev/merged-R0.json"
+            },
+            "1019": {
+              "frames": 1793.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev/merged-R0.json"
+            }
+          }
+        },
+        "s1n": {
+          "n": 20,
+          "seeds": [
+            1000,
+            1001,
+            1002,
+            1003,
+            1004,
+            1005,
+            1006,
+            1007,
+            1008,
+            1009,
+            1010,
+            1011,
+            1012,
+            1013,
+            1014,
+            1015,
+            1016,
+            1017,
+            1018,
+            1019
+          ],
+          "frames_mean": 3011.5,
+          "frames_sd": 643.531,
+          "frames_min": 2137.0,
+          "frames_max": 4964.0,
+          "clears": 0,
+          "stage_clear_seeds": [],
+          "per_seed": {
+            "1000": {
+              "frames": 2137.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev/merged-R0.json"
+            },
+            "1001": {
+              "frames": 3430.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev/merged-R0.json"
+            },
+            "1002": {
+              "frames": 2185.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev/merged-R0.json"
+            },
+            "1003": {
+              "frames": 2731.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev/merged-R0.json"
+            },
+            "1004": {
+              "frames": 2456.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev/merged-R0.json"
+            },
+            "1005": {
+              "frames": 2579.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev/merged-R0.json"
+            },
+            "1006": {
+              "frames": 2572.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev/merged-R0.json"
+            },
+            "1007": {
+              "frames": 3280.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev/merged-R0.json"
+            },
+            "1008": {
+              "frames": 3181.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev/merged-R0.json"
+            },
+            "1009": {
+              "frames": 3940.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev/merged-R0.json"
+            },
+            "1010": {
+              "frames": 2528.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev/merged-R0.json"
+            },
+            "1011": {
+              "frames": 2540.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev/merged-R0.json"
+            },
+            "1012": {
+              "frames": 3080.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev/merged-R0.json"
+            },
+            "1013": {
+              "frames": 3034.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev/merged-R0.json"
+            },
+            "1014": {
+              "frames": 3078.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev/merged-R0.json"
+            },
+            "1015": {
+              "frames": 4964.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev/merged-R0.json"
+            },
+            "1016": {
+              "frames": 2886.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev/merged-R0.json"
+            },
+            "1017": {
+              "frames": 3472.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev/merged-R0.json"
+            },
+            "1018": {
+              "frames": 3092.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev/merged-R0.json"
+            },
+            "1019": {
+              "frames": 3065.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev/merged-R0.json"
+            }
+          }
+        }
+      },
+      "R2_no_anchor": {
+        "diag_first_death": {
+          "n": 20,
+          "seeds": [
+            1000,
+            1001,
+            1002,
+            1003,
+            1004,
+            1005,
+            1006,
+            1007,
+            1008,
+            1009,
+            1010,
+            1011,
+            1012,
+            1013,
+            1014,
+            1015,
+            1016,
+            1017,
+            1018,
+            1019
+          ],
+          "frames_mean": 889.35,
+          "frames_sd": 166.72,
+          "frames_min": 733.0,
+          "frames_max": 1365.0,
+          "clears": 0,
+          "stage_clear_seeds": [],
+          "per_seed": {
+            "1000": {
+              "frames": 1017.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev2/R2-diag_first_death-1000-1001-1002-1003-1004.json"
+            },
+            "1001": {
+              "frames": 763.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev2/R2-diag_first_death-1000-1001-1002-1003-1004.json"
+            },
+            "1002": {
+              "frames": 834.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev2/R2-diag_first_death-1000-1001-1002-1003-1004.json"
+            },
+            "1003": {
+              "frames": 733.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev2/R2-diag_first_death-1000-1001-1002-1003-1004.json"
+            },
+            "1004": {
+              "frames": 975.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev2/R2-diag_first_death-1000-1001-1002-1003-1004.json"
+            },
+            "1005": {
+              "frames": 949.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev2/R2-diag_first_death-1005-1006-1007-1008-1009.json"
+            },
+            "1006": {
+              "frames": 737.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev2/R2-diag_first_death-1005-1006-1007-1008-1009.json"
+            },
+            "1007": {
+              "frames": 751.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev2/R2-diag_first_death-1005-1006-1007-1008-1009.json"
+            },
+            "1008": {
+              "frames": 950.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev2/R2-diag_first_death-1005-1006-1007-1008-1009.json"
+            },
+            "1009": {
+              "frames": 733.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev2/R2-diag_first_death-1005-1006-1007-1008-1009.json"
+            },
+            "1010": {
+              "frames": 754.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev2/R2-diag_first_death-1010-1011-1012-1013-1014.json"
+            },
+            "1011": {
+              "frames": 834.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev2/R2-diag_first_death-1010-1011-1012-1013-1014.json"
+            },
+            "1012": {
+              "frames": 1365.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev2/R2-diag_first_death-1010-1011-1012-1013-1014.json"
+            },
+            "1013": {
+              "frames": 947.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev2/R2-diag_first_death-1010-1011-1012-1013-1014.json"
+            },
+            "1014": {
+              "frames": 742.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev2/R2-diag_first_death-1010-1011-1012-1013-1014.json"
+            },
+            "1015": {
+              "frames": 829.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev2/R2-diag_first_death-1015-1016-1017-1018-1019.json"
+            },
+            "1016": {
+              "frames": 959.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev2/R2-diag_first_death-1015-1016-1017-1018-1019.json"
+            },
+            "1017": {
+              "frames": 1096.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev2/R2-diag_first_death-1015-1016-1017-1018-1019.json"
+            },
+            "1018": {
+              "frames": 1086.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev2/R2-diag_first_death-1015-1016-1017-1018-1019.json"
+            },
+            "1019": {
+              "frames": 733.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev2/R2-diag_first_death-1015-1016-1017-1018-1019.json"
+            }
+          }
+        },
+        "s1n": {
+          "n": 20,
+          "seeds": [
+            1000,
+            1001,
+            1002,
+            1003,
+            1004,
+            1005,
+            1006,
+            1007,
+            1008,
+            1009,
+            1010,
+            1011,
+            1012,
+            1013,
+            1014,
+            1015,
+            1016,
+            1017,
+            1018,
+            1019
+          ],
+          "frames_mean": 1906.4,
+          "frames_sd": 189.614,
+          "frames_min": 1636.0,
+          "frames_max": 2337.0,
+          "clears": 0,
+          "stage_clear_seeds": [],
+          "per_seed": {
+            "1000": {
+              "frames": 1835.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev2/R2-s1n-1000-1001-1002-1003-1004.json"
+            },
+            "1001": {
+              "frames": 1667.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev2/R2-s1n-1000-1001-1002-1003-1004.json"
+            },
+            "1002": {
+              "frames": 2102.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev2/R2-s1n-1000-1001-1002-1003-1004.json"
+            },
+            "1003": {
+              "frames": 1879.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev2/R2-s1n-1000-1001-1002-1003-1004.json"
+            },
+            "1004": {
+              "frames": 1773.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev2/R2-s1n-1000-1001-1002-1003-1004.json"
+            },
+            "1005": {
+              "frames": 1818.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev2/R2-s1n-1005-1006-1007-1008-1009.json"
+            },
+            "1006": {
+              "frames": 1868.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev2/R2-s1n-1005-1006-1007-1008-1009.json"
+            },
+            "1007": {
+              "frames": 1724.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev2/R2-s1n-1005-1006-1007-1008-1009.json"
+            },
+            "1008": {
+              "frames": 1788.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev2/R2-s1n-1005-1006-1007-1008-1009.json"
+            },
+            "1009": {
+              "frames": 1636.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev2/R2-s1n-1005-1006-1007-1008-1009.json"
+            },
+            "1010": {
+              "frames": 2023.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev2/R2-s1n-1010-1011-1012-1013-1014.json"
+            },
+            "1011": {
+              "frames": 1827.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev2/R2-s1n-1010-1011-1012-1013-1014.json"
+            },
+            "1012": {
+              "frames": 2215.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev2/R2-s1n-1010-1011-1012-1013-1014.json"
+            },
+            "1013": {
+              "frames": 2182.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev2/R2-s1n-1010-1011-1012-1013-1014.json"
+            },
+            "1014": {
+              "frames": 1813.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev2/R2-s1n-1010-1011-1012-1013-1014.json"
+            },
+            "1015": {
+              "frames": 1874.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev2/R2-s1n-1015-1016-1017-1018-1019.json"
+            },
+            "1016": {
+              "frames": 1798.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev2/R2-s1n-1015-1016-1017-1018-1019.json"
+            },
+            "1017": {
+              "frames": 2337.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev2/R2-s1n-1015-1016-1017-1018-1019.json"
+            },
+            "1018": {
+              "frames": 2094.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev2/R2-s1n-1015-1016-1017-1018-1019.json"
+            },
+            "1019": {
+              "frames": 1875.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev2/R2-s1n-1015-1016-1017-1018-1019.json"
+            }
+          }
+        }
+      },
+      "R2_plus_KL": {
+        "diag_first_death": {
+          "n": 20,
+          "seeds": [
+            1000,
+            1001,
+            1002,
+            1003,
+            1004,
+            1005,
+            1006,
+            1007,
+            1008,
+            1009,
+            1010,
+            1011,
+            1012,
+            1013,
+            1014,
+            1015,
+            1016,
+            1017,
+            1018,
+            1019
+          ],
+          "frames_mean": 1512.1,
+          "frames_sd": 160.655,
+          "frames_min": 1117.0,
+          "frames_max": 1751.0,
+          "clears": 0,
+          "stage_clear_seeds": [],
+          "per_seed": {
+            "1000": {
+              "frames": 1425.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-kl/R2kl-diag_first_death-1000-1001-1002-1003-1004.json"
+            },
+            "1001": {
+              "frames": 1655.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-kl/R2kl-diag_first_death-1000-1001-1002-1003-1004.json"
+            },
+            "1002": {
+              "frames": 1408.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-kl/R2kl-diag_first_death-1000-1001-1002-1003-1004.json"
+            },
+            "1003": {
+              "frames": 1384.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-kl/R2kl-diag_first_death-1000-1001-1002-1003-1004.json"
+            },
+            "1004": {
+              "frames": 1481.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-kl/R2kl-diag_first_death-1000-1001-1002-1003-1004.json"
+            },
+            "1005": {
+              "frames": 1423.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-kl/R2kl-diag_first_death-1005-1006-1007-1008-1009.json"
+            },
+            "1006": {
+              "frames": 1743.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-kl/R2kl-diag_first_death-1005-1006-1007-1008-1009.json"
+            },
+            "1007": {
+              "frames": 1751.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-kl/R2kl-diag_first_death-1005-1006-1007-1008-1009.json"
+            },
+            "1008": {
+              "frames": 1433.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-kl/R2kl-diag_first_death-1005-1006-1007-1008-1009.json"
+            },
+            "1009": {
+              "frames": 1417.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-kl/R2kl-diag_first_death-1005-1006-1007-1008-1009.json"
+            },
+            "1010": {
+              "frames": 1613.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-kl/R2kl-diag_first_death-1010-1011-1012-1013-1014.json"
+            },
+            "1011": {
+              "frames": 1117.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-kl/R2kl-diag_first_death-1010-1011-1012-1013-1014.json"
+            },
+            "1012": {
+              "frames": 1412.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-kl/R2kl-diag_first_death-1010-1011-1012-1013-1014.json"
+            },
+            "1013": {
+              "frames": 1410.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-kl/R2kl-diag_first_death-1010-1011-1012-1013-1014.json"
+            },
+            "1014": {
+              "frames": 1564.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-kl/R2kl-diag_first_death-1010-1011-1012-1013-1014.json"
+            },
+            "1015": {
+              "frames": 1555.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-kl/R2kl-diag_first_death-1015-1016-1017-1018-1019.json"
+            },
+            "1016": {
+              "frames": 1734.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-kl/R2kl-diag_first_death-1015-1016-1017-1018-1019.json"
+            },
+            "1017": {
+              "frames": 1621.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-kl/R2kl-diag_first_death-1015-1016-1017-1018-1019.json"
+            },
+            "1018": {
+              "frames": 1699.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-kl/R2kl-diag_first_death-1015-1016-1017-1018-1019.json"
+            },
+            "1019": {
+              "frames": 1397.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-kl/R2kl-diag_first_death-1015-1016-1017-1018-1019.json"
+            }
+          }
+        },
+        "s1n": {
+          "n": 20,
+          "seeds": [
+            1000,
+            1001,
+            1002,
+            1003,
+            1004,
+            1005,
+            1006,
+            1007,
+            1008,
+            1009,
+            1010,
+            1011,
+            1012,
+            1013,
+            1014,
+            1015,
+            1016,
+            1017,
+            1018,
+            1019
+          ],
+          "frames_mean": 2626.0,
+          "frames_sd": 399.99,
+          "frames_min": 2070.0,
+          "frames_max": 3479.0,
+          "clears": 0,
+          "stage_clear_seeds": [],
+          "per_seed": {
+            "1000": {
+              "frames": 2070.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-kl/R2kl-s1n-1000-1001-1002-1003-1004.json"
+            },
+            "1001": {
+              "frames": 3479.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-kl/R2kl-s1n-1000-1001-1002-1003-1004.json"
+            },
+            "1002": {
+              "frames": 2254.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-kl/R2kl-s1n-1000-1001-1002-1003-1004.json"
+            },
+            "1003": {
+              "frames": 3022.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-kl/R2kl-s1n-1000-1001-1002-1003-1004.json"
+            },
+            "1004": {
+              "frames": 2213.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-kl/R2kl-s1n-1000-1001-1002-1003-1004.json"
+            },
+            "1005": {
+              "frames": 2388.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-kl/R2kl-s1n-1005-1006-1007-1008-1009.json"
+            },
+            "1006": {
+              "frames": 2949.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-kl/R2kl-s1n-1005-1006-1007-1008-1009.json"
+            },
+            "1007": {
+              "frames": 3053.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-kl/R2kl-s1n-1005-1006-1007-1008-1009.json"
+            },
+            "1008": {
+              "frames": 2692.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-kl/R2kl-s1n-1005-1006-1007-1008-1009.json"
+            },
+            "1009": {
+              "frames": 2292.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-kl/R2kl-s1n-1005-1006-1007-1008-1009.json"
+            },
+            "1010": {
+              "frames": 2688.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-kl/R2kl-s1n-1010-1011-1012-1013-1014.json"
+            },
+            "1011": {
+              "frames": 2134.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-kl/R2kl-s1n-1010-1011-1012-1013-1014.json"
+            },
+            "1012": {
+              "frames": 2317.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-kl/R2kl-s1n-1010-1011-1012-1013-1014.json"
+            },
+            "1013": {
+              "frames": 2407.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-kl/R2kl-s1n-1010-1011-1012-1013-1014.json"
+            },
+            "1014": {
+              "frames": 2414.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-kl/R2kl-s1n-1010-1011-1012-1013-1014.json"
+            },
+            "1015": {
+              "frames": 2583.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-kl/R2kl-s1n-1015-1016-1017-1018-1019.json"
+            },
+            "1016": {
+              "frames": 3292.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-kl/R2kl-s1n-1015-1016-1017-1018-1019.json"
+            },
+            "1017": {
+              "frames": 2730.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-kl/R2kl-s1n-1015-1016-1017-1018-1019.json"
+            },
+            "1018": {
+              "frames": 2502.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-kl/R2kl-s1n-1015-1016-1017-1018-1019.json"
+            },
+            "1019": {
+              "frames": 3041.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-kl/R2kl-s1n-1015-1016-1017-1018-1019.json"
+            }
+          }
+        }
+      },
+      "r3_50k": {
+        "diag_first_death": {
+          "n": 20,
+          "seeds": [
+            1000,
+            1001,
+            1002,
+            1003,
+            1004,
+            1005,
+            1006,
+            1007,
+            1008,
+            1009,
+            1010,
+            1011,
+            1012,
+            1013,
+            1014,
+            1015,
+            1016,
+            1017,
+            1018,
+            1019
+          ],
+          "frames_mean": 1589.2,
+          "frames_sd": 322.168,
+          "frames_min": 816.0,
+          "frames_max": 2392.0,
+          "clears": 0,
+          "stage_clear_seeds": [],
+          "per_seed": {
+            "1000": {
+              "frames": 1788.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-r3/R3-diag_first_death-1000-1001-1002-1003-1004.json"
+            },
+            "1001": {
+              "frames": 816.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-r3/R3-diag_first_death-1000-1001-1002-1003-1004.json"
+            },
+            "1002": {
+              "frames": 1929.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-r3/R3-diag_first_death-1000-1001-1002-1003-1004.json"
+            },
+            "1003": {
+              "frames": 1494.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-r3/R3-diag_first_death-1000-1001-1002-1003-1004.json"
+            },
+            "1004": {
+              "frames": 1410.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-r3/R3-diag_first_death-1000-1001-1002-1003-1004.json"
+            },
+            "1005": {
+              "frames": 1492.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-r3/R3-diag_first_death-1005-1006-1007-1008-1009.json"
+            },
+            "1006": {
+              "frames": 1945.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-r3/R3-diag_first_death-1005-1006-1007-1008-1009.json"
+            },
+            "1007": {
+              "frames": 1546.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-r3/R3-diag_first_death-1005-1006-1007-1008-1009.json"
+            },
+            "1008": {
+              "frames": 1816.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-r3/R3-diag_first_death-1005-1006-1007-1008-1009.json"
+            },
+            "1009": {
+              "frames": 1489.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-r3/R3-diag_first_death-1005-1006-1007-1008-1009.json"
+            },
+            "1010": {
+              "frames": 1363.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-r3/R3-diag_first_death-1010-1011-1012-1013-1014.json"
+            },
+            "1011": {
+              "frames": 1485.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-r3/R3-diag_first_death-1010-1011-1012-1013-1014.json"
+            },
+            "1012": {
+              "frames": 1500.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-r3/R3-diag_first_death-1010-1011-1012-1013-1014.json"
+            },
+            "1013": {
+              "frames": 1568.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-r3/R3-diag_first_death-1010-1011-1012-1013-1014.json"
+            },
+            "1014": {
+              "frames": 1971.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-r3/R3-diag_first_death-1010-1011-1012-1013-1014.json"
+            },
+            "1015": {
+              "frames": 1295.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-r3/R3-diag_first_death-1015-1016-1017-1018-1019.json"
+            },
+            "1016": {
+              "frames": 2392.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-r3/R3-diag_first_death-1015-1016-1017-1018-1019.json"
+            },
+            "1017": {
+              "frames": 1495.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-r3/R3-diag_first_death-1015-1016-1017-1018-1019.json"
+            },
+            "1018": {
+              "frames": 1544.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-r3/R3-diag_first_death-1015-1016-1017-1018-1019.json"
+            },
+            "1019": {
+              "frames": 1446.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-r3/R3-diag_first_death-1015-1016-1017-1018-1019.json"
+            }
+          }
+        },
+        "s1n": {
+          "n": 20,
+          "seeds": [
+            1000,
+            1001,
+            1002,
+            1003,
+            1004,
+            1005,
+            1006,
+            1007,
+            1008,
+            1009,
+            1010,
+            1011,
+            1012,
+            1013,
+            1014,
+            1015,
+            1016,
+            1017,
+            1018,
+            1019
+          ],
+          "frames_mean": 2891.6,
+          "frames_sd": 675.186,
+          "frames_min": 1920.0,
+          "frames_max": 4701.0,
+          "clears": 0,
+          "stage_clear_seeds": [],
+          "per_seed": {
+            "1000": {
+              "frames": 3022.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-r3/R3-s1n-1000-1001-1002-1003-1004.json"
+            },
+            "1001": {
+              "frames": 1920.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-r3/R3-s1n-1000-1001-1002-1003-1004.json"
+            },
+            "1002": {
+              "frames": 4701.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-r3/R3-s1n-1000-1001-1002-1003-1004.json"
+            },
+            "1003": {
+              "frames": 2407.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-r3/R3-s1n-1000-1001-1002-1003-1004.json"
+            },
+            "1004": {
+              "frames": 2210.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-r3/R3-s1n-1000-1001-1002-1003-1004.json"
+            },
+            "1005": {
+              "frames": 2480.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-r3/R3-s1n-1005-1006-1007-1008-1009.json"
+            },
+            "1006": {
+              "frames": 3418.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-r3/R3-s1n-1005-1006-1007-1008-1009.json"
+            },
+            "1007": {
+              "frames": 2889.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-r3/R3-s1n-1005-1006-1007-1008-1009.json"
+            },
+            "1008": {
+              "frames": 3509.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-r3/R3-s1n-1005-1006-1007-1008-1009.json"
+            },
+            "1009": {
+              "frames": 2373.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-r3/R3-s1n-1005-1006-1007-1008-1009.json"
+            },
+            "1010": {
+              "frames": 2180.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-r3/R3-s1n-1010-1011-1012-1013-1014.json"
+            },
+            "1011": {
+              "frames": 3578.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-r3/R3-s1n-1010-1011-1012-1013-1014.json"
+            },
+            "1012": {
+              "frames": 3391.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-r3/R3-s1n-1010-1011-1012-1013-1014.json"
+            },
+            "1013": {
+              "frames": 2537.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-r3/R3-s1n-1010-1011-1012-1013-1014.json"
+            },
+            "1014": {
+              "frames": 3270.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-r3/R3-s1n-1010-1011-1012-1013-1014.json"
+            },
+            "1015": {
+              "frames": 2704.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-r3/R3-s1n-1015-1016-1017-1018-1019.json"
+            },
+            "1016": {
+              "frames": 3566.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-r3/R3-s1n-1015-1016-1017-1018-1019.json"
+            },
+            "1017": {
+              "frames": 2258.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-r3/R3-s1n-1015-1016-1017-1018-1019.json"
+            },
+            "1018": {
+              "frames": 3007.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-r3/R3-s1n-1015-1016-1017-1018-1019.json"
+            },
+            "1019": {
+              "frames": 2412.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-r3/R3-s1n-1015-1016-1017-1018-1019.json"
+            }
+          }
+        }
+      },
+      "r3_200k": {
+        "diag_first_death": {
+          "n": 20,
+          "seeds": [
+            1000,
+            1001,
+            1002,
+            1003,
+            1004,
+            1005,
+            1006,
+            1007,
+            1008,
+            1009,
+            1010,
+            1011,
+            1012,
+            1013,
+            1014,
+            1015,
+            1016,
+            1017,
+            1018,
+            1019
+          ],
+          "frames_mean": 1575.2,
+          "frames_sd": 245.108,
+          "frames_min": 1306.0,
+          "frames_max": 1990.0,
+          "clears": 0,
+          "stage_clear_seeds": [],
+          "per_seed": {
+            "1000": {
+              "frames": 1306.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-r3b200/R3B200-diag_first_death-1000-1001-1002-1003-1004.json"
+            },
+            "1001": {
+              "frames": 1990.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-r3b200/R3B200-diag_first_death-1000-1001-1002-1003-1004.json"
+            },
+            "1002": {
+              "frames": 1599.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-r3b200/R3B200-diag_first_death-1000-1001-1002-1003-1004.json"
+            },
+            "1003": {
+              "frames": 1411.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-r3b200/R3B200-diag_first_death-1000-1001-1002-1003-1004.json"
+            },
+            "1004": {
+              "frames": 1409.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-r3b200/R3B200-diag_first_death-1000-1001-1002-1003-1004.json"
+            },
+            "1005": {
+              "frames": 1945.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-r3b200/R3B200-diag_first_death-1005-1006-1007-1008-1009.json"
+            },
+            "1006": {
+              "frames": 1691.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-r3b200/R3B200-diag_first_death-1005-1006-1007-1008-1009.json"
+            },
+            "1007": {
+              "frames": 1370.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-r3b200/R3B200-diag_first_death-1005-1006-1007-1008-1009.json"
+            },
+            "1008": {
+              "frames": 1384.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-r3b200/R3B200-diag_first_death-1005-1006-1007-1008-1009.json"
+            },
+            "1009": {
+              "frames": 1961.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-r3b200/R3B200-diag_first_death-1005-1006-1007-1008-1009.json"
+            },
+            "1010": {
+              "frames": 1407.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-r3b200/R3B200-diag_first_death-1010-1011-1012-1013-1014.json"
+            },
+            "1011": {
+              "frames": 1413.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-r3b200/R3B200-diag_first_death-1010-1011-1012-1013-1014.json"
+            },
+            "1012": {
+              "frames": 1407.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-r3b200/R3B200-diag_first_death-1010-1011-1012-1013-1014.json"
+            },
+            "1013": {
+              "frames": 1412.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-r3b200/R3B200-diag_first_death-1010-1011-1012-1013-1014.json"
+            },
+            "1014": {
+              "frames": 1442.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-r3b200/R3B200-diag_first_death-1010-1011-1012-1013-1014.json"
+            },
+            "1015": {
+              "frames": 1968.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-r3b200/R3B200-diag_first_death-1015-1016-1017-1018-1019.json"
+            },
+            "1016": {
+              "frames": 1413.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-r3b200/R3B200-diag_first_death-1015-1016-1017-1018-1019.json"
+            },
+            "1017": {
+              "frames": 1612.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-r3b200/R3B200-diag_first_death-1015-1016-1017-1018-1019.json"
+            },
+            "1018": {
+              "frames": 1939.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-r3b200/R3B200-diag_first_death-1015-1016-1017-1018-1019.json"
+            },
+            "1019": {
+              "frames": 1425.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-r3b200/R3B200-diag_first_death-1015-1016-1017-1018-1019.json"
+            }
+          }
+        },
+        "s1n": {
+          "n": 20,
+          "seeds": [
+            1000,
+            1001,
+            1002,
+            1003,
+            1004,
+            1005,
+            1006,
+            1007,
+            1008,
+            1009,
+            1010,
+            1011,
+            1012,
+            1013,
+            1014,
+            1015,
+            1016,
+            1017,
+            1018,
+            1019
+          ],
+          "frames_mean": 2808.6,
+          "frames_sd": 457.642,
+          "frames_min": 2143.0,
+          "frames_max": 3520.0,
+          "clears": 0,
+          "stage_clear_seeds": [],
+          "per_seed": {
+            "1000": {
+              "frames": 2482.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-r3b200/R3B200-s1n-1000-1001-1002-1003-1004.json"
+            },
+            "1001": {
+              "frames": 3038.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-r3b200/R3B200-s1n-1000-1001-1002-1003-1004.json"
+            },
+            "1002": {
+              "frames": 3141.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-r3b200/R3B200-s1n-1000-1001-1002-1003-1004.json"
+            },
+            "1003": {
+              "frames": 2155.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-r3b200/R3B200-s1n-1000-1001-1002-1003-1004.json"
+            },
+            "1004": {
+              "frames": 3505.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-r3b200/R3B200-s1n-1000-1001-1002-1003-1004.json"
+            },
+            "1005": {
+              "frames": 2717.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-r3b200/R3B200-s1n-1005-1006-1007-1008-1009.json"
+            },
+            "1006": {
+              "frames": 3520.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-r3b200/R3B200-s1n-1005-1006-1007-1008-1009.json"
+            },
+            "1007": {
+              "frames": 2501.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-r3b200/R3B200-s1n-1005-1006-1007-1008-1009.json"
+            },
+            "1008": {
+              "frames": 3355.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-r3b200/R3B200-s1n-1005-1006-1007-1008-1009.json"
+            },
+            "1009": {
+              "frames": 3251.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-r3b200/R3B200-s1n-1005-1006-1007-1008-1009.json"
+            },
+            "1010": {
+              "frames": 2800.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-r3b200/R3B200-s1n-1010-1011-1012-1013-1014.json"
+            },
+            "1011": {
+              "frames": 2339.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-r3b200/R3B200-s1n-1010-1011-1012-1013-1014.json"
+            },
+            "1012": {
+              "frames": 2317.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-r3b200/R3B200-s1n-1010-1011-1012-1013-1014.json"
+            },
+            "1013": {
+              "frames": 3148.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-r3b200/R3B200-s1n-1010-1011-1012-1013-1014.json"
+            },
+            "1014": {
+              "frames": 2452.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-r3b200/R3B200-s1n-1010-1011-1012-1013-1014.json"
+            },
+            "1015": {
+              "frames": 3033.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-r3b200/R3B200-s1n-1015-1016-1017-1018-1019.json"
+            },
+            "1016": {
+              "frames": 2143.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-r3b200/R3B200-s1n-1015-1016-1017-1018-1019.json"
+            },
+            "1017": {
+              "frames": 3010.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-r3b200/R3B200-s1n-1015-1016-1017-1018-1019.json"
+            },
+            "1018": {
+              "frames": 3076.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-r3b200/R3B200-s1n-1015-1016-1017-1018-1019.json"
+            },
+            "1019": {
+              "frames": 2189.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-r3b200/R3B200-s1n-1015-1016-1017-1018-1019.json"
+            }
+          }
+        }
+      },
+      "N_a2_advnorm_off": {
+        "diag_first_death": {
+          "n": 20,
+          "seeds": [
+            1000,
+            1001,
+            1002,
+            1003,
+            1004,
+            1005,
+            1006,
+            1007,
+            1008,
+            1009,
+            1010,
+            1011,
+            1012,
+            1013,
+            1014,
+            1015,
+            1016,
+            1017,
+            1018,
+            1019
+          ],
+          "frames_mean": 1481.9,
+          "frames_sd": 271.174,
+          "frames_min": 818.0,
+          "frames_max": 1939.0,
+          "clears": 0,
+          "stage_clear_seeds": [],
+          "per_seed": {
+            "1000": {
+              "frames": 1480.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-advoff/ADVOFF-diag_first_death-1000-1001-1002-1003-1004.json"
+            },
+            "1001": {
+              "frames": 839.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-advoff/ADVOFF-diag_first_death-1000-1001-1002-1003-1004.json"
+            },
+            "1002": {
+              "frames": 1298.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-advoff/ADVOFF-diag_first_death-1000-1001-1002-1003-1004.json"
+            },
+            "1003": {
+              "frames": 1480.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-advoff/ADVOFF-diag_first_death-1000-1001-1002-1003-1004.json"
+            },
+            "1004": {
+              "frames": 818.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-advoff/ADVOFF-diag_first_death-1000-1001-1002-1003-1004.json"
+            },
+            "1005": {
+              "frames": 1755.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-advoff/ADVOFF-diag_first_death-1005-1006-1007-1008-1009.json"
+            },
+            "1006": {
+              "frames": 1615.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-advoff/ADVOFF-diag_first_death-1005-1006-1007-1008-1009.json"
+            },
+            "1007": {
+              "frames": 1412.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-advoff/ADVOFF-diag_first_death-1005-1006-1007-1008-1009.json"
+            },
+            "1008": {
+              "frames": 1431.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-advoff/ADVOFF-diag_first_death-1005-1006-1007-1008-1009.json"
+            },
+            "1009": {
+              "frames": 1700.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-advoff/ADVOFF-diag_first_death-1005-1006-1007-1008-1009.json"
+            },
+            "1010": {
+              "frames": 1411.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-advoff/ADVOFF-diag_first_death-1010-1011-1012-1013-1014.json"
+            },
+            "1011": {
+              "frames": 1658.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-advoff/ADVOFF-diag_first_death-1010-1011-1012-1013-1014.json"
+            },
+            "1012": {
+              "frames": 1939.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-advoff/ADVOFF-diag_first_death-1010-1011-1012-1013-1014.json"
+            },
+            "1013": {
+              "frames": 1422.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-advoff/ADVOFF-diag_first_death-1010-1011-1012-1013-1014.json"
+            },
+            "1014": {
+              "frames": 1577.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-advoff/ADVOFF-diag_first_death-1010-1011-1012-1013-1014.json"
+            },
+            "1015": {
+              "frames": 1775.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-advoff/ADVOFF-diag_first_death-1015-1016-1017-1018-1019.json"
+            },
+            "1016": {
+              "frames": 1475.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-advoff/ADVOFF-diag_first_death-1015-1016-1017-1018-1019.json"
+            },
+            "1017": {
+              "frames": 1491.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-advoff/ADVOFF-diag_first_death-1015-1016-1017-1018-1019.json"
+            },
+            "1018": {
+              "frames": 1449.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-advoff/ADVOFF-diag_first_death-1015-1016-1017-1018-1019.json"
+            },
+            "1019": {
+              "frames": 1613.0,
+              "clear": false,
+              "stop_reason": "death_stop",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-advoff/ADVOFF-diag_first_death-1015-1016-1017-1018-1019.json"
+            }
+          }
+        },
+        "s1n": {
+          "n": 20,
+          "seeds": [
+            1000,
+            1001,
+            1002,
+            1003,
+            1004,
+            1005,
+            1006,
+            1007,
+            1008,
+            1009,
+            1010,
+            1011,
+            1012,
+            1013,
+            1014,
+            1015,
+            1016,
+            1017,
+            1018,
+            1019
+          ],
+          "frames_mean": 2660.65,
+          "frames_sd": 348.779,
+          "frames_min": 2184.0,
+          "frames_max": 3324.0,
+          "clears": 0,
+          "stage_clear_seeds": [],
+          "per_seed": {
+            "1000": {
+              "frames": 2487.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-advoff/ADVOFF-s1n-1000-1001-1002-1003-1004.json"
+            },
+            "1001": {
+              "frames": 2248.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-advoff/ADVOFF-s1n-1000-1001-1002-1003-1004.json"
+            },
+            "1002": {
+              "frames": 3129.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-advoff/ADVOFF-s1n-1000-1001-1002-1003-1004.json"
+            },
+            "1003": {
+              "frames": 2533.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-advoff/ADVOFF-s1n-1000-1001-1002-1003-1004.json"
+            },
+            "1004": {
+              "frames": 2400.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-advoff/ADVOFF-s1n-1000-1001-1002-1003-1004.json"
+            },
+            "1005": {
+              "frames": 2970.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-advoff/ADVOFF-s1n-1005-1006-1007-1008-1009.json"
+            },
+            "1006": {
+              "frames": 2530.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-advoff/ADVOFF-s1n-1005-1006-1007-1008-1009.json"
+            },
+            "1007": {
+              "frames": 2276.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-advoff/ADVOFF-s1n-1005-1006-1007-1008-1009.json"
+            },
+            "1008": {
+              "frames": 2263.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-advoff/ADVOFF-s1n-1005-1006-1007-1008-1009.json"
+            },
+            "1009": {
+              "frames": 2525.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-advoff/ADVOFF-s1n-1005-1006-1007-1008-1009.json"
+            },
+            "1010": {
+              "frames": 3015.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-advoff/ADVOFF-s1n-1010-1011-1012-1013-1014.json"
+            },
+            "1011": {
+              "frames": 3324.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-advoff/ADVOFF-s1n-1010-1011-1012-1013-1014.json"
+            },
+            "1012": {
+              "frames": 3152.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-advoff/ADVOFF-s1n-1010-1011-1012-1013-1014.json"
+            },
+            "1013": {
+              "frames": 2423.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-advoff/ADVOFF-s1n-1010-1011-1012-1013-1014.json"
+            },
+            "1014": {
+              "frames": 2952.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-advoff/ADVOFF-s1n-1010-1011-1012-1013-1014.json"
+            },
+            "1015": {
+              "frames": 2674.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-advoff/ADVOFF-s1n-1015-1016-1017-1018-1019.json"
+            },
+            "1016": {
+              "frames": 2184.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-advoff/ADVOFF-s1n-1015-1016-1017-1018-1019.json"
+            },
+            "1017": {
+              "frames": 2584.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-advoff/ADVOFF-s1n-1015-1016-1017-1018-1019.json"
+            },
+            "1018": {
+              "frames": 2486.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-advoff/ADVOFF-s1n-1015-1016-1017-1018-1019.json"
+            },
+            "1019": {
+              "frames": 3058.0,
+              "clear": false,
+              "stop_reason": "game_over",
+              "source": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T06/dev-advoff/ADVOFF-s1n-1015-1016-1017-1018-1019.json"
+            }
+          }
+        }
+      }
+    },
+    "paired_differences": {
+      "r3_50k": {
+        "diag_first_death": {
+          "n": 20,
+          "seeds": [
+            1000,
+            1001,
+            1002,
+            1003,
+            1004,
+            1005,
+            1006,
+            1007,
+            1008,
+            1009,
+            1010,
+            1011,
+            1012,
+            1013,
+            1014,
+            1015,
+            1016,
+            1017,
+            1018,
+            1019
+          ],
+          "delta_mean_frames": -107.3,
+          "delta_sd_frames": 363.64,
+          "delta_se_frames": 81.312,
+          "t": -1.3196,
+          "ci95_t_df19": [
+            -277.489,
+            62.889
+          ],
+          "advoff_better": 8,
+          "advoff_worse": 12,
+          "per_seed": [
+            {
+              "seed": 1000,
+              "advoff_frames": 1480.0,
+              "reference_frames": 1788.0,
+              "delta_frames": -308.0
+            },
+            {
+              "seed": 1001,
+              "advoff_frames": 839.0,
+              "reference_frames": 816.0,
+              "delta_frames": 23.0
+            },
+            {
+              "seed": 1002,
+              "advoff_frames": 1298.0,
+              "reference_frames": 1929.0,
+              "delta_frames": -631.0
+            },
+            {
+              "seed": 1003,
+              "advoff_frames": 1480.0,
+              "reference_frames": 1494.0,
+              "delta_frames": -14.0
+            },
+            {
+              "seed": 1004,
+              "advoff_frames": 818.0,
+              "reference_frames": 1410.0,
+              "delta_frames": -592.0
+            },
+            {
+              "seed": 1005,
+              "advoff_frames": 1755.0,
+              "reference_frames": 1492.0,
+              "delta_frames": 263.0
+            },
+            {
+              "seed": 1006,
+              "advoff_frames": 1615.0,
+              "reference_frames": 1945.0,
+              "delta_frames": -330.0
+            },
+            {
+              "seed": 1007,
+              "advoff_frames": 1412.0,
+              "reference_frames": 1546.0,
+              "delta_frames": -134.0
+            },
+            {
+              "seed": 1008,
+              "advoff_frames": 1431.0,
+              "reference_frames": 1816.0,
+              "delta_frames": -385.0
+            },
+            {
+              "seed": 1009,
+              "advoff_frames": 1700.0,
+              "reference_frames": 1489.0,
+              "delta_frames": 211.0
+            },
+            {
+              "seed": 1010,
+              "advoff_frames": 1411.0,
+              "reference_frames": 1363.0,
+              "delta_frames": 48.0
+            },
+            {
+              "seed": 1011,
+              "advoff_frames": 1658.0,
+              "reference_frames": 1485.0,
+              "delta_frames": 173.0
+            },
+            {
+              "seed": 1012,
+              "advoff_frames": 1939.0,
+              "reference_frames": 1500.0,
+              "delta_frames": 439.0
+            },
+            {
+              "seed": 1013,
+              "advoff_frames": 1422.0,
+              "reference_frames": 1568.0,
+              "delta_frames": -146.0
+            },
+            {
+              "seed": 1014,
+              "advoff_frames": 1577.0,
+              "reference_frames": 1971.0,
+              "delta_frames": -394.0
+            },
+            {
+              "seed": 1015,
+              "advoff_frames": 1775.0,
+              "reference_frames": 1295.0,
+              "delta_frames": 480.0
+            },
+            {
+              "seed": 1016,
+              "advoff_frames": 1475.0,
+              "reference_frames": 2392.0,
+              "delta_frames": -917.0
+            },
+            {
+              "seed": 1017,
+              "advoff_frames": 1491.0,
+              "reference_frames": 1495.0,
+              "delta_frames": -4.0
+            },
+            {
+              "seed": 1018,
+              "advoff_frames": 1449.0,
+              "reference_frames": 1544.0,
+              "delta_frames": -95.0
+            },
+            {
+              "seed": 1019,
+              "advoff_frames": 1613.0,
+              "reference_frames": 1446.0,
+              "delta_frames": 167.0
+            }
+          ]
+        },
+        "s1n": {
+          "n": 20,
+          "seeds": [
+            1000,
+            1001,
+            1002,
+            1003,
+            1004,
+            1005,
+            1006,
+            1007,
+            1008,
+            1009,
+            1010,
+            1011,
+            1012,
+            1013,
+            1014,
+            1015,
+            1016,
+            1017,
+            1018,
+            1019
+          ],
+          "delta_mean_frames": -230.95,
+          "delta_sd_frames": 667.639,
+          "delta_se_frames": 149.289,
+          "t": -1.547,
+          "ci95_t_df19": [
+            -543.414,
+            81.514
+          ],
+          "advoff_better": 8,
+          "advoff_worse": 12,
+          "per_seed": [
+            {
+              "seed": 1000,
+              "advoff_frames": 2487.0,
+              "reference_frames": 3022.0,
+              "delta_frames": -535.0
+            },
+            {
+              "seed": 1001,
+              "advoff_frames": 2248.0,
+              "reference_frames": 1920.0,
+              "delta_frames": 328.0
+            },
+            {
+              "seed": 1002,
+              "advoff_frames": 3129.0,
+              "reference_frames": 4701.0,
+              "delta_frames": -1572.0
+            },
+            {
+              "seed": 1003,
+              "advoff_frames": 2533.0,
+              "reference_frames": 2407.0,
+              "delta_frames": 126.0
+            },
+            {
+              "seed": 1004,
+              "advoff_frames": 2400.0,
+              "reference_frames": 2210.0,
+              "delta_frames": 190.0
+            },
+            {
+              "seed": 1005,
+              "advoff_frames": 2970.0,
+              "reference_frames": 2480.0,
+              "delta_frames": 490.0
+            },
+            {
+              "seed": 1006,
+              "advoff_frames": 2530.0,
+              "reference_frames": 3418.0,
+              "delta_frames": -888.0
+            },
+            {
+              "seed": 1007,
+              "advoff_frames": 2276.0,
+              "reference_frames": 2889.0,
+              "delta_frames": -613.0
+            },
+            {
+              "seed": 1008,
+              "advoff_frames": 2263.0,
+              "reference_frames": 3509.0,
+              "delta_frames": -1246.0
+            },
+            {
+              "seed": 1009,
+              "advoff_frames": 2525.0,
+              "reference_frames": 2373.0,
+              "delta_frames": 152.0
+            },
+            {
+              "seed": 1010,
+              "advoff_frames": 3015.0,
+              "reference_frames": 2180.0,
+              "delta_frames": 835.0
+            },
+            {
+              "seed": 1011,
+              "advoff_frames": 3324.0,
+              "reference_frames": 3578.0,
+              "delta_frames": -254.0
+            },
+            {
+              "seed": 1012,
+              "advoff_frames": 3152.0,
+              "reference_frames": 3391.0,
+              "delta_frames": -239.0
+            },
+            {
+              "seed": 1013,
+              "advoff_frames": 2423.0,
+              "reference_frames": 2537.0,
+              "delta_frames": -114.0
+            },
+            {
+              "seed": 1014,
+              "advoff_frames": 2952.0,
+              "reference_frames": 3270.0,
+              "delta_frames": -318.0
+            },
+            {
+              "seed": 1015,
+              "advoff_frames": 2674.0,
+              "reference_frames": 2704.0,
+              "delta_frames": -30.0
+            },
+            {
+              "seed": 1016,
+              "advoff_frames": 2184.0,
+              "reference_frames": 3566.0,
+              "delta_frames": -1382.0
+            },
+            {
+              "seed": 1017,
+              "advoff_frames": 2584.0,
+              "reference_frames": 2258.0,
+              "delta_frames": 326.0
+            },
+            {
+              "seed": 1018,
+              "advoff_frames": 2486.0,
+              "reference_frames": 3007.0,
+              "delta_frames": -521.0
+            },
+            {
+              "seed": 1019,
+              "advoff_frames": 3058.0,
+              "reference_frames": 2412.0,
+              "delta_frames": 646.0
+            }
+          ]
+        }
+      },
+      "R0_untrained_anchored": {
+        "diag_first_death": {
+          "n": 20,
+          "seeds": [
+            1000,
+            1001,
+            1002,
+            1003,
+            1004,
+            1005,
+            1006,
+            1007,
+            1008,
+            1009,
+            1010,
+            1011,
+            1012,
+            1013,
+            1014,
+            1015,
+            1016,
+            1017,
+            1018,
+            1019
+          ],
+          "delta_mean_frames": -154.9,
+          "delta_sd_frames": 315.762,
+          "delta_se_frames": 70.607,
+          "t": -2.1938,
+          "ci95_t_df19": [
+            -302.681,
+            -7.119
+          ],
+          "advoff_better": 7,
+          "advoff_worse": 12,
+          "per_seed": [
+            {
+              "seed": 1000,
+              "advoff_frames": 1480.0,
+              "reference_frames": 1409.0,
+              "delta_frames": 71.0
+            },
+            {
+              "seed": 1001,
+              "advoff_frames": 839.0,
+              "reference_frames": 1728.0,
+              "delta_frames": -889.0
+            },
+            {
+              "seed": 1002,
+              "advoff_frames": 1298.0,
+              "reference_frames": 1499.0,
+              "delta_frames": -201.0
+            },
+            {
+              "seed": 1003,
+              "advoff_frames": 1480.0,
+              "reference_frames": 1557.0,
+              "delta_frames": -77.0
+            },
+            {
+              "seed": 1004,
+              "advoff_frames": 818.0,
+              "reference_frames": 1410.0,
+              "delta_frames": -592.0
+            },
+            {
+              "seed": 1005,
+              "advoff_frames": 1755.0,
+              "reference_frames": 1605.0,
+              "delta_frames": 150.0
+            },
+            {
+              "seed": 1006,
+              "advoff_frames": 1615.0,
+              "reference_frames": 1397.0,
+              "delta_frames": 218.0
+            },
+            {
+              "seed": 1007,
+              "advoff_frames": 1412.0,
+              "reference_frames": 1408.0,
+              "delta_frames": 4.0
+            },
+            {
+              "seed": 1008,
+              "advoff_frames": 1431.0,
+              "reference_frames": 1431.0,
+              "delta_frames": 0.0
+            },
+            {
+              "seed": 1009,
+              "advoff_frames": 1700.0,
+              "reference_frames": 1492.0,
+              "delta_frames": 208.0
+            },
+            {
+              "seed": 1010,
+              "advoff_frames": 1411.0,
+              "reference_frames": 1588.0,
+              "delta_frames": -177.0
+            },
+            {
+              "seed": 1011,
+              "advoff_frames": 1658.0,
+              "reference_frames": 1413.0,
+              "delta_frames": 245.0
+            },
+            {
+              "seed": 1012,
+              "advoff_frames": 1939.0,
+              "reference_frames": 1897.0,
+              "delta_frames": 42.0
+            },
+            {
+              "seed": 1013,
+              "advoff_frames": 1422.0,
+              "reference_frames": 1640.0,
+              "delta_frames": -218.0
+            },
+            {
+              "seed": 1014,
+              "advoff_frames": 1577.0,
+              "reference_frames": 2138.0,
+              "delta_frames": -561.0
+            },
+            {
+              "seed": 1015,
+              "advoff_frames": 1775.0,
+              "reference_frames": 2185.0,
+              "delta_frames": -410.0
+            },
+            {
+              "seed": 1016,
+              "advoff_frames": 1475.0,
+              "reference_frames": 1567.0,
+              "delta_frames": -92.0
+            },
+            {
+              "seed": 1017,
+              "advoff_frames": 1491.0,
+              "reference_frames": 1494.0,
+              "delta_frames": -3.0
+            },
+            {
+              "seed": 1018,
+              "advoff_frames": 1449.0,
+              "reference_frames": 2085.0,
+              "delta_frames": -636.0
+            },
+            {
+              "seed": 1019,
+              "advoff_frames": 1613.0,
+              "reference_frames": 1793.0,
+              "delta_frames": -180.0
+            }
+          ]
+        },
+        "s1n": {
+          "n": 20,
+          "seeds": [
+            1000,
+            1001,
+            1002,
+            1003,
+            1004,
+            1005,
+            1006,
+            1007,
+            1008,
+            1009,
+            1010,
+            1011,
+            1012,
+            1013,
+            1014,
+            1015,
+            1016,
+            1017,
+            1018,
+            1019
+          ],
+          "delta_mean_frames": -350.85,
+          "delta_sd_frames": 799.267,
+          "delta_se_frames": 178.722,
+          "t": -1.9631,
+          "ci95_t_df19": [
+            -724.919,
+            23.219
+          ],
+          "advoff_better": 6,
+          "advoff_worse": 14,
+          "per_seed": [
+            {
+              "seed": 1000,
+              "advoff_frames": 2487.0,
+              "reference_frames": 2137.0,
+              "delta_frames": 350.0
+            },
+            {
+              "seed": 1001,
+              "advoff_frames": 2248.0,
+              "reference_frames": 3430.0,
+              "delta_frames": -1182.0
+            },
+            {
+              "seed": 1002,
+              "advoff_frames": 3129.0,
+              "reference_frames": 2185.0,
+              "delta_frames": 944.0
+            },
+            {
+              "seed": 1003,
+              "advoff_frames": 2533.0,
+              "reference_frames": 2731.0,
+              "delta_frames": -198.0
+            },
+            {
+              "seed": 1004,
+              "advoff_frames": 2400.0,
+              "reference_frames": 2456.0,
+              "delta_frames": -56.0
+            },
+            {
+              "seed": 1005,
+              "advoff_frames": 2970.0,
+              "reference_frames": 2579.0,
+              "delta_frames": 391.0
+            },
+            {
+              "seed": 1006,
+              "advoff_frames": 2530.0,
+              "reference_frames": 2572.0,
+              "delta_frames": -42.0
+            },
+            {
+              "seed": 1007,
+              "advoff_frames": 2276.0,
+              "reference_frames": 3280.0,
+              "delta_frames": -1004.0
+            },
+            {
+              "seed": 1008,
+              "advoff_frames": 2263.0,
+              "reference_frames": 3181.0,
+              "delta_frames": -918.0
+            },
+            {
+              "seed": 1009,
+              "advoff_frames": 2525.0,
+              "reference_frames": 3940.0,
+              "delta_frames": -1415.0
+            },
+            {
+              "seed": 1010,
+              "advoff_frames": 3015.0,
+              "reference_frames": 2528.0,
+              "delta_frames": 487.0
+            },
+            {
+              "seed": 1011,
+              "advoff_frames": 3324.0,
+              "reference_frames": 2540.0,
+              "delta_frames": 784.0
+            },
+            {
+              "seed": 1012,
+              "advoff_frames": 3152.0,
+              "reference_frames": 3080.0,
+              "delta_frames": 72.0
+            },
+            {
+              "seed": 1013,
+              "advoff_frames": 2423.0,
+              "reference_frames": 3034.0,
+              "delta_frames": -611.0
+            },
+            {
+              "seed": 1014,
+              "advoff_frames": 2952.0,
+              "reference_frames": 3078.0,
+              "delta_frames": -126.0
+            },
+            {
+              "seed": 1015,
+              "advoff_frames": 2674.0,
+              "reference_frames": 4964.0,
+              "delta_frames": -2290.0
+            },
+            {
+              "seed": 1016,
+              "advoff_frames": 2184.0,
+              "reference_frames": 2886.0,
+              "delta_frames": -702.0
+            },
+            {
+              "seed": 1017,
+              "advoff_frames": 2584.0,
+              "reference_frames": 3472.0,
+              "delta_frames": -888.0
+            },
+            {
+              "seed": 1018,
+              "advoff_frames": 2486.0,
+              "reference_frames": 3092.0,
+              "delta_frames": -606.0
+            },
+            {
+              "seed": 1019,
+              "advoff_frames": 3058.0,
+              "reference_frames": 3065.0,
+              "delta_frames": -7.0
+            }
+          ]
+        }
+      },
+      "R2_no_anchor": {
+        "diag_first_death": {
+          "n": 20,
+          "seeds": [
+            1000,
+            1001,
+            1002,
+            1003,
+            1004,
+            1005,
+            1006,
+            1007,
+            1008,
+            1009,
+            1010,
+            1011,
+            1012,
+            1013,
+            1014,
+            1015,
+            1016,
+            1017,
+            1018,
+            1019
+          ],
+          "delta_mean_frames": 592.55,
+          "delta_sd_frames": 290.734,
+          "delta_se_frames": 65.01,
+          "t": 9.1147,
+          "ci95_t_df19": [
+            456.482,
+            728.618
+          ],
+          "advoff_better": 19,
+          "advoff_worse": 1,
+          "per_seed": [
+            {
+              "seed": 1000,
+              "advoff_frames": 1480.0,
+              "reference_frames": 1017.0,
+              "delta_frames": 463.0
+            },
+            {
+              "seed": 1001,
+              "advoff_frames": 839.0,
+              "reference_frames": 763.0,
+              "delta_frames": 76.0
+            },
+            {
+              "seed": 1002,
+              "advoff_frames": 1298.0,
+              "reference_frames": 834.0,
+              "delta_frames": 464.0
+            },
+            {
+              "seed": 1003,
+              "advoff_frames": 1480.0,
+              "reference_frames": 733.0,
+              "delta_frames": 747.0
+            },
+            {
+              "seed": 1004,
+              "advoff_frames": 818.0,
+              "reference_frames": 975.0,
+              "delta_frames": -157.0
+            },
+            {
+              "seed": 1005,
+              "advoff_frames": 1755.0,
+              "reference_frames": 949.0,
+              "delta_frames": 806.0
+            },
+            {
+              "seed": 1006,
+              "advoff_frames": 1615.0,
+              "reference_frames": 737.0,
+              "delta_frames": 878.0
+            },
+            {
+              "seed": 1007,
+              "advoff_frames": 1412.0,
+              "reference_frames": 751.0,
+              "delta_frames": 661.0
+            },
+            {
+              "seed": 1008,
+              "advoff_frames": 1431.0,
+              "reference_frames": 950.0,
+              "delta_frames": 481.0
+            },
+            {
+              "seed": 1009,
+              "advoff_frames": 1700.0,
+              "reference_frames": 733.0,
+              "delta_frames": 967.0
+            },
+            {
+              "seed": 1010,
+              "advoff_frames": 1411.0,
+              "reference_frames": 754.0,
+              "delta_frames": 657.0
+            },
+            {
+              "seed": 1011,
+              "advoff_frames": 1658.0,
+              "reference_frames": 834.0,
+              "delta_frames": 824.0
+            },
+            {
+              "seed": 1012,
+              "advoff_frames": 1939.0,
+              "reference_frames": 1365.0,
+              "delta_frames": 574.0
+            },
+            {
+              "seed": 1013,
+              "advoff_frames": 1422.0,
+              "reference_frames": 947.0,
+              "delta_frames": 475.0
+            },
+            {
+              "seed": 1014,
+              "advoff_frames": 1577.0,
+              "reference_frames": 742.0,
+              "delta_frames": 835.0
+            },
+            {
+              "seed": 1015,
+              "advoff_frames": 1775.0,
+              "reference_frames": 829.0,
+              "delta_frames": 946.0
+            },
+            {
+              "seed": 1016,
+              "advoff_frames": 1475.0,
+              "reference_frames": 959.0,
+              "delta_frames": 516.0
+            },
+            {
+              "seed": 1017,
+              "advoff_frames": 1491.0,
+              "reference_frames": 1096.0,
+              "delta_frames": 395.0
+            },
+            {
+              "seed": 1018,
+              "advoff_frames": 1449.0,
+              "reference_frames": 1086.0,
+              "delta_frames": 363.0
+            },
+            {
+              "seed": 1019,
+              "advoff_frames": 1613.0,
+              "reference_frames": 733.0,
+              "delta_frames": 880.0
+            }
+          ]
+        },
+        "s1n": {
+          "n": 20,
+          "seeds": [
+            1000,
+            1001,
+            1002,
+            1003,
+            1004,
+            1005,
+            1006,
+            1007,
+            1008,
+            1009,
+            1010,
+            1011,
+            1012,
+            1013,
+            1014,
+            1015,
+            1016,
+            1017,
+            1018,
+            1019
+          ],
+          "delta_mean_frames": 754.25,
+          "delta_sd_frames": 340.895,
+          "delta_se_frames": 76.226,
+          "t": 9.8949,
+          "ci95_t_df19": [
+            594.706,
+            913.794
+          ],
+          "advoff_better": 20,
+          "advoff_worse": 0,
+          "per_seed": [
+            {
+              "seed": 1000,
+              "advoff_frames": 2487.0,
+              "reference_frames": 1835.0,
+              "delta_frames": 652.0
+            },
+            {
+              "seed": 1001,
+              "advoff_frames": 2248.0,
+              "reference_frames": 1667.0,
+              "delta_frames": 581.0
+            },
+            {
+              "seed": 1002,
+              "advoff_frames": 3129.0,
+              "reference_frames": 2102.0,
+              "delta_frames": 1027.0
+            },
+            {
+              "seed": 1003,
+              "advoff_frames": 2533.0,
+              "reference_frames": 1879.0,
+              "delta_frames": 654.0
+            },
+            {
+              "seed": 1004,
+              "advoff_frames": 2400.0,
+              "reference_frames": 1773.0,
+              "delta_frames": 627.0
+            },
+            {
+              "seed": 1005,
+              "advoff_frames": 2970.0,
+              "reference_frames": 1818.0,
+              "delta_frames": 1152.0
+            },
+            {
+              "seed": 1006,
+              "advoff_frames": 2530.0,
+              "reference_frames": 1868.0,
+              "delta_frames": 662.0
+            },
+            {
+              "seed": 1007,
+              "advoff_frames": 2276.0,
+              "reference_frames": 1724.0,
+              "delta_frames": 552.0
+            },
+            {
+              "seed": 1008,
+              "advoff_frames": 2263.0,
+              "reference_frames": 1788.0,
+              "delta_frames": 475.0
+            },
+            {
+              "seed": 1009,
+              "advoff_frames": 2525.0,
+              "reference_frames": 1636.0,
+              "delta_frames": 889.0
+            },
+            {
+              "seed": 1010,
+              "advoff_frames": 3015.0,
+              "reference_frames": 2023.0,
+              "delta_frames": 992.0
+            },
+            {
+              "seed": 1011,
+              "advoff_frames": 3324.0,
+              "reference_frames": 1827.0,
+              "delta_frames": 1497.0
+            },
+            {
+              "seed": 1012,
+              "advoff_frames": 3152.0,
+              "reference_frames": 2215.0,
+              "delta_frames": 937.0
+            },
+            {
+              "seed": 1013,
+              "advoff_frames": 2423.0,
+              "reference_frames": 2182.0,
+              "delta_frames": 241.0
+            },
+            {
+              "seed": 1014,
+              "advoff_frames": 2952.0,
+              "reference_frames": 1813.0,
+              "delta_frames": 1139.0
+            },
+            {
+              "seed": 1015,
+              "advoff_frames": 2674.0,
+              "reference_frames": 1874.0,
+              "delta_frames": 800.0
+            },
+            {
+              "seed": 1016,
+              "advoff_frames": 2184.0,
+              "reference_frames": 1798.0,
+              "delta_frames": 386.0
+            },
+            {
+              "seed": 1017,
+              "advoff_frames": 2584.0,
+              "reference_frames": 2337.0,
+              "delta_frames": 247.0
+            },
+            {
+              "seed": 1018,
+              "advoff_frames": 2486.0,
+              "reference_frames": 2094.0,
+              "delta_frames": 392.0
+            },
+            {
+              "seed": 1019,
+              "advoff_frames": 3058.0,
+              "reference_frames": 1875.0,
+              "delta_frames": 1183.0
+            }
+          ]
+        }
+      },
+      "R2_plus_KL": {
+        "diag_first_death": {
+          "n": 20,
+          "seeds": [
+            1000,
+            1001,
+            1002,
+            1003,
+            1004,
+            1005,
+            1006,
+            1007,
+            1008,
+            1009,
+            1010,
+            1011,
+            1012,
+            1013,
+            1014,
+            1015,
+            1016,
+            1017,
+            1018,
+            1019
+          ],
+          "delta_mean_frames": -30.2,
+          "delta_sd_frames": 346.882,
+          "delta_se_frames": 77.565,
+          "t": -0.3894,
+          "ci95_t_df19": [
+            -192.546,
+            132.146
+          ],
+          "advoff_better": 10,
+          "advoff_worse": 10,
+          "per_seed": [
+            {
+              "seed": 1000,
+              "advoff_frames": 1480.0,
+              "reference_frames": 1425.0,
+              "delta_frames": 55.0
+            },
+            {
+              "seed": 1001,
+              "advoff_frames": 839.0,
+              "reference_frames": 1655.0,
+              "delta_frames": -816.0
+            },
+            {
+              "seed": 1002,
+              "advoff_frames": 1298.0,
+              "reference_frames": 1408.0,
+              "delta_frames": -110.0
+            },
+            {
+              "seed": 1003,
+              "advoff_frames": 1480.0,
+              "reference_frames": 1384.0,
+              "delta_frames": 96.0
+            },
+            {
+              "seed": 1004,
+              "advoff_frames": 818.0,
+              "reference_frames": 1481.0,
+              "delta_frames": -663.0
+            },
+            {
+              "seed": 1005,
+              "advoff_frames": 1755.0,
+              "reference_frames": 1423.0,
+              "delta_frames": 332.0
+            },
+            {
+              "seed": 1006,
+              "advoff_frames": 1615.0,
+              "reference_frames": 1743.0,
+              "delta_frames": -128.0
+            },
+            {
+              "seed": 1007,
+              "advoff_frames": 1412.0,
+              "reference_frames": 1751.0,
+              "delta_frames": -339.0
+            },
+            {
+              "seed": 1008,
+              "advoff_frames": 1431.0,
+              "reference_frames": 1433.0,
+              "delta_frames": -2.0
+            },
+            {
+              "seed": 1009,
+              "advoff_frames": 1700.0,
+              "reference_frames": 1417.0,
+              "delta_frames": 283.0
+            },
+            {
+              "seed": 1010,
+              "advoff_frames": 1411.0,
+              "reference_frames": 1613.0,
+              "delta_frames": -202.0
+            },
+            {
+              "seed": 1011,
+              "advoff_frames": 1658.0,
+              "reference_frames": 1117.0,
+              "delta_frames": 541.0
+            },
+            {
+              "seed": 1012,
+              "advoff_frames": 1939.0,
+              "reference_frames": 1412.0,
+              "delta_frames": 527.0
+            },
+            {
+              "seed": 1013,
+              "advoff_frames": 1422.0,
+              "reference_frames": 1410.0,
+              "delta_frames": 12.0
+            },
+            {
+              "seed": 1014,
+              "advoff_frames": 1577.0,
+              "reference_frames": 1564.0,
+              "delta_frames": 13.0
+            },
+            {
+              "seed": 1015,
+              "advoff_frames": 1775.0,
+              "reference_frames": 1555.0,
+              "delta_frames": 220.0
+            },
+            {
+              "seed": 1016,
+              "advoff_frames": 1475.0,
+              "reference_frames": 1734.0,
+              "delta_frames": -259.0
+            },
+            {
+              "seed": 1017,
+              "advoff_frames": 1491.0,
+              "reference_frames": 1621.0,
+              "delta_frames": -130.0
+            },
+            {
+              "seed": 1018,
+              "advoff_frames": 1449.0,
+              "reference_frames": 1699.0,
+              "delta_frames": -250.0
+            },
+            {
+              "seed": 1019,
+              "advoff_frames": 1613.0,
+              "reference_frames": 1397.0,
+              "delta_frames": 216.0
+            }
+          ]
+        },
+        "s1n": {
+          "n": 20,
+          "seeds": [
+            1000,
+            1001,
+            1002,
+            1003,
+            1004,
+            1005,
+            1006,
+            1007,
+            1008,
+            1009,
+            1010,
+            1011,
+            1012,
+            1013,
+            1014,
+            1015,
+            1016,
+            1017,
+            1018,
+            1019
+          ],
+          "delta_mean_frames": 34.65,
+          "delta_sd_frames": 641.916,
+          "delta_se_frames": 143.537,
+          "t": 0.2414,
+          "ci95_t_df19": [
+            -265.776,
+            335.076
+          ],
+          "advoff_better": 12,
+          "advoff_worse": 8,
+          "per_seed": [
+            {
+              "seed": 1000,
+              "advoff_frames": 2487.0,
+              "reference_frames": 2070.0,
+              "delta_frames": 417.0
+            },
+            {
+              "seed": 1001,
+              "advoff_frames": 2248.0,
+              "reference_frames": 3479.0,
+              "delta_frames": -1231.0
+            },
+            {
+              "seed": 1002,
+              "advoff_frames": 3129.0,
+              "reference_frames": 2254.0,
+              "delta_frames": 875.0
+            },
+            {
+              "seed": 1003,
+              "advoff_frames": 2533.0,
+              "reference_frames": 3022.0,
+              "delta_frames": -489.0
+            },
+            {
+              "seed": 1004,
+              "advoff_frames": 2400.0,
+              "reference_frames": 2213.0,
+              "delta_frames": 187.0
+            },
+            {
+              "seed": 1005,
+              "advoff_frames": 2970.0,
+              "reference_frames": 2388.0,
+              "delta_frames": 582.0
+            },
+            {
+              "seed": 1006,
+              "advoff_frames": 2530.0,
+              "reference_frames": 2949.0,
+              "delta_frames": -419.0
+            },
+            {
+              "seed": 1007,
+              "advoff_frames": 2276.0,
+              "reference_frames": 3053.0,
+              "delta_frames": -777.0
+            },
+            {
+              "seed": 1008,
+              "advoff_frames": 2263.0,
+              "reference_frames": 2692.0,
+              "delta_frames": -429.0
+            },
+            {
+              "seed": 1009,
+              "advoff_frames": 2525.0,
+              "reference_frames": 2292.0,
+              "delta_frames": 233.0
+            },
+            {
+              "seed": 1010,
+              "advoff_frames": 3015.0,
+              "reference_frames": 2688.0,
+              "delta_frames": 327.0
+            },
+            {
+              "seed": 1011,
+              "advoff_frames": 3324.0,
+              "reference_frames": 2134.0,
+              "delta_frames": 1190.0
+            },
+            {
+              "seed": 1012,
+              "advoff_frames": 3152.0,
+              "reference_frames": 2317.0,
+              "delta_frames": 835.0
+            },
+            {
+              "seed": 1013,
+              "advoff_frames": 2423.0,
+              "reference_frames": 2407.0,
+              "delta_frames": 16.0
+            },
+            {
+              "seed": 1014,
+              "advoff_frames": 2952.0,
+              "reference_frames": 2414.0,
+              "delta_frames": 538.0
+            },
+            {
+              "seed": 1015,
+              "advoff_frames": 2674.0,
+              "reference_frames": 2583.0,
+              "delta_frames": 91.0
+            },
+            {
+              "seed": 1016,
+              "advoff_frames": 2184.0,
+              "reference_frames": 3292.0,
+              "delta_frames": -1108.0
+            },
+            {
+              "seed": 1017,
+              "advoff_frames": 2584.0,
+              "reference_frames": 2730.0,
+              "delta_frames": -146.0
+            },
+            {
+              "seed": 1018,
+              "advoff_frames": 2486.0,
+              "reference_frames": 2502.0,
+              "delta_frames": -16.0
+            },
+            {
+              "seed": 1019,
+              "advoff_frames": 3058.0,
+              "reference_frames": 3041.0,
+              "delta_frames": 17.0
+            }
+          ]
+        }
+      },
+      "r3_200k": {
+        "diag_first_death": {
+          "n": 20,
+          "seeds": [
+            1000,
+            1001,
+            1002,
+            1003,
+            1004,
+            1005,
+            1006,
+            1007,
+            1008,
+            1009,
+            1010,
+            1011,
+            1012,
+            1013,
+            1014,
+            1015,
+            1016,
+            1017,
+            1018,
+            1019
+          ],
+          "delta_mean_frames": -93.3,
+          "delta_sd_frames": 357.783,
+          "delta_se_frames": 80.003,
+          "t": -1.1662,
+          "ci95_t_df19": [
+            -260.747,
+            74.147
+          ],
+          "advoff_better": 11,
+          "advoff_worse": 9,
+          "per_seed": [
+            {
+              "seed": 1000,
+              "advoff_frames": 1480.0,
+              "reference_frames": 1306.0,
+              "delta_frames": 174.0
+            },
+            {
+              "seed": 1001,
+              "advoff_frames": 839.0,
+              "reference_frames": 1990.0,
+              "delta_frames": -1151.0
+            },
+            {
+              "seed": 1002,
+              "advoff_frames": 1298.0,
+              "reference_frames": 1599.0,
+              "delta_frames": -301.0
+            },
+            {
+              "seed": 1003,
+              "advoff_frames": 1480.0,
+              "reference_frames": 1411.0,
+              "delta_frames": 69.0
+            },
+            {
+              "seed": 1004,
+              "advoff_frames": 818.0,
+              "reference_frames": 1409.0,
+              "delta_frames": -591.0
+            },
+            {
+              "seed": 1005,
+              "advoff_frames": 1755.0,
+              "reference_frames": 1945.0,
+              "delta_frames": -190.0
+            },
+            {
+              "seed": 1006,
+              "advoff_frames": 1615.0,
+              "reference_frames": 1691.0,
+              "delta_frames": -76.0
+            },
+            {
+              "seed": 1007,
+              "advoff_frames": 1412.0,
+              "reference_frames": 1370.0,
+              "delta_frames": 42.0
+            },
+            {
+              "seed": 1008,
+              "advoff_frames": 1431.0,
+              "reference_frames": 1384.0,
+              "delta_frames": 47.0
+            },
+            {
+              "seed": 1009,
+              "advoff_frames": 1700.0,
+              "reference_frames": 1961.0,
+              "delta_frames": -261.0
+            },
+            {
+              "seed": 1010,
+              "advoff_frames": 1411.0,
+              "reference_frames": 1407.0,
+              "delta_frames": 4.0
+            },
+            {
+              "seed": 1011,
+              "advoff_frames": 1658.0,
+              "reference_frames": 1413.0,
+              "delta_frames": 245.0
+            },
+            {
+              "seed": 1012,
+              "advoff_frames": 1939.0,
+              "reference_frames": 1407.0,
+              "delta_frames": 532.0
+            },
+            {
+              "seed": 1013,
+              "advoff_frames": 1422.0,
+              "reference_frames": 1412.0,
+              "delta_frames": 10.0
+            },
+            {
+              "seed": 1014,
+              "advoff_frames": 1577.0,
+              "reference_frames": 1442.0,
+              "delta_frames": 135.0
+            },
+            {
+              "seed": 1015,
+              "advoff_frames": 1775.0,
+              "reference_frames": 1968.0,
+              "delta_frames": -193.0
+            },
+            {
+              "seed": 1016,
+              "advoff_frames": 1475.0,
+              "reference_frames": 1413.0,
+              "delta_frames": 62.0
+            },
+            {
+              "seed": 1017,
+              "advoff_frames": 1491.0,
+              "reference_frames": 1612.0,
+              "delta_frames": -121.0
+            },
+            {
+              "seed": 1018,
+              "advoff_frames": 1449.0,
+              "reference_frames": 1939.0,
+              "delta_frames": -490.0
+            },
+            {
+              "seed": 1019,
+              "advoff_frames": 1613.0,
+              "reference_frames": 1425.0,
+              "delta_frames": 188.0
+            }
+          ]
+        },
+        "s1n": {
+          "n": 20,
+          "seeds": [
+            1000,
+            1001,
+            1002,
+            1003,
+            1004,
+            1005,
+            1006,
+            1007,
+            1008,
+            1009,
+            1010,
+            1011,
+            1012,
+            1013,
+            1014,
+            1015,
+            1016,
+            1017,
+            1018,
+            1019
+          ],
+          "delta_mean_frames": -147.95,
+          "delta_sd_frames": 659.716,
+          "delta_se_frames": 147.517,
+          "t": -1.0029,
+          "ci95_t_df19": [
+            -456.706,
+            160.806
+          ],
+          "advoff_better": 9,
+          "advoff_worse": 11,
+          "per_seed": [
+            {
+              "seed": 1000,
+              "advoff_frames": 2487.0,
+              "reference_frames": 2482.0,
+              "delta_frames": 5.0
+            },
+            {
+              "seed": 1001,
+              "advoff_frames": 2248.0,
+              "reference_frames": 3038.0,
+              "delta_frames": -790.0
+            },
+            {
+              "seed": 1002,
+              "advoff_frames": 3129.0,
+              "reference_frames": 3141.0,
+              "delta_frames": -12.0
+            },
+            {
+              "seed": 1003,
+              "advoff_frames": 2533.0,
+              "reference_frames": 2155.0,
+              "delta_frames": 378.0
+            },
+            {
+              "seed": 1004,
+              "advoff_frames": 2400.0,
+              "reference_frames": 3505.0,
+              "delta_frames": -1105.0
+            },
+            {
+              "seed": 1005,
+              "advoff_frames": 2970.0,
+              "reference_frames": 2717.0,
+              "delta_frames": 253.0
+            },
+            {
+              "seed": 1006,
+              "advoff_frames": 2530.0,
+              "reference_frames": 3520.0,
+              "delta_frames": -990.0
+            },
+            {
+              "seed": 1007,
+              "advoff_frames": 2276.0,
+              "reference_frames": 2501.0,
+              "delta_frames": -225.0
+            },
+            {
+              "seed": 1008,
+              "advoff_frames": 2263.0,
+              "reference_frames": 3355.0,
+              "delta_frames": -1092.0
+            },
+            {
+              "seed": 1009,
+              "advoff_frames": 2525.0,
+              "reference_frames": 3251.0,
+              "delta_frames": -726.0
+            },
+            {
+              "seed": 1010,
+              "advoff_frames": 3015.0,
+              "reference_frames": 2800.0,
+              "delta_frames": 215.0
+            },
+            {
+              "seed": 1011,
+              "advoff_frames": 3324.0,
+              "reference_frames": 2339.0,
+              "delta_frames": 985.0
+            },
+            {
+              "seed": 1012,
+              "advoff_frames": 3152.0,
+              "reference_frames": 2317.0,
+              "delta_frames": 835.0
+            },
+            {
+              "seed": 1013,
+              "advoff_frames": 2423.0,
+              "reference_frames": 3148.0,
+              "delta_frames": -725.0
+            },
+            {
+              "seed": 1014,
+              "advoff_frames": 2952.0,
+              "reference_frames": 2452.0,
+              "delta_frames": 500.0
+            },
+            {
+              "seed": 1015,
+              "advoff_frames": 2674.0,
+              "reference_frames": 3033.0,
+              "delta_frames": -359.0
+            },
+            {
+              "seed": 1016,
+              "advoff_frames": 2184.0,
+              "reference_frames": 2143.0,
+              "delta_frames": 41.0
+            },
+            {
+              "seed": 1017,
+              "advoff_frames": 2584.0,
+              "reference_frames": 3010.0,
+              "delta_frames": -426.0
+            },
+            {
+              "seed": 1018,
+              "advoff_frames": 2486.0,
+              "reference_frames": 3076.0,
+              "delta_frames": -590.0
+            },
+            {
+              "seed": 1019,
+              "advoff_frames": 3058.0,
+              "reference_frames": 2189.0,
+              "delta_frames": 869.0
+            }
+          ]
+        }
+      }
+    },
+    "instrument_check": {
+      "published": {
+        "R0_untrained_anchored": [
+          1636.8,
+          3011.5
+        ],
+        "R2_no_anchor": [
+          889.35,
+          1906.4
+        ],
+        "R2_plus_KL": [
+          1512.1,
+          2626.0
+        ],
+        "r3_50k": [
+          1589.2,
+          2891.6
+        ],
+        "r3_200k": [
+          1575.2,
+          2808.6
+        ]
+      },
+      "problems": []
+    }
+  },
+  "criteria": {
+    "diag_first_death": {
+      "mean": 1481.9,
+      "threshold": 1636.8,
+      "hold": false,
+      "margin_frames": -154.9,
+      "n": 20
+    },
+    "s1n": {
+      "mean": 2660.65,
+      "threshold": 3011.5,
+      "hold": false,
+      "margin_frames": -350.85,
+      "n": 20
+    },
+    "criterion_1_two_legs_hold": false,
+    "criterion_2_stage_clear": {
+      "episodes_total": 40,
+      "clears_total": 0,
+      "hold": false,
+      "strict_reading_hold": false,
+      "stage_clear_seeds": {
+        "diag_first_death": [],
+        "s1n": []
+      }
+    },
+    "verdict_rule": "R4"
+  },
+  "verdict_rule": "R4",
+  "fail_closed_traceback": {
+    "band": {
+      "lower": 0.0002261,
+      "upper": 0.0002499,
+      "centre": 0.000238
+    },
+    "measured_mean": 0.00023237764698747849,
+    "measured_mean_ratio_over_eight_times_actor_lr": 0.9682401957811604,
+    "measured_min": 0.00021915510296821594,
+    "measured_max": 0.00023912638425827026,
+    "updates_outside_band": 2,
+    "in_band": true,
+    "retroactively_a_learning_rate_revision": false,
+    "sentence": "**\u843d\u5728\u5e26\u5185\u3002** \u6bcf\u66f4\u65b0 `actor_max_abs_parameter_change` \u7684\u5747\u503c\u662f **2.32378e-04**\uff08\u9664\u4ee5 `8 \u00d7 actor_lr` \u5f97 0.968240\uff09\uff0c\u843d\u5728 `2.38e-4 \u00b15% = [2.2610e-04, 2.4990e-04]` \u5185\u3002\u56db\u81c2\u5b9e\u6d4b\u5e26\u662f `[2.37984e-04, 2.40312e-04]`\uff08\u5373 `/8lr \u2208 [0.9916, 1.0013]`\uff09\uff0c\u672c\u81c2\u843d\u5728\u5b83**\u4e4b\u4e0b**\uff08\u76f8\u5bf9\u5176\u4e0b\u6cbf -2.36%\uff09\uff0c\u65b9\u5411\u662f**\u6b65\u5e45\u7565\u5c0f**\u800c\u4e0d\u662f\u7565\u5927\u3002\u21d2 **P-N2 \u6210\u7acb\uff08\u6309\u5747\u503c\u5224\uff09\uff0c\u672c\u5b9e\u9a8c\u4e0d\u88ab\u8ffd\u6eaf\u8ba4\u5b9a\u4e3a\u5b66\u4e60\u7387\u7c7b\u4fee\u8ba2**\uff1a\u767d\u5316\u6ca1\u6709\u5728\u8c03\u6b65\u5e45\uff0c\u00a71.2\u300cAdam \u5df2\u628a\u6b65\u5e45\u4e0e\u4f18\u52bf\u5c3a\u5ea6\u89e3\u8026\u300d\u7684\u524d\u63d0\u4fdd\u4f4f\u4e86\uff1b\u540e\u7eed\u540c\u7c7b\u6539\u52a8\u4e0d\u56e0\u6b64\u53d7\u989d\u5916\u9650\u5236\u3002"
+  },
+  "directional_predictions": {
+    "P_N1_quartile_falls_faster_than_r3_50k": {
+      "arm_percent_index_round": 4.7879,
+      "r3_50k_percent_index_round": -7.8583,
+      "hold_quartile_leg": false,
+      "entropy_mean": 2.51920932,
+      "entropy_first": 2.451523244380951,
+      "entropy_last": 2.478451520204544,
+      "r3_50k_entropy_mean_reference": 2.4945,
+      "hold_entropy_leg": false,
+      "holds_both_legs": false,
+      "reads": "both legs failed: the quartile change is POSITIVE (first death improved during training) and the entropy mean is above 2.4945, so the 'common-mode reinjection' reading of spec 1.3 is falsified"
+    },
+    "P_N2_step_size_in_band": {
+      "hold": true,
+      "mean": 0.00023237764698747849,
+      "band": [
+        0.0002261,
+        0.0002499
+      ]
+    },
+    "P_N3_capability": {
+      "hold": true,
+      "clears_total": 0,
+      "episodes_total": 40
+    },
+    "P_N4_function": {
+      "status": "not_run: no forward comparison in this tier"
+    }
+  },
+  "criteria_outcome": {
+    "criterion_1_two_legs": false,
+    "criterion_2_stage_clear": false,
+    "verdict_rule": "R4",
+    "rule_text": "\u4e3b\u5224\u636e fail \u2227 \u80fd\u529b 0/40\u3002**\u767d\u5316\u8fd9\u4e00\u884c\u4e0d\u662f\u8fd9\u6761\u5dee\u8ddd\u7684\u673a\u5236**\uff08r3 \u914d\u65b9\u300150k\u3001\u5355 seed \u4e0b\uff09\u3002\u4e09\u4e2a\u5019\u9009\u91cc\u552f\u4e00\u96f6\u4ee3\u7801\u7684\u90a3\u4e2a\u88ab\u6392\u9664\uff1bN-a\u2460/N-c \u6309 \u00a71.2 \u88ab\u9884\u6d4b\u4e3a null\uff1bN-b \u65e0\u826f\u5b9a\u4e49 \u21d2 PPO \u4fa7\u5728\u672c\u9884\u7b97\u4e0b\u7684\u53ef\u8c03\u6e05\u5355\u5df2\u7ecf\u7a77\u5c3d\u3002",
+    "next_step": "\u53ea\u5269\u56db\u6761\uff0c\u90fd\u4e0d\u662f PPO \u7cfb\u6570\uff1a(a) \u5c04\u51fb\u8109\u51b2\u9519\u914d\u7684\u91cf\u5316\u4e0e\u4fee\u590d\u3001(b) 3 seed \u00d7 1M\uff08\u9700\u53e6\u7f16\u9884\u7b97\uff09\u3001(c) KL \u5224\u636e\u4fee\u8ba2\u540e\u7684 50k \u590d\u73b0\u3001(d) \u6362\u89c2\u6d4b/\u8868\u5f81\uff082 \u5e27\u8282\u62cd\u5df2\u88ab H-a \u8bc1\u4f2a\uff09\u3002"
+  },
+  "mechanism_readings": {
+    "advantage_min": 4.9890269778720825e-05,
+    "advantage_max": 0.0009946544139796197,
+    "advantage_mean": 0.0009242311007047813,
+    "advantage_sd": 0.00017339294866343836,
+    "epsilon_plus_delta": 4.9890269778720825e-05,
+    "max_over_min": 19.936842,
+    "gae_horizon": 19.936872,
+    "mean_over_sd": 5.3303,
+    "inverse_sd": 5767.247,
+    "reading": "on this real rollout the r3 advantage is almost (epsilon + delta) x a purely temporal weight, so dropping the whitening mainly removes a 5.3303 sd common-mode ramp (and a constant 1/sd scale that Adam would absorb anyway)",
+    "caveat": "measured on the audit slot (256 transitions, 1 segment, no episode termination), not on a training rollout; the training rollout's own advantage statistics were never recorded"
+  },
+  "limits": [
+    "engine_truth reward and termination: a training-time privileged diagnostic, NOT R1",
+    "single training seed (run_seed 0)",
+    "n=20 per ruler, point comparison, no interval; paired intervals are +/-220 / +/-400 frames",
+    "the boolean switches BOTH halves of the whitening (mean offset and /sd scale), so one run cannot separate them",
+    "training-rollout advantage statistics are still not recorded by the payload; the quoted advantage_sd is the audit-slot reading for the same recipe, and the whitening flag cannot change it"
+  ]
+}
