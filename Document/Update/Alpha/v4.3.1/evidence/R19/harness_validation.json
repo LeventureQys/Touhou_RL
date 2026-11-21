@@ -1,0 +1,142 @@
+{
+ "schema": "v431-recheck-r19/1",
+ "state": {
+  "index": 0,
+  "seed": 3042,
+  "decision_frame": 2010,
+  "expected_hash": "6cade82be08f8a95",
+  "a1_safe_set": [
+   2,
+   7,
+   11
+  ]
+ },
+ "harness_checks": {
+  "restore_gate_all_ok": true,
+  "recorded_reproduced_a1_death_frame": true,
+  "a1_recorded_action": 0,
+  "a1_recorded_death_frame": 2041,
+  "probe_recorded_death_frame": 2041
+ },
+ "episodes": {
+  "recorded": {
+   "policy_spec": "recorded",
+   "decisions": 90,
+   "frames_executed": 31,
+   "terminal": "first_death",
+   "first_death_frame": 2041,
+   "first_death_offset": 31,
+   "alive_120": false,
+   "alive_180": false,
+   "wall_s": 16.055,
+   "error": null
+  },
+  "const2": {
+   "policy_spec": "const:2",
+   "decisions": 90,
+   "frames_executed": 35,
+   "terminal": "first_death",
+   "first_death_frame": 2045,
+   "first_death_offset": 35,
+   "alive_120": false,
+   "alive_180": false,
+   "wall_s": 16.164,
+   "error": null
+  },
+  "const7": {
+   "policy_spec": "const:7",
+   "decisions": 90,
+   "frames_executed": 180,
+   "terminal": null,
+   "first_death_frame": null,
+   "first_death_offset": null,
+   "alive_120": true,
+   "alive_180": true,
+   "wall_s": 16.799,
+   "error": null
+  }
+ },
+ "safe_set_semantics": {
+  "a1_safe_set": [
+   2,
+   7,
+   11
+  ],
+  "a1_definition": "an arm is `engine_alive` when the candidate's 2 frames are followed by the FROZEN STUDENT's continuation to the horizon",
+  "a1_says_cand2": "engine_alive",
+  "holding_cand2_terminal": "first_death",
+  "holding_cand2_death_offset": 35,
+  "holding_cand7_terminal": null,
+  "holding_cand7_frames": 180,
+  "verdict": "S is continuation-conditional: membership in S does not mean the action can be held"
+ },
+ "segment_admissibility": {
+  "rule": "the review requires a segment that a constant key press cannot finish; a constant action surviving the full 180 frames disqualifies it",
+  "constant_cand": 7,
+  "constant_survived_180_frames": true,
+  "state_0_admissible_at_180_frames": false,
+  "state_0_admissible_at_120_frames": null,
+  "note": "at 120 frames, A1 already answers this: its own recorded action dies at offset 31, so a constant action *does* fail there - but 'there' is the student-continuation protocol, not this driver's 180-frame protocol"
+ },
+ "cost": {
+  "recorded": {
+   "wall_s": 16.055,
+   "frames_executed": 31,
+   "prefix_frames": 2010,
+   "prefix_s": 14.454192856999995,
+   "branch_frames": 31,
+   "encode_s": 0.03234951199998193,
+   "reset_s": 1.0193493100000026
+  },
+  "const2": {
+   "wall_s": 16.164,
+   "frames_executed": 35,
+   "prefix_frames": 2010,
+   "prefix_s": 14.570058637000002,
+   "branch_frames": 35,
+   "encode_s": 0.03569577899993703,
+   "reset_s": 1.0075116040000012
+  },
+  "const7": {
+   "wall_s": 16.799,
+   "frames_executed": 180,
+   "prefix_frames": 2010,
+   "prefix_s": 14.012621331999995,
+   "branch_frames": 180,
+   "encode_s": 0.1607010760001657,
+   "reset_s": 0.9295576729999908
+  }
+ },
+ "restore": {
+  "recorded": {
+   "reset_frame": 0,
+   "reset_hash": "768bca6c993e50e1",
+   "recorded_reset_hash": "768bca6c993e50e1",
+   "final_frame": 2010,
+   "final_hash": "6cade82be08f8a95",
+   "hash_mismatches": 0,
+   "first_mismatch_frame": null,
+   "matches_frozen": true
+  },
+  "const2": {
+   "reset_frame": 0,
+   "reset_hash": "768bca6c993e50e1",
+   "recorded_reset_hash": "768bca6c993e50e1",
+   "final_frame": 2010,
+   "final_hash": "6cade82be08f8a95",
+   "hash_mismatches": 0,
+   "first_mismatch_frame": null,
+   "matches_frozen": true
+  },
+  "const7": {
+   "reset_frame": 0,
+   "reset_hash": "768bca6c993e50e1",
+   "recorded_reset_hash": "768bca6c993e50e1",
+   "final_frame": 2010,
+   "final_hash": "6cade82be08f8a95",
+   "hash_mismatches": 0,
+   "first_mismatch_frame": null,
+   "matches_frozen": true
+  }
+ }
+}

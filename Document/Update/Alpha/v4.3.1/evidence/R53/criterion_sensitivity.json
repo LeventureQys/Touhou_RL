@@ -1,0 +1,118 @@
+{
+ "schema": "v431-recheck-r53/1",
+ "question": "如果主判据从均值换成中位数，臂 A 的判定会不会从\"未判定\"变成\"失败\"？",
+ "criteria": [
+  {
+   "criterion": "均值 > C-fair",
+   "statistic": 14.43,
+   "test": "paired bootstrap",
+   "ci95": [
+    -7.59,
+    37.14
+   ],
+   "direction": "inconclusive",
+   "points": "for_arm"
+  },
+  {
+   "criterion": "中位数 > C-fair",
+   "statistic": -15.0,
+   "test": "bootstrap",
+   "ci95": [
+    -22.5,
+    -6.5
+   ],
+   "direction": "baseline_better",
+   "points": "against_arm"
+  },
+  {
+   "criterion": "Q1 > C-fair",
+   "statistic": -7.5,
+   "test": "bootstrap",
+   "ci95": [
+    -16.5,
+    -1.0
+   ],
+   "direction": "baseline_better",
+   "points": "against_arm"
+  },
+  {
+   "criterion": "Q3 > C-fair",
+   "statistic": 11.7,
+   "test": "point",
+   "ci95": null,
+   "direction": "arm_better",
+   "points": "for_arm"
+  },
+  {
+   "criterion": "均值 > 恒定动作池（可部署）",
+   "statistic": -17.61,
+   "test": "point",
+   "ci95": null,
+   "direction": "baseline_better",
+   "points": "against_arm"
+  },
+  {
+   "criterion": "均值 > train 上选出的恒定动作（可部署）",
+   "statistic": -78.31,
+   "test": "point",
+   "ci95": null,
+   "direction": "baseline_better",
+   "points": "against_arm"
+  },
+  {
+   "criterion": "均值 > 神谕最强恒定动作",
+   "statistic": -164.71,
+   "test": "point",
+   "ci95": null,
+   "direction": "baseline_better",
+   "points": "against_arm"
+  },
+  {
+   "criterion": "跑满 300 的次数（6/80 vs 1/80）",
+   "statistic": "6/80 vs 1/80",
+   "test": "Fisher exact two-sided",
+   "ci95": null,
+   "direction": "inconclusive",
+   "points": "inconclusive",
+   "p": 0.1167
+  }
+ ],
+ "counts": {
+  "for_arm": 2,
+  "against_arm": 5,
+  "inconclusive": 1
+ },
+ "bootstraps": {
+  "mean": {
+   "observed": 14.43,
+   "ci95": [
+    -7.59,
+    37.14
+   ],
+   "excludes_zero": false,
+   "direction": "inconclusive"
+  },
+  "median": {
+   "observed": -15.0,
+   "ci95": [
+    -22.5,
+    -6.5
+   ],
+   "excludes_zero": true,
+   "direction": "baseline_better"
+  },
+  "q1": {
+   "observed": -7.5,
+   "ci95": [
+    -16.5,
+    -1.0
+   ],
+   "excludes_zero": true,
+   "direction": "baseline_better"
+  }
+ },
+ "verdict": {
+  "median_flip_is_significant": true,
+  "reading": "8 条可算判据里 **2 条支持臂 A**、**5 条反对**、1 条不能判定。 关键的是**中位数差 -15.00，95% CI [-22.50, -6.50] 排除 0**——即**随机策略在中位数上显著优于臂 A**。 所以\"未判定\"这个结论**只对均值口径成立**；换成中位数口径，臂 A 相对**最弱的**基线已经是显著更差。"
+ }
+}

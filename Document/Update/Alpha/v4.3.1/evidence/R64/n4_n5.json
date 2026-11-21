@@ -1,0 +1,105 @@
+{
+ "schema": "v431-recheck-r64/1",
+ "question": "N4/N5 能不能变成有协议的缺席证据？三个聚合 JSON 本身又说明了什么？",
+ "n4": {
+  "log_like_files": 2789,
+  "mentioning_a_bc_config": [],
+  "holds": true
+ },
+ "n5": {
+  "per_epoch_histories": [
+   {
+    "file": "bc_generalisation.json",
+    "exists": true,
+    "kind": "single run",
+    "epochs": 3,
+    "epoch_ids": [
+     0,
+     1,
+     2
+    ],
+    "n_train": 800,
+    "n_val": 200
+   },
+   {
+    "file": "bc_split_comparison.json",
+    "exists": true,
+    "kind": "two runs",
+    "runs": [
+     {
+      "label": "RANDOM split (val frames adjacent to train)",
+      "n_train": 800,
+      "n_val": 200,
+      "epochs": 3
+     },
+     {
+      "label": "TEMPORAL split (train = first 80%, val = last 20%)",
+      "n_train": 800,
+      "n_val": 200,
+      "epochs": 3
+     }
+    ]
+   },
+   {
+    "file": "cross_tape_generalisation.json",
+    "exists": true,
+    "kind": "no history key",
+    "top_keys": [
+     "seed12-train",
+     "seed12-val",
+     "seed10"
+    ]
+   }
+  ],
+  "holds_as_written": false,
+  "refined": "per-epoch 曲线**存在**，但只有 3 epoch、且只在这两个文件里；文档那三个 25-epoch 配置的曲线仍然不存在"
+ },
+ "majority_blocks": {
+  "per_eval_set": {
+   "seed12-train": {
+    "move": 0.8536876584859746,
+    "move_majority_share": 0.42584167424931757
+   },
+   "seed12-val": {
+    "move": 0.8536876584859746,
+    "move_majority_share": 0.42584167424931757
+   },
+   "seed10": {
+    "move": 0.855826696734724,
+    "move_majority_share": 0.4249317561419472
+   }
+  },
+  "seed12_val_share": 0.42584167424931757,
+  "share_is_468_over_1099": true,
+  "neg_log_share": 0.8536876584859746,
+  "equals_the_documented_0853": true,
+  "reading": "seed12-train 与 seed12-val 共用同一个 majority（**按整条 seed12 磁带**算的 468/1099），而 seed12-val 只有 220 个样本、且**包含在这 1,099 里**；seed10 有它自己的 majority（按整条 seed10 算）。所以 C3 的缺陷不是从脚本推断的，而是**直接写在产物里**：基线按整条磁带算，却用来评该磁带的子集。"
+ },
+ "sample_counts": {
+  "bc_generalisation": {
+   "n_train": 800,
+   "n_val": 200
+  },
+  "bc_split_comparison": [
+   {
+    "label": "RANDOM split (val frames adjacent to train)",
+    "n_train": 800,
+    "n_val": 200,
+    "epochs": 3
+   },
+   {
+    "label": "TEMPORAL split (train = first 80%, val = last 20%)",
+    "n_train": 800,
+    "n_val": 200,
+    "epochs": 3
+   }
+  ],
+  "tapes_hold": 1099,
+  "reading": "另外两个文件来自 **n_train=800 / n_val=200（合计 1,000）** 的运行，而磁带是 **1,099** 个样本。所以 v4.3.0 至少混用了**两种样本量**：1,099（磁带/文档的 880+219）与 1,000（800+200）。"
+ },
+ "verdict": {
+  "n4_holds": true,
+  "n5_needs_restating": true,
+  "reading": "N4 **成立**：2,789 个日志类文件里 **0** 个提到任一 BC 配置。N5 **写错了**：per-epoch 曲线**确实存在**（`bc_generalisation.json` 与 `bc_split_comparison.json` 各有 3 epoch 的 train/val CE），但只有 3 epoch、且不是文档那三个 25-epoch 配置的曲线——所以正确表述是\"没有 25-epoch 曲线\"，而不是\"没有任何曲线\"。顺带两个新发现：**① 0.8537 的出处已定位到产物**（`move_majority_share = 468/1099`，`−ln(share) = 0.8536876584859746`），而且这个 majority 是**按整条磁带**算的、却用来评该磁带的 220 个样子集；**② 另外两个文件用的是 n=1,000（800/200）**，与磁带的 1,099 不同——v4.3.0 至少混用了两种样本量。"
+ }
+}

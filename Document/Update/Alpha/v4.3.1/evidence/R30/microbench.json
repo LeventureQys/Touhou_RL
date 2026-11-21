@@ -1,0 +1,66 @@
+{
+ "schema": "v431-recheck-r30b/1",
+ "question": "does batching identical masks in `STEP <mask> <frames>` save wall time?",
+ "method": {
+  "block_frames": 250,
+  "blocks": 12,
+  "alternate_group_sizes": [
+   1,
+   5,
+   25
+  ],
+  "note": "alternating keeps both granularities on the same stage stretch"
+ },
+ "stats": {
+  "1": {
+   "blocks": 4,
+   "commands_per_block": 250,
+   "mean_ms_per_frame": 7.52,
+   "median_ms_per_frame": 7.655,
+   "min_ms_per_frame": 6.397,
+   "max_ms_per_frame": 8.371,
+   "per_block_s": [
+    1.5993,
+    1.7791,
+    2.0927,
+    2.0485
+   ]
+  },
+  "5": {
+   "blocks": 4,
+   "commands_per_block": 50,
+   "mean_ms_per_frame": 7.598,
+   "median_ms_per_frame": 7.718,
+   "min_ms_per_frame": 6.824,
+   "max_ms_per_frame": 8.134,
+   "per_block_s": [
+    1.706,
+    1.8285,
+    2.0304,
+    2.0335
+   ]
+  },
+  "25": {
+   "blocks": 4,
+   "commands_per_block": 10,
+   "mean_ms_per_frame": 7.677,
+   "median_ms_per_frame": 7.837,
+   "min_ms_per_frame": 6.864,
+   "max_ms_per_frame": 8.17,
+   "per_block_s": [
+    1.7159,
+    1.8976,
+    2.0426,
+    2.0208
+   ]
+  }
+ },
+ "verdict": {
+  "median_ms_per_frame_group1": 7.655,
+  "median_ms_per_frame_best_group": 7.718,
+  "best_group": "5",
+  "speedup_best_vs_group1": 0.992,
+  "batching_helps": false,
+  "reading": "batching to group 5 (0.992x fewer commands) changes wall time by -0.8%, so the cost is dominated by the engine simulating each frame, not by per-command overhead"
+ }
+}

@@ -1,0 +1,93 @@
+{
+ "schema": "v431-recheck-r41/1",
+ "question": "do the six earliest evidence files still reproduce bit-for-bit from the current workspace?",
+ "scripts": [
+  {
+   "group": "R1",
+   "script": "v431_recheck_baseline.py",
+   "output": "baseline_recheck.json",
+   "exit": 0,
+   "wall_s": 0.0,
+   "sha_before": "4f6c7c2c76d4d5c8f8a4196a43e6f98e835aa90a238b88ab4c6fe9153707c966",
+   "sha_after": "f8437759a6912823f9be4eb5944070a84de62de780226f802501aa238ece6287",
+   "identical": false,
+   "first_difference": ".generated_at_utc: '2026-11-15T22:02:17.598518+00:00' vs '2026-11-15T22:30:20.607404+00:00'",
+   "difference_kind": "timestamp"
+  },
+  {
+   "group": "R2",
+   "script": "v431_recheck_overlap.py",
+   "output": "overlap_audit.json",
+   "exit": 0,
+   "wall_s": 0.0,
+   "sha_before": "e106e61784f12e3ba0e72f69cf292a97839ff9bffd332ba734607d0d88032c6e",
+   "sha_after": "e106e61784f12e3ba0e72f69cf292a97839ff9bffd332ba734607d0d88032c6e",
+   "identical": true,
+   "first_difference": null,
+   "difference_kind": ""
+  },
+  {
+   "group": "R3",
+   "script": "v431_recheck_duplication.py",
+   "output": "duplication_structure.json",
+   "exit": 0,
+   "wall_s": 0.0,
+   "sha_before": "e1d3999d9d501e8ad97c4672be10efbd3ba9fabda009ce4448c75a2a9caaac06",
+   "sha_after": "e1d3999d9d501e8ad97c4672be10efbd3ba9fabda009ce4448c75a2a9caaac06",
+   "identical": true,
+   "first_difference": null,
+   "difference_kind": ""
+  },
+  {
+   "group": "R4",
+   "script": "v431_recheck_models.py",
+   "output": "model_recheck.json",
+   "exit": 0,
+   "wall_s": 0.0,
+   "sha_before": "35d7e3eca5d9dc06cd2ccd6f00ddc6479eba34f209067f7ad0266a3822fed9d4",
+   "sha_after": "35d7e3eca5d9dc06cd2ccd6f00ddc6479eba34f209067f7ad0266a3822fed9d4",
+   "identical": true,
+   "first_difference": null,
+   "difference_kind": ""
+  },
+  {
+   "group": "R5",
+   "script": "v431_recheck_significance.py",
+   "output": "significance.json",
+   "exit": 0,
+   "wall_s": 0.0,
+   "sha_before": "b1142d0369e44a445479b210945050a19660d8049f5f2ddfb598e4ebc00737a9",
+   "sha_after": "b1142d0369e44a445479b210945050a19660d8049f5f2ddfb598e4ebc00737a9",
+   "identical": true,
+   "first_difference": null,
+   "difference_kind": ""
+  },
+  {
+   "group": "R6",
+   "script": "v431_recheck_actor.py",
+   "output": "actor_recheck.json",
+   "exit": 0,
+   "wall_s": 0.0,
+   "sha_before": "3565287b5394f1457e1dc3b3191a0563c9f8b43401fbf99f6da3217a2229119b",
+   "sha_after": "3565287b5394f1457e1dc3b3191a0563c9f8b43401fbf99f6da3217a2229119b",
+   "identical": true,
+   "first_difference": null,
+   "difference_kind": ""
+  }
+ ],
+ "counts": {
+  "scripts": 6,
+  "exit_zero": 6,
+  "identical": 5,
+  "changed": 1
+ },
+ "verdict": {
+  "all_ran": true,
+  "all_identical": false,
+  "reading": "5/6 byte-identical; 1 differ only in a timestamp or sub-1e-9 float jitter (['R1']); substantive changes: none",
+  "substantive_changes": [],
+  "cosmetic_changes": [
+   "R1"
+  ]
+ }
+}

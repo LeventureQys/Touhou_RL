@@ -1,0 +1,95 @@
+{
+ "schema": "v431-recheck-r26/1",
+ "question": "can an env-role session (the only role that can produce obs-v3 pixels, so the only role the arms can run in) see bullets?",
+ "probe": {
+  "seed": 12,
+  "frame": 8664,
+  "walk": {
+   "frames": 8663,
+   "hash_checks": 2165,
+   "hash_mismatches": 0,
+   "engine_frame": 8663
+  },
+  "verbs_answered": {
+   "HAZARDS": true,
+   "PLAYER": true,
+   "EVENTS": true,
+   "HUD": true,
+   "STATE": true
+  },
+  "hazards_reply_bytes": 12778,
+  "hazards_reply_head": "OK frames=8663 nb=183 nl=0 ne=4 bullets=2:1:8:42d4eea6:42c176f4:3dcccccd:bc51ad65:bce84cff:178:40800000:0,4:1:10:423070dc:438eb725:3dcccccd:bf52550e:3f5fe6f7:178:40800000:0,5:1:8:4399cdfc:404ba74d:3dcccccd:bd96f3fb:be1e20d9:169:40800000:0,6"
+ },
+ "answer": {
+  "hazards_available_on_env": true,
+  "arm_a_choice": "A-HAZARDS",
+  "supersedes": "R25's partB 'status: open'; the arm can be bullet-aware, so the R25 option list collapses to A-HAZARDS"
+ },
+ "observation_contract_for_arm_a": {
+  "source": "session.client.hazards() -> protocol.HazardFrame",
+  "decoder": "touhou_rl.v400.gym.protocol.parse_hazards_reply / EnvHarnessClient.hazards(limit=0)",
+  "hazard_frame_fields": [
+   "frame",
+   "bullet_count",
+   "laser_count",
+   "enemy_count",
+   "bullets",
+   "lasers",
+   "enemies",
+   "raw_bytes"
+  ],
+  "bullet_row_fields": [
+   "slot",
+   "state",
+   "color",
+   "position",
+   "velocity",
+   "timer",
+   "collision_size",
+   "collision_disabled"
+  ],
+  "enemy_row_fields": [
+   "slot",
+   "flags1",
+   "position",
+   "life",
+   "timer",
+   "world_position",
+   "hitbox_width",
+   "hitbox_height"
+  ],
+  "laser_row_fields": [
+   "slot",
+   "state",
+   "position",
+   "angle",
+   "start_offset",
+   "end_offset",
+   "current_width",
+   "width",
+   "timer",
+   "in_use",
+   "start_time",
+   "hitbox_start_time",
+   "duration",
+   "despawn_duration",
+   "hitbox_end_delay",
+   "damageable"
+  ],
+  "engine_totals_seen_at_this_frame": {
+   "bullets": 183,
+   "lasers": 0,
+   "enemies": 4
+  },
+  "note": "BulletRow.collision_size is the FULL width; the lethal half-width is `half_width`. EnemyRow's lethal half extent is hitboxDimensions/3. Getting this wrong is the specific error 11-P1 §2.1 names."
+ },
+ "consequence": {
+  "arm_a_is_buildable_with_bullets": true,
+  "remaining_gap": "arm A's feature vector is not yet defined; this record only establishes that the channel exists and how to decode it",
+  "still_blocked": "pixel arms B/C: `_pair_cand` refuses split-mask decisions when rebuilding the obs-v3 action history (R22/R23)"
+ },
+ "caveats": [
+  "one frame, one tape: the counts (183 bullets) are a measurement at frame 8,664 of seed12, not a property of the pattern",
+  "the reply is 12.8 KB per query; a 600-frame episode that queries every frame would add 7.7 MB of protocol traffic, so the arm should query per DECISION"
+ ]
+}

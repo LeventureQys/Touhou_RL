@@ -1,0 +1,31 @@
+{
+ "schema": "v431-recheck-r69/1",
+ "question": "报告里每个数值列的表头是否自带口径？（R68 的「差」只是其中一例吗？）",
+ "counts": {
+  "tables": 120,
+  "distinct_header_cells": 298,
+  "numeric_columns_without_a_unit": 0
+ },
+ "n_conflation": {
+  "header": "n",
+  "meanings": [
+   {
+    "kind": "样本数",
+    "evidence": "CE 表 `留出集 | n | 模型 CE …`，行值 220 / 1099"
+   },
+   {
+    "kind": "episode 数",
+    "evidence": "臂 A 表 `臂 | n | 存活 …`，行值 10 / 20 / 80"
+   }
+  ],
+  "problem": "同一个表头字母在两类表里指不同的东西；读者跨表比较时会把 220 个样本与 80 个 episode 当成同一量",
+  "fix": "CE 表写 `n（样本）`，臂 A 表写 `n（episode）`"
+ },
+ "numeric_columns": [],
+ "label_columns_note": "多数短表头是标签列（结果/项/来源/状态/说明/改成/问题），对它们谈口径没有意义——把它们排除后，真正缺口径的数值列只有下面这些。",
+ "verdict": {
+  "n_is_ambiguous": true,
+  "other_numeric_columns_are_labels": false,
+  "reading": "扫了 120 张表、298 个不同的表头单元。排除标签列之后，真正需要口径的数值列有 **0** 处。其中**最实质的一处是 `n`**：它在 CE 表里是**样本数**（220/1099），在臂 A 表里是**episode 数**（10/20/80）——同一个字母两种东西，跨表比较时会被读成同一个量。其余是 `均值/中位数/最大` 这类**默认单位是决策数但没有写明**的列。**所以 R68 的「差」不是孤例：表头普遍假设读者知道上下文。**"
+ }
+}

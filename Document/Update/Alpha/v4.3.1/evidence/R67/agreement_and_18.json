@@ -1,0 +1,76 @@
+{
+ "schema": "v431-recheck-r67/1",
+ "question": "「三盘全盘动作一致率 0.448/0.463/0.456」与「每窗口 18 个恒定动作」这两个全称断言，逐条算出来还成立吗？",
+ "claim_b_eighteen_constants": {
+  "windows": 9,
+  "files_per_window": {
+   "10": 18,
+   "11": 18,
+   "12": 18,
+   "13": 18,
+   "14": 18,
+   "15": 18,
+   "16": 18,
+   "17": 18,
+   "18": 18
+  },
+  "distinct_cands_per_window": {
+   "10": 18,
+   "11": 18,
+   "12": 18,
+   "13": 18,
+   "14": 18,
+   "15": 18,
+   "16": 18,
+   "17": 18,
+   "18": 18
+  },
+  "every_window_has_18": true,
+  "total_episodes": 162,
+  "holds": true
+ },
+ "claim_a_agreement": {
+  "pairs": [
+   {
+    "pair": "seed10__seed11",
+    "n": 1099,
+    "prefix": 219,
+    "full_agreement": 0.4568,
+    "suffix_len": 880,
+    "suffix_agreement": 0.3216
+   },
+   {
+    "pair": "seed10__seed12",
+    "n": 1099,
+    "prefix": 219,
+    "full_agreement": 0.485,
+    "suffix_len": 880,
+    "suffix_agreement": 0.3568
+   },
+   {
+    "pair": "seed11__seed12",
+    "n": 1099,
+    "prefix": 225,
+    "full_agreement": 0.4823,
+    "suffix_len": 874,
+    "suffix_agreement": 0.349
+   }
+  ],
+  "n_pairs_expected": 3,
+  "n_pairs_computed": 3,
+  "claimed": [
+   0.448,
+   0.463,
+   0.456
+  ],
+  "matched_full_definition": [],
+  "matched_suffix_definition": [],
+  "reproducible": false,
+  "hold": false
+ },
+ "verdict": {
+  "claim_b_holds": true,
+  "claim_a_reproducible": false,
+  "reading": "**断言 B（每窗口 18 个恒定动作）成立**：9 个窗口 × 18 = 162 个 episode，每个窗口的 distinct cand 都是 18，**无缺口**。**断言 A（全盘一致率 0.448/0.463/0.456）不成立**：三盘恰好 3 对，全盘口径给出 [0.4568, 0.485, 0.4823]，后缀口径给出 [0.3216, 0.3568, 0.349]——**两种都不是那三个数**，且全库搜索没有任何脚本或证据产出过它们。**这就是我继承进报告、却从未核过的数字。** 结论仍然成立而且更强：一致率 0.46–0.49 只比多数类占比 0.4258 高一点、离 1.0 很远；而**去掉共同前缀后只剩 0.32–0.36**，即三盘在前缀之后**分歧更大**。"
+ }
+}

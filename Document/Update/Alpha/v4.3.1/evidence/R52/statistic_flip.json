@@ -1,0 +1,39 @@
+{
+ "schema": "v431-recheck-r52/1",
+ "question": "\"臂 A 胜过随机\"这个说法换个统计量还成立吗？",
+ "cap_decisions": 300,
+ "policies": {
+  "arm_a": {
+   "n": 80,
+   "mean": 94.1,
+   "min": 29.0,
+   "q1": 36.0,
+   "median": 48.0,
+   "q3": 110.5,
+   "max": 300.0,
+   "at_cap": 6
+  },
+  "c_fair": {
+   "n": 80,
+   "mean": 79.7,
+   "min": 29.5,
+   "q1": 44.6,
+   "median": 63.0,
+   "q3": 98.8,
+   "max": 300.0,
+   "at_cap": 1
+  }
+ },
+ "comparisons": {
+  "mean_diff": 14.4,
+  "median_diff": -15.0,
+  "q1_diff": -8.6,
+  "q3_diff": 11.7,
+  "p_arm_above_cfair_median": 0.35,
+  "p_cfair_above_arm_median": 0.7
+ },
+ "verdict": {
+  "statistic_flips_the_sign": true,
+  "reading": "the sign FLIPS with the statistic: mean 94.1 vs 79.7 (+14.4), but median 48.0 vs 63.0 (-15.0) and Q1 36.0 vs 44.6 (-8.6) both favour the RANDOM policy. 35% of arm A episodes beat C-fair's median, and 70% of C-fair episodes beat arm A's median. So \"arm A beats random\" is only true for the mean, and the mean is carried by the few episodes that reach the cap (6/80)."
+ }
+}

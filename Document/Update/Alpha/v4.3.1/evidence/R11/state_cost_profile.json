@@ -1,0 +1,96 @@
+{
+ "schema": "v431-recheck-r11/1",
+ "source": "Document\\Update\\Alpha\\v4.2.0\\evidence\\T08\\a1_safe_set_full.json",
+ "states": 200,
+ "proper_states": 184,
+ "distinct_seeds": 50,
+ "seed_range": [
+  3042,
+  3091
+ ],
+ "offsets_to_death": [
+  30,
+  31,
+  60,
+  61,
+  90,
+  91,
+  120,
+  121
+ ],
+ "prefix_frames_profile": {
+  "min": 704,
+  "p25": 1307,
+  "median": 1390,
+  "p75": 1516,
+  "max": 3020,
+  "mean": 1469.4
+ },
+ "prefix_hash_mismatch_total": 0,
+ "prefix_hash_mismatch_states": 0,
+ "safe_size_profile": {
+  "min": 0,
+  "p25": 5,
+  "median": 8,
+  "p75": 13,
+  "max": 18,
+  "mean": 8.5
+ },
+ "state_wall_s_profile": {
+  "min": 142.7,
+  "median": 226.8,
+  "max": 461.1,
+  "mean": 237.6
+ },
+ "proper_being_death_rich": {
+  "definition": "share of the 18 first actions that end in engine_death",
+  "min": 0.056,
+  "median": 0.5,
+  "max": 0.944,
+  "mean": 0.514,
+  "n_states_where_all_18_die": 0,
+  "n_states_where_no_action_dies": 0
+ },
+ "cost_model": {
+  "segment_2s": {
+   "prefix_frames": 1383,
+   "segment_frames": 120,
+   "prefix_s": 11.4,
+   "segment_s": 1.0,
+   "attempt_s": 12.4,
+   "prefix_share": 0.92,
+   "h_200_attempts": 0.69,
+   "h_3_arms_200_each": 2.06
+  },
+  "segment_3s": {
+   "prefix_frames": 1383,
+   "segment_frames": 180,
+   "prefix_s": 11.4,
+   "segment_s": 1.5,
+   "attempt_s": 12.8,
+   "prefix_share": 0.885,
+   "h_200_attempts": 0.71,
+   "h_3_arms_200_each": 2.14
+  },
+  "segment_5s": {
+   "prefix_frames": 1383,
+   "segment_frames": 300,
+   "prefix_s": 11.4,
+   "segment_s": 2.5,
+   "attempt_s": 13.8,
+   "prefix_share": 0.822,
+   "h_200_attempts": 0.77,
+   "h_3_arms_200_each": 2.3
+  },
+  "segment_10s": {
+   "prefix_frames": 1383,
+   "segment_frames": 600,
+   "prefix_s": 11.4,
+   "segment_s": 4.9,
+   "attempt_s": 16.3,
+   "prefix_share": 0.697,
+   "h_200_attempts": 0.91,
+   "h_3_arms_200_each": 2.72
+  }
+ }
+}

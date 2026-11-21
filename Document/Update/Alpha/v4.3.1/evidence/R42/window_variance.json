@@ -1,0 +1,157 @@
+{
+ "schema": "v431-recheck-r42/1",
+ "question": "seed18 scored 39.9 and seed17 152.8 on the same weights; is that window difficulty or noise?",
+ "per_window": [
+  {
+   "seed": 11,
+   "c4_constants": 18,
+   "c4_mean": 105.9,
+   "c4_median": 64.2,
+   "c4_max": 272.0,
+   "c4_min": 31.5,
+   "c4_std": 80.2,
+   "c4_count_ge_200": 3,
+   "arm_n": 20,
+   "arm_mean": 63.3,
+   "arm_first10": 78.7,
+   "arm_ext10": 47.9,
+   "arm_batch_delta": -30.8,
+   "arm_sd": 55.5,
+   "cfair_mean": 69.2,
+   "cfair_n": 20,
+   "arm_minus_cfair": -5.9,
+   "arm_survivals": 1,
+   "within_batch_sd": [
+    75.0,
+    7.9
+   ]
+  },
+  {
+   "seed": 12,
+   "c4_constants": 18,
+   "c4_mean": 126.0,
+   "c4_median": 138.8,
+   "c4_max": 260.0,
+   "c4_min": 29.0,
+   "c4_std": 57.6,
+   "c4_count_ge_200": 1,
+   "arm_n": 20,
+   "arm_mean": 109.2,
+   "arm_first10": 134.7,
+   "arm_ext10": 83.8,
+   "arm_batch_delta": -50.9,
+   "arm_sd": 99.7,
+   "cfair_mean": 78.0,
+   "cfair_n": 20,
+   "arm_minus_cfair": 31.3,
+   "arm_survivals": 2,
+   "within_batch_sd": [
+    110.7,
+    79.7
+   ]
+  },
+  {
+   "seed": 17,
+   "c4_constants": 18,
+   "c4_mean": 127.8,
+   "c4_median": 83.2,
+   "c4_max": 245.5,
+   "c4_min": 36.0,
+   "c4_std": 81.2,
+   "c4_count_ge_200": 7,
+   "arm_n": 20,
+   "arm_mean": 152.8,
+   "arm_first10": 166.1,
+   "arm_ext10": 139.6,
+   "arm_batch_delta": -26.5,
+   "arm_sd": 100.1,
+   "cfair_mean": 109.7,
+   "cfair_n": 20,
+   "arm_minus_cfair": 43.1,
+   "arm_survivals": 2,
+   "within_batch_sd": [
+    86.7,
+    110.4
+   ]
+  },
+  {
+   "seed": 18,
+   "c4_constants": 18,
+   "c4_mean": 87.1,
+   "c4_median": 67.2,
+   "c4_max": 257.5,
+   "c4_min": 28.5,
+   "c4_std": 65.6,
+   "c4_count_ge_200": 2,
+   "arm_n": 20,
+   "arm_mean": 51.0,
+   "arm_first10": 39.9,
+   "arm_ext10": 62.0,
+   "arm_batch_delta": 22.1,
+   "arm_sd": 57.7,
+   "cfair_mean": 61.8,
+   "cfair_n": 20,
+   "arm_minus_cfair": -10.8,
+   "arm_survivals": 1,
+   "within_batch_sd": [
+    9.4,
+    79.6
+   ]
+  }
+ ],
+ "variance": {
+  "between_window_sd": 40.2,
+  "mean_within_window_sd": 80.3,
+  "ratio_between_over_within": 0.5,
+  "batch_deltas": [
+   -30.8,
+   -50.9,
+   -26.5,
+   22.1
+  ],
+  "max_abs_batch_delta": 50.9,
+  "reading": null
+ },
+ "difficulty_proxy": {
+  "c4_mean_range": [
+   87.1,
+   127.8
+  ],
+  "c4_max_range": [
+   245.5,
+   272.0
+  ],
+  "arm_range": [
+   51.0,
+   152.8
+  ],
+  "note": "the BEST constant is nearly identical across windows (245.5-272), but the MEAN constant is not: that gap is the difficulty proxy to test"
+ },
+ "verdict": {
+  "h1_window_difficulty": true,
+  "h2_noise": true,
+  "h3_specific_failure": false,
+  "reading": "seed18 is the hardest window by the mean-constant proxy (87.1 vs 105.9-127.8), and the arm's per-window ranking matches that proxy exactly (4/4: 18, 11, 12, 17), so its low score is consistent with window difficulty rather than a specific failure; BUT the between-window spread (sd 40.2) is only HALF the within-window spread (mean sd 80.3), so at n=20 per window the ranking itself is not established; the sharper signal is that the arm's advantage over random is monotone in window breadth (-10.8, -5.9, +31.3, +43.1), exact one-sided p=0.0417 over 4 ranks -- suggestive, not significant, and it is the only pattern here that is not just noise",
+  "rank_arm": [
+   18,
+   11,
+   12,
+   17
+  ],
+  "rank_const_mean": [
+   18,
+   11,
+   12,
+   17
+  ],
+  "advantage_monotone_in_window_breadth": true,
+  "advantage_by_window": {
+   "11": -5.9,
+   "12": 31.3,
+   "17": 43.1,
+   "18": -10.8
+  },
+  "advantage_exact_p_one_sided": 0.0417,
+  "advantage_reading": "the arm-vs-random advantage increases monotonically with the mean-constant difficulty proxy: it only wins on the broader windows (n=4 ranks, exact one-sided p=0.0417 -- a hint, not a test)"
+ }
+}

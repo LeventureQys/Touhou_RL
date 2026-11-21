@@ -1,0 +1,127 @@
+{
+ "schema": "v431-recheck-r25/1",
+ "partA_c4_across_tapes": {
+  "segment_frames": 600,
+  "segment_seconds": 10.0,
+  "windows": [
+   {
+    "seed": 10,
+    "frame": 8664,
+    "candidates_run": 18,
+    "complete": 18,
+    "judged": true,
+    "survivors": [
+     12
+    ],
+    "n_survivors": 1,
+    "admissible": false,
+    "min_death_offset": 64,
+    "median_death_offset": 309,
+    "max_death_offset": 374,
+    "min_admissible_frames": 375,
+    "min_admissible_seconds": 6.25,
+    "n_survive_180": 10,
+    "hash_checks_all_2165": true,
+    "hash_mismatches_total": 0,
+    "mean_wall_s": 71.9
+   },
+   {
+    "seed": 11,
+    "frame": 8664,
+    "candidates_run": 18,
+    "complete": 18,
+    "judged": true,
+    "survivors": [],
+    "n_survivors": 0,
+    "admissible": true,
+    "min_death_offset": 63,
+    "median_death_offset": 128.5,
+    "max_death_offset": 544,
+    "min_admissible_frames": 545,
+    "min_admissible_seconds": 9.08,
+    "n_survive_180": 7,
+    "hash_checks_all_2165": true,
+    "hash_mismatches_total": 0,
+    "mean_wall_s": 71.9
+   },
+   {
+    "seed": 12,
+    "frame": 8664,
+    "candidates_run": 18,
+    "complete": 18,
+    "judged": true,
+    "survivors": [],
+    "n_survivors": 0,
+    "admissible": true,
+    "min_death_offset": 58,
+    "median_death_offset": 277.5,
+    "max_death_offset": 520,
+    "min_admissible_frames": 521,
+    "min_admissible_seconds": 8.68,
+    "n_survive_180": 13,
+    "hash_checks_all_2165": true,
+    "hash_mismatches_total": 0,
+    "mean_wall_s": 72.6
+   }
+  ],
+  "n_windows": 3,
+  "n_judged": 3,
+  "n_admissible": 2,
+  "admissible_seeds": [
+   11,
+   12
+  ],
+  "rejected_seeds": [
+   10
+  ],
+  "partial_seeds": [],
+  "all_judged_admissible": false,
+  "all_admissible": false,
+  "verdict": "2 of 3 judged windows admissible (admissible seeds [11, 12], rejected [10], partial []); admissibility is window-specific, not a regime property"
+ },
+ "partB_observation_channel": {
+  "state_fields": [
+   "frame",
+   "stage",
+   "replay_frame",
+   "gameplay_frame",
+   "score",
+   "graze",
+   "deaths",
+   "lives_remaining",
+   "bombs_remaining",
+   "player_power",
+   "player_x",
+   "player_y",
+   "player_z",
+   "player_state",
+   "rng_seed",
+   "stage_generation",
+   "gui_input",
+   "point_items_collected",
+   "time_orbs",
+   "youkai_gauge",
+   "clock_time",
+   "point_item_value",
+   "character",
+   "shot_type",
+   "difficulty"
+  ],
+  "state_field_count": 25,
+  "state_has_bullet_or_boss_field": false,
+  "bullet_like_fields": [],
+  "child_snapshot_verbs": [
+   "HAZARDS",
+   "PLAYER",
+   "EVENTS",
+   "HUD"
+  ],
+  "prereg_arm_a_description": "player position, power, boss HP, nearest-bullet geometry",
+  "gap": "STATE exposes player position/resources only; it carries no bullet or boss field. A bullet-aware D-state arm needs the HAZARDS channel, and HAZARDS is listed among the CHILD snapshot verbs - its availability on the env-role session used here is NOT established.",
+  "options": [
+   "A-STATE: build the arm from the 25 STATE fields only; cheap, no new plumbing, but blind to bullets - it can only learn 'where not to stand'",
+   "A-HAZARDS: probe whether an env-role session answers HAZARDS; if it does, the arm can see bullets, but this needs one cheap engine probe first"
+  ],
+  "status": "open - not resolved in this round"
+ }
+}

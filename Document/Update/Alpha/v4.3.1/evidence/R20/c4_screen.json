@@ -1,0 +1,771 @@
+{
+ "schema": "v431-recheck-r20/1",
+ "segment_frames": 180,
+ "segment_s": 6.0,
+ "rule": "a state is admissible iff none of the 18 constant actions survives the whole segment; C-const-best is the longest-surviving constant",
+ "counts": {
+  "states_screened": 4,
+  "states_complete": 4,
+  "admissible": 0,
+  "admissible_train": 0,
+  "admissible_dev": 0,
+  "admissible_rate": 0.0,
+  "errors": 0
+ },
+ "gate": {
+  "S1b_min_required_each_side": 4,
+  "S1b_train_ok": false,
+  "S1b_dev_ok": false,
+  "S1b_triggered": true
+ },
+ "admissible_states": [],
+ "states": [
+  {
+   "state_index": 0,
+   "split": "train",
+   "seed": 3042,
+   "decision_frame": 2010,
+   "complete_18": true,
+   "n_constants_run": 18,
+   "n_survivors_180": 7,
+   "surviving_candidates": [
+    6,
+    7,
+    11,
+    12,
+    13,
+    15,
+    16
+   ],
+   "admissible": false,
+   "best_constant": 6,
+   "best_constant_survival_frames": 180,
+   "best_constant_survival_s": 6.0,
+   "const_detail": {
+    "0": {
+     "terminal": "first_death",
+     "first_death_frame": 2041,
+     "first_death_offset": 31,
+     "alive_120": false,
+     "alive_180": false,
+     "frames_executed": 31,
+     "wall_s": 15.656
+    },
+    "1": {
+     "terminal": "first_death",
+     "first_death_frame": 2039,
+     "first_death_offset": 29,
+     "alive_120": false,
+     "alive_180": false,
+     "frames_executed": 29,
+     "wall_s": 15.552
+    },
+    "2": {
+     "terminal": "first_death",
+     "first_death_frame": 2045,
+     "first_death_offset": 35,
+     "alive_120": false,
+     "alive_180": false,
+     "frames_executed": 35,
+     "wall_s": 15.94
+    },
+    "3": {
+     "terminal": "first_death",
+     "first_death_frame": 2044,
+     "first_death_offset": 34,
+     "alive_120": false,
+     "alive_180": false,
+     "frames_executed": 34,
+     "wall_s": 15.901
+    },
+    "4": {
+     "terminal": "first_death",
+     "first_death_frame": 2057,
+     "first_death_offset": 47,
+     "alive_120": false,
+     "alive_180": false,
+     "frames_executed": 47,
+     "wall_s": 15.796
+    },
+    "5": {
+     "terminal": "first_death",
+     "first_death_frame": 2043,
+     "first_death_offset": 33,
+     "alive_120": false,
+     "alive_180": false,
+     "frames_executed": 33,
+     "wall_s": 15.807
+    },
+    "6": {
+     "terminal": null,
+     "first_death_frame": null,
+     "first_death_offset": null,
+     "alive_120": true,
+     "alive_180": true,
+     "frames_executed": 180,
+     "wall_s": 16.998
+    },
+    "7": {
+     "terminal": null,
+     "first_death_frame": null,
+     "first_death_offset": null,
+     "alive_120": true,
+     "alive_180": true,
+     "frames_executed": 180,
+     "wall_s": 17.078
+    },
+    "8": {
+     "terminal": "first_death",
+     "first_death_frame": 2039,
+     "first_death_offset": 29,
+     "alive_120": false,
+     "alive_180": false,
+     "frames_executed": 29,
+     "wall_s": 15.684
+    },
+    "9": {
+     "terminal": "first_death",
+     "first_death_frame": 2041,
+     "first_death_offset": 31,
+     "alive_120": false,
+     "alive_180": false,
+     "frames_executed": 31,
+     "wall_s": 15.785
+    },
+    "10": {
+     "terminal": "first_death",
+     "first_death_frame": 2039,
+     "first_death_offset": 29,
+     "alive_120": false,
+     "alive_180": false,
+     "frames_executed": 29,
+     "wall_s": 15.59
+    },
+    "11": {
+     "terminal": null,
+     "first_death_frame": null,
+     "first_death_offset": null,
+     "alive_120": true,
+     "alive_180": true,
+     "frames_executed": 180,
+     "wall_s": 17.009
+    },
+    "12": {
+     "terminal": null,
+     "first_death_frame": null,
+     "first_death_offset": null,
+     "alive_120": true,
+     "alive_180": true,
+     "frames_executed": 180,
+     "wall_s": 16.733
+    },
+    "13": {
+     "terminal": null,
+     "first_death_frame": null,
+     "first_death_offset": null,
+     "alive_120": true,
+     "alive_180": true,
+     "frames_executed": 180,
+     "wall_s": 17.223
+    },
+    "14": {
+     "terminal": "first_death",
+     "first_death_frame": 2091,
+     "first_death_offset": 81,
+     "alive_120": false,
+     "alive_180": false,
+     "frames_executed": 81,
+     "wall_s": 16.374
+    },
+    "15": {
+     "terminal": null,
+     "first_death_frame": null,
+     "first_death_offset": null,
+     "alive_120": true,
+     "alive_180": true,
+     "frames_executed": 180,
+     "wall_s": 16.909
+    },
+    "16": {
+     "terminal": null,
+     "first_death_frame": null,
+     "first_death_offset": null,
+     "alive_120": true,
+     "alive_180": true,
+     "frames_executed": 180,
+     "wall_s": 17.043
+    },
+    "17": {
+     "terminal": "first_death",
+     "first_death_frame": 2040,
+     "first_death_offset": 30,
+     "alive_120": false,
+     "alive_180": false,
+     "frames_executed": 30,
+     "wall_s": 15.773
+    }
+   }
+  },
+  {
+   "state_index": 1,
+   "split": "train",
+   "seed": 3042,
+   "decision_frame": 1980,
+   "complete_18": true,
+   "n_constants_run": 18,
+   "n_survivors_180": 8,
+   "surviving_candidates": [
+    2,
+    3,
+    4,
+    6,
+    7,
+    8,
+    15,
+    16
+   ],
+   "admissible": false,
+   "best_constant": 2,
+   "best_constant_survival_frames": 180,
+   "best_constant_survival_s": 6.0,
+   "const_detail": {
+    "0": {
+     "terminal": "first_death",
+     "first_death_frame": 2051,
+     "first_death_offset": 71,
+     "alive_120": false,
+     "alive_180": false,
+     "frames_executed": 71,
+     "wall_s": 15.784
+    },
+    "1": {
+     "terminal": "first_death",
+     "first_death_frame": 2017,
+     "first_death_offset": 37,
+     "alive_120": false,
+     "alive_180": false,
+     "frames_executed": 37,
+     "wall_s": 15.554
+    },
+    "2": {
+     "terminal": null,
+     "first_death_frame": null,
+     "first_death_offset": null,
+     "alive_120": true,
+     "alive_180": true,
+     "frames_executed": 180,
+     "wall_s": 16.77
+    },
+    "3": {
+     "terminal": null,
+     "first_death_frame": null,
+     "first_death_offset": null,
+     "alive_120": true,
+     "alive_180": true,
+     "frames_executed": 180,
+     "wall_s": 16.983
+    },
+    "4": {
+     "terminal": null,
+     "first_death_frame": null,
+     "first_death_offset": null,
+     "alive_120": true,
+     "alive_180": true,
+     "frames_executed": 180,
+     "wall_s": 17.201
+    },
+    "5": {
+     "terminal": "first_death",
+     "first_death_frame": 2027,
+     "first_death_offset": 47,
+     "alive_120": false,
+     "alive_180": false,
+     "frames_executed": 47,
+     "wall_s": 15.739
+    },
+    "6": {
+     "terminal": null,
+     "first_death_frame": null,
+     "first_death_offset": null,
+     "alive_120": true,
+     "alive_180": true,
+     "frames_executed": 180,
+     "wall_s": 16.945
+    },
+    "7": {
+     "terminal": null,
+     "first_death_frame": null,
+     "first_death_offset": null,
+     "alive_120": true,
+     "alive_180": true,
+     "frames_executed": 180,
+     "wall_s": 16.95
+    },
+    "8": {
+     "terminal": null,
+     "first_death_frame": null,
+     "first_death_offset": null,
+     "alive_120": true,
+     "alive_180": true,
+     "frames_executed": 180,
+     "wall_s": 16.774
+    },
+    "9": {
+     "terminal": "first_death",
+     "first_death_frame": 2051,
+     "first_death_offset": 71,
+     "alive_120": false,
+     "alive_180": false,
+     "frames_executed": 71,
+     "wall_s": 16.011
+    },
+    "10": {
+     "terminal": "first_death",
+     "first_death_frame": 2047,
+     "first_death_offset": 67,
+     "alive_120": false,
+     "alive_180": false,
+     "frames_executed": 67,
+     "wall_s": 15.767
+    },
+    "11": {
+     "terminal": "first_death",
+     "first_death_frame": 2026,
+     "first_death_offset": 46,
+     "alive_120": false,
+     "alive_180": false,
+     "frames_executed": 46,
+     "wall_s": 15.719
+    },
+    "12": {
+     "terminal": "first_death",
+     "first_death_frame": 2018,
+     "first_death_offset": 38,
+     "alive_120": false,
+     "alive_180": false,
+     "frames_executed": 38,
+     "wall_s": 15.975
+    },
+    "13": {
+     "terminal": "first_death",
+     "first_death_frame": 2024,
+     "first_death_offset": 44,
+     "alive_120": false,
+     "alive_180": false,
+     "frames_executed": 44,
+     "wall_s": 16.208
+    },
+    "14": {
+     "terminal": "first_death",
+     "first_death_frame": 2036,
+     "first_death_offset": 56,
+     "alive_120": false,
+     "alive_180": false,
+     "frames_executed": 56,
+     "wall_s": 16.143
+    },
+    "15": {
+     "terminal": null,
+     "first_death_frame": null,
+     "first_death_offset": null,
+     "alive_120": true,
+     "alive_180": true,
+     "frames_executed": 180,
+     "wall_s": 17.114
+    },
+    "16": {
+     "terminal": null,
+     "first_death_frame": null,
+     "first_death_offset": null,
+     "alive_120": true,
+     "alive_180": true,
+     "frames_executed": 180,
+     "wall_s": 17.157
+    },
+    "17": {
+     "terminal": "first_death",
+     "first_death_frame": 2027,
+     "first_death_offset": 47,
+     "alive_120": false,
+     "alive_180": false,
+     "frames_executed": 47,
+     "wall_s": 16.071
+    }
+   }
+  },
+  {
+   "state_index": 3,
+   "split": "train",
+   "seed": 3042,
+   "decision_frame": 1920,
+   "complete_18": true,
+   "n_constants_run": 18,
+   "n_survivors_180": 9,
+   "surviving_candidates": [
+    0,
+    3,
+    5,
+    6,
+    7,
+    9,
+    14,
+    15,
+    16
+   ],
+   "admissible": false,
+   "best_constant": 0,
+   "best_constant_survival_frames": 180,
+   "best_constant_survival_s": 6.0,
+   "const_detail": {
+    "0": {
+     "terminal": null,
+     "first_death_frame": null,
+     "first_death_offset": null,
+     "alive_120": true,
+     "alive_180": true,
+     "frames_executed": 180,
+     "wall_s": 16.655
+    },
+    "1": {
+     "terminal": "first_death",
+     "first_death_frame": 2027,
+     "first_death_offset": 107,
+     "alive_120": false,
+     "alive_180": false,
+     "frames_executed": 107,
+     "wall_s": 16.106
+    },
+    "2": {
+     "terminal": "first_death",
+     "first_death_frame": 1972,
+     "first_death_offset": 52,
+     "alive_120": false,
+     "alive_180": false,
+     "frames_executed": 52,
+     "wall_s": 15.411
+    },
+    "3": {
+     "terminal": null,
+     "first_death_frame": null,
+     "first_death_offset": null,
+     "alive_120": true,
+     "alive_180": true,
+     "frames_executed": 180,
+     "wall_s": 16.823
+    },
+    "4": {
+     "terminal": "first_death",
+     "first_death_frame": 1974,
+     "first_death_offset": 54,
+     "alive_120": false,
+     "alive_180": false,
+     "frames_executed": 54,
+     "wall_s": 15.209
+    },
+    "5": {
+     "terminal": null,
+     "first_death_frame": null,
+     "first_death_offset": null,
+     "alive_120": true,
+     "alive_180": true,
+     "frames_executed": 180,
+     "wall_s": 16.756
+    },
+    "6": {
+     "terminal": null,
+     "first_death_frame": null,
+     "first_death_offset": null,
+     "alive_120": true,
+     "alive_180": true,
+     "frames_executed": 180,
+     "wall_s": 16.524
+    },
+    "7": {
+     "terminal": null,
+     "first_death_frame": null,
+     "first_death_offset": null,
+     "alive_120": true,
+     "alive_180": true,
+     "frames_executed": 180,
+     "wall_s": 16.582
+    },
+    "8": {
+     "terminal": "first_death",
+     "first_death_frame": 2069,
+     "first_death_offset": 149,
+     "alive_120": true,
+     "alive_180": false,
+     "frames_executed": 149,
+     "wall_s": 16.401
+    },
+    "9": {
+     "terminal": null,
+     "first_death_frame": null,
+     "first_death_offset": null,
+     "alive_120": true,
+     "alive_180": true,
+     "frames_executed": 180,
+     "wall_s": 16.523
+    },
+    "10": {
+     "terminal": "first_death",
+     "first_death_frame": 1971,
+     "first_death_offset": 51,
+     "alive_120": false,
+     "alive_180": false,
+     "frames_executed": 51,
+     "wall_s": 15.584
+    },
+    "11": {
+     "terminal": "first_death",
+     "first_death_frame": 1986,
+     "first_death_offset": 66,
+     "alive_120": false,
+     "alive_180": false,
+     "frames_executed": 66,
+     "wall_s": 16.406
+    },
+    "12": {
+     "terminal": "first_death",
+     "first_death_frame": 1980,
+     "first_death_offset": 60,
+     "alive_120": false,
+     "alive_180": false,
+     "frames_executed": 60,
+     "wall_s": 15.392
+    },
+    "13": {
+     "terminal": "first_death",
+     "first_death_frame": 1996,
+     "first_death_offset": 76,
+     "alive_120": false,
+     "alive_180": false,
+     "frames_executed": 76,
+     "wall_s": 15.827
+    },
+    "14": {
+     "terminal": null,
+     "first_death_frame": null,
+     "first_death_offset": null,
+     "alive_120": true,
+     "alive_180": true,
+     "frames_executed": 180,
+     "wall_s": 17.235
+    },
+    "15": {
+     "terminal": null,
+     "first_death_frame": null,
+     "first_death_offset": null,
+     "alive_120": true,
+     "alive_180": true,
+     "frames_executed": 180,
+     "wall_s": 16.336
+    },
+    "16": {
+     "terminal": null,
+     "first_death_frame": null,
+     "first_death_offset": null,
+     "alive_120": true,
+     "alive_180": true,
+     "frames_executed": 180,
+     "wall_s": 16.674
+    },
+    "17": {
+     "terminal": "first_death",
+     "first_death_frame": 1988,
+     "first_death_offset": 68,
+     "alive_120": false,
+     "alive_180": false,
+     "frames_executed": 68,
+     "wall_s": 15.866
+    }
+   }
+  },
+  {
+   "state_index": 165,
+   "split": "dev",
+   "seed": 3083,
+   "decision_frame": 1486,
+   "complete_18": true,
+   "n_constants_run": 18,
+   "n_survivors_180": 6,
+   "surviving_candidates": [
+    1,
+    4,
+    8,
+    10,
+    13,
+    17
+   ],
+   "admissible": false,
+   "best_constant": 1,
+   "best_constant_survival_frames": 180,
+   "best_constant_survival_s": 6.0,
+   "const_detail": {
+    "0": {
+     "terminal": "first_death",
+     "first_death_frame": 1569,
+     "first_death_offset": 83,
+     "alive_120": false,
+     "alive_180": false,
+     "frames_executed": 83,
+     "wall_s": 12.881
+    },
+    "1": {
+     "terminal": null,
+     "first_death_frame": null,
+     "first_death_offset": null,
+     "alive_120": true,
+     "alive_180": true,
+     "frames_executed": 180,
+     "wall_s": 13.689
+    },
+    "2": {
+     "terminal": "first_death",
+     "first_death_frame": 1541,
+     "first_death_offset": 55,
+     "alive_120": false,
+     "alive_180": false,
+     "frames_executed": 55,
+     "wall_s": 12.844
+    },
+    "3": {
+     "terminal": "first_death",
+     "first_death_frame": 1591,
+     "first_death_offset": 105,
+     "alive_120": false,
+     "alive_180": false,
+     "frames_executed": 105,
+     "wall_s": 13.067
+    },
+    "4": {
+     "terminal": null,
+     "first_death_frame": null,
+     "first_death_offset": null,
+     "alive_120": true,
+     "alive_180": true,
+     "frames_executed": 180,
+     "wall_s": 13.385
+    },
+    "5": {
+     "terminal": "first_death",
+     "first_death_frame": 1569,
+     "first_death_offset": 83,
+     "alive_120": false,
+     "alive_180": false,
+     "frames_executed": 83,
+     "wall_s": 14.005
+    },
+    "6": {
+     "terminal": "first_death",
+     "first_death_frame": 1555,
+     "first_death_offset": 69,
+     "alive_120": false,
+     "alive_180": false,
+     "frames_executed": 69,
+     "wall_s": 12.485
+    },
+    "7": {
+     "terminal": "first_death",
+     "first_death_frame": 1555,
+     "first_death_offset": 69,
+     "alive_120": false,
+     "alive_180": false,
+     "frames_executed": 69,
+     "wall_s": 12.763
+    },
+    "8": {
+     "terminal": null,
+     "first_death_frame": null,
+     "first_death_offset": null,
+     "alive_120": true,
+     "alive_180": true,
+     "frames_executed": 180,
+     "wall_s": 13.703
+    },
+    "9": {
+     "terminal": "first_death",
+     "first_death_frame": 1569,
+     "first_death_offset": 83,
+     "alive_120": false,
+     "alive_180": false,
+     "frames_executed": 83,
+     "wall_s": 12.463
+    },
+    "10": {
+     "terminal": null,
+     "first_death_frame": null,
+     "first_death_offset": null,
+     "alive_120": true,
+     "alive_180": true,
+     "frames_executed": 180,
+     "wall_s": 13.537
+    },
+    "11": {
+     "terminal": "first_death",
+     "first_death_frame": 1528,
+     "first_death_offset": 42,
+     "alive_120": false,
+     "alive_180": false,
+     "frames_executed": 42,
+     "wall_s": 11.996
+    },
+    "12": {
+     "terminal": "first_death",
+     "first_death_frame": 1599,
+     "first_death_offset": 113,
+     "alive_120": false,
+     "alive_180": false,
+     "frames_executed": 113,
+     "wall_s": 14.89
+    },
+    "13": {
+     "terminal": null,
+     "first_death_frame": null,
+     "first_death_offset": null,
+     "alive_120": true,
+     "alive_180": true,
+     "frames_executed": 180,
+     "wall_s": 13.247
+    },
+    "14": {
+     "terminal": "first_death",
+     "first_death_frame": 1569,
+     "first_death_offset": 83,
+     "alive_120": false,
+     "alive_180": false,
+     "frames_executed": 83,
+     "wall_s": 13.119
+    },
+    "15": {
+     "terminal": "first_death",
+     "first_death_frame": 1555,
+     "first_death_offset": 69,
+     "alive_120": false,
+     "alive_180": false,
+     "frames_executed": 69,
+     "wall_s": 12.43
+    },
+    "16": {
+     "terminal": "first_death",
+     "first_death_frame": 1555,
+     "first_death_offset": 69,
+     "alive_120": false,
+     "alive_180": false,
+     "frames_executed": 69,
+     "wall_s": 14.121
+    },
+    "17": {
+     "terminal": null,
+     "first_death_frame": null,
+     "first_death_offset": null,
+     "alive_120": true,
+     "alive_180": true,
+     "frames_executed": 180,
+     "wall_s": 13.298
+    }
+   }
+  }
+ ],
+ "errors": []
+}

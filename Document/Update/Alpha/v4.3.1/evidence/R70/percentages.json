@@ -1,0 +1,220 @@
+{
+ "schema": "v431-recheck-r70/1",
+ "question": "报告里的百分比有多少是**自带分子分母**（可自证）的？其中有没有算错的？不自证的那几个关键百分比另用原始数据核。",
+ "counts": {
+  "percentages_total": 197,
+  "self_checking": 18,
+  "self_checking_that_hold": 18,
+  "self_checking_that_fail": 0,
+  "not_self_checking": 179
+ },
+ "self_checking": [
+  {
+   "doc": "ROUTE_RECHECK_2026-11-15.md",
+   "line": 30,
+   "form": "pct_then_frac",
+   "fraction": "6/80",
+   "stated_pct": 7.5,
+   "implied_pct": 7.5,
+   "holds": true,
+   "text": "| 5 | 以实际任务成功率判独立 dev 起点；有信号后再扩到 10 段／≥30 holdout／≥3 种子 | §5.6、§4.2v、§4.2eee、§4.2fff；`R37`/`R38`/`R75`/`R76` | **第 1 步已完成、第 2 步未触发"
+  },
+  {
+   "doc": "ROUTE_RECHECK_2026-11-15.md",
+   "line": 30,
+   "form": "pct_then_frac",
+   "fraction": "1/80",
+   "stated_pct": 1.25,
+   "implied_pct": 1.25,
+   "holds": true,
+   "text": "| 5 | 以实际任务成功率判独立 dev 起点；有信号后再扩到 10 段／≥30 holdout／≥3 种子 | §5.6、§4.2v、§4.2eee、§4.2fff；`R37`/`R38`/`R75`/`R76` | **第 1 步已完成、第 2 步未触发"
+  },
+  {
+   "doc": "ROUTE_RECHECK_2026-11-15.md",
+   "line": 470,
+   "form": "frac_then_pct",
+   "fraction": "0/219",
+   "stated_pct": 0.0,
+   "implied_pct": 0.0,
+   "holds": true,
+   "text": "| go 前缀内 `play_gray` **逐字节相同**的样本 | **0 / 219 （0.0%）** | `R2` |"
+  },
+  {
+   "doc": "ROUTE_RECHECK_2026-11-15.md",
+   "line": 471,
+   "form": "frac_then_pct",
+   "fraction": "0/219",
+   "stated_pct": 0.0,
+   "implied_pct": 0.0,
+   "holds": true,
+   "text": "| 前缀内 `global_rgb` 逐字节相同的样本 | **0 / 219 （0.0%）** | `R2` |"
+  },
+  {
+   "doc": "ROUTE_RECHECK_2026-11-15.md",
+   "line": 472,
+   "form": "frac_then_pct",
+   "fraction": "120/219",
+   "stated_pct": 54.8,
+   "implied_pct": 54.79,
+   "holds": true,
+   "text": "| 前缀内 `hud_gray` 逐字节相同的样本 | 120 / 219 （54.8%） | `R2`（HUD 部分静态） |"
+  },
+  {
+   "doc": "ROUTE_RECHECK_2026-11-15.md",
+   "line": 473,
+   "form": "frac_then_pct",
+   "fraction": "219/219",
+   "stated_pct": 100.0,
+   "implied_pct": 100.0,
+   "holds": true,
+   "text": "| 前缀内 `executed_key_history` 相同 | **219 / 219 （100%）** | `R2` |"
+  },
+  {
+   "doc": "ROUTE_RECHECK_2026-11-15.md",
+   "line": 478,
+   "form": "frac_then_pct",
+   "fraction": "342/880",
+   "stated_pct": 38.9,
+   "implied_pct": 38.86,
+   "holds": true,
+   "text": "| 后缀内 `move` 相同 | 342/880（38.9%），**低于**多数类先验 42.6% | `R3` |"
+  },
+  {
+   "doc": "ROUTE_RECHECK_2026-11-15.md",
+   "line": 479,
+   "form": "frac_then_pct",
+   "fraction": "167/880",
+   "stated_pct": 19.0,
+   "implied_pct": 18.98,
+   "holds": true,
+   "text": "| 后缀内 `executed_key_history` 同位置相同 | 167/880（19.0%），**共享取值仅 55 种** | `R2` |"
+  },
+  {
+   "doc": "ROUTE_RECHECK_2026-11-15.md",
+   "line": 559,
+   "form": "frac_eq_pct",
+   "fraction": "184/200",
+   "stated_pct": 92.0,
+   "implied_pct": 92.0,
+   "holds": true,
+   "text": "| `0 < \\|S\\| < 18` 且 18 臂全有效的状态 | **184 / 200 = 92%**（Wilson 95% [0.874, 0.950]） |"
+  },
+  {
+   "doc": "ROUTE_RECHECK_2026-11-15.md",
+   "line": 606,
+   "form": "frac_eq_pct",
+   "fraction": "81/84",
+   "stated_pct": 96.4,
+   "implied_pct": 96.43,
+   "holds": true,
+   "text": "| 选中状态里\"学生自己那个动作会死\" | **81/84 = 96.4%** | 与 A1 `safe_set` 的**定义一致**（该集合按定义就是\"学生续跑会死\"）；**这是定义性一致，不是对挑选意图的独立检验** |"
+  },
+  {
+   "doc": "ROUTE_RECHECK_2026-11-15.md",
+   "line": 646,
+   "form": "frac_eq_pct",
+   "fraction": "18/18",
+   "stated_pct": 100.0,
+   "implied_pct": 100.0,
+   "holds": true,
+   "text": "| 18 个生死判定与冻结 A1 表的一致性 | **18 / 18 = 100%** |"
+  },
+  {
+   "doc": "ROUTE_RECHECK_2026-11-15.md",
+   "line": 1715,
+   "form": "pct_then_frac",
+   "fraction": "28/80",
+   "stated_pct": 35.0,
+   "implied_pct": 35.0,
+   "holds": true,
+   "text": "P(臂 A 的 episode > 随机的中位数)  = 35%    (28/80)"
+  },
+  {
+   "doc": "ROUTE_RECHECK_2026-11-15.md",
+   "line": 1716,
+   "form": "pct_then_frac",
+   "fraction": "56/80",
+   "stated_pct": 70.0,
+   "implied_pct": 70.0,
+   "holds": true,
+   "text": "P(随机的 episode > 臂 A 的中位数)  = 70%    (56/80)"
+  },
+  {
+   "doc": "ROUTE_RECHECK_2026-11-15.md",
+   "line": 2235,
+   "form": "frac_then_pct",
+   "fraction": "342/880",
+   "stated_pct": 38.9,
+   "implied_pct": 38.86,
+   "holds": true,
+   "text": "只把**自带分子分母**的算作可核（`342/880（38.9%）`、`184/200 = 92%` 这种形式）："
+  },
+  {
+   "doc": "ROUTE_RECHECK_2026-11-15.md",
+   "line": 2235,
+   "form": "frac_eq_pct",
+   "fraction": "184/200",
+   "stated_pct": 92.0,
+   "implied_pct": 92.0,
+   "holds": true,
+   "text": "只把**自带分子分母**的算作可核（`342/880（38.9%）`、`184/200 = 92%` 这种形式）："
+  },
+  {
+   "doc": "ROUTE_RECHECK_2026-11-15.md",
+   "line": 2259,
+   "form": "frac_then_pct",
+   "fraction": "342/880",
+   "stated_pct": 38.9,
+   "implied_pct": 38.86,
+   "holds": true,
+   "text": "- \"42.6%\"是多数类先验，`342/880（38.9%）` 是一致率——**两个量**。"
+  },
+  {
+   "doc": "ROUTE_RECHECK_2026-11-15.md",
+   "line": 2721,
+   "form": "pct_then_frac",
+   "fraction": "56/80",
+   "stated_pct": 70.0,
+   "implied_pct": 70.0,
+   "holds": true,
+   "text": "| C35 | （我自己的 §5.5 / §9）\"臂 A 相对随机有约 6 倍存活率优势\" | **只在比均值时成立**。中位数 **48.0 vs 63.0（−15.0）**、Q1 **36.0 vs 44.6（−8.6）** 都是**随机更好**；**70"
+  },
+  {
+   "doc": "ROUTE_RECHECK_2026-11-15.md",
+   "line": 2721,
+   "form": "pct_then_frac",
+   "fraction": "28/80",
+   "stated_pct": 35.0,
+   "implied_pct": 35.0,
+   "holds": true,
+   "text": "| C35 | （我自己的 §5.5 / §9）\"臂 A 相对随机有约 6 倍存活率优势\" | **只在比均值时成立**。中位数 **48.0 vs 63.0（−15.0）**、Q1 **36.0 vs 44.6（−8.6）** 都是**随机更好**；**70"
+  }
+ ],
+ "failures": [],
+ "first_version_note": "第一版按\"同行最近的 a/b\"配对，报了 25 处不符——**全部是假的**：百分比与那个分数讲的是不同的量（\"约 20% 训练数据\"旁边是\"0/219 相同\"；\"95% CI\"被当成 95% 与 5/5 配对）。**按距离配对不是证据。**",
+ "manual_checks": {
+  "median_crossings": {
+   "arm_median": 48.0,
+   "cfair_median": 63.0,
+   "arm_above_cfair_median": "28/80 = 0.350",
+   "cfair_above_arm_median": "56/80 = 0.700",
+   "report_says": "35% 与 70%",
+   "holds": true
+  },
+  "survival_rates": {
+   "6/80": 7.5,
+   "1/80": 1.25,
+   "report_says": "7.5% 与 1.25%",
+   "holds": true
+  },
+  "train_survival": {
+   "5/128": 3.91,
+   "report_says": "3.91%",
+   "holds": true
+  }
+ },
+ "verdict": {
+  "all_self_checking_hold": true,
+  "reading": "共 197 个百分比，其中 **18 个自带分子分母**（可自证）：18 个成立、**0 个不成立**。另外 179 个**不自证**——不是错，但读者无法从文本核对。对三个最载重的百分比（70%/35% 中位数穿越、7.5%/1.25% 存活率、3.91% 训练跑满率）直接用原始 episode 复核，全部成立。**第一版按\"同行最近分数\"配对报了 25 处不符，全部是假的**——百分比与那个分数讲的是不同的量。**按距离配对不是证据，这条已写进结果。**"
+ }
+}

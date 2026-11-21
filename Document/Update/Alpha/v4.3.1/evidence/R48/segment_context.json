@@ -1,0 +1,37 @@
+{
+ "schema": "v431-recheck-r48/1",
+ "question": "does every admissibility RESULT in the deliverables carry its segment length?",
+ "rule": {
+  "result_pattern": "(\\d+\\s*个合格|\\d+\\s*/\\s*\\d+\\s*合格|合格率\\s*=?\\s*\\d|合格\\s*\\*\\*\\d|\\d+\\s*个窗口.*合格|\\d+\\s*个状态.*合格)",
+  "segment_markers": [
+   "3 s",
+   "3s",
+   "10 s",
+   "10s",
+   "180 帧",
+   "600 帧",
+   "段长",
+   "521",
+   "552",
+   "8.68",
+   "9.2 s",
+   "300 决策"
+  ],
+  "length_agnostic_exemptions": [
+   "S1b",
+   "每侧 ≥4",
+   "合格状态 < 4",
+   "停止条件"
+  ],
+  "why": "at 3 s none of the nine dense windows is admissible; at 10 s eight are, so a result without its segment length can be read as the opposite"
+ },
+ "counts": {
+  "lines_mentioning_admissibility": 56,
+  "violations": 0
+ },
+ "violations": [],
+ "verdict": {
+  "clean": true,
+  "reading": "56 lines mention admissibility; every one that states a RESULT also carries its segment length"
+ }
+}

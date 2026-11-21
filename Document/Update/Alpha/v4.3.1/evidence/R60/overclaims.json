@@ -1,0 +1,112 @@
+{
+ "schema": "v431-recheck-r60/1",
+ "question": "B 类：结论强于证据。专项通读 + 逐条复核",
+ "method": "delegated full read, then every item re-verified against the files by the lead agent",
+ "counts": {
+  "found": 11,
+  "confirmed": 10,
+  "uncertain": 1,
+  "fixed": 11
+ },
+ "items": [
+  {
+   "id": 1,
+   "where": "§4.2t 结论",
+   "claim": "只要 1.6 h 评测就能推到可判定；本轮最重要",
+   "problem": "条件式外推被写成结论；R38 当场推翻（p=0.1167）",
+   "fixed": "撤回该评价，标明条件与实测结果"
+  },
+  {
+   "id": 2,
+   "where": "§4.2t",
+   "claim": "首次全长存活说明确实学到了可迁移的东西",
+   "problem": "n=1，与运气不可区分",
+   "fixed": "改为与两种解释都一致、无法区分"
+  },
+  {
+   "id": 3,
+   "where": "§4.2s",
+   "claim": "多窗口训练确实有效",
+   "problem": "+8.8 未检验；唯一检验过的是 −14.6（CI 跨 0）",
+   "fixed": "去掉\"确实有效\"，并列出被检验的负结果"
+  },
+  {
+   "id": 4,
+   "where": "§2.5",
+   "claim": "唯一的胜利完全是共同前缀造成的",
+   "problem": "前后对比同时改变 n 与类别比例，非配对消融",
+   "fixed": "改为\"去掉后消失\"+ 声明混杂"
+  },
+  {
+   "id": 5,
+   "where": "§4.2n/§4.2o/§5.3",
+   "claim": "唯一的办法 / 唯一杠杆 / 客户端可省 0",
+   "problem": "只测了一种客户端优化（STEP 批量 0.992×）",
+   "fixed": "限定为\"已测的客户端优化里\""
+  },
+  {
+   "id": 6,
+   "where": "PREREG rev AA",
+   "claim": "seed18 确实最难",
+   "problem": "4 个秩、n=20，且报告自己说排名不成立",
+   "fixed": "降级为\"排序一致、不构成检验\""
+  },
+  {
+   "id": 7,
+   "where": "§4.2c",
+   "claim": "96.4% 证明选的是学生真实失败状态",
+   "problem": "safe_set 按定义就是会死，属定义性一致",
+   "fixed": "改为定义性一致，非独立检验"
+  },
+  {
+   "id": 8,
+   "where": "SELF_AUDIT §6",
+   "claim": "mtime 证明 third_party 未被触碰",
+   "problem": "mtime 可保留/改写；且存在既有 dirty 标记",
+   "fixed": "改为\"未见改动迹象\""
+  },
+  {
+   "id": 9,
+   "where": "§4.2v",
+   "claim": "样本量是唯一缺口",
+   "problem": "R38 显示缺口不止样本量（效应腰斩、随机也成一次）",
+   "fixed": "改为\"当时已知的缺口\""
+  },
+  {
+   "id": 10,
+   "where": "§4.2t",
+   "claim": "均值 78.7 完全由那一个 300 拉动",
+   "problem": "算术不成立：去掉 300 后均值 54.1，300 贡献 24.6（31%）",
+   "fixed": "改为定量贡献"
+  },
+  {
+   "id": 11,
+   "where": "§6.3 N 行",
+   "claim": "journal.jsonl 不是我写的",
+   "problem": "不确定：mtime 只能排除那一次探针",
+   "fixed": "改为\"非本次探针所改\""
+  }
+ ],
+ "arithmetic_check": {
+  "values": [
+   43,
+   45,
+   46,
+   47,
+   48,
+   49,
+   50,
+   73,
+   86,
+   300
+  ],
+  "mean": 78.7,
+  "mean_without_300": 54.11,
+  "contribution": 24.59,
+  "verdict": "the word 'completely' was arithmetically false"
+ },
+ "verdict": {
+  "all_items_independently_verified": true,
+  "reading": "11 处 B 类里 10 处确认、1 处判为不确定并按弱表述改。最危险的是第 1 条：它把\"若……保持\"的条件式外推写成\"只要……就能\"，并标为\"本轮最重要的可执行结论\"，而下一节自己的实测就推翻了它——**这类错误会直接推动一个不该做的决策**。第 10 条则是可验算的算术错误：去掉那个 300 之后均值是 54.1，所以\"完全由它拉动\"不成立。"
+ }
+}

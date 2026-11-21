@@ -1,0 +1,552 @@
+{
+ "schema": "v431-recheck-r1/1",
+ "generated_at_utc": "2026-11-15T22:30:20.607404+00:00",
+ "note": "R1 recovers the original split and recomputes baselines. It trains no model and makes no capability claim.",
+ "corpora": {
+  "seed12": {
+   "present": true,
+   "path": ".tmp_v430_o2\\o2-strided",
+   "n_samples": 1099,
+   "labels_sha256": "405a400ffc181bd774db7572e45c9f4794cf88faf3d0bf50fb38db9a3ada0f6b",
+   "move_histogram": [
+    468,
+    28,
+    203,
+    172,
+    32,
+    21,
+    78,
+    76,
+    21
+   ],
+   "focus_histogram": [
+    922,
+    177
+   ],
+   "shoot_histogram": [
+    0,
+    1099
+   ],
+   "bomb_histogram": [
+    1099,
+    0
+   ],
+   "tape_provenance_values": [
+    "leading_history",
+    "recorded_slot"
+   ],
+   "is_blank_count": 0,
+   "decision_index_min": 6,
+   "decision_index_max": 6594,
+   "decision_index_unique": 1099,
+   "decision_frame_min": 12,
+   "decision_frame_max": 13188,
+   "decision_gap_unique": [
+    6
+   ],
+   "label_keys": [
+    "alpha_mean",
+    "bomb",
+    "cand",
+    "decision",
+    "decision_frame",
+    "focus",
+    "frames",
+    "global_rgb_mean",
+    "is_blank",
+    "mask",
+    "move",
+    "shoot",
+    "tape_provenance"
+   ]
+  },
+  "seed10": {
+   "present": true,
+   "path": ".tmp_v430_o2\\o2-stride-seed10",
+   "n_samples": 1099,
+   "labels_sha256": "32e9067e8a6587aa36914b7e82b11c65345821864000f3e421c5f4eb4ac8b478",
+   "move_histogram": [
+    467,
+    28,
+    153,
+    197,
+    20,
+    21,
+    92,
+    97,
+    24
+   ],
+   "focus_histogram": [
+    930,
+    169
+   ],
+   "shoot_histogram": [
+    0,
+    1099
+   ],
+   "bomb_histogram": [
+    1099,
+    0
+   ],
+   "tape_provenance_values": [
+    "leading_history",
+    "recorded_slot"
+   ],
+   "is_blank_count": 0,
+   "decision_index_min": 6,
+   "decision_index_max": 6594,
+   "decision_index_unique": 1099,
+   "decision_frame_min": 12,
+   "decision_frame_max": 13188,
+   "decision_gap_unique": [
+    6
+   ],
+   "label_keys": [
+    "alpha_mean",
+    "bomb",
+    "cand",
+    "decision",
+    "decision_frame",
+    "focus",
+    "frames",
+    "global_rgb_mean",
+    "is_blank",
+    "mask",
+    "move",
+    "shoot",
+    "tape_provenance"
+   ]
+  },
+  "seed11": {
+   "present": true,
+   "path": ".tmp_v430_o2\\o2-stride-seed11",
+   "n_samples": 1099,
+   "labels_sha256": "235bf7a6c981fa4d2eb05e62ff695a82b1b41de6b6ad8b97db64948c5e7bc879",
+   "move_histogram": [
+    484,
+    18,
+    156,
+    192,
+    30,
+    13,
+    86,
+    94,
+    26
+   ],
+   "focus_histogram": [
+    942,
+    157
+   ],
+   "shoot_histogram": [
+    0,
+    1099
+   ],
+   "bomb_histogram": [
+    1099,
+    0
+   ],
+   "tape_provenance_values": [
+    "leading_history",
+    "recorded_slot"
+   ],
+   "is_blank_count": 0,
+   "decision_index_min": 6,
+   "decision_index_max": 6594,
+   "decision_index_unique": 1099,
+   "decision_frame_min": 12,
+   "decision_frame_max": 13188,
+   "decision_gap_unique": [
+    6
+   ],
+   "label_keys": [
+    "alpha_mean",
+    "bomb",
+    "cand",
+    "decision",
+    "decision_frame",
+    "focus",
+    "frames",
+    "global_rgb_mean",
+    "is_blank",
+    "mask",
+    "move",
+    "shoot",
+    "tape_provenance"
+   ]
+  }
+ },
+ "split_recovery": {
+  "n_total": 1099,
+  "claimed_in_route_review": "880 train / 219 validation",
+  "evaluated": {
+   "int_0p8": {
+    "source": "small_model_test.py:64, small_model_test_d4.py:64, cross_tape_honest.py:69, cross_tape_generalisation.py:97",
+    "n_train": 879,
+    "n_val": 220,
+    "cut_value": 879,
+    "train_index_sha256": "f67a99c2ce080498f38517adbda4105165ba9bd5d86a058ba9546531416af1b5",
+    "val_index_sha256": "2a527248de4ba1da1d5b21e065e1e4ea20d1c73c06bc48e9d73f4473eabf0bbb",
+    "val_class_counts": [
+     99,
+     6,
+     34,
+     38,
+     2,
+     5,
+     15,
+     16,
+     5
+    ],
+    "train_class_counts": [
+     369,
+     22,
+     169,
+     134,
+     30,
+     16,
+     63,
+     60,
+     16
+    ],
+    "matches_claimed_880_219": false
+   },
+   "fixed_200": {
+    "source": "bc_generalisation.py:33",
+    "n_train": 899,
+    "n_val": 200,
+    "matches_claimed_880_219": false
+   },
+   "random_200": {
+    "source": "bc_split_comparison.py:95-96 (random arm)",
+    "n_train": 899,
+    "n_val": 200,
+    "matches_claimed_880_219": false
+   }
+  },
+  "arithmetic": {
+   "int(1099*0.8)": 879,
+   "1099 - int(1099*0.8)": 220,
+   "1099 - 219": 880,
+   "note": "no expression in the triage scripts yields 880/219"
+  }
+ },
+ "documented_vs_recomputed": {
+  "documented": {
+   "old_formula_neg_log_468_over_1099": 0.8537,
+   "route_review_full_seed12_prior_on_seed12": 1.685989,
+   "route_review_full_seed12_prior_on_seed10": 1.707497,
+   "uniform_9_class_ce": 2.1972245773362196,
+   "split": "880 / 219"
+  },
+  "recomputed": {
+   "seed12_full_histogram": [
+    468,
+    28,
+    203,
+    172,
+    32,
+    21,
+    78,
+    76,
+    21
+   ],
+   "seed12_full_n": 1099,
+   "neg_log_full_majority": 0.8536876584859746,
+   "full_seed12_entropy": 1.6859891972159187,
+   "seed12_full_prior_on_seed10_full": 1.7074972455584387
+  },
+  "verdict": {
+   "old_formula_is_not_a_cross_entropy": true,
+   "full_corpus_histogram_includes_validation_labels": true
+  }
+ },
+ "baselines": {
+  "seed12_val__move": {
+   "k": 9,
+   "n_train": 879,
+   "n_eval": 220,
+   "train_counts": [
+    369,
+    22,
+    169,
+    134,
+    30,
+    16,
+    63,
+    60,
+    16
+   ],
+   "eval_counts": [
+    99,
+    6,
+    34,
+    38,
+    2,
+    5,
+    15,
+    16,
+    5
+   ],
+   "train_share": [
+    0.4197952218430034,
+    0.02502844141069397,
+    0.19226393629124006,
+    0.15244596131968147,
+    0.034129692832764506,
+    0.01820250284414107,
+    0.07167235494880546,
+    0.06825938566552901,
+    0.01820250284414107
+   ],
+   "eval_share": [
+    0.45,
+    0.02727272727272727,
+    0.15454545454545454,
+    0.17272727272727273,
+    0.00909090909090909,
+    0.022727272727272728,
+    0.06818181818181818,
+    0.07272727272727272,
+    0.022727272727272728
+   ],
+   "classes_absent_in_train": [],
+   "eval_samples_in_absent_classes": 0,
+   "train_majority_class": 0,
+   "train_majority_share": 0.4197952218430034,
+   "ce_train_mle": 1.6586285019450413,
+   "ce_train_laplace": 1.6588595283520182,
+   "ce_uniform": 2.1972245773362187,
+   "ce_train_entropy": 1.6937027205545863,
+   "majority_accuracy": 0.45,
+   "old_formula_neg_log_train_majority": 0.8679882536446498,
+   "old_formula_neg_log_full_majority": 0.8536876584859746
+  },
+  "seed12_val__focus": {
+   "k": 2,
+   "n_train": 879,
+   "n_eval": 220,
+   "train_counts": [
+    732,
+    147
+   ],
+   "eval_counts": [
+    190,
+    30
+   ],
+   "train_share": [
+    0.8327645051194539,
+    0.16723549488054607
+   ],
+   "eval_share": [
+    0.8636363636363636,
+    0.13636363636363635
+   ],
+   "classes_absent_in_train": [],
+   "eval_samples_in_absent_classes": 0,
+   "train_majority_class": 0,
+   "train_majority_share": 0.8327645051194539,
+   "ce_train_mle": 0.4019154647033075,
+   "ce_train_laplace": 0.4020846642480557,
+   "ce_uniform": 0.6931471805599454,
+   "ce_train_entropy": 0.45147553878170227,
+   "majority_accuracy": 0.8636363636363636,
+   "old_formula_neg_log_train_majority": 0.1830043837238655,
+   "old_formula_neg_log_full_majority": 0.17561073084702752
+  },
+  "seed12_val__shoot": {
+   "k": 2,
+   "n_train": 879,
+   "n_eval": 220,
+   "train_counts": [
+    0,
+    879
+   ],
+   "eval_counts": [
+    0,
+    220
+   ],
+   "train_share": [
+    0.0,
+    1.0
+   ],
+   "eval_share": [
+    0.0,
+    1.0
+   ],
+   "classes_absent_in_train": [
+    0
+   ],
+   "eval_samples_in_absent_classes": 0,
+   "train_majority_class": 1,
+   "train_majority_share": 1.0,
+   "ce_train_mle": -0.0,
+   "ce_train_laplace": 0.0011357184639273798,
+   "ce_uniform": 0.6931471805599454,
+   "ce_train_entropy": -0.0,
+   "majority_accuracy": 1.0,
+   "old_formula_neg_log_train_majority": -0.0,
+   "old_formula_neg_log_full_majority": -0.0
+  },
+  "seed12_val__bomb": {
+   "k": 2,
+   "n_train": 879,
+   "n_eval": 220,
+   "train_counts": [
+    879,
+    0
+   ],
+   "eval_counts": [
+    220,
+    0
+   ],
+   "train_share": [
+    1.0,
+    0.0
+   ],
+   "eval_share": [
+    1.0,
+    0.0
+   ],
+   "classes_absent_in_train": [
+    1
+   ],
+   "eval_samples_in_absent_classes": 0,
+   "train_majority_class": 0,
+   "train_majority_share": 1.0,
+   "ce_train_mle": -0.0,
+   "ce_train_laplace": 0.0011357184639273798,
+   "ce_uniform": 0.6931471805599454,
+   "ce_train_entropy": -0.0,
+   "majority_accuracy": 1.0,
+   "old_formula_neg_log_train_majority": -0.0,
+   "old_formula_neg_log_full_majority": -0.0
+  },
+  "seed10_full__move": {
+   "k": 9,
+   "n_train": 879,
+   "n_eval": 1099,
+   "train_counts": [
+    369,
+    22,
+    169,
+    134,
+    30,
+    16,
+    63,
+    60,
+    16
+   ],
+   "eval_counts": [
+    467,
+    28,
+    153,
+    197,
+    20,
+    21,
+    92,
+    97,
+    24
+   ],
+   "train_share": [
+    0.4197952218430034,
+    0.02502844141069397,
+    0.19226393629124006,
+    0.15244596131968147,
+    0.034129692832764506,
+    0.01820250284414107,
+    0.07167235494880546,
+    0.06825938566552901,
+    0.01820250284414107
+   ],
+   "eval_share": [
+    0.4249317561419472,
+    0.025477707006369428,
+    0.1392174704276615,
+    0.17925386715195632,
+    0.018198362147406732,
+    0.01910828025477707,
+    0.08371246587807098,
+    0.08826205641492266,
+    0.02183803457688808
+   ],
+   "classes_absent_in_train": [],
+   "eval_samples_in_absent_classes": 0,
+   "train_majority_class": 0,
+   "train_majority_share": 0.4197952218430034,
+   "ce_train_mle": 1.7125879705403937,
+   "ce_train_laplace": 1.7124818549427772,
+   "ce_uniform": 2.1972245773362196,
+   "ce_train_entropy": 1.6937027205545863,
+   "majority_accuracy": 0.4249317561419472,
+   "old_formula_neg_log_train_majority": 0.8679882536446498,
+   "old_formula_neg_log_full_majority": 0.8612128990979558
+  },
+  "seed10_suffix__move": {
+   "k": 9,
+   "n_train": 879,
+   "n_eval": 880,
+   "train_counts": [
+    369,
+    22,
+    169,
+    134,
+    30,
+    16,
+    63,
+    60,
+    16
+   ],
+   "eval_counts": [
+    384,
+    27,
+    129,
+    142,
+    19,
+    18,
+    71,
+    68,
+    22
+   ],
+   "train_share": [
+    0.4197952218430034,
+    0.02502844141069397,
+    0.19226393629124006,
+    0.15244596131968147,
+    0.034129692832764506,
+    0.01820250284414107,
+    0.07167235494880546,
+    0.06825938566552901,
+    0.01820250284414107
+   ],
+   "eval_share": [
+    0.43636363636363634,
+    0.03068181818181818,
+    0.14659090909090908,
+    0.16136363636363638,
+    0.02159090909090909,
+    0.020454545454545454,
+    0.08068181818181819,
+    0.07727272727272727,
+    0.025
+   ],
+   "classes_absent_in_train": [],
+   "eval_samples_in_absent_classes": 0,
+   "train_majority_class": 0,
+   "train_majority_share": 0.4197952218430034,
+   "ce_train_mle": 1.7122411041437948,
+   "ce_train_laplace": 1.7118070529436342,
+   "ce_uniform": 2.1972245773362187,
+   "ce_train_entropy": 1.6937027205545863,
+   "majority_accuracy": 0.43636363636363634,
+   "old_formula_neg_log_train_majority": 0.8679882536446498,
+   "old_formula_neg_log_full_majority": 0.8484355169376646
+  }
+ },
+ "cross_tape_prefix": {
+  "common_cand_prefix_len": 219,
+  "seed10_n": 1099,
+  "seed10_suffix_n": 880,
+  "seed12_n_minus_prefix": 880,
+  "fraction_of_tape": 0.19927206551410373
+ }
+}

@@ -1,0 +1,88 @@
+{
+ "schema": "v431-recheck-r51/1",
+ "question": "C-const-best 是\"在同一批数据上挑最强\"的神谕，还是可部署的基线？",
+ "windows": {
+  "train": [
+   13,
+   14,
+   15,
+   16
+  ],
+  "dev": [
+   11,
+   12,
+   17,
+   18
+  ]
+ },
+ "candidates": 18,
+ "baselines": {
+  "oracle_per_window_best": {
+   "mean": 258.8,
+   "per_window": {
+    "11": 272.0,
+    "12": 260.0,
+    "17": 245.5,
+    "18": 257.5
+   },
+   "kind": "ORACLE",
+   "why": "每窗口在 18 个里挑最大的，且在同一窗口上评分——需要知道窗口身份与该窗口全部 18 个动作的结果，任何真实策略都不可能预先知道"
+  },
+  "const_chosen_on_train": {
+   "mean": 172.4,
+   "constant_index": 12,
+   "train_means_ranked": [
+    {
+     "cand": 12,
+     "train_mean": 186.6
+    },
+    {
+     "cand": 13,
+     "train_mean": 142.8
+    },
+    {
+     "cand": 11,
+     "train_mean": 141.0
+    },
+    {
+     "cand": 3,
+     "train_mean": 135.5
+    },
+    {
+     "cand": 15,
+     "train_mean": 133.0
+    }
+   ],
+   "per_window": {
+    "11": 258.0,
+    "12": 180.5,
+    "17": 221.0,
+    "18": 30.0
+   },
+   "kind": "DEPLOYABLE",
+   "why": "只在 4 个 train 窗口上挑一个动作，然后在 4 个 dev 窗口上评分——这是策略能真正承诺的东西"
+  },
+  "const_pool_mean_dev": {
+   "mean": 111.7,
+   "kind": "DEPLOYABLE",
+   "why": "18 个恒定动作在 dev 上的池均值，等价于\"均匀随机挑一个动作一直用\""
+  }
+ },
+ "oracle_inflation": {
+  "oracle_minus_deployable": 86.4,
+  "factor": 1.5
+ },
+ "verdict": {
+  "s2_right_half_is_falsifiable": null,
+  "reading": "`C-const-best` 是神谕（258.8 vs 可部署 172.4）；臂 A 的 94.1 既低于神谕（-164.7）也低于可部署版本（-78.3）。 所以 `S2` 的右半（臂 A ≤ `C-const-best`）**对任何非神谕方法都会触发**，它作为停止条件是不可证伪的——报告用它来论证\"不启动像素臂\"是**误用**，真正挡住像素臂的是 `_pair_cand` 与 `PARK`，不是这个触发。",
+  "s2_right_half_is_falsifiable_with_oracle": false,
+  "s2_right_half_is_falsifiable_with_deployable": true,
+  "arm_beats_deployable_constant": false
+ },
+ "arm_a_mean": 94.1,
+ "comparisons": {
+  "vs_oracle": -164.7,
+  "vs_train_chosen": -78.3,
+  "vs_pool": -17.6
+ }
+}

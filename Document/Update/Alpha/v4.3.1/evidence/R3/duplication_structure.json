@@ -1,0 +1,110 @@
+{
+ "schema": "v431-recheck-r3/1",
+ "label_identity": {
+  "seed12__seed10": {
+   "prefix": 219,
+   "move_identical": 219,
+   "focus_identical": 219,
+   "cand_identical": 219,
+   "suffix_move_identical": 342,
+   "suffix_n": 880
+  },
+  "seed12__seed11": {
+   "prefix": 225,
+   "move_identical": 225,
+   "focus_identical": 225,
+   "cand_identical": 225,
+   "suffix_move_identical": 333,
+   "suffix_n": 874
+  },
+  "seed10__seed11": {
+   "prefix": 219,
+   "move_identical": 219,
+   "focus_identical": 219,
+   "cand_identical": 219,
+   "suffix_move_identical": 300,
+   "suffix_n": 880
+  }
+ },
+ "prefix_pixel_structure_play_gray": {
+  "seed12__seed10": {
+   "mean_abs_diff": 0.6218298878662482,
+   "max_abs_diff": 117.05479452054794,
+   "pixels_differing_at_all": 0.054616789995107634,
+   "pixels_off_by_ge_1": 0.054616789995107634,
+   "pixels_off_by_ge_8": 0.018999173138861705,
+   "pixels_off_by_ge_32": 0.004433177558980213,
+   "n_samples": 219,
+   "regions_3x3_last_channel": [
+    0.0,
+    0.0,
+    0.003853462837837838,
+    0.0,
+    0.008697916666666666,
+    0.008697916666666666,
+    0.0,
+    0.0,
+    0.0
+   ],
+   "samples_with_zero_pixels_differing": 0.0
+  },
+  "seed12__seed11": {
+   "mean_abs_diff": 0.7232061735284391,
+   "max_abs_diff": 119.29333333333334,
+   "pixels_differing_at_all": 0.05206989914021164,
+   "pixels_off_by_ge_1": 0.05206989914021164,
+   "pixels_off_by_ge_8": 0.01927003244874339,
+   "pixels_off_by_ge_32": 0.0058065941220238095,
+   "n_samples": 225,
+   "regions_3x3_last_channel": [
+    0.0,
+    0.0,
+    0.003220016891891892,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+   ],
+   "samples_with_zero_pixels_differing": 0.0
+  },
+  "seed10__seed11": {
+   "mean_abs_diff": 0.6186482561596272,
+   "max_abs_diff": 115.78995433789954,
+   "pixels_differing_at_all": 0.05346809747193684,
+   "pixels_off_by_ge_1": 0.05346809747193684,
+   "pixels_off_by_ge_8": 0.018539956248980756,
+   "pixels_off_by_ge_32": 0.004415048830248423,
+   "n_samples": 219,
+   "regions_3x3_last_channel": [
+    0.0,
+    0.0,
+    0.0070734797297297295,
+    0.0,
+    0.008697916666666666,
+    0.008697916666666666,
+    0.0,
+    0.0,
+    0.0
+   ],
+   "samples_with_zero_pixels_differing": 0.0
+  }
+ },
+ "random_split_optimism": {
+  "n_val": 220,
+  "n_val_sampled": 44,
+  "val_to_nearest_train_sample_mean_abs_diff": 20.64781737224364,
+  "val_to_random_train_sample_mean_abs_diff": 39.80945101651278,
+  "ratio": 0.518666217318069,
+  "note": "stride-6 grid: the temporally nearest sample is 6 frames away, so a random split puts every validation sample next to a near twin"
+ },
+ "cross_tape_distance": {
+  "pair": "seed12__seed10",
+  "prefix_n": 219,
+  "prefix_same_index_mean_abs_diff": 0.6218298878662482,
+  "control_random_pair_mean_abs_diff": 34.28635476334869,
+  "min_over_prefix": 0.002365838913690476,
+  "max_over_prefix": 4.374441964285714
+ }
+}

@@ -1,0 +1,75 @@
+{
+ "schema": "v431-recheck-r43/1",
+ "question": "is the corrected baseline sensitive to the smoothing scheme the original review demanded be pre-fixed?",
+ "requirement_quoted": "缺失类别的平滑方案须预先固定 (ROUTE_REVIEW_2026-11-15.md:73)",
+ "rows": [
+  {
+   "baseline": "seed12_val__move",
+   "classes": 9,
+   "missing_in_train": 0,
+   "ce_train_mle": 1.6586285019450413,
+   "ce_train_laplace": 1.6588595283520182,
+   "abs_delta": 0.00023103,
+   "degenerate": false
+  },
+  {
+   "baseline": "seed12_val__focus",
+   "classes": 2,
+   "missing_in_train": 0,
+   "ce_train_mle": 0.4019154647033075,
+   "ce_train_laplace": 0.4020846642480557,
+   "abs_delta": 0.0001692,
+   "degenerate": false
+  },
+  {
+   "baseline": "seed12_val__shoot",
+   "classes": 2,
+   "missing_in_train": 1,
+   "ce_train_mle": -0.0,
+   "ce_train_laplace": 0.0011357184639273798,
+   "abs_delta": 0.00113572,
+   "degenerate": true
+  },
+  {
+   "baseline": "seed12_val__bomb",
+   "classes": 2,
+   "missing_in_train": 1,
+   "ce_train_mle": -0.0,
+   "ce_train_laplace": 0.0011357184639273798,
+   "abs_delta": 0.00113572,
+   "degenerate": true
+  },
+  {
+   "baseline": "seed10_full__move",
+   "classes": 9,
+   "missing_in_train": 0,
+   "ce_train_mle": 1.7125879705403937,
+   "ce_train_laplace": 1.7124818549427772,
+   "abs_delta": 0.00010612,
+   "degenerate": false
+  },
+  {
+   "baseline": "seed10_suffix__move",
+   "classes": 9,
+   "missing_in_train": 0,
+   "ce_train_mle": 1.7122411041437948,
+   "ce_train_laplace": 1.7118070529436342,
+   "abs_delta": 0.00043405,
+   "degenerate": false
+  }
+ ],
+ "summary": {
+  "move_heads_no_missing_classes": true,
+  "max_abs_delta_on_move": 0.00043405,
+  "degenerate_heads": [
+   "seed12_val__shoot",
+   "seed12_val__bomb"
+  ],
+  "smallest_claimed_effect_nats": 0.0673,
+  "effect_over_smoothing_uncertainty": 155.1
+ },
+ "verdict": {
+  "baseline_robust_to_smoothing": true,
+  "reading": "the head the report quotes (`move`) has no class missing from train, so MLE is well-defined, and Laplace changes it by at most 4.34e-04 nats -- about 155.1x smaller than the smallest claimed effect (0.0673 nats). The only heads where the choice matters are `shoot`/`bomb`, which are degenerate (a single label value) and already reported as zero-signal instrument properties"
+ }
+}

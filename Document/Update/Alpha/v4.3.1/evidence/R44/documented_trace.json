@@ -1,0 +1,215 @@
+{
+ "schema": "v431-recheck-r44/1",
+ "question": "does every value in §2.6's 文档 column exist under v4.3.0, and does the batch-mean re-execution reproduce it?",
+ "method": {
+  "corpus": "Document/Update/Alpha/v4.3.0/**/*.{md,json,jsonl}",
+  "files_scanned": 75,
+  "match": "literal substring, then compare to 4 decimal places"
+ },
+ "rows": [
+  {
+   "row": "ActorPolicy seed12-train move",
+   "documented_value": "0.0293",
+   "documented_in": [
+    "Document\\Update\\Alpha\\v4.3.0\\ROUTE_AND_CONCLUSIONS.md",
+    "Document\\Update\\Alpha\\v4.3.0\\W12_HANDOFF.md",
+    "Document\\Update\\Alpha\\v4.3.0\\evidence\\FINAL_STATUS.md",
+    "Document\\Update\\Alpha\\v4.3.0\\evidence\\GATE_TABLE.md",
+    "Document\\Update\\Alpha\\v4.3.0\\evidence\\W03_DATA_LEG.md"
+   ],
+   "is_documented": true,
+   "head": "move",
+   "eval_set": "seed12_train",
+   "reproduced_batch_mean": 0.029261,
+   "matches_to_4dp": true
+  },
+  {
+   "row": "ActorPolicy seed12-val move",
+   "documented_value": "1.8807",
+   "documented_in": [
+    "Document\\Update\\Alpha\\v4.3.0\\ROUTE_AND_CONCLUSIONS.md",
+    "Document\\Update\\Alpha\\v4.3.0\\W12_HANDOFF.md",
+    "Document\\Update\\Alpha\\v4.3.0\\evidence\\FINAL_STATUS.md",
+    "Document\\Update\\Alpha\\v4.3.0\\evidence\\GATE_TABLE.md",
+    "Document\\Update\\Alpha\\v4.3.0\\evidence\\W03_DATA_LEG.md"
+   ],
+   "is_documented": true,
+   "head": "move",
+   "eval_set": "seed12_val",
+   "reproduced_batch_mean": 1.880707,
+   "matches_to_4dp": true
+  },
+  {
+   "row": "ActorPolicy seed10 move",
+   "documented_value": "1.8837",
+   "documented_in": [
+    "Document\\Update\\Alpha\\v4.3.0\\ROUTE_AND_CONCLUSIONS.md",
+    "Document\\Update\\Alpha\\v4.3.0\\W12_HANDOFF.md",
+    "Document\\Update\\Alpha\\v4.3.0\\evidence\\FINAL_STATUS.md",
+    "Document\\Update\\Alpha\\v4.3.0\\evidence\\GATE_TABLE.md",
+    "Document\\Update\\Alpha\\v4.3.0\\evidence\\W03_DATA_LEG.md"
+   ],
+   "is_documented": true,
+   "head": "move",
+   "eval_set": "seed10_full",
+   "reproduced_batch_mean": 1.883694,
+   "matches_to_4dp": true
+  },
+  {
+   "row": "ActorPolicy seed10 focus",
+   "documented_value": "0.6461",
+   "documented_in": [
+    "Document\\Update\\Alpha\\v4.3.0\\evidence\\W03_DATA_LEG.md"
+   ],
+   "is_documented": true,
+   "head": "focus",
+   "eval_set": "seed10_full",
+   "reproduced_batch_mean": 0.646054,
+   "matches_to_4dp": true
+  },
+  {
+   "row": "ActorPolicy seed10-val focus",
+   "documented_value": "0.5589",
+   "documented_in": [],
+   "is_documented": false,
+   "head": "focus",
+   "eval_set": "seed12_val",
+   "reproduced_batch_mean": 0.558894,
+   "matches_to_4dp": true
+  },
+  {
+   "row": "16x seed12-train move",
+   "documented_value": "1.2827",
+   "documented_in": [
+    "Document\\Update\\Alpha\\v4.3.0\\ROUTE_AND_CONCLUSIONS.md",
+    "Document\\Update\\Alpha\\v4.3.0\\W12_HANDOFF.md",
+    "Document\\Update\\Alpha\\v4.3.0\\evidence\\FINAL_STATUS.md",
+    "Document\\Update\\Alpha\\v4.3.0\\evidence\\W03_DATA_LEG.md"
+   ],
+   "is_documented": true,
+   "head": "move",
+   "eval_set": "seed12_train",
+   "reproduced_batch_mean": 1.282733,
+   "matches_to_4dp": true
+  },
+  {
+   "row": "16x seed12-val move",
+   "documented_value": "1.5306",
+   "documented_in": [
+    "Document\\Update\\Alpha\\v4.3.0\\ROUTE_AND_CONCLUSIONS.md",
+    "Document\\Update\\Alpha\\v4.3.0\\W12_HANDOFF.md",
+    "Document\\Update\\Alpha\\v4.3.0\\evidence\\FINAL_STATUS.md",
+    "Document\\Update\\Alpha\\v4.3.0\\evidence\\GATE_TABLE.md",
+    "Document\\Update\\Alpha\\v4.3.0\\evidence\\W03_DATA_LEG.md"
+   ],
+   "is_documented": true,
+   "head": "move",
+   "eval_set": "seed12_val",
+   "reproduced_batch_mean": 1.530596,
+   "matches_to_4dp": true
+  },
+  {
+   "row": "16x seed10 move",
+   "documented_value": "1.6020",
+   "documented_in": [
+    "Document\\Update\\Alpha\\v4.3.0\\ROUTE_AND_CONCLUSIONS.md",
+    "Document\\Update\\Alpha\\v4.3.0\\ROUTE_REVIEW_2026-11-15.md",
+    "Document\\Update\\Alpha\\v4.3.0\\W12_HANDOFF.md",
+    "Document\\Update\\Alpha\\v4.3.0\\evidence\\FINAL_STATUS.md",
+    "Document\\Update\\Alpha\\v4.3.0\\evidence\\GATE_TABLE.md",
+    "Document\\Update\\Alpha\\v4.3.0\\evidence\\W03_DATA_LEG.md"
+   ],
+   "is_documented": true,
+   "head": "move",
+   "eval_set": "seed10_full",
+   "reproduced_batch_mean": 1.602032,
+   "matches_to_4dp": true
+  },
+  {
+   "row": "4x seed12-train move",
+   "documented_value": "0.1558",
+   "documented_in": [
+    "Document\\Update\\Alpha\\v4.3.0\\ROUTE_AND_CONCLUSIONS.md",
+    "Document\\Update\\Alpha\\v4.3.0\\W12_HANDOFF.md",
+    "Document\\Update\\Alpha\\v4.3.0\\evidence\\FINAL_STATUS.md",
+    "Document\\Update\\Alpha\\v4.3.0\\evidence\\GATE_TABLE.md",
+    "Document\\Update\\Alpha\\v4.3.0\\evidence\\W03_DATA_LEG.md"
+   ],
+   "is_documented": true,
+   "head": "move",
+   "eval_set": "seed12_train",
+   "reproduced_batch_mean": 0.155834,
+   "matches_to_4dp": true
+  },
+  {
+   "row": "4x seed12-val move",
+   "documented_value": "2.1299",
+   "documented_in": [
+    "Document\\Update\\Alpha\\v4.3.0\\ROUTE_AND_CONCLUSIONS.md",
+    "Document\\Update\\Alpha\\v4.3.0\\W12_HANDOFF.md",
+    "Document\\Update\\Alpha\\v4.3.0\\evidence\\FINAL_STATUS.md",
+    "Document\\Update\\Alpha\\v4.3.0\\evidence\\GATE_TABLE.md",
+    "Document\\Update\\Alpha\\v4.3.0\\evidence\\W03_DATA_LEG.md"
+   ],
+   "is_documented": true,
+   "head": "move",
+   "eval_set": "seed12_val",
+   "reproduced_batch_mean": 2.129872,
+   "matches_to_4dp": true
+  },
+  {
+   "row": "4x seed10 move",
+   "documented_value": "2.1161",
+   "documented_in": [
+    "Document\\Update\\Alpha\\v4.3.0\\ROUTE_AND_CONCLUSIONS.md",
+    "Document\\Update\\Alpha\\v4.3.0\\W12_HANDOFF.md",
+    "Document\\Update\\Alpha\\v4.3.0\\evidence\\CORRECTIONS.md",
+    "Document\\Update\\Alpha\\v4.3.0\\evidence\\FINAL_STATUS.md",
+    "Document\\Update\\Alpha\\v4.3.0\\evidence\\GATE_TABLE.md",
+    "Document\\Update\\Alpha\\v4.3.0\\evidence\\W03_DATA_LEG.md"
+   ],
+   "is_documented": true,
+   "head": "move",
+   "eval_set": "seed10_full",
+   "reproduced_batch_mean": 2.116118,
+   "matches_to_4dp": true
+  },
+  {
+   "row": "4x seed10-suffix move",
+   "documented_value": "2.5070",
+   "documented_in": [
+    "Document\\Update\\Alpha\\v4.3.0\\ROUTE_AND_CONCLUSIONS.md",
+    "Document\\Update\\Alpha\\v4.3.0\\evidence\\CORRECTIONS.md",
+    "Document\\Update\\Alpha\\v4.3.0\\evidence\\FINAL_STATUS.md",
+    "Document\\Update\\Alpha\\v4.3.0\\evidence\\GATE_TABLE.md",
+    "Document\\Update\\Alpha\\v4.3.0\\evidence\\W03_DATA_LEG.md"
+   ],
+   "is_documented": true,
+   "head": "move",
+   "eval_set": "seed10_suffix",
+   "reproduced_batch_mean": 2.506951,
+   "matches_to_4dp": true
+  }
+ ],
+ "counts": {
+  "rows": 12,
+  "documented": 11,
+  "documented_and_exact": 11,
+  "documented_but_mismatch": 0,
+  "not_documented_at_all": 1
+ },
+ "fabricated_rows": [
+  "ActorPolicy seed10-val focus"
+ ],
+ "correction": {
+  "was": "§2.6 说 10 项逐位一致、2 项近似",
+  "now": "11 项文档数字全部逐位一致、0 项近似；另有 1 项（ActorPolicy seed10-val focus）的文档值在 v4.3.0 里不存在——那是我自己的 batch-mean 值被写进了文档列",
+  "cause": "§2.6 的注看的是 R6 的 sample_mean_ce，而 batch_mean_ce 一直就在同一个证据文件里；0.5589 正是 batch-mean 的 val focus 值，被误当作文档值",
+  "class": "与 C14 同一类缺陷（自己的数字冒充文档值），记为 C29"
+ },
+ "verdict": {
+  "all_documented_numbers_reproduce": true,
+  "one_row_is_mine": true,
+  "reading": "every one of the documented numbers reproduces exactly under batch-mean averaging (11/11); the twelfth row was never documented -- it is my own value, so §2.6 over-claimed in the wrong direction (it should have said more exact, not fewer) and contained one fabricated source"
+ }
+}

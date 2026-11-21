@@ -1,0 +1,65 @@
+{
+ "schema": "v431-recheck-r74/1",
+ "question": "臂 B/C 的阻断到底卡在哪：是\"策略不能提交两个 mask\"，还是\"到不了起始帧\"？",
+ "code_facts": {
+  "source": "touhou_rl\\v420\\counterfactual.py",
+  "pair_cand_definition": [
+   {
+    "line": 3924,
+    "text": "def _pair_cand(self, mask: int, previous_mask: int, frame: int) -> int:"
+   }
+  ],
+  "pair_cand_call_sites": [
+   {
+    "line": 3989,
+    "text": "self.history.push(self._pair_cand(int(mask), int(previous_mask), frame))",
+    "enclosing_function": "replay"
+   }
+  ],
+  "pair_cand_only_in_replay": true,
+  "constants_source": {
+   "DECISION_FRAMES": "C.DECISION_FRAMES",
+   "TEACHER_REPLAN_DECISIONS": "1",
+   "COMMIT_FRAMES": "DECISION_FRAMES * TEACHER_REPLAN_DECISIONS"
+  },
+  "constants_runtime": {
+   "DECISION_FRAMES": 2,
+   "TEACHER_REPLAN_DECISIONS": 1,
+   "COMMIT_FRAMES": 2
+  },
+  "replay_counts_hash_mismatch_instead_of_raising": true,
+  "replay_records_first_mismatch_frame": true,
+  "live_arm_commits_one_mask_per_commit_block": true,
+  "live_arm_mask_variable": "mask",
+  "live_arm_block_text": "for _offset in range(COMMIT_FRAMES): |             step_started = time.perf_counter() |             hash_hex, reading, exited, game_over = session.step_frame(ma"
+ },
+ "consequence": {
+  "constraint_target": "录制的磁带前缀（`replay()`），不是实时策略",
+  "live_history_is_pair_consistent_by_construction": "实时臂每个 commit 块只提交一个 mask，并把一个 cand 推进历史，所以它的历史天然满足\"一决策一 mask\"",
+  "real_blocker": "**到不了起始帧**：每条磁带的 prefix 从 frame 92 起就有双 mask 决策，而 `replay()` 在第 92 帧就会抛错。段落在 frame 8,664，绕不过去",
+  "reachable_but_invalid": "把 prefix 换成\"每两帧同 mask\"就可以重放到 8,664——`replay()` 对哈希不符只**计数**不抛错——但那样起始状态就**不是**录像里的那个状态，而\"0 不符\"正是三臂可比的前提"
+ },
+ "unblock_options": [
+  {
+   "option": "save state（引擎存档）",
+   "status": "不可用：没有这个动词"
+  },
+  {
+   "option": "重录一决策一 mask 的干净磁带",
+   "status": "需授权（资产操作）"
+  },
+  {
+   "option": "改用前缀 < 92 帧的段",
+   "status": "帧 92 之前是稀疏早期局面，`C4` 已判 0/4 不合格"
+  },
+  {
+   "option": "替换 prefix 强行重放",
+   "status": "**可到达但无效**：起始状态不是录制状态"
+  }
+ ],
+ "verdict": {
+  "report_wording_is_imprecise": true,
+  "blocker_is_reach_not_submit": true,
+  "reading": "`_pair_cand` **只有一个调用点，且在 `replay()` 里**——它校验的是**录制的磁带前缀**，不是实时策略。而实时臂 **每个 commit 块只提交一个 mask**（`COMMIT_FRAMES = 2 × 1 = 2`），所以它的历史**按构造**就满足\"一决策一 mask\"。**所以阻断不是\"策略不能提交两个 mask\"，而是\"到不了起始帧\"**：每条磁带 prefix 从 frame 92 起有双 mask 决策，`replay()` 在第 92 帧抛错，而段落在 frame 8,664。**并且存在一条\"可到达但无效\"的路**：`replay()` 对哈希不符只**计数**不抛错，所以替换 prefix 能重放到 8,664——但起始状态不再是录像里那个状态，而\"0 不符\"正是三臂可比的前提。**这四条解阻选项的取舍因此是确定的，不是我没试。**"
+ }
+}

@@ -1,0 +1,118 @@
+{
+ "schema": "v431-recheck-r59/1",
+ "question": "跨节逻辑冲突：1,218 条断言覆盖不到的那一类问题",
+ "scope": [
+  "§0",
+  "§4.2r",
+  "§4.2w",
+  "§5.5",
+  "§7.1"
+ ],
+ "found_by_self": [
+  {
+   "id": 1,
+   "where": "§0 结语",
+   "type": "D",
+   "what": "结语仍写\"文档里 10 个 CE 数字\"，而 §2.6/`R44` 已把口径改成 11/11",
+   "fix": "改为 11 个，并注明 `R44` 逐个回源"
+  },
+  {
+   "id": 2,
+   "where": "§0 结语",
+   "type": "D",
+   "what": "结语写\"改用 A1 之后最小实验从 22 h 降到 4–5 h\"，而同一张表第 9 行已判该预算**不成立**",
+   "fix": "改为\"这个预算是我的推断、已被本表第 9 行否决\"，并给出真实路径与实际 13.5 h"
+  },
+  {
+   "id": 3,
+   "where": "§4.2r 标题",
+   "type": "D",
+   "what": "标题断言\"在留出磁带上比随机还差\"（n=20），`R38`（n=80）已把它弱化为不显著",
+   "fix": "标题标 n=20，并在节首加前向说明：数字有效、模态被削弱（见 `C24`）"
+  },
+  {
+   "id": 4,
+   "where": "§4.2w 标题与首句",
+   "type": "A",
+   "what": "写\"28 条更正\"，而更正表已增到 37 条；`R39` 审计现在覆盖 37 行",
+   "fix": "标题去掉数字；正文写\"当时 28 条，现在 37 条\""
+  },
+  {
+   "id": 5,
+   "where": "§5.5 `C-const-best` 行",
+   "type": "F",
+   "what": "仍写\"dev 最强恒定动作 245.5–272.0\"，`R51` 已区分神谕（逐窗口最大，均值 258.8）与可部署（172.4）",
+   "fix": "拆成神谕 258.8（单窗口最大 272.0）+ 可部署 172.4 + 池均值 111.7"
+  },
+  {
+   "id": 6,
+   "where": "§5.5 任务成功率判据行",
+   "type": "B",
+   "what": "写\"存活率在所有臂与基线上都是 0\"，而 `R38` 已测到 `C-fair` **1/80**（`C27`）",
+   "fix": "限定为\"n=20 时都是 0\"，并写明扩到 n=80 后 `C-fair` 也跑成了一次"
+  },
+  {
+   "id": 7,
+   "where": "§7.1 成本表",
+   "type": "A",
+   "what": "表只覆盖 `R1`–`R38`，`R39`–`R57` 的 19 组离线审计不在表内，读者无法从中看出\"13.5 h 里没有新增引擎\"",
+   "fix": "加一行：19 组 + 1 流程步骤、引擎时间 0、1,218 条断言；并在成本句里显式写出"
+  }
+ ],
+ "found_by_delegated_read": {
+  "source": "delegated full-read audit (subagent_fork)",
+  "verified_by_lead_agent": true,
+  "counts": {
+   "total": 24,
+   "A": 12,
+   "B": 2,
+   "C": 3,
+   "D": 2,
+   "E": 1,
+   "F": 4
+  },
+  "key_items": [
+   "SUMMARY 3/4 vs report 2/4 (n=10 leftover) -> FIXED to 2/4",
+   "C22 vs C34 contradiction -> FIXED with cross-reference",
+   "S2 three baseline conventions (272.0 / 172.4+258.8 / footnote 272.0) -> UNIFIED to deployable 172.4",
+   "prereg body is a rev-E frozen snapshot (180 frames, alive@180) -> BANNER + 2 inline notes",
+   "self-justification loop: machine-checked claims not covered by assertions were wrong (line count, assert count, K/C/N) -> FIXED to 2,214 lines / 1,218 asserts",
+   "172.4 is the mean of 4 deterministic values, not n=80; seed18 constant is 30.0 < arm 51.0 -> LABELLED",
+   "paired vs unpaired bootstrap (+14.43 unpaired vs +14.48 paired) -> LABELLED",
+   "C18 mutually-exclusive claim overturned by manual STEP replay -> ANNOTATED",
+   "S4/OEO 4.2o real-gate claim superseded by the oracle finding -> ANNOTATED",
+   "4.2w counts 13+9+5=27 != 37 rows -> FIXED to 23+9+5+0=37"
+  ],
+  "note": "the subagent report was independently re-verified line by line before any fix; every item above was reproduced in the files first"
+ },
+ "counts": {
+  "self": 7,
+  "by_type_self": {
+   "D": 3,
+   "A": 2,
+   "F": 1,
+   "B": 1
+  },
+  "delegated_total": 24,
+  "delegated_by_type": {
+   "A": 12,
+   "B": 2,
+   "C": 3,
+   "D": 2,
+   "E": 1,
+   "F": 4
+  }
+ },
+ "verdict": {
+  "assertion_suite_is_blind_to": [
+   "结语仍写\"文档里 10 个 CE 数字\"，而 §2.6/`R44` 已把口径改成 11/11",
+   "结语写\"改用 A1 之后最小实验从 22 h 降到 4–5 h\"，而同一张表第 9 行已判该预算**不成立**",
+   "标题断言\"在留出磁带上比随机还差\"（n=20），`R38`（n=80）已把它弱化为不显著",
+   "写\"28 条更正\"，而更正表已增到 37 条；`R39` 审计现在覆盖 37 行",
+   "仍写\"dev 最强恒定动作 245.5–272.0\"，`R51` 已区分神谕（逐窗口最大，均值 258.8）与可部署（172.4）",
+   "写\"存活率在所有臂与基线上都是 0\"，而 `R38` 已测到 `C-fair` **1/80**（`C27`）",
+   "表只覆盖 `R1`–`R38`，`R39`–`R57` 的 19 组离线审计不在表内，读者无法从中看出\"13.5 h 里没有新增引擎\""
+  ],
+  "reading": "自读找到 7 处跨节冲突，全部属 D/A/B/F 型：**后文修正了前文的结论，而前文没有回头标注**（`D` 三处）、**计数与口径随轮次变了而文字没变**（`A` 两处）、**绝对化表述强于证据**（`B` 一处）、**同一比较里混用神谕与可部署口径**（`F` 一处）。全部已就地修正。这一类问题**在结构上无法由断言发现**：断言能查\"这个数字是否等于证据\"，查不了\"这句话是否还成立\"。 另由一次**全文通读**（委派，逐条回原文复核后）找到 **24** 处，按类型 A=12 B=2 C=3 D=2 E=1 F=4；其中最要紧的几处（摘要 3/4 vs 2/4、S2 三口径、预注册冻结快照、172.4 的 n=4）已一并修正。"
+ }
+}

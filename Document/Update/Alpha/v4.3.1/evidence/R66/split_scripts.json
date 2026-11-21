@@ -1,0 +1,86 @@
+{
+ "schema": "v431-recheck-r66/1",
+ "question": "「7 个脚本都是用 int(n*0.8)」这个全称断言，逐条列出来还成立吗？",
+ "splits": [
+  {
+   "script": "bc_generalisation.py",
+   "line": 33,
+   "expr": "n_val = 200",
+   "kind": "fixed_n_val"
+  },
+  {
+   "script": "bc_split_comparison.py",
+   "line": 99,
+   "expr": "cut = int(N * 0.8)",
+   "kind": "ratio_0.8"
+  },
+  {
+   "script": "cross_tape_generalisation.py",
+   "line": 97,
+   "expr": "cut = int(n * 0.8)",
+   "kind": "ratio_0.8"
+  },
+  {
+   "script": "cross_tape_honest.py",
+   "line": 69,
+   "expr": "cut = int(len(tr[\"y\"]) * 0.8)",
+   "kind": "ratio_0.8"
+  },
+  {
+   "script": "small_model_test.py",
+   "line": 64,
+   "expr": "cut = int(n * 0.8)",
+   "kind": "ratio_0.8"
+  },
+  {
+   "script": "small_model_test_d4.py",
+   "line": 64,
+   "expr": "cut = int(n * 0.8)",
+   "kind": "ratio_0.8"
+  }
+ ],
+ "counts": {
+  "scripts_with_a_split": 6,
+  "ratio_0.8": 5,
+  "fixed_n_val": 1,
+  "total_scripts_in_triage": 102
+ },
+ "corpora_in_play": [
+  {
+   "script": "cross_tape_generalisation.py",
+   "header": "\"\"\"Cross-tape generalisation: train on seed12, evaluate on seed10/seed11.\n\nThe honest comparison is NOT \"does val loss drop\" but \"does the model beat the\ntrivial majority-class predictor on the unseen tapes\". A BC loss can look low\nwhile being no better than always predicting the most common label — especially\nwhen one class dominates (move=0 is 43% of seed12).\n\nNOT capability evidence: this measu"
+  },
+  {
+   "script": "cross_tape_honest.py",
+   "header": "\"\"\"Honest cross-tape test: exclude the identical prefix seed10 shares with seed12.\n\nFinding: seed10 and seed12 have 219 byte-identical opening decisions (same stage,\nsame deterministic teacher reaction to the same opening state). Validating on the\nfull tape therefore includes ~20% literal training data. This runs the test on the\nsuffix only.\n\nNOT capability evidence.\n\"\"\"\nfrom __future__ import ann"
+  },
+  {
+   "script": "bc_generalisation.py",
+   "header": "\"\"\"Exploratory: does BC on real O2 data generalise at all?\n\n800 train / 200 validation split of the 1000-sample corpus, 3 epochs.\nReports train vs validation loss and per-head losses.\n\nNOT capability evidence: `shoot` is constant 1 and `bomb` constant 0 in this\ncorpus, so only `move`/`focus` carry any signal. This measures whether the\npipeline learns *anything transferable*, nothing about playing "
+  },
+  {
+   "script": "bc_split_comparison.py",
+   "header": "\"\"\"Exploratory: random split vs TEMPORAL split — is BC learning behaviour or nearby frames?\n\nRandom split: val frames are temporally adjacent to train frames, so the model can\nmemorise per-frame appearance and still score well.\nTemporal split: train on the first 80% of decisions, validate on the last 20%.\nA large gap between the two tells us the random-split number was optimistic.\n\nNOT capability "
+  }
+ ],
+ "arithmetic": {
+  "tape_1099": {
+   "cut": 879,
+   "val": 220
+  },
+  "subset_1000": {
+   "cut": 800,
+   "val": 200
+  },
+  "fixed_200_on_1000": {
+   "cut": 800,
+   "val": 200
+  },
+  "is_880_219_reachable": false
+ },
+ "verdict": {
+  "seven_scripts_claim_holds": false,
+  "n1_conclusion_holds": true,
+  "reading": "逐条列出来之后，全称断言**不成立**：v4.3.0 的 102 个脚本里，用 `0.8` 比例切分的是 **5** 个（不是 7），另有 **1** 个用**固定 `n_val = 200`**。而且它们**不都跑在同一个语料上**：`cross_tape_generalisation.py` / `cross_tape_honest.py` 切的是 **1,099** 样本的磁带，`bc_generalisation.py` / `bc_split_comparison.py` 跑在 **1,000** 样本的子集上。**但 N1 的结论仍然成立**：实际存在的切分只有 **879/220**（磁带）与 **800/200**（1,000 子集）两种，**880/219 哪个都不是**——只是理由要从\"7 个脚本都这样\"改成\"这两种切分都在，而 880/219 不在\"。"
+ }
+}

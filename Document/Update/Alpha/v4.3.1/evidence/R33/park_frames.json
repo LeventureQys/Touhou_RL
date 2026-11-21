@@ -1,0 +1,123 @@
+{
+ "schema": "v431-recheck-r33/1",
+ "question": "is PARK refused because the stage has not finished setting up, or is it structurally unreachable in this build?",
+ "role": "shadow",
+ "display_unset": true,
+ "targets": [
+  400,
+  1200,
+  2400,
+  4800,
+  8664
+ ],
+ "source": {
+  "frames_built": 13192,
+  "recorded_hash_frames": 3299
+ },
+ "attempts": [
+  {
+   "frame": 400,
+   "park_s": 0.0,
+   "reply_ok": false,
+   "hash_checks_so_far": 100,
+   "hash_mismatches_so_far": 0,
+   "raw": "ERR park-unsafe role=shadow-required threads=5 setup=0 null_device=0",
+   "threads": 5,
+   "setup": 0,
+   "null_device": 0
+  },
+  {
+   "frame": 1200,
+   "park_s": 0.0,
+   "reply_ok": false,
+   "hash_checks_so_far": 300,
+   "hash_mismatches_so_far": 0,
+   "raw": "ERR park-unsafe role=shadow-required threads=5 setup=0 null_device=0",
+   "threads": 5,
+   "setup": 0,
+   "null_device": 0
+  },
+  {
+   "frame": 2400,
+   "park_s": 0.0,
+   "reply_ok": false,
+   "hash_checks_so_far": 600,
+   "hash_mismatches_so_far": 0,
+   "raw": "ERR park-unsafe role=shadow-required threads=5 setup=0 null_device=0",
+   "threads": 5,
+   "setup": 0,
+   "null_device": 0
+  },
+  {
+   "frame": 4800,
+   "park_s": 0.0,
+   "reply_ok": false,
+   "hash_checks_so_far": 1200,
+   "hash_mismatches_so_far": 0,
+   "raw": "ERR park-unsafe role=shadow-required threads=5 setup=0 null_device=0",
+   "threads": 5,
+   "setup": 0,
+   "null_device": 0
+  },
+  {
+   "frame": 8664,
+   "park_s": 0.0,
+   "reply_ok": false,
+   "hash_checks_so_far": 2166,
+   "hash_mismatches_so_far": 0,
+   "raw": "ERR park-unsafe role=shadow-required threads=5 setup=0 null_device=0",
+   "threads": 5,
+   "setup": 0,
+   "null_device": 0
+  }
+ ],
+ "any_success": false,
+ "error": null,
+ "reset": {
+  "ready": "1",
+  "hash": "83d953750afaea5a",
+  "setup_frames": "119"
+ },
+ "analysis": {
+  "attempts": 5,
+  "frames_tried": [
+   400,
+   1200,
+   2400,
+   4800,
+   8664
+  ],
+  "distinct_unsafe_triples": [
+   [
+    5,
+    0,
+    0
+   ]
+  ],
+  "invariant_across_frames": true,
+  "last_attempt_hash_checks": 2166,
+  "last_attempt_hash_mismatches": 0,
+  "verdict": {
+   "was_it_merely_early": false,
+   "structural": true,
+   "reading": "every frame from 400 to 8664 returns threads=5 setup=0 null_device=0, so neither `setup` nor `d3dDevice` is a timing effect: the shadow build simply never satisfies Ready()/HandlePark",
+   "repair_location": "third_party/th08-rl (Ready() in fork.cpp, HandlePark in fork.cpp)",
+   "repair_size": "three judgement calls, not a rewrite",
+   "needs_user_approval": true
+  },
+  "side_result": {
+   "shadow_walk_hash_checks": 2166,
+   "shadow_walk_mismatches": 0,
+   "meaning": "the shadow role reproduces the recorded tape exactly to frame 8,664, so shadow is a faithful place to run the arms if PARK is ever fixed"
+  },
+  "consequence_for_the_plan": {
+   "route_A_still_available": true,
+   "route_A_cost": "three gate conditions in one file; recompile rl_v3 changes its SHA, so ASSET_SYNC has to be updated (AGENTS.md 8.2)",
+   "route_B_unchanged": "arm A to 200 episodes without touching the engine (3.9 h)",
+   "not_attempted_by_design": [
+    "patching third_party",
+    "rebuilding the engine"
+   ]
+  }
+ }
+}

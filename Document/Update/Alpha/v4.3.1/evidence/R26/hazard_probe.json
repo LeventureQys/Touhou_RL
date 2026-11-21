@@ -1,0 +1,67 @@
+{
+ "schema": "v431-recheck-r26/1",
+ "role": "env (the role every arm must run in: obs-v3 needs pixels)",
+ "seed": 12,
+ "frame": 8664,
+ "source": {
+  "shard": "/mnt/d/WorkShop/Touhou_RL/.tmp_v410_s1c/d1/shards/d1-s0d1-n3300-seed12-shard/labels.jsonl",
+  "rows_in_shard": 3298,
+  "frames_built": 13192,
+  "recorded_hash_frames": 3299,
+  "target": 8664,
+  "split_mask_blocks_in_tape": 137,
+  "note": "split-mask blocks are fine here: this path does not call _pair_cand"
+ },
+ "walk": {
+  "frames": 8663,
+  "hash_checks": 2165,
+  "hash_mismatches": 0,
+  "engine_frame": 8663
+ },
+ "verbs": {
+  "HAZARDS": {
+   "verb": "HAZARDS",
+   "ok": true,
+   "reply_len": 12778,
+   "reply_head": "OK frames=8663 nb=183 nl=0 ne=4 bullets=2:1:8:42d4eea6:42c176f4:3dcccccd:bc51ad65:bce84cff:178:40800000:0,4:1:10:423070dc:438eb725:3dcccccd:bf52550e:3f5fe6f7:178:40800000:0,5:1:8:4399cdfc:404ba74d:3dcccccd:bd96f3fb:be1e20d9:169:40800000:0,6",
+   "is_err": false
+  },
+  "PLAYER": {
+   "verb": "PLAYER",
+   "ok": true,
+   "reply_len": 331,
+   "reply_head": "OK frames=8663 hp=40000000 lives=2 bombs=40400000 power=41600000 focus=0 isYoukai=0 playerState=0 invulnState=0 px=432eb24d py=43ceedce hurtboxMinX=432ddf1a hurtboxMinY=43ce8434 hurtboxMaxX=432f8580 hurtboxMaxY=43cf5768 speedNormalAxial=408",
+   "is_err": false
+  },
+  "EVENTS": {
+   "verb": "EVENTS",
+   "ok": true,
+   "reply_len": 127,
+   "reply_head": "OK frames=8663 frameEventFlags=0400 stageClear=0 stageClearEdge=0 stageClearEdgeFrame=0 stageClearScreenState=0 stageClearSeq=0",
+   "is_err": false
+  },
+  "HUD": {
+   "verb": "HUD",
+   "ok": true,
+   "reply_len": 172,
+   "reply_head": "OK frames=8663 displayScore=167122 globalsScore=167302 lives=2 bombs=3 power=14 graze=315 point=11 time=1222 gameOverFlag=0 displayAge=180 displayStale=0 scoreDisplayStep=8",
+   "is_err": false
+  },
+  "STATE": {
+   "verb": "STATE",
+   "ok": true,
+   "reply_len": 249,
+   "reply_head": "OK frames=8663 f0=8663 f1=0 f2=0 f3=8665 f4=167302 f5=315 f6=00000000 f7=40000000 f8=40400000 f9=41600000 f10=432eb24d f11=43ceedce f12=3efae148 f13=0 f14=20580 f15=4294967016 f16=161 f17=11 f18=1222 f19=4294961006 f20=0 f21=106110 f22=0 f2",
+   "is_err": false
+  }
+ },
+ "error": null,
+ "verdict": {
+  "hazards_answered_on_env": true,
+  "player_answered_on_env": true,
+  "events_answered_on_env": true,
+  "hud_answered_on_env": true,
+  "state_answered_on_env": true,
+  "arm_a_choice": "A-HAZARDS: bullets are visible on the env session"
+ }
+}

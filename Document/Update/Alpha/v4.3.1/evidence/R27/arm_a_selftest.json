@@ -1,0 +1,115 @@
+{
+ "schema": "v431-recheck-r27/1",
+ "purpose": "check the arm A observation math offline, before spending ~4 h of engine time; a wrong feature vector still yields a number, so no engine run can catch it",
+ "checks": [
+  {
+   "check": "empty frame length",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "empty frame dtype",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "empty frame finite",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "empty frame zero tail",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "empty used_bullets",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "length with bullets",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "live bullet count",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "used bullets",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "nearest bullet first",
+   "ok": true,
+   "detail": "-0.0446 then -0.6696"
+  },
+  {
+   "check": "half_width not full width",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "non-lethal bullet skipped",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "enemy used",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "enemy half extent is /3",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "enemy full-width would differ",
+   "ok": true,
+   "detail": true
+  },
+  {
+   "check": "zero-distance bullet finite",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "logit count",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "sample in range",
+   "ok": true,
+   "detail": "8"
+  },
+  {
+   "check": "probs sum to 1",
+   "ok": true,
+   "detail": ""
+  }
+ ],
+ "n_checks": 18,
+ "n_ok": 18,
+ "all_ok": true,
+ "feature_dim": 106,
+ "feature_layout": {
+  "player_and_resources": 6,
+  "globals": 4,
+  "bullets": "12 x 6 (dx, dy, vx, vy, half_width, closing)",
+  "enemies": "4 x 5 (dx, dy, half_x, half_y, life)",
+  "laser": 4
+ },
+ "red_lines_verified": {
+  "bullet_half_width_is_collision_size_over_2": true,
+  "enemy_half_extent_is_hitbox_over_3": true
+ },
+ "not_covered": [
+  "no engine interaction: this says nothing about whether the arm can learn",
+  "the REINFORCE update itself is exercised only by a real episode"
+ ]
+}

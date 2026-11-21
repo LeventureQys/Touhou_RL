@@ -1,0 +1,40 @@
+{
+ "schema": "v431-recheck-r49/1",
+ "question": "does every survival RATE carry both its sample size and its threshold?",
+ "rule": {
+  "rate_pattern": "\\d+(?:\\.\\d+)?\\s*%|\\d+\\s*倍",
+  "n_markers": [
+   "n=",
+   "n≈",
+   "n = ",
+   "/80",
+   "/40",
+   "/20",
+   "/10",
+   "/128",
+   "80 次",
+   "40 次",
+   "episode 数",
+   "80 episode",
+   "129 episode"
+  ],
+  "threshold_markers": [
+   "300 决策",
+   "全长",
+   "600 帧",
+   "180 帧",
+   "alive@",
+   "跑满"
+  ],
+  "why": "the same comparison is 4/40 vs 0/40 at n=40 and 6/80 vs 1/80 at n=80, so a rate without n is not comparable across the report"
+ },
+ "counts": {
+  "lines_mentioning_survival": 74,
+  "violations": 0
+ },
+ "violations": [],
+ "verdict": {
+  "clean": true,
+  "reading": "74 lines mention survival; every one that states a RATE also carries n and the threshold"
+ }
+}

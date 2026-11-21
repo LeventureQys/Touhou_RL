@@ -1,0 +1,105 @@
+{
+ "schema": "v431-recheck-r68/1",
+ "question": "「−0.067 到 −0.128 nats」这五个端点，来自哪个口径？两张表的「差」列符号一致吗？",
+ "pairs": [
+  {
+   "set": "seed12_val",
+   "n": 220,
+   "model_ce": 1.5306,
+   "baseline_ce": 1.658629,
+   "model_minus_baseline": -0.128,
+   "baseline_minus_model": 0.128,
+   "ci95_baseline_minus_model": [
+    0.035,
+    0.2215
+   ],
+   "excludes_zero": true
+  },
+  {
+   "set": "seed11_full",
+   "n": 1099,
+   "model_ce": 1.5568,
+   "baseline_ce": 1.675547,
+   "model_minus_baseline": -0.1187,
+   "baseline_minus_model": 0.1187,
+   "ci95_baseline_minus_model": [
+    0.0765,
+    0.1602
+   ],
+   "excludes_zero": true
+  },
+  {
+   "set": "seed10_full",
+   "n": 1099,
+   "model_ce": 1.602,
+   "baseline_ce": 1.712588,
+   "model_minus_baseline": -0.1106,
+   "baseline_minus_model": 0.1106,
+   "ci95_baseline_minus_model": [
+    0.0657,
+    0.1549
+   ],
+   "excludes_zero": true
+  },
+  {
+   "set": "seed11_suffix",
+   "n": 874,
+   "model_ce": 1.5903,
+   "baseline_ce": 1.663908,
+   "model_minus_baseline": -0.0736,
+   "baseline_minus_model": 0.0736,
+   "ci95_baseline_minus_model": [
+    0.0265,
+    0.1206
+   ],
+   "excludes_zero": true
+  },
+  {
+   "set": "seed10_suffix",
+   "n": 880,
+   "model_ce": 1.645,
+   "baseline_ce": 1.712241,
+   "model_minus_baseline": -0.0673,
+   "baseline_minus_model": 0.0673,
+   "ci95_baseline_minus_model": [
+    0.0149,
+    0.119
+   ],
+   "excludes_zero": true
+  }
+ ],
+ "ranges": {
+  "model_minus_baseline": [
+   -0.128,
+   -0.0673
+  ],
+  "baseline_minus_model": [
+   0.0673,
+   0.128
+  ]
+ },
+ "prose_claim": {
+  "text": "−0.067 到 −0.128 nats",
+  "convention": "model_minus_baseline",
+  "matches": true,
+  "exact_values": [
+   -0.128,
+   -0.0673
+  ],
+  "rounding_note": "-0.128 是 -0.1280 的三位舍入；-0.067 是 -0.0673 的三位舍入"
+ },
+ "convention_conflict": {
+  "sec_2_5_baseline_table": "差 = 模型 − 基线（负 = 模型更好）",
+  "sec_2_5_bootstrap_table": "差 = 基线 − 模型（正 = 模型更好）",
+  "same_pair_shown_as": {
+   "model_minus_baseline": -0.128,
+   "baseline_minus_model": 0.128
+  },
+  "problem": "两张表的列名都叫「差」，符号相反；同一对 (1.5306 vs 1.6586) 在一张表里是 −0.128、另一张是 +0.1280，而**没有任何地方说明这两个口径**"
+ },
+ "verdict": {
+  "five_pairs_reproduce": true,
+  "sign_conventions_differ": true,
+  "reading": "五对全部复现且 CI 全排除 0（True）。但**两张表的「差」列符号相反**：§2.5 的比较表用 `模型−基线`（负 = 更好，范围 [-0.128, -0.0673]），bootstrap 表用 `基线−模型`（正 = 更好，范围 [0.0673, 0.128]）。同一对 (1.5306 vs 1.6586) 在前者写 **−0.128**、后者写 **+0.1280**，**而两处都没有说明口径**。正文那句「−0.067 到 −0.128」用的是前者，是对的，但读者无法判断。**这就是 C 类：不是数错，是两套符号共用一个名字。**"
+ }
+}

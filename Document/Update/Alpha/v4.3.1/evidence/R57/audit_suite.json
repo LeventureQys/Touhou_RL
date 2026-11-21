@@ -1,0 +1,110 @@
+{
+    "schema":  "v431-recheck-r57/1",
+    "question":  "the whole offline audit suite: does it run clean, and is it idempotent?",
+    "scripts":  [
+                    {
+                        "script":  "tools\\rl\\v431_seg001_gate.py",
+                        "exit":  0
+                    },
+                    {
+                        "script":  "tools\\rl\\v431_rerun_early.py",
+                        "exit":  0
+                    },
+                    {
+                        "script":  "tools\\rl\\v431_rerun_verdict.py",
+                        "exit":  0
+                    },
+                    {
+                        "script":  "tools\\rl\\v431_quote_audit.py",
+                        "exit":  0
+                    },
+                    {
+                        "script":  "tools\\rl\\v431_summary_anchors.py",
+                        "exit":  0
+                    },
+                    {
+                        "script":  "tools\\rl\\v431_arm_a_selftest.py",
+                        "exit":  0
+                    },
+                    {
+                        "script":  "tools\\rl\\v431_segment_context.py",
+                        "exit":  0
+                    },
+                    {
+                        "script":  "tools\\rl\\v431_survival_context.py",
+                        "exit":  0
+                    },
+                    {
+                        "script":  "tools\\rl\\v431_attribution_sweep.py",
+                        "exit":  0
+                    },
+                    {
+                        "script":  "tools\\rl\\v431_documented_trace.py",
+                        "exit":  0
+                    },
+                    {
+                        "script":  "tools\\rl\\v431_stop_conditions.py",
+                        "exit":  0
+                    },
+                    {
+                        "script":  "tools\\rl\\v431_window_variance.py",
+                        "exit":  0
+                    },
+                    {
+                        "script":  "tools\\rl\\v431_smoothing_sensitivity.py",
+                        "exit":  0
+                    },
+                    {
+                        "script":  "tools\\rl\\v431_censoring_audit.py",
+                        "exit":  0
+                    },
+                    {
+                        "script":  "tools\\rl\\v431_baseline_ladder.py",
+                        "exit":  0
+                    },
+                    {
+                        "script":  "tools\\rl\\v431_statistic_flip.py",
+                        "exit":  0
+                    },
+                    {
+                        "script":  "tools\\rl\\v431_criterion_sensitivity.py",
+                        "exit":  0
+                    },
+                    {
+                        "script":  "tools\\rl\\v431_correction_direction.py",
+                        "exit":  0
+                    },
+                    {
+                        "script":  "tools\\rl\\v431_favourable_criteria.py",
+                        "exit":  0
+                    },
+                    {
+                        "script":  "tools\\rl\\v431_verdict_consistency.py",
+                        "exit":  0
+                    },
+                    {
+                        "script":  "tools\\rl\\v431_evidence_refs.py",
+                        "exit":  0
+                    },
+                    {
+                        "script":  "tools\\rl\\v431_make_index.py",
+                        "exit":  0
+                    },
+                    {
+                        "script":  "tools\\rl\\v431_verify_report.py",
+                        "exit":  0
+                    }
+                ],
+    "counts":  {
+                   "scripts":  22,
+                   "exit_zero":  22,
+                   "nonzero":  0,
+                   "verify_exit_separate":  0,
+                   "total_including_verify":  23
+               },
+    "idempotent_note":  "every script rewrites its own evidence file; the suite is run twice in a row and must stay green",
+    "verdict":  {
+                    "all_green":  true,
+                    "reading":  "all 22 non-self audits exit 0 (verify itself runs last and exits 0), and a second consecutive run stays green, so the suite is idempotent"
+                }
+}

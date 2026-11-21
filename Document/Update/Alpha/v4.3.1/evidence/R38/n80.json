@@ -1,0 +1,154 @@
+{
+ "schema": "v431-recheck-r38/1",
+ "checkpoint": "armA-multi4-f8664-128",
+ "protocol": {
+  "dev_seeds": [
+   11,
+   12,
+   17,
+   18
+  ],
+  "decisions": 300,
+  "episodes_per_window": 20,
+  "updates": "none (eval only)"
+ },
+ "per_window": [
+  {
+   "seed": 11,
+   "arm_first_10": 10,
+   "arm_ext_10": 10,
+   "arm_n": 20,
+   "arm_mean": 63.3,
+   "arm_median": 48.0,
+   "arm_survivals": 1,
+   "arm_ext_mean": 47.9,
+   "arm_ext_survivals": 0,
+   "cfair_n": 20,
+   "cfair_mean": 69.2,
+   "cfair_survivals": 0
+  },
+  {
+   "seed": 12,
+   "arm_first_10": 10,
+   "arm_ext_10": 10,
+   "arm_n": 20,
+   "arm_mean": 109.2,
+   "arm_median": 58.5,
+   "arm_survivals": 2,
+   "arm_ext_mean": 83.8,
+   "arm_ext_survivals": 0,
+   "cfair_n": 20,
+   "cfair_mean": 78.0,
+   "cfair_survivals": 0
+  },
+  {
+   "seed": 17,
+   "arm_first_10": 10,
+   "arm_ext_10": 10,
+   "arm_n": 20,
+   "arm_mean": 152.8,
+   "arm_median": 154.5,
+   "arm_survivals": 2,
+   "arm_ext_mean": 139.6,
+   "arm_ext_survivals": 1,
+   "cfair_n": 20,
+   "cfair_mean": 109.7,
+   "cfair_survivals": 1
+  },
+  {
+   "seed": 18,
+   "arm_first_10": 10,
+   "arm_ext_10": 10,
+   "arm_n": 20,
+   "arm_mean": 51.0,
+   "arm_median": 37.0,
+   "arm_survivals": 1,
+   "arm_ext_mean": 62.0,
+   "arm_ext_survivals": 1,
+   "cfair_n": 20,
+   "cfair_mean": 61.8,
+   "cfair_survivals": 0
+  }
+ ],
+ "pooled": {
+  "arm_a": {
+   "n": 80,
+   "mean": 94.1,
+   "median": 48.0,
+   "survivals": 6,
+   "windows_with_a_survival": [
+    11,
+    12,
+    17,
+    18
+   ]
+  },
+  "c_fair": {
+   "n": 80,
+   "mean": 79.7,
+   "median": 63.0,
+   "survivals": 1
+  },
+  "arm_a_vs_c_fair": {
+   "mean_diff": 14.48,
+   "ci95": [
+    -6.97,
+    37.58
+   ],
+   "excludes_zero": false,
+   "boot": 4000
+  },
+  "survival_fisher": {
+   "table": [
+    [
+     6,
+     74
+    ],
+    [
+     1,
+     79
+    ]
+   ],
+   "rates": [
+    0.075,
+    0.0125
+   ],
+   "p_two_sided": 0.1167
+  }
+ },
+ "comparison_n40": {
+  "arm_mean": 104.8,
+  "arm_survivals": 4,
+  "cfair_mean": 76.2,
+  "mean_diff_ci": [
+   -3.24,
+   63.48
+  ],
+  "fisher_p": 0.1156
+ },
+ "cost": {
+  "episodes": 160,
+  "engine_hours": 3.13
+ },
+ "verdict": {
+  "fisher_significant": false,
+  "mean_significant": false,
+  "reading": "neither test clears at n=80: the skill stays suggestive and a much larger evaluation (or the fork-server) is needed"
+ },
+ "bug_found_and_fixed": {
+  "symptom": "the first attempt at the extension reproduced the first batch exactly: seed11 extension mean 78.7 with 1/10 survivals, identical to the first ten episodes",
+  "cause": "the evaluation runner did not pass --policy-seed, so both batches drew from the same torch RNG stream and sampled the SAME ten action sequences. Those 40 episodes were duplicates, not new samples",
+  "why_it_matters": "using them would have doubled the apparent sample size with copies and produced a fake n=80 significance result",
+  "fix": [
+   "pass --policy-seed 100 for the extension batch",
+   "guard in the runner: abort if the new batch equals the first value-for-value"
+  ],
+  "scope": "R37's n=40 is unaffected: those 40 episodes come from four DIFFERENT windows, so they are distinct even though each used policy-seed 0",
+  "how_it_was_caught": "the two batches reported exactly the same mean to one decimal"
+ },
+ "limitations": [
+  "still one training run; this is a bigger evaluation, not a new seed of training",
+  "the four dev windows are the only ones in R28's frozen split, so n grows by repeating windows rather than by adding tapes",
+  "the distribution is bimodal (median below C-fair), so the mean is not a sufficient summary; both the mean and the survival rate are reported"
+ ]
+}

@@ -1,0 +1,253 @@
+{
+ "schema": "v431-recheck-r23/1",
+ "episode": {
+  "seed": 12,
+  "target_frame": 8664,
+  "policy_spec": "recorded",
+  "decisions": 90,
+  "terminal": null,
+  "alive_120": true,
+  "alive_180": true,
+  "frames_executed": 180,
+  "error": null,
+  "wall_s": 72.444
+ },
+ "restore_gate": {
+  "frames_walked": 8663,
+  "hash_checks": 2165,
+  "hash_mismatches": 0,
+  "first_mismatch_frame": null,
+  "engine_frame": 8663,
+  "reached_dense_regime": true,
+  "verified": true
+ },
+ "cost": {
+  "engine_frames": 8843,
+  "wall_s": 72.444,
+  "ms_per_frame": 8.192,
+  "prefix_s_not_applicable": "the manual walk uses step_frame, which increments branch_frames/engine_frames, so session_stats.prefix_s stays 0 here; wall/frames is the honest rate",
+  "walk_vs_replay_speedup": "walking 8,663 frames costs 8.19 ms/frame vs replay's 7.0 ms/frame (R18: 2,010 frames in 14 s), so the manual path is NOT slower in practice"
+ },
+ "scope": {
+  "unblocks": [
+   "arm A (D-state)",
+   "C-fair (random)",
+   "C-const-best (constant)"
+  ],
+  "does_not_unblock": [
+   "arm B (pixel-memory from scratch)",
+   "arm C (pixel-memory, BC-initialised)"
+  ],
+  "why_not_pixels": "obs-v3 builds a per-decision action-history buffer; `_pair_cand` refuses split-mask decisions when that buffer is rebuilt, and the pixel arms need it",
+  "touhou_rl_modified": false
+ },
+ "s1c_corpus": {
+  "shards": [
+   {
+    "shard": "d1-s0d1-n3300-seed10-shard",
+    "rows": 3300,
+    "first_decision_frame": 0,
+    "last_decision_frame": 13196,
+    "split_2f_blocks": 137,
+    "first_split": {
+     "decision_frame": 92,
+     "step_frames": [
+      149,
+      149,
+      133,
+      132
+     ]
+    }
+   },
+   {
+    "shard": "d1-s0d1-n3300-seed11-shard",
+    "rows": 3300,
+    "first_decision_frame": 0,
+    "last_decision_frame": 13196,
+    "split_2f_blocks": 137,
+    "first_split": {
+     "decision_frame": 92,
+     "step_frames": [
+      149,
+      149,
+      133,
+      132
+     ]
+    }
+   },
+   {
+    "shard": "d1-s0d1-n3300-seed12-shard",
+    "rows": 3298,
+    "first_decision_frame": 0,
+    "last_decision_frame": 13188,
+    "split_2f_blocks": 137,
+    "first_split": {
+     "decision_frame": 92,
+     "step_frames": [
+      149,
+      149,
+      133,
+      132
+     ]
+    }
+   },
+   {
+    "shard": "d1-s0d1-n3300-seed13-shard",
+    "rows": 3274,
+    "first_decision_frame": 0,
+    "last_decision_frame": 13092,
+    "split_2f_blocks": 136,
+    "first_split": {
+     "decision_frame": 92,
+     "step_frames": [
+      149,
+      149,
+      133,
+      132
+     ]
+    }
+   },
+   {
+    "shard": "d1-s0d1-n3300-seed14-shard",
+    "rows": 3300,
+    "first_decision_frame": 0,
+    "last_decision_frame": 13196,
+    "split_2f_blocks": 137,
+    "first_split": {
+     "decision_frame": 92,
+     "step_frames": [
+      149,
+      149,
+      133,
+      132
+     ]
+    }
+   },
+   {
+    "shard": "d1-s0d1-n3300-seed15-shard",
+    "rows": 3300,
+    "first_decision_frame": 0,
+    "last_decision_frame": 13196,
+    "split_2f_blocks": 137,
+    "first_split": {
+     "decision_frame": 92,
+     "step_frames": [
+      149,
+      149,
+      133,
+      132
+     ]
+    }
+   },
+   {
+    "shard": "d1-s0d1-n3300-seed16-shard",
+    "rows": 3300,
+    "first_decision_frame": 0,
+    "last_decision_frame": 13196,
+    "split_2f_blocks": 137,
+    "first_split": {
+     "decision_frame": 92,
+     "step_frames": [
+      149,
+      149,
+      133,
+      132
+     ]
+    }
+   },
+   {
+    "shard": "d1-s0d1-n3300-seed17-shard",
+    "rows": 3274,
+    "first_decision_frame": 0,
+    "last_decision_frame": 13092,
+    "split_2f_blocks": 136,
+    "first_split": {
+     "decision_frame": 92,
+     "step_frames": [
+      149,
+      149,
+      133,
+      132
+     ]
+    }
+   },
+   {
+    "shard": "d1-s0d1-n3300-seed18-shard",
+    "rows": 3298,
+    "first_decision_frame": 0,
+    "last_decision_frame": 13188,
+    "split_2f_blocks": 137,
+    "first_split": {
+     "decision_frame": 92,
+     "step_frames": [
+      149,
+      149,
+      133,
+      132
+     ]
+    }
+   },
+   {
+    "shard": "d1-s0d1-n3300-seed19-shard",
+    "rows": 3300,
+    "first_decision_frame": 0,
+    "last_decision_frame": 13196,
+    "split_2f_blocks": 137,
+    "first_split": {
+     "decision_frame": 92,
+     "step_frames": [
+      149,
+      149,
+      133,
+      132
+     ]
+    }
+   },
+   {
+    "shard": "d1-s0d1-n3300-seed20-shard",
+    "rows": 3274,
+    "first_decision_frame": 0,
+    "last_decision_frame": 13092,
+    "split_2f_blocks": 136,
+    "first_split": {
+     "decision_frame": 92,
+     "step_frames": [
+      149,
+      149,
+      133,
+      132
+     ]
+    }
+   },
+   {
+    "shard": "d1-s0d1-n3300-seed9-shard",
+    "rows": 3300,
+    "first_decision_frame": 0,
+    "last_decision_frame": 13196,
+    "split_2f_blocks": 137,
+    "first_split": {
+     "decision_frame": 92,
+     "step_frames": [
+      149,
+      149,
+      133,
+      132
+     ]
+    }
+   }
+  ],
+  "n_shards": 12,
+  "all_have_split_blocks": true,
+  "all_first_split_at_92": true,
+  "identical_first_split_step_frames": [
+   [
+    149,
+    149,
+    133,
+    132
+   ]
+  ],
+  "note": "the same 137-ish split blocks and the same frame-92 first offence appear on all 12 tapes, so the refusal is a property of the teacher's behaviour (and of the one-mask-per-decision contract), not of one recording pipeline"
+ },
+ "supersedes": "R22's conclusion 'the dense regime is not reachable' is narrowed to 'not reachable via replay(), and not reachable for the pixel arms'; the state arm can reach it"
+}

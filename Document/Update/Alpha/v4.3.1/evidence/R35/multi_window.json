@@ -1,0 +1,92 @@
+{
+ "schema": "v431-recheck-r35/1",
+ "question": "was R34's overfitting caused by training on a single tape?",
+ "protocol": {
+  "dev_window": 11,
+  "dev_episodes": 10,
+  "decisions": 300,
+  "frame": 8664,
+  "train_windows": [
+   13,
+   14,
+   15,
+   16
+  ]
+ },
+ "multi": {
+  "train_episodes": 80,
+  "train_mean_return": 101.0,
+  "train_first_third": 91.6,
+  "train_last_third": 119.1,
+  "train_trend": 27.5,
+  "train_survivals": 3,
+  "per_window": {
+   "13": {
+    "episodes": 20,
+    "mean_return": 96.7,
+    "survivals": 1
+   },
+   "14": {
+    "episodes": 20,
+    "mean_return": 94.1,
+    "survivals": 1
+   },
+   "15": {
+    "episodes": 20,
+    "mean_return": 89.3,
+    "survivals": 0
+   },
+   "16": {
+    "episodes": 20,
+    "mean_return": 124.0,
+    "survivals": 1
+   }
+  },
+  "dev_mean": 57.3,
+  "dev_survivals": 0,
+  "dev_values": [
+   32.0,
+   40.0,
+   45.0,
+   49.0,
+   54.0,
+   58.0,
+   58.0,
+   62.0,
+   79.0,
+   96.0
+  ]
+ },
+ "comparison": {
+  "single_window_dev_mean": 48.5,
+  "multi_window_dev_mean": 57.3,
+  "cfair_dev_mean": 71.8,
+  "multi_vs_cfair": {
+   "mean_diff": -14.6,
+   "ci95": [
+    -46.4,
+    10.15
+   ],
+   "excludes_zero": false,
+   "boot": 4000
+  },
+  "multi_vs_single": {
+   "note": "the 72-episode per-episode dev values were overwritten by an earlier run (see R34 limitations), so this is a mean-to-mean difference, not a bootstrap",
+   "difference_of_means": 8.8
+  }
+ },
+ "cost": {
+  "episodes": 90,
+  "engine_hours": 1.76
+ },
+ "limitations": [
+  "one dev window (seed11) and n=10, same as R34, so the interval stays wide",
+  "the single-window policy had 72 episodes and the multi-window one 80; per-window that is 20 vs 72, so the comparison also changes episodes-per-window",
+  "multi-window training shares one 106-dim MLP across four bullet patterns; a bigger network could behave differently"
+ ],
+ "verdict": {
+  "multi_helps_over_single": true,
+  "multi_beats_cfair": false,
+  "reading": "multi-window training recovers some of R34's loss but still does not beat uniform random on the held-out tape"
+ }
+}

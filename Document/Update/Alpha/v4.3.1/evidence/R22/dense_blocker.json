@@ -1,0 +1,224 @@
+{
+ "schema": "v431-recheck-r22/1",
+ "attempt": {
+  "target_frame": 8666,
+  "resource": "teacher tape seed12 (dense window 8666..8844 from R8)",
+  "record": {
+   "error": "CounterfactualError: frame 96: the recorded two-frame decision carries two different masks (0x0085 then 0x0084); the action history cannot be rebuilt",
+   "frames_executed": 0,
+   "terminal": null,
+   "decisions": 90,
+   "tape": {
+    "shard": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T04/dataset/d1-s0d1-n3300-seed12-shard/slots.jsonl",
+    "per_frame_masks": "/mnt/d/WorkShop/Touhou_RL/.tmp_v420_data/T02c/rebuild/d1-s0d1-n3300-seed12-shard/2f/slots.jsonl",
+    "frame": 8666,
+    "lead_frames": 16,
+    "lead_mask": 65,
+    "hash_frames": 4327,
+    "slots_with_two_different_masks": 90,
+    "frame0_hash_available": false,
+    "gate": "every recorded frame 16..frame is hash-checked; frame 0 is not recorded for a teacher tape, so the RESET check is unavailable for tape-derived states"
+   }
+  }
+ },
+ "offline_prefix_check": {
+  "note": "the synthetic prefix was verified OFFLINE before the engine run: hash_at(8666)=235b20476408e0c8 matched the slot boundary, and all 4,326 recorded slot hashes up to frame 8666 agreed",
+  "offline_agreement": "4,326 / 4,326"
+ },
+ "refusal": {
+  "message": "CounterfactualError: frame 96: the recorded two-frame decision carries two different masks (0x0085 then 0x0084); the action history cannot be rebuilt",
+  "site": "touhou_rl/v420/counterfactual.py:3924-3929 (_StudentSession._pair_cand)",
+  "called_from": "replay(), at every frame % decision_frames == 0 boundary",
+  "rule": "a two-frame decision must carry ONE mask; two different masks are refused"
+ },
+ "teacher_tapes": {
+  "10": {
+   "seed": 10,
+   "available": true,
+   "slots": 6592,
+   "first_decision_frame": 16,
+   "last_decision_frame": 13198,
+   "split_mask_slots": 137,
+   "first_split_slot": {
+    "slot": 39,
+    "decision_frame": 94,
+    "committed_masks": [
+     133,
+     132
+    ]
+   },
+   "split_examples": [
+    {
+     "slot": 39,
+     "decision_frame": 94,
+     "committed_masks": [
+      133,
+      132
+     ]
+    },
+    {
+     "slot": 87,
+     "decision_frame": 190,
+     "committed_masks": [
+      65,
+      64
+     ]
+    },
+    {
+     "slot": 135,
+     "decision_frame": 286,
+     "committed_masks": [
+      65,
+      64
+     ]
+    },
+    {
+     "slot": 183,
+     "decision_frame": 382,
+     "committed_masks": [
+      65,
+      64
+     ]
+    },
+    {
+     "slot": 231,
+     "decision_frame": 478,
+     "committed_masks": [
+      97,
+      96
+     ]
+    }
+   ],
+   "reachable_floor": 94
+  },
+  "11": {
+   "seed": 11,
+   "available": true,
+   "slots": 6592,
+   "first_decision_frame": 16,
+   "last_decision_frame": 13198,
+   "split_mask_slots": 137,
+   "first_split_slot": {
+    "slot": 39,
+    "decision_frame": 94,
+    "committed_masks": [
+     133,
+     132
+    ]
+   },
+   "split_examples": [
+    {
+     "slot": 39,
+     "decision_frame": 94,
+     "committed_masks": [
+      133,
+      132
+     ]
+    },
+    {
+     "slot": 87,
+     "decision_frame": 190,
+     "committed_masks": [
+      65,
+      64
+     ]
+    },
+    {
+     "slot": 135,
+     "decision_frame": 286,
+     "committed_masks": [
+      65,
+      64
+     ]
+    },
+    {
+     "slot": 183,
+     "decision_frame": 382,
+     "committed_masks": [
+      65,
+      64
+     ]
+    },
+    {
+     "slot": 231,
+     "decision_frame": 478,
+     "committed_masks": [
+      97,
+      96
+     ]
+    }
+   ],
+   "reachable_floor": 94
+  },
+  "12": {
+   "seed": 12,
+   "available": true,
+   "slots": 6588,
+   "first_decision_frame": 16,
+   "last_decision_frame": 13190,
+   "split_mask_slots": 137,
+   "first_split_slot": {
+    "slot": 39,
+    "decision_frame": 94,
+    "committed_masks": [
+     133,
+     132
+    ]
+   },
+   "split_examples": [
+    {
+     "slot": 39,
+     "decision_frame": 94,
+     "committed_masks": [
+      133,
+      132
+     ]
+    },
+    {
+     "slot": 87,
+     "decision_frame": 190,
+     "committed_masks": [
+      65,
+      64
+     ]
+    },
+    {
+     "slot": 135,
+     "decision_frame": 286,
+     "committed_masks": [
+      65,
+      64
+     ]
+    },
+    {
+     "slot": 183,
+     "decision_frame": 382,
+     "committed_masks": [
+      65,
+      64
+     ]
+    },
+    {
+     "slot": 231,
+     "decision_frame": 478,
+     "committed_masks": [
+      97,
+      96
+     ]
+    }
+   ],
+   "reachable_floor": 94
+  }
+ },
+ "consequence": {
+  "student_traces_ceiling_frame": 3051,
+  "dense_from_frame": 8000,
+  "no_replayable_prefix_reaches_dense": true,
+  "statement": "A0 student traces are replayable but end by frame 3,051; teacher tapes hold the dense regime but cannot be replayed past their first split-mask decision. No replayable trajectory reaches frame >= 8,000, so a dense-regime 3-10 s segment cannot be constructed today at any budget.",
+  "unblock_options": [
+   "re-record the teacher tapes with one mask per two-frame decision",
+   "deliberately relax _pair_cand to accept split masks (contract change: it changes the action-history semantics, so it needs review, not a patch)",
+   "define the experiment on student traces but with a success criterion a constant action cannot satisfy (early stage may have no boss to damage)"
+  ]
+ }
+}

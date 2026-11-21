@@ -1,0 +1,269 @@
+{
+ "schema": "v431-recheck-r18/1",
+ "source_shard": ".tmp_v431_seg001\\full\\raw\\state_000.json",
+ "source_a1": "Document\\Update\\Alpha\\v4.2.0\\evidence\\T08\\a1_safe_set_full.json",
+ "state": {
+  "index": 0,
+  "seed": 3042,
+  "decision_frame": 2010,
+  "expected_hash": "6cade82be08f8a95",
+  "prefix_frames": 2010
+ },
+ "shard": {
+  "status": "pass",
+  "exit_code": 0,
+  "error": null,
+  "complete": true,
+  "arms": 18,
+  "cost": {
+   "engine_starts": 1,
+   "resets": 19,
+   "reset_s": 14.524,
+   "prefix_frames": 38190,
+   "prefix_s": 269.781,
+   "branch_frames": 1124,
+   "student_forwards": 567,
+   "student_s": 0.96,
+   "encode_s": 1.05,
+   "engine_frames": 39314,
+   "arms": 19,
+   "shard_wall_s": 295.747,
+   "ms_per_arm": 16430.39
+  },
+  "repeat_agreement": {
+   "pairs": 1,
+   "agreed": 1,
+   "rows": [
+    {
+     "cand": 0,
+     "trace_sha256_first": "cd87697187b4571a8052f2c3df97ce2546d6774711b4ec41e344c565e4b52510",
+     "trace_sha256_repeat": "cd87697187b4571a8052f2c3df97ce2546d6774711b4ec41e344c565e4b52510",
+     "outcome_first": "engine_death",
+     "outcome_repeat": "engine_death",
+     "first_death_frame_first": 2041,
+     "first_death_frame_repeat": 2041,
+     "agree": true
+    }
+   ]
+  },
+  "prefix_checks": 36180,
+  "prefix_mismatches": 0
+ },
+ "audio": {
+  "template_cfg_sha256": "cc062cfbf9fd2c14a1225376e182beffc52f964c342c187b409045f495d5f0fa",
+  "expected_muted_sha256": "cc062cfbf9fd2c14a1225376e182beffc52f964c342c187b409045f495d5f0fa",
+  "muted": true,
+  "log_tail": [
+   "[a1full] state 0 cand 08: engine_death death=2039 wall=15.1784s",
+   "[a1full] state 0 cand 09: engine_death death=2041 wall=15.2647s",
+   "[a1full] state 0 cand 10: engine_death death=2039 wall=15.2085s",
+   "[a1full] state 0 cand 11: engine_alive death=None wall=16.0653s",
+   "[a1full] state 0 cand 12: engine_death death=2109 wall=15.9606s",
+   "[a1full] state 0 cand 13: engine_death death=2069 wall=15.5327s",
+   "[a1full] state 0 cand 14: engine_death death=2074 wall=15.556s",
+   "[a1full] state 0 cand 15: engine_death death=2042 wall=15.2447s",
+   "[a1full] state 0 cand 16: engine_death death=2041 wall=15.1197s",
+   "[a1full] state 0 cand 17: engine_death death=2040 wall=15.3675s",
+   "[a1full] state 0 (3042@2010, offset 30): |S|=3 complete=True wall=295.7s -> /mnt/d/WorkShop/Touhou_RL/.tmp_v431_seg001/full/raw/state_000.json",
+   "[probe] exit=0 wall=303s  load=0.92"
+  ]
+ },
+ "comparison": {
+  "cands": 18,
+  "outcome_agreement": 18,
+  "outcome_agreement_rate": 1.0,
+  "safe_set_a1": [
+   2,
+   7,
+   11
+  ],
+  "safe_set_probe": [
+   2,
+   7,
+   11
+  ],
+  "safe_set_equal": true,
+  "per_cand": [
+   {
+    "cand": 0,
+    "a1": "engine_death",
+    "probe": "engine_death",
+    "agree": true,
+    "a1_first_death_frame": 2041,
+    "probe_first_death_frame": 2041,
+    "a1_executed_frames": 31,
+    "probe_executed_frames": 31
+   },
+   {
+    "cand": 1,
+    "a1": "engine_death",
+    "probe": "engine_death",
+    "agree": true,
+    "a1_first_death_frame": 2039,
+    "probe_first_death_frame": 2039,
+    "a1_executed_frames": 29,
+    "probe_executed_frames": 29
+   },
+   {
+    "cand": 2,
+    "a1": "engine_alive",
+    "probe": "engine_alive",
+    "agree": true,
+    "a1_first_death_frame": null,
+    "probe_first_death_frame": null,
+    "a1_executed_frames": 120,
+    "probe_executed_frames": 120
+   },
+   {
+    "cand": 3,
+    "a1": "engine_death",
+    "probe": "engine_death",
+    "agree": true,
+    "a1_first_death_frame": 2125,
+    "probe_first_death_frame": 2125,
+    "a1_executed_frames": 115,
+    "probe_executed_frames": 115
+   },
+   {
+    "cand": 4,
+    "a1": "engine_death",
+    "probe": "engine_death",
+    "agree": true,
+    "a1_first_death_frame": 2070,
+    "probe_first_death_frame": 2070,
+    "a1_executed_frames": 60,
+    "probe_executed_frames": 60
+   },
+   {
+    "cand": 5,
+    "a1": "engine_death",
+    "probe": "engine_death",
+    "agree": true,
+    "a1_first_death_frame": 2070,
+    "probe_first_death_frame": 2070,
+    "a1_executed_frames": 60,
+    "probe_executed_frames": 60
+   },
+   {
+    "cand": 6,
+    "a1": "engine_death",
+    "probe": "engine_death",
+    "agree": true,
+    "a1_first_death_frame": 2044,
+    "probe_first_death_frame": 2044,
+    "a1_executed_frames": 34,
+    "probe_executed_frames": 34
+   },
+   {
+    "cand": 7,
+    "a1": "engine_alive",
+    "probe": "engine_alive",
+    "agree": true,
+    "a1_first_death_frame": null,
+    "probe_first_death_frame": null,
+    "a1_executed_frames": 120,
+    "probe_executed_frames": 120
+   },
+   {
+    "cand": 8,
+    "a1": "engine_death",
+    "probe": "engine_death",
+    "agree": true,
+    "a1_first_death_frame": 2039,
+    "probe_first_death_frame": 2039,
+    "a1_executed_frames": 29,
+    "probe_executed_frames": 29
+   },
+   {
+    "cand": 9,
+    "a1": "engine_death",
+    "probe": "engine_death",
+    "agree": true,
+    "a1_first_death_frame": 2041,
+    "probe_first_death_frame": 2041,
+    "a1_executed_frames": 31,
+    "probe_executed_frames": 31
+   },
+   {
+    "cand": 10,
+    "a1": "engine_death",
+    "probe": "engine_death",
+    "agree": true,
+    "a1_first_death_frame": 2039,
+    "probe_first_death_frame": 2039,
+    "a1_executed_frames": 29,
+    "probe_executed_frames": 29
+   },
+   {
+    "cand": 11,
+    "a1": "engine_alive",
+    "probe": "engine_alive",
+    "agree": true,
+    "a1_first_death_frame": null,
+    "probe_first_death_frame": null,
+    "a1_executed_frames": 120,
+    "probe_executed_frames": 120
+   },
+   {
+    "cand": 12,
+    "a1": "engine_death",
+    "probe": "engine_death",
+    "agree": true,
+    "a1_first_death_frame": 2109,
+    "probe_first_death_frame": 2109,
+    "a1_executed_frames": 99,
+    "probe_executed_frames": 99
+   },
+   {
+    "cand": 13,
+    "a1": "engine_death",
+    "probe": "engine_death",
+    "agree": true,
+    "a1_first_death_frame": 2069,
+    "probe_first_death_frame": 2069,
+    "a1_executed_frames": 59,
+    "probe_executed_frames": 59
+   },
+   {
+    "cand": 14,
+    "a1": "engine_death",
+    "probe": "engine_death",
+    "agree": true,
+    "a1_first_death_frame": 2074,
+    "probe_first_death_frame": 2074,
+    "a1_executed_frames": 64,
+    "probe_executed_frames": 64
+   },
+   {
+    "cand": 15,
+    "a1": "engine_death",
+    "probe": "engine_death",
+    "agree": true,
+    "a1_first_death_frame": 2042,
+    "probe_first_death_frame": 2042,
+    "a1_executed_frames": 32,
+    "probe_executed_frames": 32
+   },
+   {
+    "cand": 16,
+    "a1": "engine_death",
+    "probe": "engine_death",
+    "agree": true,
+    "a1_first_death_frame": 2041,
+    "probe_first_death_frame": 2041,
+    "a1_executed_frames": 31,
+    "probe_executed_frames": 31
+   },
+   {
+    "cand": 17,
+    "a1": "engine_death",
+    "probe": "engine_death",
+    "agree": true,
+    "a1_first_death_frame": 2040,
+    "probe_first_death_frame": 2040,
+    "a1_executed_frames": 30,
+    "probe_executed_frames": 30
+   }
+  ]
+ }
+}

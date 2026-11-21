@@ -1,0 +1,137 @@
+{
+ "schema": "v431-recheck-r71/1",
+ "question": "报告里每个小时数能不能从\"episode 数 × 70.4 s\"重算出来？70.4 s 对每一类 episode 都适用吗？",
+ "unit_seconds": 70.4,
+ "simulation_floor_seconds": 66.7,
+ "claims": [
+  {
+   "claim": "C4 密集 9 窗口（162 episode）",
+   "episodes": 162,
+   "stated_h": 3.2,
+   "implied_h": 3.17,
+   "delta_h": -0.03,
+   "holds": true,
+   "note": ""
+  },
+  {
+   "claim": "n=80 的评测（80 episode）",
+   "episodes": 80,
+   "stated_h": 1.6,
+   "implied_h": 1.56,
+   "delta_h": -0.04,
+   "holds": true,
+   "note": ""
+  },
+  {
+   "claim": "补到 163/臂（166 episode）",
+   "episodes": 166,
+   "stated_h": 3.3,
+   "implied_h": 3.25,
+   "delta_h": -0.05,
+   "holds": true,
+   "note": ""
+  },
+  {
+   "claim": "200 训练 episode",
+   "episodes": 200,
+   "stated_h": 3.9,
+   "implied_h": 3.91,
+   "delta_h": 0.01,
+   "holds": true,
+   "note": ""
+  },
+  {
+   "claim": "1,000 episode 单窗口",
+   "episodes": 1000,
+   "stated_h": 19.6,
+   "implied_h": 19.56,
+   "delta_h": -0.04,
+   "holds": true,
+   "note": ""
+  },
+  {
+   "claim": "3 训练种子 × 4 窗口 × 1,000 episode",
+   "episodes": 12000,
+   "stated_h": 234.7,
+   "implied_h": 234.67,
+   "delta_h": -0.03,
+   "holds": true,
+   "note": ""
+  },
+  {
+   "claim": "计账 643 episode",
+   "episodes": 643,
+   "stated_h": 12.6,
+   "implied_h": 12.57,
+   "delta_h": -0.03,
+   "holds": true,
+   "note": ""
+  },
+  {
+   "claim": "12 训练 episode",
+   "episodes": 12,
+   "stated_h": 0.25,
+   "implied_h": 0.23,
+   "delta_h": -0.02,
+   "holds": true,
+   "note": ""
+  },
+  {
+   "claim": "C4 每窗口（18 episode）",
+   "episodes": 18,
+   "stated_h": 0.35,
+   "implied_h": 0.35,
+   "delta_h": 0.0,
+   "holds": true,
+   "note": "报告写 ≈21 min"
+  }
+ ],
+ "measured_per_group": [
+  {
+   "group": "R20",
+   "derived_from": "states_complete x 18",
+   "states": 4,
+   "states_complete": 4,
+   "episodes": 72,
+   "wall_s": 1282,
+   "wall_s_source": "报告与运行记录（不在 R20 的 JSON 里）",
+   "s_per_episode": 17.8,
+   "exists_in_evidence_json": false
+  },
+  {
+   "group": "R31",
+   "derived_from": "c_fair_pooled.n",
+   "episodes": 40,
+   "wall_s": 2264,
+   "wall_s_source": "报告与运行记录（**R31 的 JSON 里没有 wall time**）",
+   "s_per_episode": 56.6,
+   "exists_in_evidence_json": false
+  }
+ ],
+ "unit_caveat": {
+  "what_70_4_is": "满长 episode（300 决策 / 600 帧）的成本；早死的 episode 更便宜",
+  "measured_below_unit": [
+   {
+    "source": "R20",
+    "s_per_episode": 17.8,
+    "why": "C4 在稀疏早期状态上，恒定动作很快死"
+   },
+   {
+    "source": "R31",
+    "s_per_episode": 56.6,
+    "why": "C-fair 平均 79.7 决策就死，比满长短"
+   }
+  ],
+  "consequence": "凡是用 70.4 s 乘一个**含死亡**的组，得到的是**上界**而不是实测；只有真正计过 wall clock 的组才是实测值"
+ },
+ "counts": {
+  "claims": 9,
+  "hold": 9,
+  "measured_groups": 2
+ },
+ "verdict": {
+  "all_claims_recompute": true,
+  "unit_is_an_upper_bound": true,
+  "reading": "9 条小时数里 **9 条可从「episode 数 × 70.4 s」重算出来**，偏差 ≤0.06 h；**全部成立**。 **但 70.4 s 的口径需要说清**：它是**满长 episode**（300 决策）的成本，而实测里 R20 是 **17.8 s/episode**、R31 是 **56.6 s/episode**——早死的 episode 便宜得多。所以凡是用 70.4 s 乘一个**含死亡**的组，得到的是**上界**而非实测；只有真正计过 wall clock 的组才是实测值。**这不改变任何决策的符号，但改变\"13.5 h\"这类数的含义。**"
+ }
+}

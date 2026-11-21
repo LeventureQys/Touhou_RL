@@ -1,0 +1,282 @@
+{
+ "schema": "v431-recheck-r15/1",
+ "n_move_focus": 18,
+ "bomb_binary": 2,
+ "masks": {
+  "0": {
+   "mask": 1,
+   "mask_hex": "0x1"
+  },
+  "1": {
+   "mask": 17,
+   "mask_hex": "0x11"
+  },
+  "2": {
+   "mask": 145,
+   "mask_hex": "0x91"
+  },
+  "3": {
+   "mask": 129,
+   "mask_hex": "0x81"
+  },
+  "4": {
+   "mask": 161,
+   "mask_hex": "0xa1"
+  },
+  "5": {
+   "mask": 33,
+   "mask_hex": "0x21"
+  },
+  "6": {
+   "mask": 97,
+   "mask_hex": "0x61"
+  },
+  "7": {
+   "mask": 65,
+   "mask_hex": "0x41"
+  },
+  "8": {
+   "mask": 81,
+   "mask_hex": "0x51"
+  },
+  "9": {
+   "mask": 5,
+   "mask_hex": "0x5"
+  },
+  "10": {
+   "mask": 21,
+   "mask_hex": "0x15"
+  },
+  "11": {
+   "mask": 149,
+   "mask_hex": "0x95"
+  },
+  "12": {
+   "mask": 133,
+   "mask_hex": "0x85"
+  },
+  "13": {
+   "mask": 165,
+   "mask_hex": "0xa5"
+  },
+  "14": {
+   "mask": 37,
+   "mask_hex": "0x25"
+  },
+  "15": {
+   "mask": 101,
+   "mask_hex": "0x65"
+  },
+  "16": {
+   "mask": 69,
+   "mask_hex": "0x45"
+  },
+  "17": {
+   "mask": 85,
+   "mask_hex": "0x55"
+  }
+ },
+ "inverse": {
+  "0": {
+   "cand": 0,
+   "bomb": 0
+  },
+  "1": {
+   "cand": 1,
+   "bomb": 0
+  },
+  "2": {
+   "cand": 2,
+   "bomb": 0
+  },
+  "3": {
+   "cand": 3,
+   "bomb": 0
+  },
+  "4": {
+   "cand": 4,
+   "bomb": 0
+  },
+  "5": {
+   "cand": 5,
+   "bomb": 0
+  },
+  "6": {
+   "cand": 6,
+   "bomb": 0
+  },
+  "7": {
+   "cand": 7,
+   "bomb": 0
+  },
+  "8": {
+   "cand": 8,
+   "bomb": 0
+  },
+  "9": {
+   "cand": 9,
+   "bomb": 0
+  },
+  "10": {
+   "cand": 10,
+   "bomb": 0
+  },
+  "11": {
+   "cand": 11,
+   "bomb": 0
+  },
+  "12": {
+   "cand": 12,
+   "bomb": 0
+  },
+  "13": {
+   "cand": 13,
+   "bomb": 0
+  },
+  "14": {
+   "cand": 14,
+   "bomb": 0
+  },
+  "15": {
+   "cand": 15,
+   "bomb": 0
+  },
+  "16": {
+   "cand": 16,
+   "bomb": 0
+  },
+  "17": {
+   "cand": 17,
+   "bomb": 0
+  }
+ },
+ "counts": {
+  "candidates": 18,
+  "distinct_masks": 18,
+  "collisions": 0,
+  "problems": 0,
+  "roundtrip_ok": true,
+  "bomb_always_0": true
+ },
+ "collision_detail": {},
+ "problems": [],
+ "bits": {
+  "or_of_all_masks": "0xf5",
+  "and_of_all_masks": "0x1",
+  "varying_bits": "0xf4"
+ },
+ "focus_axis": {
+  "assumed_layout": "cand // 9 == focus, cand % 9 == move (checked below)",
+  "pairs": [
+   {
+    "move": 0,
+    "cands": [
+     0,
+     9
+    ],
+    "masks": [
+     "0x1",
+     "0x5"
+    ],
+    "masks_differ": true
+   },
+   {
+    "move": 1,
+    "cands": [
+     1,
+     10
+    ],
+    "masks": [
+     "0x11",
+     "0x15"
+    ],
+    "masks_differ": true
+   },
+   {
+    "move": 2,
+    "cands": [
+     2,
+     11
+    ],
+    "masks": [
+     "0x91",
+     "0x95"
+    ],
+    "masks_differ": true
+   },
+   {
+    "move": 3,
+    "cands": [
+     3,
+     12
+    ],
+    "masks": [
+     "0x81",
+     "0x85"
+    ],
+    "masks_differ": true
+   },
+   {
+    "move": 4,
+    "cands": [
+     4,
+     13
+    ],
+    "masks": [
+     "0xa1",
+     "0xa5"
+    ],
+    "masks_differ": true
+   },
+   {
+    "move": 5,
+    "cands": [
+     5,
+     14
+    ],
+    "masks": [
+     "0x21",
+     "0x25"
+    ],
+    "masks_differ": true
+   },
+   {
+    "move": 6,
+    "cands": [
+     6,
+     15
+    ],
+    "masks": [
+     "0x61",
+     "0x65"
+    ],
+    "masks_differ": true
+   },
+   {
+    "move": 7,
+    "cands": [
+     7,
+     16
+    ],
+    "masks": [
+     "0x41",
+     "0x45"
+    ],
+    "masks_differ": true
+   },
+   {
+    "move": 8,
+    "cands": [
+     8,
+     17
+    ],
+    "masks": [
+     "0x51",
+     "0x55"
+    ],
+    "masks_differ": true
+   }
+  ],
+  "all_pairs_differ_in_mask": true
+ }
+}

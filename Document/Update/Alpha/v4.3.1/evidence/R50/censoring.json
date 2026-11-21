@@ -1,0 +1,95 @@
+{
+ "schema": "v431-recheck-r50/1",
+ "question": "报告里哪些\"均值存活决策数\"其实是下界？",
+ "cap_decisions": 300,
+ "groups": [
+  {
+   "group": "arm A (dev, n=80)",
+   "n": 80,
+   "at_cap": 6,
+   "mean_censored": 94.1,
+   "median_censored": 48.0,
+   "max": 300.0,
+   "kind": "LOWER_BOUND",
+   "why": "6 episode(s) reached the cap, so the true mean is >= this value"
+  },
+  {
+   "group": "C-fair (dev, n=80)",
+   "n": 80,
+   "at_cap": 1,
+   "mean_censored": 79.7,
+   "median_censored": 63.0,
+   "max": 300.0,
+   "kind": "LOWER_BOUND",
+   "why": "1 episode(s) reached the cap, so the true mean is >= this value"
+  },
+  {
+   "group": "all constants pooled (18 x 4)",
+   "n": 72,
+   "at_cap": 0,
+   "mean_censored": 111.7,
+   "median_censored": 88.2,
+   "max": 272.0,
+   "kind": "EXACT",
+   "why": "every episode died before the cap, so the mean is exact"
+  }
+ ],
+ "counts": {
+  "groups": 3,
+  "lower_bounds": 2,
+  "exact": 1
+ },
+ "arm_vs_a_fixed_action": {
+  "per_window": [
+   {
+    "seed": 11,
+    "arm_mean": 63.3,
+    "arm_at_cap": 1,
+    "const_pool_mean": 105.9,
+    "const_pool_at_cap": 0,
+    "const_best": 272.0,
+    "arm_minus_pool": -42.6,
+    "arm_minus_best": -208.7
+   },
+   {
+    "seed": 12,
+    "arm_mean": 109.2,
+    "arm_at_cap": 2,
+    "const_pool_mean": 126.0,
+    "const_pool_at_cap": 0,
+    "const_best": 260.0,
+    "arm_minus_pool": -16.8,
+    "arm_minus_best": -150.8
+   },
+   {
+    "seed": 17,
+    "arm_mean": 152.8,
+    "arm_at_cap": 2,
+    "const_pool_mean": 127.8,
+    "const_pool_at_cap": 0,
+    "const_best": 245.5,
+    "arm_minus_pool": 25.1,
+    "arm_minus_best": -92.7
+   },
+   {
+    "seed": 18,
+    "arm_mean": 51.0,
+    "arm_at_cap": 1,
+    "const_pool_mean": 87.1,
+    "const_pool_at_cap": 0,
+    "const_best": 257.5,
+    "arm_minus_pool": -36.1,
+    "arm_minus_best": -206.6
+   }
+  ],
+  "windows_arm_beats_const_pool": 1,
+  "windows_arm_beats_best_const": 0,
+  "windows": 4,
+  "mean_of_arm_minus_pool": -17.6
+ },
+ "verdict": {
+  "some_means_are_lower_bounds": true,
+  "reading": "NEW, SHARPER: arm A's mean (94.1, a lower bound) is BELOW the pooled mean of the 18 constant actions (111.7, exact), and per window arm A only beats 'pick one action and repeat it' on 1/4 windows (mean gap -17.6). Separately, 2 of 3 reported means are LOWER BOUNDS, not exact averages: ['arm A (dev, n=80)', 'C-fair (dev, n=80)'] each contain episodes that reached the 300-decision cap. The best-constant comparison has no survivals, so its mean is exact -- which means the report compares a lower bound against an exact value when it contrasts arm A with C-const-best. The direction of that comparison is therefore the worst case for arm A, and it still loses, so the conclusion survives; but the numbers must be labelled as bounds.",
+  "arm_beats_fixed_action_anywhere": true
+ }
+}

@@ -1,0 +1,113 @@
+{
+ "schema": "v431-recheck-r31/1",
+ "cell": {
+  "frame": 8664,
+  "segment_decisions": 300,
+  "segment_frames": 600,
+  "segment_seconds": 10.0
+ },
+ "dev_windows": [
+  {
+   "seed": 11,
+   "side": "dev",
+   "c_const_best_frames": 544,
+   "c_const_best_decisions": 272.0,
+   "c_fair_n": 10,
+   "c_fair_survived": 0,
+   "c_fair_mean_decisions": 71.8,
+   "c_fair_median_decisions": 60.8,
+   "c_fair_max_decisions": 182.5,
+   "arm_a_mean_decisions": 75.1,
+   "arm_a_n": 10
+  },
+  {
+   "seed": 12,
+   "side": "dev",
+   "c_const_best_frames": 520,
+   "c_const_best_decisions": 260.0,
+   "c_fair_n": 10,
+   "c_fair_survived": 0,
+   "c_fair_mean_decisions": 65.3,
+   "c_fair_median_decisions": 64.0,
+   "c_fair_max_decisions": 101.0,
+   "arm_a_mean_decisions": null,
+   "arm_a_n": 0
+  },
+  {
+   "seed": 17,
+   "side": "dev",
+   "c_const_best_frames": 491,
+   "c_const_best_decisions": 245.5,
+   "c_fair_n": 10,
+   "c_fair_survived": 0,
+   "c_fair_mean_decisions": 118.0,
+   "c_fair_median_decisions": 82.5,
+   "c_fair_max_decisions": 246.0,
+   "arm_a_mean_decisions": null,
+   "arm_a_n": 0
+  },
+  {
+   "seed": 18,
+   "side": "dev",
+   "c_const_best_frames": 515,
+   "c_const_best_decisions": 257.5,
+   "c_fair_n": 10,
+   "c_fair_survived": 0,
+   "c_fair_mean_decisions": 49.6,
+   "c_fair_median_decisions": 39.2,
+   "c_fair_max_decisions": 115.5,
+   "arm_a_mean_decisions": null,
+   "arm_a_n": 0
+  }
+ ],
+ "train_windows": [
+  {
+   "seed": 13,
+   "side": "train",
+   "c_const_best_frames": 518,
+   "c_const_best_decisions": 259.0
+  },
+  {
+   "seed": 14,
+   "side": "train",
+   "c_const_best_frames": 494,
+   "c_const_best_decisions": 247.0
+  },
+  {
+   "seed": 15,
+   "side": "train",
+   "c_const_best_frames": 551,
+   "c_const_best_decisions": 275.5
+  },
+  {
+   "seed": 16,
+   "side": "train",
+   "c_const_best_frames": 448,
+   "c_const_best_decisions": 224.0
+  }
+ ],
+ "c_fair_pooled": {
+  "n": 40,
+  "survived": 0,
+  "mean_decisions": 76.2,
+  "median_decisions": 59.5,
+  "max_decisions": 246.0,
+  "survival_rate": 0.0
+ },
+ "arm_a_dev11": {
+  "n": 10,
+  "survived": 0,
+  "mean_decisions": 75.1,
+  "note": "12 training episodes only; see R29 for the bootstrap comparison"
+ },
+ "difficulty_reading": {
+  "best_constant_beats_random_by": 3.57,
+  "insight": "the strongest constant action survives 272.0 decisions (seed11) versus 76.2 for uniform random, i.e. 3.57x. A learned policy has to beat THAT, not random, so 'beats C-fair' is a weak gate and 'beats C-const-best' is the real one"
+ },
+ "step_batching": {
+  "measured": true,
+  "result": "no speed-up",
+  "detail": "group 1 = 7.655 ms/frame, group 5 = 7.718, group 25 = 7.837; speedup 0.992x, so the cost is the engine simulating a frame, not per-command overhead",
+  "consequence": "the 70.4 s episode cost is already at the engine's simulation floor (8,663 x 7.7 ms = 66.7 s); the only remaining lever is a save-state"
+ }
+}

@@ -1,0 +1,383 @@
+{
+ "schema": "v431-recheck-r39/1",
+ "question": "does every claim the report attributes to the original v4.3.0 review actually appear in it?",
+ "method": {
+  "fragment_chars": 8,
+  "match": "verbatim 8-character fragment, no semantic matching",
+  "corpus": [
+   "DEVELOPMENT_GUIDE.md",
+   "EXECUTION_PLAN.md",
+   "README.md",
+   "ROUTE_AND_CONCLUSIONS.md",
+   "ROUTE_REVIEW_2026-11-15.md",
+   "TACTICAL_LEARNING.md",
+   "TRAINING_PLAN.md",
+   "V420_REVIEW.md",
+   "W12_HANDOFF.md"
+  ]
+ },
+ "counts": {
+  "rows": 44,
+  "found": 9,
+  "not_found": 5,
+  "internal": 30
+ },
+ "rows": [
+  {
+   "id": "C1",
+   "claim": "\"880 训练 / 219 验证\"",
+   "status": "not_found",
+   "where": "",
+   "fragment": "",
+   "note": "no 8-character fragment appears verbatim in any v4.3.0 doc"
+  },
+  {
+   "id": "C2",
+   "claim": "基线 CE = 0.8537 / 0.8558 / 0.8293",
+   "status": "not_found",
+   "where": "",
+   "fragment": "",
+   "note": "no 8-character fragment appears verbatim in any v4.3.0 doc"
+  },
+  {
+   "id": "C3",
+   "claim": "基线用整份数据（含验证标签）拟合",
+   "status": "not_found",
+   "where": "",
+   "fragment": "",
+   "note": "no 8-character fragment appears verbatim in any v4.3.0 doc"
+  },
+  {
+   "id": "C4",
+   "claim": "\"三组配置全部不优于平凡基线\"",
+   "status": "found",
+   "where": "ROUTE_AND_CONCLUSIONS.md",
+   "fragment": "全部不优于平凡基",
+   "note": ""
+  },
+  {
+   "id": "C5",
+   "claim": "\"全部劣于恒预测多数类\"",
+   "status": "found",
+   "where": "ROUTE_AND_CONCLUSIONS.md",
+   "fragment": "全部劣于恒预测多",
+   "note": ""
+  },
+  {
+   "id": "C6",
+   "claim": "\"seed10 与 seed12 前 219 个决策逐字节相同\"",
+   "status": "found",
+   "where": "ROUTE_AND_CONCLUSIONS.md",
+   "fragment": "seed10与s",
+   "note": ""
+  },
+  {
+   "id": "C7",
+   "claim": "\"验证集含约 20% 训练数据原文\"",
+   "status": "not_found",
+   "where": "",
+   "fragment": "",
+   "note": "no 8-character fragment appears verbatim in any v4.3.0 doc"
+  },
+  {
+   "id": "C8",
+   "claim": "\"seed11–seed12 共同前缀 219（语料层）\"",
+   "status": "found",
+   "where": "W12_HANDOFF.md",
+   "fragment": "共同前缀219语",
+   "note": ""
+  },
+  {
+   "id": "C9",
+   "claim": "\"剔除污染后 2.1161→2.5070，结论更强\"",
+   "status": "not_found",
+   "where": "",
+   "fragment": "",
+   "note": "no 8-character fragment appears verbatim in any v4.3.0 doc"
+  },
+  {
+   "id": "C10",
+   "claim": "\"在 BC 成因查清前，真实微段 ≥9/10 不可能达成\"",
+   "status": "found",
+   "where": "EXECUTION_PLAN.md",
+   "fragment": "真实微段≥910",
+   "note": ""
+  },
+  {
+   "id": "C11",
+   "claim": "`executed_key_history` 相同可作为输入重复的证据",
+   "status": "found",
+   "where": "DEVELOPMENT_GUIDE.md",
+   "fragment": "executed",
+   "note": ""
+  },
+  {
+   "id": "C12",
+   "claim": "`slots.jsonl` 里\"窗口内无死亡\"",
+   "status": "found",
+   "where": "W12_HANDOFF.md",
+   "fragment": "slotsjso",
+   "note": ""
+  },
+  {
+   "id": "C13",
+   "claim": "\"设计一个有成功见证且必须作出战斗决策的 3–10 秒片段\"被当作待办",
+   "status": "found",
+   "where": "ROUTE_REVIEW_2026-11-15.md",
+   "fragment": "设计一个有成功见",
+   "note": ""
+  },
+  {
+   "id": "C14",
+   "claim": "**（`R6` 实测补充，不是原报告的说法——`R39` 审计发现此处曾把我的数字误置于\"原说法\"列）** 原报告实际写的是\"三组配置均不优于恒预测多数类\"；我重执行后发现 2.7M 在 seed10/seed11 **全盘**上准确率确实高于多数类（0.4995/0.5369 vs 0.4249/0.4404），可读作\"跨磁带赢了一点\"",
+   "status": "found",
+   "where": "W12_HANDOFF.md",
+   "fragment": "三组配置均不优于",
+   "note": ""
+  },
+  {
+   "id": "C15",
+   "claim": "（我自己的 rev B/rev C）\"A1 的 184 个 proper 状态已证明片段需要决策，故可砍掉 `C4` 恒定动作校准门\"",
+   "status": "internal",
+   "where": "",
+   "fragment": "",
+   "note": "the claim is already labelled as my own, so no source quote is owed"
+  },
+  {
+   "id": "C16",
+   "claim": "（我自己的 rev B）state 0 可作为\"需要战斗决策的 3 s 片段\"",
+   "status": "internal",
+   "where": "",
+   "fragment": "",
+   "note": "the claim is already labelled as my own, so no source quote is owed"
+  },
+  {
+   "id": "C17",
+   "claim": "（我自己的 rev B/rev D）\"改用 A1 的 184 个 proper 状态，实验便宜 5 倍（4–5 h）\"",
+   "status": "internal",
+   "where": "",
+   "fragment": "",
+   "note": "the claim is already labelled as my own, so no source quote is owed"
+  },
+  {
+   "id": "C18",
+   "claim": "（我自己的 rev A）\"后期密集磁带窗口是可执行的 3–10 s 片段\"",
+   "status": "internal",
+   "where": "",
+   "fragment": "",
+   "note": "the claim is already labelled as my own, so no source quote is owed"
+  },
+  {
+   "id": "C19",
+   "claim": "（我自己的 rev D/E）3 s 是最合适的段长",
+   "status": "internal",
+   "where": "",
+   "fragment": "",
+   "note": "the claim is already labelled as my own, so no source quote is owed"
+  },
+  {
+   "id": "C20",
+   "claim": "（我自己的 rev L）要让 episode 变便宜，只能在 `third_party` 里**写**一个 fork-server",
+   "status": "internal",
+   "where": "",
+   "fragment": "",
+   "note": "the claim is already labelled as my own, so no source quote is owed"
+  },
+  {
+   "id": "C21",
+   "claim": "（我自己的 rev M）`PARK` 被拒可能只是关卡还没建立完",
+   "status": "internal",
+   "where": "",
+   "fragment": "",
+   "note": "the claim is already labelled as my own, so no source quote is owed"
+  },
+  {
+   "id": "C22",
+   "claim": "（我自己的 rev K）用 `C-fair` 当学会与否的门",
+   "status": "internal",
+   "where": "",
+   "fragment": "",
+   "note": "the claim is already labelled as my own, so no source quote is owed"
+  },
+  {
+   "id": "C23",
+   "claim": "（我自己的 `R29`/`R31`）臂 A 没有学习信号",
+   "status": "internal",
+   "where": "",
+   "fragment": "",
+   "note": "the claim is already labelled as my own, so no source quote is owed"
+  },
+  {
+   "id": "C24",
+   "claim": "（我自己的 `R34`）臂 A 在 dev 上**显著**差于随机",
+   "status": "internal",
+   "where": "",
+   "fragment": "",
+   "note": "the claim is already labelled as my own, so no source quote is owed"
+  },
+  {
+   "id": "C25",
+   "claim": "（我自己的 rev A）前缀重放可以用批量 `STEP` 提速",
+   "status": "internal",
+   "where": "",
+   "fragment": "",
+   "note": "the claim is already labelled as my own, so no source quote is owed"
+  },
+  {
+   "id": "C26",
+   "claim": "（我自己的 rev A/rev L）70.4 s/episode 还有优化空间",
+   "status": "internal",
+   "where": "",
+   "fragment": "",
+   "note": "the claim is already labelled as my own, so no source quote is owed"
+  },
+  {
+   "id": "C27",
+   "claim": "（我自己的 `R37`）\"随机与任何恒定动作在 40 次里 0 次做到全长存活\"",
+   "status": "internal",
+   "where": "",
+   "fragment": "",
+   "note": "the claim is already labelled as my own, so no source quote is owed"
+  },
+  {
+   "id": "C28",
+   "claim": "（我自己的 `R14`–`R18` 阶段）§6.2 的\"原说法\"列可以混入我自己的实测数字",
+   "status": "internal",
+   "where": "",
+   "fragment": "",
+   "note": "the claim is already labelled as my own, so no source quote is owed"
+  },
+  {
+   "id": "C29",
+   "claim": "（我自己的 §2.6）\"seed10-val focus CE 0.5589（文档）\"",
+   "status": "internal",
+   "where": "",
+   "fragment": "",
+   "note": "the claim is already labelled as my own, so no source quote is owed"
+  },
+  {
+   "id": "C30",
+   "claim": "（我自己的 §3 表）\"三盘是否同一条轨迹的变体\"的**依据**标为\"文档 + `R2`\"",
+   "status": "internal",
+   "where": "",
+   "fragment": "",
+   "note": "the claim is already labelled as my own, so no source quote is owed"
+  },
+  {
+   "id": "C31",
+   "claim": "（我自己的 §1 表）\"R17 判据算术自测 **25 项**通过\"",
+   "status": "internal",
+   "where": "",
+   "fragment": "",
+   "note": "the claim is already labelled as my own, so no source quote is owed"
+  },
+  {
+   "id": "C32",
+   "claim": "（我自己的 §5.4）停止条件 S1–S7 构成一套完整判定机制",
+   "status": "internal",
+   "where": "",
+   "fragment": "",
+   "note": "the claim is already labelled as my own, so no source quote is owed"
+  },
+  {
+   "id": "C33",
+   "claim": "（我自己的 `R27`）臂 A 的基线只有\"均匀随机\"与\"最强恒定动作\"两端",
+   "status": "internal",
+   "where": "",
+   "fragment": "",
+   "note": "the claim is already labelled as my own, so no source quote is owed"
+  },
+  {
+   "id": "C34",
+   "claim": "（我自己的 `R27`/`S2`）\"臂 A ≤ `C-const-best`\"作为停止条件",
+   "status": "internal",
+   "where": "",
+   "fragment": "",
+   "note": "the claim is already labelled as my own, so no source quote is owed"
+  },
+  {
+   "id": "C35",
+   "claim": "（我自己的 §5.5 / §9）\"臂 A 相对随机有约 6 倍存活率优势\"",
+   "status": "internal",
+   "where": "",
+   "fragment": "",
+   "note": "the claim is already labelled as my own, so no source quote is owed"
+  },
+  {
+   "id": "C36",
+   "claim": "（我自己的 §5.5 / §9）把臂 A 的判定写成单一的\"未判定\"",
+   "status": "internal",
+   "where": "",
+   "fragment": "",
+   "note": "the claim is already labelled as my own, so no source quote is owed"
+  },
+  {
+   "id": "C37",
+   "claim": "（我自己的 §5.5，持续约二十轮）只用**均值**描述臂 A 相对随机的表现",
+   "status": "internal",
+   "where": "",
+   "fragment": "",
+   "note": "the claim is already labelled as my own, so no source quote is owed"
+  },
+  {
+   "id": "C38",
+   "claim": "（我自己的 §3 表）\"三盘全盘动作一致率 0.448 / 0.463 / 0.456\"",
+   "status": "internal",
+   "where": "",
+   "fragment": "",
+   "note": "the claim is already labelled as my own, so no source quote is owed"
+  },
+  {
+   "id": "C39",
+   "claim": "（我自己的 §2.5）两张表的\"差\"列**同名反号**",
+   "status": "internal",
+   "where": "",
+   "fragment": "",
+   "note": "the claim is already labelled as my own, so no source quote is owed"
+  },
+  {
+   "id": "C40",
+   "claim": "（我自己的 §4.2f）\"共 **90 个 episode** / 1,282 s\"",
+   "status": "internal",
+   "where": "",
+   "fragment": "",
+   "note": "the claim is already labelled as my own, so no source quote is owed"
+  },
+  {
+   "id": "C41",
+   "claim": "（我自己的 §6 K 表）`K9` 仍写\"全盘动作一致率 0.448/0.463/0.456\"",
+   "status": "internal",
+   "where": "",
+   "fragment": "",
+   "note": "the claim is already labelled as my own, so no source quote is owed"
+  },
+  {
+   "id": "C42",
+   "claim": "（我自己的 §6 `K3`）三个正确基线统一引 `R1`",
+   "status": "internal",
+   "where": "",
+   "fragment": "",
+   "note": "the claim is already labelled as my own, so no source quote is owed"
+  },
+  {
+   "id": "C43",
+   "claim": "（我自己的 `N11` 与 §9 的臂 B/C 段）\"obs-v3 需要逐决策动作历史，`_pair_cand` 拒绝双 mask 决策\"",
+   "status": "internal",
+   "where": "",
+   "fragment": "",
+   "note": "the claim is already labelled as my own, so no source quote is owed"
+  },
+  {
+   "id": "C44",
+   "claim": "（我自己的 §5.6 与 `N8`/覆盖率第 5 行）把\"预注册判据未通过\"写成\"**无信号**\"",
+   "status": "internal",
+   "where": "",
+   "fragment": "",
+   "note": "the claim is already labelled as my own, so no source quote is owed"
+  }
+ ],
+ "verdict": {
+  "all_attributed_claims_found": false,
+  "reading": "5 of 14 attributed claims have no verbatim fragment in the v4.3.0 documents: those are either my paraphrases presented as quotes (to be fixed) or quotes of files outside this directory"
+ }
+}

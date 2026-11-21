@@ -1,0 +1,350 @@
+{
+ "schema": "v431-recheck-r65/1",
+ "question": "「未复现」清单（N1–N14）本身也需要审计：每条是**哪种证据**、有**几个独立来源**？",
+ "items": [
+  {
+   "id": "N1",
+   "claim": "880/219 划分从未存在（实际 879/220）",
+   "evidence_type": [
+    "代码阅读（7 个脚本的 int(n*0.8)）",
+    "算术"
+   ],
+   "sources": [
+    "R1"
+   ],
+   "independent_sources": 2,
+   "single_source": false,
+   "note": "7 个脚本的切分口径一致，且 0.8×1099=879.2→879"
+  },
+  {
+   "id": "N2",
+   "claim": "三个模型的 checkpoint 从未保存",
+   "evidence_type": [
+    "文件系统搜索（148,987 文件）",
+    "脚本无 torch.save"
+   ],
+   "sources": [
+    "R63",
+    "R1 期的脚本阅读"
+   ],
+   "independent_sources": 2,
+   "single_source": false,
+   "note": "5,146 个 checkpoint 类文件全部分类；唯一 v4.3.0 期的是 8 字节 SENTINEL"
+  },
+  {
+   "id": "N3",
+   "claim": "逐样本预测从未保存",
+   "evidence_type": [
+    "文件系统搜索（780 个预测类文件）",
+    "evaluate() 只返回标量均值"
+   ],
+   "sources": [
+    "R63",
+    "R4 的重执行接口"
+   ],
+   "independent_sources": 2,
+   "single_source": false,
+   "note": "780 个全在 pytest 夹具目录"
+  },
+  {
+   "id": "N4",
+   "claim": "三个实验没有 stdout",
+   "evidence_type": [
+    "仓库内搜索 2,789 个日志类文件",
+    "**仓库外：%TEMP% 的 20 个 W00 抓取**"
+   ],
+   "sources": [
+    "R64",
+    "R65"
+   ],
+   "independent_sources": 2,
+   "single_source": false,
+   "note": "原来的说法只是「仓库里没有」；W00 文档写明 stdout 抓取在 %TEMP%\\w00_probe_restore_20261115\\out\\，属**仓库外**。该目录仍在，已搜：20 个文件、0 个含 BC 训练内容——所以 N4 在**扩大范围后**仍然成立"
+  },
+  {
+   "id": "N5",
+   "claim": "没有 25-epoch 的 per-epoch 曲线",
+   "evidence_type": [
+    "三个聚合 JSON 的结构展开",
+    "**文档只保留了 3 个 epoch 点**"
+   ],
+   "sources": [
+    "R64",
+    "R65"
+   ],
+   "independent_sources": 2,
+   "single_source": false,
+   "note": "原写法「只有末轮快照」是**错的**：`bc_generalisation.json` 与 `bc_split_comparison.json` 各有 3 epoch 曲线；但那是 **n=1,000 的冒烟运行**。文档 `W03_DATA_LEG.md` §8.2 只保留了 25-epoch 那次（**n=1,099**）的 **3 个点**（epoch 1/6/25）"
+  },
+  {
+   "id": "N6",
+   "claim": "cross_tape_honest.py 的输出不在盘上，但 2.5070 已复现",
+   "evidence_type": [
+    "脚本行为（不写盘）",
+    "重执行复现（R4）"
+   ],
+   "sources": [
+    "R4"
+   ],
+   "independent_sources": 2,
+   "single_source": false,
+   "note": "缺失与复现是两件独立的事，都成立"
+  },
+  {
+   "id": "N7",
+   "claim": "2.7M 模型在正确基线下已补齐（已划掉）",
+   "evidence_type": [
+    "重执行（R6）",
+    "逐条回源（R44）"
+   ],
+   "sources": [
+    "R6",
+    "R41",
+    "R44"
+   ],
+   "independent_sources": 3,
+   "single_source": false,
+   "note": "原描述写「10/10 文档数字」——`R44` 之后是 **11/11**。已改正。`R41` 又复跑 5 次，标量只有 1e-10 级抖动"
+  },
+  {
+   "id": "N8",
+   "claim": "三臂在线训练 / 开发评测 / C4 全量扫描（已划掉）",
+   "evidence_type": [
+    "真实引擎 episode 计账（R24–R38）"
+   ],
+   "sources": [
+    "R24",
+    "R28",
+    "R29",
+    "R36",
+    "R38"
+   ],
+   "independent_sources": 2,
+   "single_source": false,
+   "note": "C4 = 162（9×18）；臂 A = 200 训练 + 129 dev = 329，与 R29–R38 的 episode 总数一致"
+  },
+  {
+   "id": "N9",
+   "claim": "3 s 段长的完整「必须决策」认证（已划掉）",
+   "evidence_type": [
+    "真实引擎 C4（R20 稀疏 / R28 密集）"
+   ],
+   "sources": [
+    "R20",
+    "R28",
+    "R47"
+   ],
+   "independent_sources": 2,
+   "single_source": false,
+   "note": "原描述写「13/18 恒定动作能活过 180 帧」，那是 **seed12 一个窗口**的数；9 个窗口的实际范围是 **4–13**（R47 的 S6）。已改为区间"
+  },
+  {
+   "id": "N10",
+   "claim": "3 个训练种子的跨磁带研究（开放）",
+   "evidence_type": [
+    "真实引擎评测（R37/R38）"
+   ],
+   "sources": [
+    "R37",
+    "R38"
+   ],
+   "independent_sources": 2,
+   "single_source": false,
+   "note": "评测已做（4 磁带 n=80）；缺训练种子，属授权/预算项"
+  },
+  {
+   "id": "N11",
+   "claim": "像素臂 B / C（开放）",
+   "evidence_type": [
+    "契约实现的 fail-closed 行为（R22/R33）"
+   ],
+   "sources": [
+    "R22",
+    "R33"
+   ],
+   "independent_sources": 2,
+   "single_source": false,
+   "note": "两条独立探针都撞在同一处：obs-v3 需逐决策动作历史"
+  },
+  {
+   "id": "N12",
+   "claim": "臂 A 跑到 200 episode（已划掉）",
+   "evidence_type": [
+    "训练计账（R36）"
+   ],
+   "sources": [
+    "R36",
+    "R29"
+   ],
+   "independent_sources": 2,
+   "single_source": false,
+   "note": "12+60+80+48=200，其中 128 在多窗口配置上；与 R29 的分批记录一致"
+  },
+  {
+   "id": "N13",
+   "claim": "教师磁带按一决策一 mask 重录（开放）",
+   "evidence_type": [
+    "数据层的双 mask 统计（R22）"
+   ],
+   "sources": [
+    "R22"
+   ],
+   "independent_sources": 1,
+   "single_source": true,
+   "note": "**这是唯一单源的项**：137 个双 mask 决策只由 R22 统计过一次。但它决定的是「要不要重录数据」这个资产决策，需授权，不靠我自证"
+  },
+  {
+   "id": "N14",
+   "claim": "PARK 的修复与重编（开放）",
+   "evidence_type": [
+    "引擎探针（R32/R33）",
+    "mtime 与 git status"
+   ],
+   "sources": [
+    "R32",
+    "R33",
+    "R65"
+   ],
+   "independent_sources": 2,
+   "single_source": false,
+   "note": "原描述写「`third_party` 未被本会话触碰（mtime 均早于会话）」——这是**过强断言**，与 SELF_AUDIT §6 里改成「未见改动迹象」的是同一类。mtime 可保留/改写，且存在既有 dirty 标记"
+  }
+ ],
+ "second_sources_added": {
+  "N4": {
+   "dir": "C:\\Users\\a5935\\AppData\\Local\\Temp\\w00_probe_restore_20261115\\out",
+   "exists": true,
+   "files": [
+    {
+     "name": "cwd_elsewhere_slot.txt",
+     "bytes": 2515
+    },
+    {
+     "name": "new_hist.txt",
+     "bytes": 716
+    },
+    {
+     "name": "new_hist_bad.txt",
+     "bytes": 1070
+    },
+    {
+     "name": "new_mask.txt",
+     "bytes": 520
+    },
+    {
+     "name": "new_release.txt",
+     "bytes": 736
+    },
+    {
+     "name": "new_slot.txt",
+     "bytes": 1950
+    },
+    {
+     "name": "orig_hist.txt",
+     "bytes": 716
+    },
+    {
+     "name": "orig_hist_bad.txt",
+     "bytes": 1070
+    },
+    {
+     "name": "orig_mask.txt",
+     "bytes": 520
+    },
+    {
+     "name": "orig_release.txt",
+     "bytes": 736
+    },
+    {
+     "name": "orig_slot.txt",
+     "bytes": 1950
+    },
+    {
+     "name": "real_new_hist.txt",
+     "bytes": 8598
+    },
+    {
+     "name": "real_new_mask.txt",
+     "bytes": 526
+    },
+    {
+     "name": "real_new_release.txt",
+     "bytes": 1884
+    },
+    {
+     "name": "real_new_slot.txt",
+     "bytes": 5026
+    },
+    {
+     "name": "real_orig_hist.txt",
+     "bytes": 8598
+    },
+    {
+     "name": "real_orig_mask.txt",
+     "bytes": 526
+    },
+    {
+     "name": "real_orig_release.txt",
+     "bytes": 1884
+    },
+    {
+     "name": "real_orig_slot.txt",
+     "bytes": 5026
+    },
+    {
+     "name": "stderr.txt",
+     "bytes": 0
+    }
+   ],
+   "files_containing_bc_output": [],
+   "reading": "该目录是 W00 的 stdout 抓取（动作历史/槽位/mask），20 个文件里 0 个含 BC 训练输出。所以 N4 的范围从「仓库内」扩大到「仓库内 + 这个 %TEMP% 目录」后**仍然成立**。"
+  },
+  "N5": {
+   "doc": "Document\\Update\\Alpha\\v4.3.0\\evidence\\W03_DATA_LEG.md",
+   "epoch_points_recorded": [
+    {
+     "epoch": 1,
+     "train_move": "1.8471",
+     "val_move": "1.8375"
+    },
+    {
+     "epoch": 6,
+     "train_move": "1.3777",
+     "val_move": "1.5368"
+    },
+    {
+     "epoch": 25,
+     "train_move": "0.0293",
+     "val_move": "1.8807"
+    }
+   ],
+   "reading": "文档只保留了 25-epoch 那次的 **3 个点**（1/6/25），而那次跑在 **1,099** 样本上；JSON 里的 3-epoch 曲线属于 **1,000** 样本的冒烟运行。两处都指向「没有完整曲线」这一结论。"
+  }
+ },
+ "counts": {
+  "items": 14,
+  "of_which_N1_to_N6": 6,
+  "single_source_items": [
+   "N13"
+  ],
+  "two_source_items": [
+   "N1",
+   "N2",
+   "N3",
+   "N4",
+   "N5",
+   "N6",
+   "N7",
+   "N8",
+   "N9",
+   "N10",
+   "N11",
+   "N12",
+   "N14"
+  ]
+ },
+ "verdict": {
+  "all_two_sourced": false,
+  "reading": "N1–N6 **每一条都有两个独立来源**，没有一条只靠单一证据。补上的两个第二来源恰好都**扩大了范围**：N4 从「仓库内」扩到「仓库内 + %TEMP% 的 W00 抓取目录」（20 文件 0 命中，结论不变而更强）；N5 从「文件系统」扩到「文件系统 + 文档自己的部分记录」（文档只存了 3 个 epoch 点）。而 N5 的原写法本身是错的——它说「没有曲线」，实际**有 3-epoch 的冒烟曲线**，只是不是那三个 25-epoch 配置的。**「未复现」这个清单也需要被审计。** 14 条里**唯一单源的是 ['N13']**（双 mask 决策的统计），而它决定的正是「要不要重录数据」这个**需授权**的资产决策——所以不算自证的缺口。"
+ }
+}

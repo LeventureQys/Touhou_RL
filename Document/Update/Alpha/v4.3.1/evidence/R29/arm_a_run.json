@@ -1,0 +1,153 @@
+{
+ "schema": "v431-recheck-r29/1",
+ "configuration": {
+  "observation": "A-HAZARDS (client.hazards + STATE), queried per decision",
+  "feature_dim": 106,
+  "segment": {
+   "decisions": 300,
+   "frames": 600,
+   "seconds": 10.0
+  },
+  "start_frame": 8664,
+  "train_window": {
+   "seed": 13,
+   "role": "train"
+  },
+  "dev_window": {
+   "seed": 11,
+   "role": "dev (never trained on)"
+  },
+  "algorithm": "REINFORCE, EMA baseline, reward +1 per decision survived",
+  "lr": 0.003,
+  "hidden": 64,
+  "grad_clip": 1.0
+ },
+ "works": {
+  "train_episodes": 12,
+  "train_survived_full_segment": 1,
+  "train_mean_return_decisions": 133.9,
+  "train_best_episode": 300.0,
+  "checkpoint_saved": true,
+  "dev_episodes": 10,
+  "dev_survived": 0,
+  "dev_mean_return_decisions": 75.1,
+  "note": "one training episode reached the full 300 decisions, which no constant action achieves on this window (best constant = 259 decisions)"
+ },
+ "bug_found_and_fixed": {
+  "symptom": "first run's mean return fell from ~84 (untrained) to 38 by episode 10; the policy was being destroyed, not trained",
+  "cause": "loss = sum(-logp) * advantage, so gradient scale ~ 300 x 300 = 9e4",
+  "fix": [
+   "mean instead of sum",
+   "advantage / decisions",
+   "lr 1e-2 -> 3e-3",
+   "clip_grad_norm_ 1.0"
+  ],
+  "evidence": {
+   "ep0_return": 40,
+   "ep10_return_before_fix": 38,
+   "ep10_return_after_fix": 83,
+   "ep11_return_after_fix": 300
+  }
+ },
+ "no_signal_on_dev": {
+  "arm_a": {
+   "n": 10,
+   "survived": 0,
+   "mean": 75.1,
+   "median": 77.0,
+   "max": 117.0,
+   "all": [
+    34.0,
+    38.0,
+    43.0,
+    50.0,
+    74.0,
+    80.0,
+    85.0,
+    114.0,
+    116.0,
+    117.0
+   ]
+  },
+  "c_fair": {
+   "n": 10,
+   "survived": 0,
+   "mean": 71.8,
+   "median": 60.8,
+   "max": 182.5,
+   "all": [
+    34.5,
+    42.0,
+    42.5,
+    42.5,
+    59.5,
+    62.0,
+    71.0,
+    88.5,
+    92.5,
+    182.5
+   ]
+  },
+  "paired_bootstrap_of_mean_difference": {
+   "mean_diff": 3.279,
+   "ci95": [
+    -31.1,
+    33.75
+   ],
+   "excludes_zero": false,
+   "boot": 4000
+  },
+  "verdict": "no signal: the arm's mean is inside the bootstrap CI of a zero difference"
+ },
+ "why_no_signal": {
+  "training_episodes": 12,
+  "prereg_budget_episodes": 200,
+  "fraction_of_prereg_budget_run": 0.06,
+  "cost_measured_s_per_episode": 70.4,
+  "prefix_share_of_episode": 0.96,
+  "staged_cost": {
+   "episodes": [
+    12,
+    60,
+    200,
+    1000,
+    3000
+   ],
+   "hours_one_window": [
+    0.2,
+    1.2,
+    3.9,
+    19.6,
+    58.7
+   ],
+   "hours_3_seeds_4_windows": [
+    2.8,
+    14.1,
+    46.9,
+    234.7,
+    704.0
+   ]
+  },
+  "reading": "12 episodes is 6% of the prereg's budget; a policy-gradient run that needs 1e3-1e3 episodes costs 19-58 h per seed at 70 s/episode, and a 3-seed x 4-window study costs 60-230 h. The binding constraint is the missing engine save-state: 96% of every episode is replaying the 8,663 frame prefix, not learning."
+ },
+ "decision_rule_outcome": {
+  "gate": "arm A must beat C-fair on dev before the pixel arms are attempted",
+  "result": "arm A does NOT beat C-fair",
+  "action_per_prereg": "stop and inspect reward / exploration / optimisation before anything else",
+  "inspection_done": {
+   "optimisation": "found and fixed a gradient-scale bug (see bug_found_and_fixed)",
+   "exploration": "entropy is not annealed and the initial policy is near-uniform; no evidence exploration is the blocker",
+   "reward": "+1 per decision survived is dense; the terminal is the only 0, so the signal is not sparse in the usual sense",
+   "budget": "12 episodes vs the prereg's 200; the run is 6% of its own budget"
+  },
+  "do_not": [
+   "do not proceed to pixel arms B/C on this result",
+   "do not report arm A as failed as a method - it was not run at budget"
+  ]
+ },
+ "next_actions": [
+  "run arm A to the prereg's 200 episodes on one window (~3.9 h) before judging it",
+  "or first build the engine save-state, which cuts episode cost by ~25x and makes a 3-seed study affordable (this is the highest-value engineering prerequisite)",
+  "C-const-best remains unbeaten by any policy so far: it is the second gate"
+ ]
+}

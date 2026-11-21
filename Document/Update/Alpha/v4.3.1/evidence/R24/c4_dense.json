@@ -1,0 +1,292 @@
+{
+ "schema": "v431-recheck-r24/1",
+ "window": {
+  "seed": 12,
+  "frame": 8664,
+  "dense": true
+ },
+ "segment": {
+  "frames": 600,
+  "seconds": 10.0,
+  "decisions": 300
+ },
+ "rule": "hold each of the 18 candidates for the whole segment; admissible iff none survives",
+ "counts": {
+  "candidates": 18,
+  "complete": 18,
+  "survivors": 0,
+  "surviving_candidates": [],
+  "errors": 0
+ },
+ "admissible": true,
+ "death_offsets": {
+  "min": 58,
+  "median": 277.5,
+  "max": 520,
+  "max_seconds": 8.67,
+  "all": [
+   195,
+   124,
+   58,
+   306,
+   286,
+   201,
+   315,
+   310,
+   176,
+   256,
+   118,
+   60,
+   361,
+   286,
+   269,
+   520,
+   391,
+   304
+  ]
+ },
+ "segment_length_constraint": {
+  "min_admissible_frames": 521,
+  "min_admissible_seconds": 8.68,
+  "reading": "any segment longer than the best constant's survival is admissible at this window; the 10 s segment clears it by 80 frames",
+  "margin_frames": 80,
+  "margin_fraction": 0.1333
+ },
+ "restore_gate": {
+  "hash_checks_all": true,
+  "hash_mismatches_total": 0
+ },
+ "cost": {
+  "episodes": 18,
+  "mean_wall_s": 72.6,
+  "total_wall_s": 1306.6
+ },
+ "verdict": {
+  "c4_passes_dense_10s": true,
+  "contrast_with_sparse_3s": "R20 found 0/4 admissible at 3 s in the early regime",
+  "consequence": "arm A may proceed on this window at a segment length above 8.68 s"
+ },
+ "caveats": [
+  "one window, one seed: admissibility is per (window, segment length), not a property of the dense regime in general",
+  "the pixel arms (B/C) still cannot run here: obs-v3 needs the action-history buffer and `_pair_cand` refuses split-mask decisions (R22/R23)",
+  "the best constant survives 520 frames, so a policy that simply holds it and then switches once would also clear 600 frames; the gate rules out 'one constant key' but not 'one constant key plus one change'"
+ ],
+ "rows": [
+  {
+   "cand": 0,
+   "terminal": "first_death",
+   "first_death_offset": 195,
+   "frames_executed": 196,
+   "alive_120": true,
+   "alive_180": true,
+   "restore_hash_checks": 2165,
+   "restore_hash_mismatches": 0,
+   "wall_s": 73.481,
+   "error": null
+  },
+  {
+   "cand": 1,
+   "terminal": "first_death",
+   "first_death_offset": 124,
+   "frames_executed": 125,
+   "alive_120": true,
+   "alive_180": false,
+   "restore_hash_checks": 2165,
+   "restore_hash_mismatches": 0,
+   "wall_s": 71.727,
+   "error": null
+  },
+  {
+   "cand": 2,
+   "terminal": "first_death",
+   "first_death_offset": 58,
+   "frames_executed": 59,
+   "alive_120": false,
+   "alive_180": false,
+   "restore_hash_checks": 2165,
+   "restore_hash_mismatches": 0,
+   "wall_s": 71.329,
+   "error": null
+  },
+  {
+   "cand": 3,
+   "terminal": "first_death",
+   "first_death_offset": 306,
+   "frames_executed": 307,
+   "alive_120": true,
+   "alive_180": true,
+   "restore_hash_checks": 2165,
+   "restore_hash_mismatches": 0,
+   "wall_s": 73.378,
+   "error": null
+  },
+  {
+   "cand": 4,
+   "terminal": "first_death",
+   "first_death_offset": 286,
+   "frames_executed": 287,
+   "alive_120": true,
+   "alive_180": true,
+   "restore_hash_checks": 2165,
+   "restore_hash_mismatches": 0,
+   "wall_s": 72.988,
+   "error": null
+  },
+  {
+   "cand": 5,
+   "terminal": "first_death",
+   "first_death_offset": 201,
+   "frames_executed": 202,
+   "alive_120": true,
+   "alive_180": true,
+   "restore_hash_checks": 2165,
+   "restore_hash_mismatches": 0,
+   "wall_s": 72.451,
+   "error": null
+  },
+  {
+   "cand": 6,
+   "terminal": "first_death",
+   "first_death_offset": 315,
+   "frames_executed": 316,
+   "alive_120": true,
+   "alive_180": true,
+   "restore_hash_checks": 2165,
+   "restore_hash_mismatches": 0,
+   "wall_s": 73.078,
+   "error": null
+  },
+  {
+   "cand": 7,
+   "terminal": "first_death",
+   "first_death_offset": 310,
+   "frames_executed": 311,
+   "alive_120": true,
+   "alive_180": true,
+   "restore_hash_checks": 2165,
+   "restore_hash_mismatches": 0,
+   "wall_s": 73.173,
+   "error": null
+  },
+  {
+   "cand": 8,
+   "terminal": "first_death",
+   "first_death_offset": 176,
+   "frames_executed": 177,
+   "alive_120": true,
+   "alive_180": false,
+   "restore_hash_checks": 2165,
+   "restore_hash_mismatches": 0,
+   "wall_s": 72.418,
+   "error": null
+  },
+  {
+   "cand": 9,
+   "terminal": "first_death",
+   "first_death_offset": 256,
+   "frames_executed": 257,
+   "alive_120": true,
+   "alive_180": true,
+   "restore_hash_checks": 2165,
+   "restore_hash_mismatches": 0,
+   "wall_s": 72.877,
+   "error": null
+  },
+  {
+   "cand": 10,
+   "terminal": "first_death",
+   "first_death_offset": 118,
+   "frames_executed": 119,
+   "alive_120": false,
+   "alive_180": false,
+   "restore_hash_checks": 2165,
+   "restore_hash_mismatches": 0,
+   "wall_s": 69.904,
+   "error": null
+  },
+  {
+   "cand": 11,
+   "terminal": "first_death",
+   "first_death_offset": 60,
+   "frames_executed": 61,
+   "alive_120": false,
+   "alive_180": false,
+   "restore_hash_checks": 2165,
+   "restore_hash_mismatches": 0,
+   "wall_s": 69.262,
+   "error": null
+  },
+  {
+   "cand": 12,
+   "terminal": "first_death",
+   "first_death_offset": 361,
+   "frames_executed": 362,
+   "alive_120": true,
+   "alive_180": true,
+   "restore_hash_checks": 2165,
+   "restore_hash_mismatches": 0,
+   "wall_s": 72.737,
+   "error": null
+  },
+  {
+   "cand": 13,
+   "terminal": "first_death",
+   "first_death_offset": 286,
+   "frames_executed": 287,
+   "alive_120": true,
+   "alive_180": true,
+   "restore_hash_checks": 2165,
+   "restore_hash_mismatches": 0,
+   "wall_s": 72.701,
+   "error": null
+  },
+  {
+   "cand": 14,
+   "terminal": "first_death",
+   "first_death_offset": 269,
+   "frames_executed": 270,
+   "alive_120": true,
+   "alive_180": true,
+   "restore_hash_checks": 2165,
+   "restore_hash_mismatches": 0,
+   "wall_s": 72.101,
+   "error": null
+  },
+  {
+   "cand": 15,
+   "terminal": "first_death",
+   "first_death_offset": 520,
+   "frames_executed": 521,
+   "alive_120": true,
+   "alive_180": true,
+   "restore_hash_checks": 2165,
+   "restore_hash_mismatches": 0,
+   "wall_s": 74.182,
+   "error": null
+  },
+  {
+   "cand": 16,
+   "terminal": "first_death",
+   "first_death_offset": 391,
+   "frames_executed": 392,
+   "alive_120": true,
+   "alive_180": true,
+   "restore_hash_checks": 2165,
+   "restore_hash_mismatches": 0,
+   "wall_s": 74.246,
+   "error": null
+  },
+  {
+   "cand": 17,
+   "terminal": "first_death",
+   "first_death_offset": 304,
+   "frames_executed": 305,
+   "alive_120": true,
+   "alive_180": true,
+   "restore_hash_checks": 2165,
+   "restore_hash_mismatches": 0,
+   "wall_s": 74.538,
+   "error": null
+  }
+ ]
+}

@@ -1,0 +1,86 @@
+{
+ "schema": "v431-recheck-r55/1",
+ "question": "有没有任何**合理且对臂 A 有利**的判据能支持\"臂 A 学会了\"？",
+ "criteria": [
+  {
+   "criterion": "跑满 300 的次数",
+   "arm": "6/80",
+   "baseline": "1/80",
+   "favours_arm": true,
+   "note": "报告一直用双侧 p=0.1167"
+  },
+  {
+   "criterion": "存活率单侧 Fisher（最宽松的合法检验）",
+   "arm": "0.075",
+   "baseline": "0.013",
+   "favours_arm": false,
+   "p_one_sided": 0.0584,
+   "note": "即使单侧也 > 0.05"
+  },
+  {
+   "criterion": "上四分位 Q3",
+   "arm": 110.5,
+   "baseline": 98.8,
+   "favours_arm": true,
+   "note": ""
+  },
+  {
+   "criterion": "前 10 个 episode 的均值",
+   "arm": 294.8,
+   "baseline": 187.3,
+   "favours_arm": true,
+   "note": ""
+  },
+  {
+   "criterion": "≥200 决策的 episode 比例",
+   "arm": "15/80",
+   "baseline": "3/80",
+   "favours_arm": true,
+   "note": ""
+  },
+  {
+   "criterion": "单个最好窗口（seed17）的均值",
+   "arm": 152.8,
+   "baseline": 109.7,
+   "favours_arm": true,
+   "note": "只有一个窗口"
+  },
+  {
+   "criterion": "seed17 的中位数",
+   "arm": 154.5,
+   "baseline": 70.2,
+   "favours_arm": true,
+   "note": ""
+  },
+  {
+   "criterion": "四个窗口里胜出的窗口数（按均值）",
+   "arm": "2/4",
+   "baseline": "—",
+   "favours_arm": false,
+   "note": "3/4 才算压倒性"
+  }
+ ],
+ "counts": {
+  "criteria": 8,
+  "favours_arm": 6
+ },
+ "favoured_by": [
+  "跑满 300 的次数",
+  "上四分位 Q3",
+  "前 10 个 episode 的均值",
+  "≥200 决策的 episode 比例",
+  "单个最好窗口（seed17）的均值",
+  "seed17 的中位数"
+ ],
+ "survival_one_sided": {
+  "arm": "6/80",
+  "baseline": "1/80",
+  "p_one_sided": 0.0584,
+  "clears_005": false
+ },
+ "verdict": {
+  "support_exists": true,
+  "support_is_upper_tail_only": true,
+  "reading": "**6/8 条对臂 A 有利**：['跑满 300 的次数', '上四分位 Q3', '前 10 个 episode 的均值', '≥200 决策的 episode 比例', '单个最好窗口（seed17）的均值', 'seed17 的中位数']。所以\"臂 A 什么都没学到\"是**错的**——它在存活次数、Q3、前 10 名均值、≥200 的比例、以及 seed17 上确实更好。**但所有这些有利判据都是\"上尾\"或\"单窗口\"判据**：没有一个说的是\"典型 episode 更好\"。最关键的是**最宽松的合法检验也差一点**：存活率单侧 Fisher **p = 0.0584**（> 0.05），比双侧的 0.1167 好，但**仍然过不了线**。所以正确的表述是：**优势真实存在，但只存在于分布的顶端**；它既不足以说\"学会了\"，也不该被写成\"没有差别\"。"
+ }
+}

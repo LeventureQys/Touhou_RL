@@ -1,0 +1,360 @@
+{
+ "schema": "v431-recheck-r8/1",
+ "corrected_criteria": {
+  "C1_mean_ink_percentile_min": 60.0,
+  "C2_distinct_executed_cand_min": 4,
+  "C3_prefix_replay_s_max": 120.0,
+  "C4_control_must_fail": {
+   "gate": "frozen constant-action policy must lose a life or fail to complete the window in >= 4 of 5 attempts",
+   "status": "NOT EVALUATED OFFLINE — engine required"
+  },
+  "dropped": {
+   "C2_teacher_margin_below_8": "dropped after R7f: margin is quantised (median = max = 16.0 on all three tapes), fires 4/6588 on seed12 and 0/6592 on both others, and is not the top-1/top-2 score gap (that gap is < 8 on 6588/6588)."
+  }
+ },
+ "measured_replay_fps": 104.81,
+ "per_ancestor": {
+  "seed12": {
+   "episode_seed": 12,
+   "slots": 6588,
+   "first_frame": 16,
+   "last_frame": 13190,
+   "minutes": 3.66,
+   "hash_chain_ok": 6587,
+   "hash_chain_total": 6587,
+   "distinct_cand_in_tape": 17,
+   "windows": {
+    "90": {
+     "start_slot": 4325,
+     "end_slot": 4415,
+     "width_slots": 90,
+     "duration_s": 3.0,
+     "start_frame": 8666,
+     "end_frame": 8844,
+     "mean_ink_percentile": 94.58,
+     "distinct_executed_cand": 15,
+     "prefix_replay_s": 82.5,
+     "segment_play_s": 1.7,
+     "restore_gate_hash_pre": "235b20476408e0c8",
+     "recorded_masks_prefix_first5": [
+      65,
+      65,
+      65,
+      65,
+      65
+     ],
+     "n_eligible_ranked_1st": 281
+    },
+    "150": {
+     "start_slot": 6210,
+     "end_slot": 6360,
+     "width_slots": 150,
+     "duration_s": 5.0,
+     "start_frame": 12436,
+     "end_frame": 12734,
+     "mean_ink_percentile": 88.89,
+     "distinct_executed_cand": 13,
+     "prefix_replay_s": 118.5,
+     "segment_play_s": 2.9,
+     "restore_gate_hash_pre": "74cc90a5a4bf0e82",
+     "recorded_masks_prefix_first5": [
+      65,
+      65,
+      65,
+      65,
+      65
+     ],
+     "n_eligible_ranked_1st": 288
+    },
+    "300": {
+     "start_slot": 6060,
+     "end_slot": 6360,
+     "width_slots": 300,
+     "duration_s": 10.0,
+     "start_frame": 12136,
+     "end_frame": 12734,
+     "mean_ink_percentile": 83.82,
+     "distinct_executed_cand": 14,
+     "prefix_replay_s": 115.6,
+     "segment_play_s": 5.7,
+     "restore_gate_hash_pre": "d9d33eb9d8f82612",
+     "recorded_masks_prefix_first5": [
+      65,
+      65,
+      65,
+      65,
+      65
+     ],
+     "n_eligible_ranked_1st": 317
+    }
+   }
+  },
+  "seed10": {
+   "episode_seed": 10,
+   "slots": 6592,
+   "first_frame": 16,
+   "last_frame": 13198,
+   "minutes": 3.66,
+   "hash_chain_ok": 6591,
+   "hash_chain_total": 6591,
+   "distinct_cand_in_tape": 17,
+   "windows": {
+    "90": {
+     "start_slot": 5105,
+     "end_slot": 5195,
+     "width_slots": 90,
+     "duration_s": 3.0,
+     "start_frame": 10226,
+     "end_frame": 10404,
+     "mean_ink_percentile": 94.04,
+     "distinct_executed_cand": 17,
+     "prefix_replay_s": 97.4,
+     "segment_play_s": 1.7,
+     "restore_gate_hash_pre": "796b0bfeac2bc830",
+     "recorded_masks_prefix_first5": [
+      65,
+      65,
+      65,
+      65,
+      65
+     ],
+     "n_eligible_ranked_1st": 335
+    },
+    "150": {
+     "start_slot": 5090,
+     "end_slot": 5240,
+     "width_slots": 150,
+     "duration_s": 5.0,
+     "start_frame": 10196,
+     "end_frame": 10494,
+     "mean_ink_percentile": 86.59,
+     "distinct_executed_cand": 17,
+     "prefix_replay_s": 97.1,
+     "segment_play_s": 2.9,
+     "restore_gate_hash_pre": "52a10d25d8d78618",
+     "recorded_masks_prefix_first5": [
+      65,
+      65,
+      65,
+      65,
+      65
+     ],
+     "n_eligible_ranked_1st": 339
+    },
+    "300": {
+     "start_slot": 3045,
+     "end_slot": 3345,
+     "width_slots": 300,
+     "duration_s": 10.0,
+     "start_frame": 6106,
+     "end_frame": 6704,
+     "mean_ink_percentile": 78.39,
+     "distinct_executed_cand": 4,
+     "prefix_replay_s": 58.1,
+     "segment_play_s": 5.7,
+     "restore_gate_hash_pre": "31096da4a8f40d93",
+     "recorded_masks_prefix_first5": [
+      65,
+      65,
+      65,
+      65,
+      65
+     ],
+     "n_eligible_ranked_1st": 411
+    }
+   }
+  },
+  "seed11": {
+   "episode_seed": 11,
+   "slots": 6592,
+   "first_frame": 16,
+   "last_frame": 13198,
+   "minutes": 3.66,
+   "hash_chain_ok": 6591,
+   "hash_chain_total": 6591,
+   "distinct_cand_in_tape": 17,
+   "windows": {
+    "90": {
+     "start_slot": 4295,
+     "end_slot": 4385,
+     "width_slots": 90,
+     "duration_s": 3.0,
+     "start_frame": 8606,
+     "end_frame": 8784,
+     "mean_ink_percentile": 94.84,
+     "distinct_executed_cand": 16,
+     "prefix_replay_s": 82.0,
+     "segment_play_s": 1.7,
+     "restore_gate_hash_pre": "2447cf5387bfd780",
+     "recorded_masks_prefix_first5": [
+      65,
+      65,
+      65,
+      65,
+      65
+     ],
+     "n_eligible_ranked_1st": 292
+    },
+    "150": {
+     "start_slot": 4255,
+     "end_slot": 4405,
+     "width_slots": 150,
+     "duration_s": 5.0,
+     "start_frame": 8526,
+     "end_frame": 8824,
+     "mean_ink_percentile": 89.29,
+     "distinct_executed_cand": 16,
+     "prefix_replay_s": 81.2,
+     "segment_play_s": 2.9,
+     "restore_gate_hash_pre": "54055464baca1af3",
+     "recorded_masks_prefix_first5": [
+      65,
+      65,
+      65,
+      65,
+      65
+     ],
+     "n_eligible_ranked_1st": 293
+    },
+    "300": {
+     "start_slot": 3045,
+     "end_slot": 3345,
+     "width_slots": 300,
+     "duration_s": 10.0,
+     "start_frame": 6106,
+     "end_frame": 6704,
+     "mean_ink_percentile": 80.21,
+     "distinct_executed_cand": 4,
+     "prefix_replay_s": 58.1,
+     "segment_play_s": 5.7,
+     "restore_gate_hash_pre": "2c39b23577c403cc",
+     "recorded_masks_prefix_first5": [
+      65,
+      65,
+      65,
+      65,
+      65
+     ],
+     "n_eligible_ranked_1st": 358
+    }
+   }
+  }
+ },
+ "selection": {
+  "train_5s": {
+   "start_slot": 6210,
+   "end_slot": 6360,
+   "width_slots": 150,
+   "duration_s": 5.0,
+   "start_frame": 12436,
+   "end_frame": 12734,
+   "mean_ink_percentile": 88.89,
+   "distinct_executed_cand": 13,
+   "prefix_replay_s": 118.5,
+   "segment_play_s": 2.9,
+   "restore_gate_hash_pre": "74cc90a5a4bf0e82",
+   "recorded_masks_prefix_first5": [
+    65,
+    65,
+    65,
+    65,
+    65
+   ],
+   "n_eligible_ranked_1st": 288,
+   "tape": "seed12",
+   "episode_seed": 12
+  },
+  "train_3s": {
+   "start_slot": 4325,
+   "end_slot": 4415,
+   "width_slots": 90,
+   "duration_s": 3.0,
+   "start_frame": 8666,
+   "end_frame": 8844,
+   "mean_ink_percentile": 94.58,
+   "distinct_executed_cand": 15,
+   "prefix_replay_s": 82.5,
+   "segment_play_s": 1.7,
+   "restore_gate_hash_pre": "235b20476408e0c8",
+   "recorded_masks_prefix_first5": [
+    65,
+    65,
+    65,
+    65,
+    65
+   ],
+   "n_eligible_ranked_1st": 281,
+   "tape": "seed12",
+   "episode_seed": 12
+  },
+  "train_10s": {
+   "start_slot": 6060,
+   "end_slot": 6360,
+   "width_slots": 300,
+   "duration_s": 10.0,
+   "start_frame": 12136,
+   "end_frame": 12734,
+   "mean_ink_percentile": 83.82,
+   "distinct_executed_cand": 14,
+   "prefix_replay_s": 115.6,
+   "segment_play_s": 5.7,
+   "restore_gate_hash_pre": "d9d33eb9d8f82612",
+   "recorded_masks_prefix_first5": [
+    65,
+    65,
+    65,
+    65,
+    65
+   ],
+   "n_eligible_ranked_1st": 317,
+   "tape": "seed12",
+   "episode_seed": 12
+  },
+  "dev_seed10_5s": {
+   "start_slot": 5090,
+   "end_slot": 5240,
+   "width_slots": 150,
+   "duration_s": 5.0,
+   "start_frame": 10196,
+   "end_frame": 10494,
+   "mean_ink_percentile": 86.59,
+   "distinct_executed_cand": 17,
+   "prefix_replay_s": 97.1,
+   "segment_play_s": 2.9,
+   "restore_gate_hash_pre": "52a10d25d8d78618",
+   "recorded_masks_prefix_first5": [
+    65,
+    65,
+    65,
+    65,
+    65
+   ],
+   "n_eligible_ranked_1st": 339,
+   "tape": "seed10",
+   "episode_seed": 10
+  },
+  "dev_seed11_5s": {
+   "start_slot": 4255,
+   "end_slot": 4405,
+   "width_slots": 150,
+   "duration_s": 5.0,
+   "start_frame": 8526,
+   "end_frame": 8824,
+   "mean_ink_percentile": 89.29,
+   "distinct_executed_cand": 16,
+   "prefix_replay_s": 81.2,
+   "segment_play_s": 2.9,
+   "restore_gate_hash_pre": "54055464baca1af3",
+   "recorded_masks_prefix_first5": [
+    65,
+    65,
+    65,
+    65,
+    65
+   ],
+   "n_eligible_ranked_1st": 293,
+   "tape": "seed11",
+   "episode_seed": 11
+  }
+ }
+}

@@ -1,0 +1,220 @@
+{
+ "schema": "v431-recheck-r45/1",
+ "question": "is the C14 / C29 failure class -- my own number presented as the documents' -- present anywhere else in the report?",
+ "method": {
+  "attribution_markers": [
+   "文档",
+   "原报告",
+   "原说法",
+   "原文",
+   "旧报告",
+   "复核文档"
+  ],
+  "corpus": "Document/Update/Alpha/v4.3.0/**/*.{md,json,jsonl}",
+  "note": "detection is mechanical; the classification of each hit is a hand judgement recorded here so a reader can disagree with it"
+ },
+ "counts": {
+  "numbers_checked": 50,
+  "absent_from_corpus": 30,
+  "by_class": {
+   "full-precision": 4,
+   "own-measurement": 6,
+   "mine-self-explaining": 20
+  }
+ },
+ "flagged": [
+  {
+   "line": 292,
+   "token": "0.8536876584859746",
+   "class": "full-precision",
+   "text": "−log(468/1099)                   = 0.8536876584859746      （文档 0.8537   ✅）"
+  },
+  {
+   "line": 293,
+   "token": "1.6859891972159187",
+   "class": "full-precision",
+   "text": "seed12 完整直方图自身熵          = 1.6859891972159187      （文档 1.685989 ✅）"
+  },
+  {
+   "line": 294,
+   "token": "1.7074972455584387",
+   "class": "full-precision",
+   "text": "seed12 完整频率分布 → seed10     = 1.7074972455584387      （文档 1.707497 ✅）"
+  },
+  {
+   "line": 420,
+   "token": "0.558894",
+   "class": "own-measurement",
+   "text": "`batch_mean_ce` val-focus 值（0.558894…）被误写进了\"文档\"列。**该行已删除**，"
+  },
+  {
+   "line": 454,
+   "token": "0.558894",
+   "class": "own-measurement",
+   "text": "`batch_mean_ce` val-focus 值（0.558894…）被误写进了\"文档\"列。该行已删除，"
+  },
+  {
+   "line": 1407,
+   "token": "0.4995",
+   "class": "mine-self-explaining",
+   "text": "但 `0.4995`/`0.5369`/`0.4249`/`0.4404` 这 4 个数字在 v4.3.0 的 9 个文档里**一个都找不到**——"
+  },
+  {
+   "line": 1407,
+   "token": "0.5369",
+   "class": "mine-self-explaining",
+   "text": "但 `0.4995`/`0.5369`/`0.4249`/`0.4404` 这 4 个数字在 v4.3.0 的 9 个文档里**一个都找不到**——"
+  },
+  {
+   "line": 1407,
+   "token": "0.4249",
+   "class": "mine-self-explaining",
+   "text": "但 `0.4995`/`0.5369`/`0.4249`/`0.4404` 这 4 个数字在 v4.3.0 的 9 个文档里**一个都找不到**——"
+  },
+  {
+   "line": 1407,
+   "token": "0.4404",
+   "class": "mine-self-explaining",
+   "text": "但 `0.4995`/`0.5369`/`0.4249`/`0.4404` 这 4 个数字在 v4.3.0 的 9 个文档里**一个都找不到**——"
+  },
+  {
+   "line": 2081,
+   "token": "0.8536876584859746",
+   "class": "full-precision",
+   "text": "而 `−ln(0.42584) = 0.8536876584859746`——**与文档数字逐位相同**。"
+  },
+  {
+   "line": 2526,
+   "token": "0.9829",
+   "class": "own-measurement",
+   "text": "| 4× 模型 train CE 0.1558 / acc 0.9829 → val 2.1299 | **确认过拟合**（原报告这一点正确） |"
+  },
+  {
+   "line": 2693,
+   "token": "0.622",
+   "class": "own-measurement",
+   "text": "| C7 | \"验证集含约 20% 训练数据原文\" | **无一条训练样本原样出现**。是 219 个\"标签相同、画面差 0.622/255\"的**近重复对** | `R2`/`R3` |"
+  },
+  {
+   "line": 2699,
+   "token": "0.500",
+   "class": "own-measurement",
+   "text": "| C13 | \"设计一个有成功见证且必须作出战斗决策的 3–10 秒片段\"被当作待办 | **已有现成资产未用**：v4.2.0 T08 A1 已实测 200 状态 × 18 首动作（3,600 臂，unknown 0，hash mismatch 0），其中 **184 个状态 `0<\\|S\\|<"
+  },
+  {
+   "line": 2700,
+   "token": "0.4995",
+   "class": "mine-self-explaining",
+   "text": "| C14 | **（`R6` 实测补充，不是原报告的说法——`R39` 审计发现此处曾把我的数字误置于\"原说法\"列）** 原报告实际写的是\"三组配置均不优于恒预测多数类\"；我重执行后发现 2.7M 在 seed10/seed11 **全盘**上准确率确实高于多数类（0.4995/0.5369 vs"
+  },
+  {
+   "line": 2700,
+   "token": "0.5369",
+   "class": "mine-self-explaining",
+   "text": "| C14 | **（`R6` 实测补充，不是原报告的说法——`R39` 审计发现此处曾把我的数字误置于\"原说法\"列）** 原报告实际写的是\"三组配置均不优于恒预测多数类\"；我重执行后发现 2.7M 在 seed10/seed11 **全盘**上准确率确实高于多数类（0.4995/0.5369 vs"
+  },
+  {
+   "line": 2700,
+   "token": "0.4249",
+   "class": "mine-self-explaining",
+   "text": "| C14 | **（`R6` 实测补充，不是原报告的说法——`R39` 审计发现此处曾把我的数字误置于\"原说法\"列）** 原报告实际写的是\"三组配置均不优于恒预测多数类\"；我重执行后发现 2.7M 在 seed10/seed11 **全盘**上准确率确实高于多数类（0.4995/0.5369 vs"
+  },
+  {
+   "line": 2700,
+   "token": "0.4404",
+   "class": "mine-self-explaining",
+   "text": "| C14 | **（`R6` 实测补充，不是原报告的说法——`R39` 审计发现此处曾把我的数字误置于\"原说法\"列）** 原报告实际写的是\"三组配置均不优于恒预测多数类\"；我重执行后发现 2.7M 在 seed10/seed11 **全盘**上准确率确实高于多数类（0.4995/0.5369 vs"
+  },
+  {
+   "line": 2700,
+   "token": "0.4034",
+   "class": "mine-self-explaining",
+   "text": "| C14 | **（`R6` 实测补充，不是原报告的说法——`R39` 审计发现此处曾把我的数字误置于\"原说法\"列）** 原报告实际写的是\"三组配置均不优于恒预测多数类\"；我重执行后发现 2.7M 在 seed10/seed11 **全盘**上准确率确实高于多数类（0.4995/0.5369 vs"
+  },
+  {
+   "line": 2700,
+   "token": "0.4462",
+   "class": "mine-self-explaining",
+   "text": "| C14 | **（`R6` 实测补充，不是原报告的说法——`R39` 审计发现此处曾把我的数字误置于\"原说法\"列）** 原报告实际写的是\"三组配置均不优于恒预测多数类\"；我重执行后发现 2.7M 在 seed10/seed11 **全盘**上准确率确实高于多数类（0.4995/0.5369 vs"
+  },
+  {
+   "line": 2700,
+   "token": "0.1554",
+   "class": "mine-self-explaining",
+   "text": "| C14 | **（`R6` 实测补充，不是原报告的说法——`R39` 审计发现此处曾把我的数字误置于\"原说法\"列）** 原报告实际写的是\"三组配置均不优于恒预测多数类\"；我重执行后发现 2.7M 在 seed10/seed11 **全盘**上准确率确实高于多数类（0.4995/0.5369 vs"
+  },
+  {
+   "line": 2700,
+   "token": "0.5144",
+   "class": "mine-self-explaining",
+   "text": "| C14 | **（`R6` 实测补充，不是原报告的说法——`R39` 审计发现此处曾把我的数字误置于\"原说法\"列）** 原报告实际写的是\"三组配置均不优于恒预测多数类\"；我重执行后发现 2.7M 在 seed10/seed11 **全盘**上准确率确实高于多数类（0.4995/0.5369 vs"
+  },
+  {
+   "line": 2714,
+   "token": "0.4995",
+   "class": "mine-self-explaining",
+   "text": "| C28 | （我自己的 `R14`–`R18` 阶段）§6.2 的\"原说法\"列可以混入我自己的实测数字 | **`R39` 审计发现 1 处（`C14`）**：那行原本把我 `R6` 算出的 0.4995/0.5369 写进了\"原说法\"列，而 v4.3.0 文档里既没有这些数字、也没有该说法（原"
+  },
+  {
+   "line": 2714,
+   "token": "0.5369",
+   "class": "mine-self-explaining",
+   "text": "| C28 | （我自己的 `R14`–`R18` 阶段）§6.2 的\"原说法\"列可以混入我自己的实测数字 | **`R39` 审计发现 1 处（`C14`）**：那行原本把我 `R6` 算出的 0.4995/0.5369 写进了\"原说法\"列，而 v4.3.0 文档里既没有这些数字、也没有该说法（原"
+  },
+  {
+   "line": 2715,
+   "token": "0.5589",
+   "class": "mine-self-explaining",
+   "text": "| C29 | （我自己的 §2.6）\"seed10-val focus CE 0.5589（文档）\" | **这个文档值不存在**：`R44` 在 `v4.3.0/**` 全文搜索 `0.5589` **0 命中**；它是我的 `batch_mean_ce` val-focus 值（0.55889"
+  },
+  {
+   "line": 2715,
+   "token": "0.5589",
+   "class": "mine-self-explaining",
+   "text": "| C29 | （我自己的 §2.6）\"seed10-val focus CE 0.5589（文档）\" | **这个文档值不存在**：`R44` 在 `v4.3.0/**` 全文搜索 `0.5589` **0 命中**；它是我的 `batch_mean_ce` val-focus 值（0.55889"
+  },
+  {
+   "line": 2715,
+   "token": "0.558894",
+   "class": "mine-self-explaining",
+   "text": "| C29 | （我自己的 §2.6）\"seed10-val focus CE 0.5589（文档）\" | **这个文档值不存在**：`R44` 在 `v4.3.0/**` 全文搜索 `0.5589` **0 命中**；它是我的 `batch_mean_ce` val-focus 值（0.55889"
+  },
+  {
+   "line": 2715,
+   "token": "0.646054",
+   "class": "mine-self-explaining",
+   "text": "| C29 | （我自己的 §2.6）\"seed10-val focus CE 0.5589（文档）\" | **这个文档值不存在**：`R44` 在 `v4.3.0/**` 全文搜索 `0.5589` **0 命中**；它是我的 `batch_mean_ce` val-focus 值（0.55889"
+  },
+  {
+   "line": 2716,
+   "token": "0.463",
+   "class": "mine-self-explaining",
+   "text": "| C30 | （我自己的 §3 表）\"三盘是否同一条轨迹的变体\"的**依据**标为\"文档 + `R2`\" | **文档侧没有这个说法**：`0.463`/`0.456` 在 v4.3.0 里 0 命中，文档从未给出任何动作一致率，只在 `W09.md:70` 提出用 `trajectory_sha"
+  },
+  {
+   "line": 2716,
+   "token": "0.456",
+   "class": "mine-self-explaining",
+   "text": "| C30 | （我自己的 §3 表）\"三盘是否同一条轨迹的变体\"的**依据**标为\"文档 + `R2`\" | **文档侧没有这个说法**：`0.463`/`0.456` 在 v4.3.0 里 0 命中，文档从未给出任何动作一致率，只在 `W09.md:70` 提出用 `trajectory_sha"
+  },
+  {
+   "line": 2843,
+   "token": "0.622",
+   "class": "own-measurement",
+   "text": "**原报告的三个 CE 数字全对、十一个数字全可重现；错的是基线定义（用了被评测标签）和\"880/219\"这个从未存在的划分（实际 879/220）。换成只用训练集拟合的基线后，16× 配置在 CE 上从\"不优于\"翻成\"优于\"（配对 bootstrap 可辨零），但准确率仍赢不了恒预测多数类——所以"
+  }
+ ],
+ "mislabelled": [],
+ "fix_applied": {
+  "where": "§3 表格「三盘是否同一条轨迹的变体」",
+  "was": "依据 = 文档 + R2",
+  "now": "依据 = R2，并写明三个数字是我算的、v4.3.0 只提出风险（W09.md:70）",
+  "recorded_as": "C30"
+ },
+ "verdict": {
+  "sweep_is_complete": "any line that attributes a number to the documents is in scope",
+  "three_instances_recorded": true,
+  "mislabelled_now": 0,
+  "reading": "of 30 numbers absent from v4.3.0, all are mine on lines that merely mention the documents (including the audit rows that name the problem) OR are longer forms of a documented value; **zero lines currently attribute my numbers to the documents**. One line did before this round's fix (§3's trajectory-variant row cited 文档 + R2 for 0.448/0.463/0.456, while v4.3.0 gives no agreement rate at all); it is fixed and recorded as C30. The class therefore appeared three times (C14, C29, C30), roughly twelve rounds apart, and each was found only by tracing a number back to a source"
+ }
+}

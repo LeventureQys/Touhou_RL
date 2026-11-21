@@ -1,0 +1,160 @@
+{
+ "schema": "v431-recheck-r47/1",
+ "question": "§5.4 的停止条件里，有几条真的能用现有证据判定？",
+ "conditions": [
+  {
+   "id": "S1",
+   "condition": "恢复门哈希不匹配率 > 5%",
+   "measured": {
+    "episodes_with_a_gate": 162,
+    "hash_checks": 350730,
+    "hash_mismatches": 0,
+    "rate": 0.0
+   },
+   "status": "NOT_TRIGGERED",
+   "evidence": "raw/c4dense + raw/armA per-episode restore block"
+  },
+  {
+   "id": "S1b",
+   "condition": "C4 合格窗口 < 4（任一侧）",
+   "measured": {
+    "train_admissible": 4,
+    "dev_admissible": 4
+   },
+   "status": "NOT_TRIGGERED",
+   "evidence": "R28 split"
+  },
+  {
+   "id": "S2",
+   "condition": "臂 A 成功率 ≤ C-fair 或 ≤ C-const-best",
+   "measured": {
+    "arm_mean": 94.1,
+    "cfair_mean": 79.7,
+    "const_best": 272.0,
+    "le_cfair": false,
+    "le_const_best": true
+   },
+   "status": "TRIGGERED",
+   "evidence": "R38 pooled + R28 dev-side constants",
+   "note": "左半未触发、右半触发"
+  },
+  {
+   "id": "S3",
+   "condition": "臂 A 学到、臂 B 学不到",
+   "measured": null,
+   "status": "NOT_EVALUABLE",
+   "evidence": "臂 B 从未运行（_pair_cand 阻断，R22/R33）",
+   "note": "暂不可用：解阻条件是修 `PARK`（third_party，R32/R33）或放宽 `_pair_cand` （契约变更）。在此之前这条不是待办，是当前架构无法检验的假设"
+  },
+  {
+   "id": "S4",
+   "condition": "臂 B 与 C 都 ≤ 两个基线",
+   "measured": null,
+   "status": "NOT_EVALUABLE",
+   "evidence": "臂 B/C 从未运行（R22/R33）",
+   "note": "同 S3：暂不可用，解阻条件相同"
+  },
+  {
+   "id": "S5",
+   "condition": "引擎墙钟超预算",
+   "measured": {
+    "spent_h": 13.5,
+    "budget_h": 23.0
+   },
+   "status": "NOT_TRIGGERED",
+   "evidence": "本报告 §7.1 的计账（643 episode ≈ 12.6 h）+ 小探针"
+  },
+  {
+   "id": "S6",
+   "condition": "同一窗口在 3 s 与 10 s 下的合格判定是否一致（原 S6 的可算等价式）",
+   "measured": {
+    "windows": [
+     10,
+     11,
+     12,
+     13,
+     14,
+     15,
+     16,
+     17,
+     18
+    ],
+    "constants_alive_at_180_frames": {
+     "10": 10,
+     "11": 7,
+     "12": 13,
+     "13": 4,
+     "14": 11,
+     "15": 5,
+     "16": 11,
+     "17": 8,
+     "18": 7
+    },
+    "constants_alive_at_600_frames": {
+     "10": 1,
+     "11": 0,
+     "12": 0,
+     "13": 0,
+     "14": 0,
+     "15": 0,
+     "16": 0,
+     "17": 0,
+     "18": 0
+    },
+    "windows_admissible_at_180": [],
+    "windows_admissible_at_600": [
+     11,
+     12,
+     13,
+     14,
+     15,
+     16,
+     17,
+     18
+    ],
+    "windows_whose_verdict_flips": [
+     11,
+     12,
+     13,
+     14,
+     15,
+     16,
+     17,
+     18
+    ]
+   },
+   "status": "TRIGGERED",
+   "evidence": "raw/c4dense 的 alive_180 与 first_death_offset（无需新引擎）",
+   "note": "原 S6 的指标（alive@120/180）在密集阶段不再产出，故重述为\"段长是否改变合格判定\"；两者结论相反时，必须以更长段长为准并记录最短合格段长"
+  },
+  {
+   "id": "S7",
+   "condition": "臂 A 训练状态 100% 但开发 ≤ 基线",
+   "measured": {
+    "train_survival_rate": 0.0391,
+    "train_survivals": 5,
+    "train_episodes": 128
+   },
+   "status": "NOT_TRIGGERED",
+   "evidence": "R36 multi_128"
+  }
+ ],
+ "counts": {
+  "conditions": 8,
+  "triggered": 2,
+  "not_triggered": 4,
+  "not_evaluable": 2
+ },
+ "triggered_ids": [
+  "S2",
+  "S6"
+ ],
+ "not_evaluable_ids": [
+  "S3",
+  "S4"
+ ],
+ "verdict": {
+  "all_decidable": false,
+  "reading": "8 条里 **2 条已触发**（['S2', 'S6']）、4 条未触发、**2 条暂不可用**（['S3', 'S4']：依赖从未运行的臂 B）。其中 S6 已从无法判定的 alive@120/180 **重述为段长敏感性**，结果触发且很有信息量：3 s 下 9 个窗口共有 76 个恒定动作存活 180 帧（**0 个窗口合格**），10 s 下只剩 1 个存活（**8 个窗口合格**）；**8 个窗口的合格判定随段长翻转**——这正是\"必须先统一段长再判\"的实测依据，也是 600 帧这个选择不是任意的原因。"
+ }
+}

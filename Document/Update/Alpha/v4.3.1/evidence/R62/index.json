@@ -1,0 +1,535 @@
+{
+ "schema": "v431-recheck-r62/1",
+ "question": "接手者的入口：索引直接从磁盘生成，避免与内容漂移",
+ "documents": [
+  {
+   "file": "SUMMARY_FOR_DECISION.md",
+   "bytes": 11446,
+   "lines": 152
+  },
+  {
+   "file": "ROUTE_RECHECK_2026-11-15.md",
+   "bytes": 220959,
+   "lines": 2851
+  },
+  {
+   "file": "SELF_AUDIT.md",
+   "bytes": 14732,
+   "lines": 218
+  },
+  {
+   "file": "PREREGISTRATION_SEG_001.md",
+   "bytes": 117281,
+   "lines": 2331
+  },
+  {
+   "file": "evidence/COMMANDS.md",
+   "bytes": 118078,
+   "lines": 2564
+  }
+ ],
+ "evidence_groups": [
+  {
+   "group": "R1",
+   "n": 1,
+   "files": 1,
+   "bytes": 11641,
+   "about": "重算划分与正确基线（训练集频率 MLE/Laplace），无模型"
+  },
+  {
+   "group": "R2",
+   "n": 2,
+   "files": 1,
+   "bytes": 12300,
+   "about": "跨磁带重叠：动作前缀相同不等于像素相同"
+  },
+  {
+   "group": "R3",
+   "n": 3,
+   "files": 1,
+   "bytes": 2958,
+   "about": "重复结构：盘内重复行、相邻样本差、SE 重复"
+  },
+  {
+   "group": "R4",
+   "n": 4,
+   "files": 1,
+   "bytes": 17548,
+   "about": "三配置重执行：CE / 准确率 / 逐类（新身份，非复现）"
+  },
+  {
+   "group": "R5",
+   "n": 5,
+   "files": 1,
+   "bytes": 2849,
+   "about": "显著性：配对 bootstrap 4,000 次"
+  },
+  {
+   "group": "R6",
+   "n": 6,
+   "files": 1,
+   "bytes": 19293,
+   "about": "ActorPolicy 重执行 + 剥离近重复前缀的翻负实验"
+  },
+  {
+   "group": "R7",
+   "n": 7,
+   "files": 9,
+   "bytes": 1148861,
+   "about": "片段候选与成本排序（离线筛选）"
+  },
+  {
+   "group": "R8",
+   "n": 8,
+   "files": 6,
+   "bytes": 573571,
+   "about": "磁带哈希链与后期密集窗口定位"
+  },
+  {
+   "group": "R10",
+   "n": 10,
+   "files": 1,
+   "bytes": 20053,
+   "about": "A1 资产核验（byte-exact，sha256 pin）"
+  },
+  {
+   "group": "R11",
+   "n": 11,
+   "files": 1,
+   "bytes": 1938,
+   "about": "A1 安全集证据：184 个 proper 状态"
+  },
+  {
+   "group": "R12",
+   "n": 12,
+   "files": 1,
+   "bytes": 54949,
+   "about": "状态成本画像（每状态每秒代价）"
+  },
+  {
+   "group": "R14",
+   "n": 14,
+   "files": 1,
+   "bytes": 5135,
+   "about": "音频 cfg 审计：105 个 cfg 全部可出声"
+  },
+  {
+   "group": "R15",
+   "n": 15,
+   "files": 1,
+   "bytes": 3728,
+   "about": "候选空间：18 个 (focus,move)，mask 注入性"
+  },
+  {
+   "group": "R16",
+   "n": 16,
+   "files": 1,
+   "bytes": 37831,
+   "about": "判定可靠性：Wilson / bootstrap / Fisher"
+  },
+  {
+   "group": "R18",
+   "n": 18,
+   "files": 1,
+   "bytes": 7108,
+   "about": "A1 state 0 的 18 臂复现，36,180 次前缀哈希 0 不符"
+  },
+  {
+   "group": "R19",
+   "n": 19,
+   "files": 1,
+   "bytes": 3890,
+   "about": "3 个策略驱动 episode（稀疏早期状态）"
+  },
+  {
+   "group": "R20",
+   "n": 20,
+   "files": 2,
+   "bytes": 19045,
+   "about": "C4 @3 s 在 4 个稀疏状态上：0/4 合格 → S1b 触发"
+  },
+  {
+   "group": "R21",
+   "n": 21,
+   "files": 1,
+   "bytes": 8281,
+   "about": "A1 池上限：学生轨迹全部止于 first_death"
+  },
+  {
+   "group": "R22",
+   "n": 22,
+   "files": 1,
+   "bytes": 5425,
+   "about": "replay() 阻断：137 个双 mask 决策，首个 frame 94"
+  },
+  {
+   "group": "R23",
+   "n": 23,
+   "files": 1,
+   "bytes": 5699,
+   "about": "手动逐帧重放到达 frame 8,664（密集区间可达性）"
+  },
+  {
+   "group": "R24",
+   "n": 24,
+   "files": 1,
+   "bytes": 6760,
+   "about": "C4 @10 s 单窗口：13/18 恒动作活过 180 帧"
+  },
+  {
+   "group": "R25",
+   "n": 25,
+   "files": 1,
+   "bytes": 3417,
+   "about": "三窗口复跑：2/3 合格，臂 A 观测定义有错"
+  },
+  {
+   "group": "R26",
+   "n": 26,
+   "files": 2,
+   "bytes": 5393,
+   "about": "HAZARDS 可用性与字段（env-role 可答）"
+  },
+  {
+   "group": "R27",
+   "n": 27,
+   "files": 1,
+   "bytes": 2268,
+   "about": "臂 A 观测特征 106 维与自测 18/18"
+  },
+  {
+   "group": "R28",
+   "n": 28,
+   "files": 1,
+   "bytes": 5517,
+   "about": "9 窗口筛选：8 合格，train/dev 各 4（冻结切分）"
+  },
+  {
+   "group": "R29",
+   "n": 29,
+   "files": 1,
+   "bytes": 4246,
+   "about": "臂 A 首轮训练曲线"
+  },
+  {
+   "group": "R30",
+   "n": 30,
+   "files": 2,
+   "bytes": 5531,
+   "about": "前缀 run 结构 + STEP 批量微基准（0.992×）"
+  },
+  {
+   "group": "R31",
+   "n": 31,
+   "files": 1,
+   "bytes": 2980,
+   "about": "C-fair 基线画像（逐决策均匀随机）"
+  },
+  {
+   "group": "R32",
+   "n": 32,
+   "files": 1,
+   "bytes": 3142,
+   "about": "PARK/SPAWN/CHILD 探针：结构上关着"
+  },
+  {
+   "group": "R33",
+   "n": 33,
+   "files": 1,
+   "bytes": 3286,
+   "about": "PARK 在 5 个不同帧上重试：同一组拒绝原因"
+  },
+  {
+   "group": "R34",
+   "n": 34,
+   "files": 1,
+   "bytes": 2334,
+   "about": "单磁带→跨磁带迁移（n=20）"
+  },
+  {
+   "group": "R35",
+   "n": 35,
+   "files": 1,
+   "bytes": 2136,
+   "about": "多窗口训练（4 磁带）与首个不跨窗的更正"
+  },
+  {
+   "group": "R36",
+   "n": 36,
+   "files": 1,
+   "bytes": 2517,
+   "about": "200 episode 预算与训练后段趋势"
+  },
+  {
+   "group": "R37",
+   "n": 37,
+   "files": 1,
+   "bytes": 3244,
+   "about": "四窗口 n=40 评测"
+  },
+  {
+   "group": "R38",
+   "n": 38,
+   "files": 1,
+   "bytes": 3769,
+   "about": "n=80 评测：R37 的乐观结论变弱"
+  },
+  {
+   "group": "R39",
+   "n": 39,
+   "files": 3,
+   "bytes": 19278,
+   "about": "引文回源：更正表第一列逐字/数字定位"
+  },
+  {
+   "group": "R41",
+   "n": 41,
+   "files": 2,
+   "bytes": 5853,
+   "about": "早期证据 R1–R6 重跑（发现我自己的假快照）"
+  },
+  {
+   "group": "R42",
+   "n": 42,
+   "files": 1,
+   "bytes": 3900,
+   "about": "逐窗口方差与「窗口宽阔度」"
+  },
+  {
+   "group": "R43",
+   "n": 43,
+   "files": 1,
+   "bytes": 2354,
+   "about": "平滑敏感性：MLE vs Laplace（4.34e-4）"
+  },
+  {
+   "group": "R44",
+   "n": 44,
+   "files": 1,
+   "bytes": 7926,
+   "about": "§2.6 文档值回源：11/11 精确，1 行非文档"
+  },
+  {
+   "group": "R45",
+   "n": 45,
+   "files": 1,
+   "bytes": 11332,
+   "about": "全篇「归因数字」扫描（C14/C29/C30 那类）"
+  },
+  {
+   "group": "R46",
+   "n": 46,
+   "files": 1,
+   "bytes": 15701,
+   "about": "证据引用完整性：45 引用 / 0 缺失 / 0 孤儿"
+  },
+  {
+   "group": "R47",
+   "n": 47,
+   "files": 1,
+   "bytes": 4271,
+   "about": "停止条件可判定性：8 条里 2 触发 / 2 不可用"
+  },
+  {
+   "group": "R48",
+   "n": 48,
+   "files": 1,
+   "bytes": 1013,
+   "about": "段长上下文纪律：合格结论必须带段长"
+  },
+  {
+   "group": "R49",
+   "n": 49,
+   "files": 1,
+   "bytes": 893,
+   "about": "存活率上下文纪律：比率必须带 n 与门槛"
+  },
+  {
+   "group": "R50",
+   "n": 50,
+   "files": 1,
+   "bytes": 2910,
+   "about": "均值截断 + 漏掉的「固定一个动作」基线"
+  },
+  {
+   "group": "R51",
+   "n": 51,
+   "files": 1,
+   "bytes": 2374,
+   "about": "基线阶梯：神谕 258.8 / 可部署 172.4 / 池 111.7"
+  },
+  {
+   "group": "R52",
+   "n": 52,
+   "files": 1,
+   "bytes": 1099,
+   "about": "统计量翻转：均值 +14.4 / 中位数 −15.0"
+  },
+  {
+   "group": "R53",
+   "n": 53,
+   "files": 1,
+   "bytes": 2760,
+   "about": "判据敏感性：8 条可算判据 2 支持 / 5 反对"
+  },
+  {
+   "group": "R54",
+   "n": 54,
+   "files": 1,
+   "bytes": 6815,
+   "about": "36 处自更正的方向统计（2 帮臂 A / 7 损）"
+  },
+  {
+   "group": "R55",
+   "n": 55,
+   "files": 1,
+   "bytes": 2737,
+   "about": "反向检验：最有利判据 6/8 支持，单侧 p=0.0584"
+  },
+  {
+   "group": "R56",
+   "n": 56,
+   "files": 1,
+   "bytes": 3133,
+   "about": "三份交付物对臂 A 的结论一致性"
+  },
+  {
+   "group": "R57",
+   "n": 57,
+   "files": 1,
+   "bytes": 4410,
+   "about": "全套离线审计：22 脚本 / 幂等"
+  },
+  {
+   "group": "R59",
+   "n": 59,
+   "files": 2,
+   "bytes": 6745,
+   "about": "跨节逻辑冲突通读：自读 7 + 委派 24"
+  },
+  {
+   "group": "R60",
+   "n": 60,
+   "files": 1,
+   "bytes": 3699,
+   "about": "结论强于证据专项：11 处（10 确认）"
+  },
+  {
+   "group": "R61",
+   "n": 61,
+   "files": 1,
+   "bytes": 2745,
+   "about": "判据混用专项：3 处（含「种子」两义）"
+  },
+  {
+   "group": "R62",
+   "n": 62,
+   "files": 1,
+   "bytes": 11620,
+   "about": "本索引的生成记录"
+  },
+  {
+   "group": "R63",
+   "n": 63,
+   "files": 1,
+   "bytes": 13362,
+   "about": "产物缺席搜索：148,987 文件里没有一个是训练好的 BC 权重"
+  },
+  {
+   "group": "R64",
+   "n": 64,
+   "files": 1,
+   "bytes": 3724,
+   "about": "N4/N5 穷尽：0 个日志提到 BC；但有 3 epoch 曲线，且两个聚合文件是 n=1,000"
+  },
+  {
+   "group": "R65",
+   "n": 65,
+   "files": 1,
+   "bytes": 9828,
+   "about": "未复现清单的证据类型：N1–N6 各 2 个独立来源，N4 范围扩到 %TEMP%"
+  },
+  {
+   "group": "R66",
+   "n": 66,
+   "files": 1,
+   "bytes": 4008,
+   "about": "切分脚本逐条清点：5 个 0.8 + 1 个固定 200，两种语料（1,099 与 1,000）"
+  },
+  {
+   "group": "R67",
+   "n": 67,
+   "files": 1,
+   "bytes": 2204,
+   "about": "两条全称断言：18 个恒定动作成立；一致率 0.448/0.463/0.456 无法复现"
+  },
+  {
+   "group": "R68",
+   "n": 68,
+   "files": 1,
+   "bytes": 3085,
+   "about": "两张表的「差」列符号相反：模型−基线 vs 基线−模型，同一对显示为 −0.128 与 +0.1280"
+  },
+  {
+   "group": "R69",
+   "n": 69,
+   "files": 1,
+   "bytes": 1643,
+   "about": "104 张表的表头审计：n 在 CE 表是样本、在臂 A 表是 episode；25 处数值列补齐单位"
+  },
+  {
+   "group": "R70",
+   "n": 70,
+   "files": 1,
+   "bytes": 7797,
+   "about": "107 个百分比：9 个自证全成立；我的第一版检查器按距离配对报了 25 个假错"
+  },
+  {
+   "group": "R71",
+   "n": 71,
+   "files": 1,
+   "bytes": 3740,
+   "about": "成本链 9/9 可重算；70.4 s 是满长上界（实测 17.8）；抓到 90→72"
+  },
+  {
+   "group": "R72",
+   "n": 72,
+   "files": 1,
+   "bytes": 6074,
+   "about": "K 表引用核验：6 条无引用、K9 仍带已证伪的数、K3 引用错组（seed11 在 R4）"
+  },
+  {
+   "group": "R73",
+   "n": 73,
+   "files": 1,
+   "bytes": 28702,
+   "about": "按值反查残留：63 处全部人工分类、0 处真残留；假阳性是主题/正确用法/子串/自身说明"
+  },
+  {
+   "group": "R74",
+   "n": 74,
+   "files": 1,
+   "bytes": 3475,
+   "about": "臂 B/C 的阻断其实在 replay()：到不了起始帧，不是不能提交两个 mask"
+  },
+  {
+   "group": "R75",
+   "n": 75,
+   "files": 1,
+   "bytes": 3697,
+   "about": "存活率检验的功效与粒度：163/臂 → 84%@7.5%；实际 α 0.1%；p=0.0584 不是\"差一点\""
+  },
+  {
+   "group": "R76",
+   "n": 76,
+   "files": 1,
+   "bytes": 2460,
+   "about": "判据校准：Fisher 0.0584（α 实际 0.126%）vs Boschloo ≤0.0343 ⇒ 未通过判据 ≠ 无效应"
+  }
+ ],
+ "counts": {
+  "documents": 5,
+  "groups": 71,
+  "evidence_bytes": 2236010
+ }
+}
