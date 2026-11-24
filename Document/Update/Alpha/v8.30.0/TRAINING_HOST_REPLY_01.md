@@ -241,3 +241,31 @@ wsl 'ps -eo comm | grep -c th08'                     -> 0  0 个
 3. 启动后、跑实验前跑 `python tools\rl\v431_audio_cfg_audit.py`，目标目录必须落在 `muted`；落在 `audible` 就先关声再继续。
 
 **给研究端的提示**：新开的运行**不得再增加 `audible` 计数**。若实施单要求复用一个既有私有 data 目录，那条目录的 cfg 必须先被替换成静音模板并留下替换前后的解码值——这会改动私有目录内容，属需要授权的资产操作，请在那张单里写明。
+
+### 10.1 源 cfg 的逐字节现状（本次实测）
+
+| 文件 | bytes | sha256 | musicMode | playSounds | musicVolume | sfxVolume | 判定 |
+| --- | ---: | --- | ---: | ---: | ---: | ---: | --- |
+| `/root/v400-data/game/th08.cfg`（活的源） | 60 | `48bf7621da5879ef5ec1392fcac2cc0a85c313912a24fb33b4cddccf0d28f07a` | 1 | 1 | 39 | 36 | **audible** |
+| `th08.cfg.orig`（留底） | 60 | `48bf7621…0d28f07a`（**与活的源逐字节相同**） | 1 | 1 | 39 | 36 | audible |
+| `th08.cfg.dirty-20261109-001521`（留底） | 60 | `4664d8d44cb845a9faac07bd9a7973ce24fab7234bf082fa5dc3b743bc2d6574` | 1 | 1 | 100 | 80 | audible（更响） |
+
+三点由此确定：
+
+- **§9.2 的前置条件已满足**：`th08.cfg.orig` 与 `th08.cfg.dirty-*` 都在，且活的源与 `.orig` **逐字节相同**——即源文件自 2026-11-07 起没有漂移，回滚是零成本的。
+- **根因确认到字节**：0x1F=1、0x20=1、0x27=39、0x28=36。104 个可出声的派生 cfg 都能回溯到这个文件。
+- 三个 cfg 的 `lifeCount = 2`、`bombCount = 3`。**这两项与 R1 的"初始/继承资源"直接相关**；`lifeCount` 究竟是"总残机"还是"附加残机"本次**未核实**，实施单里必须用真实开局读一次来定，不要按 3 残机先验写死。
+
+### 10.2 两种修法，以及为什么应当选最小改法
+
+| 修法 | 做法 | 结果 sha256 | 副作用 | 适用 |
+| --- | --- | --- | --- | --- |
+| (a) 整模板替换 | 把 `v400_make_cfg.py` 生成的 60 字节模板覆盖源 | `cc062cfbf9fd2c14a1225376e182beffc52f964c342c187b409045f495d5f0fa` | **不止关声**：`controllerMapping` 被清成全 0（源里是键盘映射 `0000010002000400ffffffffffffffff03000000`），`opts` 由 `0x1` 变 `0x6001`（`preloadMusic=true`、`disableVsync=true`）。**会改变输入映射与呈现路径** | 适合给 harness 自建的**私有 data 目录**放模板（§9.3 第 1 步），**不适合**直接覆盖共享源 |
+| (b) 最小四字节改法（**推荐用于源**） | 只把 0x1F、0x20、0x27、0x28 置 0，其余 56 字节不动 | `cfa292ae10ee1907df7c637d013386851486dadf7a97bb5adf12bcf21dd14638` | **diff = 4 字节**；`controllerMapping`、`opts=0x1`、`lifeCount=2`、`bombCount=3`、`defaultDifficulty`、`windowed` 全部保持；解码 `problems: []` | 用于替换 `/root/v400-data/game/th08.cfg`（§9.2 的"最省事正确做法"，但以最小改动实现） |
+
+**已就绪的产物（本次只写进仓库内新路径，`/root/v400-data` 一字未动）**
+
+- `.tmp_v830_mute/th08.cfg` — 模板，60 B，`cc062cfb…`，解码 `musicMode/playSounds/musicVolume/sfxVolume` 全 0、`problems: []`
+- `.tmp_v830_mute/th08.cfg.mute-only` — 最小改法产物，60 B，`cfa292ae…`，与源仅差 4 字节
+
+**仍需授权的步骤（不要由代理自行执行）**：把上述任一文件落到 `/root/v400-data/game/th08.cfg` 属于**资产操作**——§8.2 保护 `/root/v400-data`，而 §9.2 建议换这一个文件；`ASSET_SYNC` 目前登记的是 `48bf7621…`，一旦替换**必须**同步更新 `ASSET_SYNC.md` 与 `ASSET_SYNC.sha256`。请把这一步写进实施单，并指定用 (a) 还是 (b)。
