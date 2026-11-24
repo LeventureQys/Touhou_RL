@@ -114,10 +114,11 @@
 | 隔离 | `quarantine` = **12**（S1b dev 1000–1011，种子来源被拒） | 同上 `splits.quarantine` | 本次只读核实 |
 | 永久禁训种子 | 60000–60199 | 同上 `reserved_training_exclusion` | 本次只读核实 |
 | 封存结果 | `sealed.present_on_host=false`、`read_sealed_results=false` | 同上 | 本次只读核实 |
-| 曝光/同源字段 | **祖先记录只有 `source_kind/source_id/episode/seed/task_family/note`，没有 `exposure`/`stage` 字段**；曝光事实需从语料登记另查 | `ancestors[0]` 实测 | 缺口/待核验 |
+| 曝光/同源（**本回合已解，原为缺口**） | 曝光不记在 `splits.json.ancestors` 上，而是记在冻结登记 `Document/Update/Alpha/v4.3.0/registries/pretraining_sources.json` 的 `status` 上：25 个来源 = **17 used_for_training / 2 used_for_selection / 3 evaluated_only / 1 rejected_not_used / 1 rule_based_no_training_data / 1 executed_instrument_only**；祖先枚举 22 个 `complete`、3 个 `family_level`。**关键核对：20 个 dev 面板种子（1000–1019）在任何 `used_for_training` 来源的祖先里出现 0 次**（`dev-seed-NNNN` 与数字 `seedNNNN` 两种写法都查过） | `v4.3.0/registries/pretraining_sources.json`（本次解析） | 本次只读核实 |
+| 登记表完整性 | 4 个冻结登记（task_families / pretraining_sources / holdout_families / runs）按 `digest_scope: text/lf-normalized` 重算 sha256，**4/4 与 `splits.json` 记录的摘要相符**，无漂移 | `configs/v430/splits.json.registries` + 四个登记文件（本次重算） | 本次只读核实 |
 | v8.29 新采根 | 8 个演练祖先（`reh-seed3201…`），`used_for_training:false`、`lineage_new:true`，但**前缀是被评测策略自己滚出来的**（起点不中立） | `v8.29.0/RESEARCH_REVIEW_PACKET.md:55-71,112-116` | 历史记录 |
 
-**结论**：支持一个小任务族的**少量开发祖先是有的**（20 个 dev 面板 + 328 训练源），不必预设 8 根。两点限制：(a) 4 个旧开发窗 11/12/17/18 已用于 BC/RL 与开发，**不能充当新的独立留出集**；(b) 没有曝光字段，且 v8.29 自采根的起点依赖被评测策略——**"起点中立"仍待研究端决定**（`RESEARCH_REVIEW_PACKET §4.3`）。
+**结论**：支持一个小任务族的**少量开发祖先是有的**（20 个 dev 面板 + 328 训练源），不必预设 8 根。两点限制：(a) 4 个旧开发窗 11/12/17/18 已用于 BC/RL 与开发，**不能充当新的独立留出集**；(b) 曝光已在冻结登记里完整登记、dev 面板 0 泄漏，但 v8.29 自采根的起点依赖被评测策略——**"起点中立"仍待研究端决定**（`RESEARCH_REVIEW_PACKET §4.3`）。
 
 ---
 
@@ -216,6 +217,6 @@ wsl 'ps -eo comm | grep -c th08'                     -> 0  0 个
 *训练端本次实测 = §0/§1(引擎面)/§3(obs 泄漏)/§5(splits)/§6(ReadbackMicros 能力)/§7；
 历史记录 = §2/§3(前缀)/§4/§6(T08 与 v8.29 数字)；
 研究端离线判断 = ROUTE_DECISION / WORK_PLAN / PIXEL_SLICE_PLAN 的口径；
-待核验 = 祖先曝光字段、可用时段、框内可见性覆盖率。*
+待核验 = 可用时段、框内可见性覆盖率。*
 
 **本回执内的自我更正（留痕）**：初稿曾把 `team` 当作阶段内位置选择器并据此推断"可用 `team>0` 切短子窗"。经 `rlharness.cpp:1164` `g_GameManager.shotType = g_startTeam` 实证，`team` 是机体/射击类型，该推断**已撤回**；相应地把"短切片"的唯一可行路径改为"重录干净磁带 + PARK"。初稿另曾据 `strings | grep -cx STAGE_CLEAR` 得 0 而怀疑二进制不含该表面，随后的完整字符串核查显示它是以 `stageClear=…` 形式存在，该怀疑**已撤回**。第三，初稿曾把 `touhou_rl/obs.py` 的 `encode()` 与 v8 的 106 维 `OBS_DIM` 当成同一向量，实测不是（`encode()` 是 24 self + 64×6 弹丸 + 16×8 网格的特权状态向量）；已改为分列并标明"106 维构成待核验"。
