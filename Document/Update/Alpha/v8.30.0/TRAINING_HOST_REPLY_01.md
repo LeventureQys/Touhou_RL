@@ -46,6 +46,7 @@
 | 资源语义的三个陷阱 | ① **practice 模式把 lifeCount 强制成 8**（`flags.isPracticeMode`），比自然开局多 6 条命，绝不能当作自然起点；② `difficulty >= EXTRA` 时 lifeCount 被强制为 2；③ 资源初始化整块在 `if (!flags.isReplay)` 里，**replay 路径不走这段**，所以录像回放不能用来推断自然开局资源 | `GameManagerSetup.cpp:110-130` | 本次只读核实 |
 | 死亡的资源后果 | 死亡会 `SetPower(0)` 并掉出 5 个 `ITEM_POWER_FULL`，同时 `DecreaseSubrank(1600)` —— 即"首死"不只是少一条命，还改写 power 与 subrank | `Player.cpp:1355-1364` | 本次只读核实 |
 | `team` 参数（**更正**） | `team` **不是**阶段内位置选择器，而是**机体/射击类型**：`ConsumePendingStart()` 里 `g_GameManager.shotType = g_startTeam;`。所以任务族名 `…-team0` = stage 0 / normal / **shotType 0**。`team>0` = 换机体，与 R1"冻结机体"冲突，**不能**用来切更短的子窗 | `rlharness.cpp:1142-1146,1163-1165` | 本次只读核实 |
+| 机体（**本回合已定**） | `team` = `shotType`，零售录制元数据给出完整对照：**0 Border Team**、1 Magic Team、2 Scarlet Team、3 Ghost Team、4 Reimu、5 Yukari、6 Marisa、7 Alice、8 Sakuya、9 Remilia、10 Youmu、11 Yuyuko。所以任务族 `…-team0` = **Border Team**（灵梦+紫），全部既有运行都用它。R1 冻结机体 = 冻结 shotType，并因此**同时冻结了炸弹数**（见"初始资源"行） | `third_party/th08/config/replay-fixtures.json`（108 条 fixture 的 `shot`/`shotName` 对照）；`Player.cpp:1387` 用 `shotType` 选动画 | 本次只读核实 |
 | 是否存在"从第 N 帧开始"的引擎杠杆 | **没有**。RESET 只有 `stage/difficulty/team(shotType)/seed/practice`，无起始帧参数；中局状态只能靠**前缀磁带重放 + `BRANCH`/`PARK`/`SPAWN`** 到达（v8.29 已用 `--reuse-park`） | `rlharness.cpp:981,1004,1142-1165`；`rlharness.hpp:43-51` | 本次只读核实 |
 
 **结论**：一个真实、可恢复、完成事件可在帧级核对的阶段**成立**（`th08-stage1-normal-team0`，完成 = `stage_clear`）。但"短攻击阶段"这一具体切片**尚未定义**——现有全部证据都是整段 stage 1（需 13,195 帧），没有"短"子阶段的事件定义。
@@ -59,6 +60,7 @@
 | 项 | 值 | 证据 | 类别 |
 | --- | --- | --- | --- |
 | **真实成功**（唯一一条，本次已从产物 JSON 逐字段核对） | 同一条**教师录像带**在修正仪器下：`stage_clear=true`、`frames=13195`、`score_final=2631430`、`deaths=0.0`、`stop_reason="stage_clear"`、`decisions=6598`、`shoot_frames=13058`。负对照（长 period）→ `stage_clear=false`、`frames=15564`、`score_final=163945`、`deaths=3.0`、`stop_reason="game_over"`。`shoot_pulse_period=48`（= 48 决策 × 2 帧 = 96 帧，与 `configs/v420/rl-engine-{audit,pilot}.json` 冻结值一致） | `T08/clear_reachability.json`、`T08/eval_shoot_pulse.json`（本次原样读取字段）；叙述见 `T08/CLEAR_REACHABILITY.md`、`T08/EVAL_SHOOT_PULSE.md` | 历史记录（产物本次已核） |
+| **独立于教师磁带的可解性见证**（零售录像） | 零售录像库里 **Normal + Border Team + 非 practice + 非 extra** 的 fixture 有 **2 条**；其中 `normal-0-b`（`th8_ud2cd5.rpy`，sha256 `ba9ca721a8fe80d015c2b99461804f12891d3fbad842ed5b12829887177d49ba`）的 `stages[0]` 记 Stage 1 的 `inputRecords=9203`、`endScore=1802425`，且其后仍有 Stage 2/3… ⇒ **该局确实通过了 Stage 1**。这是本项目之外的人类录像，与我们的动作约束不同，**只能支持"任务可解"**，不能充当同约束成功见证 | `third_party/th08/config/replay-fixtures.json`（108 条，全部 `practice=false`、`extended=false`） | 本次只读核实 |
 | 该成功的动作约束 | 动作库同 18/72 登记入口；**SHOOT 脉冲 period=48**；stage 0 / normal | `CLEAR_REMEASURE.md:22-23` | 历史记录 |
 | 该成功的性质 | **教师录像带重放**，不是像素策略成绩，也不是新阶段成绩 | 同上 | 历史记录 |
 | **真实失败** | 4 臂 × 2 口径 × 20 dev seed = **160 局，`stage_clear` = 0**，errors=0、invalid=0；最深 3,914 帧（D3/seed1010/s1n），距过关 13,195 帧差 **9,281 帧**；160 局无一达 12,000 帧 | `T08/CLEAR_REMEASURE.md:3-8,49-64` | 历史记录 |
