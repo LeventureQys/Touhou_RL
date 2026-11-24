@@ -395,3 +395,21 @@ if not mask & BTN_SHOOT:
 | `cannot_claim`: "the fix, once applied, would not make any policy clear: it only makes a clear *reportable*" | 修好通道只是让过关**可被报告**，不会让任何策略变强 |
 
 **所以 §13 的正确读法是**：这是一个**测量能力**缺口（不能报告过关），不是"旧失败被推翻"，也不是"通道修好就能过"。R1 若把主指标定为阶段完成，**必须先解决可报告性**，同时**不得**回头宣称历史上的 0/N 无效。
+
+### 13.6 若选 (a)：脉冲的精确规则已经实现好了，R1 直接复用即可
+
+`touhou_rl/v400/teacher/shoot.py` 就是这份约定的唯一实现，**R1 不要重写**。
+
+**引擎级根因（比评测器层面更靠前）**：`GameManager.cpp:381-389` 判定离开阶段结束状态的条件是 `(g_CurFrameInput & 0x1001)` **非零且与上一帧不同**——`0x1001` = SHOOT(0x1) | ENTER(0x1000)。所以「按住 SHOOT」**不算上升沿**；而 `rlharness.cpp` 没有 `0x1000` 通道，**客户端必须自己发上升沿**。
+
+| 规则 | 定义 | 出处 |
+| --- | --- | --- |
+| 触发判据 | `release_due(i, period) = ((i + 1) % period == 0)` —— 每第 `period` 个决策（1 起算）触发一次 | `shoot.py:50-55` |
+| 释放帧位置 | **只释放该决策的最后一帧**：`[(mask, decision_frames-1), (mask & ~SHOOT & ~BOMB, 1)]`；`decision_frames == 1` 时退化为 `[(held, 1)]` | `shoot.py:58-80` |
+| 同时丢掉 BOMB | 释放帧必须也去掉 BOMB——"the release frame must not be the frame that spends a bomb" | `shoot.py:67-69` |
+| bomb 归属 | bomb 只挂在**第一个**子决策上（"the next decision presses bomb"，不是整段按住） | `commit_block` `shoot.py:83-109` |
+| 周期取值 | 教师默认 `SHOOT_PULSE_PERIOD = 24`，配 **4 帧决策** = 96 帧；**2 帧决策的等价取值是 48**（T08 用的就是 48）。原话："Any period works: the transition state waits indefinitely for the edge" | `shoot.py:43-47`；`T08/clear_reachability.json.q3_fix` |
+| 代价 | 占射击时间 `1/(period × frames_per_decision)`，默认 96 帧里 1 帧 ≈ **1.04%** | `shoot.py:22-25` |
+| 可核计数 | `mask_summary()` 给出 `shoot_frames` / `release_frames`，可与见证的 `shoot_frames=13058` 对照 | `shoot.py:118-129` |
+
+**给实施单的一句话**：若 R1 选 (a)，直接 `from touhou_rl.v400.teacher.shoot import release_due, commit_frames`，并把 `period` 与 `decision_frames` 一起写进任务身份；`48 决策 × 2 帧 = 96 帧` 与已冻结的 `rollout.shoot_pulse_period` 对齐，不要另发明周期。
