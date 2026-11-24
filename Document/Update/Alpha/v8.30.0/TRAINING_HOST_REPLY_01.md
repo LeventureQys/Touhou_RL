@@ -42,7 +42,7 @@
 | 动作库（原始） | `MultiDiscrete(9,2,2,2)` = 9 移动 × 射击 × focus × bomb = **72**，`encode_flat = move*8+shoot*4+focus*2+bomb` | `touhou_rl/spec.py:343-345,384-407` | 本次只读核实 |
 | 决策节拍 | 依工具而定：v4.2 T08 评测 `DECISION_FRAMES=2` / `COMMIT_FRAMES=2`；v8 系列用 H=120 微段。**本单不裁定，须在实施单冻结** | `R74/code_facts.constants_runtime` | 历史记录 |
 | 射击约定（关键） | 过关**需要 SHOOT 上升沿**：每 48 决策，在该决策最后一个 STEP 帧 `mask & ~(BTN_SHOOT\|BTN_BOMB)`。旧仪器无条件 OR `BTN_SHOOT`、无释放路径，引擎永远看不到上升沿 | `v4.2.0/evidence/T08/CLEAR_REMEASURE.md:22-32` | 历史记录 |
-| 初始/继承资源 | 自然开局：3 残机、bomb 按机体；**继承资源语义尚未在任何连续运行中定义**（旧恢复段每段补足三颗雷） | `ROUTE_DECISION.md`（研究端）；本单未测 | 缺口/待核验 |
+| 初始/继承资源 | 源 cfg 实测 lifeCount=2、bombCount=3（见 §10.1），但 lifeCount 是否等于总残机本次未核实；**继承资源语义尚未在任何连续运行中定义**（旧恢复段每段补足三颗雷） | `ROUTE_DECISION.md`（研究端）；本单未测 | 缺口/待核验 |
 | `team` 参数（**更正**） | `team` **不是**阶段内位置选择器，而是**机体/射击类型**：`ConsumePendingStart()` 里 `g_GameManager.shotType = g_startTeam;`。所以任务族名 `…-team0` = stage 0 / normal / **shotType 0**。`team>0` = 换机体，与 R1"冻结机体"冲突，**不能**用来切更短的子窗 | `rlharness.cpp:1142-1146,1163-1165` | 本次只读核实 |
 | 是否存在"从第 N 帧开始"的引擎杠杆 | **没有**。RESET 只有 `stage/difficulty/team(shotType)/seed/practice`，无起始帧参数；中局状态只能靠**前缀磁带重放 + `BRANCH`/`PARK`/`SPAWN`** 到达（v8.29 已用 `--reuse-park`） | `rlharness.cpp:981,1004,1142-1165`；`rlharness.hpp:43-51` | 本次只读核实 |
 
@@ -269,3 +269,5 @@ wsl 'ps -eo comm | grep -c th08'                     -> 0  0 个
 - `.tmp_v830_mute/th08.cfg.mute-only` — 最小改法产物，60 B，`cfa292ae…`，与源仅差 4 字节
 
 **仍需授权的步骤（不要由代理自行执行）**：把上述任一文件落到 `/root/v400-data/game/th08.cfg` 属于**资产操作**——§8.2 保护 `/root/v400-data`，而 §9.2 建议换这一个文件；`ASSET_SYNC` 目前登记的是 `48bf7621…`，一旦替换**必须**同步更新 `ASSET_SYNC.md` 与 `ASSET_SYNC.sha256`。请把这一步写进实施单，并指定用 (a) 还是 (b)。
+
+**第四处更正（同轮内）**：回执 §1 初稿写"自然开局：3 残机、bomb 按机体"，那是**未核实的先验**。本次按字节解码源 cfg 得到 `lifeCount=2`、`bombCount=3`，已替换该说法；但 `lifeCount` 究竟表示"总残机"还是"附加残机"仍未核实，实施单必须用真实开局读一次来定，**不得按 3 残机写死**。
