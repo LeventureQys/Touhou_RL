@@ -220,3 +220,24 @@ wsl 'ps -eo comm | grep -c th08'                     -> 0  0 个
 待核验 = 可用时段、框内可见性覆盖率。*
 
 **本回执内的自我更正（留痕）**：初稿曾把 `team` 当作阶段内位置选择器并据此推断"可用 `team>0` 切短子窗"。经 `rlharness.cpp:1164` `g_GameManager.shotType = g_startTeam` 实证，`team` 是机体/射击类型，该推断**已撤回**；相应地把"短切片"的唯一可行路径改为"重录干净磁带 + PARK"。初稿另曾据 `strings | grep -cx STAGE_CLEAR` 得 0 而怀疑二进制不含该表面，随后的完整字符串核查显示它是以 `stageClear=…` 形式存在，该怀疑**已撤回**。第三，初稿曾把 `touhou_rl/obs.py` 的 `encode()` 与 v8 的 106 维 `OBS_DIM` 当成同一向量，实测不是（`encode()` 是 24 self + 64×6 弹丸 + 16×8 网格的特权状态向量）；已改为分列并标明"106 维构成待核验"。
+
+---
+
+## 10. 留给实施单的运行纪律：静音（R2 一开引擎就必须先做）
+
+本节不属于六项设计输入，但它是下一次**真的启动引擎**之前必须落地的前置条件，写进回执以免实施时被漏掉。
+
+| 项 | 现状（本次实测） | 证据 | 类别 |
+| --- | --- | --- | --- |
+| 机内 `th08.cfg` 静音统计 | **找到 105 个、解码 105 个、错误 0；`muted` = 0，`audible` = 105**（一律 `musicMode=1, playSounds=1, music=39, sfx=36`）。分布：`.tmp_v420_data` 71、`.tmp_v410_wp05_round1` 32、`.tmp_v430_o2` 2 | 本次跑 `tools/rl/v431_audio_cfg_audit.py`（退出码 0） | 本次只读核实 |
+| 该审计是否可信/稳定 | 重跑后产出的 `R14/audio_cfg_audit.json` 与 HEAD 里的 blob **完全相同**（`37b3e21d930adbdcd959e005fce7f602ae1cc8d2`），即结论逐字节可复现、且自 2026-11-15 未变化 | `git hash-object` vs `git rev-parse HEAD:…` | 本次只读核实 |
+| 根因 | 引擎没有音频开关；`th08.cfg` 是 60 字节二进制结构体，写 `key=value` 会被静默丢弃。`/root/v400-data/game/th08.cfg` **本身**就是可出声的，A1/扩容启动器用 `copytree` 把它复制进各私有 data 目录，且未设 `SDL_AUDIODRIVER` | `AGENTS.md §9.1–9.2` | 研究端/历史口径 |
+| 静音是否改变游戏逻辑 | 已实测哈希中性（单状态）：R18 在 `playSounds=0` + `SDL_AUDIODRIVER=dummy` 下重跑 A1 state 0 的 18 个首动作，36,180 次逐帧前缀哈希 **0 不匹配**，18/18 判定与每个 `first_death_frame` 逐位相同。**只覆盖 1 个状态，不能外推** | `AGENTS.md §9.2` | 历史记录 |
+
+**实施单开引擎前必须做的三件事**（缺一不得开跑，也不得用“WSL 没有声卡”充当理由）：
+
+1. 给该次运行的私有 data 目录放静音 cfg：`python tools\rl\v400_make_cfg.py --out "<data-dir>\th08.cfg"`，再用 `--inspect … --json` 确认 `musicMode/playSounds/musicVolume/sfxVolume` 全 0。
+2. 启动环境显式设 `SDL_AUDIODRIVER=dummy`（`touhou_rl` 里已有多个 v4.0 脚本这么做，**不要**删掉或绕过）。
+3. 启动后、跑实验前跑 `python tools\rl\v431_audio_cfg_audit.py`，目标目录必须落在 `muted`；落在 `audible` 就先关声再继续。
+
+**给研究端的提示**：新开的运行**不得再增加 `audible` 计数**。若实施单要求复用一个既有私有 data 目录，那条目录的 cfg 必须先被替换成静音模板并留下替换前后的解码值——这会改动私有目录内容，属需要授权的资产操作，请在那张单里写明。
