@@ -225,6 +225,7 @@ wsl 'ps -eo comm | grep -c th08'                     -> 0  0 个
 
 **本回执内的自我更正（留痕）**：初稿曾把 `team` 当作阶段内位置选择器并据此推断"可用 `team>0` 切短子窗"。经 `rlharness.cpp:1164` `g_GameManager.shotType = g_startTeam` 实证，`team` 是机体/射击类型，该推断**已撤回**；相应地把"短切片"的唯一可行路径改为"重录干净磁带 + PARK"。初稿另曾据 `strings | grep -cx STAGE_CLEAR` 得 0 而怀疑二进制不含该表面，随后的完整字符串核查显示它是以 `stageClear=…` 形式存在，该怀疑**已撤回**。第三，初稿曾把 `touhou_rl/obs.py` 的 `encode()` 与 v8 的 106 维 `OBS_DIM` 当成同一向量，实测不是（`encode()` 是 24 self + 64×6 弹丸 + 16×8 网格的特权状态向量）；已改为分列并标明"106 维构成待核验"。
 第五，§12 初稿把 obs-v3 的 occupancy F1 写成“未通过的门槛”，不够准确——D-14 已正式把验收口径从 F1 改判为闭环 S1N 过关率，F1 仅作代理指标；现已按裁决原文改写。
+第六，§13 初稿写成“旧 0/N 从此有了机理层面的解释”，这是**过度断言**。clear_reachability.json 明写旧 0/N “are still valid negative results”，且“no existing 0/N number is explained by it”（那批策略在 ≤4,964 帧就死，离 13,195 帧差 8,000+ 帧）；已改写为“测量能力缺口”并新增 §13.5 专记边界。
 
 ---
 
@@ -374,11 +375,23 @@ if not mask & BTN_SHOOT:
 
 ### 13.4 推论（R1 必须处理）
 
-1. **只用标准动作契约，"阶段完成"在构造上不可达。** 旧仪器 `v410_student_eval.py` 的 `cand_to_mask` 无条件 OR `BTN_SHOOT`、无释放路径，所以"此前所有 0/N 都不是对能否过关的测量"——这条历史结论现在有了机理层面的解释，而不只是"仪器 bug"。
-2. 过关所依赖的 SHOOT 释放来自**外生的运行器约定**（T08 的 `--shoot-pulse-period 48`），**不是策略能决定的东西**。所以任何"像素 actor 通了第一面"的说法，严格写法应当是"**像素 actor + 固定外生脉冲**"，不能写成策略自己学会了触发过关。
+1. **只用标准动作契约 + 无释放路径，"阶段完成"在构造上不可达。** `clear_reachability.json` 的裁决原文：`stage_clear_reachable_through_evaluator_channel = false`；机制是"`cand_to_mask` 把 `BTN_SHOOT` OR 进每个 mask、评测器没有释放路径，于是每帧都按着射击；引擎需要一个 `SHOOT` 上升沿才能离开等待状态，而评测器与 harness 都不提供"。
+2. 过关所依赖的 SHOOT 释放来自**外生的运行器约定**（T08 的 `--shoot-pulse-period 48`），**不是策略能决定的东西**。所以任何"像素 actor 通了第一面"的说法，严格写法应当是"**像素 actor + 固定外生脉冲**"。
 3. R1 冻结动作契约时只有两条路，必须选一条并写进实施单：
    - **(a)** 把 SHOOT 脉冲**作为任务定义的一部分**声明（周期、释放帧位置都冻结），并明确"策略不可控"；或
-   - **(b)** **扩展动作空间，给策略一个 shoot 位，然后重新登记任务**。这正对应研究端 R1 原文的口径："若 18 动作/禁 bomb 不可解，不能因此否定允许 bomb 的完整游戏任务；**应恢复所需合法动作并重新登记任务**"。
-4. 本条**不构成**对像素学习或学习器能力的任何判断：它只说明"用现有动作契约 + 无脉冲，无法观测到过关"。
+   - **(b)** **扩展动作空间，给策略一个 shoot 位，然后重新登记任务**——这正是研究端 R1 原文的口径："若 18 动作/禁 bomb 不可解……**应恢复所需合法动作并重新登记任务**"。
+4. 裁决还给了三条**实施纪律**（`q3_fix.must_also`），R1 必须照抄：**把 `shoot_pulse_period` 记进 episode 身份**；**拒绝合并不同 `shoot_pulse_period` 的摘要**；**修复前写下的行若要比较就必须重跑，不得混用**。周期本身也要注意：`48 决策 × 2 帧 = 96 帧`，与 `configs/v420/rl-engine-{audit,pilot}.json` 已冻结的 `rollout.shoot_pulse_period` 一致；教师默认的 24 是配 4 帧决策的。
 
-**给研究端的取舍提示**：若选 (a)，主指标里混入了一个策略不可控的外生项，需要说清它对"反馈价值"判别的影响；若选 (b)，动作空间从 18/36 变大，必须有对应预算与参照（恒动作 #12 那类基线要重新冻结）。
+### 13.5 本条**不能**被用来改写历史结论（重要，防止误用）
+
+同一份产物明确划了界，R1 引用时必须连边界一起引：
+
+| 产物原话 | 含义 |
+| --- | --- |
+| `impact_on_existing_zero_clear_counts: "none measured: 1285 episode records, 1 clears"` | 扫了 **87 个文件 / 1,285 局**，只有 1 个 clear（且那是 reward audit 自己的 clear 重放）。**旧 0/N 不受本缺口解释** |
+| `one_line: "…but no existing 0/N number is explained by it, because every evaluated episode ended in a death at <= 4964 frames, 8,000+ frames short of the clear"` | 旧策略在 ≤4,964 帧就死了，离过关的 13,195 帧差 8,000+ 帧——**它们本来也过不了** |
+| `cannot_claim`: "the 0/N counts are unchanged and are still valid negative results for the reason they were reported" | **旧 0/N 仍是有效的负结果**，只是原因与通道无关 |
+| `cannot_claim`: "the recorded tape is a teacher recording, not a policy: replaying it through the evaluator channel proves the channel is broken, not that any student could clear" | 13,195 帧那条是**教师录音**，它只证明通道坏了，**不证明任何学生能过关** |
+| `cannot_claim`: "the fix, once applied, would not make any policy clear: it only makes a clear *reportable*" | 修好通道只是让过关**可被报告**，不会让任何策略变强 |
+
+**所以 §13 的正确读法是**：这是一个**测量能力**缺口（不能报告过关），不是"旧失败被推翻"，也不是"通道修好就能过"。R1 若把主指标定为阶段完成，**必须先解决可报告性**，同时**不得**回头宣称历史上的 0/N 无效。
