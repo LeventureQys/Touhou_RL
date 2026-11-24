@@ -9,10 +9,10 @@
 
 | 路径 | 字节 | SHA-256 |
 | --- | ---: | --- |
-| `tools/rl/v829_guard.py` | 81,189 | `a234502ae27348839b72af2ca03570f605da400d6af4a71ac72dc6114470711a` |
-| `tools/rl/v829_pair.py` | 393,031 | `4cfc21638ef0876ebc73c7ad91193db743cbb672cbd22d99410339fb7ec4c8a7` |
+| `tools/rl/v829_guard.py` | 94,342 | `deb3c77766aa1b7cdcfc3ee307fb58073bff5e097229bf8118a2f9f0a4b88b9b` |
+| `tools/rl/v829_pair.py` | 409,660 | `39aa63e78cb02961f8c1b67e38b8cf5ccbe9455c19abd1fcae008751e6b6c250` |
 | `tools/rl/v829_report.py` | 142,225 | `08c8d86137c9ae09852956b12e586a4a3735eb955bdd8a361296c0719ee60841` |
-| `tools/rl/v829_manifest_build.py` | 99,504 | `b8ec952b7872321b15fb31177242cd06f2a77641c8c6c73773a2a807a56e133c` |
+| `tools/rl/v829_manifest_build.py` | 120,429 | `bfe44832b3f03b4fb9b6bf80fc8b6d0bb6567f220056ea4f0d379412f959f5c6` |
 | `tools/rl/v829_collect_source.py` | 105,551 | `1414292324b49deb97830311e3cbd90e24f5f8098b00e4eac23344bcaa21d7c9` |
 
 > 五件工具都在演练中继续演进过（`--reuse-park`、路径规范化、`ckpts`/`rngs` 两根轴）。**以本表为准**。

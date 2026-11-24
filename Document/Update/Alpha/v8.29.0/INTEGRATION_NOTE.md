@@ -12,9 +12,9 @@
 | 工具 | 职责 | 会不会启动引擎 |
 | --- | --- | --- |
 | `tools/rl/v829_collect_source.py` | **从全新 seed 采出 4 帧录像**（`labels.jsonl` + `shard.json` + `collect.json`）；写盘前做哈希链校验，跑前跑后各一次静音审计 | **会**（`collect`）；`verify`/`selftest` 不会 |
-| `tools/rl/v829_manifest_build.py` | **来源清单 → 通过守卫的清单**（顶层 `ckpts:[]` 与 `rngs` 可展开预注册的两根重复测量轴；幂等） | **不会** |
-| `tools/rl/v829_guard.py` | 清单 `fail-closed` 校验（结构、预算、曝光、摘要、重复、RNG 复用、祖先自洽） | **不会**（纯离线，`selftest 52/52`） |
-| `tools/rl/v829_pair.py` | 配对入口：`check / trace / pair / compare`，跑真实引擎；`--reuse-park` 可让同 `(录像, 接管帧, 预算)` 的多 cell 共用一次 PARK | `check`/`compare` 不会；`trace`/`pair` 会 |
+| `tools/rl/v829_manifest_build.py` | **来源清单 → 通过守卫的清单**（顶层 `ckpts:[]`、`rngs`、`budgets:[]` 展开预注册的三根轴；幂等） | **不会** |
+| `tools/rl/v829_guard.py` | 清单 `fail-closed` 校验（结构、预算、曝光、摘要、重复、RNG 复用、祖先自洽、档位集合） | **不会**（纯离线，`selftest 57/57`） |
+| `tools/rl/v829_pair.py` | 配对入口：`check / trace / pair / compare`，跑真实引擎；`--window` / `--budget-frames` 是清单**子集选择器**；`--reuse-park` 可让同 `(录像, 接管帧, 预算)` 的多 cell 共用一次 PARK | `check`/`compare` 不会；`trace`/`pair` 会 |
 | `tools/rl/v829_report.py` | §4 计分与报表（2×2、Δ30/Δ40、去一法、界限、判定） | **不会**（纯离线，`selftest 170/170`） |
 
 **运行时解释器**：`/root/v400-venv/bin/python`（**Python 3.10.12**）。
@@ -186,6 +186,44 @@ python -B tools/rl/v829_collect_source.py verify \
 `pair_index` 是唯一允许变化的字段。
 
 实测：48 root 清单 `check_count=295`、`codes=[]`，**不加 `--allow-exposed`**（全部 `used_for_*: false`）。
+
+
+## 2.7 两个预算档与「接管帧 vs 预算」的硬约束
+
+预注册要求 **30 s 与 40 s 分别从同一接管状态开跑**，所以同一祖先要有两个 `budget_frames` 的 root：
+
+```json
+{ "budgets": [1800, 2400], "ckpts": [...], "rngs": 2, "sources": [...] }
+```
+
+同一祖先在**不同档位的 root 共享** `ancestor_id` / `takeover_frame` / `total_frames` / tape / digest；
+`budget_frames` 与 `pair_index` 是**允许变化**的轴。守卫对同一祖先的档位要求：`{1800,2400}` 的子集、同一 `(ckpt, pair_index)` 内不得重复（`ANCESTOR_BUDGET_SET`）。
+
+### 运行：`--budget-frames` 是选择器，不是断言
+
+一份清单可以同时登记两档；**每个档位跑一次**，其余档位的 root 被跳过：
+
+```bash
+python -B tools/rl/v829_pair.py --mode pair --manifest <96-root>.json \
+  --budget-frames 1800 --reuse-park --tag <tag>-30s --allow-legacy-window
+python -B tools/rl/v829_pair.py --mode pair --manifest <96-root>.json \
+  --budget-frames 2400 --reuse-park --tag <tag>-40s --allow-legacy-window
+```
+
+stdout 会打 `budget 1800: selected 48 root(s), skipped 48 (other tiers)`，`run.json` 里记 `budget_selection`。
+**选择器**（`--window`、`--budget-frames`）与**登记值**（`--pair-rng`、`--takeover-frame`、`--prefix-tape`、`--ckpt-sha256`）是两类语义：
+前者选子集、后者必须与清单相等。
+
+### 硬约束：`takeover_frame + 最大档预算 ≤ total_frames`
+
+| tape 帧数 | 可行接管帧（两档都要） | 说明 |
+| ---: | ---: | --- |
+| 4,800 | ≤ 2,399（`≡3 mod 4`） | 2,399 时 30 s 余 601 帧、40 s 余 1 帧 |
+| 5,600 | ≤ 3,199 | 1,400 块；实测 9.6 s 采完 |
+| 任意 | `N ≡ 3 (mod 4)` | `target = N+1` 必须是已记录锚点 |
+
+不满足时 builder 报 `BUDGET_EXCEEDS_TOTAL`（点名是哪一档装不下），守卫报 `BUDGET_EXCEEDS_FRAMES`。
+**所以想用更晚的接管帧就必须采更长的录像。**
 
 ---
 

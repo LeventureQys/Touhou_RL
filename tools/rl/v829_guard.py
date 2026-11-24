@@ -88,13 +88,53 @@ at two pair RNGs, 48 cells -- was refused as ``DUPLICATE_ANCESTOR`` +
 
 One ancestor, several roots, therefore also needs a consistency gate of its own:
 the fields that describe the play-root itself -- ``stage``, ``window``, the tape
-(``prefix_tape`` or an S1c ``s1c_window``), ``takeover_frame``, ``total_frames``,
-``budget_frames`` and ``parent_prefix_digest`` -- must agree across every root
-carrying that ``ancestor_id``, or the file is describing two different roots under
-one label (``ANCESTOR_INCONSISTENT``).  Only the checkpoint, the seed and the
-repeat number may differ: ``pair_index`` is deliberately **not** one of the
-invariant fields, because it is the repeat axis and *must* vary between the two
-pair-RNG runs of one cell.
+(``prefix_tape`` or an S1c ``s1c_window``), ``takeover_frame``, ``total_frames``
+and ``parent_prefix_digest`` -- must agree across every root carrying that
+``ancestor_id``, or the file is describing two different roots under one label
+(``ANCESTOR_INCONSISTENT``).  Only the checkpoint, the seed, the repeat number
+and the **budget tier** may differ: ``pair_index`` is deliberately **not** one of
+the invariant fields, because it is the repeat axis and *must* vary between the
+two pair-RNG runs of one cell, and ``budget_frames`` is not one either -- see the
+next section, which is why v8.30.0 removed it.
+
+The budget tier is §2's endpoint axis (30 s = 1,800 frames, 40 s = 2,400)
+------------------------------------------------------------------------
+§2 evaluates the *same take-over state* at two budgets: "30 秒与 40 秒分别从同一
+接管状态开跑".  A manifest that can only carry one ``budget_frames`` per ancestor
+therefore cannot express the primary/secondary endpoint pair at all, and until
+v8.30.0 the consistency gate made it worse than unwritable: ``budget_frames`` was
+an invariant, so the pre-registered 2-root shape (one ancestor, one tape, one
+``takeover_frame``, one ``total_frames``, budgets 1,800 + 2,400) was refused as
+``ANCESTOR_INCONSISTENT`` *and* ``DUPLICATE_ANCESTOR``.  The reproduction is
+``.tmp_v829_info/s20/repro-before.log`` (exit 1, both codes).
+
+The shape is now carried **one tier per root** (a scalar ``budget_frames``), not
+as a ``budgets: [1800, 2400]`` array on one root, for three reasons:
+
+1. every downstream reader already treats the root as one arm: `v829_pair.py`
+   refuses a root whose declared ``budget_frames`` is not the ``--budget-frames``
+   of the invocation (``BUDGET_ROOT_MISMATCH``) and `v829_report.py` averages
+   "for every ancestor **and every budget**", so one root *is* one
+   (ancestor, budget) arm -- an array would have to be expanded downstream, and
+   that expansion is exactly what this guard exists to make impossible to do
+   silently;
+2. the window identity, the seed slot and the per-root ceiling
+   (``takeover_frame + budget_frames <= total_frames``) are all defined on a
+   scalar, so a scalar keeps one meaning for "the frames this root proves";
+3. an array would need a "which value binds this root" rule -- the same
+   ambiguous-precedence trap ``ckpt`` vs ``ckpts`` has -- while two roots need
+   no rule at all.
+
+What replaces the old invariant is :data:`ANCESTOR_BUDGET_SET`: across one
+``ancestor_id`` the declared tiers must be a **subset of** :data:`BUDGET_TIERS`
+and **no (checkpoint, repeat) cell may be measured twice at the same tier**.
+That second rule is the only reading of "no repeats" that is compatible with the
+pre-registered grid: one ancestor legitimately owns 3 checkpoints x 2 pair RNGs =
+6 roots and every one of them declares the *same* tier (the 24- and 48-root
+manifests on disk do exactly that and must stay exit 0), so the tier is a set per
+*cell*, not per ancestor.  ``ANCESTOR_BUDGET_SET`` therefore names the budget
+axis in its own words; the same 2-root path is also a duplicate cell, which
+``DUPLICATE_ANCESTOR`` reports with ``budget_frames`` now in its key.
 
 A label is not an identity, so every root is also keyed on the window itself:
 ``(ckpt_sha256, parent_prefix_digest, takeover_frame, total_frames,
@@ -163,16 +203,27 @@ Error codes (every one is a refusal)
 ``ANCESTOR_INCONSISTENT``   two roots share an ``ancestor_id`` but disagree on what
                             that play-root *is*: ``stage`` / ``window`` / the tape
                             (``prefix_tape`` or ``s1c_window``) / ``takeover_frame``
-                            / ``total_frames`` / ``budget_frames`` /
-                            ``parent_prefix_digest``, or one of them declares such a
-                            field while its sibling does not.  ``pair_index`` is
-                            not one of them: it is the repeat axis and must vary
-``DUPLICATE_ANCESTOR``      the same ``(ancestor_id, ckpt_sha256, pair_index)``
-                            appears twice (``ancestor_id`` after ``strip()``,
-                            ``pair_index`` default 0): one cell is one
+                            / ``total_frames`` / ``parent_prefix_digest``, or one of
+                            them declares such a field while its sibling does not.
+                            ``pair_index`` is not one of them (it is the repeat
+                            axis and must vary) and ``budget_frames`` is not one
+                            either (it is the endpoint axis -- ``ANCESTOR_BUDGET_SET``
+                            judges it)
+``ANCESTOR_BUDGET_SET``     the endpoint axis of one ``ancestor_id`` is malformed:
+                            a declared ``budget_frames`` is outside
+                            :data:`BUDGET_TIERS`, or one ``(ckpt_sha256,
+                            pair_index)`` cell declares the same tier twice (a tier
+                            is one endpoint, so the same tier twice is one
+                            measurement counted twice, not a third endpoint).  Two
+                            *different* tiers of one cell are the pre-registered
+                            30 s/40 s pair and pass
+``DUPLICATE_ANCESTOR``      the same ``(ancestor_id, ckpt_sha256, pair_index,
+                            budget_frames)`` appears twice (``ancestor_id`` after
+                            ``strip()``, ``pair_index`` default 0): one cell is one
                             measurement, however it is labelled.  A *different*
-                            checkpoint or a *different* repeat number under one
-                            ``ancestor_id`` is a §2 repeat axis and is legal
+                            checkpoint, a *different* repeat number or a *different*
+                            budget tier under one ``ancestor_id`` is a §2 repeat /
+                            endpoint axis and is legal
 ``DUPLICATE_WINDOW``        two roots agree on ``(ckpt_sha256,
                             parent_prefix_digest, takeover_frame, total_frames,
                             budget_frames, pair_index)``: one measurement under
@@ -199,10 +250,11 @@ cells.  Three key families are checked so the diagnosis is not blind to any rout
 
 So a repeated seed either repeats a cell (which also trips
 ``DUPLICATE_ANCESTOR`` / ``DUPLICATE_WINDOW``) or repeats a seed across the two
-repeat numbers of one cell (``RNG_REUSED`` alone).  ``DUPLICATE_ANCESTOR`` is
-reported before ``DUPLICATE_WINDOW`` and both before ``RNG_REUSED``
-(:data:`CODE_ORDER`), so when a cell is duplicated the first line of the report
-already says which cell it is.
+repeat numbers of one cell (``RNG_REUSED`` alone).  ``ANCESTOR_BUDGET_SET`` (the
+endpoint axis) is reported before ``DUPLICATE_ANCESTOR``, which is reported before
+``DUPLICATE_WINDOW``, and all three before ``RNG_REUSED`` (:data:`CODE_ORDER`), so
+when a cell is duplicated the report already says which cell, which tier and which
+seed it is.
 
 Exit codes
 ----------
@@ -243,8 +295,13 @@ when ``pair_index`` 0/1 carry different seeds, a duplicated
 repeat number with one seed reports ``RNG_REUSED``, an absent ``pair_index`` and
 an explicit ``0`` are one repeat number, ``pair_index`` 16 is
 ``FIELD_INVALID``, and the two repeats of one cell sharing one seed is the case
-where ``RNG_REUSED`` stands alone.  Both the exit code and the exact
-finding-code set of every case are asserted, and the battery prints
+where ``RNG_REUSED`` stands alone.  The endpoint axis has its own four cases: the
+same ancestor / tape / takeover / total at budgets 1,800 **and** 2,400 passes (the
+pre-registered 30 s + 40 s pair), the same cell at 1,800 twice is
+``ANCESTOR_BUDGET_SET``, two tiers whose ``takeover_frame`` disagrees is
+``ANCESTOR_INCONSISTENT``, and a 2,400 tier that does not fit
+(``takeover + 2400 > total``) is ``BUDGET_EXCEEDS_FRAMES``.  Both the exit code
+and the exact finding-code set of every case are asserted, and the battery prints
 ``SELFTEST: ok N/N`` with the count it actually ran (there is no hard-coded N).
 """
 
@@ -263,7 +320,11 @@ GUARD = "tools/rl/v829_guard.py"
 #: six-field window (five + ``pair_index``) for ``DUPLICATE_WINDOW`` -- so the
 #: second §2 axis (3 checkpoints x **2 pair RNGs** = 48 cells) is writable in one
 #: manifest.  The document keys did not change (``v829_pair.py`` reads them).
-GUARD_VERSION = "v8.29.2"
+#: v8.30.0: ``budget_frames`` left the ancestor-invariant set (it is §2's endpoint
+#: axis: one take-over state at 1,800 and at 2,400 frames), joined the
+#: ``DUPLICATE_ANCESTOR`` cell key, and got its own gate
+#: (``ANCESTOR_BUDGET_SET``).  Keys and codes are additions only.
+GUARD_VERSION = "v8.30.0"
 
 #: The two pre-registered budget tiers (1,800 = secondary endpoint, 2,400 = the
 #: §2 admission bar).  Frozen as choices so a typo cannot silently widen a gate.
@@ -312,9 +373,16 @@ TAPE_FIELDS = ("prefix_tape", "s1c_window")
 
 #: The play-root fields that must agree across every root of one ``ancestor_id``.
 #: ``tuple`` order is the order the disagreement list is printed in.
+#: ``budget_frames`` is deliberately **absent**: §2 measures one take-over state at
+#: two budgets, so it is the endpoint axis and must be free to differ across the
+#: roots of one ancestor (``ANCESTOR_BUDGET_SET`` judges the set instead).
 ANCESTOR_INVARIANT_FIELDS = ("stage", "window", "tape", "takeover_frame",
-                             "total_frames", "budget_frames",
-                             "parent_prefix_digest")
+                             "total_frames", "parent_prefix_digest")
+
+#: The tiers a declared ``budget_frames`` may name.  §2 pre-registers exactly two
+#: endpoints (30 s = 1,800 frames, 40 s = 2,400), so anything else is outside the
+#: contract even if it is a positive integer.
+ANCESTOR_BUDGET_TIERS = BUDGET_TIERS
 
 #: Printed for a field that a root does not declare, so "one root names the tape
 #: and its sibling does not" is a visible disagreement instead of a silent pass.
@@ -338,6 +406,7 @@ CODE_ORDER = (
     "EXPOSURE_CONFLICT",
     "DIGEST_MISMATCH",
     "ANCESTOR_INCONSISTENT",
+    "ANCESTOR_BUDGET_SET",
     "DUPLICATE_ANCESTOR",
     "DUPLICATE_WINDOW",
     "RNG_REUSED",
@@ -453,19 +522,22 @@ def ancestor_descriptor(root: dict) -> dict:
     """The play-root fields of one root, ``<absent>`` for anything undeclared.
 
     ``ANCESTOR_INCONSISTENT`` compares these across every root that carries one
-    ``ancestor_id``: a checkpoint, a repeat number, a seed and the checkpoint's own
-    seed may differ inside one ancestor (§2's 3-checkpoint x 2-RNG design), the
+    ``ancestor_id``: a checkpoint, a repeat number, a seed, the checkpoint's own
+    seed and the **budget tier** may differ inside one ancestor (§2's
+    3-checkpoint x 2-RNG grid, measured at 1,800 *and* 2,400 frames), the
     play-root itself may not.  ``stage`` / ``takeover_frame`` / ``total_frames`` /
-    ``budget_frames`` / ``parent_prefix_digest`` are required, so they are always
-    present (possibly with an invalid value, which is already reported field by
-    field); ``window`` and the tape are optional in this contract -- ``v829_pair.py``
-    accepts a window from the root or from ``--window`` -- so a field is compared
-    only as "what this root says", and a sibling that says nothing prints
-    ``<absent>``.  That is deliberate: two roots claiming to describe the same
-    play-root must agree on *whether* they name the tape as well as on what they
-    name, otherwise the guard could not tell "same root, one label omits the tape"
-    from "two different roots".  ``pair_index`` is absent from this descriptor on
-    purpose: it is the repeat axis and must differ between the two RNG runs.
+    ``parent_prefix_digest`` are required, so they are always present (possibly
+    with an invalid value, which is already reported field by field); ``window``
+    and the tape are optional in this contract -- ``v829_pair.py`` accepts a window
+    from the root or from ``--window`` -- so a field is compared only as "what
+    this root says", and a sibling that says nothing prints ``<absent>``.  That is
+    deliberate: two roots claiming to describe the same play-root must agree on
+    *whether* they name the tape as well as on what they name, otherwise the guard
+    could not tell "same root, one label omits the tape" from "two different
+    roots".  ``pair_index`` is absent from this descriptor on purpose (it is the
+    repeat axis and must differ between the two RNG runs) and so is
+    ``budget_frames`` (the endpoint axis; ``ANCESTOR_BUDGET_SET`` judges it as a
+    set over the (checkpoint, repeat) cells).
     """
     tape = _ABSENT
     for name in TAPE_FIELDS:
@@ -474,7 +546,7 @@ def ancestor_descriptor(root: dict) -> dict:
             break
     described = {"tape": tape}
     for name in ("stage", "window", "takeover_frame", "total_frames",
-                 "budget_frames", "parent_prefix_digest"):
+                 "parent_prefix_digest"):
         described[name] = root[name] if name in root else _ABSENT
     return described
 
@@ -613,10 +685,14 @@ def audit(manifest: object, *, budget: int = DEFAULT_BUDGET,
     roots_count = len(roots)
 
     # ---- per-root checks ---------------------------------------------------
-    # ``seen_ids``       (ancestor_id, ckpt_sha256) -> roots: one cell once
+    # ``seen_ids``       (ancestor_id, ckpt_sha256, pair_index, budget_frames) ->
+    #                    roots: one cell at one tier once
     # ``ancestor_groups`` ancestor_id -> roots: the play-root consistency check
+    # ``budget_axis``    ancestor_id -> (root index, usable tier, ckpt, repeat):
+    #                    the endpoint axis, judged as a set per cell
     seen_ids: dict[tuple, list[int]] = {}
     ancestor_groups: dict[str, list[int]] = {}
+    budget_axis: dict[str, list[tuple[int, int | None, str | None, int | None]]] = {}
     descriptors: dict[int, dict] = {}
     labels: dict[int, str] = {}
     windows: dict[tuple, list[int]] = {}
@@ -789,21 +865,33 @@ def audit(manifest: object, *, budget: int = DEFAULT_BUDGET,
         if is_text(ancestor):
             ancestor_key = ancestor.strip()
             # Every root of one ancestor, for ANCESTOR_INCONSISTENT: that check
-            # must see the checkpoints and repeats of one ancestor as siblings, so
-            # it groups by the label alone and never by the repeat number.
+            # must see the checkpoints, repeats and budget tiers of one ancestor as
+            # siblings, so it groups by the label alone.
             ancestor_groups.setdefault(ancestor_key, []).append(index)
             descriptors[index] = ancestor_descriptor(root)
-            # The identity DUPLICATE_ANCESTOR refuses on is the cell
-            # (label, checkpoint, repeat number): one measurement is one cell.
-            # The key is only built when the checkpoint is a real digest and the
-            # repeat number is usable -- a root with a broken ckpt_sha256 or an
-            # out-of-range pair_index is already reported FIELD_INVALID and must
-            # not seed a cross-root key from a value nobody can compare.
+            # The endpoint axis.  A tier that is not a usable positive integer is
+            # already FIELD_INVALID, so it is recorded as None and seeds no
+            # cross-root key; the checkpoint and the repeat number are recorded the
+            # same way, because a cell can only be named when both are comparable.
             repeat = pair_index_of(root)
-            if is_digest(root.get("ckpt_sha256")) and repeat is not None:
-                seen_ids.setdefault((ancestor_key, root["ckpt_sha256"], repeat),
-                                    []).append(index)
-                if is_int(declared) and "pair_rng" in root:
+            budget_axis.setdefault(ancestor_key, []).append((
+                index,
+                declared if is_int(declared) and declared > 0 else None,
+                root.get("ckpt_sha256") if is_digest(root.get("ckpt_sha256")) else None,
+                repeat))
+            # The identity DUPLICATE_ANCESTOR refuses on is the cell
+            # (label, checkpoint, repeat number, budget tier): one measurement is
+            # one cell at one tier.  The key is only built when the checkpoint is a
+            # real digest and the repeat number and the tier are usable -- a root
+            # with a broken ckpt_sha256, an out-of-range pair_index or a zero
+            # budget is already reported FIELD_INVALID and must not seed a
+            # cross-root key from a value nobody can compare.
+            if (is_digest(root.get("ckpt_sha256")) and repeat is not None
+                    and is_int(declared) and declared > 0):
+                seen_ids.setdefault(
+                    (ancestor_key, root["ckpt_sha256"], repeat, declared),
+                    []).append(index)
+                if "pair_rng" in root:
                     # Two seed families: the cell slot (label, budget, checkpoint,
                     # repeat) and the coarser ancestor family (the same minus the
                     # repeat) that makes a repeat number no licence for a reused
@@ -838,19 +926,64 @@ def audit(manifest: object, *, budget: int = DEFAULT_BUDGET,
             "ANCESTOR_INCONSISTENT",
             f"ancestor_id {ancestor!r} appears on roots{sorted(indices)}, but those "
             f"roots disagree about the play-root itself: {'; '.join(disagreements)}. "
-            f"One ancestor is one play-root, so its checkpoint, its pair_rng and its "
-            f"repeat number pair_index may differ (those are the section 2 "
-            f"three-checkpoint x two-RNG axes) while the tape, takeover frame, total "
-            f"frames, budget, stage, window and prefix digest may not",
+            f"One ancestor is one play-root, so its checkpoint, its pair_rng, its "
+            f"repeat number pair_index and its budget tier may differ (those are the "
+            f"section 2 three-checkpoint x two-RNG axes and the 30 s/40 s endpoint "
+            f"axis) while the tape, takeover frame, total frames, stage, window and "
+            f"prefix digest may not",
             labels[indices[0]]))
 
-    # ---- cross-root: one cell per (ancestor, checkpoint, repeat) -----------
+    # ---- cross-root: the budget tiers of one ancestor form a set -----------
+    # `budget_frames` is §2's endpoint axis (1,800 = 30 s, 2,400 = 40 s), so it is
+    # free to differ across the roots of one ancestor -- but the tiers it names
+    # have to be pre-registered, and a tier is one endpoint: the same tier twice on
+    # one (checkpoint, repeat) cell is one measurement counted twice, not a third
+    # endpoint.  Per *cell*, not per ancestor: the pre-registered grid already
+    # gives one ancestor 3 checkpoints x 2 pair RNGs = 6 roots, and every one of
+    # them declares the same tier (the 24- and 48-root manifests on disk), which is
+    # legal and must stay legal.
+    checks.append("roots.ancestor_budget_set")
+    for ancestor in sorted(budget_axis):
+        entries = budget_axis[ancestor]
+        outside = [(index, value) for index, value, _ckpt, _repeat in entries
+                   if value is not None and value not in ANCESTOR_BUDGET_TIERS]
+        if outside:
+            shown = ", ".join(f"roots[{index}]={value!r}" for index, value in outside)
+            findings.append(finding(
+                "ANCESTOR_BUDGET_SET",
+                f"ancestor_id {ancestor!r}: {shown} declare(s) a budget_frames "
+                f"outside the pre-registered tiers {ANCESTOR_BUDGET_TIERS}. The "
+                f"budget is section 2's endpoint axis (1,800 frames = 30 s, 2,400 = "
+                f"40 s), so a third value names no endpoint the report can average",
+                labels[outside[0][0]]))
+        cells: dict[tuple, list[tuple[int, int]]] = {}
+        for index, value, ckpt, repeat in entries:
+            if value is None or ckpt is None or repeat is None:
+                continue
+            cells.setdefault((ckpt, repeat), []).append((index, value))
+        for cell in sorted(cells):
+            pairs = cells[cell]
+            for value in _repeated([item for _index, item in pairs]):
+                holders = [index for index, item in pairs if item == value]
+                findings.append(finding(
+                    "ANCESTOR_BUDGET_SET",
+                    f"ancestor_id {ancestor!r} measures the cell (ckpt "
+                    f"{cell[0][:12]}..., pair_index {cell[1]}) at budget_frames "
+                    f"{value} on roots{holders}: the tiers are a SET per "
+                    f"(checkpoint, repeat) cell -- budget {value} is one endpoint "
+                    f"(section 2), so the same tier twice is one measurement counted "
+                    f"twice rather than a second endpoint. Two *different* tiers of "
+                    f"one cell (1,800 + 2,400 from one take-over state) are the "
+                    f"pre-registered 30 s/40 s pair and pass",
+                    labels[holders[0]]))
+
+    # ---- cross-root: one cell per (ancestor, checkpoint, repeat, tier) ------
     checks.append("roots.unique_ancestor")
     for key in sorted(seen_ids):
         indices = seen_ids[key]
         if len(indices) < 2:
             continue
-        ancestor, ckpt, repeat = key
+        ancestor, ckpt, repeat, tier = key
         raw_labels = sorted({labels[index] for index in indices})
         tail = ("; the raw labels "
                 f"{raw_labels} collapse to that key after str.strip()"
@@ -858,12 +991,13 @@ def audit(manifest: object, *, budget: int = DEFAULT_BUDGET,
         findings.append(finding(
             "DUPLICATE_ANCESTOR",
             f"ancestor_id {ancestor!r} with ckpt {ckpt[:12]}... at repeat "
-            f"pair_index {repeat} appears {len(indices)} times "
-            f"(roots{sorted(indices)}){tail}; section 2 of the pre-registration "
-            f"admits one cell per (independent ancestor, checkpoint, pair RNG), and "
-            f"a repeat is the same cell counted twice. A *different* checkpoint or a "
-            f"*different* pair_index under this ancestor is a section 2 repeat axis, "
-            f"not a second ancestor"))
+            f"pair_index {repeat} and budget_frames {tier} appears {len(indices)} "
+            f"times (roots{sorted(indices)}){tail}; section 2 of the pre-registration "
+            f"admits one cell per (independent ancestor, checkpoint, pair RNG) at "
+            f"each budget, and a repeat is the same cell counted twice. A *different* "
+            f"checkpoint, a *different* pair_index or a *different* budget tier "
+            f"under this ancestor is a section 2 repeat/endpoint axis, not a second "
+            f"ancestor"))
 
     # ---- cross-root: one physical measurement per manifest ------------------
     checks.append("roots.unique_window")
@@ -1165,12 +1299,15 @@ def _selftest_cases() -> list[tuple[str, dict, dict, set, int]]:
     cases.append(("digest", _manifest([broken]), {}, {"DIGEST_MISMATCH"}, 1))
 
     # 8. uniqueness: a repeated ancestor that repeats its window *and* its rng --
-    #    identical copies now trip all three cross-root gates, which is the point
+    #    identical copies now trip every cross-root gate, which is the point.  The
+    #    two copies also share the tier of one cell, so ANCESTOR_BUDGET_SET reports
+    #    the endpoint axis too (a tier is one endpoint, not two).
     first = _root("anc-dup", rng=99)
     second = _root("anc-dup", rng=99)
     third = _root("anc-dup", rng=100)             # different rng: only the id repeats
     cases.append(("uniqueness", _manifest([first, second, third]), {},
-                  {"DUPLICATE_ANCESTOR", "DUPLICATE_WINDOW", "RNG_REUSED"}, 1))
+                  {"ANCESTOR_BUDGET_SET", "DUPLICATE_ANCESTOR", "DUPLICATE_WINDOW",
+                   "RNG_REUSED"}, 1))
 
     # 9. the 2,400 admission bar is the default: this window fits the secondary
     #    1,800 endpoint but not 2,400, so a default of anything else would let a
@@ -1231,7 +1368,8 @@ def _selftest_cases() -> list[tuple[str, dict, dict, set, int]]:
     padded = dict(spaced)
     padded["ancestor_id"] = "anc-sp "
     cases.append(("label_space", _manifest([spaced, padded]), {},
-                  {"DUPLICATE_ANCESTOR", "DUPLICATE_WINDOW", "RNG_REUSED"}, 1))
+                  {"ANCESTOR_BUDGET_SET", "DUPLICATE_ANCESTOR", "DUPLICATE_WINDOW",
+                   "RNG_REUSED"}, 1))
 
     # 17. strip() must not need the window to match: same label modulo a
     #     trailing space, two genuinely different windows -- the same play-root is
@@ -1240,7 +1378,8 @@ def _selftest_cases() -> list[tuple[str, dict, dict, set, int]]:
     left = _root("anc-w", takeover=8663, rng=20261125)
     right = _root("anc-w ", takeover=3000, rng=20261126)
     cases.append(("label_space_distinct_window", _manifest([left, right]), {},
-                  {"DUPLICATE_ANCESTOR", "ANCESTOR_INCONSISTENT"}, 1))
+                  {"ANCESTOR_BUDGET_SET", "DUPLICATE_ANCESTOR",
+                   "ANCESTOR_INCONSISTENT"}, 1))
 
     # 18. one ancestor, two windows, one seed: RNG_REUSED has to be able to fire
     #     without DUPLICATE_WINDOW (the ancestor key family still matters).  Two
@@ -1251,7 +1390,8 @@ def _selftest_cases() -> list[tuple[str, dict, dict, set, int]]:
     twin_a = _root("anc-twin", takeover=8663, rng=5)
     twin_b = _root("anc-twin", takeover=9000, rng=5)
     cases.append(("rng_across_windows", _manifest([twin_a, twin_b]), {},
-                  {"DUPLICATE_ANCESTOR", "ANCESTOR_INCONSISTENT", "RNG_REUSED"}, 1))
+                  {"ANCESTOR_BUDGET_SET", "DUPLICATE_ANCESTOR",
+                   "ANCESTOR_INCONSISTENT", "RNG_REUSED"}, 1))
 
     # 19. the top level is never inherited: the four frame fields live only at
     #     the top, and the root is complete otherwise
@@ -1298,7 +1438,8 @@ def _selftest_cases() -> list[tuple[str, dict, dict, set, int]]:
     same_ckpt = [_root("anc-sameckpt", ckpt="ckpt|anc-sameckpt", rng=20262001),
                  _root("anc-sameckpt", ckpt="ckpt|anc-sameckpt", rng=20262002)]
     cases.append(("ancestor_same_ckpt", _manifest(same_ckpt), {},
-                  {"DUPLICATE_ANCESTOR", "DUPLICATE_WINDOW"}, 1))
+                  {"ANCESTOR_BUDGET_SET", "DUPLICATE_ANCESTOR",
+                   "DUPLICATE_WINDOW"}, 1))
 
     # 30. one ancestor cannot be two different roots: a sibling whose takeover
     #     frame contradicts the other two is ANCESTOR_INCONSISTENT (and is NOT
@@ -1375,7 +1516,8 @@ def _selftest_cases() -> list[tuple[str, dict, dict, set, int]]:
                 _root("anc-dup-cell", ckpt="ckpt|anc-dup-cell", pair_index=0,
                       rng=20264002)]
     cases.append(("pair_rng_same_cell", _manifest(dup_cell), {},
-                  {"DUPLICATE_ANCESTOR", "DUPLICATE_WINDOW"}, 1))
+                  {"ANCESTOR_BUDGET_SET", "DUPLICATE_ANCESTOR",
+                   "DUPLICATE_WINDOW"}, 1))
 
     # 39. the same cell twice *and* one seed: RNG_REUSED joins the two.  Which code
     #     is printed first is asserted on the ordered finding list below
@@ -1385,7 +1527,8 @@ def _selftest_cases() -> list[tuple[str, dict, dict, set, int]]:
                 _root("anc-dup-seed", ckpt="ckpt|anc-dup-seed", pair_index=0,
                       rng=20264003)]
     cases.append(("pair_rng_same_cell_same_seed", _manifest(dup_seed), {},
-                  {"DUPLICATE_ANCESTOR", "DUPLICATE_WINDOW", "RNG_REUSED"}, 1))
+                  {"ANCESTOR_BUDGET_SET", "DUPLICATE_ANCESTOR", "DUPLICATE_WINDOW",
+                   "RNG_REUSED"}, 1))
 
     # 40. an absent pair_index means repeat 0: it cannot be counted as a second
     #     axis next to an explicit 0 -- the two rows are one cell
@@ -1393,7 +1536,8 @@ def _selftest_cases() -> list[tuple[str, dict, dict, set, int]]:
                 _root("anc-implicit", ckpt="ckpt|anc-implicit", rng=20264005,
                       pair_index=0)]
     cases.append(("pair_index_default_zero", _manifest(implicit), {},
-                  {"DUPLICATE_ANCESTOR", "DUPLICATE_WINDOW"}, 1))
+                  {"ANCESTOR_BUDGET_SET", "DUPLICATE_ANCESTOR",
+                   "DUPLICATE_WINDOW"}, 1))
 
     # 41. the repeat axis is an index below MAX_PAIR_INDEX: 16 names no
     #     pre-registered measurement and is refused instead of wrapped
@@ -1422,6 +1566,62 @@ def _selftest_cases() -> list[tuple[str, dict, dict, set, int]]:
     three_repeats = [_root("anc-3rng", ckpt="ckpt|anc-3rng", pair_index=index,
                            rng=20265000 + index) for index in range(3)]
     cases.append(("pair_rng_three", _manifest(three_repeats), {}, set(), 0))
+
+    # 45.-49. §2's ENDPOINT axis: the same take-over state measured at 30 s
+    #     (1,800 frames) and at 40 s (2,400).  Until v8.30.0 `budget_frames` was an
+    #     ancestor invariant, so the pre-registered 2-root shape below was refused
+    #     as ANCESTOR_INCONSISTENT + DUPLICATE_ANCESTOR (repro:
+    #     .tmp_v829_info/s20/repro-before.log, exit 1).  The take-over frame is
+    #     2,399 because 2399 + 2,400 = 4,799 and the tape holds 4,800 frames.
+    #
+    # 45. one ancestor, one tape, one takeover_frame, one total_frames, one
+    #     checkpoint -- two budget tiers, two seeds -> the pre-registered pair
+    endpoint = [_root("anc-endpoint", takeover=2399, total=4800, budget=1800,
+                      ckpt="ckpt|anc-endpoint|0", rng=20265000),
+                _root("anc-endpoint", takeover=2399, total=4800, budget=2400,
+                      ckpt="ckpt|anc-endpoint|0", rng=20265001)]
+    cases.append(("budget_endpoint_pair", _manifest(endpoint), {}, set(), 0))
+
+    # 46. the same tier twice on one cell is not a second endpoint: the tier set of
+    #     that cell has a repeat (and, budget now being in the cell key, the two
+    #     roots are also one duplicate cell)
+    twice = [_root("anc-tier-twice", takeover=2399, total=4800, budget=1800,
+                   ckpt="ckpt|anc-tier-twice|0", rng=20265002),
+             _root("anc-tier-twice", takeover=2399, total=4800, budget=1800,
+                   ckpt="ckpt|anc-tier-twice|0", rng=20265003)]
+    cases.append(("budget_same_tier_twice", _manifest(twice), {},
+                  {"ANCESTOR_BUDGET_SET", "DUPLICATE_ANCESTOR",
+                   "DUPLICATE_WINDOW"}, 1))
+
+    # 47. both tiers must come from ONE take-over frame: a 2,400 root whose
+    #     takeover_frame contradicts its 1,800 sibling describes a different
+    #     play-root, so the endpoint pair is not comparable (and this is NOT
+    #     silently read as two ancestors)
+    tier_skew = [_root("anc-tier-skew", takeover=2399, total=4800, budget=1800,
+                       ckpt="ckpt|anc-tier-skew|0", rng=20265004),
+                 _root("anc-tier-skew", takeover=2299, total=4800, budget=2400,
+                       ckpt="ckpt|anc-tier-skew|0", rng=20265005)]
+    cases.append(("budget_takeover_differs", _manifest(tier_skew), {},
+                  {"ANCESTOR_INCONSISTENT"}, 1))
+
+    # 48. the ceiling is judged per root AND per tier: 2,399 + 1,800 = 4,199 fits
+    #     while 2,399 + 2,400 = 4,799 still fits, but a takeover of 2,999 leaves
+    #     4,800 - 2,999 = 1,801 frames, so only the 2,400 tier overflows
+    tier_long = [_root("anc-tier-long", takeover=2999, total=4800, budget=1800,
+                       ckpt="ckpt|anc-tier-long|0", rng=20265006),
+                 _root("anc-tier-long", takeover=2999, total=4800, budget=2400,
+                       ckpt="ckpt|anc-tier-long|0", rng=20265007)]
+    cases.append(("budget_2400_does_not_fit", _manifest(tier_long), {},
+                  {"BUDGET_EXCEEDS_FRAMES"}, 1))
+
+    # 49. only the two pre-registered tiers name an endpoint: a third value is
+    #     refused as a malformed set even though it is a positive integer
+    third = [_root("anc-tier-third", takeover=2399, total=4800, budget=1800,
+                   ckpt="ckpt|anc-tier-third|0", rng=20265008),
+             _root("anc-tier-third", takeover=2399, total=4800, budget=3600,
+                   ckpt="ckpt|anc-tier-third|0", rng=20265009)]
+    cases.append(("budget_third_tier", _manifest(third), {},
+                  {"ANCESTOR_BUDGET_SET", "BUDGET_EXCEEDS_FRAMES"}, 1))
 
     return cases
 
@@ -1498,26 +1698,30 @@ def selftest(work: pathlib.Path) -> int:
         failures.append(f"default_budget: DEFAULT_BUDGET is {DEFAULT_BUDGET!r}, not 2400")
 
     # ---- structure case 5: on a duplicated cell the report names that cell first.
-    #      DUPLICATE_ANCESTOR / DUPLICATE_WINDOW / RNG_REUSED have to be printed in
-    #      CODE_ORDER (so "which code reports first" is not left to dict order),
-    #      and the first finding must already say which repeat number it is.
+    #      ANCESTOR_BUDGET_SET / DUPLICATE_ANCESTOR / DUPLICATE_WINDOW / RNG_REUSED
+    #      have to be printed in CODE_ORDER (so "which code reports first" is not
+    #      left to dict order), and the duplicate-cell finding must already say which
+    #      repeat number and which tier it is.
     duplicated = audit(next(case[1] for case in cases
                             if case[0] == "pair_rng_same_cell_same_seed"))
     ordered_codes = [entry["code"] for entry in duplicated["findings"]]
-    expected_order = ["DUPLICATE_ANCESTOR", "DUPLICATE_WINDOW", "RNG_REUSED"]
-    first_detail = duplicated["findings"][0]["detail"] if ordered_codes else ""
+    expected_order = ["ANCESTOR_BUDGET_SET", "DUPLICATE_ANCESTOR",
+                      "DUPLICATE_WINDOW", "RNG_REUSED"]
+    duplicate_detail = next((entry["detail"] for entry in duplicated["findings"]
+                             if entry["code"] == "DUPLICATE_ANCESTOR"), "")
     if ordered_codes != expected_order:
         order_problem = f"ordered codes {ordered_codes} != {expected_order}"
-    elif "pair_index 0" not in first_detail:
-        order_problem = (f"the first finding does not name the repeat number: "
-                         f"{first_detail!r}")
+    elif "pair_index 0" not in duplicate_detail or "budget_frames 2400" not in duplicate_detail:
+        order_problem = (f"the DUPLICATE_ANCESTOR finding does not name the repeat "
+                         f"number and the tier: {duplicate_detail!r}")
     else:
         order_problem = None
     if order_problem:
         failures.append(f"duplicate_cell_order: {order_problem}")
     else:
         passed += 1
-        print("  ok  duplicate_cell_order DUPLICATE_ANCESTOR first, names pair_index 0")
+        print("  ok  duplicate_cell_order DUPLICATE_ANCESTOR names pair_index 0 + "
+              "budget_frames 2400")
 
     # ---- the detail of the thin root must name every missing field ---------
     thin_report = audit(next(case[1] for case in cases if case[0] == "fields"))

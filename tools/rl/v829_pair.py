@@ -45,6 +45,55 @@ Modes
              same inventory.  That is the definition of a pair here.
 ``compare``  Two trace documents, G1 vs T2.  Pure stdlib; starts nothing.
 
+Selectors vs registered values (sec. 2's two tiers in ONE manifest)
+==================================================================
+Two options choose **which** roots of the manifest this invocation runs.  They
+are *selectors over the manifest subset*, applied in this order:
+
+1. ``--window N``         keeps only the roots that declare window ``N``;
+2. ``--budget-frames F``  keeps only the roots that declare budget ``F``
+                          (``F`` in ``BUDGET_TIERS``; the default is unchanged,
+                          2400 = sec. 2's admission bar).
+
+After both, what is left is this invocation's root set.  So one manifest may
+register both tiers of sec. 2's pilot shape ("8 ancestors x 3 ckpt x 2 RNG x
+2 budgets" = 96 roots) and the two tiers are run as **two invocations** against
+that one file.  An **empty set is refused** -- ``BUDGET_TIER_ABSENT`` (exit 1),
+never a silent run of zero cells: asking for a tier the manifest does not
+register is a usage error, not a verdict on a cell.  When every root already
+declares the requested tier the selection keeps all of them and nothing else
+changes: no new plan key, no new stdout line.  That is exactly what the
+byte-identical regression on the single-tier manifests compares.
+
+Every other pinned option is a **registered value, not a selector**: it must
+agree with what the root declares, and a disagreement is refused, because the
+run table is the manifest --
+
+* ``--pair-rng``       vs ``roots[i].pair_rng``        (``PAIR_RNG_CONFLICT``; a
+                        different seed is a different registered pair);
+* ``--takeover-frame`` vs ``roots[i].takeover_frame``  (``TAKEOVER_ROOT_MISMATCH``);
+* ``--prefix-tape``    vs ``roots[i].prefix_tape``     (``PREFIX_TAPE_NOT_IN_MANIFEST``
+                        / ``PREFIX_TAPE_CLI_MISMATCH``);
+* ``--ckpt-sha256``    vs ``roots[i].ckpt_sha256``     (``CKPT_SHA_MISMATCH``).
+
+A selector that matches nothing has a refusal code of its own
+(``WINDOW_NOT_IN_MANIFEST`` / ``BUDGET_TIER_ABSENT``); a registered value that
+disagrees is a refusal of that *cell*.  Neither edits the manifest and neither
+relaxes a ``v829_guard`` rule: the guard still judges the whole file at the
+requested tier **before** any root is selected, so whether a manifest may be run
+at a tier at all stays the guard's decision (e.g. ``BUDGET_EXCEEDS_FRAMES`` is
+still raised by the guard, not by this selector).
+
+Where the selection is recorded
+-------------------------------
+``budget_selection {requested, matched, skipped_by_budget, matched_roots}`` is
+written to the plan document, to ``run.json`` and to the stdout line
+``budget <F>: selected N root(s), skipped M (other tiers)`` -- but only when at
+least one root was skipped (a mixed-tier manifest).  That is the same
+present-only-when-needed discipline ``takeover_override`` / ``prefix_tape`` /
+``lineage_new_roots`` already follow, and it is what keeps a single-tier
+invocation byte-identical.
+
 Recovery: windows and the takeover frame
 =======================================
 The four old windows ``(11, 12, 17, 18)`` are the only ones v1 recovers, and a
@@ -472,6 +521,10 @@ SCHEMA_RUN = "v829-pair-run/1"
 SCHEMA_AUDIO = "v829-pair-audio-audit/1"
 SCHEMA_LINEAGE = "v829-pair-lineage/1"
 SCHEMA_CLOSURE = "v829-pair-manifest-bytes/1"
+#: the ``budget_selection`` block of a mixed-tier invocation (a selector, see the
+#: module docstring "Selectors vs registered values"); a single-tier manifest
+#: never produces it, so its plan/run.json stays byte-identical
+SCHEMA_BUDGET_SELECTION = "v829-pair-budget-selection/1"
 SCHEMA_GUARD = "v829-pair-manifest/1"          # owned by tools/rl/v829_guard.py
 
 # -- the frozen inputs this file obeys --------------------------------------
@@ -1180,8 +1233,129 @@ def manifest_from_single_read(args: argparse.Namespace,
     return manifest, closure
 
 
+def budget_selection_line(block: dict) -> str:
+    """The one stdout line a mixed-tier selection prints (the selector's record)."""
+
+    return (f"budget {int(block['requested'])}: selected {int(block['matched'])} "
+            f"root(s), skipped {int(block['skipped_by_budget'])} (other tiers)")
+
+
+def select_budget_tier(args: argparse.Namespace, candidates: list[dict], *,
+                       manifest_indices: list[int]) -> tuple[list[dict], dict]:
+    """Second selection pass: keep the roots declared at ``--budget-frames``.
+
+    ``--budget-frames`` is a **selector over the manifest subset**, exactly like
+    ``--window`` (module docstring, "Selectors vs registered values").  One
+    manifest can register both tiers of pre-registration sec. 2's pilot shape
+    ("8 ancestors x 3 ckpt x 2 RNG x 2 budgets"), and each tier is then run as
+    its own invocation against that one file.  The option is deliberately *not*
+    an assertion that every root is at that tier: that assertion is what this
+    function replaces, and it is why a 96-root two-tier manifest used to be
+    refused (``BUDGET_ROOT_MISMATCH``) at **both** tiers before a single root
+    could be selected.
+
+    Ordering matters for the refusal codes: ``--window`` runs first
+    (``select_roots``), so an invocation that names an absent window still gets
+    ``WINDOW_NOT_IN_MANIFEST`` verbatim.  Only then is the budget applied, and an
+    empty result is ``BUDGET_TIER_ABSENT`` (exit 1) -- a tier the manifest does
+    not register is a usage error, never a silent no-op run of zero cells.
+
+    A root whose ``budget_frames`` is missing or not an integer is **kept** here
+    and refused by ``check_root`` with ``MANIFEST_INVALID`` and its own label, so
+    the more precise code keeps winning; it is not this selector's job to
+    re-judge a field the guard and ``check_root`` already own.
+
+    The counters are named so that two invocations of the *same* mixed-tier
+    manifest can be compared without arithmetic:
+
+    * ``matched``             -- roots this invocation runs (``kept``);
+    * ``skipped_by_budget``   -- every manifest root the selection leaves out,
+                                 i.e. ``manifest_roots - matched`` (a window
+                                 exclusion is an exclusion from the same run);
+    * ``skipped_by_window``   -- how many of those the window step removed
+                                 (``manifest_roots - roots_after_window``);
+    * ``dropped_by_budget_step`` -- how many the budget step removed from the
+                                 roots the window step left (the strictly
+                                 "other tier" part).
+
+    ``candidates`` are the roots the window step kept (with ``_index`` already
+    set), ``manifest_indices`` is every manifest root index in file order.
+    Returns ``(kept, block)`` where ``block`` is the ``budget_selection`` record.
+    """
+
+    requested = int(args.budget_frames)
+    source = str(getattr(args, "budget_frames_source", "cli"))
+    manifest_roots = len(manifest_indices)
+    kept: list[dict] = []
+    skipped: list[dict] = []
+    tiers: dict[int, int] = {}
+    for root in candidates:
+        declared = root.get("budget_frames")
+        if isinstance(declared, bool) or not isinstance(declared, int):
+            kept.append(root)               # check_root -> MANIFEST_INVALID
+            continue
+        tiers[int(declared)] = tiers.get(int(declared), 0) + 1
+        if int(declared) == requested:
+            kept.append(root)
+        else:
+            skipped.append(root)
+    if not kept:
+        window_note = ("" if args.window is None
+                       else f" within --window {int(args.window)}")
+        raise PairError(
+            "BUDGET_TIER_ABSENT",
+            f"no root in the manifest declares budget_frames {requested}"
+            f"{window_note}; --budget-frames is a SELECTOR over the manifest "
+            f"subset, and it selected 0 of the {len(candidates)} root(s) the "
+            f"window step left, so this invocation would run nothing -- refusing "
+            f"instead of exiting 0 on an empty plan. The manifest declares "
+            f"tier(s) {sorted(tiers)} (counts "
+            f"{ {str(tier): count for tier, count in sorted(tiers.items())} }); "
+            f"pass one of them, or build a new root/manifest version for a new "
+            f"tier")
+    matched_roots = [int(root["_index"]) for root in kept]
+    matched_set = set(matched_roots)
+    skipped_roots = [int(index) for index in manifest_indices
+                     if int(index) not in matched_set]
+    block = {
+        "schema": SCHEMA_BUDGET_SELECTION,
+        "requested": requested,
+        "requested_source": source,
+        "matched": len(kept),
+        "skipped_by_budget": len(skipped_roots),
+        "matched_roots": matched_roots,
+        "skipped_roots": skipped_roots,
+        "skipped_by_window": manifest_roots - len(candidates),
+        "dropped_by_budget_step": len(skipped),
+        "declared_tiers": {str(tier): count
+                           for tier, count in sorted(tiers.items())},
+        "manifest_roots": manifest_roots,
+        "roots_after_window": len(candidates),
+        "window": (None if args.window is None else int(args.window)),
+        "scope": ("--budget-frames is a SELECTOR over the manifest subset, "
+                  "applied after --window: matched_roots are the roots this "
+                  "invocation runs, skipped_roots are the manifest roots it "
+                  "leaves out (skipped_by_window of them went to another window, "
+                  "dropped_by_budget_step to another tier). The other pinned "
+                  "options (--pair-rng / --takeover-frame / --prefix-tape / "
+                  "--ckpt-sha256) are REGISTERED VALUES, not selectors: each "
+                  "must equal the root's declared value or the cell is refused"),
+        "line": budget_selection_line({"requested": requested,
+                                       "matched": len(kept),
+                                       "skipped_by_budget": len(skipped_roots)}),
+    }
+    return kept, block
+
+
 def select_roots(manifest: object, args: argparse.Namespace) -> list[dict]:
-    """Resolve every root this invocation would touch, failing closed on any gap."""
+    """Resolve every root this invocation would touch, failing closed on any gap.
+
+    Two selectors, in this order: ``--window`` (below) and ``--budget-frames``
+    (``select_budget_tier``).  The result is the root set this invocation runs,
+    and the ``budget_selection`` record is stored on ``args`` so the plan
+    document, ``run.json`` and the stdout line all report the same object
+    instead of re-deriving it from the root list.
+    """
 
     if not isinstance(manifest, dict):
         raise PairError("MANIFEST_UNREADABLE", "manifest is not a JSON object")
@@ -1220,6 +1394,9 @@ def select_roots(manifest: object, args: argparse.Namespace) -> list[dict]:
             f"no root in the manifest matches --window {args.window}; the "
             f"manifest declares windows "
             f"{sorted({r.get('window') for r in roots if isinstance(r, dict)})}")
+    selected, selection = select_budget_tier(
+        args, selected, manifest_indices=list(range(len(roots))))
+    args.budget_selection = selection
     return selected
 
 
@@ -1306,12 +1483,20 @@ def check_root(root: dict, args: argparse.Namespace, *, needs_engine: bool) -> l
                         f"{label}: budget_frames must be an integer, "
                         f"got {declared_budget!r}")
     if int(declared_budget) != int(args.budget_frames):
+        # POST-SELECTION INVARIANT, not the selection rule.  `--budget-frames` is
+        # a selector (select_roots -> select_budget_tier drops every root of
+        # another tier, BUDGET_TIER_ABSENT when that empties the set), so a
+        # selected root that still disagrees means the selector was bypassed or
+        # the root set was built by hand.  Refusing keeps the old code and the old
+        # guarantee: a run never executes a root at a tier the manifest did not
+        # register for it.
         raise PairError(
             "BUDGET_ROOT_MISMATCH",
             f"{label}: the manifest declares budget_frames {declared_budget} but "
-            f"--budget-frames is {args.budget_frames}; the run table is the "
-            f"manifest, so a run at a different tier would not be the registered "
-            f"one (a new tier needs a new root/manifest version)")
+            f"--budget-frames is {args.budget_frames} -- this root should have "
+            f"been filtered out by the --budget-frames selector before any mode "
+            f"reached it (defensive assertion: the run table is the manifest, so a "
+            f"run at a different tier would not be the registered one)")
     engine_declared = check_engine_declaration(root)
     pair_rng = root.get("pair_rng")
     if isinstance(pair_rng, bool) or not isinstance(pair_rng, int) or pair_rng < 0:
@@ -3784,16 +3969,29 @@ def build_argv(*, mode: str, args: argparse.Namespace, root: dict, tag: str,
 
 def preflight(args: argparse.Namespace, *, guard_doc: dict, manifest: dict,
               roots: list[dict], needs_engine: bool,
-              closure: dict | None = None) -> dict:
+              closure: dict | None = None,
+              selection: dict | None = None) -> dict:
     """Every check that needs no engine; returns the plan document.
 
     ``closure`` is the A block (``manifest_from_single_read``): the digest of the
     manifest bytes this invocation actually parsed.  It is echoed into the plan
     and, for a run, into ``run.json`` -- the guard's own document stays verbatim
     in ``guard.json``, so the two provenances remain distinguishable.
+
+    ``selection`` is the ``budget_selection`` record of ``select_budget_tier``
+    (the ``--budget-frames`` selector).  It is echoed into the plan **only when it
+    actually skipped a root**: a single-tier manifest keeps exactly the plan
+    document -- and therefore the exact stdout -- it had, which is what the
+    byte-identical regression compares.  The same discipline gates
+    ``takeover_override`` / ``prefix_tape`` / ``lineage_new_roots`` below.
     """
 
     closure = dict(closure or {})
+    if selection is None:
+        selection = getattr(args, "budget_selection", None)
+    budget_block = (dict(selection)
+                    if isinstance(selection, dict)
+                    and int(selection.get("skipped_by_budget") or 0) > 0 else None)
     notes: list[str] = []
     checks: list[dict] = []
     for root in roots:
@@ -4091,6 +4289,12 @@ def preflight(args: argparse.Namespace, *, guard_doc: dict, manifest: dict,
         "would_start_engine": bool(needs_engine),
         "engine_side_modules_imported": engine_modules_loaded(),
     }
+    if budget_block is not None:
+        # The --budget-frames selector recorded its own result.  Only a mixed-tier
+        # manifest gets this key: with selected == every root and skipped == 0 the
+        # plan document, run.json and stdout stay byte-identical (requirement of
+        # the same name), exactly like takeover_override / prefix_tape below.
+        plan_document["budget_selection"] = budget_block
     # Present ONLY when some selected root is not the frozen 8663 cell.  Adding
     # the key unconditionally would change mode=check's output -- and its own
     # ``run.json`` -- for every pre-v8.30 cell, and the regression for the four
@@ -4160,6 +4364,11 @@ def render_plan(plan: dict) -> str:
         f"({plan['guard']['check_count']} checks, codes={plan['guard']['codes']})",
         f"  roots       {plan['roots_selected']} selected",
     ]
+    budget_selection = plan.get("budget_selection") or {}
+    if budget_selection:
+        # the selector's own line, printed only when it skipped a root (a
+        # single-tier selection prints nothing new: byte-identical output)
+        lines.append(budget_selection_line(budget_selection))
     if lineage.get("lineage_checked"):
         lines.append(f"  lineage     checked against {lineage['lineage_config_path']} "
                      f"sha256={str(lineage['lineage_config_sha256'])[:16]}...  "
@@ -5415,6 +5624,12 @@ def mode_run(args: argparse.Namespace, *, guard_doc: dict, manifest: dict,
     _LOG_FH = log_path.open("a", encoding="utf-8")
     try:
         log(f"mode={args.mode} tag={tag} engine={engine} ({engine_source})")
+        # the --budget-frames selector's result, once, on stdout: only a mixed-tier
+        # invocation prints it (see preflight's docstring), so a single-tier run's
+        # output is byte-identical
+        budget_block = dict(plan.get("budget_selection") or {})
+        if budget_block:
+            print(budget_selection_line(budget_block), flush=True)
         # The override is applied **after** the log handle exists and before the
         # first spawn: `prefix_module_objects()` loads the nested copies lazily, and
         # they capture their `_LOG_FH` at load time, so applying it earlier would
@@ -5509,6 +5724,11 @@ def mode_run(args: argparse.Namespace, *, guard_doc: dict, manifest: dict,
             # only a `lineage_new` invocation gets this key, and it is the
             # machine-readable half of residual_risk RESIDUAL_LINEAGE_NEW
             summary["lineage_new_roots"] = new_roots
+        if budget_block:
+            # only a mixed-tier invocation gets this key (selected>0, skipped>0),
+            # so a single-tier run.json keeps exactly the shape it had; the roots
+            # this run did NOT touch are named in skipped_roots
+            summary["budget_selection"] = budget_block
         if session.enabled:
             # only an --reuse-park run gets this key, so a default run.json keeps
             # exactly the shape it had
@@ -6023,10 +6243,14 @@ def work_cells(roots: list[dict]) -> list[dict]:
 
     Pre-registration sec. 3.4 names a cell as "one root x one budget x one ckpt".
     ``v829_guard`` pins exactly one ``budget_frames`` and one ``ckpt_sha256`` per
-    root, and ``--budget-frames`` must equal the declared value
-    (``BUDGET_ROOT_MISMATCH``), so the cartesian product collapses to one cell per
-    root -- the key is still spelled out in full, which is what makes two roots
-    that differ only by window (or only by ckpt) provably different cells.
+    root, and ``--budget-frames`` is a **selector** that keeps only the roots
+    already declared at that tier, so the cartesian product collapses to one cell
+    per root (a root of another tier is not in ``roots`` at all -- it was skipped
+    by ``select_budget_tier`` and is named in ``budget_selection.skipped_roots``).
+    ``check_root`` still keeps ``BUDGET_ROOT_MISMATCH`` as a defensive assertion
+    for a root set built by hand.  The key is spelled out in full, which is what
+    makes two roots that differ only by window (or only by ckpt) provably
+    different cells.
     """
 
     cells: list[dict] = []
@@ -6403,6 +6627,12 @@ def mode_workers(args: argparse.Namespace, *, guard_doc: dict, manifest: dict,
     new_roots = list((plan.get("lineage") or {}).get("lineage_new_roots") or [])
     if new_roots:
         summary["lineage_new_roots"] = new_roots
+    budget_block = dict(plan.get("budget_selection") or {})
+    if budget_block:
+        # only a mixed-tier invocation gets this key (see mode_run): the
+        # --budget-frames selector's result, so the coordinator record names the
+        # roots these cells came from and the ones left for the other tier
+        summary["budget_selection"] = budget_block
     write_json(base_dir / "run.json", summary)
     write_json(base_dir / "workers.json", {
         "schema": SCHEMA_RUN + ":workers", "tag": tag,
@@ -6514,7 +6744,7 @@ def check_worker_specs(args: argparse.Namespace, *, roots: list[dict],
     batches_by_index = [
         [int(spec["worker_index"]) for spec in table
          if int(spec["batch"]) == int(batch)] for batch in batches]
-    return {
+    document = {
         "schema": SCHEMA_PLAN + ":workers",
         "tool": TOOL, "tool_version": TOOL_VERSION,
         "kind": "workers-plan", "mode_requested": args.mode,
@@ -6563,6 +6793,12 @@ def check_worker_specs(args: argparse.Namespace, *, roots: list[dict],
             "re-run as-is",
         ],
     }
+    budget_block = dict(plan.get("budget_selection") or {})
+    if budget_block:
+        # the --budget-frames selector of the plan these cells came from (only a
+        # mixed-tier manifest produces it, so a single-tier document keeps shape)
+        document["budget_selection"] = budget_block
+    return document
 
 
 def render_workers_plan(document: dict) -> str:
@@ -6581,6 +6817,10 @@ def render_workers_plan(document: dict) -> str:
         f"would_spawn {document['would_spawn']}   "
         f"engine_side_modules_imported {document['engine_side_modules_imported']}",
     ]
+    budget_selection = document.get("budget_selection") or {}
+    if budget_selection:
+        # only a mixed-tier plan prints it (single-tier output stays identical)
+        lines.append(budget_selection_line(budget_selection))
     for spec in document["workers"]:
         lines.append(
             f"  worker {spec['worker_index']}/{len(document['workers'])}  "
@@ -6639,6 +6879,10 @@ def write_workers_plan_record(*, args: argparse.Namespace,
         "notes": document["notes"],
         "written_at": time.strftime("%Y-%m-%dT%H:%M:%S"),
     }
+    if document.get("budget_selection"):
+        # only a mixed-tier plan gets it, so a single-tier workers record keeps
+        # exactly the shape it had
+        record["budget_selection"] = document["budget_selection"]
     write_json(target, record)
     return target
 
@@ -6992,6 +7236,11 @@ def write_check_record(*, args: argparse.Namespace, plan: dict) -> list[pathlib.
     ``engine_started: false``.  A repeated check overwrites **only** these
     records (``check_record_only``), so ``mode=check`` stays idempotent while a
     real ``runs/<tag>`` is never touched.
+
+    A **mixed-tier** selection adds ``budget_selection`` -- the ``--budget-frames``
+    selector's result, the same block ``mode=pair``'s ``run.json`` carries -- to
+    every record it writes.  A single-tier selection adds nothing at all, so a
+    single-tier record keeps exactly the shape (and bytes) it had.
     """
 
     lineage = dict(plan.get("lineage") or {})
@@ -7073,6 +7322,14 @@ def write_check_record(*, args: argparse.Namespace, plan: dict) -> list[pathlib.
             # LINEAGE_NEW verdict is also visible in lineage_codes and in
             # roots[0].lineage_code, and this names the root that carried it
             record["lineage_new_roots"] = [entry["root_index"]]
+        budget_block = dict(plan.get("budget_selection") or {})
+        if budget_block:
+            # only a mixed-tier check gets this key: it is the --budget-frames
+            # selector's result (requested / matched / skipped_by_budget /
+            # matched_roots), which names the roots the matching pair run would
+            # execute and the ones it would leave for the other tier.  A
+            # single-tier check record keeps exactly the shape it had.
+            record["budget_selection"] = budget_block
         target = assert_writable(work / "runs" / tag / "run.json",
                                  work_dir=work, what="check-mode run.json")
         written.append(write_json(target, record))
@@ -7100,15 +7357,31 @@ def build_args(argv: list[str] | None = None) -> argparse.Namespace:
                              "tools/rl/v829_guard.py before anything else "
                              "(required for check/trace/pair)")
     parser.add_argument("--window", type=int, default=None,
-                        help="select the manifest roots at this window; v1 only "
-                             "supports 11, 12, 17, 18 (it is also the S1c "
-                             "recording seed and the w<NN> data dir)")
+                        help="SELECTOR (not an assertion): keep only the manifest "
+                             "roots that declare this window, so one manifest can "
+                             "register several windows. v1 only supports 11, 12, "
+                             "17, 18 for a run (it is also the S1c recording seed "
+                             "and the w<NN> data dir); an empty selection is "
+                             "WINDOW_NOT_IN_MANIFEST")
     parser.add_argument("--budget-frames", type=int, choices=BUDGET_TIERS,
                         default=DEFAULT_BUDGET_FRAMES,
-                        help="budget in FRAMES (1800 or 2400, default 2400 = the "
-                             "sec. 2 admission bar). decisions = frames / 2, so "
-                             "900 or 1200 decisions; both units are written to "
-                             "every row")
+                        help="selector over the manifest subset (NOT an assertion "
+                             "on every root): keep only the manifest roots whose "
+                             "budget_frames equals this tier, applied after "
+                             "--window. A "
+                             "manifest may therefore register pre-registration "
+                             "sec. 2's two tiers (1800 and 2400) side by side and "
+                             "each tier is run as its own invocation. Default "
+                             "2400 = sec. 2's admission bar, unchanged. 1800/2400 "
+                             "frames = 900/1200 decisions (frames / 2); an empty "
+                             "selection is BUDGET_TIER_ABSENT (exit 1), and the "
+                             "selection is recorded as budget_selection "
+                             "{requested, matched, skipped_by_budget, "
+                             "matched_roots} in the plan and in run.json when any "
+                             "root was skipped. --pair-rng / --takeover-frame / "
+                             "--prefix-tape / --ckpt-sha256 are NOT selectors: "
+                             "they are registered values and must equal the "
+                             "root's declared value")
     parser.add_argument("--arm", choices=ARMS, default=None,
                         help="trace mode: the single arm to run")
     parser.add_argument("--arm-order", default=DEFAULT_ARM_ORDER,
@@ -7294,7 +7567,15 @@ def build_args(argv: list[str] | None = None) -> argparse.Namespace:
                              "reading the manifest and without writing anything. "
                              "It is the same fence_verdict() the write targets go "
                              "through, so it answers 'which rule decided my --out'")
-    return parser.parse_args(argv)
+    args = parser.parse_args(argv)
+    # Whether the tier was requested explicitly or is the 2400 default: recorded in
+    # budget_selection.requested_source so a reader can tell "the manifest's only
+    # tier happened to be the default" from "the default actually selected it".
+    # Matched by prefix because argparse accepts --budget / --budget=1800 too.
+    args.budget_frames_source = ("cli" if any(
+        str(item).split("=", 1)[0].startswith("--budget")
+        for item in (sys.argv[1:] if argv is None else argv)) else "default")
+    return args
 
 
 def mode_explain_path(raw: list[str]) -> int:

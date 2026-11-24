@@ -100,11 +100,12 @@ Rules:
 4. ``pair_rng`` is **allocated from the indices**, not copied from the sheet::
 
        pair_rng = PAIR_RNG_BASE
+                + budget_index * PAIR_RNG_BUDGET_STRIDE
                 + rng_index    * PAIR_RNG_RNG_STRIDE
                 + source_index * PAIR_RNG_SOURCE_STRIDE
                 + ckpt_index
        PAIR_RNG_BASE = 20265000   PAIR_RNG_RNG_STRIDE = 1000
-       PAIR_RNG_SOURCE_STRIDE = 10
+       PAIR_RNG_SOURCE_STRIDE = 10   PAIR_RNG_BUDGET_STRIDE = 16000
 
    so source 0 gets 20265000/01/02, source 1 gets 20265010/11/12, and an 8-source
    x 3-checkpoint sheet lands on 20265000-20265072: unique by construction, and
@@ -112,11 +113,13 @@ Rules:
    20263001-20263008 rehearsal).  A repeated measurement moves a whole
    1,000-wide layer (``rng_index`` 1 = 20266000-20266072) rather than shifting the
    checkpoint digits, so repeat 0 keeps exactly the numbers the 24-root rehearsal
-   already uses.  A source-level ``pair_rng`` is **refused** whenever this tool
-   allocates (``ckpts`` or ``rngs > 1``; ``SOURCES_INVALID``) instead of being
+   already uses, and the second budget tier moves a 16,000-wide layer
+   (``budget_index`` 1 = 20281000+; see the ``budgets`` section below).  A
+   source-level ``pair_rng`` is **refused** whenever this tool allocates
+   (``ckpts``, ``rngs > 1`` or ``budgets``; ``SOURCES_INVALID``) instead of being
    interpreted: one seed on the row cannot address several cells, and picking one
    for it silently would be an inference.  In the single-``ckpt`` mode with
-   ``rngs: 1`` ``pair_rng`` stays required, unchanged.
+   ``rngs: 1`` and one tier, ``pair_rng`` stays required, unchanged.
 5. Each generated root records ``pair_index`` and ``ckpt_seed``.  ``pair_index``
    is the repeat number the guard keys a cell on: with ``rngs > 1`` it is the
    repeat index ``0 .. rngs - 1`` inside the cell, counted per checkpoint; with
@@ -143,9 +146,81 @@ roots, which is the pre-registered shape.  ``rngs`` also works without ``ckpts``
 measurement is not a new ancestor -- it is the same cell measured again, which is
 what the guard's ``(ancestor_id, ckpt_sha256, pair_index)`` key reads.
 
+§2's endpoint axis: the top-level ``budgets`` array
+---------------------------------------------------
+§2 evaluates the same take-over state at **two** budgets -- 1,800 frames (30 s,
+the primary endpoint) and 2,400 (40 s, the secondary one): "30 秒与 40 秒分别从
+同一接管状态开跑".  The single ``budget_frames`` field binds one tier, so it
+cannot express that pair, and `v829_guard.py` used to treat the tier as an ancestor
+invariant, i.e. it refused the pair outright (v8.30.0 removed it; repro in
+``.tmp_v829_info/s20/repro-before.log``).  The optional top-level ``budgets``
+carries it::
+
+    {
+      "schema": "v829-sources/1",
+      "experiment_id": "v829-endpoint-8x3x2-001",
+      "engine": "/root/Touhou_RL/third_party/th08-rl/build/rl_v3/th08-modern",
+      "data_source": "/root/v400-data/game",
+      "budgets": [1800, 2400],
+      "ckpts": [ ... 3 entries ... ],
+      "rngs": 2,
+      "sources": [ ... 8 entries ... ]
+    }
+
+Rules:
+
+1. ``budgets`` is a **strictly increasing** array of **1 to 2** values, each one
+   of the pre-registered tiers ``(1800, 2400)`` (``BUDGET_NOT_A_TIER`` otherwise).
+   Ascending order is required, not interpreted: the array position is the seed
+   layer (rule 4 below), so ``[2400, 1800]`` would silently allocate the two tiers
+   to each other's layer.  A repeated value is refused for the same reason.
+2. ``budgets`` and ``budget_frames`` are **mutually exclusive**
+   (``SOURCES_INVALID``): one says "these tiers", the other says "this tier", and
+   "which one binds the root" has no safe answer.  ``--budget`` is refused in this
+   mode too -- it can override at most one of the tiers.
+   ``budgets: [X]`` is exactly ``budget_frames: X``: the same roots, the same
+   seeds and the same ``builder.budget_frames`` key (the file still records which
+   sheet it read through ``builder.sources_*``), which is what "1 to 2" is for.
+3. Every ``(source, checkpoint, repeat)`` cell expands into **one root per
+   tier**.  All of them share the source's ``ancestor_id``, its ``takeover_frame``,
+   its ``total_frames``, its tape and its digests, and each carries its own
+   ``budget_frames`` -- that is the endpoint axis: the same take-over state
+   measured at 30 s and at 40 s.  8 sources x 3 checkpoints x 2 repeats x 2 tiers
+   = 96 roots.
+4. ``pair_rng`` gains a **budget layer** so the allocation stays unique across the
+   whole manifest::
+
+       pair_rng = PAIR_RNG_BASE
+                + budget_index * PAIR_RNG_BUDGET_STRIDE   (16,000)
+                + rng_index    * PAIR_RNG_RNG_STRIDE      (1,000)
+                + source_index * PAIR_RNG_SOURCE_STRIDE   (10)
+                + ckpt_index
+       budget_index = position of the tier inside ``budgets`` (0 when absent)
+
+   ``PAIR_RNG_BUDGET_STRIDE`` is ``MAX_RNGS * PAIR_RNG_RNG_STRIDE`` = 16,000, so
+   one budget layer holds every repeat layer (``rng_index`` 0-15) with no overlap,
+   and ``budget_index`` 0 keeps the numbers the 24- and 48-root manifests already
+   use (a single-tier sheet is unchanged, byte for byte).  The second tier starts
+   at 20281000, which is outside every allocation on disk.  ``build_manifest``
+   still verifies the claim table-wide: in ``budgets`` mode every seed it hands out
+   must be distinct across all 96 roots (``RNG_DUPLICATE``).
+5. ``takeover_frame + budget_frames <= total_frames`` is checked **per root and
+   per tier**, and the refusal names the tier: a 2,399 take-over fits both tiers of
+   a 4,800-frame tape (4,199 and 4,799) while a 2,999 one leaves 1,801 frames and
+   therefore cannot carry the 2,400 tier (``BUDGET_EXCEEDS_TOTAL``, "budget tier
+   2400").
+6. Running a two-tier manifest: `v829_pair.py` selects roots by ``--window`` and
+   refuses any selected root whose declared tier is not the invocation's
+   ``--budget-frames`` (``BUDGET_ROOT_MISMATCH``), so the table is run one tier per
+   invocation.  Slice the **manifest** (keep its ``pair_rng`` values) rather than
+   rebuilding that tier from a one-tier sheet: ``budgets: [2400]`` would allocate
+   layer 0 and move all 48 seeds of the second tier, which are registered at layer
+   1 (20281000+) precisely so the two tiers never collide.
+
 Output (schema ``v829-pair-manifest/1``): one root per source (single ``ckpt``),
-per (source, checkpoint) (``ckpts``), or per (source, checkpoint, repeat) when
-``rngs > 1``.  Derivation table
+per (source, checkpoint) (``ckpts``), per (source, checkpoint, repeat) when
+``rngs > 1``, and per (source, checkpoint, repeat, tier) when ``budgets`` is used.
+Derivation table
 ---------------------------------------------------------------------------
 ==============================  ===============================================
 manifest field                  derived from
@@ -167,15 +242,22 @@ manifest field                  derived from
                                 stable integer derived from ``ancestor_id``
                                 (``window_derived: true``); ``--window`` only
                                 selects a root and names the private data dir
-``budget_frames``               the sheet, or ``--budget`` (recorded as
-                                ``budget_source``)
+``budget_frames``               the sheet's ``budget_frames``, or ``--budget``
+                                (recorded as ``budget_source``); with ``budgets``
+                                one root per tier, each carrying its own tier
+``budgets``                     the sheet's array (1-2 strictly increasing
+                                pre-registered tiers); expanded into one root per
+                                tier, so the top-level array is the endpoint axis
 ``ckpt_sha256``                 ``sha256`` measured on disk, compared with the
                                 sheet's claim (``CKPT_SHA_MISMATCH``); with
                                 ``ckpts`` one root per entry
 ``ckpt_path``                   the sheet's path (guard ignores it; it lets
                                 ``v829_pair.py --mode check`` print an argv)
-``pair_rng``                    single ``ckpt``: ``sources[i].pair_rng``; ``ckpts``:
-                                ``PAIR_RNG_BASE + i * PAIR_RNG_SOURCE_STRIDE + j``
+``pair_rng``                    single ``ckpt``: ``sources[i].pair_rng``; otherwise
+                                ``PAIR_RNG_BASE + budget_index *
+                                PAIR_RNG_BUDGET_STRIDE + rng_index *
+                                PAIR_RNG_RNG_STRIDE + i * PAIR_RNG_SOURCE_STRIDE +
+                                j`` (see rule 4 and the ``budgets`` section)
 ``pair_index`` / ``ckpt_seed``  ``ckpts`` only: the repeat number and the seed that
                                 produced that checkpoint (``ckpts[j].seed``)
 ``engine_sha256``               ``sha256`` measured on disk -- the sheet's
@@ -239,7 +321,12 @@ Error codes (every one is a refusal; nothing is written when one fires)
                                   ``ckpts`` is not a 1-3 array of
                                   ``{path, sha256[, seed][, pair_index]}``
                                   objects, or a source declares ``pair_rng`` in
-                                  ``ckpts`` mode (see the allocation rule above)
+                                  ``ckpts`` / ``rngs > 1`` / ``budgets`` mode
+                                  (see the allocation rule above), or
+                                  ``budget_frames`` and ``budgets`` are both
+                                  declared (or ``--budget`` was given with
+                                  ``budgets``), or ``budgets`` is not a strictly
+                                  increasing 1-2 array
 ``EXPOSURE_REQUIRED``         1   ``used_for_training`` / ``used_for_selection``
                                   absent or not a boolean -- an unknown exposure
                                   is a refusal, not a default
@@ -248,9 +335,11 @@ Error codes (every one is a refusal; nothing is written when one fires)
 ``TAKEOVER_BEYOND_TAPE``      1   ``takeover_frame + 1 > frames_built``: target
                                   ``N + 1`` is not a recorded anchor of this tape
 ``BUDGET_EXCEEDS_TOTAL``      1   ``takeover_frame + budget_frames > total_frames``
-``BUDGET_NOT_A_TIER``         1   ``budget_frames`` is not one of the
-                                  pre-registered tiers (1800, 2400), so the guard
-                                  could not prove the requested tier
+                                  for a root's own tier -- checked per root **and
+                                  per tier**, and the refusal names the tier
+``BUDGET_NOT_A_TIER``         1   ``budget_frames`` or a ``budgets`` entry is not
+                                  one of the pre-registered tiers (1800, 2400),
+                                  so the guard could not prove the requested tier
 ``TAPE_MISSING``              2   the tape is not a readable file on this host
 ``TAPE_MALFORMED``            1   a row is not 4 frames, or ``decision_frame`` is
                                   not 0/4/8..., or ``hash_pre``/``hash_post`` is
@@ -288,7 +377,10 @@ prints the guard's **exit code and full stdout**, writes the same run to
 ``<out>.guard.json`` (argv, exit, stdout, stderr, manifest sha256) and adopts the
 guard's exit code as its own when the guard refuses.  ``--allow-exposed`` is
 forwarded **only** when the operator passed it, so an exposed root still needs
-the explicit acknowledgement the guard demands.
+the explicit acknowledgement the guard demands.  With ``budgets``, ``<budget>`` is
+the **highest** declared tier: the guard checks every root's own tier on top of
+the requested one, so one run at 2,400 proves the 2,400 ceiling for every root
+and therefore the weaker 1,800 one too.
 
 If the guard refuses, the manifest is **kept at the exact ``--out`` path** (never
 renamed, never deleted) and the build report plus the sidecar are clearly stamped
@@ -329,7 +421,12 @@ TOOL = "tools/rl/v829_manifest_build.py"
 #: (source, checkpoint) cell), the repeat layer of the ``pair_rng`` formula and the
 #: ``pair_index`` repeat number, so the second §2 axis -- 3 checkpoints x 2 pair
 #: RNGs -- is writable in one manifest.
-TOOL_VERSION = "v8.29.2"
+#: v8.30.0: added the top-level ``budgets`` array (1-2 pre-registered tiers), the
+#: budget layer of the ``pair_rng`` formula and the per-root/per-tier ceiling, so
+#: §2's endpoint axis -- one take-over state at 30 s and at 40 s -- is writable in
+#: one manifest.  ``budget_frames`` stays the single-tier shorthand and is
+#: unchanged (a one-tier sheet rebuilds byte for byte).
+TOOL_VERSION = "v8.30.0"
 
 SOURCES_SCHEMA = "v829-sources/1"
 MANIFEST_SCHEMA = "v829-pair-manifest/1"
@@ -349,6 +446,7 @@ DEFAULT_GUARD = "tools/rl/v829_guard.py"
 #: cell is allocated from the indices so it is unique by construction::
 #:
 #:     pair_rng = PAIR_RNG_BASE
+#:              + budget_index * PAIR_RNG_BUDGET_STRIDE
 #:              + rng_index * PAIR_RNG_RNG_STRIDE
 #:              + source_index * PAIR_RNG_SOURCE_STRIDE
 #:              + ckpt_index
@@ -363,9 +461,20 @@ MAX_CKPTS = 3
 #: §2's second axis: each (source, checkpoint) cell may be measured 1..16 times
 #: with different pair RNGs.  Above 16 is outside the pre-registration and refused.
 MAX_RNGS = 16
+#: §2's endpoint axis: the sheet may declare 1-2 budget tiers (30 s = 1,800
+#: frames, 40 s = 2,400), strictly increasing.  Each (source, checkpoint, repeat)
+#: cell then becomes one root per tier, and the tier is the outermost seed layer.
+MAX_BUDGETS = 2
 PAIR_RNG_BASE = 20265000
 PAIR_RNG_SOURCE_STRIDE = 10
 PAIR_RNG_RNG_STRIDE = 1000
+#: One budget layer must hold every repeat layer (``rng_index`` 0..MAX_RNGS-1), so
+#: it is exactly ``MAX_RNGS * PAIR_RNG_RNG_STRIDE`` = 16,000 wide.  Budget 0 is
+#: then the allocation that already exists (20265000-20265072 for repeat 0 and
+#: 20266000+ for repeat 1) and budget 1 starts at 20281000, which is outside every
+#: allocation on disk.  The guard-side companion is the builder's own table-wide
+#: ``RNG_DUPLICATE`` scan: "by construction" is verified, never assumed.
+PAIR_RNG_BUDGET_STRIDE = MAX_RNGS * PAIR_RNG_RNG_STRIDE
 
 #: `--window` is only a label (it selects the root and names the data dir), so a
 #: sheet without one still needs a stable integer.  It is derived from the
@@ -650,27 +759,32 @@ def derived_window(ancestor_id: str) -> int:
     return WINDOW_LOW + value % WINDOW_SPAN
 
 
-def rng_slot(source_index: int, ckpt_index: int, rng_index: int = 0) -> int:
-    """The ``pair_rng`` of one (source, checkpoint, repeat) cell.
+def rng_slot(source_index: int, ckpt_index: int, rng_index: int = 0,
+             budget_index: int = 0) -> int:
+    """The ``pair_rng`` of one (budget, source, checkpoint, repeat) cell.
 
-    §1 allocates one seed per (ancestor, budget, checkpoint, repeat), so the seed is
-    a function of *which* cell this is, and an index-derived formula is the only
-    way to keep it unique without asking the sheet to retype two thirds of the
-    allocation.  Two strides keep the layers apart::
+    §1 allocates one seed per (ancestor, **budget**, checkpoint, repeat), so the
+    seed is a function of *which* cell this is, and an index-derived formula is the
+    only way to keep it unique without asking the sheet to retype two thirds of the
+    allocation.  Three strides keep the layers apart::
 
         PAIR_RNG_BASE
+          + budget_index * PAIR_RNG_BUDGET_STRIDE   (16000)
           + rng_index    * PAIR_RNG_RNG_STRIDE      (1000)
           + source_index * PAIR_RNG_SOURCE_STRIDE   (10)
           + ckpt_index
 
-    ``rng_index`` 0 is the earlier (24-root) allocation, so adding the second §2
-    axis does not move one existing seed; repeat 1 starts 1,000 above it, and the
-    largest offset inside a layer is ``(sources - 1) * 10 + (ckpts - 1)``, which
+    ``budget_index`` 0 (the default, and what every single-tier sheet uses) and
+    ``rng_index`` 0 are the earlier (24-root) allocation, so adding the second §2
+    axis and the endpoint axis does not move one existing seed: repeat 1 starts
+    1,000 above it, the second budget tier starts 16,000 above it, and the largest
+    offset inside a layer is ``(sources - 1) * 10 + (ckpts - 1)``, which
     :func:`build_manifest` refuses to let reach :data:`PAIR_RNG_RNG_STRIDE`.  See
-    the module docstring (rule 4) for the exact rule.
+    the module docstring (rule 4 and the ``budgets`` section) for the exact rule.
     """
 
-    return (PAIR_RNG_BASE + rng_index * PAIR_RNG_RNG_STRIDE
+    return (PAIR_RNG_BASE + budget_index * PAIR_RNG_BUDGET_STRIDE
+            + rng_index * PAIR_RNG_RNG_STRIDE
             + source_index * PAIR_RNG_SOURCE_STRIDE + ckpt_index)
 
 
@@ -780,12 +894,13 @@ def build_manifest(doc: dict, *, sources_rel: str, sources_sha256: str,
         "options": {"window": window_cli, "budget": budget_cli,
                     "ckpt": None if ckpt_cli is None else str(ckpt_cli),
                     "ckpt_sha256": ckpt_sha_cli,
-                    "engine": engine_cli, "rngs": None},
+                    "engine": engine_cli, "rngs": None, "budgets": None},
         "manifest_id": None,
         "engine": None,
         "ckpt": None,
         "rngs": None,
         "budget_frames": None,
+        "budgets": None,
         "budget_source": None,
         "roots": [],
         "findings": findings,
@@ -821,22 +936,103 @@ def build_manifest(doc: dict, *, sources_rel: str, sources_sha256: str,
             f"engine must be a non-empty path, got {type_name(engine_value)} "
             f"({engine_value!r}); engine_sha256 is measured from that file")
 
-    budget = budget_cli if budget_cli is not None else doc.get("budget_frames")
-    budget_source = "cli" if budget_cli is not None else "sources"
-    if not is_int(budget) or budget <= 0:
-        add("SOURCES_INVALID",
-            f"budget_frames must be a positive integer, got {type_name(budget)} "
-            f"({budget!r}); a budget is not a number to be guessed")
-    elif budget not in BUDGET_TIERS:
-        add("BUDGET_NOT_A_TIER",
-            f"budget_frames {budget} is not one of the pre-registered tiers "
-            f"{BUDGET_TIERS}; v829_guard.py only proves those two, so a run at "
-            f"{budget} frames could not be validated after the fact")
-    elif budget_cli is not None and doc.get("budget_frames") not in (None, budget):
-        notes.append(
-            f"--budget {budget} overrides sources.budget_frames "
-            f"{doc.get('budget_frames')!r}; the manifest records {budget} "
-            f"(budget_source=cli)")
+    # ---- 1. the budget tier(s): `budget_frames` (one tier) XOR `budgets` ----
+    # §2's endpoint axis: one take-over state measured at 1,800 frames (30 s) and at
+    # 2,400 (40 s).  A root proves exactly ONE tier (`v829_pair.py` refuses a root
+    # whose declared tier is not the invocation's `--budget-frames`), so the axis is
+    # carried by expanding every (source, checkpoint, repeat) cell into one root per
+    # tier -- all of them sharing the ancestor_id, the takeover frame and every
+    # other play-root field.
+    budgets_doc = doc.get("budgets")
+    budgets_mode = budgets_doc is not None
+    budget: int | None = None
+    budgets: list[int] = []
+    budget_plan: list[tuple[int, int]] = []       # (layer index, tier)
+    if budgets_mode:
+        budget_source = "sources"
+        if doc.get("budget_frames") is not None:
+            add("SOURCES_INVALID",
+                "'budgets' and 'budget_frames' are both declared: they are mutually "
+                "exclusive, because 'budgets' names 1-2 endpoints and expands every "
+                "cell into one root per tier while 'budget_frames' names exactly one "
+                "tier, and there is no safe answer to 'which one binds the root'. "
+                f"Keep 'budgets' for the section 2 30 s + 40 s pair or "
+                f"'budget_frames' for a single-tier sheet")
+        elif budget_cli is not None:
+            add("SOURCES_INVALID",
+                f"--budget {budget_cli} cannot be combined with 'budgets' "
+                f"{budgets_doc if isinstance(budgets_doc, list) else budgets_doc!r}: "
+                f"the flag overrides one tier and the sheet declares "
+                f"{len(budgets_doc) if isinstance(budgets_doc, list) else 'several'}, "
+                f"so it would silently bind only one of them")
+        elif not isinstance(budgets_doc, list) or not budgets_doc:
+            add("SOURCES_INVALID",
+                f"'budgets' must be a non-empty array of 1-{MAX_BUDGETS} "
+                f"pre-registered tiers, got {type_name(budgets_doc)} "
+                f"({budgets_doc!r}); the endpoint axis cannot be defaulted")
+        else:
+            mistyped = [value for value in budgets_doc
+                        if not is_int(value) or value <= 0]
+            if mistyped:
+                add("SOURCES_INVALID",
+                    f"'budgets' holds {mistyped!r}; every entry must be a positive "
+                    f"integer frame count (a bool, a string or a non-positive number "
+                    f"names no endpoint)")
+            elif len(budgets_doc) > MAX_BUDGETS:
+                add("SOURCES_INVALID",
+                    f"'budgets' holds {len(budgets_doc)} entries; the section 2 "
+                    f"endpoint axis is 1-{MAX_BUDGETS} tiers "
+                    f"({BUDGET_TIERS})")
+            else:
+                outside = [value for value in budgets_doc if value not in BUDGET_TIERS]
+                if outside:
+                    add("BUDGET_NOT_A_TIER",
+                        f"'budgets' holds {outside!r}, which is not one of the "
+                        f"pre-registered tiers {BUDGET_TIERS}; v829_guard.py only "
+                        f"proves those two, so a run at {outside[0]} frames could "
+                        f"not be validated after the fact")
+                elif list(budgets_doc) != sorted(set(budgets_doc)):
+                    add("SOURCES_INVALID",
+                        f"'budgets' {budgets_doc!r} must be strictly increasing: the "
+                        f"array position is the seed layer (budget_index in the "
+                        f"pair_rng allocation), so a repeated value or a descending "
+                        f"pair would move one tier into the other's layer instead of "
+                        f"being interpreted; write [{', '.join(str(t) for t in BUDGET_TIERS)}]")
+                else:
+                    budgets = [int(value) for value in budgets_doc]
+                    budget_plan = list(enumerate(budgets))
+    else:
+        budget = budget_cli if budget_cli is not None else doc.get("budget_frames")
+        budget_source = "cli" if budget_cli is not None else "sources"
+        if not is_int(budget) or budget <= 0:
+            add("SOURCES_INVALID",
+                f"budget_frames must be a positive integer, got {type_name(budget)} "
+                f"({budget!r}); a budget is not a number to be guessed")
+        elif budget not in BUDGET_TIERS:
+            add("BUDGET_NOT_A_TIER",
+                f"budget_frames {budget} is not one of the pre-registered tiers "
+                f"{BUDGET_TIERS}; v829_guard.py only proves those two, so a run at "
+                f"{budget} frames could not be validated after the fact")
+        elif budget_cli is not None and doc.get("budget_frames") not in (None, budget):
+            notes.append(
+                f"--budget {budget} overrides sources.budget_frames "
+                f"{doc.get('budget_frames')!r}; the manifest records {budget} "
+                f"(budget_source=cli)")
+        if is_int(budget) and budget > 0:
+            budgets = [budget]
+            # The single-tier shorthand IS layer 0, so `budgets: [1800]` and
+            # `budget_frames: 1800` allocate exactly the same seeds.
+            budget_plan = [(0, budget)]
+
+    # §2's endpoint axis only exists when the sheet declares TWO tiers: a
+    # one-element `budgets` array is the single-tier shorthand, so it is
+    # normalised back onto `budget` and the manifest it writes is byte-identical
+    # to the one `budget_frames: X` writes (that equality is asserted in the s20
+    # report, and it is what lets `budgets: [1800]` be the documented way to slice
+    # a two-tier sheet in half without moving a single seed).
+    multi_tier = len(budget_plan) > 1
+    if budgets_mode and budget_plan and not multi_tier:
+        budget = budget_plan[0][1]
 
     # ---- 1a. the repeat count: `rngs` (paired RNGs per cell) ----------------
     # §2's second axis: how many times each (source, checkpoint) cell is measured
@@ -857,9 +1053,9 @@ def build_manifest(doc: dict, *, sources_rel: str, sources_sha256: str,
     ckpt_doc = doc.get("ckpt")
     ckpts_doc = doc.get("ckpts")
     ckpts_mode = ckpts_doc is not None
-    # `ckpts` and `rngs` both make this tool the author of the seed allocation, so
-    # a source-level `pair_rng` cannot be honoured in either mode.
-    allocating = ckpts_mode or rngs > 1
+    # `ckpts`, `rngs > 1` and `budgets` all make this tool the author of the seed
+    # allocation, so a source-level `pair_rng` cannot be honoured in those modes.
+    allocating = ckpts_mode or rngs > 1 or budgets_mode
     # Normalised specs, in the order the manifest will emit them.  `pair_index` /
     # `seed` stay None in single-`ckpt` mode (the guard treats "absent" as "one
     # repeat", which is exactly what one checkpoint per source is).
@@ -1093,7 +1289,9 @@ def build_manifest(doc: dict, *, sources_rel: str, sources_sha256: str,
     # measured checkpoint); `ckpts` mode reports the list and leaves `ckpt` null.
     build["ckpt"] = None if ckpts_mode else measured[0]
     build["budget_frames"] = budget
+    build["budgets"] = list(budgets) if budgets_mode else None
     build["budget_source"] = budget_source
+    build["options"]["budgets"] = list(budgets) if budgets_mode else None
 
     # ---- 3. per-source derivation ------------------------------------------
     roots: list[dict] = []
@@ -1244,20 +1442,38 @@ def build_manifest(doc: dict, *, sources_rel: str, sources_sha256: str,
                 f"{frames_built - 1}",
                 index, ancestor_label)
             continue
-        if takeover + budget > frames_built:
-            add("BUDGET_EXCEEDS_TOTAL",
-                f"{label}: takeover_frame {takeover} + budget_frames {budget} = "
-                f"{takeover + budget} > total_frames {frames_built} (the tape's "
-                f"frames_built), short by {takeover + budget - frames_built} "
-                f"frames", index, ancestor_label)
+        # §2's endpoint axis: every declared tier has to fit this take-over frame,
+        # and the refusal names the tier that does not.  The check is per root and
+        # per tier because each tier becomes its own root below -- a 2,399 take-over
+        # fits both tiers of a 4,800-frame tape, a 2,999 one fits only 1,800.
+        over = [(tier, takeover + tier) for _layer, tier in budget_plan
+                if takeover + tier > frames_built]
+        if over:
+            for tier, needed in over:
+                add("BUDGET_EXCEEDS_TOTAL",
+                    f"{label}: takeover_frame {takeover} + budget tier {tier} = "
+                    f"{needed} > total_frames {frames_built} (the tape's "
+                    f"frames_built), short by {needed - frames_built} frames"
+                    + (f"; the other tier(s) "
+                       f"{[t for _layer, t in budget_plan if t != tier]} would fit"
+                       if len(budget_plan) > 1 else ""),
+                    index, ancestor_label)
             continue
 
+        if len(budget_plan) == 1:
+            tier_clause = (f"takeover {takeover} + budget {budget_plan[0][1]} = "
+                           f"{takeover + budget_plan[0][1]} <= {frames_built}, "
+                           f"headroom "
+                           f"{frames_built - takeover - budget_plan[0][1]} frames")
+        else:
+            tier_clause = " and ".join(
+                f"takeover {takeover} + budget tier {tier} = {takeover + tier} <= "
+                f"{frames_built} (headroom {frames_built - takeover - tier})"
+                for _layer, tier in budget_plan)
         total_source = (
             f"total_frames {frames_built} = prefix tape rows {meta['rows']} x "
             f"{ANCHOR_STRIDE} frames (frames_built counted by {TOOL} from "
-            f"{tape_declared}, sha256 {meta['sha256'][:16]}...); takeover "
-            f"{takeover} + budget {budget} = {takeover + budget} <= "
-            f"{frames_built}, headroom {frames_built - takeover - budget} frames. "
+            f"{tape_declared}, sha256 {meta['sha256'][:16]}...); {tier_clause}. "
             f"The tape is the recorded span, not a hard end: the live engine keeps "
             f"running past the recording.")
         anchor_note = (
@@ -1268,94 +1484,107 @@ def build_manifest(doc: dict, *, sources_rel: str, sources_sha256: str,
             f"refuses a target with no hash, which is why an admissible takeover "
             f"frame is 4k - 1. All three digest fields are this tape's own sha256 "
             f"({meta['bytes']} B) over the raw file bytes.")
-        # One root per checkpoint -- and, with `rngs > 1`, one more per paired RNG.
-        # Everything above this line describes the play-root and is therefore shared
-        # by every root of this source; only the checkpoint, the repeat number, the
-        # seed and the checkpoint's own seed change between them.
+        # One root per checkpoint -- and, with `rngs > 1`, one more per paired RNG,
+        # and, with `budgets`, one more per budget tier.  Everything above this line
+        # describes the play-root and is therefore shared by every root of this
+        # source; only the checkpoint, the repeat number, the seed, the checkpoint's
+        # own seed and the budget tier change between them.
         for ckpt_position, ckpt_item in enumerate(measured):
             for rng_index in range(rngs):
                 if rngs > 1:
-                    cell = (f"{label}/ckpts[{ckpt_position}]/rng[{rng_index}]"
-                            if ckpts_mode else f"{label}/rng[{rng_index}]")
+                    base_cell = (f"{label}/ckpts[{ckpt_position}]/rng[{rng_index}]"
+                                 if ckpts_mode else f"{label}/rng[{rng_index}]")
                 else:
-                    cell = (f"{label}/ckpts[{ckpt_position}]" if ckpts_mode else label)
-                cell_rng = (rng_slot(index, ckpt_position, rng_index)
-                            if allocating else rng)
-                root = {
-                    "ancestor_id": ancestor.strip(),
-                    "stage": source["stage"].strip(),
-                    "window": window,
-                    "window_source": window_source,
-                    "budget_frames": budget,
-                    "ckpt_sha256": ckpt_item["sha256"],
-                    "ckpt_path": ckpt_item["declared"],
-                    "engine_sha256": engine_sha,
-                    "pair_rng": cell_rng,
-                    "takeover_frame": takeover,
-                    "total_frames": frames_built,
-                    "total_frames_source": total_source,
-                    "parent_prefix_digest": meta["sha256"],
-                    "prefix_tape": tape_declared,
-                    "prefix_tape_sha256": meta["sha256"],
-                    "prefix_tape_rows": meta["rows"],
-                    "prefix_tape_frames": frames_built,
-                    "verify_anchor": {
-                        "prefix_digest": meta["sha256"],
-                        "prefix_record": tape_declared,
-                        "window_recording_sha256": meta["sha256"],
-                        "recording_bytes": meta["bytes"],
-                        "recorded_frames": takeover,
+                    base_cell = (f"{label}/ckpts[{ckpt_position}]"
+                                 if ckpts_mode else label)
+                for budget_index, tier in budget_plan:
+                    # The tier is part of the cell label only when there are two of
+                    # them, so a single-tier sheet keeps the names it had.
+                    cell = (f"{base_cell}/b{tier}" if len(budget_plan) > 1
+                            else base_cell)
+                    cell_rng = (rng_slot(index, ckpt_position, rng_index, budget_index)
+                                if allocating else rng)
+                    root = {
+                        "ancestor_id": ancestor.strip(),
+                        "stage": source["stage"].strip(),
+                        "window": window,
+                        "window_source": window_source,
+                        "budget_frames": tier,
+                        "ckpt_sha256": ckpt_item["sha256"],
+                        "ckpt_path": ckpt_item["declared"],
+                        "engine_sha256": engine_sha,
+                        "pair_rng": cell_rng,
+                        "takeover_frame": takeover,
+                        "total_frames": frames_built,
+                        "total_frames_source": total_source,
+                        "parent_prefix_digest": meta["sha256"],
+                        "prefix_tape": tape_declared,
+                        "prefix_tape_sha256": meta["sha256"],
+                        "prefix_tape_rows": meta["rows"],
+                        "prefix_tape_frames": frames_built,
+                        "verify_anchor": {
+                            "prefix_digest": meta["sha256"],
+                            "prefix_record": tape_declared,
+                            "window_recording_sha256": meta["sha256"],
+                            "recording_bytes": meta["bytes"],
+                            "recorded_frames": takeover,
+                            "hash_checkpoints": checkpoints,
+                            "note": anchor_note,
+                        },
+                        "used_for_training": source["used_for_training"],
+                        "used_for_selection": source["used_for_selection"],
+                    }
+                    if ckpts_mode or rngs > 1 or budgets_mode:
+                        # The repeat number the guard keys the cell on.  With
+                        # `rngs > 1` it is the RNG index inside the (source,
+                        # checkpoint) cell; with a single repeat it keeps the earlier
+                        # per-checkpoint meaning.  `ckpt_seed` is the seed that
+                        # produced the checkpoint.
+                        if rngs > 1:
+                            root["pair_index"] = rng_index
+                        else:
+                            root["pair_index"] = (ckpt_position
+                                                  if ckpt_item["pair_index"] is None
+                                                  else ckpt_item["pair_index"])
+                        if ckpt_item["seed"] is not None:
+                            root["ckpt_seed"] = ckpt_item["seed"]
+                    if len(budget_plan) > 1:
+                        root["budget_index"] = budget_index
+                    if window_source == "derived":
+                        root["window_derived"] = True
+                    if tape_absolute:
+                        root["prefix_tape_absolute"] = True
+                        root["verify_anchor"]["prefix_record_absolute"] = True
+                    if lineage_new is not None:
+                        root["lineage_new"] = lineage_new
+                    if lineage_ids is not None:
+                        root["lineage_ancestor_ids"] = list(lineage_ids)
+                    roots.append({
+                        "index": index,
+                        "ckpt_index": ckpt_position if ckpts_mode else None,
+                        "rng_index": rng_index if rngs > 1 else None,
+                        "budget_index": (budget_index if len(budget_plan) > 1
+                                         else None),
+                        "cell": cell,
+                        "record": root,
+                        "window": window,
+                        "window_source": window_source,
+                        "tape_sha256": meta["sha256"],
+                        "takeover_frame": takeover,
+                        "budget_frames": tier,
+                        "total_frames": frames_built,
                         "hash_checkpoints": checkpoints,
-                        "note": anchor_note,
-                    },
-                    "used_for_training": source["used_for_training"],
-                    "used_for_selection": source["used_for_selection"],
-                }
-                if ckpts_mode or rngs > 1:
-                    # The repeat number the guard keys the cell on.  With `rngs > 1`
-                    # it is the RNG index inside the (source, checkpoint) cell; with
-                    # a single repeat it keeps the earlier per-checkpoint meaning.
-                    # `ckpt_seed` is the seed that produced the checkpoint.
-                    if rngs > 1:
-                        root["pair_index"] = rng_index
-                    else:
-                        root["pair_index"] = (ckpt_position
-                                              if ckpt_item["pair_index"] is None
-                                              else ckpt_item["pair_index"])
-                    if ckpt_item["seed"] is not None:
-                        root["ckpt_seed"] = ckpt_item["seed"]
-                if window_source == "derived":
-                    root["window_derived"] = True
-                if tape_absolute:
-                    root["prefix_tape_absolute"] = True
-                    root["verify_anchor"]["prefix_record_absolute"] = True
-                if lineage_new is not None:
-                    root["lineage_new"] = lineage_new
-                if lineage_ids is not None:
-                    root["lineage_ancestor_ids"] = list(lineage_ids)
-                roots.append({
-                    "index": index,
-                    "ckpt_index": ckpt_position if ckpts_mode else None,
-                    "rng_index": rng_index if rngs > 1 else None,
-                    "cell": cell,
-                    "record": root,
-                    "window": window,
-                    "window_source": window_source,
-                    "tape_sha256": meta["sha256"],
-                    "takeover_frame": takeover,
-                    "budget_frames": budget,
-                    "total_frames": frames_built,
-                    "hash_checkpoints": checkpoints,
-                    "pair_rng": cell_rng,
-                    "pair_index": root.get("pair_index"),
-                    "ckpt_sha256": ckpt_item["sha256"],
-                    "ancestor_id": root["ancestor_id"],
-                })
+                        "pair_rng": cell_rng,
+                        "pair_index": root.get("pair_index"),
+                        "ckpt_sha256": ckpt_item["sha256"],
+                        "ancestor_id": root["ancestor_id"],
+                    })
 
     # ---- 4. cross-root gates ------------------------------------------------
-    # One ancestor owns several roots -- one per checkpoint, and one more per paired
-    # RNG -- so the duplicate key is the cell (ancestor, checkpoint, repeat), not
-    # the label.  A repeat is the same cell twice.
+    # One ancestor owns several roots -- one per checkpoint, one more per paired
+    # RNG, one more per budget tier -- so the duplicate key is the cell (ancestor,
+    # checkpoint, repeat, tier), not the label.  A repeat is the same cell at the
+    # same tier twice; the *same* cell at two tiers is the endpoint axis and legal.
     def cell_repeat(entry: dict) -> int:
         """The effective repeat number: an absent ``pair_index`` means repeat 0."""
         return 0 if entry["pair_index"] is None else entry["pair_index"]
@@ -1363,20 +1592,22 @@ def build_manifest(doc: dict, *, sources_rel: str, sources_sha256: str,
     by_ancestor: dict[tuple, list[str]] = {}
     for entry in roots:
         by_ancestor.setdefault((entry["ancestor_id"], entry["ckpt_sha256"],
-                                cell_repeat(entry)), []).append(entry["cell"])
+                                cell_repeat(entry), entry["budget_frames"]),
+                               []).append(entry["cell"])
     for key in sorted(by_ancestor):
         cells = by_ancestor[key]
         if len(cells) > 1:
             add("SOURCES_INVALID",
                 f"ancestor_id {key[0]!r} with ckpt {str(key[1])[:12]}... at repeat "
-                f"pair_index {key[2]} appears {len(cells)} times ({cells}); one cell "
-                f"is one measurement, and a repeat is the same cell counted twice. "
-                f"A *different* checkpoint or a *different* pair_index under this "
-                f"ancestor is a section 2 repeat axis, not a second source")
+                f"pair_index {key[2]} and budget_frames {key[3]} appears "
+                f"{len(cells)} times ({cells}); one cell is one measurement, and a "
+                f"repeat is the same cell counted twice. A *different* checkpoint, a "
+                f"*different* pair_index or a *different* budget tier under this "
+                f"ancestor is a section 2 repeat/endpoint axis, not a second source")
 
     rng_scope: dict[tuple, list[tuple[str, object]]] = {}
     for entry in roots:
-        key = (entry["ancestor_id"], budget, entry["ckpt_sha256"])
+        key = (entry["ancestor_id"], entry["budget_frames"], entry["ckpt_sha256"])
         rng_scope.setdefault(key, []).append((entry["cell"], entry["pair_rng"]))
     for key in sorted(rng_scope, key=repr):
         grouped: dict[str, tuple[object, list[str]]] = {}
@@ -1392,14 +1623,14 @@ def build_manifest(doc: dict, *, sources_rel: str, sources_sha256: str,
                 continue
             add("RNG_DUPLICATE",
                 f"{cells} share pair_rng {value!r} under ancestor "
-                f"{key[0]!r}, budget {budget}, ckpt {str(key[2])[:12]}...; one seed "
+                f"{key[0]!r}, budget {key[1]}, ckpt {str(key[2])[:12]}...; one seed "
                 f"per (ancestor, budget, checkpoint, repeat) is pre-allocated, so "
                 f"a repeat silently correlates two cells")
 
     # The allocation is unique by construction, but "by construction" is exactly the
-    # claim that should be verified: in `ckpts` / `rngs` mode every seed this tool
-    # hands out has to be distinct across the WHOLE manifest, not just inside one
-    # (ancestor, budget, checkpoint) family.
+    # claim that should be verified: in `ckpts` / `rngs` / `budgets` mode every seed
+    # this tool hands out has to be distinct across the WHOLE manifest, not just
+    # inside one (ancestor, budget, checkpoint) family.
     if allocating:
         seen_rng: dict[int, list[str]] = {}
         for entry in roots:
@@ -1409,10 +1640,12 @@ def build_manifest(doc: dict, *, sources_rel: str, sources_sha256: str,
             if len(cells) > 1:
                 add("RNG_DUPLICATE",
                     f"{cells} were allocated the same pair_rng {value}; the "
-                    f"allocation (PAIR_RNG_BASE + rng_index * {PAIR_RNG_RNG_STRIDE} "
+                    f"allocation (PAIR_RNG_BASE + budget_index * "
+                    f"{PAIR_RNG_BUDGET_STRIDE} + rng_index * {PAIR_RNG_RNG_STRIDE} "
                     f"+ source_index * {PAIR_RNG_SOURCE_STRIDE} + ckpt_index) is "
                     f"unique by construction, so a collision means the sheet "
-                    f"exhausted a repeat layer and two cells overlapped")
+                    f"exhausted a repeat layer (or a budget layer) and two cells "
+                    f"overlapped")
 
     # The checkpoint and the repeat number are part of the window identity: the
     # three checkpoints of one ancestor are three *different* physical windows over
@@ -1480,10 +1713,24 @@ def build_manifest(doc: dict, *, sources_rel: str, sources_sha256: str,
             checkpoint_text = (
                 f"the checkpoint is {str(measured[0]['sha256'])[:16]}... as measured "
                 f"on disk")
+        # §2's endpoint axis: the tier is part of the arm, so it is named in the
+        # purpose instead of the single "runs N frames per arm" of a one-tier sheet.
+        # A one-element `budgets` array is the shorthand, so it takes the single-tier
+        # wording (and the byte-identical manifest) of `budget_frames`.
+        if multi_tier:
+            budget_text = (
+                f"{' and '.join(str(tier) for tier in budgets)} frames "
+                f"(one root per budget tier, the section 2 endpoint axis)")
+            checkpoint_text += (
+                f"; every (checkpoint, repeat) cell is measured at "
+                f"{len(budgets)} budget tier(s) "
+                f"({', '.join(str(b) for b in budgets)}), each tier its own root")
+        else:
+            budget_text = f"{budget} frames"
         purpose = (
             f"{len(roots)} root(s) built from {sources_rel} (experiment "
             f"{experiment_id}): each root replays its own 4-frame prefix tape up "
-            f"to a 4k - 1 takeover frame, then runs {budget} frames per arm; "
+            f"to a 4k - 1 takeover frame, then runs {budget_text} per arm; "
             f"{checkpoint_text}.")
     manifest_id = doc.get("manifest_id")
     if not is_text(manifest_id):
@@ -1497,12 +1744,19 @@ def build_manifest(doc: dict, *, sources_rel: str, sources_sha256: str,
         "sources_sha256": sources_sha256,
         "sources_bytes": sources_bytes,
         "experiment_id": experiment_id,
-        "budget_frames": budget,
-        "budget_source": budget_source,
-        "note": ("every derived field comes from the tape / checkpoint / "
-                 "engine bytes on disk; there is no generated_at, so the same "
-                 "sources file yields this file byte for byte"),
     }
+    if multi_tier:
+        # §2's endpoint axis: the tiers are the sheet's, one root per tier.  The
+        # single-tier `budget_frames` key is used otherwise, and only a 1-element
+        # `budgets` array reaches that branch, so the manifest it writes is
+        # identical to the one the shorthand writes.
+        builder_doc["budgets"] = list(budgets)
+    else:
+        builder_doc["budget_frames"] = budget
+    builder_doc["budget_source"] = budget_source
+    builder_doc["note"] = ("every derived field comes from the tape / checkpoint / "
+                           "engine bytes on disk; there is no generated_at, so the "
+                           "same sources file yields this file byte for byte")
     if rngs > 1:
         # Only recorded when the second §2 axis is actually used, so a single-RNG
         # manifest keeps the shape (and the bytes) it had before `rngs` existed.
@@ -1514,9 +1768,14 @@ def build_manifest(doc: dict, *, sources_rel: str, sources_sha256: str,
         "purpose": purpose,
         "engine": engine_declared,
         "data_source": data_source,
-        "builder": builder_doc,
-        "roots": [entry["record"] for entry in roots],
     }
+    if multi_tier:
+        # The guard ignores unknown top-level keys on purpose (and `v829_pair.py`
+        # reads only `roots` / `engine` / `data_source`), so the axis is recorded
+        # where a reader of the file can see it; the authority stays per root.
+        manifest["budgets"] = list(budgets)
+    manifest["builder"] = builder_doc
+    manifest["roots"] = [entry["record"] for entry in roots]
     build["manifest"] = manifest
     build["manifest_id"] = manifest_id
     build["status"] = "built"
@@ -1525,6 +1784,7 @@ def build_manifest(doc: dict, *, sources_rel: str, sources_sha256: str,
         {"source_index": entry["index"],
          "ckpt_index": entry["ckpt_index"],
          "rng_index": entry["rng_index"],
+         "budget_index": entry["budget_index"],
          "cell": entry["cell"],
          "ancestor_id": entry["ancestor_id"],
          "window": entry["window"],
@@ -1742,6 +2002,10 @@ def command_build(args: argparse.Namespace) -> int:
     if build["budget_frames"] is not None:
         print(f"  budget_frames {build['budget_frames']} "
               f"({build['budget_source']})")
+    if build.get("budgets"):
+        print(f"  budgets {build['budgets']} ({build['budget_source']}, "
+              f"{len(build['budgets'])} tier(s): one root per tier per cell -- the "
+              f"section 2 endpoint axis)")
     if build["rngs"] is not None:
         repeat_note = ("paired RNGs per (source, checkpoint) cell" if build["rngs"] > 1
                        else "one measurement per cell")
@@ -1796,7 +2060,11 @@ def command_build(args: argparse.Namespace) -> int:
               f"headroom {entry['headroom_frames']}")
     print(f"  wrote {out_path}: {manifest_bytes} B sha256 {manifest_sha}")
 
-    guard = run_guard(out_path, budget=int(manifest["roots"][0]["budget_frames"]),
+    # One guard run proves every root's own tier on top of the requested one, so the
+    # requested tier is the highest the sheet declares (2,400 when both are there).
+    declared_tiers = sorted({int(root["budget_frames"]) for root in manifest["roots"]})
+    guard_budget = declared_tiers[-1]
+    guard = run_guard(out_path, budget=guard_budget,
                       allow_exposed=bool(args.allow_exposed),
                       guard_path=guard_path)
     report["guard"] = guard
@@ -1806,10 +2074,13 @@ def command_build(args: argparse.Namespace) -> int:
     print_guard(guard)
 
     sidecar = pathlib.Path(str(out_path) + ".guard.json")
-    write_report(sidecar, {"manifest": str(out_path), "manifest_sha256": manifest_sha,
-                           "allow_exposed": bool(args.allow_exposed),
-                           "budget": int(manifest["roots"][0]["budget_frames"]),
-                           "guard": guard, "status": report["status"]})
+    sidecar_doc = {"manifest": str(out_path), "manifest_sha256": manifest_sha,
+                   "allow_exposed": bool(args.allow_exposed),
+                   "budget": guard_budget,
+                   "guard": guard, "status": report["status"]}
+    if len(declared_tiers) > 1:
+        sidecar_doc["budgets"] = declared_tiers
+    write_report(sidecar, sidecar_doc)
 
     if args.report is not None:
         write_report(args.report, report)
@@ -1825,6 +2096,17 @@ def command_build(args: argparse.Namespace) -> int:
         return int(guard["exit"])
     print(f"VALIDATED: guard exit 0; manifest {out_path} sha256 {manifest_sha}")
     first = manifest["roots"][0]
+    if len(declared_tiers) > 1:
+        # v829_pair.py refuses any selected root whose declared tier is not the
+        # invocation's --budget-frames (BUDGET_ROOT_MISMATCH), so a multi-tier
+        # manifest is run one tier at a time; `--window` alone does not split it.
+        tiers_text = " / ".join(f"--budget-frames {tier}" for tier in declared_tiers)
+        print(f"note: this manifest declares {len(declared_tiers)} budget tiers "
+              f"({tiers_text}): v829_pair.py refuses a root whose declared tier is "
+              f"not the invocation's --budget-frames and selects by --window only, "
+              f"so run this table ONE TIER AT A TIME by filtering it to that tier "
+              f"and keeping the registered pair_rng (rebuilding the second tier "
+              f"from a one-tier sheet would allocate it layer 0 and move its seeds)")
     print(f"next: python -B tools/rl/v829_pair.py --mode check --manifest {out_path} "
           f"--window {first['window']} "
           f"--budget-frames {first['budget_frames']}"
@@ -1833,8 +2115,9 @@ def command_build(args: argparse.Namespace) -> int:
                    if root.get("window") == first.get("window")]
     if len(same_window) > 1:
         print(f"      --window {first['window']} selects {len(same_window)} roots "
-              f"(every checkpoint x paired RNG of that ancestor) -- the section 2 "
-              f"shape; omit --window to select all {len(manifest['roots'])} roots")
+              f"(every checkpoint x paired RNG x budget tier of that ancestor) -- "
+              f"the section 2 shape; omit --window to select all "
+              f"{len(manifest['roots'])} roots")
     return EXIT_OK
 
 
@@ -1864,7 +2147,9 @@ the derivation in one screen
   takeover_frame             -> verify_anchor.recorded_frames
   takeover_frame % 4 == 3    -> required (4k - 1), else TAKEOVER_NOT_ANCHOR
   takeover + 1 <= total      -> else TAKEOVER_BEYOND_TAPE
-  takeover + budget <= total -> else BUDGET_EXCEEDS_TOTAL
+  takeover + budget <= total -> else BUDGET_EXCEEDS_TOTAL (per root AND per tier:
+                                every declared tier of the sheet is checked, and
+                                the refusal names the tier)
   sha256(ckpt)               -> ckpt_sha256, compared with the sheet's claim
   sha256(engine)             -> engine_sha256, measured (the sheet's claim is
                                 verified, never copied)
@@ -1877,22 +2162,46 @@ one ancestor, 1-3 checkpoints x 1-16 paired RNGs
                               all of one source SHARING its ancestor_id -- the
                               section 2 "3 checkpoints x 2 pair RNGs per ancestor"
                               grid, in one manifest
-  pair_rng                 -> PAIR_RNG_BASE + rng_index * PAIR_RNG_RNG_STRIDE
+  pair_rng                 -> PAIR_RNG_BASE + budget_index * PAIR_RNG_BUDGET_STRIDE
+                              + rng_index * PAIR_RNG_RNG_STRIDE
                               + source_index * PAIR_RNG_SOURCE_STRIDE + ckpt_index
-                              (20265000/01/02, ..., repeat 1: 20266000/01/02, ...)
+                              (20265000/01/02, ..., repeat 1: 20266000/01/02, ...,
+                              tier 2: 20281000+ with two budgets)
   pair_index               -> rngs > 1: the RNG index 0..rngs-1 inside the cell;
                               rngs == 1: ckpts[j].pair_index, else the ckpt index
   ckpt_seed                -> recorded on the root (ckpts[j].seed)
   ckpt + ckpts together    -> SOURCES_INVALID (mutually exclusive)
-  sources[i].pair_rng      -> SOURCES_INVALID when ckpts or rngs > 1: one seed on
-                              the row cannot address several cells
+  sources[i].pair_rng      -> SOURCES_INVALID when ckpts, rngs > 1 or budgets: one
+                              seed on the row cannot address several cells
   ckpts[j].pair_index      -> SOURCES_INVALID with rngs > 1: the repeat number is
                               the RNG index, so a per-checkpoint number would
                               address only one of the repeats
 
+section 2's endpoint axis: the top-level 'budgets' array
+-------------------------------------------------------
+  budgets: [1800] | [1800, 2400]  (optional; mutually exclusive with
+                              'budget_frames' and with --budget).  Strictly
+                              increasing, 1-2 values, each a pre-registered tier.
+                              Every (source, checkpoint, repeat) cell becomes one
+                              root PER TIER, all sharing ancestor_id, tape,
+                              takeover_frame and digests -- the same take-over
+                              state measured at 30 s (1,800 frames, primary
+                              endpoint) and at 40 s (2,400, secondary).
+                              8 sources x 3 checkpoints x 2 rngs x 2 tiers = 96
+                              roots.  'budgets: [X]' gives the same roots and the
+                              same seeds as 'budget_frames: X' (only the recorded
+                              sheet path/sha differs).
+  budget_index             -> the tier's position in 'budgets' (0 when absent); it
+                              is the outermost pair_rng layer, 16,000 wide, so the
+                              two tiers can never share a seed
+  budget_frames per root   -> that root's own tier; v829_pair.py refuses a root
+                              whose tier is not the invocation's --budget-frames,
+                              so a multi-tier manifest is run one tier at a time
+
 the 4 and the 3 above are ANCHOR_STRIDE and TAKEOVER_MOD in this file, the seed
-constants are PAIR_RNG_BASE / PAIR_RNG_SOURCE_STRIDE / PAIR_RNG_RNG_STRIDE; the
-columns are aligned by hand for --help, the code always uses the constants.
+constants are PAIR_RNG_BASE / PAIR_RNG_SOURCE_STRIDE / PAIR_RNG_RNG_STRIDE /
+PAIR_RNG_BUDGET_STRIDE; the columns are aligned by hand for --help, the code
+always uses the constants.
 
 codes (exit): SOURCES_UNREADABLE(2) SOURCES_INVALID(1) EXPOSURE_REQUIRED(1)
   TAKEOVER_NOT_ANCHOR(1) TAKEOVER_BEYOND_TAPE(1) BUDGET_EXCEEDS_TOTAL(1)
@@ -1902,8 +2211,10 @@ codes (exit): SOURCES_UNREADABLE(2) SOURCES_INVALID(1) EXPOSURE_REQUIRED(1)
 
 after writing, the guard always runs:
   <this python> -B tools/rl/v829_guard.py check <out> --budget <budget> [--allow-exposed]
-and its exit code becomes this tool's exit code (1 refused / 2 unevaluable).
-No manifest is written at all when a builder check fails.
+where <budget> is the highest tier the manifest declares (one run proves every
+root's own tier too), and its exit code becomes this tool's exit code
+(1 refused / 2 unevaluable).  No manifest is written at all when a builder check
+fails.
 """
 
 
@@ -1927,15 +2238,24 @@ def build_parser() -> argparse.ArgumentParser:
                     "ancestor_id).  The optional top-level 'rngs' (1-16) measures "
                     "every (source, checkpoint) cell that many times with different "
                     "pair RNGs -- 8 sources x 3 checkpoints x 2 rngs = 48 roots, the "
-                    "pre-registered section 2 grid -- see the epilog for the seed "
-                    "allocation rule.",
+                    "pre-registered section 2 grid.  The optional top-level "
+                    "'budgets' (1-2 pre-registered tiers, e.g. [1800, 2400]) adds "
+                    "section 2's ENDPOINT axis: every (source, checkpoint, repeat) "
+                    "cell becomes one root per tier -- the same take-over state at "
+                    "30 s and at 40 s -- so the 48 roots become 96.  It is mutually "
+                    "exclusive with 'budget_frames' and with --budget.  See the "
+                    "epilog for the seed allocation rule.",
         formatter_class=argparse.RawDescriptionHelpFormatter)
     build_cmd.add_argument("--sources", required=True, type=pathlib.Path,
                            help=f"the {SOURCES_SCHEMA} sheet to read; it declares "
                                 f"either 'ckpt' (one checkpoint) or 'ckpts' "
                                 f"(1-{MAX_CKPTS} checkpoints per ancestor), never "
                                 f"both, and optionally 'rngs' (1-{MAX_RNGS} paired "
-                                f"RNGs per (source, checkpoint) cell)")
+                                f"RNGs per (source, checkpoint) cell) and 'budgets' "
+                                f"(1-{MAX_BUDGETS} pre-registered tiers, e.g. "
+                                f"[1800, 2400] for the section 2 30 s + 40 s "
+                                f"endpoint axis -- one root per tier, each carrying "
+                                f"its own budget_frames)")
     build_cmd.add_argument("--out", required=True, type=pathlib.Path,
                            help="where to write the manifest (parent dirs created)")
     build_cmd.add_argument("--window", type=int, default=None,
@@ -1945,7 +2265,9 @@ def build_parser() -> argparse.ArgumentParser:
                                 "ancestor_id instead of guessed")
     build_cmd.add_argument("--budget", type=int, default=None,
                            help=f"override sources.budget_frames; must be one of "
-                                f"{BUDGET_TIERS} (the tiers the guard can prove)")
+                                f"{BUDGET_TIERS} (the tiers the guard can prove). "
+                                f"Refused when the sheet uses 'budgets': the flag "
+                                f"binds one tier and the array declares several")
     build_cmd.add_argument("--ckpt", type=pathlib.Path, default=None,
                            help="measure this checkpoint instead of sources.ckpt.path "
                                 "(the sheet's sha256 must still match); refused when "
