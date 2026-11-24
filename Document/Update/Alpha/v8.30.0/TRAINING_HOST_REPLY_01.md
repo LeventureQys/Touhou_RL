@@ -1,0 +1,221 @@
+# V830-ROUTE-INFO-01 回执：路线判别所需的最少信息
+
+**工单**：`Document/Update/Alpha/v8.30.0/TRAINING_HOST_REQUEST.md`（V830-ROUTE-INFO-01）
+**回执端**：DeepSeek 训练端主代理 + 执行代理（DeepSeek v4.1 flash）
+**性质**：只读。本单未启动引擎、未评测、未采集、未训练、未安装依赖、未修改代码/协议/资产/暂停快照、未上传。WP05 保持暂停。
+
+> **执行说明（需研究端知情）**：本单先按项目约定派给 4 个 Provider=DeepSeek / DeepSeek v4.1 flash 子代理，四者在长时间静默后无任何回执，按 AGENTS.md §7.3 全部停止（未再唤醒，避免占用并发槽）。为不让路线停滞，第 3、4 项及引擎面核查由训练端主代理做最小必要只读处置，命令与退出码列于 §8。这是"训练端子代理池未可用"的处置，不是并行盘点。
+
+---
+
+## 0. 身份
+
+| 项 | 值 | 类别 |
+| --- | --- | --- |
+| 实际跑工具的检出 | `/mnt/d/WorkShop/Touhou_RL`（= Windows `D:\WorkShop\Touhou_RL`） | 本次只读核实 |
+| 该检出 HEAD | `c885e6477f498741d12269942d5e3decf8c8e2ed`（v8.30.0 文档提交） | 本次只读核实 |
+| `git status --short -uno` 行数 | 3,516（工作区存在大量既有未提交改动/删除，非本单产生） | 本次只读核实 |
+| Python | `C:\...\Python312\python.exe 3.12.10`；WSL 侧 `/root/v400-venv/bin/python` **3.10.12**（引擎与工具用它） | 本次只读核实 |
+| 时间及时区 | 2026-11-25T00:19:50+08:00（Asia/Shanghai） | 本次只读核实 |
+| 第二个检出 | WSL `/root/Touhou_RL`，HEAD `d55c26a6c465b26f11e26ba4fc1bdb888e8b130b`（v4.0.0 期），**但引擎产物在此树下** | 本次只读核实 |
+| 引擎（登记的 rl_v3） | `/root/Touhou_RL/third_party/th08-rl/build/rl_v3/th08-modern`，sha256 `691bfd77b7eca3361aa8bb7af0977556a70cc73a070b29a2447222ba7a568ef6` | 本次只读核实；与 `ASSET_SYNC` 登记 `691bfd77…` **一致** |
+| rl_laser | sha256 `1462829ba756bab49aae0878686988687dbaa109ea1750729d1202b555340d2f` | 同上，与登记 `1462829b…` **一致** |
+| 游戏数据 | `/root/v400-data/game` 存在 | 本次只读核实 |
+| 运行中引擎进程 | Windows 0 个、WSL 0 个（本单全程无引擎） | 本次只读核实 |
+
+**⚠ 身份分裂（须研究端知悉）**：代码检出在 `c885e64`，而 `rl_v3` 等引擎二进制位于第二个检出 `/root/Touhou_RL`（其 git HEAD 停在 `d55c26a`）。二进制本身可核（sha256 与 `ASSET_SYNC` 一致、源码 mtime 2026-11-10 10:17:29 早于二进制 10:43:28），但**"该二进制由哪个源码提交构建"没有构建记录可核**，标为待核验。
+
+---
+
+## 1. 一个真实攻击阶段
+
+| 字段 | 结论 | 证据 | 类别 |
+| --- | --- | --- | --- |
+| 任务族 | `th08-stage1-normal-team0`（stage 0 / normal / **shotType 0**；见下 `team` 更正） | `configs/v430/splits.json` → `ancestors[0].task_family`；`splits.json:roots.engine_binary_relative` | 本次只读核实 |
+| 恢复入口 | `RESET <stage> <difficulty> <team> <seed> [practice]`；`ArmStart()` 在标题画面 Ready 状态被自身消费，**不能从外部强改 curState** | `rlharness.cpp:981,989-991`；`rlharness.hpp:83-91` | 本次只读核实 |
+| 起止事件 | 起点 = `RESET` 后 `ResetFrameCount()` 的 frame 0（= 录像 trace 的第 0 字段）；**完成事件 = `stage_clear`** | `rlharness.hpp:68-73`；见下"完成定义" | 本次只读核实 |
+| 完成定义（可核） | `EVENTS` 回包字段 `stageClear` / `stageClearEdge` / **`stageClearEdgeFrame`** / `stageClearScreenState` / `stageClearSeq`；`frameEventFlags` 的 **0x0080** 是 harness 派生位，取自 `Gui.impl->stageClearScreenState`，在 pump 循环里**逐帧**采样（对多帧 STEP 也精确） | `rlharness.cpp:82-124,755-794`（Handler 全文已读） | 本次只读核实 |
+| **⚠ 代码库里有两套 `stage_clear` 定义（R1 必须冻结其一）** | (a) **评测工具口径**：`stage_clear = stage_end > stage_start`，即 `STATE` 的 stage 计数前进了。`v420_eval_shoot.py:667`、`v410_student_eval.py:1065`、`v410_baselines.py:361`、`v400_teacher.py:633`、`touhou_rl/v420/eval.py` 全用这一套，**无一读取 `EVENTS` 位**。(b) **harness 事件口径**：`EVENTS` 的 0x0080 + `stageClearEdgeFrame`，只有 `v400_p2_reward_detector.py`（`STAGE_CLEAR_BIT=0x0080`）与 `v400_stage_clear_replay.py` 用 | 上述行号（本次逐文件核对） | 本次只读核实 |
+| 两套口径的差别 | (a) 只给"阶段变了"，**不给精确帧**；(b) 给**逐帧电平 + 精确边沿帧**。两者"应当"一致但**本单未验证一致**。若 R1 主指标要帧级精度，应冻结 (b) 并把 (a) 作为交叉校验 | — | 缺口/待核验 |
+| 该表面是否在**已构建**二进制里 | **是**。`rl_v3` 含字符串 `OK frames=%llu frameEventFlags=%04x stageClear=%u stageClearEdge=%u stageClearEdgeFrame=%llu stageClearScreenState=%d stageClearSeq=%u` | `strings rl_v3/th08-modern` | 本次只读核实 |
+| EVENTS 在正常对局是否可用 | **可用**。`g_ReplayManager==NULL` 时 fail-closed 回 `ERR events-unavailable`；但清位回调在 **record 模式**也注册，正常开局的阶段会累积 | `rlharness.cpp:757-777` | 本次只读核实 |
+| 动作库（原始） | `MultiDiscrete(9,2,2,2)` = 9 移动 × 射击 × focus × bomb = **72**，`encode_flat = move*8+shoot*4+focus*2+bomb` | `touhou_rl/spec.py:343-345,384-407` | 本次只读核实 |
+| 决策节拍 | 依工具而定：v4.2 T08 评测 `DECISION_FRAMES=2` / `COMMIT_FRAMES=2`；v8 系列用 H=120 微段。**本单不裁定，须在实施单冻结** | `R74/code_facts.constants_runtime` | 历史记录 |
+| 射击约定（关键） | 过关**需要 SHOOT 上升沿**：每 48 决策，在该决策最后一个 STEP 帧 `mask & ~(BTN_SHOOT\|BTN_BOMB)`。旧仪器无条件 OR `BTN_SHOOT`、无释放路径，引擎永远看不到上升沿 | `v4.2.0/evidence/T08/CLEAR_REMEASURE.md:22-32` | 历史记录 |
+| 初始/继承资源 | 自然开局：3 残机、bomb 按机体；**继承资源语义尚未在任何连续运行中定义**（旧恢复段每段补足三颗雷） | `ROUTE_DECISION.md`（研究端）；本单未测 | 缺口/待核验 |
+| `team` 参数（**更正**） | `team` **不是**阶段内位置选择器，而是**机体/射击类型**：`ConsumePendingStart()` 里 `g_GameManager.shotType = g_startTeam;`。所以任务族名 `…-team0` = stage 0 / normal / **shotType 0**。`team>0` = 换机体，与 R1"冻结机体"冲突，**不能**用来切更短的子窗 | `rlharness.cpp:1142-1146,1163-1165` | 本次只读核实 |
+| 是否存在"从第 N 帧开始"的引擎杠杆 | **没有**。RESET 只有 `stage/difficulty/team(shotType)/seed/practice`，无起始帧参数；中局状态只能靠**前缀磁带重放 + `BRANCH`/`PARK`/`SPAWN`** 到达（v8.29 已用 `--reuse-park`） | `rlharness.cpp:981,1004,1142-1165`；`rlharness.hpp:43-51` | 本次只读核实 |
+
+**结论**：一个真实、可恢复、完成事件可在帧级核对的阶段**成立**（`th08-stage1-normal-team0`，完成 = `stage_clear`）。但"短攻击阶段"这一具体切片**尚未定义**——现有全部证据都是整段 stage 1（需 13,195 帧），没有"短"子阶段的事件定义。
+
+**而且引擎层没有"从第 N 帧开始"的入口**：`RESET` 只接受 `stage/difficulty/team(=shotType)/seed/practice`，`team` 换的是机体而不是段位。因此中局起点**只能**由「合法前缀磁带重放 → `PARK`/`BRANCH` 固化状态」得到，而这正是 §3 里被双 mask 磁带卡住的那条路。**结论：R1 若要用比整段更短的切片，前置条件是拿到一决策一 mask 的干净磁带（需授权重录）；否则任务就是整段 13,195 帧。**
+
+---
+
+## 2. 现存成功与失败见证
+
+| 项 | 值 | 证据 | 类别 |
+| --- | --- | --- | --- |
+| **真实成功**（唯一一条） | 同一条**教师录像带**在修正仪器下 `stage_clear=true`，**13,195 帧 / 2,631,430 分**；负对照（period 1000000007）→ `game_over` 15,564 帧；两者 `mask_trace_sha256` 与独立实现逐位相同 | `T08/CLEAR_REACHABILITY.md`、`T08/EVAL_SHOOT_PULSE.md`（`CLEAR_REMEASURE.md:29-32` 只读引用，本单未重跑） | 历史记录 |
+| 该成功的动作约束 | 动作库同 18/72 登记入口；**SHOOT 脉冲 period=48**；stage 0 / normal | `CLEAR_REMEASURE.md:22-23` | 历史记录 |
+| 该成功的性质 | **教师录像带重放**，不是像素策略成绩，也不是新阶段成绩 | 同上 | 历史记录 |
+| **真实失败** | 4 臂 × 2 口径 × 20 dev seed = **160 局，`stage_clear` = 0**，errors=0、invalid=0；最深 3,914 帧（D3/seed1010/s1n），距过关 13,195 帧差 **9,281 帧**；160 局无一达 12,000 帧 | `T08/CLEAR_REMEASURE.md:3-8,49-64` | 历史记录 |
+| 失败的三类分离 | 阶段完成 0；首死 = `death_stop:20`（diag 口径，帧 1,597.9–1,757.5 均值）；技术故障 0 | 同上 §3 | 历史记录 |
+| 同约束程度 | 成功与失败**同一引擎 sha `691bfd77…`、同一 `--max-frames 19887`、同一 SHOOT 脉冲仪器**；差别在"教师录像带 vs 策略 checkpoint" | `CLEAR_REMEASURE.md:16-25` | 历史记录 |
+| 旧仪器结果不可用 | 旧 `v410_student_eval.py` 的 `cand_to_mask` 无条件 OR `BTN_SHOOT` → **此前所有 0/N 都不是"能否过关"的测量** | `CLEAR_REMEASURE.md:27-32` | 历史记录 |
+
+**结论**：**有同约束真实成功见证，也有同约束真实失败见证**，且二者身份一致。可以支持 R1 的"任务可解性"判断。需要提醒的两点：(a) 成功见证是教师录像带重放，不是策略；(b) 成功需要的 13,195 帧是**整段 stage 1**，与"短攻击阶段"的设想还有距离。
+
+---
+
+## 3. 像素与执行历史
+
+| 字段 | 结论 | 证据 | 类别 |
+| --- | --- | --- | --- |
+| 合法前缀 | **不成立（已定位到首个冲突）**。旧配对磁带 prefix **从 frame 92 起就有双 mask 决策**，而 `_pair_cand` 的**唯一调用点在 `replay()`**（校验录制磁带，不是实时策略），第 92 帧即抛错；目标段落在 **frame 8,664** | `R74/pair_cand_scope.json:19,30-40` | 历史记录 |
+| 实时臂是否也有该冲突 | **没有**。实时臂每 commit 块只提交一个 mask（`COMMIT_FRAMES = 2×1 = 2`），历史**按构造**满足"一决策一 mask" | `R74/pair_cand_scope.json:34,38` | 历史记录 |
+| 四条解阻选项（已排除三条） | 引擎存档：**无该动词**；重录干净磁带：需资产授权；改用 <92 帧前缀：早期稀疏局面，C4 已判 0/4 不合格；替换 prefix 强行重放：**可到达但无效**（起始状态不是录制状态，而"0 不符"是三臂可比前提） | `R74/pair_cand_scope.json:42-58` | 历史记录 |
+| 连续像素 | 有：obs-v3 = playfield + HUD + 动作历史，T08 为纯像素评测（引擎 STATE 仅作裁判） | `CLEAR_REMEASURE.md:11-12,194` | 历史记录 |
+| 观测维度（v8 放雷头） | `OBS_DIM=106` + `EXPLICIT_DIM=3` = `FEATURE_DIM=109`。**这 106 维的具体构成本单未核实**，不作断言 | `tools/rl/v8u0_features.py:166-169` | 本次只读核实（构成待核验） |
+| 像素契约 | `PIXELS` 回 `glReadPixels(0,0,640,480,GL_RGBA,GL_UNSIGNED_BYTE)` → **640×480 RGBA8**，**原点在左下**；导出 PPM 时翻成自上而下并丢 alpha；`checksum` 是 RGBA 的 FNV‑1a‑64；同帧字节也发布到共享块（`SHM`） | `rlharness.cpp:1182-1215` | 本次只读核实 |
+| `touhou_rl/obs.py::encode` 的性质（**关键**） | 它**不是像素观测，是状态/特权观测**：输入是 `GameState` + `BulletField`（引擎真值）。`self_feat` **24 维** = rel_x、rel_y、两个保留 0、focus、`lives/8`、`bombs/8`、`power/128`、graze、score、clock_time、time_orbs、`stage/6`、`stage_clear_flag`、弹数/700、近距数/120 + 8 条射线；另加最近 `64×6` 弹丸特征与 `16×8` 危险网格 | `touhou_rl/obs.py:33-39,91-186` | 本次只读核实 |
+| 泄漏点定位（修正后的准确说法） | `self_feat` 的 **index 13 = `float(state.stage_clear_flag != 0)`** ——引擎真值的**过关标志**在向量里，且它与 R1 主指标**同源**。该通道在 72,472 帧录像上恒为 1.0（旧"15.1 颗子弹误差"就是在测这条死通道）。任何沿用此向量的候选都会把主指标喂进观测 | `touhou_rl/obs.py:151`；`touhou_rl/vision_metrics.py:15-17` | 本次只读核实 |
+| 可见性已知/未知 | 已知：SHOOT 上升沿是过关必要条件（仪器级证据）。未知：过关瞬间的画面先兆、自机/威胁/资源/阶段先兆在框内的**可见性覆盖率**未测 | — | 缺口/待核验 |
+
+**结论**：像素通道存在，但**当前没有任何满足"一决策一 mask"的合法前缀磁带**，这是输入 3 的硬缺口；且 **index 13 的 `stage_clear_flag` 与 R1 主指标（阶段完成）直接同源**，任何像素候选继承旧 obs 前必须删掉该通道，否则主指标本身泄漏进观测。本单未启动 render、未做可见性探针。
+
+---
+
+## 4. 同约束控制器与像素候选
+
+| 项 | 结论 | 证据 | 类别 |
+| --- | --- | --- | --- |
+| 可部署强参照（固定动作） | 18 个恒动作里在 4 个 train 窗口选出 **#12**，4 个 dev 窗口均值 **172.4**（per-window 258.0/180.5/221.0/30.0） | `R51/baseline_ladder.json:31-64` | 历史记录 |
+| 神谕 vs 可部署 | 每窗最优神谕 258.8；池均值 111.7；神谕膨胀 +86.4（×1.5） | 同上 §19-28 | 历史记录 |
+| 旧学习臂 A | 均值 **94.1**，**低于可部署恒动作 78.3，也低于池均值 17.6** | 同上 §82-86 | 历史记录 |
+| 教师/状态控制器 | 可解性参照：教师录像带（真实过关，见 §2）；教师另可用真值。**教师 100/100 类的整段动作成绩不能充当缩减任务的正对照** | `PIXEL_SLICE_PLAN.md:62`（研究端口径）+ `CLEAR_REMEASURE.md` | 历史记录/研究端 |
+| 特权混合臂标注 | 凡依赖特权距离/库存的放雷规则，只能标为**特权/混合参照**；G1/T2 移动读出为 softmax 抽样、v8.28 学习头为 argmax，成绩同时含移动读出差异 | `SOURCE_AUDIT.md:57`；研究端口径 | 历史记录 |
+| 像素候选现状 | **无**可用于本阶段的像素学习权重（v8.29 演练用的 `bombdag.pt` 是放雷头，非本任务像素 actor）。可用**接线入口**：`PIXELS`/`SHM`/`READBACK` 命令 + obs-v3 管线 + `rlharness` 的 `SetReadback`/`ReadbackMicros` | `rlharness.hpp:96-105`；`rlharness.cpp` PIXELS 分支 | 本次只读核实 |
+| 汇报口径风险 | 旧 `S2` 右半（臂 A ≤ C-const-best）对任何非神谕方法都会触发 → **不可证伪的停止条件**；真正卡住像素臂的是 `_pair_cand` 与 `PARK`，不是该触发 | `R51/baseline_ladder.json:75-79` | 历史记录 |
+
+**结论**：**可解性参照齐备**（教师录像带 + 已构建引擎 + EVENTS 判决）；**可部署强参照齐备**（恒动作 #12 = 172.4，可直接用作 R2 的"固定/开环"对照底本）。**缺像素候选权重**，只能先做接线。另须提醒：该任务上旧学习臂 94.1 已被一个恒动作（172.4）明显解释，这正是 `ROUTE_DECISION.md` 第 4 条要防的情形，R2 必须把它作为强参照而非弱参照。
+
+---
+
+## 5. 少量开发祖先
+
+| 项 | 值 | 证据 | 类别 |
+| --- | --- | --- | --- |
+| 祖先登记总数 | **360**（`splits.json.ancestors`） | `configs/v430/splits.json` | 本次只读核实 |
+| 可直接分给训练/调试 | `train` = **328** 条（源为 `teacher_query|d1-teacher-fast`，D1 语料分片） | 同上 `splits.train.ancestor_ids` | 本次只读核实 |
+| 未参与拟合与选参的开发面板 | `dev` = **20**（seeds **1000–1019**，`model_selection|v420-dev-panel`）；**1020–1039 保留**未登记为祖先 | 同上 `splits.dev` | 本次只读核实 |
+| 正式确认 | `confirm` = **0**（v4.3.0 未冻结确认批） | 同上 `splits.confirm` | 本次只读核实 |
+| 适应保留 | `adapt` = **0** | 同上 `splits.adapt` | 本次只读核实 |
+| 隔离 | `quarantine` = **12**（S1b dev 1000–1011，种子来源被拒） | 同上 `splits.quarantine` | 本次只读核实 |
+| 永久禁训种子 | 60000–60199 | 同上 `reserved_training_exclusion` | 本次只读核实 |
+| 封存结果 | `sealed.present_on_host=false`、`read_sealed_results=false` | 同上 | 本次只读核实 |
+| 曝光/同源字段 | **祖先记录只有 `source_kind/source_id/episode/seed/task_family/note`，没有 `exposure`/`stage` 字段**；曝光事实需从语料登记另查 | `ancestors[0]` 实测 | 缺口/待核验 |
+| v8.29 新采根 | 8 个演练祖先（`reh-seed3201…`），`used_for_training:false`、`lineage_new:true`，但**前缀是被评测策略自己滚出来的**（起点不中立） | `v8.29.0/RESEARCH_REVIEW_PACKET.md:55-71,112-116` | 历史记录 |
+
+**结论**：支持一个小任务族的**少量开发祖先是有的**（20 个 dev 面板 + 328 训练源），不必预设 8 根。两点限制：(a) 4 个旧开发窗 11/12/17/18 已用于 BC/RL 与开发，**不能充当新的独立留出集**；(b) 没有曝光字段，且 v8.29 自采根的起点依赖被评测策略——**"起点中立"仍待研究端决定**（`RESEARCH_REVIEW_PACKET §4.3`）。
+
+---
+
+## 6. 一个切片的实际成本
+
+| 环节 | 实测 | 证据 | 类别 |
+| --- | --- | --- | --- |
+| T08 单批 = 5 seed | **115–223 s**（批墙钟），即 ≈ **23–45 s/局**；`--max-frames 19887`；25 批退出码全 0，errors=0/invalid=0 | `CLEAR_REMEASURE.md:217-245` | 历史记录 |
+| 单局上限 | `--max-frames 19887`（≈ 13,195 过关帧的 1.5 倍） | 同上 `:211` | 历史记录 |
+| 前缀/恢复拆分 | **本任务没有拆分**；可得范围只有两种口径（diag=`--stop-on-death` / s1n=三命） | 同上 §9 | 缺口/待核验 |
+| 渲染/读回单独成本 | harness 自带计量：`ReadbackFrames()` / `ReadbackMicros()`（"differencing two STEP runs" 可测读回成本）；**尚未被任何成本登记使用** | `rlharness.hpp:96-105` | 本次只读核实 |
+| 采集 1 盘 4,800 帧 | ≈ **4.2 s**；5,600 帧 ≈ 9.6 s | `v8.29.0/RESEARCH_REVIEW_PACKET.md:121-126` | 历史记录 |
+| 96 单臂（单档） | 176 s（30 s 档）/ 168 s（40 s 档）；两档 96 对/192 单臂 ≈ **344 s** | 同上 | 历史记录 |
+| 切片规划上限 | 每条轨迹至多 **600 受控游戏帧**，前缀重放/记忆预热/恢复核验**另计** | `PIXEL_SLICE_PLAN.md:25,88` | 研究端口径 |
+| 可用起止时段与分钟数 | **未知**：本单无调度记录、无可承诺窗口 | — | 缺口 |
+
+**结论**：一个端到端切片的量级已知（单局 23–45 s、≤19,887 帧），但**没有前缀/恢复/渲染的拆分实测**，也**没有可用时段**。按工单要求不外推并发、不承诺完成日期。
+
+---
+
+## 7. 附带核实：SOURCE_AUDIT 在本机的身份
+
+研究端 `SOURCE_AUDIT.md` 明确要求"训练端如文件身份不同，先报告差异"。本单核对结果：**完全一致，无差异**。
+
+| 项 | 研究端声明 | 训练端本次实测 | 结论 |
+| --- | --- | --- | --- |
+| `v8m0_bombrl.py` | `fd0ac4ef…4cb41`；BC 960、977–979；指标 989–992 | sha256 **逐字符相同**；960 `BCEWithLogitsLoss()`、977 `# two logits == one logit…`、978 `[:, 1]`、989 `softmax` | 一致 |
+| `v8p0_bombrl900.py` | `71bfbeb6…122a`；1012、1029–1031；1041–1044 | sha256 相同；命中 1012/1029/1030/1041 | 一致 |
+| `v8t0_densereward.py` | `e7f004e5…21e1`；1050、1067–1069；1079–1082 | sha256 相同；命中 1050/1067/1068/1079 | 一致 |
+| `v8u0_features.py` | `c4cde38f…0aac`；1190、1207–1209；1219–1222 | sha256 相同；命中 1190/1207/1208/1219 | 一致 |
+| 网络形状 | `Linear(109,64)→Tanh→Linear(64,2)` | `FEATURE_DIM=109`(106+3)、`BOMB_HIDDEN=64`、`N_BOMB=2`，`make_bomb_head` 在 563–571 | 一致 |
+| 源码常数 | 裁剪 1.0、200 steps、batch 256、lr 1e-2、正例比 0.5 | `GRAD_CLIP=1.0`(198)、`BC_STEPS=200`、`BC_BATCH=256`、`BC_LR=1e-2`、`BC_POS_FRACTION=0.5`(208) | 一致 |
+
+**边界**：这只证明**当前工作区文件的身份**与审计基线相同，**不证明**四次历史实跑执行的就是这些文件（`SOURCE_AUDIT.md:56` 的"历史实现身份未核验"仍然成立）。
+
+---
+
+## 8. 实际命令与退出码
+
+```text
+# 1) 工单指定的身份命令（在 /mnt/d/WorkShop/Touhou_RL 执行）
+git rev-parse --show-toplevel                        -> 0  D:/WorkShop/Touhou_RL
+git rev-parse HEAD                                   -> 0  c885e6477f498741d12269942d5e3decf8c8e2ed
+git status --short --untracked-files=no              -> 0  3516 行
+python -B -c "…sys.version…datetime…"                -> 0  3.12.10 2026-11-25T00:19:50.737904+08:00
+
+# 2) 第二检出的身份
+wsl -e bash -lc 'cd /root/Touhou_RL && git rev-parse HEAD'
+                                                     -> 0  d55c26a6c465b26f11e26ba4fc1bdb888e8b130b
+wsl -e bash -lc 'cd /mnt/d/WorkShop/Touhou_RL && git rev-parse HEAD'
+                                                     -> 0  c885e6477f498741d12269942d5e3decf8c8e2ed
+wsl -e bash -lc '/root/v400-venv/bin/python -c "import sys;print(sys.version.split()[0])"'
+                                                     -> 0  3.10.12
+
+# 3) SOURCE_AUDIT 四个 runner 的 sha256（Windows Get-FileHash）
+                                                     -> 0  4/4 与研究端一致
+
+# 4) 引擎面只读核查（自写脚本，仅 sha256sum/strings/stat）
+bash .tmp_v830_engine_probe.sh                       -> 0  build 产物 + sha 前缀
+bash .tmp_v830_provenance_probe.sh                   -> 0  mtime/字符串/Handler 位置
+bash .tmp_v830_events_gate.sh                        -> 0  EVENTS 的 replay-manager 闸门
+bash .tmp_v830_team_probe.sh                         -> 0  team=shotType 实证、PIXELS 契约
+bash .tmp_v830_probe_harness.py (venv python)        -> 0  协议动词 25 个 + StateExport 字段
+
+# 5) 结构摘要（不整读大文件）
+python -B -c "json.load(configs/v430/splits.json)…"   -> 0  顶层 16 键、ancestors 360、splits 5 类
+
+# 6) 进程核查（关声纪律的现状）
+Windows Get-Process *th08*                           -> 0  0 个
+wsl 'ps -eo comm | grep -c th08'                     -> 0  0 个
+```
+
+最短错误原文：无。本单没有失败命令。
+
+---
+
+## 9. 可独立推进项 / 仅需补充的最少输入
+
+**可独立推进（不需要新授权）**
+1. `stage_clear` 判决链路已可核，可作为 R1 主指标；建议下一步先做**只读**的判决冒烟设计（不启引擎）。
+2. 删除 `touhou_rl/obs.py:151` 的 `stage_clear_flag` 通道属**代码变更**，须另单授权；本单只报告不修改。
+3. 无前缀拆分的成本可用 harness 自带 `ReadbackMicros()` 计量，不必新造仪表。
+
+**仅需研究端定的最少事项**
+1. **任务切片（二选一，已无第三条路）**：(a) 接受整段 stage 1（13,195 帧，≈ 3.7 分钟/局）作为 R1 任务；或 (b) 授权**重录一决策一 mask 的干净磁带**，再用「前缀重放 → `PARK`」切后期短子窗。`team` 不能用于此（它是机体/射击类型）。按研究端规则，切片须先按来源与脚本边界定，**不得看新成绩后筛容易窗**。
+2. **合法前缀**：即上面 (b) 的授权。不授权则输入 3 的缺口无法在现有磁带内解开（引擎无存档动词、<92 帧前缀已被 C4 判 0/4、替换 prefix 属"可到达但无效"）。
+3. **起点中立**：接受策略自生起点，还是要求教师/固定脚本生成的起点（`RESEARCH_REVIEW_PACKET §4.3`）。
+4. **强参照冻结**：R2 的固定/开环对照是否就用恒动作 **#12（172.4）**这一族；它在本任务上曾明显压过旧学习臂（94.1）。
+5. **可用时段**：本机可用于实施单的实际起止时间与分钟数（本单无此记录）。
+6. **主指标口径**：`stage_clear` 冻结为 (a) stage 计数前进，还是 (b) `EVENTS` 0x0080 + `stageClearEdgeFrame`。建议 (b) 为主、(a) 为交叉校验；一旦冻结就写进实施单，不在看结果后改。同时注意 (a) 的现有实现都在"每决策 2 帧"的旧节拍下，与新切片节拍的关系需重新确认。
+
+**本回执不主张**：路线可行性、像素可学、任务已冻结、成本已按切片拆分。R0 设计复核与接线通过都不改变 G410 任何能力门状态。
+
+---
+
+*训练端本次实测 = §0/§1(引擎面)/§3(obs 泄漏)/§5(splits)/§6(ReadbackMicros 能力)/§7；
+历史记录 = §2/§3(前缀)/§4/§6(T08 与 v8.29 数字)；
+研究端离线判断 = ROUTE_DECISION / WORK_PLAN / PIXEL_SLICE_PLAN 的口径；
+待核验 = 引擎二进制的构建提交、祖先曝光字段、可用时段、框内可见性覆盖率、v8 的 106 维 obs 构成。*
+
+**本回执内的自我更正（留痕）**：初稿曾把 `team` 当作阶段内位置选择器并据此推断"可用 `team>0` 切短子窗"。经 `rlharness.cpp:1164` `g_GameManager.shotType = g_startTeam` 实证，`team` 是机体/射击类型，该推断**已撤回**；相应地把"短切片"的唯一可行路径改为"重录干净磁带 + PARK"。初稿另曾据 `strings | grep -cx STAGE_CLEAR` 得 0 而怀疑二进制不含该表面，随后的完整字符串核查显示它是以 `stageClear=…` 形式存在，该怀疑**已撤回**。第三，初稿曾把 `touhou_rl/obs.py` 的 `encode()` 与 v8 的 106 维 `OBS_DIM` 当成同一向量，实测不是（`encode()` 是 24 self + 64×6 弹丸 + 16×8 网格的特权状态向量）；已改为分列并标明"106 维构成待核验"。
