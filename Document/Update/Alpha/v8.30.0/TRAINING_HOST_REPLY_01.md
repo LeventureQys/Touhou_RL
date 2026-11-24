@@ -56,7 +56,7 @@
 
 | 项 | 值 | 证据 | 类别 |
 | --- | --- | --- | --- |
-| **真实成功**（唯一一条） | 同一条**教师录像带**在修正仪器下 `stage_clear=true`，**13,195 帧 / 2,631,430 分**；负对照（period 1000000007）→ `game_over` 15,564 帧；两者 `mask_trace_sha256` 与独立实现逐位相同 | `T08/CLEAR_REACHABILITY.md`、`T08/EVAL_SHOOT_PULSE.md`（`CLEAR_REMEASURE.md:29-32` 只读引用，本单未重跑） | 历史记录 |
+| **真实成功**（唯一一条，本次已从产物 JSON 逐字段核对） | 同一条**教师录像带**在修正仪器下：`stage_clear=true`、`frames=13195`、`score_final=2631430`、`deaths=0.0`、`stop_reason="stage_clear"`、`decisions=6598`、`shoot_frames=13058`。负对照（长 period）→ `stage_clear=false`、`frames=15564`、`score_final=163945`、`deaths=3.0`、`stop_reason="game_over"`。`shoot_pulse_period=48`（= 48 决策 × 2 帧 = 96 帧，与 `configs/v420/rl-engine-{audit,pilot}.json` 冻结值一致） | `T08/clear_reachability.json`、`T08/eval_shoot_pulse.json`（本次原样读取字段）；叙述见 `T08/CLEAR_REACHABILITY.md`、`T08/EVAL_SHOOT_PULSE.md` | 历史记录（产物本次已核） |
 | 该成功的动作约束 | 动作库同 18/72 登记入口；**SHOOT 脉冲 period=48**；stage 0 / normal | `CLEAR_REMEASURE.md:22-23` | 历史记录 |
 | 该成功的性质 | **教师录像带重放**，不是像素策略成绩，也不是新阶段成绩 | 同上 | 历史记录 |
 | **真实失败** | 4 臂 × 2 口径 × 20 dev seed = **160 局，`stage_clear` = 0**，errors=0、invalid=0；最深 3,914 帧（D3/seed1010/s1n），距过关 13,195 帧差 **9,281 帧**；160 局无一达 12,000 帧 | `T08/CLEAR_REMEASURE.md:3-8,49-64` | 历史记录 |
