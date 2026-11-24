@@ -42,7 +42,9 @@
 | 动作库（原始） | `MultiDiscrete(9,2,2,2)` = 9 移动 × 射击 × focus × bomb = **72**，`encode_flat = move*8+shoot*4+focus*2+bomb` | `touhou_rl/spec.py:343-345,384-407` | 本次只读核实 |
 | 决策节拍 | 依工具而定：v4.2 T08 评测 `DECISION_FRAMES=2` / `COMMIT_FRAMES=2`；v8 系列用 H=120 微段。**本单不裁定，须在实施单冻结** | `R74/code_facts.constants_runtime` | 历史记录 |
 | 射击约定（关键） | 过关**需要 SHOOT 上升沿**：每 48 决策，在该决策最后一个 STEP 帧 `mask & ~(BTN_SHOOT\|BTN_BOMB)`。旧仪器无条件 OR `BTN_SHOOT`、无释放路径，引擎永远看不到上升沿 | `v4.2.0/evidence/T08/CLEAR_REMEASURE.md:22-32` | 历史记录 |
-| 初始/继承资源 | 源 cfg 实测 lifeCount=2、bombCount=3（见 §10.1），但 lifeCount 是否等于总残机本次未核实；**继承资源语义尚未在任何连续运行中定义**（旧恢复段每段补足三颗雷） | `ROUTE_DECISION.md`（研究端）；本单未测 | 缺口/待核验 |
+| 初始资源（**源码已核，替换先验**） | Normal / 非 practice / 非 replay 的普通开局：`livesRemaining = cfg->lifeCount = 2`（**2 条备用残机**）；死亡时先判 `GetLives() <= 0` → 是则 `showRetryMenu=1`（game over），否则 `AddLives(-1)` 并重生 ⇒ **共允许 3 次死亡**（= lifeCount+1 次机会）。`bombsRemaining = primaryShtFile->initialBombCount` —— **炸弹数来自机体射击文件，不是 cfg 的 bombCount=3**。`playerPower = 0` | `GameManagerSetup.cpp:105-130`；`GameManager.hpp:286-298`；`Player.cpp:1393-1400`；`Player.hpp:30,47` | 本次只读核实 |
+| 资源语义的三个陷阱 | ① **practice 模式把 lifeCount 强制成 8**（`flags.isPracticeMode`），比自然开局多 6 条命，绝不能当作自然起点；② `difficulty >= EXTRA` 时 lifeCount 被强制为 2；③ 资源初始化整块在 `if (!flags.isReplay)` 里，**replay 路径不走这段**，所以录像回放不能用来推断自然开局资源 | `GameManagerSetup.cpp:110-130` | 本次只读核实 |
+| 死亡的资源后果 | 死亡会 `SetPower(0)` 并掉出 5 个 `ITEM_POWER_FULL`，同时 `DecreaseSubrank(1600)` —— 即"首死"不只是少一条命，还改写 power 与 subrank | `Player.cpp:1355-1364` | 本次只读核实 |
 | `team` 参数（**更正**） | `team` **不是**阶段内位置选择器，而是**机体/射击类型**：`ConsumePendingStart()` 里 `g_GameManager.shotType = g_startTeam;`。所以任务族名 `…-team0` = stage 0 / normal / **shotType 0**。`team>0` = 换机体，与 R1"冻结机体"冲突，**不能**用来切更短的子窗 | `rlharness.cpp:1142-1146,1163-1165` | 本次只读核实 |
 | 是否存在"从第 N 帧开始"的引擎杠杆 | **没有**。RESET 只有 `stage/difficulty/team(shotType)/seed/practice`，无起始帧参数；中局状态只能靠**前缀磁带重放 + `BRANCH`/`PARK`/`SPAWN`** 到达（v8.29 已用 `--reuse-park`） | `rlharness.cpp:981,1004,1142-1165`；`rlharness.hpp:43-51` | 本次只读核实 |
 
@@ -254,7 +256,7 @@ wsl 'ps -eo comm | grep -c th08'                     -> 0  0 个
 
 - **§9.2 的前置条件已满足**：`th08.cfg.orig` 与 `th08.cfg.dirty-*` 都在，且活的源与 `.orig` **逐字节相同**——即源文件自 2026-11-07 起没有漂移，回滚是零成本的。
 - **根因确认到字节**：0x1F=1、0x20=1、0x27=39、0x28=36。104 个可出声的派生 cfg 都能回溯到这个文件。
-- 三个 cfg 的 `lifeCount = 2`、`bombCount = 3`。**这两项与 R1 的"初始/继承资源"直接相关**；`lifeCount` 究竟是"总残机"还是"附加残机"本次**未核实**，实施单里必须用真实开局读一次来定，不要按 3 残机先验写死。
+- 三个 cfg 的 `lifeCount = 2`、`bombCount = 3`。**注意两者都不是"游戏内资源"的权威来源**：源码里 `livesRemaining = cfg->lifeCount`（所以 lifeCount=2 确实是 2 条备用残机，game over 发生在 `GetLives() <= 0`），而 `bombsRemaining = primaryShtFile->initialBombCount` —— **炸弹数由机体射击文件决定，`cfg.bombCount=3` 只是菜单默认值**（仅在 `Supervisor.cpp:1394-1395` 与 `TitleScreen.cpp:1171` 作为默认写回）。详见 §1 的"初始资源"行。
 
 ### 10.2 两种修法，以及为什么应当选最小改法
 
@@ -270,7 +272,7 @@ wsl 'ps -eo comm | grep -c th08'                     -> 0  0 个
 
 **仍需授权的步骤（不要由代理自行执行）**：把上述任一文件落到 `/root/v400-data/game/th08.cfg` 属于**资产操作**——§8.2 保护 `/root/v400-data`，而 §9.2 建议换这一个文件；`ASSET_SYNC` 目前登记的是 `48bf7621…`，一旦替换**必须**同步更新 `ASSET_SYNC.md` 与 `ASSET_SYNC.sha256`。请把这一步写进实施单，并指定用 (a) 还是 (b)。
 
-**第四处更正（同轮内）**：回执 §1 初稿写"自然开局：3 残机、bomb 按机体"，那是**未核实的先验**。本次按字节解码源 cfg 得到 `lifeCount=2`、`bombCount=3`，已替换该说法；但 `lifeCount` 究竟表示"总残机"还是"附加残机"仍未核实，实施单必须用真实开局读一次来定，**不得按 3 残机写死**。
+**第四处更正（同轮内，两次）**：§1 初稿写"自然开局：3 残机、bomb 按机体"，是**未核实的先验**。第一次改成 cfg 字节（`lifeCount=2`、`bombCount=3`）；随后读引擎源码发现**两处仍不准确**：`lifeCount=2` 确实是 2 条备用残机（game over 在 `GetLives() <= 0`，共 3 次死亡），但**炸弹数并不来自 `cfg.bombCount`**，而是 `primaryShtFile->initialBombCount`（机体射击文件决定），且 `playerPower` 初始为 0、practice 模式会把 lifeCount 强制成 8。现已按源码重写该行并单列三个陷阱，`cfg.bombCount=3` 只作菜单默认值记录。
 
 ---
 
