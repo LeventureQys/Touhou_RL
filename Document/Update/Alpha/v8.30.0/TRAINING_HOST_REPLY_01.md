@@ -39,9 +39,9 @@
 | 两套口径的差别 | (a) 只给"阶段变了"，**不给精确帧**；(b) 给**逐帧电平 + 精确边沿帧**。两者"应当"一致但**本单未验证一致**。若 R1 主指标要帧级精度，应冻结 (b) 并把 (a) 作为交叉校验 | — | 缺口/待核验 |
 | 该表面是否在**已构建**二进制里 | **是**。`rl_v3` 含字符串 `OK frames=%llu frameEventFlags=%04x stageClear=%u stageClearEdge=%u stageClearEdgeFrame=%llu stageClearScreenState=%d stageClearSeq=%u` | `strings rl_v3/th08-modern` | 本次只读核实 |
 | EVENTS 在正常对局是否可用 | **可用**。`g_ReplayManager==NULL` 时 fail-closed 回 `ERR events-unavailable`；但清位回调在 **record 模式**也注册，正常开局的阶段会累积 | `rlharness.cpp:757-777` | 本次只读核实 |
-| 动作库（原始） | `MultiDiscrete(9,2,2,2)` = 9 移动 × 射击 × focus × bomb = **72**，`encode_flat = move*8+shoot*4+focus*2+bomb` | `touhou_rl/spec.py:343-345,384-407` | 本次只读核实 |
+| 动作库（**三套，别混用**） | ① 原始按钮：`MultiDiscrete(9,2,2,2)`=**72**（`encode_flat = move*8+shoot*4+focus*2+bomb`）；② **教师候选**：`cand = focus*9+move`=**18**，**射击恒开、bomb 恒关**；③ **学生动作**：`(cand, bomb)`=**36**。9 方向 = 0 idle/1 N/2 NE/3 E/4 SE/5 S/6 SW/7 W/8 NW | `touhou_rl/spec.py:343-345,384-407`；`touhou_rl/v400/gym/actions.py:5-7,19-22,102,105`；**缺口见 §13** | 本次只读核实 |
 | 决策节拍 | 依工具而定：v4.2 T08 评测 `DECISION_FRAMES=2` / `COMMIT_FRAMES=2`；v8 系列用 H=120 微段。**本单不裁定，须在实施单冻结** | `R74/code_facts.constants_runtime` | 历史记录 |
-| 射击约定（关键） | 过关**需要 SHOOT 上升沿**：每 48 决策，在该决策最后一个 STEP 帧 `mask & ~(BTN_SHOOT\|BTN_BOMB)`。旧仪器无条件 OR `BTN_SHOOT`、无释放路径，引擎永远看不到上升沿 | `v4.2.0/evidence/T08/CLEAR_REMEASURE.md:22-32` | 历史记录 |
+| 射击约定（关键） | 过关**需要 SHOOT 上升沿**：每 48 决策，在该决策最后一个 STEP 帧 `mask & ~(BTN_SHOOT\|BTN_BOMB)`。旧仪器无条件 OR `BTN_SHOOT`、无释放路径，引擎永远看不到上升沿 | `v4.2.0/evidence/T08/CLEAR_REMEASURE.md:22-32` | 历史记录 ；**机理与后果见 §13** |
 | 初始资源（**源码已核，替换先验**） | Normal / 非 practice / 非 replay 的普通开局：`livesRemaining = cfg->lifeCount = 2`（**2 条备用残机**）；死亡时先判 `GetLives() <= 0` → 是则 `showRetryMenu=1`（game over），否则 `AddLives(-1)` 并重生 ⇒ **共允许 3 次死亡**（= lifeCount+1 次机会）。`bombsRemaining = primaryShtFile->initialBombCount` —— **炸弹数来自机体射击文件，不是 cfg 的 bombCount=3**。`playerPower = 0` | `GameManagerSetup.cpp:105-130`；`GameManager.hpp:286-298`；`Player.cpp:1393-1400`；`Player.hpp:30,47` | 本次只读核实 |
 | 资源语义的三个陷阱 | ① **practice 模式把 lifeCount 强制成 8**（`flags.isPracticeMode`），比自然开局多 6 条命，绝不能当作自然起点；② `difficulty >= EXTRA` 时 lifeCount 被强制为 2；③ 资源初始化整块在 `if (!flags.isReplay)` 里，**replay 路径不走这段**，所以录像回放不能用来推断自然开局资源 | `GameManagerSetup.cpp:110-130` | 本次只读核实 |
 | 死亡的资源后果 | 死亡会 `SetPower(0)` 并掉出 5 个 `ITEM_POWER_FULL`，同时 `DecreaseSubrank(1600)` —— 即"首死"不只是少一条命，还改写 power 与 subrank | `Player.cpp:1355-1364` | 本次只读核实 |
@@ -329,3 +329,56 @@ R2 需要"框内像素 + 自己执行历史"的观测。本回合确认**不必�
 | **已裁决的负结果（不是"悄悄没过"）** | `PROBE_OUTCOME`：EXP-P3-010 在 held-out seeds 15–16 上测自机 48 px 内的占用率 F1，**"no candidate reached F1 >= 0.90, so the T2 stop-loss condition fired"**。随后 **`D-14`（2026-11-10）裁决**：仍然采纳分辨率 B(96×112)，但**把验收标准从"occupancy F1 ≥ 0.90"改为闭环分数**（`G3 S1N` 过关率：stage 1 normal、确认种子），F1 只作为**记录在案的代理指标**。B 的 F1 = 0.8502（预注册口径）/ 0.8661（事后最优阈值） | 所以正确的说法是：**该像素信息量代理指标未达 0.90，且验收口径已被正式改判为闭环过关率**。这既不是"已通过"，也不是"未处理"——R2 必须交的是**闭环结果**，不能拿 F1 或"接线通过"充当；而 F1 值被写进 digest，正是为了让读者不会误以为它过了门 |
 
 **一句话**：观测侧已经有一份冻结、可复算、边界合规（无自机/威胁真值平面）的像素契约可用；但它的像素信息量代理指标**未达 0.90**，且验收标准已被 `D-14` 正式改判为**闭环过关率**。R2 的"观测是否有控制价值"必须用闭环结果回答，不能用接线、loss 或 F1 代替。
+
+---
+
+## 13. 动作契约里的一个结构性缺口：标准动作空间**无法表达"不射击"**，而过关需要 SHOOT 上升沿
+
+这条是本次最影响 R1 可行性的发现，单独列出。
+
+### 13.1 仓库里其实有三套动作空间
+
+| 空间 | 定义 | 出处 |
+| --- | --- | --- |
+| 原始按钮组合 | `MultiDiscrete(9,2,2,2)` = 9 移动 × 射击 × focus × bomb = **72** | `touhou_rl/spec.py:389-407` |
+| **教师候选** | `cand = focus * 9 + move` → **18** 个，**射击恒开、bomb 恒关** | `touhou_rl/v400/gym/actions.py:5-6,22,102` |
+| 学生动作 | `(cand, bomb)` → **36** 个 | 同上 `:7,105` |
+
+`MOVES` 的 9 个方向是：0 idle、1 N、2 NE、3 E、4 SE、5 S、6 SW、7 W、8 NW（+y 向下）。
+
+### 13.2 缺口：`cand_to_mask` 无条件 OR 上 SHOOT
+
+```python
+mask = _MOVE_BITS[move] | BTN_SHOOT      # 无条件
+if focus: mask |= BTN_FOCUS
+if bomb:  mask |= BTN_BOMB
+```
+
+反向函数更直接地 fail-closed：
+
+```python
+if not mask & BTN_SHOOT:
+    raise ValueError("mask does not shoot; not representable as a candidate")
+```
+
+其 docstring 的理由是"'not shooting' is never useful here"。**于是标准契约里"不射击"根本不是合法动作。**
+
+### 13.3 但过关恰恰需要一个 SHOOT 上升沿
+
+`T08/CLEAR_REACHABILITY.md` / `EVAL_SHOOT_PULSE.md` 的实测（本回执 §2 已核到产物字段）：同一条教师磁带，
+
+- `shoot_pulse_period = 48`（每 48 决策在该决策最后一个 STEP 帧放掉 `SHOOT|BOMB`）→ **`stage_clear=true`，13,195 帧，2,631,430 分**；
+- 释放周期极大（等价于从不释放）→ **`game_over`，15,564 帧**。
+
+也就是说：**没有 SHOOT 上升沿就过不了关**，而"放掉射击"在 18/36 动作空间里**无法表达**。
+
+### 13.4 推论（R1 必须处理）
+
+1. **只用标准动作契约，"阶段完成"在构造上不可达。** 旧仪器 `v410_student_eval.py` 的 `cand_to_mask` 无条件 OR `BTN_SHOOT`、无释放路径，所以"此前所有 0/N 都不是对能否过关的测量"——这条历史结论现在有了机理层面的解释，而不只是"仪器 bug"。
+2. 过关所依赖的 SHOOT 释放来自**外生的运行器约定**（T08 的 `--shoot-pulse-period 48`），**不是策略能决定的东西**。所以任何"像素 actor 通了第一面"的说法，严格写法应当是"**像素 actor + 固定外生脉冲**"，不能写成策略自己学会了触发过关。
+3. R1 冻结动作契约时只有两条路，必须选一条并写进实施单：
+   - **(a)** 把 SHOOT 脉冲**作为任务定义的一部分**声明（周期、释放帧位置都冻结），并明确"策略不可控"；或
+   - **(b)** **扩展动作空间，给策略一个 shoot 位，然后重新登记任务**。这正对应研究端 R1 原文的口径："若 18 动作/禁 bomb 不可解，不能因此否定允许 bomb 的完整游戏任务；**应恢复所需合法动作并重新登记任务**"。
+4. 本条**不构成**对像素学习或学习器能力的任何判断：它只说明"用现有动作契约 + 无脉冲，无法观测到过关"。
+
+**给研究端的取舍提示**：若选 (a)，主指标里混入了一个策略不可控的外生项，需要说清它对"反馈价值"判别的影响；若选 (b)，动作空间从 18/36 变大，必须有对应预算与参照（恒动作 #12 那类基线要重新冻结）。
