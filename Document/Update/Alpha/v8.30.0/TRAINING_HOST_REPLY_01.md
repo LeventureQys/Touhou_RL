@@ -271,3 +271,19 @@ wsl 'ps -eo comm | grep -c th08'                     -> 0  0 个
 **仍需授权的步骤（不要由代理自行执行）**：把上述任一文件落到 `/root/v400-data/game/th08.cfg` 属于**资产操作**——§8.2 保护 `/root/v400-data`，而 §9.2 建议换这一个文件；`ASSET_SYNC` 目前登记的是 `48bf7621…`，一旦替换**必须**同步更新 `ASSET_SYNC.md` 与 `ASSET_SYNC.sha256`。请把这一步写进实施单，并指定用 (a) 还是 (b)。
 
 **第四处更正（同轮内）**：回执 §1 初稿写"自然开局：3 残机、bomb 按机体"，那是**未核实的先验**。本次按字节解码源 cfg 得到 `lifeCount=2`、`bombCount=3`，已替换该说法；但 `lifeCount` 究竟表示"总残机"还是"附加残机"仍未核实，实施单必须用真实开局读一次来定，**不得按 3 残机写死**。
+
+---
+
+## 11. R2 前置的离线可核部分（本回合已跑，全绿）
+
+R2 的第一份交付是"真实像素 → actor → 动作 → 实际帧 → 独立终态"的接线，其中**帧序/帧证明/终态核对这一层不需要引擎**，可以先在离线验证。本回合跑了这部分，用作接线前的基线（它**不能**代替真实引擎轨迹）。
+
+| 范围 | 命令 | 结果 |
+| --- | --- | --- |
+| 帧栅栏 + 帧证明 + 历史证明 | `python -m pytest -p no:cacheprovider --basetemp .tmp_v830_pytest_run -q touhou_rl/tests/test_framefence.py touhou_rl/tests/test_frame_proof.py touhou_rl/tests/test_phase2_history_proof.py` | **27 passed / 0.38 s / 退出码 0** |
+| 渲染像素一致性 + 确定性 + 像素死亡/配对 | `python -m pytest -p no:cacheprovider --basetemp .tmp_v830_pytest_run2 -q tests/test_v400_render_pixel_consistency.py tests/test_v400_render_pixel_determinism.py tests/test_v400_pixel_death.py tests/test_v400_pixel_pair.py` | **142 passed / 6.49 s / 退出码 0** |
+
+两点说明，避免误读：
+
+1. 这两批**没有启动任何引擎**（跑前跑后 `th08-modern` 进程数在 Windows 与 WSL 都是 0）。其中两个渲染测试只**断言** `SDL_AUDIODRIVER == "dummy"` 这一契约，不 spawn 引擎。
+2. 它们证明的是**审计/判分机器没有坏**，不证明引擎轨迹能跑通、也不证明像素可学。按 `PIXEL_SLICE_PLAN` 的口径，这属于"离线边界测试可验证计分实现，不能填补缺失的真实成功或真实死亡"。
