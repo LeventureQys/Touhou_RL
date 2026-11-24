@@ -23,7 +23,7 @@
 | 游戏数据 | `/root/v400-data/game` 存在 | 本次只读核实 |
 | 运行中引擎进程 | Windows 0 个、WSL 0 个（本单全程无引擎） | 本次只读核实 |
 
-**⚠ 身份分裂（须研究端知悉）**：代码检出在 `c885e64`，而 `rl_v3` 等引擎二进制位于第二个检出 `/root/Touhou_RL`（其 git HEAD 停在 `d55c26a`）。二进制本身可核（sha256 与 `ASSET_SYNC` 一致、源码 mtime 2026-11-10 10:17:29 早于二进制 10:43:28），但**"该二进制由哪个源码提交构建"没有构建记录可核**，标为待核验。
+**⚠ 身份分裂（须研究端知悉，构建身份本回合已解开）**：代码检出在 `c885e64`，而 `rl_v3` 等引擎二进制位于第二个检出 `/root/Touhou_RL`（其 git HEAD 停在 `d55c26a`）。二进制的 sha256 与 `ASSET_SYNC` 一致。**构建身份现已可核**：`third_party/th08-rl` 自身是 git 仓库且**工作树干净**，HEAD = `1523df26ec643b7276d2cf487b299ad932a982b7`；`build/rl_v3/CMakeCache.txt` 记 `th08-modern_SOURCE_DIR=/root/Touhou_RL/third_party/th08-rl`、`TH08_RL_HARNESS=ON`、`CMAKE_BUILD_TYPE=Debug`；`rlharness.cpp.o` 的 mtime 与源码 mtime 同为 2026-11-10 10:17:29（差 0.6 s），二进制 10:43:28 链接完成。**残留限制**：没有构建日志，所以"编译的就是这份内容"依赖 mtime + 干净工作树，不是可回放的哈希链——这一条仍按待核验的强度陈述。
 
 ---
 
@@ -76,10 +76,10 @@
 | 实时臂是否也有该冲突 | **没有**。实时臂每 commit 块只提交一个 mask（`COMMIT_FRAMES = 2×1 = 2`），历史**按构造**满足"一决策一 mask" | `R74/pair_cand_scope.json:34,38` | 历史记录 |
 | 四条解阻选项（已排除三条） | 引擎存档：**无该动词**；重录干净磁带：需资产授权；改用 <92 帧前缀：早期稀疏局面，C4 已判 0/4 不合格；替换 prefix 强行重放：**可到达但无效**（起始状态不是录制状态，而"0 不符"是三臂可比前提） | `R74/pair_cand_scope.json:42-58` | 历史记录 |
 | 连续像素 | 有：obs-v3 = playfield + HUD + 动作历史，T08 为纯像素评测（引擎 STATE 仅作裁判） | `CLEAR_REMEASURE.md:11-12,194` | 历史记录 |
-| 观测维度（v8 放雷头） | `OBS_DIM=106` + `EXPLICIT_DIM=3` = `FEATURE_DIM=109`。**这 106 维的具体构成本单未核实**，不作断言 | `tools/rl/v8u0_features.py:166-169` | 本次只读核实（构成待核验） |
+| 观测维度（v8 放雷头，**本次已解出全部构成**） | `OBS_DIM=106` = `10 + 6×12 + 5×4 + 4`（`v431_arm_a.feature_dim()`）。逐项：**10 基础** px/384、py/448、(power−64)/64、lives/8、bombs/8、graze/2000、bullet_count/300、laser_count/10、enemy_count/20、decision_index/300；**12 颗最近致命弹 ×6** 相对 dx、dy、vx/10、vy/10、half_width/16、逼近速度；**4 个最近可碰撞敌 ×5** 相对 dx、dy、half_w/384、half_h/448、life/5000；**激光 ×4** 相对 dx、dy、width/64、damageable。再拼 3 个 explicit = 109 | `tools/rl/v431_arm_a.py:65-68,88-152`；`tools/rl/v8u0_features.py:166-169,586-611` | 本次只读核实 |
 | 像素契约 | `PIXELS` 回 `glReadPixels(0,0,640,480,GL_RGBA,GL_UNSIGNED_BYTE)` → **640×480 RGBA8**，**原点在左下**；导出 PPM 时翻成自上而下并丢 alpha；`checksum` 是 RGBA 的 FNV‑1a‑64；同帧字节也发布到共享块（`SHM`） | `rlharness.cpp:1182-1215` | 本次只读核实 |
 | `touhou_rl/obs.py::encode` 的性质（**关键**） | 它**不是像素观测，是状态/特权观测**：输入是 `GameState` + `BulletField`（引擎真值）。`self_feat` **24 维** = rel_x、rel_y、两个保留 0、focus、`lives/8`、`bombs/8`、`power/128`、graze、score、clock_time、time_orbs、`stage/6`、`stage_clear_flag`、弹数/700、近距数/120 + 8 条射线；另加最近 `64×6` 弹丸特征与 `16×8` 危险网格 | `touhou_rl/obs.py:33-39,91-186` | 本次只读核实 |
-| 泄漏点定位（修正后的准确说法） | `self_feat` 的 **index 13 = `float(state.stage_clear_flag != 0)`** ——引擎真值的**过关标志**在向量里，且它与 R1 主指标**同源**。该通道在 72,472 帧录像上恒为 1.0（旧"15.1 颗子弹误差"就是在测这条死通道）。任何沿用此向量的候选都会把主指标喂进观测 | `touhou_rl/obs.py:151`；`touhou_rl/vision_metrics.py:15-17` | 本次只读核实 |
+| 泄漏点定位（**修正后的准确说法**） | **两个向量必须分开看**：① v8 的 106 维（`v431_arm_a`）**全是引擎真值**（自机坐标、power、lives、bombs、graze、弹丸/敌/激光的精确位形），**但不含 `stage_clear_flag`** —— 它是特权观测，按 `PIXEL_SLICE_PLAN §3` **不能给像素 actor 用**，但**不泄漏 R1 主指标**；② 泄漏主指标的是**另一条管线** `touhou_rl/obs.py::encode`，其 `self_feat[13]` = `float(state.stage_clear_flag != 0)`，而该向量在 72,472 帧录像上恒为 1.0 | `tools/rl/v431_arm_a.py`；`touhou_rl/obs.py:151`；`touhou_rl/vision_metrics.py:15-17` | 本次只读核实 |
 | 可见性已知/未知 | 已知：SHOOT 上升沿是过关必要条件（仪器级证据）。未知：过关瞬间的画面先兆、自机/威胁/资源/阶段先兆在框内的**可见性覆盖率**未测 | — | 缺口/待核验 |
 
 **结论**：像素通道存在，但**当前没有任何满足"一决策一 mask"的合法前缀磁带**，这是输入 3 的硬缺口；且 **index 13 的 `stage_clear_flag` 与 R1 主指标（阶段完成）直接同源**，任何像素候选继承旧 obs 前必须删掉该通道，否则主指标本身泄漏进观测。本单未启动 render、未做可见性探针。
@@ -216,6 +216,6 @@ wsl 'ps -eo comm | grep -c th08'                     -> 0  0 个
 *训练端本次实测 = §0/§1(引擎面)/§3(obs 泄漏)/§5(splits)/§6(ReadbackMicros 能力)/§7；
 历史记录 = §2/§3(前缀)/§4/§6(T08 与 v8.29 数字)；
 研究端离线判断 = ROUTE_DECISION / WORK_PLAN / PIXEL_SLICE_PLAN 的口径；
-待核验 = 引擎二进制的构建提交、祖先曝光字段、可用时段、框内可见性覆盖率、v8 的 106 维 obs 构成。*
+待核验 = 祖先曝光字段、可用时段、框内可见性覆盖率。*
 
 **本回执内的自我更正（留痕）**：初稿曾把 `team` 当作阶段内位置选择器并据此推断"可用 `team>0` 切短子窗"。经 `rlharness.cpp:1164` `g_GameManager.shotType = g_startTeam` 实证，`team` 是机体/射击类型，该推断**已撤回**；相应地把"短切片"的唯一可行路径改为"重录干净磁带 + PARK"。初稿另曾据 `strings | grep -cx STAGE_CLEAR` 得 0 而怀疑二进制不含该表面，随后的完整字符串核查显示它是以 `stageClear=…` 形式存在，该怀疑**已撤回**。第三，初稿曾把 `touhou_rl/obs.py` 的 `encode()` 与 v8 的 106 维 `OBS_DIM` 当成同一向量，实测不是（`encode()` 是 24 self + 64×6 弹丸 + 16×8 网格的特权状态向量）；已改为分列并标明"106 维构成待核验"。
