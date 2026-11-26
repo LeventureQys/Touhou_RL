@@ -5017,3 +5017,95 @@ sha256sum: 'Document/Update/Alpha/v4.1.0/README.md'$'\r': No such file or direct
 4. **全表 `sha256sum -c`（1,649 条）= 1,575 OK / 74 FAILED，退出码 1**：FAILED **恰好 74**，与 §39.4 第 2 条**完全相同**（63 条 `Document/Update/Alpha` 漂移 + 11 条 `tools/rl/v8*.py` 漂移，均为本轮之前既有的工作树状态），**一条不增不减、新增 0 FAILED**（`comm` 双向比对：`new_failed=0`、`gone_failed=0`）；全表 `No such file` = 0。
 5. 本节只读既有产物、只追加两个登记文件：未改 `touhou_rl/**`、`configs/**`、`Document/**`、`.tmp_*` 既有内容，未删除、未 `git` 写入、**未启动引擎**。
 
+## 41 Easy 难度评测（V831-EASY-01，2026-11-27，训练端本机实测）
+
+对当前训练成果做的一次 **Easy 难度闭环评测**：学生用已注册的 `tools/rl/v400_student_eval.py`
+（`--obs v3 --arch v3`，未加 SHOOT 脉冲的 v4.1 标尺），教师参照用 `tools/rl/v420_eval_shoot.py --replay-tape`
+（有脉冲，但它是一条 Normal 录像，shard 不记录录制难度）。10 个 episode / 10 次引擎启动 / 21,057 帧，
+全部跑在 `game-muted` 私有副本上（四点静音字节逐 episode 前后 10/10 为 0，`SDL_AUDIODRIVER=dummy`，
+源目录树 sha 前后不变）。
+
+### 41.1 目录身份
+
+| 目录 | 文件数 | 字节 | 说明 |
+| --- | ---: | ---: | --- |
+| `.tmp_v831_easy_01/` | 94 | 497179348 | 10 个 episode 的原始输出 + 共享 `game-muted` 私有副本 |
+
+### 41.2 关键文件
+
+| # | 路径 | 字节 | sha256 |
+| ---: | --- | ---: | --- |
+| 1 | `.tmp_v831_easy_01/summary.json` | 37,436 | `a684e3877c053c005b5c6a79f7b17e933aebd5a0bf4097a48b68a4f74bf1737e` |
+| 2 | `.tmp_v831_easy_01/EASY_EVAL.md` | 17,024 | `efa65330d585883740f0bfcee1dc7e73c841e5da2d3e5eb97cb856aba3d0e670` |
+| 3 | `.tmp_v831_easy_01/deviations.json` | 5,196 | `b2cd81c6c02f80fc3b4325e0eeb267eb8b5abf6e9971f980bd5af4a151b8e8f7` |
+| 4 | `.tmp_v831_easy_01/run_easy_eval.log` | 4,205 | `1a05abc8ee1bd9c66d4ecaeff903037a70a937f722e86313ed4f435f68782bb2` |
+| 5 | `.tmp_v831_easy_01/cost.txt` | 49 | `ea9abe75984a15bf5c6fbe98ae143ae5af17cb322cd7491ec28eb00cc1072d03` |
+| 6 | `.tmp_v831_easy_01/cfg_inspect.json` | 787 | `9283c0a39d9b5517b2c1a3dfad5c09f608c34073bcaf46d6b474e3936a18b97c` |
+| 7 | `.tmp_v831_easy_01/cfg_diff.json` | 2,439 | `8f0ceac5c6faa37208a0ea4c18ecf9030b6fa49a85ab15208cceb2672567f758` |
+| 8 | `.tmp_v831_easy_01/audio_preflight.json` | 5,854 | `548cd7945d38ed882617b9f8e0e6e39844bd305c8f5621430bbb68f874b65624` |
+| 9 | `.tmp_v831_easy_01/ep01/meta.json` | 682 | `c561c48be9ff506b15f5e92e6aa6406f1a7a333f8b1504747064ad6694a8f4bd` |
+| 10 | `.tmp_v831_easy_01/ep01/summary.json` | 5,733 | `f64e222d0cef19a282a3f4d89da6e3b557c00628ecc81b544ca836d6def4f2e1` |
+| 11 | `.tmp_v831_easy_01/ep01/episodes.jsonl` | 1,983 | `90e38ef0230ff14d0e9c5ec5189b158e61a0134d5c9f15ff3a8462e896351ed0` |
+| 12 | `.tmp_v831_easy_01/ep01/post_audio.json` | 222 | `d512d03cc48320ef70c91392efb1cbb93ab0622f48d1f574dd665cdaa534d78a` |
+| 13 | `.tmp_v831_easy_01/ep02/meta.json` | 684 | `33329a7f7d1f52c9cf394028e7f57594bc33ed4f081431b03d863d1b28534169` |
+| 14 | `.tmp_v831_easy_01/ep02/summary.json` | 5,739 | `910832ac89694ed5873a10632f0361590aa94fa485b7a1cf4fe369f7834731b3` |
+| 15 | `.tmp_v831_easy_01/ep02/episodes.jsonl` | 1,985 | `17d6395cca3eb386de38e7719d6b7ef9372306fecaccbc94db651766971a40e2` |
+| 16 | `.tmp_v831_easy_01/ep02/post_audio.json` | 222 | `d512d03cc48320ef70c91392efb1cbb93ab0622f48d1f574dd665cdaa534d78a` |
+| 17 | `.tmp_v831_easy_01/ep03/meta.json` | 683 | `5b072d5720317c39c65f1d97219022b24f1060af44b7fd00ca0c7e3ab918a6f2` |
+| 18 | `.tmp_v831_easy_01/ep03/summary.json` | 5,715 | `2cf98053bb7105886fa444afaa58a068b2e02344f2ebefe6536d360bf0d4484c` |
+| 19 | `.tmp_v831_easy_01/ep03/episodes.jsonl` | 1,970 | `c75aecd671274e2af0f9b74db4263bc0a243d12fde974b2774e684a5a33e120f` |
+| 20 | `.tmp_v831_easy_01/ep03/post_audio.json` | 222 | `d512d03cc48320ef70c91392efb1cbb93ab0622f48d1f574dd665cdaa534d78a` |
+| 21 | `.tmp_v831_easy_01/ep04/meta.json` | 685 | `6c72ca2a34448268c6dcbb49be83b1067f4a12dcc7db6b44c520a74955041435` |
+| 22 | `.tmp_v831_easy_01/ep04/summary.json` | 5,721 | `1a40e6098350cf0911670d31a731b2dbbbe6a7f7812c68cb6f0c7e6a872dfdc8` |
+| 23 | `.tmp_v831_easy_01/ep04/episodes.jsonl` | 1,972 | `3724ce37b48ed5158b2deade1522a64aae6ee54ac2283b0b9968c7bc98c9a830` |
+| 24 | `.tmp_v831_easy_01/ep04/post_audio.json` | 222 | `d512d03cc48320ef70c91392efb1cbb93ab0622f48d1f574dd665cdaa534d78a` |
+| 25 | `.tmp_v831_easy_01/ep05/meta.json` | 707 | `de909a2fc0cf636204053c2c44d981a8a6fbf997b537989a1a52a72922b31317` |
+| 26 | `.tmp_v831_easy_01/ep05/summary.json` | 5,734 | `7fa055ccb9cab4dd09d2fa8e8d00d4a1c47011fed08adce9b33afdb970551f57` |
+| 27 | `.tmp_v831_easy_01/ep05/episodes.jsonl` | 2,007 | `e9f33b6e2af5b451264b3a99df649f54733c6fcf3cf3b352affd1469ea1a9b47` |
+| 28 | `.tmp_v831_easy_01/ep05/post_audio.json` | 222 | `d512d03cc48320ef70c91392efb1cbb93ab0622f48d1f574dd665cdaa534d78a` |
+| 29 | `.tmp_v831_easy_01/ep06/meta.json` | 709 | `4c422daab874393a95d12300a3195a4f86da865cab07197f691804526c7bd942` |
+| 30 | `.tmp_v831_easy_01/ep06/summary.json` | 5,740 | `c3bbd0546eafcb6edce4d106f631df90c0bc1c80b96573525aa9a329cf1e214d` |
+| 31 | `.tmp_v831_easy_01/ep06/episodes.jsonl` | 2,008 | `d39460a4286cc1ff017f32d7520beb632af7759ff2f24ac55ced82f1a4e21736` |
+| 32 | `.tmp_v831_easy_01/ep06/post_audio.json` | 222 | `d512d03cc48320ef70c91392efb1cbb93ab0622f48d1f574dd665cdaa534d78a` |
+| 33 | `.tmp_v831_easy_01/ep07/meta.json` | 702 | `d79854f5fb9b40143c7ab1e64984f99a1f8077891ec075c5c814818dfa41db7a` |
+| 34 | `.tmp_v831_easy_01/ep07/summary.json` | 5,733 | `479d4857ec06a35f33cedf170326b318a39cb56a6e2dbb34306209287b3d49ae` |
+| 35 | `.tmp_v831_easy_01/ep07/episodes.jsonl` | 2,001 | `0f02d2ee82b61d4b830bacc8f729dc1e70123de24aaade00624ea14bd646df93` |
+| 36 | `.tmp_v831_easy_01/ep07/post_audio.json` | 222 | `d512d03cc48320ef70c91392efb1cbb93ab0622f48d1f574dd665cdaa534d78a` |
+| 37 | `.tmp_v831_easy_01/ep08/meta.json` | 684 | `935b70823e14626c612ecd56cdf32e8ca704ec82ac7a7c72c6f7b9a923235b50` |
+| 38 | `.tmp_v831_easy_01/ep08/summary.json` | 5,721 | `416e82c5baa5e8c130fc76300493490ae07ad9dced9b62371ab22cd0ab1e28f3` |
+| 39 | `.tmp_v831_easy_01/ep08/episodes.jsonl` | 1,979 | `a6ad6efe3b393b8c9fe6580e059af442b2bbc7f926a03192902bba860405aad0` |
+| 40 | `.tmp_v831_easy_01/ep08/post_audio.json` | 222 | `d512d03cc48320ef70c91392efb1cbb93ab0622f48d1f574dd665cdaa534d78a` |
+| 41 | `.tmp_v831_easy_01/ep09/meta.json` | 709 | `0a426cc0e9713293cd6e13686ff1cc42fc3b0dcb6f0cff4f5b565ef1a90027d2` |
+| 42 | `.tmp_v831_easy_01/ep09/summary.json` | 5,722 | `2e7cd5e360e6e8bf2d6106f8a531f734c431ac1df7a6f2447d7d897b2a9c0cf1` |
+| 43 | `.tmp_v831_easy_01/ep09/episodes.jsonl` | 2,003 | `733d114e3c5384464e5c578f23342e2fe8dfd3c50370e8fb42695f932eb4f671` |
+| 44 | `.tmp_v831_easy_01/ep09/post_audio.json` | 222 | `d512d03cc48320ef70c91392efb1cbb93ab0622f48d1f574dd665cdaa534d78a` |
+| 45 | `.tmp_v831_easy_01/ep10/meta.json` | 643 | `b561cbbb38b2bcdb358de48a525ee378121c0357e141bf5aa8710f85712b08e9` |
+| 46 | `.tmp_v831_easy_01/ep10/tape.json` | 3,112 | `53a3eda3e0b39e5d525f1e14fb979e6ee991282e0f5e972243f668ae0dc95302` |
+| 47 | `.tmp_v831_easy_01/ep10/post_audio.json` | 222 | `d512d03cc48320ef70c91392efb1cbb93ab0622f48d1f574dd665cdaa534d78a` |
+| 48 | `.tmp_v831_followup_probe/run_easy_eval.sh` | 11,603 | `975bfebed6bc282a2ec08e915949ac4fe92c7dd54528035b54a57d531736ff53` |
+| 49 | `.tmp_v831_followup_probe/easy_aggregate.py` | 15,165 | `adfcf07b4bcf1c9263d2ccfe9aa212e47c4d0d844fdd62c16e3387d4fb0b5440` |
+| 50 | `.tmp_v831_followup_probe/easy_cfg_diff.py` | 2,265 | `7250deaca1b443cbb2c65ea6c7518802c4b08dedc103296b3413de5858e87f82` |
+| 51 | `.tmp_v831_followup_probe/easy_audio_evidence.py` | 6,403 | `d7c74c7dde9127591a64b03715f7e374417d0d10b1aaca65981b17db8fc22f7f` |
+| 52 | `.tmp_v831_followup_probe/easy_ckpt_check.py` | 2,465 | `99f97db9fbeda8d6e4f1ba0a1060ca49eabb496041e53f4144a8ff4d57b87d3f` |
+
+### 41.3 本轮结论（只作描述，不构成能力门；单 episode/格、无 CI）
+
+- **学生**（4 个检查点 × Easy × seed 12/1000，`--stop-on-death`）：首次死亡帧 **1,458–1,570**
+  （约 729–785 决策，约为 13,195 帧整面的 **11–12%**），四个检查点之间只差约 110 帧，
+  动作分布 dominant 78.6–97.1%（`pilot_final` 97.1% 是「不动」cand 0）。
+- **训练后比 seed-0 初始权重还差 112 帧**：`pilot_final` 1,458 帧 vs `pilot_init` 1,570 帧；
+  但 `pilot_final` 分数 21,577 vs 2,569（8.4×）——初始权重是「贴右下角斜射」的角落策略，
+  训练后变成「站着不动」，分高但更早被弹。
+- **Easy ≈ 2× Normal**（同检查点同 seed）：`pilot_final` 1,458 vs 731（1.99×），
+  `refit_B_final` 1,468 vs 776（1.89×）；两个难度都活不过 Stage 1 的前 12%。
+- **教师参照**：Normal 录像在 Easy 上 9,066 帧、3 次死亡、`game_over`、117,631 分、`stage_clear=false`
+  （同一条磁带在 Normal 上 13,195 帧过关）；它是录音不是策略，且录制难度未登记，**不能当 Easy 上限**。
+
+### 41.4 成本与限制
+
+- 引擎启动 **10** 次、总帧 **21057**、
+  墙钟 **240.658** s；单 episode 17.6–22.1 s，磁带 77.8 s。
+- 仪器不记录 `power`/`graze`/`wave`（学生记录里没有这些字段），只报 stage + 帧号 + score + lives/bombs。
+- 静音口径是「无出声」：引擎仍会打开样本表文件（`se_*.wav`/`.mid`），但不播放；
+  `SDL_AUDIODRIVER=dummy` 与四点字节 0 是本轮的实际证据。
+
