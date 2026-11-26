@@ -1,0 +1,421 @@
+{
+  "schema": "v831-pilot03-roots/1",
+  "manifest_id": "v831-pilot-03-roots/1",
+  "created_at": "2026-11-26T12:48:29.109124+08:00",
+  "ticket": "V831-PILOT-03 / TRAINING_HOST_REQUEST_02.md#L42-L52",
+  "repo": "/mnt/d/WorkShop/Touhou_RL",
+  "repo_head": "0c4efbd5bd52e895a583d286d66b6df3b4d49393",
+  "repo_dirty_tracked": 3894,
+  "split": {
+    "path": "configs/v430/splits.json",
+    "sha256": "bfab16ba7b68ff4f8dc33a6dd06bbe0e69c1771293804ad1eb432f1a960522c2",
+    "frozen_at": "2026-11-15T11:34:26+08:00",
+    "digest_scope": "file bytes (git LF checkout)",
+    "note": "the split's own registries block is checked below, entry by entry"
+  },
+  "splits_registry_digests": {
+    "configs/v430/splits.json": "bfab16ba7b68ff4f8dc33a6dd06bbe0e69c1771293804ad1eb432f1a960522c2",
+    "Document/Update/Alpha/v4.3.0/registries/task_families.json": "8736ad6b702514b015ede93cdc5825047328d09a4dbdc94a5fdfe120fdf6fe19",
+    "Document/Update/Alpha/v4.3.0/registries/pretraining_sources.json": "9c890133fa307a49b4d015ebefd1beb0c2e977c0b3c3bc3394866178b559cde0",
+    "Document/Update/Alpha/v4.3.0/registries/holdout_families.json": "81e94bef48d5714862f2c502a30ca67c087f5c6118293d1208af2e7a4ba57a63",
+    "Document/Update/Alpha/v4.3.0/registries/runs.json": "84a32efe34c8f6356cc390f4d4d7d713bb77ec2cab1988a46e2ff085fcad9e81"
+  },
+  "splits_registry_checks": [
+    {
+      "role": "task_families",
+      "path": "Document/Update/Alpha/v4.3.0/registries/task_families.json",
+      "registered_sha256": "8736ad6b702514b015ede93cdc5825047328d09a4dbdc94a5fdfe120fdf6fe19",
+      "actual_sha256": "8736ad6b702514b015ede93cdc5825047328d09a4dbdc94a5fdfe120fdf6fe19",
+      "matches": true,
+      "classification": "measured"
+    },
+    {
+      "role": "pretraining_sources",
+      "path": "Document/Update/Alpha/v4.3.0/registries/pretraining_sources.json",
+      "registered_sha256": "9c890133fa307a49b4d015ebefd1beb0c2e977c0b3c3bc3394866178b559cde0",
+      "actual_sha256": "9c890133fa307a49b4d015ebefd1beb0c2e977c0b3c3bc3394866178b559cde0",
+      "matches": true,
+      "classification": "measured"
+    },
+    {
+      "role": "holdout_families",
+      "path": "Document/Update/Alpha/v4.3.0/registries/holdout_families.json",
+      "registered_sha256": "81e94bef48d5714862f2c502a30ca67c087f5c6118293d1208af2e7a4ba57a63",
+      "actual_sha256": "81e94bef48d5714862f2c502a30ca67c087f5c6118293d1208af2e7a4ba57a63",
+      "matches": true,
+      "classification": "measured"
+    },
+    {
+      "role": "runs",
+      "path": "Document/Update/Alpha/v4.3.0/registries/runs.json",
+      "registered_sha256": "84a32efe34c8f6356cc390f4d4d7d713bb77ec2cab1988a46e2ff085fcad9e81",
+      "actual_sha256": "84a32efe34c8f6356cc390f4d4d7d713bb77ec2cab1988a46e2ff085fcad9e81",
+      "matches": true,
+      "classification": "measured"
+    }
+  ],
+  "reserved_seed_range": {
+    "seed_min": 1020,
+    "seed_max": 1039
+  },
+  "purpose": "this pilot's same-family development roots; never training data; never the confirm/adapt family",
+  "roots": [
+    {
+      "seed": 1020,
+      "role": "dev",
+      "split_binding": {
+        "split_sha256": "bfab16ba7b68ff4f8dc33a6dd06bbe0e69c1771293804ad1eb432f1a960522c2",
+        "reserved_range": "1020-1039",
+        "ancestor_id": null,
+        "note": "seeds 1020-1023 are reserved, never registered: this manifest is their first and only registration"
+      },
+      "exposure": {
+        "status": "not_exposed",
+        "pretraining": "none",
+        "candidate_selection": "none",
+        "evidence": [
+          "configs/v430/splits.json#splits.*.ancestor_ids: 360 ids, 0 name seed 1020",
+          "configs/v430/splits.json#ancestors: 360 rows, 0 name seed 1020",
+          "Document/Update/Alpha/v4.3.0/registries/runs.json#entries: 0",
+          "03_roots_analysis.md#2: os.walk over the whitelist assets found no 1020-1023 entry (host sweep, not repeated here)"
+        ]
+      },
+      "source": "fresh RESET 0 1 0 1020 on the training host; no stored asset",
+      "entry": {
+        "controller": "frozen prefix v1: the recorded T04 schedule's decisions 0..1542 through the two-frame executor",
+        "prefix_frames": 3086,
+        "prefix_decisions": 1543,
+        "period": 48,
+        "prefix_masks_sha256": "2632726e4e6b7f35f20cd5257b10280d19f44f6418d68d29cd4dba89e6250300",
+        "entry_frame": 3086,
+        "arrived": null,
+        "note": "filled by the arm evidence; the arrival rate is reported, never forced"
+      },
+      "task_card_sha256": "617f03a561ca1228bc3e3d17e4022f1829cdc5d853b2295129b490869189e8a0",
+      "status": "planned",
+      "classification": "measured"
+    },
+    {
+      "seed": 1021,
+      "role": "dev",
+      "split_binding": {
+        "split_sha256": "bfab16ba7b68ff4f8dc33a6dd06bbe0e69c1771293804ad1eb432f1a960522c2",
+        "reserved_range": "1020-1039",
+        "ancestor_id": null,
+        "note": "seeds 1020-1023 are reserved, never registered: this manifest is their first and only registration"
+      },
+      "exposure": {
+        "status": "not_exposed",
+        "pretraining": "none",
+        "candidate_selection": "none",
+        "evidence": [
+          "configs/v430/splits.json#splits.*.ancestor_ids: 360 ids, 0 name seed 1021",
+          "configs/v430/splits.json#ancestors: 360 rows, 0 name seed 1021",
+          "Document/Update/Alpha/v4.3.0/registries/runs.json#entries: 0",
+          "03_roots_analysis.md#2: os.walk over the whitelist assets found no 1020-1023 entry (host sweep, not repeated here)"
+        ]
+      },
+      "source": "fresh RESET 0 1 0 1021 on the training host; no stored asset",
+      "entry": {
+        "controller": "frozen prefix v1: the recorded T04 schedule's decisions 0..1542 through the two-frame executor",
+        "prefix_frames": 3086,
+        "prefix_decisions": 1543,
+        "period": 48,
+        "prefix_masks_sha256": "2632726e4e6b7f35f20cd5257b10280d19f44f6418d68d29cd4dba89e6250300",
+        "entry_frame": 3086,
+        "arrived": null,
+        "note": "filled by the arm evidence; the arrival rate is reported, never forced"
+      },
+      "task_card_sha256": "617f03a561ca1228bc3e3d17e4022f1829cdc5d853b2295129b490869189e8a0",
+      "status": "planned",
+      "classification": "measured"
+    },
+    {
+      "seed": 1022,
+      "role": "dev",
+      "split_binding": {
+        "split_sha256": "bfab16ba7b68ff4f8dc33a6dd06bbe0e69c1771293804ad1eb432f1a960522c2",
+        "reserved_range": "1020-1039",
+        "ancestor_id": null,
+        "note": "seeds 1020-1023 are reserved, never registered: this manifest is their first and only registration"
+      },
+      "exposure": {
+        "status": "not_exposed",
+        "pretraining": "none",
+        "candidate_selection": "none",
+        "evidence": [
+          "configs/v430/splits.json#splits.*.ancestor_ids: 360 ids, 0 name seed 1022",
+          "configs/v430/splits.json#ancestors: 360 rows, 0 name seed 1022",
+          "Document/Update/Alpha/v4.3.0/registries/runs.json#entries: 0",
+          "03_roots_analysis.md#2: os.walk over the whitelist assets found no 1020-1023 entry (host sweep, not repeated here)"
+        ]
+      },
+      "source": "fresh RESET 0 1 0 1022 on the training host; no stored asset",
+      "entry": {
+        "controller": "frozen prefix v1: the recorded T04 schedule's decisions 0..1542 through the two-frame executor",
+        "prefix_frames": 3086,
+        "prefix_decisions": 1543,
+        "period": 48,
+        "prefix_masks_sha256": "2632726e4e6b7f35f20cd5257b10280d19f44f6418d68d29cd4dba89e6250300",
+        "entry_frame": 3086,
+        "arrived": null,
+        "note": "filled by the arm evidence; the arrival rate is reported, never forced"
+      },
+      "task_card_sha256": "617f03a561ca1228bc3e3d17e4022f1829cdc5d853b2295129b490869189e8a0",
+      "status": "planned",
+      "classification": "measured"
+    },
+    {
+      "seed": 1023,
+      "role": "dev",
+      "split_binding": {
+        "split_sha256": "bfab16ba7b68ff4f8dc33a6dd06bbe0e69c1771293804ad1eb432f1a960522c2",
+        "reserved_range": "1020-1039",
+        "ancestor_id": null,
+        "note": "seeds 1020-1023 are reserved, never registered: this manifest is their first and only registration"
+      },
+      "exposure": {
+        "status": "not_exposed",
+        "pretraining": "none",
+        "candidate_selection": "none",
+        "evidence": [
+          "configs/v430/splits.json#splits.*.ancestor_ids: 360 ids, 0 name seed 1023",
+          "configs/v430/splits.json#ancestors: 360 rows, 0 name seed 1023",
+          "Document/Update/Alpha/v4.3.0/registries/runs.json#entries: 0",
+          "03_roots_analysis.md#2: os.walk over the whitelist assets found no 1020-1023 entry (host sweep, not repeated here)"
+        ]
+      },
+      "source": "fresh RESET 0 1 0 1023 on the training host; no stored asset",
+      "entry": {
+        "controller": "frozen prefix v1: the recorded T04 schedule's decisions 0..1542 through the two-frame executor",
+        "prefix_frames": 3086,
+        "prefix_decisions": 1543,
+        "period": 48,
+        "prefix_masks_sha256": "2632726e4e6b7f35f20cd5257b10280d19f44f6418d68d29cd4dba89e6250300",
+        "entry_frame": 3086,
+        "arrived": null,
+        "note": "filled by the arm evidence; the arrival rate is reported, never forced"
+      },
+      "task_card_sha256": "617f03a561ca1228bc3e3d17e4022f1829cdc5d853b2295129b490869189e8a0",
+      "status": "planned",
+      "classification": "measured"
+    }
+  ],
+  "training_roots": {
+    "fit": {
+      "id": "d1-n3371-seed13",
+      "registered_ancestor_id": "teacher_query|d1-teacher-fast|d1-s0d1-n3371-seed13-shard|th08-stage1-normal-team0",
+      "shard": "d1-s0d1-n3371-seed13-shard",
+      "path": ".tmp_v400_d1/d1/shards/d1-s0d1-n3371-seed13-shard",
+      "seed": 13,
+      "stage": 0,
+      "difficulty": 1,
+      "decisions": 3274,
+      "frames": 13096,
+      "shard_json_sha256": "072d9d8523a474641cb2e85caa7696bc875d601490fe52139c3de18d791f658c",
+      "labels_sha256": "b20939e6c086b1690c1835f10237d2b94ab286eb16f6e369e836da76302009d4",
+      "obs_sha256": {
+        "play96x112": "aac84a385aab64f62caf78f7a6b1bcc0182ba34225759367a9aef101745cc84f",
+        "hud": "b98efbaa168cac1e51a13e8624d4111934b829a150bee5296d371cbc61028210",
+        "act_hist": "de7a6f8c0e6c22a1bd02bea9b438704a1273ed9fd33221b3c093eff7a99081c1"
+      },
+      "obs_dtype_shapes": {
+        "play96x112": [
+          3274,
+          4,
+          112,
+          96
+        ],
+        "hud": [
+          3274,
+          56,
+          160
+        ],
+        "act_hist": [
+          3274,
+          8,
+          18
+        ]
+      },
+      "obs_spec_version": "obs-v3",
+      "obs_spec_digest": "ef2fbd15385f26f425db2bfe855d105ee009023acb08c26916e811963553a105",
+      "alignment": "decision_time_before_commit",
+      "complete": true,
+      "classification": "measured",
+      "role": "fit: the pilot's only supervised fit"
+    },
+    "donor": {
+      "id": "d1-n3371-seed14",
+      "registered_ancestor_id": "teacher_query|d1-teacher-fast|d1-s0d1-n3371-seed14-shard|th08-stage1-normal-team0",
+      "shard": "d1-s0d1-n3371-seed14-shard",
+      "path": ".tmp_v400_d1/d1/shards/d1-s0d1-n3371-seed14-shard",
+      "seed": 14,
+      "stage": 0,
+      "difficulty": 1,
+      "decisions": 3371,
+      "frames": 13484,
+      "shard_json_sha256": "5fef4afeece4f87d283bff3175fe592db45beaff02f96a351d47d204dbf56605",
+      "labels_sha256": "fd78ddb934b3f7c5120437709bb31a093d38433cfc5f36b9d02371ca1b920f6d",
+      "obs_sha256": {
+        "play96x112": "20a51f3bbcc896bc5986399f7afa26e088916977e0373a090b0463c2f8b9b07b",
+        "hud": "e8008bd76938e03a6859fd34e033d2d5faefb5fc47340206ce9eb8f9a59a1745",
+        "act_hist": "e6d607184154b254ace806d544f94a67bbc8c0f54a909ef4c3a0d49c7b861e6c"
+      },
+      "obs_dtype_shapes": {
+        "play96x112": [
+          3371,
+          4,
+          112,
+          96
+        ],
+        "hud": [
+          3371,
+          56,
+          160
+        ],
+        "act_hist": [
+          3371,
+          8,
+          18
+        ]
+      },
+      "obs_spec_version": "obs-v3",
+      "obs_spec_digest": "ef2fbd15385f26f425db2bfe855d105ee009023acb08c26916e811963553a105",
+      "alignment": "decision_time_before_commit",
+      "complete": true,
+      "classification": "measured",
+      "role": "donor: the open-loop table's observation source; never fitted"
+    },
+    "separation": "the fit root and the donor root are different seeds of the same first stage, so they are different runs; S1c seeds 13/14 are truncation/relabel copies of D1 and therefore cannot supply a second independent root"
+  },
+  "recipe": {
+    "obs": "obs-v3",
+    "model": "model_v3",
+    "arch": "v3",
+    "init_seed": 0,
+    "initial_checkpoint_basename": "weights_initial.pt",
+    "final_checkpoint_basename": "weights_final.pt",
+    "optimizer": "Adam",
+    "lr": 0.0003,
+    "betas": [
+      0.9,
+      0.999
+    ],
+    "batch": 32,
+    "updates": 200,
+    "grad_clip": 5.0,
+    "loss": "ce18",
+    "loss_definition": "cross entropy of the 18-way move head against one_hot(chosen_plan.first_action), i.e. the 18 executed candidates",
+    "loss_implementation": "touhou_rl.v410.student.bc.bc_loss (bomb weight 0)",
+    "readout": "argmax",
+    "bomb": "disabled: the bomb head's argmax is discarded and cand_to_mask(cand, 0) is sent",
+    "frames_per_decision": 2,
+    "pulse_period": 48,
+    "wall_cap_s": 1800.0,
+    "no_best_point_rollback": true,
+    "seed_order": "torch.manual_seed(0); np.random.seed(0); cudnn.deterministic=True; cudnn.benchmark=False",
+    "open_loop_window_decisions": 300,
+    "open_loop_history_mode": "self_consistent"
+  },
+  "exposure": {
+    "verdict": "not_exposed",
+    "checked": [
+      "configs/v430/splits.json#splits.*.ancestor_ids",
+      "configs/v430/splits.json#ancestors",
+      "Document/Update/Alpha/v4.3.0/registries/runs.json",
+      "Document/Update/Alpha/v4.3.0/registries/holdout_families.json",
+      "ASSET_SYNC.md (quoted from 03_roots_analysis.md §2)",
+      "host asset whitelist (quoted from 03_roots_analysis.md §2)"
+    ],
+    "reserved_seed_range": {
+      "seed_min": 1020,
+      "seed_max": 1039
+    },
+    "per_seed": {
+      "1020": {
+        "seed": 1020,
+        "status": "not_exposed",
+        "split_ancestors_naming_the_seed": [],
+        "ancestors_table_naming_the_seed": 0,
+        "runs_registry_entries": 0,
+        "evidence": [
+          "configs/v430/splits.json#splits.*.ancestor_ids: 360 ids, 0 name seed 1020",
+          "configs/v430/splits.json#ancestors: 360 rows, 0 name seed 1020",
+          "Document/Update/Alpha/v4.3.0/registries/runs.json#entries: 0",
+          "03_roots_analysis.md#2: os.walk over the whitelist assets found no 1020-1023 entry (host sweep, not repeated here)"
+        ],
+        "classification": "measured"
+      },
+      "1021": {
+        "seed": 1021,
+        "status": "not_exposed",
+        "split_ancestors_naming_the_seed": [],
+        "ancestors_table_naming_the_seed": 0,
+        "runs_registry_entries": 0,
+        "evidence": [
+          "configs/v430/splits.json#splits.*.ancestor_ids: 360 ids, 0 name seed 1021",
+          "configs/v430/splits.json#ancestors: 360 rows, 0 name seed 1021",
+          "Document/Update/Alpha/v4.3.0/registries/runs.json#entries: 0",
+          "03_roots_analysis.md#2: os.walk over the whitelist assets found no 1020-1023 entry (host sweep, not repeated here)"
+        ],
+        "classification": "measured"
+      },
+      "1022": {
+        "seed": 1022,
+        "status": "not_exposed",
+        "split_ancestors_naming_the_seed": [],
+        "ancestors_table_naming_the_seed": 0,
+        "runs_registry_entries": 0,
+        "evidence": [
+          "configs/v430/splits.json#splits.*.ancestor_ids: 360 ids, 0 name seed 1022",
+          "configs/v430/splits.json#ancestors: 360 rows, 0 name seed 1022",
+          "Document/Update/Alpha/v4.3.0/registries/runs.json#entries: 0",
+          "03_roots_analysis.md#2: os.walk over the whitelist assets found no 1020-1023 entry (host sweep, not repeated here)"
+        ],
+        "classification": "measured"
+      },
+      "1023": {
+        "seed": 1023,
+        "status": "not_exposed",
+        "split_ancestors_naming_the_seed": [],
+        "ancestors_table_naming_the_seed": 0,
+        "runs_registry_entries": 0,
+        "evidence": [
+          "configs/v430/splits.json#splits.*.ancestor_ids: 360 ids, 0 name seed 1023",
+          "configs/v430/splits.json#ancestors: 360 rows, 0 name seed 1023",
+          "Document/Update/Alpha/v4.3.0/registries/runs.json#entries: 0",
+          "03_roots_analysis.md#2: os.walk over the whitelist assets found no 1020-1023 entry (host sweep, not repeated here)"
+        ],
+        "classification": "measured"
+      }
+    },
+    "prospective_mentions": [
+      {
+        "line": 490,
+        "text": "\"trigger\": \"dev/candidate seeds 1020-1039 are used to look at a hold-out family\","
+      }
+    ],
+    "prospective_mentions_note": "policy text about the reserved 1020-1039 window, not a run reference; recorded verbatim so the reader can tell the two apart",
+    "classification": "measured"
+  },
+  "exclusions": {
+    "legacy_dev_1000_1019": "registered dev panel; not allocatable here",
+    "reserved_1040_1099": "pre-registered ablations; not allocatable",
+    "banned_60000_60199": "sealed confirm family; never allocated",
+    "seed_12": "the 02-B/02-C frozen evidence seed; never a dev root"
+  },
+  "task_card": {
+    "path": ".tmp_v831_followup_02a_gwZ4fA8u/02b/task_card.json",
+    "content_sha256": "617f03a561ca1228bc3e3d17e4022f1829cdc5d853b2295129b490869189e8a0",
+    "task_id": "v831-02bc-seed12-slot1-gen89",
+    "entry_decision": 1543,
+    "entry_frame": 3086
+  },
+  "status": "frozen",
+  "pending": [
+    "the open-loop table's strength check on the fit root (needs its own engine start; deferred out of the technical smoke)",
+    "the per-root arrival witnesses (each arm is its own witness: it replays the frozen prefix from RESET)"
+  ],
+  "classification": "measured",
+  "content_sha256": "15946291d430de3c60bbb262db5cc4ddb200f80ec5d331d81f0c53a3e28fddea"
+}

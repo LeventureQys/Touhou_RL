@@ -4727,3 +4727,293 @@ sha256sum: 'Document/Update/Alpha/v4.1.0/README.md'$'\r': No such file or direct
 1. 清单在 §38 已 LF 化（`cr=0`）。本轮追加 12 条后：**1,466 条**，本轮 **12/12 OK**。
 2. 全清单 `sha256sum -c`（1,466 条）= **1,392 OK / 74 FAILED**，退出码 1；74 条与 §38.4 第 5 条**完全相同**（63 条 `Document/Update/Alpha` + 11 条 `tools/rl/v8*.py`，全部为既有工作树漂移，`open or read` = 0），**未新增任何失败项**；1,466 行全部 well-formed（`bad=0`），`cr=0`。
 3. 本轮回执的三项结论都可**离线复现**：`a7_pulse_hypothesis.sh` 打印 8 个 shard 的"原始/仅差 SHOOT/真正候选级"三列；`gap_timeline.sh` 从 `decisions.jsonl` 重放出 13,195 帧与 137 个上升沿；`bombs_probe.sh` + 源码 `sed` 给出 `initialBombCount` 的三处调用点。
+## 40 V831-SLICE-02 / V831-PILOT-03（2026-11-26）新增登记
+
+本轮登记 **V831-SLICE-02 / V831-PILOT-03** 的交付文件、运行证据与脚本/中间报告。登记过程**未启动引擎**（26 次引擎启动全部发生在 `.tmp_v831_followup_02a_gwZ4fA8u/` 的既有台账里，本节只引身份），只读既有产物，并且只对 `ASSET_SYNC.md` 与 `ASSET_SYNC.sha256` 两个登记文件做**追加**。
+
+| 组 | 条数 | 说明 |
+| --- | ---: | --- |
+| 交付文件 | 4 | 脚本 / 测试 / 配置各 1 件 + 训练端回执 1 件 |
+| 运行证据目录 | 2 | 1 个有效运行 + 1 个失败尝试；只登记目录身份 |
+| 关键证据文件 | 38 | 逐个 sha256，不复制（含 `03/strength/` 3 条、`03/diag/teacher_arm/` 5 条） |
+| 离线复拟合权重 | 9 | 一次离线 BC 的初始/最终权重 6 件 + loss 3 件 |
+| 脚本与中间报告 | 132 | 非资产，只登记身份 |
+| **合计 sha256 条目** | **183** | 交付 + 关键文件 + 离线复拟合 + 脚本（目录不入 `sha256`） |
+
+### 40.1 交付文件
+
+本轮新增交付 **4 件 / 955,227 B**，全部为本轮新建路径，入册 4、未入册 0。其中 3 件是代码/配置/测试，1 件是本轮训练端回执 `Document/Update/Alpha/v8.31.0/TRAINING_HOST_REPLY_03.md`。工具与测试在两轮里各改过两版，此处登记**第三批定稿版本**，不是任何中间版本；回执哈希取父代理更正后的定稿值。
+
+| # | 路径 | 字节 | sha256 |
+| ---: | --- | ---: | --- |
+| 1 | `tools/rl/v8_31_followup.py` | 766,502 | `6520ca935c789da0fd846c48af7676e3988baa9912b764f659cfd7c357de5bde` |
+| 2 | `tests/test_v8_31_followup.py` | 123,807 | `cf6194145965c2a11ebe3c094a8ecc32bc03bcc016bf7174ce8955e082d66acc` |
+| 3 | `configs/v8_31/pilot_03_roots.json` | 18,071 | `c15b1b43fdd827f22cb56493b20be1bd0177773c003ba21ac030e6791844cc1b` |
+| 4 | `Document/Update/Alpha/v8.31.0/TRAINING_HOST_REPLY_03.md` | 46,847 | `63dcc5d26cb5d62877921d64f5f24ca40088f21786c9223ee29f07c3230f135a` |
+
+口径：`tools/rl/v8_31_followup.py` 是 SLICE-02/PILOT-03 的打包执行器；`tests/test_v8_31_followup.py` 是离线单测（不需要引擎与数据）；`configs/v8_31/pilot_03_roots.json` 是 PILOT-03 的 4 个 dev root（seeds 1020–1023）配置。
+
+### 40.2 运行证据目录
+
+#### 40.2.1 目录身份（`du -sb` 表观字节，与本轮工单同口径）
+
+| 目录 | 条目数 | 总字节 | 说明 |
+| --- | ---: | ---: | --- |
+| `.tmp_v831_followup_02a_gwZ4fA8u/` | 664 | 13,044,502,699 | **有效运行**：`02a`/`02b`/`02c`/`03` 四阶段齐全，另有 `ledger.jsonl`、`run.json`、`verify.json`；台账累计 `engine_starts` = **26**（末条 `committed_before.starts` = 26，bookkeeping 行 `requested.starts` = 0），与 26 个 `mute.json` 一一对应；目录内 `pytest-wsl/` 79 项为 WSL 侧 pytest 临时工作目录，不计入证据 |
+| `.tmp_v831_followup_02a_gZ3CwofM/` | 4 | 866,423 | **首次尝试失败**：`verify.json` 的 `inputs_present` 缺 `02a/prefix/result.json`、`02a/reference/result.json`，`gate.passed=false`；目录内**无 `ledger.jsonl`、无 `run.json`** ⇒ 未启动引擎、无台账行，其余字节全部是 `02a` 三个 JSON |
+
+条目数 = 常规文件 641 + 无法在 Windows 侧 stat 的 WSL 符号链接 23（均在 `pytest-wsl/` 下，`WinError 1920`）。
+
+#### 40.2.2 关键证据文件（逐文件，38 条）
+
+| # | 路径（相对 `.tmp_v831_followup_02a_gwZ4fA8u/`） | 字节 | sha256 |
+| ---: | --- | ---: | --- |
+| 1 | `ledger.jsonl` | 106,292 | `f4b1cb83481b75f23e70b66fab2088ae9e56e7ae60c9bbda1fdd02e1da69ca08` |
+| 2 | `run.json` | 382,171 | `fe6b3e67fb16752318084f04ff8cc40c50eb8b5e5ba9c3a6dd0f12d9ee0dcd02` |
+| 3 | `verify.json` | 674,978 | `fcf8805054acf1b7a6188c72a335ccb7c14cf4027288c54562a6eeb125ea596f` |
+| 4 | `02a/sources.json` | 431,444 | `2de1c50c8c2d21cd65461bb80263254a917e69635ed6208bd924eb109fb7d872` |
+| 5 | `02a/adapter.json` | 421,843 | `043e9b4faa38e9ab27f5f543e9cc2db76ddc8f314915b108eb58b59a9222dec4` |
+| 6 | `02a/compare.json` | 36,773 | `4fbac360e7b7c90bc1db0bcfae76703cf008bfe31eedd0f8aff5b60cc7e661ed` |
+| 7 | `02a/prefix/result.json` | 499,392 | `158d2fcca37b985aad34b85500bd9a5b9844587551cc23c3036745dff271c596` |
+| 8 | `02a/prefix/mute.json` | 4,598 | `d424e731c4a83b08ab79d9b59af43f48f6fbf895ef5b066615e6fda5c4a3c430` |
+| 9 | `02a/prefix/history.jsonl` | 1,064,458 | `a988e12f311137369c8d03cb4884693a1ddbeeba1197a9632f2c7a3665f835b4` |
+| 10 | `02a/prefix/hashes.jsonl` | 380,285 | `54ca3eab3ba5de21e41b36965654ad20fce136a5f627ea145b61bec16bd1a74f` |
+| 11 | `02a/reference/result.json` | 499,183 | `f0a563be8c69dad2e1950842c4146373a3774d266bd264234027ab4c93632333` |
+| 12 | `02a/reference/mute.json` | 4,604 | `07df970dc77a713831fecbe295d21e405f1ef360fce92ec36d8aa298c85bbe5a` |
+| 13 | `02b/recon/result.json` | 420,686 | `d916ca28048590162f13947d94c974a419624b9a7256d1bb11a35241ee4596ad` |
+| 14 | `02b/recon/decisions.jsonl` | 20,093,418 | `584ccd1e3fb0d979ad892f8a683128b2c774fa1daec436d7e63163990ce828ec` |
+| 15 | `02b/task_card.json` | 17,044 | `52a08005eb7f8a56a1dbf739a595d3047043eb9f8fa19401000ed78cd834c002` |
+| 16 | `02b/task_card.md` | 4,500 | `8260f508052a3fb4e41bf45553d44d628b67b9c94eecee3cb2c3af45adde2144` |
+| 17 | `02b/nomination.json` | 492,432 | `56ca51b48e385e7414b6c7fa8550cacbbc8b7bc39b03477ca1a203790c4a5fa0` |
+| 18 | `02c/intervene.json` | 452,438 | `992672612aa162548d80d8644ed5207bd8957e19a776eca1ee9676ac7635a0c0` |
+| 19 | `02c/arm_T/decisions.jsonl` | 726,657 | `684a7d069704f9d15fa5e0d6d39ac1fcb0266eaca6a90a7c0cad7959f1d00056` |
+| 20 | `02c/arm_T/mute.json` | 4,596 | `60b010fcf9387ffcabb4ec964ddaf0e8b0135c94552756f0bf7c85c3ee1de2d5` |
+| 21 | `02c/arm_T/prefix.jsonl` | 1,096,264 | `8f0a955f6010c57b507630ca0a2e3020312813a6f84e6bd7226ece865a9f7484` |
+| 22 | `02c/arm_C/decisions.jsonl` | 323,237 | `9dac84a02d2ed69b07f716c11043d4fc1afdbbe574d2dbf7c226aad7d7853fa1` |
+| 23 | `02c/arm_C/mute.json` | 4,596 | `9782b3a23220edfd42f1d3e6e8cee16de2352702bbbd98ca11e228cc33675c77` |
+| 24 | `02c/arm_C/prefix.jsonl` | 1,096,264 | `8f0a955f6010c57b507630ca0a2e3020312813a6f84e6bd7226ece865a9f7484` |
+| 25 | `03/pilot.json` | 1,241,538 | `ef84047a763828f18eac419ed4bc360d232e7fde490d0bfcc2cbba9e89027db9` |
+| 26 | `03/train/train.json` | 384,456 | `4ee8f9e84c7722ee78b5249c282341f044dda1340bd48240572b8730d5fc6b89` |
+| 27 | `03/train/weights_initial.pt` | 10,468,055 | `5ef59855b41558d8d1742ac3963a2011c161d3cb0c02bb48f66a11ab68dff675` |
+| 28 | `03/train/weights_final.pt` | 10,467,859 | `336397ed6f3adc738264d9dd1cc9299b6345348306c77aa33450f867286c4084` |
+| 29 | `03/open_loop/table.json` | 572,383 | `16bc87225c15b89455ac7b32b20a6fd27375b9099146f937b7f41d833813a061` |
+| 30 | `03/open_loop/rows.jsonl` | 152,916 | `11cb3b44df2ac01f1982c21caf694cccfeb73944dc69355301e39be50ff88f26` |
+| 31 | `03/strength/result.json` | 407,317 | `2c3304e2486ba47cc59ca46529513c46e570f39e5fee15721e8ab13b4ed1f867` |
+| 32 | `03/strength/arm_open_loop/result.json` | 409,116 | `c250c2eb72db109b81ea5639e052b2c24d1fbb2b83cb45e738fcd22142ebe08a` |
+| 33 | `03/strength/arm_constant_12/result.json` | 412,676 | `1262f8cef5463dea0532926148e9688acbb02fa221cef0d2d0d77b8f8bad5e5f` |
+| 34 | `03/diag/teacher_arm/result.json` | 434,182 | `96823ee2fd9ef9fd2dff2efa20f24b5b96820a8d2ee090633594fa393925dccc` |
+| 35 | `03/diag/teacher_arm/1020/result.json` | 414,922 | `eb17efe23770e0030e401a56d66127bd9c534a65b1f30a5272df06b3841ba311` |
+| 36 | `03/diag/teacher_arm/1021/result.json` | 414,974 | `2ca2ef902da869a7df1ef551a21f13c942fb256dfab6eca8c77f7d9ad72ac428` |
+| 37 | `03/diag/teacher_arm/1022/result.json` | 412,621 | `231659132c13cb8f7b10544766ad4fe5e3cab6af1c5956a4e4e01a126e3b7b9b` |
+| 38 | `03/diag/teacher_arm/1023/result.json` | 413,961 | `e0352555ecdc14463f4694a4b50d4cdfbacc9c06f04242b853003fd931c57bc5` |
+
+38 条合计 **55,845,129 B**。只登记身份，**未复制**任何一个文件。
+
+第 31–33 条是 **L51 开环强度检查**证据：`03/strength/result.json` 里 `strength_passed` = **false**（既作字段 `"strength_passed": false`，也作 gate 检查项 `strength_passed` / `ok=false`），顶层 `verdict` = `strength_failed`（`seed=13`），两条 arm 分别 `open_loop` / `constant_12` ⇒ **强度门未通过**，按失败记。
+
+第 34–38 条是**教师续带诊断**证据（4 次引擎启动）：`03/diag/teacher_arm/result.json` + 4 个 seed 逐根 `result.json`；汇总的 `teacher_completed_roots` = **`[]`**、`interpretation` = **`entry_or_task_seed_specific`**，即 4 个 dev root 上教师续带均未达成 ⇒ 该诊断判**负**，不是通过。每个 seed 目录里另有 `decisions.jsonl` / `prefix.jsonl` / `mute.json` / `game/`，按目录身份登记，不逐文件列。
+
+#### 40.2.3 `03/dev/`、`03/smoke/`、`03/strength/`、`03/diag/`：只按目录身份登记
+
+这些目录里是引擎运行副本（`game/`）与轨迹，文件数过多，按工单要求**不逐文件列**，只给文件数 + 总字节 + 一句说明。
+
+| 目录 | 常规文件数 | 总字节（`du -sb`） | 说明 |
+| --- | ---: | ---: | --- |
+| `.tmp_v831_followup_02a_gwZ4fA8u/03/dev/` | 252 | 5,982,862,573 | 4 个 dev root（seeds 1020–1023），每个 root 63 个常规文件（`open_loop/` + `train/` + `game/`）；`03/pilot.json` 的 `gate.passed=false`、`verdict=no_nomination` |
+| `.tmp_v831_followup_02a_gwZ4fA8u/03/smoke/` | 69 | 1,519,373,888 | 1 个 smoke root（seed 1000）63 个常规文件 + `open_loop/` 2 + `train/` 3 + 根 1 |
+| `.tmp_v831_followup_02a_gwZ4fA8u/03/strength/` | 43 | 996,873,140 | L51 开环强度检查：顶层 `result.json` + 2 个 arm 目录（`arm_open_loop/`、`arm_constant_12/`），seed 13，`verdict=strength_failed` |
+| `.tmp_v831_followup_02a_gwZ4fA8u/03/diag/` | 85 | 1,993,537,281 | 教师续带诊断（`teacher_arm/`，4 个 seed 1020–1023 各一套 `game/` + 轨迹 + `result.json`，共 4 次引擎启动）；`teacher_completed_roots=[]` |
+
+#### 40.2.4 与工单路径清单的三处口径修正
+
+| 工单所列路径 | 实测 | 处理 |
+| --- | --- | --- |
+| `.tmp_v831_followup_02a_gwZ4fA8u/02c/arm_T/result.json` | **不存在** | 改登该 arm 的 3 个实际产物：`decisions.jsonl`、`mute.json`、`prefix.jsonl` |
+| `.tmp_v831_followup_02a_gwZ4fA8u/02c/arm_C/result.json` | **不存在** | 同上 |
+| `.tmp_v831_followup_02a_gwZ4fA8u/03/open_loop/masks.json` | **不存在** | 按工单「不存在就跳过并注明」处理；同目录改登 `table.json` + `rows.jsonl` |
+
+#### 40.2.5 离线复拟合权重（一次离线 BC，`.tmp_v831_followup_probe/diag_refit/`）
+
+3 组配置（A 原生 2f / B 类别平衡 / C D1-seed13 半密度）各一对初始/最终权重 + 一条 loss 曲线，共 **9 件 / 62,910,494 B**。这是**一次离线 BC** 的权重，不是线上训练 checkpoint：只登记身份，未复制。`diag_refit/` 里其余 `artifact_sha256.json`、`refit_bc.log`、`t04_self_check/*.json` 不属本节登记范围（见 §40.4）。
+
+| # | 路径（相对 `.tmp_v831_followup_probe/`） | 字节 | sha256 |
+| ---: | --- | ---: | --- |
+| 1 | `diag_refit/A_t04_seed10_native_2f/weights_initial.pt` | 10,467,863 | `38de77824f714d0ef5832fa19acbc914c68e2644cebc5e889682e31ffed90fdb` |
+| 2 | `diag_refit/A_t04_seed10_native_2f/weights_final.pt` | 10,467,731 | `e633193948bc0e8bf5d5f2d1aacb36201c42a8f17ebb4b56d9b664bcadd2a38b` |
+| 3 | `diag_refit/A_t04_seed10_native_2f/loss.jsonl` | 34,652 | `ed03c2488e5c919fa3dffc1aed3f6ca30a626523fc87cfdcf3270d0026f0b3ad` |
+| 4 | `diag_refit/B_t04_seed10_class_balanced/weights_initial.pt` | 10,467,863 | `d6e7e62200e63e3f7acea73ae42f39cbefda6bebb09e61a9dd3f84bd0bd465da` |
+| 5 | `diag_refit/B_t04_seed10_class_balanced/weights_final.pt` | 10,467,731 | `b7268751bbd09f2d5fd31bedb9aea60f4d7593a4368eccd44aa8f8c7cf29c306` |
+| 6 | `diag_refit/B_t04_seed10_class_balanced/loss.jsonl` | 34,421 | `4fe7dbc56f9644bb18b4ad63bc264cc6edecc897b24860e5aef20dd315e5648c` |
+| 7 | `diag_refit/C_d1_seed13_half_density/weights_initial.pt` | 10,467,863 | `d4dfb9cf9c841b42a1ce0e31ea4c1d1cee96fc3a4bf473ca1393f7341a476f5e` |
+| 8 | `diag_refit/C_d1_seed13_half_density/weights_final.pt` | 10,467,731 | `46a9cd5044c8e9f87cd48a581bb1948dad619060ad0b02fc3e5a4785babdb97f` |
+| 9 | `diag_refit/C_d1_seed13_half_density/loss.jsonl` | 34,639 | `fbf9d8e0b4eba7eb9db9b90a2cacc9178bb42e80610151d7c6f26a7fbe8b3de3` |
+
+### 40.3 脚本与中间报告（非资产）
+
+`.tmp_v831_followup_probe/` 下 `*.sh` / `*.py` / `*.md` / `*.json` 共 **132 件**（已排除 `pytest-*/` 临时目录；同目录的 `*.log` / `*.txt` 是日志与校验输出，不属脚本/报告类，未登记）。这些是**脚本与中间报告，非资产**：可随时删除或重生成，登记只为让本轮的探针、报告与复算入口可追溯。此表为本轮**最后一次**枚举的结果：诊断阶段新增的 `run_diag_teacher.sh`、`ff_*.py`、`refit_*.py`、`finalize_diag.sh`、`ledger_now.py`、`03_diag_refit.*`、`03_first_failure.*` 及 `diag_dry/` 下的 JSON 已计入，过期条目已替换、删除的条目已移除；`diag_refit/` 子目录按工单排除（其权重与 loss 见 §40.2.5）。
+
+| # | 路径（相对 `.tmp_v831_followup_probe/`） | 字节 | sha256 |
+| ---: | --- | ---: | --- |
+| 1 | `02b_eventscan.json` | 694,932 | `f036fd9cc8b8c67e4bc0698bb790a2b951036da1f0e2762fc0085e81c7f86ac9` |
+| 2 | `02b_eventscan.md` | 50,933 | `ebb7168e8bde2019074b7fbb74d7f4bcdc83a020c7cfe5ac9fb95aca506136b2` |
+| 3 | `03_diag_refit.json` | 55,608 | `73fce6d5e4e36e0898d6caaae8bd162ca4472c14e0a69f434944c3a9312dd9f7` |
+| 4 | `03_diag_refit.md` | 14,099 | `0fd61afeec82ce62bef78a5a17c302faaa0de74fe5b70d32de5721ea8bb02174` |
+| 5 | `03_first_failure.json` | 566,514 | `614b3cef24b6a9d406fa50ca7f24a331643a8acc9c216d7287bdaec1ace37f8b` |
+| 6 | `03_first_failure.md` | 25,249 | `c6f185413455fa3aced44eeced1f43c706dc91754e836a173e07f571e0f01a86` |
+| 7 | `03_recipe.json` | 30,596 | `3cf06eb32a9baab752df46502759180c5d8a8485c3c188c1498d8eb80eb39ff4` |
+| 8 | `03_recipe.md` | 30,178 | `99f1b9724549bb441755ce82ec8539ee464181d795a46fdca048a2a812540480` |
+| 9 | `03_roots_analysis.json` | 110,780 | `df04738b5f2efc35243bb90b3b10ca1f31f7c7c6ce4b6db5040e5d8073a09f9f` |
+| 10 | `03_roots_analysis.md` | 24,817 | `2fc237434760cf97666d570aa6a2b28ea632f25377d83b52901fd142ba8488b8` |
+| 11 | `SPEC.md` | 16,252 | `307cbf6268c616464f80f30b3ccb98e04e44842b98a35751a2440e48f8dcdbd3` |
+| 12 | `_probe1.py` | 891 | `a604f78c2eaa4de160eb837541d9817ddc0e36bc2402a4d1ad2b1feb089a43f6` |
+| 13 | `_probe10.py` | 1,143 | `7015ac574506a67ff81d5fe713842817d50270edff0c6c491897fdb7bd2b7016` |
+| 14 | `_probe11.py` | 337 | `c3f484850728297f0b2635e411d60b851db1d57d6fbfcbbf70c90853ea5e9a45` |
+| 15 | `_probe12.py` | 383 | `ff913e48626cfaf7e03841d2446e2ea646cd7f6aee96abac3a56532aad596ce6` |
+| 16 | `_probe13.py` | 248 | `54753ade309412c0b139c6fb9f42b864e6b7ee22f38252d78624971c50dfb639` |
+| 17 | `_probe2.py` | 695 | `a9665d9e099a6b26b17a49900f8ae048c5c3072b2340ab83758fb0333dad0b79` |
+| 18 | `_probe3.py` | 522 | `d826ed927f752d5f7914b219f494a60f4f228277247df5ce055ecb657e5c7217` |
+| 19 | `_probe4.py` | 610 | `c147b8318647ae0b680ad2181319b4bf7adbc04ebee1169c6364d337f342d09b` |
+| 20 | `_probe5.py` | 625 | `a305b67899b50a518cff195b04e1a2997dd552e4d564251b4e92e264573c871f` |
+| 21 | `_probe6.py` | 625 | `70ffcf1f3bd291ffe0a72e2510662a5cd5dc83c7c39597cb3032da0181fa0361` |
+| 22 | `_probe7.py` | 341 | `1d8fe98f830ab5ea27930553ee69aaec32d5763fbcb2d0e1a9b8cf181c5a3c52` |
+| 23 | `_probe8.py` | 690 | `c190d6873ed48bdfb45f297d17d8a100ee1768a6ad16f76322fb05d7557c577f` |
+| 24 | `_probe9.py` | 378 | `d8f3b22adf8afdfc773e4d3fe39e59186fdd79406ad4b272312e80c0c20788bd` |
+| 25 | `accept_full.sh` | 3,595 | `95faa504b4244f8619cad7b9d3583444ffe37e107132a6542d6e0c39bd2ecb07` |
+| 26 | `add_roots_config.py` | 1,870 | `8dde2591f509f7d6e8c52dfd27f8432c731969c46eea27415c0dfd73524dd4a3` |
+| 27 | `arm_table.py` | 2,385 | `ffb872b8ced513a6edebc92c325f6ec1290e42c2e3c90439c9130ede61e83f2c` |
+| 28 | `check_offline.py` | 582 | `37961e375f531bd080b8ff3bc776ebe4c2d4a80bbb4401511349e900b7abd604` |
+| 29 | `check_offline2.py` | 1,168 | `b8665a1aaa87da50199696e4890f91d3f801e8a7fa6766166a41ad65ffdc4b66` |
+| 30 | `config_facts.py` | 1,560 | `beab977543078f41682d8c7c753289a89f2959f4db63ca4ff5e781047d0f625f` |
+| 31 | `diag_dry.py` | 2,736 | `54e73842e39472cba089a0efdb72f23ef5807549470790fa84800e958dd09ab8` |
+| 32 | `diag_dry/02b/task_card.json` | 17,044 | `52a08005eb7f8a56a1dbf739a595d3047043eb9f8fa19401000ed78cd834c002` |
+| 33 | `diag_dry/02b/task_card.md` | 4,500 | `8260f508052a3fb4e41bf45553d44d628b67b9c94eecee3cb2c3af45adde2144` |
+| 34 | `diag_dry/03/diag/teacher_arm/1020/result.json` | 3,120 | `c6d966b9c357c5bb3e2e414fde3e5ac96daa121bf11df3017d81970431a507e5` |
+| 35 | `diag_dry/03/diag/teacher_arm/1021/result.json` | 3,120 | `7b8d28d95cec272882f1e35959f075976b3a796eb4418a75cfbd9dd8a8c9901d` |
+| 36 | `diag_dry/03/diag/teacher_arm/1022/result.json` | 3,120 | `38faf6dc69410885872773aed918353081ade63e7518e91c564a5095f2e0c7f2` |
+| 37 | `diag_dry/03/diag/teacher_arm/1023/result.json` | 3,120 | `3e18837d9abdca24cabcedfd374afbe537715c542c545f518bcfb7f481f818f0` |
+| 38 | `diag_dry/03/diag/teacher_arm/result.json` | 409,693 | `09481388bd3aefa7ae72cbcba19b787b08244b5912194dd3e5d0d206d440d8d2` |
+| 39 | `diag_dry/03/pilot.json` | 1,241,538 | `ef84047a763828f18eac419ed4bc360d232e7fde490d0bfcc2cbba9e89027db9` |
+| 40 | `diag_dry_verify.py` | 1,217 | `44fa67920ea7954cc7f0a9efe2a2ea975243db42be77058df8c77ee2a3bd11e3` |
+| 41 | `diag_teacher_block.py` | 80,507 | `b57863fa0feafc2dbdf12630e3c3cc8be447b3f9a2879ef666c53df5e4e978dd` |
+| 42 | `diag_tests_block.py` | 14,356 | `a7b98b5932683b7969415a87a54761936226a8fb4a8ffaa87537bc4e013521b2` |
+| 43 | `enemy_semantics.json` | 14,713 | `420b434de683d4b1dd81fc467c63dd9f8387ba22eecc7ae81c2741f262f9c52c` |
+| 44 | `enemy_semantics.md` | 19,321 | `654e5866402a1c227ce8e194413ca5bafa0b81612b11a26d2845ff2a57e6bfd6` |
+| 45 | `env_audit.sh` | 1,435 | `5f2a6a05b1473a7bbdd5785bf133e9234b0c0759c12817317efb8f1da0a791ee` |
+| 46 | `es_check.py` | 5,597 | `76f547bddda3bfd19a1099967b6a75605ead738eb7396f7cb5bb739d439d504d` |
+| 47 | `ff_probe_ckpt.py` | 1,093 | `3db8b1a976981d80f05d14c8c95d1dd1c64de4b4bedd5f0173dbf3a47f896bf1` |
+| 48 | `ff_report.py` | 78,963 | `1113b958b56f9299a4270bf742d2659877722f36b37214df279d3e2e7753efcc` |
+| 49 | `ff_validate.py` | 7,819 | `7aa9468711edbda7f0b00a0c3a824a4b9f009658b9a687dfc0b8eeab526467bf` |
+| 50 | `final_check.py` | 1,953 | `c3f00499df7d0767e43434dc6785a8f436900e34ea946a232d5b5c192152f842` |
+| 51 | `final_check.sh` | 1,127 | `dee41be2b13a978eb482bb50c859d0b2c29cbb3f95b57c2c43aec755ce1fb5f6` |
+| 52 | `final_summary.py` | 2,177 | `9a2272019a4a5f3e445de890555d96d56d7d1acb927e63902afb7f21383c56d2` |
+| 53 | `final_summary2.py` | 1,582 | `247b0e2e30334fb2ea806451104ffcea07453fc1d3db03c6d4be686700fbdca1` |
+| 54 | `finalize_diag.sh` | 1,052 | `de9e998755e85e06a1eeb317fe0ceff1b9f71f28fef6250f32ab5f37a8127ac0` |
+| 55 | `finalize_run.sh` | 691 | `77907c3da31171c8cec64fd4dba49205d8ae682df48d46774bfbdfc3f6880606` |
+| 56 | `hash_pairs_probe.sh` | 1,110 | `24c9a4c5c5bb9bd5e21c54aaa33c7d7f248047cace50e344b80a75746b7710ae` |
+| 57 | `ledger_now.py` | 524 | `4c32634375deae93a485e2f91c8931403073a9cd4413900ef6f02a8d66117f62` |
+| 58 | `main_check_sources.py` | 3,236 | `04a0ed9c162cc336cd419e88963e33b17f9c0a5c779acda294a32e30a55eb895` |
+| 59 | `main_verify_out/02a/adapter.json` | 404,272 | `0086ee660ab61e955c9bed42dca56b5cab4c15158505a5d8ba971aacecbf7ad8` |
+| 60 | `main_verify_out/02a/sources.json` | 415,800 | `7699a2b8d4bd30f2eaaec92a17ee1815a6cd4a0a378866acf68a8db1ca525040` |
+| 61 | `main_verify_out/verify.json` | 387,608 | `c532a66fa973d5d44bed85d6fa03bb66d69837f2cfbb8baa8fbea64ebe91579a` |
+| 62 | `patch_meter.py` | 750 | `c8fcbd02d1ad7e8fa12fe29ffcf3886c15f348661e031648708f6d5ebb855b34` |
+| 63 | `patch_run.py` | 738 | `88eb7deafe4e376dce2565ed26cdf7bd3550761edc888587727dbcc8ae598649` |
+| 64 | `patch_stage.py` | 703 | `addc553cc11f660496a11a19f848d25461c39903fbd11cd2d983bc172ba2634f` |
+| 65 | `patch_verify.py` | 887 | `76f72cbcc18fc587f3f02ba4f105b4c3157f3230987632df96b7771cca53a606` |
+| 66 | `peek_s1.py` | 1,154 | `dd35afbb44abeed26d0c6f2e39883e4974bfc9673dd3660aa5c43efddb67d2b3` |
+| 67 | `peek_s2.py` | 1,073 | `3631fa2c259cd361770cceda74187c6f9254339ca16a7806bdffda27c1c0cee1` |
+| 68 | `peek_s2b.py` | 1,925 | `21239a7917123a2ee55761a15c8853af9602c75c8baca837450f38187c37a66a` |
+| 69 | `peek_s3.py` | 1,630 | `17facd52ee5a8e6c81133f83cf00e9e3d44c76d47b20fc30148d2489da14006b` |
+| 70 | `pilot_block.py` | 114,695 | `bbdbf54155404e77ef97e9931f3ee11b8d590ef57348a3e6a7b9d464de1bf29e` |
+| 71 | `pilot_dry.py` | 4,739 | `a8094c5e2ce69b38b9e8d85c6af52e5d120251f10556b21440c425fb6731001d` |
+| 72 | `pilot_dry/out/03/smoke/open_loop/table.json` | 572,389 | `13f1bf6d89f873b67ec223864d11377c9b4b32180602d8cfc8dfe2120a2fba67` |
+| 73 | `pilot_dry/out/03/smoke/train/train.json` | 384,509 | `57e817b4719a9c77afacf4044d8333a459f762f29f399b07c9b0e3080f758052` |
+| 74 | `pilot_dry/pilot_03_roots.json` | 18,071 | `142fa5329d3b8d2a4e73165633e955b66af43ec3b5d4f7debf2eb8ea94b39a95` |
+| 75 | `pilot_report.py` | 3,556 | `409dd8c7ee156201ba26b4c09d129de5ddd30d4da967fe990143a370695bbd9a` |
+| 76 | `preflight_02bc.sh` | 1,316 | `fe3eb8064b507908e75f31577c4b976a6521b0b95ea25b0157a66c5c8e80139b` |
+| 77 | `probe_d1.py` | 1,821 | `959d48f68c7207ffd125c7922bd6cd439ac1ea71fec8e0485598a6ec24a4233b` |
+| 78 | `probe_d1b.py` | 1,818 | `10afac1455bacfebb7058bb2bbd4927f0b7ec3fdb522da682fd975d362252763` |
+| 79 | `probe_imports.py` | 1,219 | `cef66bfa7dd4c3b423669627360ac73a8a8ebcb7a92fa14c23cfa176ec03639a` |
+| 80 | `probe_inspect_adapter.py` | 1,431 | `e214c2fa874d698331285daf13efeae2e01d8e2ff4b67084a8cf5eae6b70390a` |
+| 81 | `probe_inspect_sources.py` | 1,496 | `59c43776ef295febcceb328542007f3d7e1c43a4e28738c1a44be257bb0aebb4` |
+| 82 | `probe_meta.py` | 2,707 | `0098088018d3621d86b9a5713383b63557ccd751df62e99cf4581750c8c99769` |
+| 83 | `probe_out/02a/adapter.json` | 404,283 | `0e900b1be9bbd0535ddc8a13b045c1b154f0e44c988be911e387588a50d12dab` |
+| 84 | `probe_out/02a/sources.json` | 415,732 | `2053236f5cf2edbaef43bcb8d22a6c8c18e8e247f2974795963a032bca59cc5f` |
+| 85 | `probe_report.py` | 3,265 | `97d4b6babf1277a9334e69dad76c31e8084a5a4bb12db66654445751cf3fa5ba` |
+| 86 | `probe_shapes.py` | 595 | `83754258be57f51b9240c2ae88dc3d309eb396b3b6829eca8513ff604d881d1c` |
+| 87 | `probe_slots.py` | 1,607 | `34f79e768ce48c1a6463497af23243468a6f49e5913b32f8e5a62d86e9114e3b` |
+| 88 | `probe_slots2.py` | 1,508 | `d67445b9e728ac4e5f56ba63feae3e072768eb45153965ac6bcd8a2864468808` |
+| 89 | `recipe_probe.py` | 19,825 | `fc038aaf66a2fc1d4eb85441b1d65107867e1dbe2b83697a99a3cc866a34e8e4` |
+| 90 | `recipe_sha_test.py` | 1,465 | `f31298b4ed56d247fcdd0720fc58cc6869be8f6ad969d89bdb541f09fd474f1b` |
+| 91 | `refit_bc.py` | 66,470 | `e91d2dbdaebd23f710c72bd572f4e2dce1422062615a579ddb26fd0993a4dc76` |
+| 92 | `refit_data_probe.py` | 7,791 | `26c64cad42f54b7f36a5993eb297904a9e67e4ce4da6c4ab8434f0b70be85c08` |
+| 93 | `refit_env_probe.py` | 1,866 | `4b7f5a3beb3d72860e9a6a434c368c69fcf9422ee243eb16462f17b14cd6c1a3` |
+| 94 | `refit_prior_check.py` | 3,512 | `b4f7c6b586a40a9fdb41a9541fe3b5399708d48f91ed46d1b23ca31603f708ba` |
+| 95 | `refresh_run.sh` | 428 | `9bddeb2ff93240c39ea24157d30bfdf1446a1073bacf73a6faca9589fb0e6547` |
+| 96 | `roots_check.py` | 10,401 | `fd3e3fa1d0f4cd27363ab4c41c8f230ae8fbb5755967ac40633bb1f3af7d0bd3` |
+| 97 | `roots_collect.py` | 81,087 | `b16726e29179b76423cb5bf179bd1c0902d276963ef850bf94b63ad9e08b9f7f` |
+| 98 | `run_02a.sh` | 9,086 | `4607b65a58c2caec68ef872c95141b9e41fe3ca21ac62fe435771d20bf1797ad` |
+| 99 | `run_02bc.sh` | 15,989 | `ae64ff193c4b2cf02e74ea6be555e0a061bc5bd00461dac0cabe2828ef6ff803` |
+| 100 | `run_block.py` | 18,054 | `f58349d5783d71082b1b95974a9b7dbeb21a568185410553a0b6d53380755a1a` |
+| 101 | `run_diag_teacher.sh` | 11,273 | `0c204995ec1a680bd30deb15f6021bcbbb614b2e399927928636bb7aaa007967` |
+| 102 | `run_pilot_formal.sh` | 2,697 | `218601dc342384055572f3c6af6499b1aa63a3ba2e5f281edb61e9db8dcbe889` |
+| 103 | `run_pilot_smoke.sh` | 4,441 | `6cb91e4713afafd250db5bd5858c94737fb9ffe23d6f847bbb632709abcefc7a` |
+| 104 | `run_strength.sh` | 10,267 | `e54d28eff1cfdea2523f17609430be626c5a2880cb21548ec11f5c6a2063f1f5` |
+| 105 | `s1_out/02a/adapter.json` | 404,265 | `75a6e9b1d9ad6470b856dc518fe2233c0db9c05f4c35c4e0274d0dc9da3ef638` |
+| 106 | `s1_out/02a/sources.json` | 415,791 | `01d69844ab1554f28eb9accff84f2ebd57eabe8a731d83b50efe03bb7c34e40c` |
+| 107 | `s1_out/verify.json` | 387,582 | `d0e6df2855ca8c5dd6b39ce5dc515444aa109741ffd028d7e807eb03577a789d` |
+| 108 | `s2_env.sh` | 228 | `29a9e4943ab4b4c7bd6198e92f766e74e75e7e83e90a2765bef1ad7f2794fa0c` |
+| 109 | `s2_fix_frames.py` | 841 | `194c503c1407dd0c242f5e607956f0f9608dafae10f8e09c71daa2c5797008a0` |
+| 110 | `s2_helpers.py` | 4,798 | `8dd7f1fec6c8a7c85105e2491eb48b3dcd22ee9b0578ebe79762f1dd9193395d` |
+| 111 | `s2_mute_check.py` | 1,243 | `90ca6cd9ed16e874f8dd94f0542cf5db634ab02bc7eaee6c2a6945bad2084672` |
+| 112 | `s2_probe_d1.py` | 2,049 | `407d9613de410f1ec818853389efb68151a789723cfe323af975ff0b7296f20b` |
+| 113 | `s2_report.py` | 5,506 | `afceb3cc9d9b0d054cea193ea426e709080e85cd45787f13da82a42c99389955` |
+| 114 | `s3_collect.py` | 3,769 | `6c552db8aa194a3203e490da5db75a5a9e8f89c75bd9442c41dad6e4cab33ae0` |
+| 115 | `s3_gen_smoke.py` | 9,281 | `9d91883ae167cacf9e087729cd8eeaf064fc07f4c5d6fdeffd864ecb07639cc3` |
+| 116 | `s3_look_boss.py` | 1,315 | `246675bbcd16b29860c41607b66f334089d66ed0691a7284ca82a044b4a1cb3b` |
+| 117 | `s3_look_recon.py` | 3,714 | `4de9efa658e171fa3e9163bc6fb8659444bdad4f7204b1f95558b3985112f91a` |
+| 118 | `scan_action_divergence.py` | 2,856 | `a6a10409799320115c58f805d344bfbe9ae8943ebd4f93284c9e738e73adea11` |
+| 119 | `scan_digest.py` | 1,762 | `082270b614f2d60d2d032067c0f150553e954f98f5f33d832c9ad3c2544352a5` |
+| 120 | `scan_events.py` | 73,421 | `5285a37ccc949985fbfe5663f97f759914c9d38028ca168fae7350847bd84e7a` |
+| 121 | `scan_peek.py` | 2,102 | `ac6d8c98eff7c4cc3487f94f110d6e39f9688cdcb1ff18bbc32b31fcbf795742` |
+| 122 | `shapes_probe.sh` | 1,397 | `b854bdbe5ef599c72e8b461a824d366ac8d7ee618f076eec09bd3cfada33cf08` |
+| 123 | `shard_meta_probe.sh` | 1,130 | `26b91038bc9c97a3bc878b1bb5081a746f736af6b26e891935e9e70331038f37` |
+| 124 | `source_probe.sh` | 2,662 | `75b4a4a518547af57ccbc6a5614b7386c98ca03bc604884e2af66f2fb483c930` |
+| 125 | `splice_diag_teacher.py` | 643 | `a428be6b998df3b6d7831662dfc447e3e604ddf0c8f45b304a2a6cf7f7dff90c` |
+| 126 | `splice_pilot.py` | 587 | `f1a9a4afc8b0145fdb3e8cc7dca7e646db7792e200de977f2effcef5eb7df1d3` |
+| 127 | `splits_probe.sh` | 1,235 | `2def04a9125e9b6198253e5a9e15b10cb3b249dc892636260f83f81bbcb0eb0d` |
+| 128 | `sync_append.py` | 35,054 | `e3b622b68f297bfb046f11364d1ffcf6339f08fb488643713d580d344e0e66e8` |
+| 129 | `sync_verify.sh` | 682 | `6778e423da2dbc463e5ccb20dca1976b57e12bdda74e28c4f628b05252fbdff5` |
+| 130 | `torch_probe.sh` | 566 | `8c3526b1b178dd3b52b89b69cd89b3c244445eb1407e480f36cb4eb9cba0c8ae` |
+| 131 | `verify_block.py` | 14,755 | `309807690416ca834d72883449e82795ce5f473a46e61e4f57026c87237a3e59` |
+| 132 | `wrapup.sh` | 1,284 | `4632084ed673a7d7a38ca1571e3927103b52c5469df7671ebc4e1e67f1e65885` |
+
+其中 `_probe*.py` 与本节的追加脚本 `sync_append.py` 是登记动作本身使用的探针/工具，一并入册以保证可复现；`main_verify_out/`、`probe_out/`、`s1_out/`、`pilot_dry/` 下的 JSON 是早期尝试的中间输出。
+
+### 40.4 跳过说明
+
+| 物件 | 处理 | 理由 |
+| --- | --- | --- |
+| `D1` 语料（`.tmp_v400_d1/**`）、`.tmp_v410_s1c/**`、`.tmp_v410_wp05_round*/**`、`.tmp_v420_data/**` | 不重复登记 | 既有资产，§8.2 红线不动；本轮只按台账 `inputs` 引用其 sha256 |
+| 引擎源码与二进制 `third_party/th08-rl/**`（`rl_v3/th08-modern` 等） | 不复制、不入册 | 既有资产；本轮只引用台账记录的引擎 sha256 与 `--rl-*` 参数 |
+| `.tmp_v831_slice_01_*/**` | 不重复登记 | 已由 §38 登记，本轮只读 |
+| `.tmp_v831_slice_02a/**` | 不重复登记 | 已由 §39 登记（12 条），本轮只读 |
+| 各 run 下的 `game/` 引擎数据目录（`th08.dat`/`thbgm.dat` 软链、`th08.cfg`、`score.dat`） | 不逐文件登记 | 引擎运行副本，非本轮交付。静音按 §9 落盘且可核：26 个 `mute.json` 与 26 次启动一一对应，私有 `game/th08.cfg` 在**启动前**与**退出后**两次核验均为四字段全 0（`muted_strict_four_field=true`，两处 sha256 恒为 `cfa292ae10ee…`），`SDL_AUDIODRIVER=dummy`，`problems=[]` |
+| `.tmp_v831_followup_02a_gwZ4fA8u/pytest-wsl/**` | 不逐文件登记 | pytest 临时工作目录；其中 23 个 WSL 符号链接在 Windows 侧 `WinError 1920` 无法 stat，无法给出可信 sha256 |
+| `.tmp_v831_followup_02a_gwZ4fA8u/03/diag/teacher_arm/{1020,1021,1022,1023}/{decisions.jsonl,prefix.jsonl,mute.json,game/**}` | 不逐文件登记 | 按工单「只按目录身份登记」；每 root 的 `result.json` 已逐件登记，其余并入 `03/diag/` 的 85 文件 / 1,993,537,281 B |
+| `.tmp_v831_followup_probe/diag_refit/{artifact_sha256.json,refit_bc.log,t04_self_check/*.json}` | 不逐文件登记 | 工单只要求登记 6 个权重 + 3 条 `loss.jsonl`（已入 §40.2.5）；其余为复算脚手架与日志 |
+| `.tmp_v831_followup_probe/*.log`、`*.txt` | 不登记 | 非脚本/报告类扩展名（日志与校验输出） |
+
+### 40.5 与既有清单的交集
+
+本轮 **183** 条 `sha256` 路径与既有 **1,466** 条清单的交集 = **0**：`v8_31_followup`、`test_v8_31_followup`、`pilot_03_roots`、`.tmp_v831_followup`、`configs/v8_31` 五个模式在追加前的 `ASSET_SYNC.md` 与 `ASSET_SYNC.sha256` 里命中次数均为 **0**（脚本内已断言）。
+
+`ASSET_SYNC.md` §1–§39 与 `ASSET_SYNC.sha256` 既有 1,466 行**一字未动**：追加前 md sha256 = `42a1906c1038f07013893b7878bd0a10dd7fb7bbb93ffc98b720b27b015c886c`；追加后重读前 **788,384 B**，sha256 仍为 `42a1906c1038f07013893b7878bd0a10dd7fb7bbb93ffc98b720b27b015c886c`。本条为追加前后逐字节比对的结果，不是推断。
+
+### 40.6 校验结论
+
+1. **`ASSET_SYNC.md`**：追加前 **788,384 B / 4,729 行 / cr=lf=4,729 / 无裸 LF / sha256 `42a1906c1038f07013893b7878bd0a10dd7fb7bbb93ffc98b720b27b015c886c`**；追加后 **820,342 B / 5,019 行 / cr=lf=5,019**（本节以 UTF-8 + CRLF 写入，逐行 `\r\n`）；前缀 788,384 B 重读后 sha256 与追加前相同 ⇒ **既有字节完全未变**。
+2. **`ASSET_SYNC.sha256`**：追加前 **1,466 行 / 197,102 B / cr=0（纯 LF，行尾为既有风格）/ sha256 `7431feb07938fd5c698ec2938c8e4c562baf93377a80e77f0374554ece55e4d6`**；追加后 **1,649 行 / 217,846 B / cr=0**，每行 `<sha256>␠␠<path>`、路径为仓库相对 POSIX 形式，well-formed **1,649/1,649**、bad=0。
+3. **本节新增 183 条 = 183/183 OK**，新增 FAILED **0**（交付 4 + 关键文件 38 + 离线复拟合 9 + 脚本 132；目录不入 sha256）。
+4. **全表 `sha256sum -c`（1,649 条）= 1,575 OK / 74 FAILED，退出码 1**：FAILED **恰好 74**，与 §39.4 第 2 条**完全相同**（63 条 `Document/Update/Alpha` 漂移 + 11 条 `tools/rl/v8*.py` 漂移，均为本轮之前既有的工作树状态），**一条不增不减、新增 0 FAILED**（`comm` 双向比对：`new_failed=0`、`gone_failed=0`）；全表 `No such file` = 0。
+5. 本节只读既有产物、只追加两个登记文件：未改 `touhou_rl/**`、`configs/**`、`Document/**`、`.tmp_*` 既有内容，未删除、未 `git` 写入、**未启动引擎**。
+
