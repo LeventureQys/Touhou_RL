@@ -4583,3 +4583,147 @@ Document/Update/Alpha/v4.2.0/journal.jsonl: FAILED
 **6. `manifest.json` 的覆盖边界**：其 `root` 是 `/mnt/d/WorkShop/Touhou_RL/Document/Update/Alpha/v8.28.0/evidence/FEATURES`（**绝对 WSL 路径**，与 v8.27.0 的写法**一致**，非本轮变化），**不含**顶层 `PREREGISTRATION_FEATURES_001.md`，**不含**执行器，**也不含自身**（`file_count=43` 而目录 45 件）。⇒ 「manifest 是整目录清单」**不成立**；它只是「`FEATURES/` 内除自身」的 43 件。顶层预注册稿由 `ckpt_assertions.prereg.sha256` 独立固定（且与盘上逐位相同），执行器则**没有任何盘上可校验的固定**（见第 1 条）。
 
 **7. 本轮的记录优点（与 v8.27.0 的对照，供下游取舍）**：v8.27.0 的 `preflight.json`、`eval_exits.tsv`、`commands.tsv` **缺件或无机读证据**（§36.5 第 3、5 条）；本轮这 3 件**全部落盘且入册**（`preflight.json` 670 B、`eval_exits.tsv` 12 格 `exit=0`、`commands.tsv` 27 条 `exit=0`），并且 `verdict` 新增了 **D3 门序断言**（`written_before_summary`）与 **P3 显式判据**，把 v8.27 踩过的「摘要早于门 ⇒ 误判 `S-fork`」变成**机检项**而非人读项。这两处是本轮相对 v8.27 的实质改进，`S-fork.held=false` 因此有**自动**依据。
+## 38. v8.31.0 资产（2026-11-26）
+
+### 38.1 登记范围与逐文件表
+
+本轮登记 **30 条 / 17,316,326 B = 16.5126 MiB**：v8.31.0 目录 **6 件**（含本轮回执与 A 节任务卡）+ 本单代码 **2 件** + 验收脚本与日志 **6 件** + 三个运行根的结果/静音/逐决策 **18 件**（6 件 × 3 轮）。**入册 30、未入册 0**（跳过项见 §38.2）。
+
+> 口径：v8.31.0 目录在本单开始时已有 `README.md`（6,695 B）与 `TRAINING_HOST_REQUEST_01.md`（10,385 B）两件（研发端提交 `1180761` 带来的），本轮**只追加**两份新文档，未改动前者；`README.md`/`TRAINING_HOST_REQUEST_01.md` 一并入册以便下游复算同版身份。
+
+| 组 | 文件数 | 字节 |
+| --- | ---: | ---: |
+| `Document/Update/Alpha/v8.31.0/**` | 4 | 87,603 |
+| `tools/rl/v8_31_slice.py` + `tests/test_v8_31_slice.py` | 2 | 261,776 |
+| `.tmp_v831_slice_01_probe/`（3 个验收脚本 + 3 份日志） | 6 | 1,706,853 |
+| `.tmp_v831_slice_01_lV7zfs9S/**`（第 1 轮，技术无效） | 6 | 42,548 |
+| `.tmp_v831_slice_01_eK6pxCuY/**`（第 2 轮，像素通过 / 教师超时） | 6 | 5,763,824 |
+| `.tmp_v831_slice_01_YmVD4nBX/**`（**第 3 轮，两条轨迹均通过**） | 6 | 9,453,722 |
+| **合计** | **30** | **17,316,326** |
+
+> `v8.31.0/` 的 4 件 = `README.md` 6,695 + `TRAINING_HOST_REQUEST_01.md` 10,385 + `TASK_CARD_SLICE_A.md` 35,046 + `TRAINING_HOST_REPLY_01.md` 35,393。**未入册**：两个空运行目录 `.tmp_v831_slice_01_l6OqKAS4/`、`.tmp_v831_slice_01_NANazung/`（各 4,096 B，`mktemp -d` 建目录后在 pytest 行即中止，**未启动引擎、未写任何文件**，见 §38.4 第 3 条）；三份运行根的 `game/` 私有游戏目录（各 474 MB，`.tmp_*` 运行件，身份由 `mute.json` 的 `copy_before_start`/`copy_after_exit` sha256 固定）。
+
+#### 38.1.1 逐文件表（30 条）
+
+| # | 路径 | 字节 | sha256 |
+| ---: | --- | ---: | --- |
+| 1 | `Document/Update/Alpha/v8.31.0/README.md` | 6,695 | `6512fe5f4d452226726b7d2ed9ea1483213c45190361a41b9b511abc13c47227` |
+| 2 | `Document/Update/Alpha/v8.31.0/TRAINING_HOST_REQUEST_01.md` | 10,385 | `74da5f38246e1657e5db817bb6b1bd28eb96e81c6325e511806d6470f3c8a010` |
+| 3 | `Document/Update/Alpha/v8.31.0/TASK_CARD_SLICE_A.md` | 35,046 | `c3d2b470b57654b2991102f2516a68847abd688c0fe7d622f1246d7eb2caf5db` |
+| 4 | `Document/Update/Alpha/v8.31.0/TRAINING_HOST_REPLY_01.md` | 35,477 | `3c1d2a963d6b9e774f8fcc8ad8fc0ff6873d71ae4438c496edcd8ccc924c2435` |
+| 5 | `tools/rl/v8_31_slice.py` | 173,807 | `19888a274c3508c8fabc21452aa5959b9916b84b75ba39ce287d0b48026430d0` |
+| 6 | `tests/test_v8_31_slice.py` | 87,969 | `2c51143f8a22781c9af2cf8cb9ac1a0cb9a5e55066c9b5a7d08cbb43b3a630e3` |
+| 7 | `.tmp_v831_slice_01_probe/v831_acceptance.sh` | 2,301 | `4ac8452d36e5a8fda32aad58048b90a09cea03d1749babc1339ed1088e64ad50` |
+| 8 | `.tmp_v831_slice_01_probe/v831_acceptance_wsl.sh` | 3,179 | `70e3a7c633db581fb4201815ecd3bf4780d2babd6169842cb04067f48b4821ed` |
+| 9 | `.tmp_v831_slice_01_probe/v831_acceptance_wsl_v2.sh` | 3,320 | `33ad65ff73349ec13319a7f0fe0308cde870e358a5612558f04332549a5a9bb8` |
+| 10 | `.tmp_v831_slice_01_probe/acceptance_verbatim.log` | 337,233 | `62b28fc0fb7dd740a6924c073d6658960f618190d0b36181119f08144afd969d` |
+| 11 | `.tmp_v831_slice_01_probe/acceptance_wsl_run2.log` | 680,094 | `3caa85db25a957a2092d88a3b8029c57e46768db240c2ca22f46ccdf9d786d25` |
+| 12 | `.tmp_v831_slice_01_probe/acceptance_wsl_run3.log` | 680,726 | `c196f970bddfbe69a4535577351cbf15ad6a6a905076585aed5d5b1b73643afb` |
+| 13 | `.tmp_v831_slice_01_lV7zfs9S/pixel/result.json` | 14,022 | `aa0eb02edfe27faab57f647d7ea86e58c67d006065073fcc237ff0c5253fd1e7` |
+| 14 | `.tmp_v831_slice_01_lV7zfs9S/pixel/mute.json` | 4,579 | `a2985821b8dd49f4c72efa6038ff334c7542aca2ff87ce2fa5e1f793b1e728bf` |
+| 15 | `.tmp_v831_slice_01_lV7zfs9S/pixel/decisions.jsonl` | 807 | `fb8b8936f4c77824362723395d3a40b359c5f285a857940250188619f7526b54` |
+| 16 | `.tmp_v831_slice_01_lV7zfs9S/teacher/result.json` | 17,754 | `b4e677fc6c65d7d7a8abbf0d6c28503b44a3dcde436219b414644707fcda123c` |
+| 17 | `.tmp_v831_slice_01_lV7zfs9S/teacher/mute.json` | 4,583 | `f38e80ae44f66b81e0d9055063bd13b58e9e7cdac3b92ba670d193f959cfe483` |
+| 18 | `.tmp_v831_slice_01_lV7zfs9S/teacher/decisions.jsonl` | 803 | `8032586a7c168c87644e6d40f8f816b2fb23215d5b3d1380c295988b9d483357` |
+| 19 | `.tmp_v831_slice_01_eK6pxCuY/pixel/result.json` | 57,752 | `e8b65c403a2a298b8be0789293ea30b90743491fd712c9d98fb43beed3e65f7e` |
+| 20 | `.tmp_v831_slice_01_eK6pxCuY/pixel/mute.json` | 4,579 | `3a91b3feae6f3320c578c6f8e977336a2564670457c869edaa9917759ad61d85` |
+| 21 | `.tmp_v831_slice_01_eK6pxCuY/pixel/decisions.jsonl` | 329,765 | `6fd73bfe8de1b80557a9848b024db3042014e987176be5b8abf68d7c0126adef` |
+| 22 | `.tmp_v831_slice_01_eK6pxCuY/teacher/result.json` | 62,801 | `11386b331c906310f3a0a7740e622bb150f15c24f768d7b349dd4cec7fe5c874` |
+| 23 | `.tmp_v831_slice_01_eK6pxCuY/teacher/mute.json` | 4,583 | `06df6c83a09687ea806b2f71f43471c116876420e3a1d18647792d448f673ab1` |
+| 24 | `.tmp_v831_slice_01_eK6pxCuY/teacher/decisions.jsonl` | 5,264,344 | `634fc709ec159f91a98885312c1447c178b4da80cb54438a457f860620681d83` |
+| 25 | `.tmp_v831_slice_01_YmVD4nBX/pixel/result.json` | 72,985 | `e5d17f3bfdd5a8f01720bf08f9e73305b956559cec9148e3382bc3972c9b948d` |
+| 26 | `.tmp_v831_slice_01_YmVD4nBX/pixel/mute.json` | 4,579 | `b07dd6933b58c8a7ee3b9aa4cda352a4d021e902f144cd65ea3bf4177eb76c67` |
+| 27 | `.tmp_v831_slice_01_YmVD4nBX/pixel/decisions.jsonl` | 404,085 | `b426ce6d1584c69c27796500f6efc863e7d2899a2fc363a13d363ba0490de889` |
+| 28 | `.tmp_v831_slice_01_YmVD4nBX/teacher/result.json` | 77,058 | `64d91af4ba3e98ac0ecb18e94163ec79312e4b24c5a75a7fcb29410976130b01` |
+| 29 | `.tmp_v831_slice_01_YmVD4nBX/teacher/mute.json` | 4,583 | `92b851b6ee4af65cb35c043052cdb0676b83a05c8e1b207f95fd6e99f63e9301` |
+| 30 | `.tmp_v831_slice_01_YmVD4nBX/teacher/decisions.jsonl` | 8,890,432 | `d774338bd7ceef4585402cdd146841f7419f2a92d7d1a8771f1fdd96899d8498` |
+
+### 38.2 跳过说明（未入册 0，以下物件不属登记范围）
+
+| 物件 | 处理 | 理由 |
+| --- | --- | --- |
+| 三个运行根下的 `pixel/game/`、`teacher/game/`（各 496,968,813–496,968,815 B，合计约 2.85 GiB/9 份） | 不入册，只引路径与 sha | §8.1：本机私有游戏目录，是 `--data-source` 的整目录副本；其身份已由各 `mute.json` 的 `copy_before_start`/`copy_after_exit` sha256（`cfa292ae…`）+ `diff_byte_offsets` 固定，逐字节复制不提供额外信息 |
+| `.tmp_v831_slice_01_l6OqKAS4/`、`.tmp_v831_slice_01_NANazung/`（各 4,096 B） | 不入册 | `mktemp -d` 建目录后脚本在 pytest 行即中止（§38.4 第 3 条），**目录为空、未启动引擎、未写文件**；目录空这一事实已由 `du -sb` = 4,096 B 记录在回执 §5.0 |
+| `.tmp_v831_slice_01_probe/pytest_win/`、`pytest_win2/`、各 `*.sh` 探针脚本 | 不入册 | 本单临时探针与 pytest `--basetemp` 产物，非证据；所有结论已由入册的 6 件脚本/日志承载 |
+| `/root/v400-data/game`（496,968,814 B）、引擎 `rl_v3`、教师磁带 `slots.jsonl` | 不复制、不入册 | §8.2 红线：既有资产不移动、不覆盖。身份在本节与本回执 §1 逐项记录（引擎 `691bfd77…`、磁带 `f759de7d…`、源 cfg `48bf7621…`），运行前后 `du -sb` 与 mtime 逐项相同 |
+| `Document/Update/Alpha/v4.2.0/evidence/T08/**`、`.tmp_v420_evalpulse/positive_control.json` | 不动、不重复登记 | 只读对照物；`positive_control.json` 的 sha256 `9cdd9033…` 已记在回执 §9，其内容自 v4.2.0 起未变 |
+
+### 38.3 与 §1–§37 的交集
+
+登记前 `ASSET_SYNC.sha256` 共 **1,424** 条非空行；本轮 30 条路径**两两互不相同**，且与既有 1,424 条**交集 0**（`v8.31.0` / `v831` / `v8_31_slice` 三个串在既有清单里命中 0 次；三个 `.tmp_v831_slice_01_*` 运行根为本轮新建）。`ASSET_SYNC.md` §1–§37 **一字未动**（追加前 `chars=772,305`、`lines=4,585`、末字节 `0a`、sha256 `75dadd2e…`；追加方式为"读原文 + 末尾拼接"，前缀 `StartsWith(原文)` = **True**）。
+
+### 38.4 校验结论
+
+**1. 发现的真实缺陷：`ASSET_SYNC.sha256` 是 CRLF，`sha256sum -c` 对它 1,424 条全部失败。** 追加前实测：
+
+```
+$ sha256sum -c ASSET_SYNC.sha256
+sha256sum: 'Document/Update/Alpha/v4.1.0/README.md'$'\r': No such file or directory
+… 1,424 条全部 "FAILED open or read"（OK = 0）
+```
+
+原因是该文件 **1,424 行全部以 `0d 0a` 结尾**（`tr -dc '\r' | wc -c` = 1,424），GNU `sha256sum` **不剥离** 行尾 `\r`，于是把文件名读成 `README.md\r`。**AGENTS.md §8.3 让下游执行 `sha256sum -c ASSET_SYNC.sha256`，而这条命令在本机当前状态下一个文件也校验不了。** §37 记录的"1,423 OK / 1 FAILED"与本机现况不符——该文件此后被以 CRLF 重写过（本机 Windows 检出 `core.autocrlf=true`，一次 `git checkout`/编辑器保存即可造成）。
+
+**2. 本轮处理（只改行尾，不改任何 (sha256, path) 对，且先留底）。** 先把原字节备份为 `.tmp_v831_slice_01_probe/ASSET_SYNC.sha256.pre-lf.bak`，再按"去掉全部 `0x0D`"把整车清单规范到 LF 并追加本轮 30 条。可核对的零信息损失判据：
+
+- 去 CR 后的内容 `==` 原文去 CR 后的内容 `+` 本轮 30 条（`StartsWith(original_without_CR)` = **True**）；
+- 1,424 条既有 `(sha256, path)` 对的**字符内容一字节未改**（只删了行尾 CR）；
+- 追加后 `sha256sum -c` 的 OK/FAILED 计数见第 3 条。
+
+**3. 追加后的实际校验计数**：
+
+| 量 | 值 |
+| --- | ---: |
+| 清单总条数 | 1,454 = 1,424 + 30 |
+| 本轮 30 条 | **30 / 30 OK** |
+| 既有 1,424 条 | **1,350 OK / 74 FAILED**，退出码 1，`WARNING: 74 computed checksums did NOT match`——74 条**全部是"内容不符"**（`FAILED open or read` = **0**），即文件在盘上但字节已变；本轮**未修改其中任何一条**，只报告（分类见第 5 条） |
+
+**4. 运行产物自洽性（本单三项独立复核）**：① 最终一轮两条轨迹的 `result.json` 里 `accepted=true`、`exit_code=0`、`problems=[]`；② 教师轨迹 `expected/match` 21 项**全 true**，且三个动作摘要与外部独立实现 `positive_control.json`（`9cdd9033…`）**逐位相同**；③ 源数据目录 `/root/v400-data/game` 运行前后 `du -sb` = 496,968,814 B、17 文件、`th08.cfg`/`score.dat` 的 sha256 与 mtime 全部相同 ⇒ 本轮**没有触碰任何受保护资产**。
+
+**5. 74 条既有失败的分类（只报告，不改条目）**：`Document/Update/Alpha` **63** 条（61 个 `.md` + 2 个 `journal.jsonl`）＋ `tools/rl` **11** 条 `v8*.py`（`v8b0_eventsample` / `v8f0_critical` / `v8j0_earlybomb` / `v8k0_rulesweep30` / `v8l0_unified` / `v8m0_bombrl` / `v8n0_rulefine` / `v8o0_ruletight` / `v8q0_t33tiers` / `v8r0_urgency` / `v8t0_densereward`）。逐条 `git status --porcelain` 复判：**73 条在本机工作树里本身就是 dirty**，与 §38.3 记录的"3,893 行既有未提交改动/删除"同源；剩 **1 条**工作树 clean 但仍不符（`Document/Update/Alpha/v4.2.0/journal.jsonl`，与 §35/§36/§37 记的"唯一允许失败项"一致）。**没有一条属于本单**（本单 30 条 = 30 OK / 0 FAILED），也没有一条落在引擎、数据、checkpoint、`configs/` 或 `third_party/` 上。口径提示：§37 的"1,423 OK / 1 FAILED"是在清单仍为 LF 时得的；该文件此后被以 CRLF 重写，故本节 **1,350 OK / 74 FAILED** 是本机**当前**口径，两者不矛盾但不可混用；清单 LF 化后的 `sha256 = b5ed071300aabadb976c2e8297fcffc39d86e640a3c82a494ab57bb51ae79161`（`chars=195,833`、`lines=1,454`、`cr=0`）。
+## 39. v8.31.0 补遗与 A7/A5 复核资产（2026-11-26）
+
+### 39.1 登记范围与逐文件表
+
+本轮登记 **12 条 / 34,843 B = 34.0 KiB**：v8.31.0 补遗回执 **1 件** + 只读复核脚本 **11 件**。**入册 12、未入册 0**。本节全部内容在**未启动引擎**的前提下产生（只读源码、只读既有产物、离线复算）。
+
+| 组 | 文件数 | 字节 |
+| --- | ---: | ---: |
+| `Document/Update/Alpha/v8.31.0/TRAINING_HOST_REPLY_02.md` | 1 | 16,148 |
+| `.tmp_v831_slice_02a/*.sh`（A7 / 脉冲 / 炸弹 / 77 帧四组探针） | 11 | 18,695 |
+| **合计** | **12** | **34,843** |
+
+#### 39.1.1 逐文件表（12 条）
+
+| # | 路径 | 字节 | sha256 |
+| ---: | --- | ---: | --- |
+| 1 | `Document/Update/Alpha/v8.31.0/TRAINING_HOST_REPLY_02.md` | 16,148 | `b62b25b31074c0582742c91ef412fbb14ebb1226e0afdc6b808d02e60871e6a4` |
+| 2 | `.tmp_v831_slice_02a/a7_pair_conflict.sh` | 3,343 | `0e278fae3f6df390d5c6112db7ae631fd0056a3a618c08beeb2521ad24d576c9` |
+| 3 | `.tmp_v831_slice_02a/a7_all_shards.sh` | 2,773 | `06417b714f0ab2250e5d8bb58c02167e12798481a54789ae74f12ae33dd6eda7` |
+| 4 | `.tmp_v831_slice_02a/a7_field_semantics.sh` | 2,913 | `6f2f9e3b971bd6dc511d0fc71dedbbe64f6e111ca1fb69fdb8ed07fecf53d357` |
+| 5 | `.tmp_v831_slice_02a/a7_pulse_hypothesis.sh` | 3,899 | `fa84d3b1336e1f651e1cad90645fa9326eb5ffde89a01232b47a72c62390372d` |
+| 6 | `.tmp_v831_slice_02a/bombs_probe.sh` | 541 | `a0e7dc0cff544c6fd43cc43812040dbc3f27068dedf1c71b411e92ad5b29954d` |
+| 7 | `.tmp_v831_slice_02a/bombs_and_gap.sh` | 1,633 | `50446b7fa688a409a7203263790f38cd58ed996aca10c63d7f1b68adb5b4bd96` |
+| 8 | `.tmp_v831_slice_02a/gap_mechanism.sh` | 461 | `88775215299b85a33a1be24a3f6551ecb38ba65e9e4f486e2bfd95070c6ff73e` |
+| 9 | `.tmp_v831_slice_02a/gap_mechanism2.sh` | 579 | `b6cb2786422e943105373ce4929eb6e427cfa3d448616977e60ff2e59653a190` |
+| 10 | `.tmp_v831_slice_02a/gap_mechanism3.sh` | 270 | `c0ac794b5542fcc8b0ced5a335adc9aad3678b64adfa78041ea3c374f1cbdee5` |
+| 11 | `.tmp_v831_slice_02a/gap_mechanism4.sh` | 173 | `3b5b77c133c3de9391e411709308000c8a81417c2fcaf88ca71f8e9eea81de17` |
+| 12 | `.tmp_v831_slice_02a/gap_timeline.sh` | 2,110 | `f8462e53be8879f1165cf8757d256e947b499ecc259119fda319df54fdd916b8` |
+
+### 39.2 跳过说明
+
+| 物件 | 处理 | 理由 |
+| --- | --- | --- |
+| `D1` 语料 8 个 seed-12 shard 的 `labels.jsonl` / `shard.json` | **不入册**，只引身份 | §8.2 红线：既有数据资产不动。身份已在回执 §1.1/§1.3 逐件记录（s0d1 `labels.jsonl` = 5,822,072 B / `457728a9…ccbd`；8 个 shard 的 `labels.jsonl` sha256 全部列表化） |
+| `.tmp_v400_d1/**`、`.tmp_v420_data/**`、`.tmp_v831_slice_01_*/**` | 不重复登记 | 前两者是既有资产；后者已由 §38 登记，本轮只读 |
+| 引擎源码 `/root/Touhou_RL/third_party/th08-rl/src/**` | 不复制、不入册 | 既有资产；本轮回执只引行号（`GameManagerSetup.cpp:123-130`、`GameManager.cpp:357-359`/`:388-396`、`Gui.cpp:687-688`、`rlharness.cpp:107`/`:1362`、`main.cpp:143-146`） |
+
+### 39.3 与 §1–§38 的交集
+
+本轮 12 条路径与既有 **1,454** 条清单**交集 0**（`v8.31.0/TRAINING_HOST_REPLY_02.md` 与 `.tmp_v831_slice_02a/` 均为本轮新建）。`ASSET_SYNC.md` §1–§38 一字未动（追加前 `chars=784,164`、`lines=4,683`、`cr=4,683`、sha256 `872e5ebc…`；追加后前缀 `StartsWith(原文)` = **True**）。
+
+### 39.4 校验结论
+
+1. 清单在 §38 已 LF 化（`cr=0`）。本轮追加 12 条后：**1,466 条**，本轮 **12/12 OK**。
+2. 全清单 `sha256sum -c`（1,466 条）= **1,392 OK / 74 FAILED**，退出码 1；74 条与 §38.4 第 5 条**完全相同**（63 条 `Document/Update/Alpha` + 11 条 `tools/rl/v8*.py`，全部为既有工作树漂移，`open or read` = 0），**未新增任何失败项**；1,466 行全部 well-formed（`bad=0`），`cr=0`。
+3. 本轮回执的三项结论都可**离线复现**：`a7_pulse_hypothesis.sh` 打印 8 个 shard 的"原始/仅差 SHOOT/真正候选级"三列；`gap_timeline.sh` 从 `decisions.jsonl` 重放出 13,195 帧与 137 个上升沿；`bombs_probe.sh` + 源码 `sed` 给出 `initialBombCount` 的三处调用点。
