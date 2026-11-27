@@ -57,11 +57,26 @@ the 20-seed protocol are untouched.
       --checkpoint .tmp_v400_p3v3/checkpoint-v3.pt \
       --obs v3 --seeds 1000-1019 --max-frames 19887 \
       --stage 0 --difficulty normal --stop-on-death --out-dir .tmp_v400_p3v3/eval
+
+V832-RUN-01 adds two optional inputs; naming neither leaves the ruler byte-identical
+(same records, no new file, no extra engine command); a missing log parent or a failed
+write is fatal, never a silently dropped line.
+
+* ``--decision-log PATH``: per episode a header (schema ``v400-student-eval-decision-log/1``:
+  arm, seed, repeat, frames_per_decision, checkpoint[+sha], obs spec, raw ``reset`` reply)
+  then one row per decision (schema ``v400-student-eval-decision-1``: cand/mask/readings/
+  events/end + ``player``/``enemies``).  Both are **referee-side readings only**: the policy
+  still sees only pixels + its own action history, and scoring identity comes from
+  ``HAZARDS`` row identity (slot + flags1, signed life), never ``ENEMIES`` pagination.
+* ``--arm {policy,constant}`` + ``--constant-cand N``: the constant arm emits cand N every
+  decision with no checkpoint and no network (``--checkpoint`` refused); a policy-arm
+  record gains only the new ``arm`` key.
 """
 
 from __future__ import annotations
 
 import argparse
+import dataclasses
 import hashlib
 import json
 import os
@@ -89,9 +104,26 @@ from touhou_rl.v400.student.model_v2 import (  # noqa: E402
     load_checkpoint_v2,
 )
 from touhou_rl.v400.student.model_v3 import load_checkpoint_v3  # noqa: E402
+#: ``EnemyManager.hpp:69-71``: the only boss bit any command exports.  Taken from
+#: the teacher's decoder (``teacher/engine.py``) instead of re-deriving ``1 << 1``
+#: here; the gym protocol exports only ``ENEMY_FLAG_ACTIVE``/``_COLLISION``.
+from touhou_rl.v400.teacher.engine import ENEMY_FLAG_BOSS  # noqa: E402
 
 EPISODE_SCHEMA = "v400-student-eval-episode-1"
 SUMMARY_SCHEMA = "v400-student-eval-summary-1"
+#: V832-RUN-01: first line of every ``--decision-log`` episode block.
+DECISION_LOG_SCHEMA = "v400-student-eval-decision-log/1"
+#: V832-RUN-01: one line per decision, following that episode's header.
+DECISION_SCHEMA = "v400-student-eval-decision-1"
+#: V832-RUN-01: ``--arm`` values.  ``policy`` is the historical ruler.
+ARMS = ("policy", "constant")
+#: V832-RUN-01: the constant arm loads no checkpoint, so ``_policy_identity``
+#: cannot describe it; the summary carries this disclosure instead.
+CONSTANT_ARM_DISCLOSURE = (
+    "Constant-action control arm (V832-RUN-01): every decision emits the same "
+    "candidate.  No checkpoint is loaded and no network is evaluated, so the row "
+    "measures the frame ruler under a fixed action, not a policy; not_a_gate.")
+
 #: ``RESET`` stage argument; 0-based, so ``0`` is the first stage.  ``S1N`` is
 #: ``stage 0`` normal (``bench/human_reference.json``: ``stage_index 0`` is
 #: ``Stage1``, 13258 gameplay frames; EXP-P1-012 + EXP-P1-018 both ran S1N as
@@ -157,6 +189,15 @@ class EvalError(RuntimeError):
     """An episode or its record violated the evaluation contract."""
 
 
+class DecisionLogError(EvalError):
+    """The ``--decision-log`` telemetry could not be written (V832-RUN-01).
+
+    A subclass of :class:`EvalError` for the same reason, but distinct because
+    :func:`run_episode` records every other failure as a failed episode and this
+    one must escape: a run whose telemetry was dropped is not a measured run.
+    """
+
+
 class EnvHarnessClient(HarnessClient):
     """HarnessClient that starts the engine in ``env`` role (pixels + state)."""
 
@@ -186,6 +227,282 @@ def _readings(state: dict) -> dict[str, float]:
         "bombs": float(state["bombs_remaining"]),
         "score": int(state["score"]),
     }
+
+
+# ---------------------------------------------------------------------------
+# V832-RUN-01: arm selector, per-decision telemetry
+#
+# Everything below is opt-in.  The default run (``arm="policy"``, no
+# ``--decision-log``) builds the same episode record as before, opens no file and
+# sends no extra engine command; only the new ``arm`` key joins that record.
+# ---------------------------------------------------------------------------
+def resolve_arm(*, arm: str | None, constant_cand: int,
+                checkpoint: str | None) -> dict:
+    """Validate the ``--arm`` selector before anything is loaded (V832-RUN-01).
+
+    ``policy`` keeps the historical requirement (a checkpoint is mandatory, its
+    path + sha256 travel in the episode identity).  ``constant`` evaluates no
+    checkpoint at all, so a ``--checkpoint`` is refused -- mixing the two would
+    leave the record unable to say which arm produced the frames -- and the fixed
+    candidate must be a legal action (``0 .. N_MOVE_CLASSES - 1``).
+    """
+
+    name = str("policy" if arm is None else arm)
+    if name not in ARMS:
+        raise EvalError(f"arm {name!r} not in {list(ARMS)}")
+    if name == "policy":
+        if not checkpoint:
+            raise EvalError(
+                "the following arguments are required: --checkpoint (only --arm "
+                "constant may omit it)")
+        return {"arm": "policy", "constant_cand": 0, "loads_checkpoint": True}
+    if checkpoint:
+        raise EvalError("--arm constant must not be given --checkpoint: the constant "
+                        "arm evaluates no checkpoint")
+    try:
+        cand = int(constant_cand)
+    except (TypeError, ValueError) as exc:
+        raise EvalError(f"--constant-cand {constant_cand!r} is not an integer") from exc
+    if not 0 <= cand < obs_spec.N_MOVE_CLASSES:
+        raise EvalError(f"--constant-cand {cand} is outside 0.."
+                        f"{obs_spec.N_MOVE_CLASSES - 1}")
+    return {"arm": "constant", "constant_cand": cand, "loads_checkpoint": False}
+
+
+def arm_identity(*, arm: str, constant_cand: int, checkpoint_path) -> dict:
+    """The arm's contribution to the episode identity (V832-RUN-01).
+
+    ``policy`` returns the historical ``checkpoint`` / ``checkpoint_sha256`` pair
+    plus the single new key ``arm``; ``constant`` never reads a checkpoint file, so
+    both checkpoint fields are the empty string and ``constant_cand`` records the
+    action that was emitted instead of a policy output.
+    """
+
+    if arm == "policy":
+        return {
+            "arm": "policy",
+            "checkpoint": str(checkpoint_path),
+            "checkpoint_sha256": checkpoint_digest(checkpoint_path),
+        }
+    if arm == "constant":
+        cand = int(constant_cand)
+        if not 0 <= cand < obs_spec.N_MOVE_CLASSES:
+            raise EvalError(f"constant_cand {cand} is outside 0.."
+                            f"{obs_spec.N_MOVE_CLASSES - 1}")
+        return {
+            "arm": "constant",
+            "constant_cand": cand,
+            "checkpoint": "",
+            "checkpoint_sha256": "",
+        }
+    raise EvalError(f"arm {arm!r} not in {list(ARMS)}")
+
+
+def player_payload(snapshot) -> dict:
+    """Raw ``PLAYER`` fields of one decision, names unchanged (V832-RUN-01).
+
+    A dataclass (the harness ``PlayerSnapshot``) is converted with
+    :func:`dataclasses.asdict` and tuples become lists so the row is JSON; a plain
+    mapping is copied.  Nothing is renamed, rescaled or invented: ``position``
+    stays the two-element reading the engine sent, and ``x``/``y`` are the same two
+    numbers spelled out for a reader that wants them (not a second measurement).
+    This is a referee-side reading that the policy never sees.
+    """
+
+    if isinstance(snapshot, dict):
+        payload = dict(snapshot)
+    elif dataclasses.is_dataclass(snapshot) and not isinstance(snapshot, type):
+        payload = dataclasses.asdict(snapshot)
+    else:
+        raise EvalError(
+            f"PLAYER reading {type(snapshot).__name__} is neither a mapping nor a "
+            "dataclass")
+    out = {key: list(value) if isinstance(value, tuple) else value
+           for key, value in payload.items()}
+    position = out.get("position")
+    if isinstance(position, (list, tuple)) and len(position) == 2:
+        out["x"], out["y"] = position[0], position[1]
+    return out
+
+
+def enemies_payload(rows) -> dict:
+    """Diagnostics-only summary of one ``ENEMIES`` page (V832-RUN-01).
+
+    ``count`` is how many live rows the page returned, ``boss_count`` how many of
+    them carry ``ENEMY_FLAG_BOSS`` (``EnemyManager.hpp:69-71``; the same flag
+    ``touhou_rl.v400.teacher.engine`` uses), ``boss_life`` the largest remaining
+    ``life`` among those rows (0 when none is listed) and ``boss_slots`` their
+    slot ids.  ``life`` is kept exactly as the engine reports it (hex -> int).
+
+    This is a *diagnostic* reading, not a scoring source: judging uses ``HAZARDS``
+    row identity (slot + flags1, signed life), because ``ENEMIES`` is paginated and
+    a page is not a census.
+    """
+
+    bosses = [row for row in rows if int(row.flags1) & ENEMY_FLAG_BOSS]
+    return {
+        "available": True,
+        "count": len(rows),
+        "boss_count": len(bosses),
+        "boss_life": int(max((int(row.life) for row in bosses), default=0)),
+        "boss_slots": [int(row.slot) for row in bosses],
+    }
+
+
+def probe_enemies(client) -> dict:
+    """One ``ENEMIES`` page, or the engine's own refusal -- never an exception.
+
+    V832-RUN-01: the decision row must still be written when the engine refuses
+    the probe, so a refusal becomes ``{"available": False, "reason": <text>}``.
+    A fabricated zero would be indistinguishable from a measured one.
+    """
+
+    try:
+        rows = client.enemies()
+    except Exception as exc:  # noqa: BLE001 - a refused probe is recorded, not raised
+        return {"available": False, "reason": str(exc)}
+    try:
+        return enemies_payload(rows)
+    except Exception as exc:  # noqa: BLE001 - an undecodable page is recorded too
+        return {"available": False,
+                "reason": f"{type(exc).__name__}: {exc}"}
+
+
+def decision_header(*, arm: str, seed: int, repeat: int, frames_per_decision: int,
+                    checkpoint: str, checkpoint_sha256: str, obs_spec_version: str,
+                    obs_spec_digest: str, reset: dict) -> dict:
+    """First line of one episode's ``--decision-log`` block (V832-RUN-01).
+
+    The entry identity lives here, including the ``client.reset(...)`` reply
+    verbatim (key names unchanged), so an entry hash can be recomputed from the log
+    alone.  Decision rows that follow carry :data:`DECISION_SCHEMA`.
+    """
+
+    return {
+        "schema": DECISION_LOG_SCHEMA,
+        "arm": str(arm),
+        "seed": int(seed),
+        "repeat": int(repeat),
+        "frames_per_decision": int(frames_per_decision),
+        "checkpoint": str(checkpoint),
+        "checkpoint_sha256": str(checkpoint_sha256),
+        "obs_spec_version": str(obs_spec_version),
+        "obs_spec_digest": str(obs_spec_digest),
+        "reset": dict(reset),
+    }
+
+
+def decision_record(*, seed: int, repeat: int, decision: int, frame: int,
+                    frames_per_decision: int, cand: int, mask: int, readings: dict,
+                    stage: int, events, end: str = "",
+                    player: dict | None = None,
+                    enemies: dict | None = None) -> dict:
+    """One ``--decision-log`` row for one decision (V832-RUN-01).
+
+    ``frame`` is the game frame the decision was made at (frames elapsed *before*
+    it) and ``frames_per_decision`` how many frames it actually advanced, so
+    ``frame + frames_per_decision`` is the next row's frame even when an episode
+    ends mid-decision.  ``readings`` is the post-decision ``_readings`` dict;
+    ``events`` is the engine's ``EVENTS`` name list; ``end`` is this decision's
+    termination label and ``""`` when the episode continued.
+
+    ``player`` (raw ``PLAYER`` fields) is omitted when the reading was unavailable
+    -- it is never forged.  ``enemies`` is the diagnostics summary from
+    :func:`probe_enemies`; it is a referee-side reading and never an input to the
+    policy or a scoring source.
+    """
+
+    row = {
+        "schema": DECISION_SCHEMA,
+        "seed": int(seed),
+        "repeat": int(repeat),
+        "decision": int(decision),
+        "frame": int(frame),
+        "frames_per_decision": int(frames_per_decision),
+        "cand": int(cand),
+        "mask": int(mask),
+        "deaths": float(readings["deaths"]),
+        "lives": float(readings["lives"]),
+        "bombs": float(readings["bombs"]),
+        "score": int(readings["score"]),
+        "stage": int(stage),
+        "events": [str(name) for name in events],
+        "end": str(end),
+    }
+    if player is not None:
+        row["player"] = dict(player)
+    if enemies is not None:
+        row["enemies"] = dict(enemies)
+    return row
+
+
+class DecisionLog:
+    """Append-only JSONL sink for the per-decision telemetry (V832-RUN-01).
+
+    One instance per run.  Every line is flushed as it is written, so a crashed
+    run leaves the decisions that did happen on disk.  Each failure -- missing
+    parent directory, unwritable file, a write after close -- raises
+    :class:`DecisionLogError`: telemetry must fail the run, not be dropped.
+    """
+
+    def __init__(self, path: str | Path) -> None:
+        self.path = Path(path)
+        parent = self.path.parent
+        if not parent.is_dir():
+            raise DecisionLogError(
+                f"--decision-log parent directory does not exist: {parent} "
+                "(it is never created implicitly)")
+        try:
+            self._handle = self.path.open("a", encoding="utf-8", newline="\n")
+        except OSError as exc:
+            raise DecisionLogError(
+                f"cannot open decision log {self.path}: {exc}") from exc
+        self.rows = 0
+
+    def __enter__(self) -> "DecisionLog":
+        return self
+
+    def __exit__(self, *exc_info) -> bool:
+        self.close()
+        return False
+
+    @property
+    def closed(self) -> bool:
+        return self._handle.closed
+
+    def write(self, row: dict) -> int:
+        """Append one row and flush; returns how many rows this log holds."""
+
+        line = json.dumps(row, ensure_ascii=False, sort_keys=True)
+        try:
+            self._handle.write(line + "\n")
+            self._handle.flush()
+        except (OSError, ValueError) as exc:
+            raise DecisionLogError(
+                f"decision log write failed for {self.path}: {exc}") from exc
+        self.rows += 1
+        return self.rows
+
+    def close(self) -> None:
+        handle = self._handle
+        if handle.closed:
+            return
+        try:
+            handle.close()
+        except OSError as exc:
+            raise DecisionLogError(
+                f"decision log close failed for {self.path}: {exc}") from exc
+
+
+def open_decision_log(path: str | Path | None) -> DecisionLog | None:
+    """``None`` when no path was given -- then no file is created or touched."""
+
+    if path is None:
+        return None
+    text = str(path).strip()
+    if not text:
+        return None
+    return DecisionLog(text)
 
 
 def decision_steps(obs_window: str, budget: int) -> tuple[int, int]:
@@ -256,6 +573,10 @@ OPTIONAL_EPISODE_FIELDS = {
     "action_histogram": list,
     "action0_share": float,
     "focus_classes_covered": int,
+    #: V832-RUN-01: which arm produced the row.  Optional so every pre-V832 record
+    #: (which has no arm) still validates; a present value is checked below.
+    "arm": str,
+    "constant_cand": int,
 }
 VALID_OBS_WINDOWS = set(OBS_WINDOWS)
 VALID_EXITS = {"engine_exit", "game_over", "controller", "none"}
@@ -329,6 +650,24 @@ def validate_episode_record(record: dict, *, expected_spec: tuple[str, str] | No
         raise EvalError("episode observed a different obs spec digest")
     if record["frames"] < 0 or record["max_frames"] <= 0:
         raise EvalError("episode frame counters are invalid")
+    # V832-RUN-01: the arm must say the truth about what produced the frames.  A
+    # constant-arm row carries no checkpoint identity (nothing was loaded) and the
+    # fixed candidate; a policy row carries neither the candidate nor a claim of one.
+    if "arm" in record:
+        if record["arm"] not in ARMS:
+            raise EvalError(f"episode arm {record['arm']!r} not in {list(ARMS)}")
+        if record["arm"] == "constant":
+            if "constant_cand" not in record:
+                raise EvalError("a constant-arm episode must record constant_cand")
+            if not 0 <= record["constant_cand"] < obs_spec.N_MOVE_CLASSES:
+                raise EvalError(
+                    f"episode constant_cand {record['constant_cand']!r} is outside "
+                    f"0..{obs_spec.N_MOVE_CLASSES - 1}")
+            if record["checkpoint"] or record["checkpoint_sha256"]:
+                raise EvalError(
+                    "a constant-arm episode must not carry a checkpoint identity")
+        elif "constant_cand" in record:
+            raise EvalError("only the constant arm records constant_cand")
     if record["not_a_gate"] is not True:
         raise EvalError("episode must be labelled not_a_gate=True")
 
@@ -355,6 +694,9 @@ def run_episode(
     obs_v3: bool = False,
     arch: str = "mlp",
     repeat: int = 0,
+    arm: str = "policy",
+    constant_cand: int = 0,
+    decision_log: "DecisionLog | None" = None,
 ) -> dict:
     """One real S1N episode; returns a validated record.
 
@@ -377,14 +719,33 @@ def run_episode(
     one-hot of the policy's own last eight decisions.  The episode record then
     carries obs-v3's version/digest, so
     :func:`validate_episode_record` refuses a v1/v2 record under a v3 checkpoint.
-    """
 
-    import torch
+    V832-RUN-01 adds two opt-in inputs and leaves every default alone:
+    ``arm="constant"`` emits ``constant_cand`` on every decision and never touches
+    the model or a checkpoint file (``model`` may then be ``None``), and
+    ``decision_log`` streams the per-decision telemetry through
+    :class:`DecisionLog`.  With neither named, the record, the files and the engine
+    traffic are exactly what they were before this change.
+    """
 
     if obs_window not in OBS_WINDOWS:
         raise EvalError(f"obs_window {obs_window!r} not in {sorted(OBS_WINDOWS)}")
     if obs_v3 and obs_v2:
         raise EvalError("obs_v3 and obs_v2 are exclusive observation contracts")
+    if arm not in ARMS:
+        raise EvalError(f"arm {arm!r} not in {list(ARMS)}")
+    use_policy = arm == "policy"
+    if not use_policy:
+        # V832-RUN-01: the constant arm has no network to run, so its candidate is
+        # checked here and the frame ruler below is shared with the policy arm.
+        constant_cand = int(constant_cand)
+        if not 0 <= constant_cand < obs_spec.N_MOVE_CLASSES:
+            raise EvalError(f"constant_cand {constant_cand} is outside 0.."
+                            f"{obs_spec.N_MOVE_CLASSES - 1}")
+    if use_policy:
+        # Only the policy arm runs a tensor through a network; the constant arm
+        # never imports torch, let alone evaluates a model.
+        import torch
 
     started = time.monotonic()
     if obs_v3:
@@ -403,8 +764,11 @@ def run_episode(
         policy_input = "play64 4-frame stack + hud strip; no privileged state"
     identity = {
         "schema": EPISODE_SCHEMA,
-        "checkpoint": str(checkpoint_path),
-        "checkpoint_sha256": checkpoint_digest(checkpoint_path),
+        # V832-RUN-01: the arm block.  ``policy`` keeps the historical checkpoint
+        # path + sha256 and only adds ``arm``; ``constant`` records its fixed
+        # candidate and leaves both checkpoint fields empty (nothing was loaded).
+        **arm_identity(arm=arm, constant_cand=constant_cand,
+                       checkpoint_path=checkpoint_path),
         "obs_spec_version": spec_version,
         "obs_spec_digest": spec_digest,
         "seed": int(seed),
@@ -465,6 +829,16 @@ def run_episode(
                              team=0, seed=seed)
         if reply.get("ready") != "1":
             raise EvalError(f"RESET did not reach a playable state: {reply}")
+        if decision_log is not None:
+            # V832-RUN-01: the block starts with this episode's entry identity, so
+            # an entry hash can be recomputed from the log alone.
+            decision_log.write(decision_header(
+                arm=arm, seed=seed, repeat=repeat,
+                frames_per_decision=DECISION_FRAMES,
+                checkpoint=identity["checkpoint"],
+                checkpoint_sha256=identity["checkpoint_sha256"],
+                obs_spec_version=spec_version, obs_spec_digest=spec_digest,
+                reset=reply))
         state = state_from_reply(client.request("STATE"))
         start = _readings(state)
         previous = start
@@ -486,34 +860,44 @@ def run_episode(
             buffer = obs_spec.ObservationBuffer()
             history = obs_spec_v2.ActionHistoryBuffer() if obs_v2 else None
             encode = obs_spec.encode_planes
-        gru_cache = (GRUCache(model.seq_len) if (obs_v2 and arch == ARCH_GRU) else None)
+        gru_cache = (GRUCache(model.seq_len) if (use_policy and obs_v2 and arch == ARCH_GRU)
+                     else None)
         play, hud = encode(shm.pixels())
         buffer.push(play, hud)
         renders = 1
 
+        decision_index = 0
+        player_readable = decision_log is not None
         while frames < max_frames:
-            arrays = buffer.arrays()
-            play_t = torch.from_numpy(arrays["play"][None]).float()
-            hud_t = torch.from_numpy(arrays["hud"][None]).float()
-            if obs_v3:
-                # (1,8,18): the v3 student takes the history as a grid, not flattened.
-                hist_t = torch.from_numpy(history.rows()[None]).float()
-                cand, bomb = model.act(play_t, hud_t, hist_t)
-            elif obs_v2:
-                # (B,S,18): the model takes the 8x18 window, not the flattened 144
-                hist_t = torch.from_numpy(history.rows()[None]).float()
-                if gru_cache is not None:
-                    cand, bomb = model.act_step(play_t, hud_t, hist_t, gru_cache)
-                else:
+            decision_frame = int(frames)
+            if use_policy:
+                arrays = buffer.arrays()
+                play_t = torch.from_numpy(arrays["play"][None]).float()
+                hud_t = torch.from_numpy(arrays["hud"][None]).float()
+                if obs_v3:
+                    # (1,8,18): the v3 student takes the history as a grid, not flattened.
+                    hist_t = torch.from_numpy(history.rows()[None]).float()
                     cand, bomb = model.act(play_t, hud_t, hist_t)
+                elif obs_v2:
+                    # (B,S,18): the model takes the 8x18 window, not the flattened 144
+                    hist_t = torch.from_numpy(history.rows()[None]).float()
+                    if gru_cache is not None:
+                        cand, bomb = model.act_step(play_t, hud_t, hist_t, gru_cache)
+                    else:
+                        cand, bomb = model.act(play_t, hud_t, hist_t)
+                else:
+                    cand, bomb = model.act(play_t, hud_t)
             else:
-                cand, bomb = model.act(play_t, hud_t)
+                # V832-RUN-01 constant arm: the same candidate every decision, no
+                # model call and no tensor, on the identical frame ruler.
+                cand, bomb = int(constant_cand), 0
             mask = gym_actions.cand_to_mask(cand, bomb)
             action_counts[int(cand)] += 1
             budget = min(DECISION_FRAMES, max_frames - frames)
             units, want = decision_steps(obs_window, budget)
             steps += 1
             ended = None
+            current = None
             for _unit in range(units):
                 step_reply = client.step(mask, want)
                 advanced = int(step_reply.get("advanced", 0))
@@ -552,6 +936,39 @@ def run_episode(
                 # The history at decision t must hold a[0..t-1]; push only after the
                 # action has been applied, so the current decision can never leak in.
                 history.push(cand)
+            if decision_log is not None:
+                # V832-RUN-01: one telemetry row per decision.  ``events`` and
+                # ``player``/``enemies`` are referee-side readings -- they never
+                # enter ``buffer``/``history``, so the policy still sees pixels plus
+                # its own action history.  A missing EVENTS word is recorded as an
+                # empty list; a missing PLAYER reading omits the key (never forged).
+                row_events: tuple[str, ...] = ()
+                try:
+                    row_events = tuple(client.events().names)
+                except Exception:  # noqa: BLE001 - telemetry never aborts the episode
+                    row_events = ()
+                row_player = None
+                if player_readable:
+                    try:
+                        row_player = player_payload(client.player())
+                    except Exception:  # noqa: BLE001 - PLAYER is optional telemetry
+                        player_readable = False
+                decision_log.write(decision_record(
+                    seed=seed,
+                    repeat=repeat,
+                    decision=decision_index,
+                    frame=decision_frame,
+                    frames_per_decision=int(frames) - decision_frame,
+                    cand=int(cand),
+                    mask=int(mask),
+                    readings=current if current is not None else previous,
+                    stage=int(state["stage"]),
+                    events=row_events,
+                    end=(ended[0] if ended is not None else ""),
+                    player=row_player,
+                    enemies=probe_enemies(client),
+                ))
+                decision_index += 1
             if ended is not None:
                 end, exit_reason = ended
                 break
@@ -565,6 +982,10 @@ def run_episode(
         identity["final_state_source"] = (
             "engine STATE reply after the final STEP" if end_state is not state
             else "last successful per-step STATE reply")
+    except DecisionLogError:
+        # V832-RUN-01: dropped telemetry fails the run instead of becoming a quietly
+        # recorded "error" episode with a partial log.
+        raise
     except BaseException as exc:  # noqa: BLE001 - a failed episode is a recorded episode
         error = f"{type(exc).__name__}: {exc}"
         end = "reset_failed" if start is None else "error"
@@ -868,7 +1289,9 @@ def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--engine", required=True)
     parser.add_argument("--data-dir", required=True)
-    parser.add_argument("--checkpoint", required=True)
+    parser.add_argument("--checkpoint", default=None,
+                        help="student checkpoint under test; mandatory for --arm "
+                             "policy and refused by --arm constant, which loads none")
     parser.add_argument("--seeds", default="1000,1001,1002,1003,1004",
                         help="seed list and/or ranges: '1000-1019', '1000,1001', "
                              "'1000,1005-1009'.  EXP-P3-009: five seeds cannot "
@@ -907,6 +1330,20 @@ def build_parser() -> argparse.ArgumentParser:
                              "student (it also implies --obs v3)")
     parser.add_argument("--out-dir", default=".tmp_v400_p3/eval")
     parser.add_argument("--device", default="cpu")
+    parser.add_argument("--arm", choices=ARMS, default="policy",
+                        help="V832-RUN-01: 'policy' (default) evaluates --checkpoint "
+                             "exactly as before; 'constant' emits --constant-cand on "
+                             "every decision, loads no checkpoint and runs no network")
+    parser.add_argument("--constant-cand", type=int, default=0,
+                        help="V832-RUN-01: the fixed candidate (0..17) the constant arm "
+                             "emits on every decision; refused outside that range")
+    parser.add_argument("--decision-log", default=None,
+                        help="V832-RUN-01: append one JSONL block per episode (a "
+                             "header with the arm/seed/checkpoint/obs identity and the "
+                             "raw reset reply, then one row per decision with player/"
+                             "enemies referee readings).  The parent directory must "
+                             "already exist and a failed write fails the run.  Off by "
+                             "default: no file and no extra engine command")
     return parser
 
 
@@ -967,62 +1404,90 @@ def _policy_identity(payload: dict) -> tuple[str, str]:
 
 
 def main(argv: list[str] | None = None) -> int:
-    args = build_parser().parse_args(argv)
+    parser = build_parser()
+    args = parser.parse_args(argv)
 
-    import torch
+    # V832-RUN-01: both new inputs are validated before anything is created, loaded
+    # or spawned, so a refused arm/log leaves no directory, file or engine behind.
+    decision_log = None
+    try:
+        arm_cfg = resolve_arm(arm=args.arm, constant_cand=args.constant_cand,
+                              checkpoint=args.checkpoint)
+        decision_log = open_decision_log(args.decision_log)
+    except EvalError as exc:
+        parser.error(str(exc))
 
-    out_dir = Path(args.out_dir)
-    out_dir.mkdir(parents=True, exist_ok=True)
-    route = route_obs(args)
-    if route == "v3":
-        model, payload = load_checkpoint_v3(args.checkpoint, device=args.device)
-        arch = "v3"
-    elif route == "v2":
-        model, payload = load_checkpoint_v2(args.checkpoint, device=args.device)
-        arch = str((payload.get("model") or {}).get("arch", ""))
-        if arch not in ("mlp", "gru"):
-            raise SystemExit(f"obs-v2 checkpoint arch {arch!r} is not mlp/gru")
-    else:
-        model, payload = load_checkpoint(args.checkpoint, device=args.device)
-        arch = "mlp"
-    model.eval()
-    disclosure, policy_note = _policy_identity(payload)
-    seeds = parse_seeds(args.seeds)
-    if int(args.repeats) < 1:
-        raise SystemExit(f"--repeats must be >= 1, got {args.repeats!r}")
-    if not seeds:
-        raise SystemExit("no seeds given")
-    records = []
-    for repeat in range(int(args.repeats)):
-        for seed in seeds:
-            shm_name = (f"p3eval-{os.getpid()}-{seed}-"
-                        f"{int(time.time() * 1000) % 100000}")
-            record = run_episode(
-                engine=args.engine,
-                data_dir=args.data_dir,
-                checkpoint_path=args.checkpoint,
-                model=model,
-                seed=seed,
-                stage=args.stage,
-                difficulty=args.difficulty,
-                max_frames=args.max_frames,
-                shm_name=shm_name,
-                stop_on_death=bool(args.stop_on_death),
-                obs_window=str(args.obs_window),
-                obs_v2=(route == "v2"),
-                obs_v3=(route == "v3"),
-                arch=arch,
-                repeat=repeat,
-            )
-            records.append(record)
-            print(json.dumps({key: record.get(key) for key in
-                              ("seed", "repeat", "frames", "deaths", "cleared",
-                               "score", "stage_start", "stage_end", "end", "exit",
-                               "wall_s", "error")},
-                             ensure_ascii=False), flush=True)
-    summary = summarise(records, disclosure=disclosure, policy_note=policy_note,
-                        bootstrap_iters=int(args.bootstrap_iters),
-                        ci_level=float(args.ci_level))
+    try:
+        out_dir = Path(args.out_dir)
+        out_dir.mkdir(parents=True, exist_ok=True)
+        route = route_obs(args)
+        if arm_cfg["loads_checkpoint"]:
+            import torch
+
+            if route == "v3":
+                model, payload = load_checkpoint_v3(args.checkpoint, device=args.device)
+                arch = "v3"
+            elif route == "v2":
+                model, payload = load_checkpoint_v2(args.checkpoint, device=args.device)
+                arch = str((payload.get("model") or {}).get("arch", ""))
+                if arch not in ("mlp", "gru"):
+                    raise SystemExit(f"obs-v2 checkpoint arch {arch!r} is not mlp/gru")
+            else:
+                model, payload = load_checkpoint(args.checkpoint, device=args.device)
+                arch = "mlp"
+            model.eval()
+            disclosure, policy_note = _policy_identity(payload)
+        else:
+            # No checkpoint, no network: the constant arm only needs the frame ruler.
+            model = None
+            arch = "mlp"
+            disclosure = CONSTANT_ARM_DISCLOSURE
+            policy_note = (f"arm=constant constant_cand={arm_cfg['constant_cand']} "
+                           "(one fixed action per decision; no checkpoint loaded, no "
+                           "network evaluated)")
+        seeds = parse_seeds(args.seeds)
+        if int(args.repeats) < 1:
+            raise SystemExit(f"--repeats must be >= 1, got {args.repeats!r}")
+        if not seeds:
+            raise SystemExit("no seeds given")
+        records = []
+        for repeat in range(int(args.repeats)):
+            for seed in seeds:
+                shm_name = (f"p3eval-{os.getpid()}-{seed}-"
+                            f"{int(time.time() * 1000) % 100000}")
+                record = run_episode(
+                    engine=args.engine,
+                    data_dir=args.data_dir,
+                    checkpoint_path=args.checkpoint,
+                    model=model,
+                    seed=seed,
+                    stage=args.stage,
+                    difficulty=args.difficulty,
+                    max_frames=args.max_frames,
+                    shm_name=shm_name,
+                    stop_on_death=bool(args.stop_on_death),
+                    obs_window=str(args.obs_window),
+                    obs_v2=(route == "v2"),
+                    obs_v3=(route == "v3"),
+                    arch=arch,
+                    repeat=repeat,
+                    arm=arm_cfg["arm"],
+                    constant_cand=arm_cfg["constant_cand"],
+                    decision_log=decision_log,
+                )
+                records.append(record)
+                print(json.dumps({key: record.get(key) for key in
+                                  ("seed", "repeat", "frames", "deaths", "cleared",
+                                   "score", "stage_start", "stage_end", "end", "exit",
+                                   "wall_s", "error")},
+                                 ensure_ascii=False), flush=True)
+        summary = summarise(records, disclosure=disclosure, policy_note=policy_note,
+                            bootstrap_iters=int(args.bootstrap_iters),
+                            ci_level=float(args.ci_level))
+    finally:
+        # V832-RUN-01: a failed close is itself a lost log, so it propagates.
+        if decision_log is not None:
+            decision_log.close()
 
     (out_dir / "episodes.jsonl").write_text(
         "".join(json.dumps(record, ensure_ascii=False, sort_keys=True) + "\n"
